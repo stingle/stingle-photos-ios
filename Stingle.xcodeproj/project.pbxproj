@@ -1,0 +1,505 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		620C02D323FED4EC00999057 /* GaleryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D223FED4EC00999057 /* GaleryVC.swift */; };
+		620C02D523FED4FB00999057 /* TrashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D423FED4FB00999057 /* TrashVC.swift */; };
+		620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D623FED51E00999057 /* BackupPhraseVC.swift */; };
+		620C02D923FED52E00999057 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D823FED52E00999057 /* SettingsVC.swift */; };
+		6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */; };
+		6279CF2223FEBB0C008B18DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF2123FEBB0C008B18DA /* SceneDelegate.swift */; };
+		6279CF2423FEBB0C008B18DA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF2323FEBB0C008B18DA /* ViewController.swift */; };
+		6279CF2723FEBB0C008B18DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2523FEBB0C008B18DA /* Main.storyboard */; };
+		6279CF2923FEBB0D008B18DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2823FEBB0D008B18DA /* Assets.xcassets */; };
+		6279CF2C23FEBB0D008B18DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2A23FEBB0D008B18DA /* LaunchScreen.storyboard */; };
+		62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62EDF4CC23FEDE3700C868F5 /* Crypto.swift */; };
+		D25D6B2D323167EF3A5485AD /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F579C6E8456773E872F6272 /* Pods_Stingle.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0AAEE600921BF35CF314DD9C /* Pods-Stingle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release.xcconfig"; sourceTree = "<group>"; };
+		620C02D223FED4EC00999057 /* GaleryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaleryVC.swift; sourceTree = "<group>"; };
+		620C02D423FED4FB00999057 /* TrashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashVC.swift; sourceTree = "<group>"; };
+		620C02D623FED51E00999057 /* BackupPhraseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupPhraseVC.swift; sourceTree = "<group>"; };
+		620C02D823FED52E00999057 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		6279CF1C23FEBB0C008B18DA /* Stingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6279CF2123FEBB0C008B18DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		6279CF2323FEBB0C008B18DA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6279CF2623FEBB0C008B18DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6279CF2823FEBB0D008B18DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6279CF2B23FEBB0D008B18DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6279CF2D23FEBB0D008B18DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		62EDF4CC23FEDE3700C868F5 /* Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
+		6F579C6E8456773E872F6272 /* Pods_Stingle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stingle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8CCA8E0B47DFA4BA2AA7368A /* Pods-Stingle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6279CF1923FEBB0C008B18DA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D25D6B2D323167EF3A5485AD /* Pods_Stingle.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		620C02C923FED23F00999057 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				620C02D223FED4EC00999057 /* GaleryVC.swift */,
+				620C02D423FED4FB00999057 /* TrashVC.swift */,
+				620C02D623FED51E00999057 /* BackupPhraseVC.swift */,
+				620C02D823FED52E00999057 /* SettingsVC.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		620C02CA23FED26200999057 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		620C02CB23FED26A00999057 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		620C02CC23FED27600999057 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				62EDF4CC23FEDE3700C868F5 /* Crypto.swift */,
+			);
+			path = Crypto;
+			sourceTree = "<group>";
+		};
+		620C02CD23FED2BB00999057 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		620C02CE23FED2F700999057 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				620C02D123FED39D00999057 /* DB */,
+				620C02D023FED38900999057 /* Util */,
+				620C02CF23FED34D00999057 /* File */,
+				620C02CC23FED27600999057 /* Crypto */,
+				620C02CB23FED26A00999057 /* Network */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		620C02CF23FED34D00999057 /* File */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = File;
+			sourceTree = "<group>";
+		};
+		620C02D023FED38900999057 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		620C02D123FED39D00999057 /* DB */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DB;
+			sourceTree = "<group>";
+		};
+		620C02FD23FED61900999057 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6F579C6E8456773E872F6272 /* Pods_Stingle.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6279CF1323FEBB0C008B18DA = {
+			isa = PBXGroup;
+			children = (
+				6279CF1E23FEBB0C008B18DA /* Stingle */,
+				6279CF1D23FEBB0C008B18DA /* Products */,
+				620C02FD23FED61900999057 /* Frameworks */,
+				F0EAE25FDBA481D663076C4E /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		6279CF1D23FEBB0C008B18DA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6279CF1C23FEBB0C008B18DA /* Stingle.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6279CF1E23FEBB0C008B18DA /* Stingle */ = {
+			isa = PBXGroup;
+			children = (
+				620C02CE23FED2F700999057 /* Core */,
+				620C02CD23FED2BB00999057 /* ViewModels */,
+				620C02CA23FED26200999057 /* Models */,
+				620C02C923FED23F00999057 /* Views */,
+				6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */,
+				6279CF2123FEBB0C008B18DA /* SceneDelegate.swift */,
+				6279CF2323FEBB0C008B18DA /* ViewController.swift */,
+				6279CF2523FEBB0C008B18DA /* Main.storyboard */,
+				6279CF2823FEBB0D008B18DA /* Assets.xcassets */,
+				6279CF2A23FEBB0D008B18DA /* LaunchScreen.storyboard */,
+				6279CF2D23FEBB0D008B18DA /* Info.plist */,
+			);
+			path = Stingle;
+			sourceTree = "<group>";
+		};
+		F0EAE25FDBA481D663076C4E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8CCA8E0B47DFA4BA2AA7368A /* Pods-Stingle.debug.xcconfig */,
+				0AAEE600921BF35CF314DD9C /* Pods-Stingle.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6279CF1B23FEBB0C008B18DA /* Stingle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6279CF3023FEBB0D008B18DA /* Build configuration list for PBXNativeTarget "Stingle" */;
+			buildPhases = (
+				704E7A80959564B3AE9D1163 /* [CP] Check Pods Manifest.lock */,
+				6279CF1823FEBB0C008B18DA /* Sources */,
+				6279CF1923FEBB0C008B18DA /* Frameworks */,
+				6279CF1A23FEBB0C008B18DA /* Resources */,
+				B1B881BECD84DE51CF4458D7 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Stingle;
+			productName = Stingle;
+			productReference = 6279CF1C23FEBB0C008B18DA /* Stingle.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6279CF1423FEBB0C008B18DA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "Davit Grigoryan";
+				TargetAttributes = {
+					6279CF1B23FEBB0C008B18DA = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 6279CF1723FEBB0C008B18DA /* Build configuration list for PBXProject "Stingle" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6279CF1323FEBB0C008B18DA;
+			productRefGroup = 6279CF1D23FEBB0C008B18DA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6279CF1B23FEBB0C008B18DA /* Stingle */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6279CF1A23FEBB0C008B18DA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6279CF2C23FEBB0D008B18DA /* LaunchScreen.storyboard in Resources */,
+				6279CF2923FEBB0D008B18DA /* Assets.xcassets in Resources */,
+				6279CF2723FEBB0C008B18DA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		704E7A80959564B3AE9D1163 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Stingle-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B1B881BECD84DE51CF4458D7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6279CF1823FEBB0C008B18DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */,
+				6279CF2423FEBB0C008B18DA /* ViewController.swift in Sources */,
+				620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */,
+				620C02D523FED4FB00999057 /* TrashVC.swift in Sources */,
+				6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */,
+				620C02D323FED4EC00999057 /* GaleryVC.swift in Sources */,
+				6279CF2223FEBB0C008B18DA /* SceneDelegate.swift in Sources */,
+				620C02D923FED52E00999057 /* SettingsVC.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6279CF2523FEBB0C008B18DA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6279CF2623FEBB0C008B18DA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6279CF2A23FEBB0D008B18DA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6279CF2B23FEBB0D008B18DA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6279CF2E23FEBB0D008B18DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6279CF2F23FEBB0D008B18DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6279CF3123FEBB0D008B18DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8CCA8E0B47DFA4BA2AA7368A /* Pods-Stingle.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6FR7795JTL;
+				INFOPLIST_FILE = Stingle/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.photos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6279CF3223FEBB0D008B18DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0AAEE600921BF35CF314DD9C /* Pods-Stingle.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6FR7795JTL;
+				INFOPLIST_FILE = Stingle/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.photos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6279CF1723FEBB0C008B18DA /* Build configuration list for PBXProject "Stingle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6279CF2E23FEBB0D008B18DA /* Debug */,
+				6279CF2F23FEBB0D008B18DA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6279CF3023FEBB0D008B18DA /* Build configuration list for PBXNativeTarget "Stingle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6279CF3123FEBB0D008B18DA /* Debug */,
+				6279CF3223FEBB0D008B18DA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6279CF1423FEBB0C008B18DA /* Project object */;
+}
