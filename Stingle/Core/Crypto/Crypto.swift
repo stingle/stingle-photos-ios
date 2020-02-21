@@ -17,6 +17,7 @@ enum FileType:Int {
 
 public class Crypto {
 
+    private let so:Sodium
     public let FileBeggining:String = "SP"
     public let KeyFileBeggining:String = "SPK"
     public let CurrentFileVersion = 1
@@ -61,6 +62,7 @@ public class Crypto {
     private let hexArray:[Character] = [Character]("0123456789ABCDEF")
 
     init() {
+        so = Sodium()
         FileBegginingLen = FileBeggining.count
         KeyFileBegginingLen = KeyFileBeggining.count
         FileHeaderBeginningLen = FileBegginingLen + FileFileVersionLen + FileFileIdLen + FileHeaderSizeLen
@@ -71,79 +73,167 @@ public class Crypto {
         try generateMainKeypair(password:password, privateKey:nil, publicKey:nil);
     }
 
-    public func generateMainKeypair(password:String , privateKey:[UInt8]?, publicKey:[UInt8]?) throws{
+    public func generateMainKeypair(password:String , privateKey:Bytes?, publicKey:Bytes?) throws{
         
+        let pwdSalt:Bytes = so.randomBytes.buf(length: so.pwHash.SaltBytes) ?? []
+        var result = savePrivateFile(filename: PwdSaltFilename, data: pwdSalt)
+        
+        if !result {
+            //TODO: throw exception
+            return
+        }
+        
+        var newPrivateKey:Bytes?  = nil
+        var newPublicKey:Bytes?  = nil
+
+        if(privateKey == nil || publicKey == nil) {
+            guard let keyPair = so.box.keyPair() else {
+                //TODO: throw exception
+                return
+            }
+            newPrivateKey = privateKey ?? keyPair.secretKey
+            newPublicKey = publicKey ?? keyPair.publicKey
+        }
+        
+        guard let pwdKey = try getKeyFromPassword(password: password, difficulty: KdfDifficultyNormal) else {
+            //TODO: throw exception
+            return
+        }
+        guard let pwdEncNonce = so.randomBytes.buf(length: so.secretBox.NonceBytes) else {
+            //TODO: throw exception
+            return
+        }
+        result = savePrivateFile(filename: SKNONCEFilename, data: pwdEncNonce)
+        if !result {
+            //TODO: throw exception
+            return
+        }
+        
+        guard let encryptedPrivateKey = encryptSymmetric(key: pwdKey, nonce: pwdEncNonce, data: newPrivateKey!) else {
+            //TODO: throw exception
+            return
+        }
+        result = savePrivateFile(filename: PrivateKeyFilename, data: encryptedPrivateKey)
+        if !result {
+            //TODO: throw exception
+            return
+        }
+        result = savePrivateFile(filename: PublicKeyFilename, data: newPublicKey!)
+        if !result {
+            //TODO: throw exception
+            return
+        }
     }
     
-    public func getPrivateKey(password:String) throws  -> [UInt8] {
-        return []
+    public func getPrivateKey(password:String) throws  -> Bytes? {
+        guard let encKey = try getKeyFromPassword(password: password, difficulty: KdfDifficultyNormal) else {
+            //TODO: throw exception
+            return nil
+        }
+        
+        guard let encPrivKey = readPrivateFile(filename: PrivateKeyFilename) else {
+            //TODO throw exception
+            return nil
+        }
+        
+        guard let nonce = readPrivateFile(filename: SKNONCEFilename) else {
+            //TODO throw exception
+            return nil
+        }
+        return try decryptSymmetric(key: encKey, nonce:nonce, data: encPrivKey)
     }
     
     public func reencryptPrivateKey(oldPassword:String , newPassword:String ) throws {
         
     }
     
-    public func getEncryptedPrivateKey() -> [UInt8] {
-        return []
+    public func getEncryptedPrivateKey() -> Bytes? {
+        return nil
     }
     
-    public func getPublicKey() -> [UInt8] {
-        return []
+    public func getPublicKey() -> Bytes? {
+        return nil
     }
     
-    public func getServerPublicKey() -> [UInt8] {
-        return []
+    public func getServerPublicKey() -> Bytes? {
+        return nil
     }
     
-    public func saveEncryptedPrivateKey(encryptedPrivateKey:[UInt8]) {
+    public func saveEncryptedPrivateKey(encryptedPrivateKey:Bytes?) {
         
     }
     
-    public func getPrivateKeyForExport(password:String) throws -> [UInt8] {
-        return []
+    public func getPrivateKeyForExport(password:String) throws -> Bytes? {
+        return nil
     }
     
-    public func getPrivateKeyFromExportedKey(password:String , encPrivKey:[UInt8]) throws -> [UInt8] {
-        return []
+    public func getPrivateKeyFromExportedKey(password:String , encPrivKey:Bytes?) throws -> Bytes? {
+        return nil
     }
     
-    public func exportKeyBundle(password:String) throws -> [UInt8] {
-        return []
+    public func exportKeyBundle(password:String) throws -> Bytes? {
+        return nil
     }
     
-    public func exportPublicKey() throws  -> [UInt8] {
-        return []
+    public func exportPublicKey() throws  -> Bytes? {
+        return nil
     }
     
-    public static func  getPublicKeyFromExport(exportedPublicKey:[UInt8]) throws -> [UInt8] {
-        return []
+    public static func  getPublicKeyFromExport(exportedPublicKey:Bytes?) throws -> Bytes? {
+        return nil
     }
     
-    public func importKeyBundle(keys:[UInt8], password:String) throws {
+    public func importKeyBundle(keys:Bytes?, password:String) throws {
         
     }
     
-    public func importServerPublicKey(publicKey:[UInt8]) throws  {
+    public func importServerPublicKey(publicKey:Bytes?) throws  {
         
     }
     
-    public func decryptSeal(enc:[UInt8], publicKey:[UInt8], privateKey:[UInt8]) throws  -> [UInt8] {
-        return []
+    public func decryptSeal(enc:Bytes?, publicKey:Bytes?, privateKey:Bytes?) throws  -> Bytes? {
+        return nil
     }
     
-    public func encryptCryptoBox(message:[UInt8], publicKey:[UInt8], privateKey:[UInt8]) throws -> [UInt8]  {
-        return []
+    public func encryptCryptoBox(message:Bytes, publicKey:Bytes?, privateKey:Bytes?) throws -> Bytes?  {
+        return nil
     }
     
-    public func getPublicKeyFromPrivateKey(privateKey:[UInt8]) -> [UInt8] {
-        return []
+    public func getPublicKeyFromPrivateKey(privateKey:Bytes?) -> Bytes? {
+        return nil
     }
     
     public func deleteKeys(){
     }
     
-    public func getKeyFromPassword(String password:String, difficulty:Int) throws -> [UInt8] {
-        return []
+    public func getKeyFromPassword(password:String, difficulty:Int) throws -> Bytes? {
+        
+        guard let salt = readPrivateFile(filename: PwdSaltFilename), salt.count != so.pwHash.SaltBytes else {
+            //TODO: throw exception
+            return nil
+        }
+
+        var opsLimit = so.pwHash.OpsLimitInteractive
+        var memlimit = so.pwHash.MemLimitInteractive
+        
+        switch difficulty {
+        case KdfDifficultyHard:
+            opsLimit = so.pwHash.OpsLimitModerate
+            memlimit = so.pwHash.MemLimitModerate
+            break
+        case KdfDifficultyUltra:
+            opsLimit = so.pwHash.OpsLimitSensitive
+            memlimit = so.pwHash.MemLimitSensitive
+            break
+        default:
+            break
+        }
+        
+        guard let key = so.pwHash.hash(outputLength: so.secretBox.KeyBytes, passwd: password.bytes, salt: salt, opsLimit: opsLimit, memLimit: memlimit) else {
+            // TODO: throw exception
+            return nil
+        }
+        return key
     }
     
     public func  getPasswordHashForStorage(password:String) -> [String : String] {
@@ -154,7 +244,7 @@ public class Crypto {
             return ""
     }
     
-    public func getPasswordHashForStorage(password:String, salt:[UInt8]) -> String {
+    public func getPasswordHashForStorage(password:String, salt:Bytes?) -> String {
         return ""
     }
     
@@ -162,12 +252,38 @@ public class Crypto {
         return false
     }
     
-    //protected func encryptSymmetric([UInt8] key, [UInt8] nonce, [UInt8] data) -> [UInt8] { }
-    //protected func decryptSymmetric([UInt8] key, [UInt8] nonce, [UInt8] data) throws -> [UInt8] { }
-    //protected func getNewHeader([UInt8] symmetricKey, long dataSize, String filename, int fileType, [UInt8] fileId, int videoDuration) throws  -> Header { }
-    //protected func writeHeader(OutputStream out, Header header, [UInt8] publicKey) throws  {}
+    private func encryptSymmetric(key:Bytes?, nonce:Bytes?, data:Bytes?) -> Bytes? {
+
+        
+        guard let key = key, key.count !=  so.secretBox.KeyBytes else {
+            //TODO: throw exception
+            return nil
+        }
+        
+        guard let nonce = nonce, nonce.count != so.secretBox.NonceBytes else {
+            //TODO: throw exception
+            return nil
+        }
+        
+        guard let message = data, message.count > 0 else {
+            //TODO: throw exception
+            return nil
+        }
+        return nil
+    }
     
-    public func getFileHeader(bytes:[UInt8]) throws -> Header {
+    private func decryptSymmetric(key:Bytes?, nonce:Bytes?, data:Bytes?) throws -> Bytes? {
+        return nil
+    }
+    
+    private func getNewHeader(symmetricKey:Bytes?, dataSize:UInt, filename:String, fileType:Int, fileId:Bytes?, videoDuration:Int) throws  -> Header {
+        return Header()
+    }
+    private func writeHeader(output:OutputStream, header:Header, publicKey:Bytes?) throws  {
+        
+    }
+    
+    public func getFileHeader(bytes:Bytes?) throws -> Header {
         return Header()
     }
     
@@ -179,57 +295,84 @@ public class Crypto {
         return ""
     }
     
-    public func encryptFile(output:OutputStream, data:[UInt8], filename:String, fileType:Int, videoDuration:Int) throws -> [UInt8] {
-        return []
+    public func encryptFile(output:OutputStream, data:Bytes?, filename:String, fileType:Int, videoDuration:Int) throws -> Bytes? {
+        return nil
     }
     
-    public func encryptFile(out:OutputStream , data:[UInt8] , filename:String, fileType:Int, fileId:[UInt8], videoDuration:Int) throws -> [UInt8] {
-        return []
+    public func encryptFile(out:OutputStream , data:Bytes? , filename:String, fileType:Int, fileId:Bytes?, videoDuration:Int) throws -> Bytes? {
+        return nil
     }
     
-    public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, videoDuration:Int) throws -> [UInt8] {
-        return []
+    public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, videoDuration:Int) throws -> Bytes? {
+        return nil
     }
     
-    public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, fileId:[UInt8], videoDuration:Int) throws -> [UInt8]   {
-        return []
+    public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, fileId:Bytes?, videoDuration:Int) throws -> Bytes? {
+        return nil
     }
     
-//    public func [UInt8] encryptFile(InputStream in, OutputStream out, String filename, int fileType, long dataLength, [UInt8] fileId, int videoDuration, CryptoProgress progress, AsyncTask<?,?,?> task) throws  { }
+//    public func Bytes encryptFile(InputStream in, OutputStream out, String filename, int fileType, long dataLength, Bytes fileId, int videoDuration, CryptoProgress progress, AsyncTask<?,?,?> task) throws  { }
     
-    public func getNewFileId() -> [UInt8] {
-        return []
+    public func getNewFileId() -> Bytes? {
+        return nil
     }
     
-    public func decryptFile(bytes:[UInt8]) throws -> [UInt8] {
-        return []
+    public func decryptFile(bytes:Bytes?) throws -> Bytes? {
+        return nil
     }
     
-//    public func [UInt8] decryptFile([UInt8] bytes, AsyncTask<?,?,?> task) throws  { }
-//    public func [UInt8] decryptFile(InputStream in) throws { }
-//    public func [UInt8] decryptFile(InputStream in, CryptoProgress progress, AsyncTask<?,?,?> task) throws  {}
+//    public func Bytes decryptFile(Bytes bytes, AsyncTask<?,?,?> task) throws  { }
+//    public func Bytes decryptFile(InputStream in) throws { }
+//    public func Bytes decryptFile(InputStream in, CryptoProgress progress, AsyncTask<?,?,?> task) throws  {}
 //    public func void decryptFile(InputStream in, OutputStream out, CryptoProgress progress, AsyncTask<?,?,?> task) throws { }
-//    public func [UInt8] getRandomData(int length){ }
-//    protected boolean encryptData(InputStream in, OutputStream out, Header header) throws  { }
-//    protected boolean encryptData(InputStream in, OutputStream out, Header header, CryptoProgress progress, AsyncTask<?,?,?> task) throws  {}
-//    protected boolean decryptData(InputStream in, OutputStream out, Header header) throws  { }
-//    protected boolean decryptData(InputStream in, OutputStream out, Header header, CryptoProgress progress, AsyncTask<?,?,?> task) throws  {}
-//    protected boolean savePrivateFile(String filename, [UInt8] data){ }
-//    protected [UInt8] readPrivateFile(String filename){ }
-//    protected boolean deletePrivateFile(String filename){ }
-//    public static [UInt8] sha256([UInt8] data){ }
-//    public static String byte2hex([UInt8] bytes){ }
-//    public static [UInt8] hex2byte(String s){ }
-//    public static [UInt8] intToByteArray(int a){ }
-//    public static int byteArrayToInt([UInt8] b) { }
-//    public static [UInt8] longToByteArray(long x) { }
-//    public static long byteArrayToLong([UInt8] bytes) { }
-//    public static String byteArrayToBase64([UInt8] bytes) { }
-//    public static [UInt8] base64ToByteArray(String base64str) { }
-//    public static String byteArrayToBase64Default([UInt8] bytes) { }
-//    public static [UInt8] base64ToByteArrayDefault(String base64str) { }
+//    public func Bytes getRandomData(int length){ }
+//    private boolean encryptData(InputStream in, OutputStream out, Header header) throws  { }
+//    private boolean encryptData(InputStream in, OutputStream out, Header header, CryptoProgress progress, AsyncTask<?,?,?> task) throws  {}
+//    private boolean decryptData(InputStream in, OutputStream out, Header header) throws  { }
+//    private boolean decryptData(InputStream in, OutputStream out, Header header, CryptoProgress progress, AsyncTask<?,?,?> task) throws  {}
+
+    private func savePrivateFile(filename:String, data:Bytes?) -> Bool {
+        guard let out = OutputStream(toFileAtPath: filename, append: false) else {
+            // TODO: throw exception
+            return false
+        }
+        
+        guard let data = data else {
+            // TODO: throw exception
+            return false
+        }
+        
+        return data.count == out.write(data, maxLength: data.count)
+    }
+    
+    private func readPrivateFile(filename:String ) -> Bytes? {
+        guard let input:InputStream = InputStream(fileAtPath: filename) else {
+            // TODO: throw exception
+            return nil
+        }
+        
+        let outBuffer:OutputStream = OutputStream(toMemory: ())
+        var buffer = Bytes(repeating: 0, count: bufSize)
+        while input.read(&buffer, maxLength: buffer.count) > 0 {
+            outBuffer.write(&buffer, maxLength: buffer.count)
+        }
+        return outBuffer.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as? Bytes
+    }
+    
+//    private boolean deletePrivateFile(String filename){ }
+//    public static Bytes sha256(Bytes data){ }
+//    public static String byte2hex(Bytes bytes){ }
+//    public static Bytes hex2byte(String s){ }
+//    public static Bytes intToByteArray(int a){ }
+//    public static int byteArrayToInt(Bytes b) { }
+//    public static Bytes longToByteArray(long x) { }
+//    public static long byteArrayToLong(Bytes bytes) { }
+//    public static String byteArrayToBase64(Bytes bytes) { }
+//    public static Bytes base64ToByteArray(String base64str) { }
+//    public static String byteArrayToBase64Default(Bytes bytes) { }
+//    public static Bytes base64ToByteArrayDefault(String base64str) { }
 //    public static String getFileHeaders(String encFilePath, String encThumbPath) throws  {}
-//    public static [UInt8] getFileHeaderAsIs(String filePath) throws  {}
+//    public static Bytes getFileHeaderAsIs(String filePath) throws  {}
 //    public static int getOverallHeaderSize(InputStream in) throws  {}
     
     public struct Header{
