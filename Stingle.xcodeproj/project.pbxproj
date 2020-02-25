@@ -11,6 +11,8 @@
 		620C02D523FED4FB00999057 /* TrashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D423FED4FB00999057 /* TrashVC.swift */; };
 		620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D623FED51E00999057 /* BackupPhraseVC.swift */; };
 		620C02D923FED52E00999057 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D823FED52E00999057 /* SettingsVC.swift */; };
+		6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6239B147240096B60041F703 /* Crypto+Extensions.swift */; };
+		624A678424040E9000436C2F /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A678324040E9000436C2F /* CryptoTests.swift */; };
 		6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */; };
 		6279CF2223FEBB0C008B18DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF2123FEBB0C008B18DA /* SceneDelegate.swift */; };
 		6279CF2423FEBB0C008B18DA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF2323FEBB0C008B18DA /* ViewController.swift */; };
@@ -21,12 +23,26 @@
 		D25D6B2D323167EF3A5485AD /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F579C6E8456773E872F6272 /* Pods_Stingle.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		624A678624040E9000436C2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6279CF1423FEBB0C008B18DA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6279CF1B23FEBB0C008B18DA;
+			remoteInfo = Stingle;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		0AAEE600921BF35CF314DD9C /* Pods-Stingle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release.xcconfig"; sourceTree = "<group>"; };
 		620C02D223FED4EC00999057 /* GaleryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaleryVC.swift; sourceTree = "<group>"; };
 		620C02D423FED4FB00999057 /* TrashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashVC.swift; sourceTree = "<group>"; };
 		620C02D623FED51E00999057 /* BackupPhraseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupPhraseVC.swift; sourceTree = "<group>"; };
 		620C02D823FED52E00999057 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		6239B147240096B60041F703 /* Crypto+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Crypto+Extensions.swift"; sourceTree = "<group>"; };
+		624A678124040E9000436C2F /* CryptoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		624A678324040E9000436C2F /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
+		624A678524040E9000436C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6279CF1C23FEBB0C008B18DA /* Stingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6279CF2123FEBB0C008B18DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -41,6 +57,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		624A677E24040E9000436C2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6279CF1923FEBB0C008B18DA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -81,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				62EDF4CC23FEDE3700C868F5 /* Crypto.swift */,
+				6239B147240096B60041F703 /* Crypto+Extensions.swift */,
 			);
 			path = Crypto;
 			sourceTree = "<group>";
@@ -133,10 +157,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		624A678224040E9000436C2F /* CryptoTests */ = {
+			isa = PBXGroup;
+			children = (
+				624A678324040E9000436C2F /* CryptoTests.swift */,
+				624A678524040E9000436C2F /* Info.plist */,
+			);
+			path = CryptoTests;
+			sourceTree = "<group>";
+		};
 		6279CF1323FEBB0C008B18DA = {
 			isa = PBXGroup;
 			children = (
 				6279CF1E23FEBB0C008B18DA /* Stingle */,
+				624A678224040E9000436C2F /* CryptoTests */,
 				6279CF1D23FEBB0C008B18DA /* Products */,
 				620C02FD23FED61900999057 /* Frameworks */,
 				F0EAE25FDBA481D663076C4E /* Pods */,
@@ -147,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				6279CF1C23FEBB0C008B18DA /* Stingle.app */,
+				624A678124040E9000436C2F /* CryptoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -181,6 +216,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		624A678024040E9000436C2F /* CryptoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 624A678A24040E9000436C2F /* Build configuration list for PBXNativeTarget "CryptoTests" */;
+			buildPhases = (
+				624A677D24040E9000436C2F /* Sources */,
+				624A677E24040E9000436C2F /* Frameworks */,
+				624A677F24040E9000436C2F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				624A678724040E9000436C2F /* PBXTargetDependency */,
+			);
+			name = CryptoTests;
+			productName = CryptoTests;
+			productReference = 624A678124040E9000436C2F /* CryptoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		6279CF1B23FEBB0C008B18DA /* Stingle */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6279CF3023FEBB0D008B18DA /* Build configuration list for PBXNativeTarget "Stingle" */;
@@ -210,6 +263,10 @@
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Davit Grigoryan";
 				TargetAttributes = {
+					624A678024040E9000436C2F = {
+						CreatedOnToolsVersion = 11.3.1;
+						TestTargetID = 6279CF1B23FEBB0C008B18DA;
+					};
 					6279CF1B23FEBB0C008B18DA = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
@@ -229,11 +286,19 @@
 			projectRoot = "";
 			targets = (
 				6279CF1B23FEBB0C008B18DA /* Stingle */,
+				624A678024040E9000436C2F /* CryptoTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		624A677F24040E9000436C2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6279CF1A23FEBB0C008B18DA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -289,6 +354,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		624A677D24040E9000436C2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				624A678424040E9000436C2F /* CryptoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6279CF1823FEBB0C008B18DA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -298,6 +371,7 @@
 				620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */,
 				620C02D523FED4FB00999057 /* TrashVC.swift in Sources */,
 				6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */,
+				6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */,
 				620C02D323FED4EC00999057 /* GaleryVC.swift in Sources */,
 				6279CF2223FEBB0C008B18DA /* SceneDelegate.swift in Sources */,
 				620C02D923FED52E00999057 /* SettingsVC.swift in Sources */,
@@ -305,6 +379,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		624A678724040E9000436C2F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6279CF1B23FEBB0C008B18DA /* Stingle */;
+			targetProxy = 624A678624040E9000436C2F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6279CF2523FEBB0C008B18DA /* Main.storyboard */ = {
@@ -326,6 +408,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		624A678824040E9000436C2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6FR7795JTL;
+				INFOPLIST_FILE = CryptoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.photos.Stingle.CryptoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stingle.app/Stingle";
+			};
+			name = Debug;
+		};
+		624A678924040E9000436C2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6FR7795JTL;
+				INFOPLIST_FILE = CryptoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.photos.Stingle.CryptoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stingle.app/Stingle";
+			};
+			name = Release;
+		};
 		6279CF2E23FEBB0D008B18DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -481,6 +603,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		624A678A24040E9000436C2F /* Build configuration list for PBXNativeTarget "CryptoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				624A678824040E9000436C2F /* Debug */,
+				624A678924040E9000436C2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6279CF1723FEBB0C008B18DA /* Build configuration list for PBXProject "Stingle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
