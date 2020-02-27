@@ -11,6 +11,7 @@
 		620C02D523FED4FB00999057 /* TrashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D423FED4FB00999057 /* TrashVC.swift */; };
 		620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D623FED51E00999057 /* BackupPhraseVC.swift */; };
 		620C02D923FED52E00999057 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D823FED52E00999057 /* SettingsVC.swift */; };
+		6233925F2406D11600A0F64F /* FileManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6233925E2406D11600A0F64F /* FileManger.swift */; };
 		6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6239B147240096B60041F703 /* Crypto+Extensions.swift */; };
 		624A678424040E9000436C2F /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A678324040E9000436C2F /* CryptoTests.swift */; };
 		6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */; };
@@ -39,6 +40,7 @@
 		620C02D423FED4FB00999057 /* TrashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashVC.swift; sourceTree = "<group>"; };
 		620C02D623FED51E00999057 /* BackupPhraseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupPhraseVC.swift; sourceTree = "<group>"; };
 		620C02D823FED52E00999057 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		6233925E2406D11600A0F64F /* FileManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManger.swift; sourceTree = "<group>"; };
 		6239B147240096B60041F703 /* Crypto+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Crypto+Extensions.swift"; sourceTree = "<group>"; };
 		624A678124040E9000436C2F /* CryptoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		624A678324040E9000436C2F /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 		620C02CF23FED34D00999057 /* File */ = {
 			isa = PBXGroup;
 			children = (
+				6233925E2406D11600A0F64F /* FileManger.swift */,
 			);
 			path = File;
 			sourceTree = "<group>";
@@ -369,6 +372,7 @@
 				62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */,
 				6279CF2423FEBB0C008B18DA /* ViewController.swift in Sources */,
 				620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */,
+				6233925F2406D11600A0F64F /* FileManger.swift in Sources */,
 				620C02D523FED4FB00999057 /* TrashVC.swift in Sources */,
 				6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */,
 				6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */,
