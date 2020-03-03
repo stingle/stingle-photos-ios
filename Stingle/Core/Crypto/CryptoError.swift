@@ -1,10 +1,3 @@
-//
-//  CryptoErrors.swift
-//  Stingle
-//
-//  Created by Davit Grigoryan on 27.02.2020.
-//  Copyright © 2020 Davit Grigoryan. All rights reserved.
-//
 
 import Foundation
 
@@ -35,7 +28,7 @@ enum CryptoError: Error {
         case randomBytesGenerationFailure
         case hashGenerationFailure
         case sealFailure
-        case openlFailure
+        case openFailure
     }
     
     enum General : Error {

@@ -1,11 +1,3 @@
-//
-//  Crypto.swift
-//  Stingle
-//
-//  Created by Davit Grigoryan on 20.02.2020.
-//  Copyright © 2020 Davit Grigoryan. All rights reserved.
-//
-
 import Foundation
 import Sodium
 
@@ -19,7 +11,7 @@ fileprivate struct Constants {
     
     public static let CurrentFileVersion:Int = 1
     public static let CurrentHeaderVersion:Int = 1
-    public static let CurrentKeyFileVersion:Int = 1;
+    public static let CurrentKeyFileVersion:Int = 1
     
     public static let PwdSaltFilename = "pwdSalt"
     public static let SKNONCEFilename = "skNonce"
@@ -141,6 +133,8 @@ public class Crypto {
         }
         return key
     }
+	
+	
         
     private func encryptSymmetric(key:Bytes?, nonce:Bytes?, data:Bytes?) throws -> Bytes {
 
@@ -178,7 +172,7 @@ public class Crypto {
         }
         
         guard let plainText = so.secretBox.open(authenticatedCipherText: data, secretKey: key, nonce: nonce) else {
-            throw CryptoError.Internal.openlFailure
+            throw CryptoError.Internal.openFailure
         }
         
         return plainText
@@ -272,11 +266,11 @@ public class Crypto {
         
         let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
         
-        //TODO : Get Secret key from memory 
+        //TODO : Get Secret key from memory
         let privateKey:Bytes = try getPrivateKey(password: "11111111")
         
         guard let headerBytes = so.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
-            throw CryptoError.Internal.openlFailure
+            throw CryptoError.Internal.openFailure
         }
         
         offset = 0
@@ -481,7 +475,6 @@ public class Crypto {
                     "Filename - \(fileName ?? "")\n\n" +
                     "Video Duration - \(videoDuration)\n\n"
         }
-        
     }
 }
 
@@ -502,7 +495,7 @@ extension Crypto {
             return result
         }
         
-        public static func fromBytes<T:FixedWidthInteger>(b:Bytes) -> T  {
+    public static func fromBytes<T:FixedWidthInteger>(b:Bytes) -> T  {
             assert(0 != b.count)
             if b.count == 1 {
                 return T(b[0] & 255)
@@ -517,13 +510,14 @@ extension Crypto {
             return result
         }
             
-        public static func byteArrayToBase64(data:Bytes) -> String {
+	public static func byteArrayToBase64(data:Bytes) -> String {
             assert(data.count > 0)
             let newData = Data(data)
             return newData.base64EncodedString()
         }
         
     public func toBytes(header:Header) -> Bytes {
+		
             // Current header version - 1 byte
             var headerBytes = [UInt8(header.headerVersion & 255)]
     

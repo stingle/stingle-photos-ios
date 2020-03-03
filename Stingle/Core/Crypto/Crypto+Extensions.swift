@@ -1,10 +1,3 @@
-//
-//  Crypto+Extensions.swift
-//  Stingle
-//
-//  Created by Davit Grigoryan on 22.02.2020.
-//  Copyright © 2020 Davit Grigoryan. All rights reserved.
-//
 
 //This extension is for add functions which are not ported from Clibsodium
 import Sodium

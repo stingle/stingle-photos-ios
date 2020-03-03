@@ -1,11 +1,3 @@
-//
-//  FileManger.swift
-//  Stingle
-//
-//  Created by Davit Grigoryan on 26.02.2020.
-//  Copyright © 2020 Davit Grigoryan. All rights reserved.
-//
-
 import Foundation
 
 class SPFileManager : FileManager {

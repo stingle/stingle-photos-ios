@@ -1,10 +1,3 @@
-//
-//  CryptoTests.swift
-//  CryptoTests
-//
-//  Created by Davit Grigoryan on 24.02.2020.
-//  Copyright © 2020 Davit Grigoryan. All rights reserved.
-//
 
 import XCTest
 import Stingle
@@ -54,13 +47,13 @@ class CryptoTests: XCTestCase {
     
     func decrypt() {
         do {
-        let input:InputStream = InputStream(fileAtPath: "\(filePath)\(inDecFileName)")!
-        input.open()
-        let output:OutputStream = OutputStream(toFileAtPath: "\(filePath)\(outDecFileName)", append: false)!
-        output.open()
-        _ = try crypto.decryptFile(input: input, output: output)
-        input.close()
-        output.close()
+            let input:InputStream = InputStream(fileAtPath: "\(filePath)\(inDecFileName)")!
+            input.open()
+            let output:OutputStream = OutputStream(toFileAtPath: "\(filePath)\(outDecFileName)", append: false)!
+            output.open()
+            _ = try crypto.decryptFile(input: input, output: output)
+            input.close()
+            output.close()
         } catch {
             print("\n***********\n Failed with error \(error) in line : \(#line)")
         }
