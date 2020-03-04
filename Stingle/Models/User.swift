@@ -8,36 +8,28 @@ class User {
 	public let userId:String
 	public let isKeyBackedUp:Bool
 	public let homeFolder:String
-	
-	private var secret:[UInt8] = []
-	
-	//TODO : maybe KayChain is better place to store the secret
-	public var key:[UInt8] { get { return secret } set(newKey) { secret = newKey } }
+	public let email:String
 	
 	private init() {
 		token = ""
 		userId = ""
 		isKeyBackedUp = false
 		homeFolder = ""
+		email = ""
 	}
 	
-	//TODO: Create propper singletone
-	init(response:SPSignInResponse) {
-		if User.shared != nil {
-			fatalError()
+	init(token:String, userId:String, isKeyBackedUp:Bool, homeFolder:String, email:String) {
+		self.token = token
+		self.userId = userId
+		self.isKeyBackedUp = isKeyBackedUp
+		self.homeFolder = homeFolder
+		self.email = email
+		if(User.shared == nil) {
+			User.shared = self
 		}
-		token = response.parts.token
-		userId = response.parts.userId
-		isKeyBackedUp = (response.parts.isKeyBackedUp == 1)
-		homeFolder = response.parts.homeFolder
-		User.shared = self
 	}
 	
-	public func get() -> User {
-		return User.shared!
-	}
-	
-	static public func autorized() -> Bool {
-		return false
-	}
+	static public func get() -> User? {
+		return User.shared
+	}	
 }

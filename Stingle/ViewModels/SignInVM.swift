@@ -15,11 +15,17 @@ class SignInVM: NSObject {
 				let request = SPSignInRequest(email: email, password: pHash)
 				let task = NetworkManager.send(request: request) { (data:SPSignInResponse) in
 					do {
-						let user = User(response: data)
-						user.key = try self.crypto.getPrivateKey(password: password)
+						let isKeyBackedUp:Bool = (data.parts.isKeyBackedUp == 1)
+						SPApplication.user = User(token: data.parts.token, userId: data.parts.userId, isKeyBackedUp: isKeyBackedUp, homeFolder: data.parts.homeFolder, email: email)
+						guard true == KeyManagement.importKeyBundle(keyBundle: data.parts.keyBundle, password: password) else {
+							print("Can't import key bundle")
+							return
+						}
+						KeyManagement.key = try self.crypto.getPrivateKey(password: password)
 						print(data)
 					} catch {
 						print(error)
+						return
 					}
 				}
 				print(task.taskIdentifier)

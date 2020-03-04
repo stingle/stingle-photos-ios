@@ -104,7 +104,13 @@ public class Crypto {
         let privateKey = try decryptSymmetric(key:encKey, nonce:nonce, data:encPrivKey)
         return privateKey
     }
-
+	
+	public func getPrivateKeyFromExportedKey(password:String, encPrivKey:Bytes) throws -> Bytes {
+		let nonce = try readPrivateFile(filename: Constants.SKNONCEFilename)
+		let decPK = try decryptSymmetric(key: getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard), nonce: nonce, data: encPrivKey)
+		return try encryptSymmetric(key: getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal), nonce: nonce, data: decPK)
+	}
+	
     public func getKeyFromPassword(password:String, difficulty:Int) throws -> Bytes {
         
         let salt = try readPrivateFile(filename: Constants.PwdSaltFilename)
@@ -128,28 +134,72 @@ public class Crypto {
             break
         }
         
-        guard let key = so.pwHash.hash(outputLength: so.secretBox.KeyBytes, passwd: password.bytes, salt: salt, opsLimit: opsLimit, memLimit: memlimit) else {
+		guard let key = so.pwHash.hash(outputLength: so.secretBox.KeyBytes, passwd: password.bytes, salt: salt, opsLimit: opsLimit, memLimit: memlimit, alg: .Argon2ID13) else {
             throw CryptoError.Internal.hashGenerationFailure
         }
         return key
     }
 	
 	public func getPasswordHashForStorage(password:String, salt:String) throws -> String {
-		guard let data = salt.hexadecimal else {
+		guard let data = so.utils.hex2bin(salt) else {
 			return ""
 		}
-		return try getPasswordHashForStorage(password: password, salt: Bytes(data))
+		return try getPasswordHashForStorage(password: password, salt: data)
 	}
 	
 	private func getPasswordHashForStorage(password:String, salt:Bytes) throws -> String {
-		guard let hash = so.pwHash.hash(outputLength: Constants.PWHASH_LEN, passwd: password.bytes, salt: salt, opsLimit: so.pwHash.OpsLimitModerate, memLimit: so.pwHash.MemLimitModerate) else {
+		guard let hash = so.pwHash.hash(outputLength: Constants.PWHASH_LEN, passwd: password.bytes, salt: salt, opsLimit: so.pwHash.OpsLimitModerate, memLimit: so.pwHash.MemLimitModerate, alg: .Argon2ID13) else {
             throw CryptoError.Internal.hashGenerationFailure
         }
-		
-		return Crypto.byte2hex(bytes: hash)
+		guard let hex = so.utils.bin2hex(hash)?.uppercased() else {
+            throw CryptoError.Internal.hashGenerationFailure
+		}
+		return hex
 	}
 
+	public func importKeyBundle(keys:Bytes, password:String) throws {
+        var offset:Int = 0
+        let fileBegginingStr:String = String(bytes: Bytes(keys[offset..<(offset + Constants.KeyFileBegginingLen)]), encoding: String.Encoding.utf8) ?? ""
+        if fileBegginingStr != Constants.KeyFileBeggining {
+			throw CryptoError.Bundle.incorrectKeyFileBeginning
+        }
+        offset += Constants.KeyFileBegginingLen
         
+        let keyFileVersion = keys[offset]
+        if keyFileVersion > Constants.CurrentKeyFileVersion {
+            throw CryptoError.Bundle.incorrectKeyFileVersion
+        }
+        offset += 1
+
+		let keyFileType = keys[offset]
+		if keyFileType != Constants.KeyFileTypeBundleEncrypted && keyFileType != Constants.KeyFileTypeBundlePlain && keyFileType != Constants.KeyFileTypePublicPlain {
+            throw CryptoError.Bundle.incorrectKeyFileType
+		}
+		offset += 1
+		
+		let publicKey = keys[offset..<(offset + so.box.PublicKeyBytes)]
+		offset += so.box.PublicKeyBytes
+		if keyFileType == Constants.KeyFileTypeBundleEncrypted {
+			let encryptedPrivateKey = keys[offset..<(offset + so.box.SecretKeyBytes + so.secretBox.MacBytes)]
+			offset += so.box.SecretKeyBytes + so.secretBox.MacBytes
+			
+			let pwdSalt = keys[offset..<(offset + so.pwHash.SaltBytes)]
+			offset += so.pwHash.SaltBytes
+			
+			let skNonce = keys[offset..<(offset + so.secretBox.NonceBytes)]
+			offset += so.secretBox.NonceBytes
+			
+			_ = try savePrivateFile(filename: Constants.PublicKeyFilename, data: Bytes(publicKey))
+			_ = try savePrivateFile(filename: Constants.PwdSaltFilename, data: Bytes(pwdSalt))
+			_ = try savePrivateFile(filename: Constants.SKNONCEFilename, data: Bytes(skNonce))
+			let pK = try getPrivateKeyFromExportedKey(password: password, encPrivKey: Bytes(encryptedPrivateKey))
+			_ = try savePrivateFile(filename: Constants.PrivateKeyFilename, data: pK)
+
+		} else if keyFileType == Constants.KeyFileTypePublicPlain {
+			_ = try savePrivateFile(filename: Constants.PublicKeyFilename, data: Bytes(publicKey))
+		}
+	}
+        	
     private func encryptSymmetric(key:Bytes?, nonce:Bytes?, data:Bytes?) throws -> Bytes {
 
         guard let key = key, key.count ==  so.secretBox.KeyBytes else {
@@ -249,7 +299,7 @@ public class Crypto {
         }
         offset += Constants.FileBegginingLen
         
-        let fileVersion:UInt8 = buf[2]
+        let fileVersion:UInt8 = buf[offset]
         if fileVersion != Constants.CurrentFileVersion {
             throw CryptoError.Header.incorrectFileVersion
         }
@@ -281,7 +331,7 @@ public class Crypto {
         let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
         
         //TODO : Get Secret key from memory
-        let privateKey:Bytes = try getPrivateKey(password: "11111111")
+		let privateKey:Bytes = KeyManagement.key
         
         guard let headerBytes = so.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
             throw CryptoError.Internal.openFailure
@@ -456,7 +506,7 @@ public class Crypto {
         
         repeat {
             numRead = input.read(&buffer, maxLength: pivateBufferSize)
-			if numRead <= 0 {
+			if numRead < 0 {
 				throw CryptoError.IO.readFailure
 			}
             outBuff += buffer[0..<numRead]
@@ -485,24 +535,12 @@ public class Crypto {
         public var fileName:String?
         public var videoDuration:UInt32 = 0
         public var overallHeaderSize:UInt32?
-        public func toString() -> String {
-            return "Chunk Size - \(chunkSize)\n" + "Data Size - \(dataSize)\n" +
-                    "Symmetric Key - \(Crypto.byteArrayToBase64(data: symmetricKey))\n" +
-                    "File Type - \(fileType)\n" +
-                    "Filename - \(fileName ?? "")\n\n" +
-                    "Video Duration - \(videoDuration)\n\n"
-        }
     }
 }
 
 extension Crypto {
-	
-	public static func byte2hex(bytes:Bytes) -> String {
-		return Data(bytes: bytes, count: bytes.count).hexString
-	}
-
-	
-        public static func toBytes<T:FixedWidthInteger>(value:T) -> Bytes {
+		
+	public static func toBytes<T:FixedWidthInteger>(value:T) -> Bytes {
             var result:Bytes = []
             let numOfBytes = MemoryLayout<T>.size
             if numOfBytes == 1 {
@@ -532,11 +570,16 @@ extension Crypto {
             return result
         }
             
-	public static func byteArrayToBase64(data:Bytes) -> String {
-            assert(data.count > 0)
-            let newData = Data(data)
-            return newData.base64EncodedString()
-        }
+	public func bytesToBase64(data:Bytes) -> String? {
+		assert(data.count > 0)
+		return so.utils.bin2base64(data)
+	}
+	
+	public func base64ToByte(data:String) -> Bytes? {
+		assert(data.count > 0)
+		return so.utils.base642bin(data, variant: .ORIGINAL)
+	}
+
         
     public func toBytes(header:Header) -> Bytes {
 		

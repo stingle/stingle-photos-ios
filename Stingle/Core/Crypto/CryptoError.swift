@@ -20,6 +20,12 @@ enum CryptoError: Error {
         case incorrectFileBeggining
         case incorrectChunkSize
     }
+	
+	enum Bundle : Error {
+		case incorrectKeyFileBeginning
+		case incorrectKeyFileVersion
+		case incorrectKeyFileType
+	}
 
     enum Internal : Error {
         case keyPairGenerationFailure
