@@ -1,6 +1,6 @@
 import UIKit
 
-class BaseVC: ViewController {
+class BaseVC: UIViewController {
 	
 	let screenWidth = UIScreen.main.bounds.size.width
 	let screenHeight = UIScreen.main.bounds.size.height
@@ -10,11 +10,9 @@ class BaseVC: ViewController {
 		if #available(iOS 13.0, *) {
 			let app = UIApplication.shared
 			let statusBarHeight: CGFloat = app.statusBarFrame.size.height
-			
 			let statusbarView = UIView()
 			statusbarView.backgroundColor = Theme.Colors.SPDarkRed
 			view.addSubview(statusbarView)
-		  
 			statusbarView.translatesAutoresizingMaskIntoConstraints = false
 			statusbarView.heightAnchor
 				.constraint(equalToConstant: statusBarHeight).isActive = true
@@ -24,12 +22,10 @@ class BaseVC: ViewController {
 				.constraint(equalTo: view.topAnchor).isActive = true
 			statusbarView.centerXAnchor
 				.constraint(equalTo: view.centerXAnchor).isActive = true
-		  
 		} else {
 			let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
 			statusBar?.backgroundColor = Theme.Colors.SPDarkRed
 		}
-
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

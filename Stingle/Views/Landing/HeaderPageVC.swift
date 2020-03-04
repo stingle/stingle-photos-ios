@@ -17,8 +17,9 @@ class HeaderPageVC : UIPageViewController, UIPageViewControllerDataSource, UIPag
 	}
 	
 	private func createPage  (index:Int) -> CurrentPageVC {
-		let viewController:CurrentPageVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CurrentPageVC") as! CurrentPageVC
+		let viewController:CurrentPageVC = UIStoryboard(name: "Welcome", bundle: nil).instantiateViewController(withIdentifier: "CurrentPageVC") as! CurrentPageVC
 		viewController.index = index
+
 		return viewController
 	}
 	

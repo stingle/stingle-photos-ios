@@ -7,6 +7,15 @@ class LandingVC: BaseVC {
 	@IBOutlet weak var signUp: UIButton!
 	@IBOutlet weak var signIn: UIButton!
 	@IBOutlet weak var alreadyHaveAnAccount: UILabel!
+		
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+        guard let navigationController = self.navigationController else {
+            return
+        }
+        navigationController.setNavigationBarHidden(true, animated: false)
+	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()

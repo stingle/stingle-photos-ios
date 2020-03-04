@@ -134,7 +134,21 @@ public class Crypto {
         return key
     }
 	
+	public func getPasswordHashForStorage(password:String, salt:String) throws -> String {
+		guard let data = salt.hexadecimal else {
+			return ""
+		}
+		return try getPasswordHashForStorage(password: password, salt: Bytes(data))
+	}
 	
+	private func getPasswordHashForStorage(password:String, salt:Bytes) throws -> String {
+		guard let hash = so.pwHash.hash(outputLength: Constants.PWHASH_LEN, passwd: password.bytes, salt: salt, opsLimit: so.pwHash.OpsLimitModerate, memLimit: so.pwHash.MemLimitModerate) else {
+            throw CryptoError.Internal.hashGenerationFailure
+        }
+		
+		return Crypto.byte2hex(bytes: hash)
+	}
+
         
     private func encryptSymmetric(key:Bytes?, nonce:Bytes?, data:Bytes?) throws -> Bytes {
 
@@ -442,6 +456,9 @@ public class Crypto {
         
         repeat {
             numRead = input.read(&buffer, maxLength: pivateBufferSize)
+			if numRead <= 0 {
+				throw CryptoError.IO.readFailure
+			}
             outBuff += buffer[0..<numRead]
         } while (numRead > 0)
         
@@ -479,7 +496,12 @@ public class Crypto {
 }
 
 extension Crypto {
+	
+	public static func byte2hex(bytes:Bytes) -> String {
+		return Data(bytes: bytes, count: bytes.count).hexString
+	}
 
+	
         public static func toBytes<T:FixedWidthInteger>(value:T) -> Bytes {
             var result:Bytes = []
             let numOfBytes = MemoryLayout<T>.size
