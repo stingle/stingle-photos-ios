@@ -14,7 +14,7 @@ class SignInVC : BaseVC {
 	@IBOutlet weak var dontHaveAnAccount: UILabel!
 
 	@IBAction func singInClicked(_ sender: Any) {
-		let ok = viewModel.signIn(email: "grig.davit@gmail.com", password: "mekicvec")
+		let ok = viewModel.signIn(email: emailInput.text, password: passwordInput.text)
 		print(ok)
 	}
 	override func viewDidLoad() {

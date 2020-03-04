@@ -18,22 +18,4 @@ class KeyManagement {
 		
 		return true
 	}
-	
 }
-/*
-
-public static boolean importKeyBundle(String keyBundle, String password){
-	try {
-		byte[] keyBundleBytes = Crypto.base64ToByteArrayDefault(keyBundle);
-
-		StinglePhotosApplication.getCrypto().importKeyBundle(keyBundleBytes, password);
-	} catch (IOException | CryptoException e) {
-		e.printStackTrace();
-		return false;
-	}
-
-	return true;
-}
-
-
-*/
