@@ -14,9 +14,20 @@ class SignInVC : BaseVC {
 	@IBOutlet weak var dontHaveAnAccount: UILabel!
 
 	@IBAction func singInClicked(_ sender: Any) {
-		let ok = viewModel.signIn(email: emailInput.text, password: passwordInput.text)
-		print(ok)
+		_ = viewModel.signIn(email: "grig.davit@gmail.com", password: "mekicvec" ) { (status, error) in
+			do {
+				if status {
+					DispatchQueue.main.async {
+						guard let vc = super.viewController(with: "GalleryVC", from: "Home") else {
+							return
+						}
+						self.navigationController?.pushViewController(vc, animated: true)
+						}
+					}
+			}
+		}
 	}
+		
 	override func viewDidLoad() {
 		super.viewDidLoad()
         guard let navigationController = self.navigationController else {

@@ -1,7 +1,6 @@
 import Foundation
 
-protocol SPResponse : Decodable {
-	
+protocol SPResponse : Codable {
 }
 
 struct SPPreSignInResponse: SPResponse {
@@ -30,5 +29,30 @@ struct SPSignInResponse: SPResponse {
 		var serverPublicKey:String
 		var token:String
 		var userId:String
+	}
+}
+
+struct SPUpdateResponse: SPResponse {
+
+	var status:String
+	var parts:Parts
+	var infos:[String]
+	var errors:[String]
+
+	struct Parts : Codable {
+		
+		var spaceQuota:String
+		var spaceUsed:String
+
+		var deletes:[Deleted]
+		var files:[SPFile]
+		var trash:[SPFile]
+
+		struct Deleted: Codable {
+			var date:String
+			var file:String
+			var type:Int
+		}
+				
 	}
 }

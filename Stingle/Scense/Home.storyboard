@@ -10,7 +10,7 @@
         <!--GalleryVC-->
         <scene sceneID="uB3-iq-WTr">
             <objects>
-                <viewController id="OU2-rh-DL2" customClass="GalleryVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GalleryVC" id="OU2-rh-DL2" customClass="GalleryVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jvt-mw-jFN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

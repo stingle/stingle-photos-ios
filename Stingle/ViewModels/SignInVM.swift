@@ -3,18 +3,24 @@ import Foundation
 class SignInVM: NSObject {
     private let crypto:Crypto = Crypto()
 
-	public func signIn(email:String?, password:String?) -> Bool {
+	public func signIn(email:String?, password:String?, completionHandler: @escaping (Bool, Error?) -> Swift.Void) -> Bool {
 		guard let email = email, let password = password else {
 			return false
 		}
 		
 		let request = SPPreSignInRequest(email: email)
-		let task = NetworkManager.send(request:request) { (data:SPPreSignInResponse) in
-			do {
+		_ = NetworkManager.send(request:request) { (data:SPPreSignInResponse?, error)  in do {
+				guard let data = data, error == nil else {
+					completionHandler(false, error)
+					return
+				}
 				let pHash = try self.crypto.getPasswordHashForStorage(password: password, salt: data.parts.salt)
 				let request = SPSignInRequest(email: email, password: pHash)
-				let task = NetworkManager.send(request: request) { (data:SPSignInResponse) in
-					do {
+				_ = NetworkManager.send(request: request) { (data:SPSignInResponse?, error) in do {
+						guard let data = data, error == nil else {
+							completionHandler(false, error)
+							return
+						}
 						let isKeyBackedUp:Bool = (data.parts.isKeyBackedUp == 1)
 						SPApplication.user = User(token: data.parts.token, userId: data.parts.userId, isKeyBackedUp: isKeyBackedUp, homeFolder: data.parts.homeFolder, email: email)
 						guard true == KeyManagement.importKeyBundle(keyBundle: data.parts.keyBundle, password: password) else {
@@ -22,19 +28,15 @@ class SignInVM: NSObject {
 							return
 						}
 						KeyManagement.key = try self.crypto.getPrivateKey(password: password)
-						print(data)
+						completionHandler(true, nil)
 					} catch {
-						print(error)
-						return
+						completionHandler(false, error)
 					}
 				}
-				print(task.taskIdentifier)
 			} catch {
-				print(error)
+				completionHandler(false, error)
 			}
-			
 		}
-		print(task.taskIdentifier)
 		return false
 	}
 	

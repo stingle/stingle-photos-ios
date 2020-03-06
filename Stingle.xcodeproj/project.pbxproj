@@ -35,6 +35,10 @@
 		6242B7CC240DE6930090BFE4 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6242B7BF240DE6930090BFE4 /* Montserrat-Regular.ttf */; };
 		624658CD240F96540050F18F /* SPApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624658CC240F96540050F18F /* SPApplication.swift */; };
 		624658D0240F99730050F18F /* KeyManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624658CF240F99730050F18F /* KeyManagement.swift */; };
+		624A1947241115250002F1ED /* StingleModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 624A1945241115250002F1ED /* StingleModel.xcdatamodeld */; };
+		624A197024116B370002F1ED /* GalleryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A196F24116B370002F1ED /* GalleryVM.swift */; };
+		624A197224116D8B0002F1ED /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A197124116D8B0002F1ED /* DataBase.swift */; };
+		624A197424118CAE0002F1ED /* SPFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A197324118CAE0002F1ED /* SPFile.swift */; };
 		624A678424040E9000436C2F /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A678324040E9000436C2F /* CryptoTests.swift */; };
 		62619354240D092D00562BDF /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619353240D092D00562BDF /* SignInVC.swift */; };
 		62619357240D094F00562BDF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619356240D094F00562BDF /* SignUpVC.swift */; };
@@ -96,6 +100,10 @@
 		6242B7BF240DE6930090BFE4 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		624658CC240F96540050F18F /* SPApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPApplication.swift; sourceTree = "<group>"; };
 		624658CF240F99730050F18F /* KeyManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManagement.swift; sourceTree = "<group>"; };
+		624A1946241115250002F1ED /* StingleModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StingleModel.xcdatamodel; sourceTree = "<group>"; };
+		624A196F24116B370002F1ED /* GalleryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryVM.swift; sourceTree = SOURCE_ROOT; };
+		624A197124116D8B0002F1ED /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
+		624A197324118CAE0002F1ED /* SPFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFile.swift; sourceTree = "<group>"; };
 		624A678124040E9000436C2F /* CryptoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		624A678324040E9000436C2F /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		624A678524040E9000436C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -181,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				62048A66240E99BE006207AC /* User.swift */,
+				624A197324118CAE0002F1ED /* SPFile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -208,6 +217,7 @@
 		620C02CD23FED2BB00999057 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				624A196F24116B370002F1ED /* GalleryVM.swift */,
 				6261935F240D4D2A00562BDF /* LandingVM.swift */,
 				62048A68240EDBDD006207AC /* SignInVM.swift */,
 			);
@@ -244,6 +254,7 @@
 		620C02D123FED39D00999057 /* DB */ = {
 			isa = PBXGroup;
 			children = (
+				624A197124116D8B0002F1ED /* DataBase.swift */,
 			);
 			path = DB;
 			sourceTree = "<group>";
@@ -307,6 +318,7 @@
 		6279CF1323FEBB0C008B18DA = {
 			isa = PBXGroup;
 			children = (
+				624A1945241115250002F1ED /* StingleModel.xcdatamodeld */,
 				6279CF1E23FEBB0C008B18DA /* Stingle */,
 				624A678224040E9000436C2F /* CryptoTests */,
 				6279CF1D23FEBB0C008B18DA /* Products */,
@@ -553,6 +565,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				624A197024116B370002F1ED /* GalleryVM.swift in Sources */,
+				624A1947241115250002F1ED /* StingleModel.xcdatamodeld in Sources */,
 				62048A6B240EEC82006207AC /* NetworkManager.swift in Sources */,
 				62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */,
 				6242B7B1240DDEA00090BFE4 /* String+Extensions.swift in Sources */,
@@ -561,9 +575,11 @@
 				6261935B240D0E8400562BDF /* BaseVC.swift in Sources */,
 				62619360240D4D2A00562BDF /* LandingVM.swift in Sources */,
 				6233925F2406D11600A0F64F /* FileManger.swift in Sources */,
+				624A197224116D8B0002F1ED /* DataBase.swift in Sources */,
 				62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */,
 				620C02D523FED4FB00999057 /* TrashVC.swift in Sources */,
 				62AE6894240D55CD001EA58D /* Theme.swift in Sources */,
+				624A197424118CAE0002F1ED /* SPFile.swift in Sources */,
 				6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */,
 				6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */,
 				62048A6F240F1766006207AC /* SPRequest.swift in Sources */,
@@ -846,6 +862,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		624A1945241115250002F1ED /* StingleModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				624A1946241115250002F1ED /* StingleModel.xcdatamodel */,
+			);
+			currentVersion = 624A1946241115250002F1ED /* StingleModel.xcdatamodel */;
+			path = StingleModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6279CF1423FEBB0C008B18DA /* Project object */;
 }

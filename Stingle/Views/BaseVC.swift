@@ -43,4 +43,13 @@ class BaseVC: UIViewController {
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
 	}
+	
+	func viewController(with name:String, from scene:String) -> BaseVC? {
+		guard Thread.current.isMainThread else {
+			fatalError()
+		}
+		var viewController:BaseVC? = nil
+		viewController = UIStoryboard(name:scene, bundle: nil).instantiateViewController(withIdentifier: name) as? BaseVC
+		return viewController
+	}
 }
