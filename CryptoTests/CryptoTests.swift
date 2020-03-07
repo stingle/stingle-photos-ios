@@ -26,7 +26,7 @@ class CryptoTests: XCTestCase {
     func encrypt() {
         do {
 
-            try crypto.generateMainKeypair(password: "11111111")
+            try crypto.generateMainKeypair(password: "mekicvec")
             let input:InputStream = InputStream(fileAtPath: "\(filePath)\(inEncFileName)")!
             input.open()
             let output:OutputStream = OutputStream(toFileAtPath: "\(filePath)\(outEncFileName)", append: false)!

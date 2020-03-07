@@ -1,10 +1,22 @@
 import UIKit
 
-class GalleryVC : BaseVC {
-	let viewModel = GalleryVM()
+class GalleryVC : BaseVC, GalleryDelegate {
+	
+	@IBOutlet weak var count: UILabel!
+	var viewModel:GalleryVM?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		viewModel.update(lastSeen: "0", lastDelSeen: "0")
-		}
+		count.text = "0"
+		viewModel = GalleryVM()
+		viewModel?.delegate = self
+	}
+	
+	static var count  = 0
+	
+	func gallery(items:[String]) {
+		GalleryVC.count += 1
+		count.text = "\(GalleryVC.count)"
+	}
+	
 }

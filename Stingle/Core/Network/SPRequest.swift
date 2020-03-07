@@ -8,7 +8,6 @@ enum SPRequestMethod : String {
 	func value() -> String {
 		return self.rawValue
 	}
-	
 }
 
 protocol SPRequest {
@@ -152,23 +151,10 @@ struct SPDownloadFileRequest : SPRequest {
 		return nil
 	}
 
-	
 	func params () -> String? {
 		var components = URLComponents()
 		components.queryItems = [URLQueryItem(name: "thumb", value: "1"),URLQueryItem(name: "folder", value: "0"),URLQueryItem(name: "file", value: fileName), URLQueryItem(name: "token", value: token)]
 		let strParams = components.url?.absoluteString
 		return String((strParams?.dropFirst())!)
 	}
-
-	
-	/*
-	postParams.put("token", KeyManagement.getApiToken(context));
-	postParams.put("file", filename);
-	if(isThumb) {
-		postParams.put("thumb", "1");
-	}
-
-	
-	*/
-	
 }

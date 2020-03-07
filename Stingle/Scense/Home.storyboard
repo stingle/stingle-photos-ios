@@ -14,13 +14,32 @@
                     <view key="view" contentMode="scaleToFill" id="jvt-mw-jFN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OhH-vS-IL4">
+                                <rect key="frame" x="157" y="386" width="100" height="124"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="WT9-oN-q7B"/>
+                                    <constraint firstAttribute="height" constant="124" id="sgD-sT-UeU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="OhH-vS-IL4" firstAttribute="centerX" secondItem="jvt-mw-jFN" secondAttribute="centerX" id="FEm-Of-a3I"/>
+                            <constraint firstItem="OhH-vS-IL4" firstAttribute="centerY" secondItem="jvt-mw-jFN" secondAttribute="centerY" id="wNu-Dr-36A"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="pRC-8t-ueb"/>
                     </view>
+                    <connections>
+                        <outlet property="count" destination="OhH-vS-IL4" id="QZR-y9-unU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ALr-jx-sP6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-99" y="86"/>
+            <point key="canvasLocation" x="-100.00000000000001" y="85.714285714285708"/>
         </scene>
     </scenes>
 </document>

@@ -32,7 +32,7 @@ struct SPSignInResponse: SPResponse {
 	}
 }
 
-struct SPUpdateResponse: SPResponse {
+struct SPUpdateInfo: SPResponse {
 
 	var status:String
 	var parts:Parts
@@ -44,15 +44,8 @@ struct SPUpdateResponse: SPResponse {
 		var spaceQuota:String
 		var spaceUsed:String
 
-		var deletes:[Deleted]
+		var deletes:[SPDeletedFile]
 		var files:[SPFile]
-		var trash:[SPFile]
-
-		struct Deleted: Codable {
-			var date:String
-			var file:String
-			var type:Int
-		}
-				
+		var trash:[SPTrashFile]
 	}
 }

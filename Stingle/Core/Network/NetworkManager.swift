@@ -3,11 +3,11 @@ import Foundation
 class session : NSObject, URLSessionDelegate, URLSessionDownloadDelegate {
 	
 	lazy var downloadsSession: URLSession = {
-	  let configuration = URLSessionConfiguration.default
-	  
-	  return URLSession(configuration: configuration,
-						delegate: self,
-						delegateQueue: nil)
+		let configuration = URLSessionConfiguration.default
+		
+		return URLSession(configuration: configuration,
+						  delegate: self,
+						  delegateQueue: nil)
 	}()
 	
 	var dataTask: URLSessionDataTask?
@@ -15,7 +15,7 @@ class session : NSObject, URLSessionDelegate, URLSessionDownloadDelegate {
 	func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
 		
 	}
-
+	
 	func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
 		
 	}
@@ -47,61 +47,52 @@ class NetworkManager : NSObject {
 		default:
 			return nil
 		}
-
+		
 	}
-
+	
 	static public func send<T: SPResponse>(request:SPRequest, completionHandler: @escaping (T?, Error?) -> Swift.Void) -> URLSessionDataTask {
 		guard let urlRequest = NetworkManager.create(request: request) else { fatalError() }
 		let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-				if let error = error {
-					print("Error: \(error)")
-					return
+			if let error = error {
+				print("Error: \(error)")
+				return
+			}
+			if let data = data {
+				do {
+//					print(try JSONSerialization.jsonObject(with:data, options:[]))
+					let decoder = JSONDecoder()
+					decoder.keyDecodingStrategy = .convertFromSnakeCase
+					let response:T = try decoder.decode(T.self, from: data)
+					completionHandler(response, nil)
+				} catch {
+					completionHandler(nil, error)
 				}
-				if let data = data {
-					do {
-						print(try JSONSerialization.jsonObject(with:data, options:[]))
-						let decoder = JSONDecoder()
-						decoder.keyDecodingStrategy = .convertFromSnakeCase
-						let response:T = try decoder.decode(T.self, from: data)
-						completionHandler(response, nil)
-					} catch {
-						completionHandler(nil, error)
-					}
-
-				}
+				
+			}
 		}
 		task.resume()
 		return task
 	}
 	
 	
-	static public func download<T: SPResponse>(request:SPRequest, completionHandler: @escaping (T?, Error?) -> Swift.Void) -> URLSessionDownloadTask {
-
+	static public func download(request:SPRequest, completionHandler: @escaping (URL?, Error?) -> Swift.Void) -> URLSessionDownloadTask {
+		
 		guard let urlRequest = NetworkManager.create(request: request) else { fatalError() }
 		let s = session()
 		s.downloadsSession.configuration.httpShouldUsePipelining = true
 		let task = s.downloadsSession.downloadTask(with: urlRequest){ (url, response, error) in
-				if let error = error {
-					print("Error: \(error)")
-					return
-				}
-			guard  let url = url else {
+			guard  let url = url, error == nil else {
+				completionHandler(nil, error)
 				return
 			}
-			guard let input =  InputStream(url: url) else {
-				return
-			}
-			input.open()
-			guard let out = OutputStream(toFileAtPath: "~/Desktop/thumb.jpg", append: false) else {
-				return
-			}
-			out.open()
+			let downloadFileRequest:SPDownloadFileRequest = request as! SPDownloadFileRequest
 			do {
-			_ = try SPApplication.crypto.decryptFile(input:input, output:out)
+				_ = try SPFileManager.moveToHomeFolder(fileURL: url, withName: downloadFileRequest.fileName)
 			} catch {
-				print(error)
+				completionHandler(nil, error)
+				return
 			}
-			
+			completionHandler(SPFileManager.fullPathOfFile(fileName: downloadFileRequest.fileName), nil)
 		}
 		task.resume()
 		return task

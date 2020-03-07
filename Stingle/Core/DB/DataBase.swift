@@ -3,29 +3,27 @@ import Foundation
 import CoreData
 class DataBase {
 	
-	public let container:NSPersistentContainer
+	private let container:NSPersistentContainer
 	
 	init() {
-        container = NSPersistentContainer(name: "StingleModel")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        container.viewContext.undoManager = nil
-        container.viewContext.shouldDeleteInaccessibleFaults = true
+		container = NSPersistentContainer(name: "StingleModel")
+		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+			if let error = error as NSError? {
+				fatalError("Unresolved error \(error), \(error.userInfo)")
+			}
+		})
+		container.viewContext.automaticallyMergesChangesFromParent = true
+		container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		container.viewContext.undoManager = nil
+		container.viewContext.shouldDeleteInaccessibleFaults = true
 	}
 	
 	public func add(spfile:SPFile) {
-        let context = container.newBackgroundContext()
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        context.undoManager = nil
+		let context = container.newBackgroundContext()
+		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		context.undoManager = nil
 		context.performAndWait {
-			guard let file = NSEntityDescription.insertNewObject(forEntityName: "Files", into: context) as? FileMO else {
-				return
-			}
+			let file = NSEntityDescription.insertNewObject(forEntityName: spfile.mo(), into: context) as! FileMO
 			file.update(file: spfile)
 			if context.hasChanges {
 				do {
@@ -36,8 +34,40 @@ class DataBase {
 					
 				}
 				context.reset()
-				}
+			}
 		}
+	}
+	
+	public func add(deletes:[SPDeletedFile]) {
+		for item in deletes {
+			add(deleted: item)
+		}
+	}
+	
+	public func add(deleted:SPDeletedFile) {
+		let context = container.newBackgroundContext()
+		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		context.undoManager = nil
+		context.performAndWait {
+			let file = NSEntityDescription.insertNewObject(forEntityName: deleted.mo(), into: context) as! DeletedFileMO
+			file.update(info: deleted)
+			if context.hasChanges {
+				do {
+					try context.save()
+				} catch {
+					print("Error: \(error)\nCould not save Core Data context.")
+					return
+					
+				}
+				context.reset()
+			}
+		}
+	}
+	
+	public func update(parts:SPUpdateInfo.Parts) {
+		add(files: parts.files)
+		add(files: parts.trash)
+		add(deletes: parts.deletes)
 	}
 	
 	public func add(files:[SPFile]) {
@@ -62,29 +92,91 @@ class DataBase {
 		return false
 	}
 	
-	func getAllFiles() -> [SPFile]? {
-		let fetchRequest = NSFetchRequest<FileMO>(entityName: "Files")
+	private func getAppinfoMO (context:NSManagedObjectContext) -> AppInfoMO? {
+		var info:AppInfoMO? = nil
+		let fetchRequest = NSFetchRequest<AppInfoMO>(entityName: "AppInfo")
 		do {
-			let files = try container.viewContext.fetch(fetchRequest)
-			var result:[SPFile] = []
-			for item in files {
-				result.append(SPFile(file: item))
+			info = try context.fetch(fetchRequest).first
+			if info == nil {
+				guard let newInfo = NSEntityDescription.insertNewObject(forEntityName: "AppInfo", into: context) as? AppInfoMO else {
+					return nil
+				}
+				newInfo.update(lastSeen: 0, lastDelSeen: 0)
+				info = newInfo
 			}
-			return result
+		} catch {
+			return nil
+		}
+		return info
+	}
+	
+	func getAppInfo() -> AppInfo? {
+		let context = container.newBackgroundContext()
+		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		context.undoManager = nil
+		var info:AppInfo? = nil
+		context.performAndWait {
+			guard let infoMO = getAppinfoMO(context: context) else {
+				return
+			}
+			info = AppInfo(info: infoMO)
+			if context.hasChanges {
+				do {
+					try context.save()
+				} catch {
+					print("Error: \(error)\nCould not save Core Data context.")
+					return
+				}
+				context.reset()
+			}
+		}
+		return info
+	}
+		
+	func updateAppInfo(info:AppInfo) {
+		let context = container.newBackgroundContext()
+		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		context.undoManager = nil
+		context.performAndWait {
+			let infoMo = getAppinfoMO(context: context)
+			if infoMo != nil {
+				infoMo?.update(lastSeen: info.lastSeen, lastDelSeen: info.lastDelSeen)
+			}
+			if context.hasChanges {
+				do {
+					try context.save()
+				} catch {
+					print("Error: \(error)\nCould not save Core Data context.")
+					return
+				}
+				context.reset()
+			}
+		}
+	}
+	
+	func getAllFiles() -> [SPFile]? {
+		let filesFetchRequest = NSFetchRequest<FileMO>(entityName: "Files")
+		do {
+			let filesFetchResult = try container.viewContext.fetch(filesFetchRequest)
+			var files:[SPFile] = []
+			for item in filesFetchResult {
+				files.append(SPFile(file: item))
+			}
+			return files
 		} catch {
 			print(error)
+			return nil
 		}
-		return []
 	}
 	
 	func getAllFilesCount() -> Int {
 		return 0
 	}
-
+	
 	func getFiles(mode:Int, sort:Int) -> [SPFile]? {
 		return nil
 	}
-
+	
 	
 	func getReuploadFilesList() -> [SPFile]? {
 		return nil
@@ -97,16 +189,16 @@ class DataBase {
 	public func deleteAll() {
 		
 	}
-			
-    func commit() {
-        let context = container.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
+	
+	func commit() {
+		let context = container.viewContext
+		if context.hasChanges {
+			do {
+				try context.save()
+			} catch {
+				let nserror = error as NSError
+				fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+			}
+		}
+	}
 }

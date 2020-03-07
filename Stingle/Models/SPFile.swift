@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+//MARK : Core Data Managed Objects
 class FileMO : NSManagedObject {
 	@NSManaged var dateCreated:String?
 	@NSManaged var dateModified:String?
@@ -24,8 +25,32 @@ class FileMO : NSManagedObject {
 	}
 }
 
+class TarshMO : FileMO {
+	
+}
 
-struct SPFile: Codable {
+class DeletedFileMO : NSManagedObject {
+	@NSManaged var date:Int64
+	@NSManaged var file:String
+	@NSManaged var type:Int
+	
+	func update(info:SPDeletedFile) {
+		if let intDate = Int64(info.date) {
+			date = intDate
+		} else {
+			date = 0
+		}
+		file = info.file
+		type = info.type
+	}
+}
+
+//MARK : Codable(serializable) objects 
+protocol SPFileInfo : Codable {
+	func mo() -> String
+}
+
+class SPFile: SPFileInfo {
 	var dateCreated:String
 	var dateModified:String
 	var file:String
@@ -33,6 +58,10 @@ struct SPFile: Codable {
 	var version:String
 	var isLocal:Bool?
 	var reUpload:Int?
+	
+	func mo() -> String {
+		return "Files"
+	}
 	
 	enum CodingKeys : CodingKey {
 		case dateCreated
@@ -52,3 +81,21 @@ struct SPFile: Codable {
 		reUpload = file.reUpload
 	}
 }
+
+class SPTrashFile : SPFile {
+	override func mo() -> String {
+		return "Trash"
+	}
+}
+
+class SPDeletedFile: SPFileInfo {
+	var date:String
+	var file:String
+	var type:Int
+	
+	func mo() -> String {
+		return "Deletes"
+	}
+
+}
+
