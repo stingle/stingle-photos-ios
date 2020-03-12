@@ -49,8 +49,7 @@ class SyncManager {
 			return false
 		}
 		
-//		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
-		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(0)", lastDelSeenTime: "\(info.lastDelSeen)")
+		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
 
 		//		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "0", lastDelSeenTime: "0")
 		_ = NetworkManager.send(request: request) { (data:SPUpdateInfo?, error:Error?) in

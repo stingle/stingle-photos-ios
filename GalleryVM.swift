@@ -111,7 +111,11 @@ class GalleryVM : SPEventHandler {
 		}
 		
 		let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
-		let newImage = UIImage(data:imageData)
+		let screenSize: CGRect = UIScreen.main.bounds
+		let width = screenSize.size.width / 3
+		let height = width
+
+		let newImage = UIImage(data:imageData)?.resize(size: CGSize(width: width, height: height))
 		dataSource[file] = newImage
 		cell.ImageView.image = newImage
 		return cell

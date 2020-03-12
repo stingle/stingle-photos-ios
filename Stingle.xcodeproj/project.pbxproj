@@ -45,6 +45,9 @@
 		624A197224116D8B0002F1ED /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A197124116D8B0002F1ED /* DataBase.swift */; };
 		624A197424118CAE0002F1ED /* SPFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A197324118CAE0002F1ED /* SPFile.swift */; };
 		624A678424040E9000436C2F /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A678324040E9000436C2F /* CryptoTests.swift */; };
+		62504370241AB6FF00A90F3A /* Image+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6250436F241AB6FF00A90F3A /* Image+Extension.swift */; };
+		62504374241ACD2400A90F3A /* SPMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62504373241ACD2400A90F3A /* SPMenuCell.swift */; };
+		62504376241AD24C00A90F3A /* SPMenuVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62504375241AD24C00A90F3A /* SPMenuVM.swift */; };
 		625F32A92419EB1E00477881 /* SPCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625F32A72419EB1E00477881 /* SPCollectionHeader.swift */; };
 		62619354240D092D00562BDF /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619353240D092D00562BDF /* SignInVC.swift */; };
 		62619357240D094F00562BDF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619356240D094F00562BDF /* SignUpVC.swift */; };
@@ -123,6 +126,9 @@
 		624A678124040E9000436C2F /* CryptoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		624A678324040E9000436C2F /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		624A678524040E9000436C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6250436F241AB6FF00A90F3A /* Image+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Extension.swift"; sourceTree = "<group>"; };
+		62504373241ACD2400A90F3A /* SPMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMenuCell.swift; sourceTree = "<group>"; };
+		62504375241AD24C00A90F3A /* SPMenuVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMenuVM.swift; sourceTree = "<group>"; };
 		625F32A72419EB1E00477881 /* SPCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCollectionHeader.swift; sourceTree = "<group>"; };
 		62619353240D092D00562BDF /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
 		62619356240D094F00562BDF /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
@@ -194,7 +200,7 @@
 		620C02C923FED23F00999057 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				620E18CE241A166F00097A16 /* DrawerMenu */,
+				620E18CE241A166F00097A16 /* Menu */,
 				6284A4C524156E97003C3FA5 /* Gallery */,
 				6261935C240D43D400562BDF /* Landing */,
 				620C02D423FED4FB00999057 /* TrashVC.swift */,
@@ -243,6 +249,7 @@
 				624A196F24116B370002F1ED /* GalleryVM.swift */,
 				6261935F240D4D2A00562BDF /* LandingVM.swift */,
 				62048A68240EDBDD006207AC /* SignInVM.swift */,
+				62504375241AD24C00A90F3A /* SPMenuVM.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -291,15 +298,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		620E18CE241A166F00097A16 /* DrawerMenu */ = {
+		620E18CE241A166F00097A16 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
 				620E18DA241A2E1C00097A16 /* HomeVC.swift */,
 				620E18D8241A2E1C00097A16 /* SPDrawerRootVCr.swift */,
 				620E18D7241A2E1C00097A16 /* SPDrawerVC.swift */,
 				620E18D9241A2E1C00097A16 /* SPMenuVC.swift */,
+				62504373241ACD2400A90F3A /* SPMenuCell.swift */,
 			);
-			path = DrawerMenu;
+			path = Menu;
 			sourceTree = "<group>";
 		};
 		6242B7B2240DE6930090BFE4 /* Fonts */ = {
@@ -338,6 +346,13 @@
 				624A678524040E9000436C2F /* Info.plist */,
 			);
 			path = CryptoTests;
+			sourceTree = "<group>";
+		};
+		6250436E241AB6B600A90F3A /* Uitils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Uitils;
 			sourceTree = "<group>";
 		};
 		6261935C240D43D400562BDF /* Landing */ = {
@@ -410,6 +425,7 @@
 		62AE689C240DDD59001EA58D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				6250436E241AB6B600A90F3A /* Uitils */,
 				6242B7B2240DE6930090BFE4 /* Fonts */,
 				62AE689E240DDDA2001EA58D /* Localization */,
 				62AE689D240DDD6B001EA58D /* Extensions */,
@@ -423,6 +439,7 @@
 			children = (
 				6242B7B0240DDEA00090BFE4 /* String+Extensions.swift */,
 				62E754552412DE9600D8FB96 /* Date.swift */,
+				6250436F241AB6FF00A90F3A /* Image+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -637,6 +654,7 @@
 				6233925F2406D11600A0F64F /* SPFileManager.swift in Sources */,
 				624A197224116D8B0002F1ED /* DataBase.swift in Sources */,
 				62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */,
+				62504374241ACD2400A90F3A /* SPMenuCell.swift in Sources */,
 				620C02D523FED4FB00999057 /* TrashVC.swift in Sources */,
 				620E18DD241A2E1C00097A16 /* SPMenuVC.swift in Sources */,
 				62AE6894240D55CD001EA58D /* Theme.swift in Sources */,
@@ -645,6 +663,8 @@
 				6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */,
 				62048A6F240F1766006207AC /* SPRequest.swift in Sources */,
 				62048A6D240F1759006207AC /* SPResponse.swift in Sources */,
+				62504376241AD24C00A90F3A /* SPMenuVM.swift in Sources */,
+				62504370241AB6FF00A90F3A /* Image+Extension.swift in Sources */,
 				6284A4CC241582F8003C3FA5 /* SPCollectionViewCell.swift in Sources */,
 				62E754562412DE9600D8FB96 /* Date.swift in Sources */,
 				62048A69240EDBDD006207AC /* SignInVM.swift in Sources */,

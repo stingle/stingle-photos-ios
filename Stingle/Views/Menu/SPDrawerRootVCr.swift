@@ -14,6 +14,7 @@ class RootViewController: UINavigationController, UINavigationControllerDelegate
         super.init(rootViewController: mainViewController)
         self.topNavigationLeftImage = topNavigationLeftImage
         menuButton = UIBarButtonItem(image: topNavigationLeftImage, style: .plain, target: self, action: #selector(handleMenuButton))
+		menuButton.tintColor = .white
     }
 
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
