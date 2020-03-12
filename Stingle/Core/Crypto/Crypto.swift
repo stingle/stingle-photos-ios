@@ -1,5 +1,7 @@
 import Foundation
 import Sodium
+import Clibsodium
+
 
 fileprivate struct Constants {
 	public static let FileTypeGeneral = 1
@@ -435,15 +437,12 @@ public class Crypto {
 		guard let header = header, (1...bufSize).contains(Int(header.chunkSize)) else {
 			throw CryptoError.Header.incorrectChunkSize
 		}
-		
-		let contextBytes:Bytes = Constants.XCHACHA20POLY1305_IETF_CONTEXT.bytes
 		var chunkNumber:UInt64 = 1
 		
 		let dataReadSize:Int = Int(header.chunkSize) + so.aead.xchacha20poly1305ietf.ABytes + so.aead.xchacha20poly1305ietf.NonceBytes
 		var buf:Bytes = Bytes(repeating: 0, count: dataReadSize)
 		var numRead = 0
 		var diff:Int = 0
-		
 		var numWrite:Int = 0
 		repeat {
 			numRead = input.read(&buf, maxLength: buf.count)
@@ -456,7 +455,7 @@ public class Crypto {
 				throw CryptoError.Internal.keyDerivationFailure
 			}
 			assert(keyBytesLength == chunkKey.count)
-			guard let  decryptedData = so.aead.xchacha20poly1305ietf.decrypt(nonceAndAuthenticatedCipherText: buf, secretKey: chunkKey, additionalData: contextBytes) else {
+			guard let  decryptedData = so.aead.xchacha20poly1305ietf.decrypt(nonceAndAuthenticatedCipherText: buf, secretKey: chunkKey) else {
 				throw CryptoError.Internal.decrypFailure
 			}
 			assert(header.chunkSize == decryptedData.count || (diff != 0))

@@ -133,10 +133,12 @@ struct SPDownloadFileRequest : SPRequest {
 	
 	let token:String
 	let fileName:String
+	let isThumb:Bool
 	
-	init(token:String, fileName:String) {
+	init(token:String, fileName:String, isThumb:Bool = false) {
 		self.token = token
 		self.fileName = fileName
+		self.isThumb = isThumb
 	}
 	
 	func path () -> String {
@@ -153,7 +155,10 @@ struct SPDownloadFileRequest : SPRequest {
 
 	func params () -> String? {
 		var components = URLComponents()
-		components.queryItems = [URLQueryItem(name: "thumb", value: "1"),URLQueryItem(name: "folder", value: "0"),URLQueryItem(name: "file", value: fileName), URLQueryItem(name: "token", value: token)]
+		components.queryItems = [URLQueryItem(name: "folder", value: "0"),URLQueryItem(name: "file", value: fileName), URLQueryItem(name: "token", value: token)]
+		if isThumb {
+			components.queryItems?.append(URLQueryItem(name: "thumb", value: "1"))
+		}
 		let strParams = components.url?.absoluteString
 		return String((strParams?.dropFirst())!)
 	}

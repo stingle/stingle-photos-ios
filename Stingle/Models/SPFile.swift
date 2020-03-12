@@ -5,11 +5,12 @@ import CoreData
 class FileMO : NSManagedObject {
 	@NSManaged var dateCreated:String?
 	@NSManaged var dateModified:String?
-	@NSManaged var file:String?
+	@NSManaged var file:String
 	@NSManaged var headers:String?
 	@NSManaged var version:String?
 	@NSManaged var isLocal:Bool
 	@NSManaged var reUpload:Int
+	@NSManaged var date:Date
 	
 	func update(file:SPFile) {
 		dateCreated = file.dateCreated
@@ -17,6 +18,10 @@ class FileMO : NSManagedObject {
 		self.file = file.file
 		headers = file.headers
 		version = file.version
+		let cut = 24 * 3600 * 1000
+		let back = 24 * 3600
+		let timeInterval = (((dateCreated ?? "0") as NSString).integerValue / cut) * back
+		date = Date(timeIntervalSince1970: Double(timeInterval))
 		guard let newIsLocal = file.isLocal, let newReUpload = file.reUpload else {
 			return
 		}
@@ -58,6 +63,7 @@ class SPFile: SPFileInfo {
 	var version:String
 	var isLocal:Bool?
 	var reUpload:Int?
+	var date:Date?
 	
 	func mo() -> String {
 		return "Files"
@@ -74,11 +80,12 @@ class SPFile: SPFileInfo {
 	init(file:FileMO) {
 		dateCreated = file.dateCreated ?? ""
 		dateModified = file.dateModified ?? ""
-		self.file = file.file ?? ""
+		self.file = file.file 
 		headers = file.headers ?? ""
 		version = file.version ?? ""
 		isLocal = file.isLocal
 		reUpload = file.reUpload
+		date = file.date
 	}
 }
 

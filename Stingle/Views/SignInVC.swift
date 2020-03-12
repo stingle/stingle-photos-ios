@@ -12,46 +12,46 @@ class SignInVC : BaseVC {
 	@IBOutlet weak var signIn: UIButton!
 	@IBOutlet weak var signUp: UIButton!
 	@IBOutlet weak var dontHaveAnAccount: UILabel!
-
+	
 	@IBAction func singInClicked(_ sender: Any) {
 		_ = viewModel.signIn(email: "grig.davit@gmail.com", password: "mekicvec" ) { (status, error) in
 			do {
 				if status {
 					DispatchQueue.main.async {
-						guard let vc = super.viewController(with: "GalleryVC", from: "Home") else {
-							return
-						}
-						self.navigationController?.pushViewController(vc, animated: true)
-						}
+						let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
+						let home = storyboard.instantiateInitialViewController()
+						let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+						let rootViewController = appDelegate.window?.rootViewController
+						UIView.transition(from: rootViewController!.view, to: home!.view, duration: 0.6, options: [.transitionCrossDissolve], completion: {
+							_ in
+							appDelegate.window?.rootViewController = home
+						})
 					}
+				}
 			}
 		}
 	}
-		
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-        guard let navigationController = self.navigationController else {
-            return
-        }
-        navigationController.navigationBar.barTintColor = Theme.Colors.SPRed
 		createBackBarButton(forNavigationItem: self.navigationItem)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-        guard let navigationController = self.navigationController else {
-            return
-        }
-        navigationController.setNavigationBarHidden(false, animated: false)
+		guard let navigationController = self.navigationController else {
+			return
+		}
+		navigationController.setNavigationBarHidden(false, animated: false)
 	}
 	
 	//TODO : create reusable components (with style ) such as navigation bar, navigation bar items ... 
-    func createBackBarButton(forNavigationItem navigationItem:UINavigationItem){
-        let backButtonImage = UIImage(named: "arrow_back")
-        let backButton = UIButton(frame: CGRect(x: 0, y: 0, width: backButtonImage!.size.width, height: backButtonImage!.size.height))
-        backButton.setImage(backButtonImage!, for: .normal)
+	func createBackBarButton(forNavigationItem navigationItem:UINavigationItem) {
+		let backButtonImage = UIImage(named: "arrow_back")
+		let backButton = UIButton(frame: CGRect(x: 0, y: 0, width: backButtonImage!.size.width, height: backButtonImage!.size.height))
+		backButton.setImage(backButtonImage!, for: .normal)
 		backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-        let backBarButton = UIBarButtonItem(customView: backButton)
+		let backBarButton = UIBarButtonItem(customView: backButton)
 		let spaceBar = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.fixedSpace, target: nil, action: nil)
 		spaceBar.width = 30
 		let titleLabel = UILabel()
@@ -61,11 +61,10 @@ class SignInVC : BaseVC {
 		string.setColor(color: .white, forText: text)
 		titleLabel.attributedText = string
 		let titleBar = UIBarButtonItem(customView: titleLabel)
-        navigationItem.leftBarButtonItems = [backBarButton, spaceBar, titleBar]
-    }
+		navigationItem.leftBarButtonItems = [backBarButton, spaceBar, titleBar]
+	}
 	
 	@objc public func backButtonTapped() {
 		self.navigationController?.popToRootViewController(animated: true)
 	}
-
 }

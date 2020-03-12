@@ -8,23 +8,15 @@ class BaseVC: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		if #available(iOS 13.0, *) {
-			let app = UIApplication.shared
-			let statusBarHeight: CGFloat = app.statusBarFrame.size.height
-			let statusbarView = UIView()
-			statusbarView.backgroundColor = Theme.Colors.SPDarkRed
-			view.addSubview(statusbarView)
-			statusbarView.translatesAutoresizingMaskIntoConstraints = false
-			statusbarView.heightAnchor
-				.constraint(equalToConstant: statusBarHeight).isActive = true
-			statusbarView.widthAnchor
-				.constraint(equalTo: view.widthAnchor, multiplier: 1.0).isActive = true
-			statusbarView.topAnchor
-				.constraint(equalTo: view.topAnchor).isActive = true
-			statusbarView.centerXAnchor
-				.constraint(equalTo: view.centerXAnchor).isActive = true
+			let statusBar = UIView(frame: UIApplication.shared.keyWindow?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
+			 statusBar.backgroundColor = Theme.Colors.SPDarkRed
+			 UIApplication.shared.keyWindow?.addSubview(statusBar)
 		} else {
 			let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
 			statusBar?.backgroundColor = Theme.Colors.SPDarkRed
+		}
+		if let navigationController = self.navigationController {
+			navigationController.navigationBar.barTintColor = Theme.Colors.SPRed
 		}
 	}
 	
@@ -44,12 +36,12 @@ class BaseVC: UIViewController {
 		super.viewDidDisappear(animated)
 	}
 	
-	func viewController(with name:String, from scene:String) -> BaseVC? {
+	func viewController(with name:String, from scene:String) -> UIViewController? {
 		guard Thread.current.isMainThread else {
 			fatalError()
 		}
-		var viewController:BaseVC? = nil
-		viewController = UIStoryboard(name:scene, bundle: nil).instantiateViewController(withIdentifier: name) as? BaseVC
+		var viewController:UIViewController? = nil
+		viewController = UIStoryboard(name:scene, bundle: nil).instantiateViewController(withIdentifier: name)
 		return viewController
 	}
 }

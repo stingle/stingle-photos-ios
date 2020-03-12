@@ -154,6 +154,45 @@ class DataBase {
 		}
 	}
 	
+	func filesFilteredByDate() -> Dictionary<Date, Array<SPFile>>? {
+		
+		let keypathExp = NSExpression(forKeyPath: "date")
+		let expression = NSExpression(forFunction: "count:", arguments: [keypathExp])
+		
+		let countDesc = NSExpressionDescription()
+		countDesc.expression = expression
+		countDesc.name = "count"
+		countDesc.expressionResultType = .integer64AttributeType
+
+		let datesFetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Files")
+		datesFetchRequest.propertiesToFetch = ["date"]
+		datesFetchRequest.propertiesToGroupBy = ["date"]
+		datesFetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+		datesFetchRequest.resultType = .dictionaryResultType
+		do {
+			var result = Dictionary<Date, Array<SPFile>>()
+			let datesFetchResult = try container.viewContext.fetch(datesFetchRequest)
+			for item in datesFetchResult {
+				let dict = item as! Dictionary<String, Date>
+				guard let date = dict["date"] else {
+					return nil
+				}
+				let filesFetchRequest = NSFetchRequest<FileMO>(entityName: "Files")
+				filesFetchRequest.predicate = NSPredicate(format: "date == %@", date as NSDate)
+				let filesFetchResult = try container.viewContext.fetch(filesFetchRequest)
+				var files:[SPFile] = []
+				for file in filesFetchResult {
+					files.append(SPFile(file: file))
+				}
+				result[date] = files
+			}
+			return result
+		} catch {
+			print(error)
+			return nil
+		}
+	}
+	
 	func getAllFiles() -> [SPFile]? {
 		let filesFetchRequest = NSFetchRequest<FileMO>(entityName: "Files")
 		do {

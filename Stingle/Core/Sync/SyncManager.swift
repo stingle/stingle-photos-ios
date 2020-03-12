@@ -49,7 +49,9 @@ class SyncManager {
 			return false
 		}
 		
-		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
+//		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
+		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(0)", lastDelSeenTime: "\(info.lastDelSeen)")
+
 		//		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "0", lastDelSeenTime: "0")
 		_ = NetworkManager.send(request: request) { (data:SPUpdateInfo?, error:Error?) in
 			guard let data = data , error == nil else {
@@ -80,7 +82,7 @@ class SyncManager {
 	
 	static func download (files:[SPFile], completionHandler:  @escaping (String?, Error?) -> Swift.Void) {
 		for item in files {
-			let req = SPDownloadFileRequest(token: SPApplication.user!.token, fileName: item.file)
+			let req = SPDownloadFileRequest(token: SPApplication.user!.token, fileName: item.file, isThumb: true)
 			_ = NetworkManager.download(request: req) { (url, error) in
 				if error != nil {
 					completionHandler(nil, error)

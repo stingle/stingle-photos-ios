@@ -17,6 +17,11 @@
 		620C02D523FED4FB00999057 /* TrashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D423FED4FB00999057 /* TrashVC.swift */; };
 		620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D623FED51E00999057 /* BackupPhraseVC.swift */; };
 		620C02D923FED52E00999057 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D823FED52E00999057 /* SettingsVC.swift */; };
+		620E18CD2419F48200097A16 /* SPCollectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 620E18CC2419F48200097A16 /* SPCollectionHeader.xib */; };
+		620E18DB241A2E1C00097A16 /* SPDrawerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E18D7241A2E1C00097A16 /* SPDrawerVC.swift */; };
+		620E18DC241A2E1C00097A16 /* SPDrawerRootVCr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E18D8241A2E1C00097A16 /* SPDrawerRootVCr.swift */; };
+		620E18DD241A2E1C00097A16 /* SPMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E18D9241A2E1C00097A16 /* SPMenuVC.swift */; };
+		620E18DE241A2E1C00097A16 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E18DA241A2E1C00097A16 /* HomeVC.swift */; };
 		6233925F2406D11600A0F64F /* SPFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6233925E2406D11600A0F64F /* SPFileManager.swift */; };
 		6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6239B147240096B60041F703 /* Crypto+Extensions.swift */; };
 		6242B7B1240DDEA00090BFE4 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6242B7B0240DDEA00090BFE4 /* String+Extensions.swift */; };
@@ -40,6 +45,7 @@
 		624A197224116D8B0002F1ED /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A197124116D8B0002F1ED /* DataBase.swift */; };
 		624A197424118CAE0002F1ED /* SPFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A197324118CAE0002F1ED /* SPFile.swift */; };
 		624A678424040E9000436C2F /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 624A678324040E9000436C2F /* CryptoTests.swift */; };
+		625F32A92419EB1E00477881 /* SPCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625F32A72419EB1E00477881 /* SPCollectionHeader.swift */; };
 		62619354240D092D00562BDF /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619353240D092D00562BDF /* SignInVC.swift */; };
 		62619357240D094F00562BDF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619356240D094F00562BDF /* SignUpVC.swift */; };
 		62619359240D096000562BDF /* LandingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619358240D096000562BDF /* LandingVC.swift */; };
@@ -47,10 +53,11 @@
 		6261935E240D4CA800562BDF /* HeaderPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935D240D4CA800562BDF /* HeaderPageVC.swift */; };
 		62619360240D4D2A00562BDF /* LandingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935F240D4D2A00562BDF /* LandingVM.swift */; };
 		6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */; };
-		6279CF2223FEBB0C008B18DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF2123FEBB0C008B18DA /* SceneDelegate.swift */; };
 		6279CF2723FEBB0C008B18DA /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2523FEBB0C008B18DA /* Welcome.storyboard */; };
 		6279CF2923FEBB0D008B18DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2823FEBB0D008B18DA /* Assets.xcassets */; };
 		6279CF2C23FEBB0D008B18DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2A23FEBB0D008B18DA /* LaunchScreen.storyboard */; };
+		6284A4CC241582F8003C3FA5 /* SPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6284A4CA241582F8003C3FA5 /* SPCollectionViewCell.swift */; };
+		6284A4CD241582F8003C3FA5 /* SPCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6284A4CB241582F8003C3FA5 /* SPCollectionViewCell.xib */; };
 		62AE6894240D55CD001EA58D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AE6893240D55CD001EA58D /* Theme.swift */; };
 		62AE6896240D7E54001EA58D /* CurrentPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AE6895240D7E54001EA58D /* CurrentPageVC.swift */; };
 		62AE6899240DDD21001EA58D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 62AE689B240DDD21001EA58D /* Localizable.strings */; };
@@ -86,6 +93,11 @@
 		620C02D423FED4FB00999057 /* TrashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashVC.swift; sourceTree = "<group>"; };
 		620C02D623FED51E00999057 /* BackupPhraseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupPhraseVC.swift; sourceTree = "<group>"; };
 		620C02D823FED52E00999057 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		620E18CC2419F48200097A16 /* SPCollectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SPCollectionHeader.xib; sourceTree = "<group>"; };
+		620E18D7241A2E1C00097A16 /* SPDrawerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPDrawerVC.swift; sourceTree = "<group>"; };
+		620E18D8241A2E1C00097A16 /* SPDrawerRootVCr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPDrawerRootVCr.swift; sourceTree = "<group>"; };
+		620E18D9241A2E1C00097A16 /* SPMenuVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPMenuVC.swift; sourceTree = "<group>"; };
+		620E18DA241A2E1C00097A16 /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		6233925E2406D11600A0F64F /* SPFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFileManager.swift; sourceTree = "<group>"; };
 		6239B147240096B60041F703 /* Crypto+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Crypto+Extensions.swift"; sourceTree = "<group>"; };
 		6242B7B0240DDEA00090BFE4 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
@@ -111,6 +123,7 @@
 		624A678124040E9000436C2F /* CryptoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		624A678324040E9000436C2F /* CryptoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		624A678524040E9000436C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		625F32A72419EB1E00477881 /* SPCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCollectionHeader.swift; sourceTree = "<group>"; };
 		62619353240D092D00562BDF /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
 		62619356240D094F00562BDF /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		62619358240D096000562BDF /* LandingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingVC.swift; sourceTree = "<group>"; };
@@ -119,11 +132,12 @@
 		6261935F240D4D2A00562BDF /* LandingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingVM.swift; sourceTree = "<group>"; };
 		6279CF1C23FEBB0C008B18DA /* Stingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6279CF2123FEBB0C008B18DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6279CF2623FEBB0C008B18DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Welcome.storyboard; sourceTree = "<group>"; };
 		6279CF2823FEBB0D008B18DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6279CF2B23FEBB0D008B18DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6279CF2D23FEBB0D008B18DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6284A4CA241582F8003C3FA5 /* SPCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCollectionViewCell.swift; sourceTree = "<group>"; };
+		6284A4CB241582F8003C3FA5 /* SPCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SPCollectionViewCell.xib; sourceTree = "<group>"; };
 		62AE6893240D55CD001EA58D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		62AE6895240D7E54001EA58D /* CurrentPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPageVC.swift; sourceTree = "<group>"; };
 		62AE689A240DDD21001EA58D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -171,7 +185,6 @@
 			isa = PBXGroup;
 			children = (
 				6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */,
-				6279CF2123FEBB0C008B18DA /* SceneDelegate.swift */,
 				6279CF2823FEBB0D008B18DA /* Assets.xcassets */,
 				6279CF2D23FEBB0D008B18DA /* Info.plist */,
 			);
@@ -181,8 +194,9 @@
 		620C02C923FED23F00999057 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				620E18CE241A166F00097A16 /* DrawerMenu */,
+				6284A4C524156E97003C3FA5 /* Gallery */,
 				6261935C240D43D400562BDF /* Landing */,
-				620C02D223FED4EC00999057 /* GalleryVC.swift */,
 				620C02D423FED4FB00999057 /* TrashVC.swift */,
 				620C02D623FED51E00999057 /* BackupPhraseVC.swift */,
 				620C02D823FED52E00999057 /* SettingsVC.swift */,
@@ -277,6 +291,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		620E18CE241A166F00097A16 /* DrawerMenu */ = {
+			isa = PBXGroup;
+			children = (
+				620E18DA241A2E1C00097A16 /* HomeVC.swift */,
+				620E18D8241A2E1C00097A16 /* SPDrawerRootVCr.swift */,
+				620E18D7241A2E1C00097A16 /* SPDrawerVC.swift */,
+				620E18D9241A2E1C00097A16 /* SPMenuVC.swift */,
+			);
+			path = DrawerMenu;
+			sourceTree = "<group>";
+		};
 		6242B7B2240DE6930090BFE4 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -360,6 +385,18 @@
 				620C02C923FED23F00999057 /* Views */,
 			);
 			path = Stingle;
+			sourceTree = "<group>";
+		};
+		6284A4C524156E97003C3FA5 /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				620C02D223FED4EC00999057 /* GalleryVC.swift */,
+				6284A4CA241582F8003C3FA5 /* SPCollectionViewCell.swift */,
+				6284A4CB241582F8003C3FA5 /* SPCollectionViewCell.xib */,
+				625F32A72419EB1E00477881 /* SPCollectionHeader.swift */,
+				620E18CC2419F48200097A16 /* SPCollectionHeader.xib */,
+			);
+			path = Gallery;
 			sourceTree = "<group>";
 		};
 		62AE6892240D554D001EA58D /* Styles */ = {
@@ -510,10 +547,12 @@
 				6242B7C7240DE6930090BFE4 /* SF Compact Display Medium.ttf in Resources */,
 				6242B7C2240DE6930090BFE4 /* SF-Pro-Display-Heavy.ttf in Resources */,
 				6242B7CC240DE6930090BFE4 /* Montserrat-Regular.ttf in Resources */,
+				620E18CD2419F48200097A16 /* SPCollectionHeader.xib in Resources */,
 				62048A64240E97FF006207AC /* Home.storyboard in Resources */,
 				6242B7C1240DE6930090BFE4 /* NotoSans-Regular.ttf in Resources */,
 				6242B7C8240DE6930090BFE4 /* SF-Pro-Display-Light.ttf in Resources */,
 				6242B7C5240DE6930090BFE4 /* Roboto-Regular.ttf in Resources */,
+				6284A4CD241582F8003C3FA5 /* SPCollectionViewCell.xib in Resources */,
 				6242B7C3240DE6930090BFE4 /* SF-Pro-Display-Regular.otf in Resources */,
 				6242B7C0240DE6930090BFE4 /* Roboto-Medium.ttf in Resources */,
 				6279CF2C23FEBB0D008B18DA /* LaunchScreen.storyboard in Resources */,
@@ -586,6 +625,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				624A197024116B370002F1ED /* GalleryVM.swift in Sources */,
+				620E18DE241A2E1C00097A16 /* HomeVC.swift in Sources */,
 				624A1947241115250002F1ED /* StingleModel.xcdatamodeld in Sources */,
 				62048A6B240EEC82006207AC /* NetworkManager.swift in Sources */,
 				62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */,
@@ -598,24 +638,28 @@
 				624A197224116D8B0002F1ED /* DataBase.swift in Sources */,
 				62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */,
 				620C02D523FED4FB00999057 /* TrashVC.swift in Sources */,
+				620E18DD241A2E1C00097A16 /* SPMenuVC.swift in Sources */,
 				62AE6894240D55CD001EA58D /* Theme.swift in Sources */,
 				624A197424118CAE0002F1ED /* SPFile.swift in Sources */,
 				6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */,
 				6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */,
 				62048A6F240F1766006207AC /* SPRequest.swift in Sources */,
 				62048A6D240F1759006207AC /* SPResponse.swift in Sources */,
+				6284A4CC241582F8003C3FA5 /* SPCollectionViewCell.swift in Sources */,
 				62E754562412DE9600D8FB96 /* Date.swift in Sources */,
 				62048A69240EDBDD006207AC /* SignInVM.swift in Sources */,
 				62E7545E241331D400D8FB96 /* SPEvent.swift in Sources */,
+				620E18DC241A2E1C00097A16 /* SPDrawerRootVCr.swift in Sources */,
 				62AE68A0240DDDBE001EA58D /* Localize.swift in Sources */,
 				62E85BCF2412C89A00FB9FD0 /* AppInfo.swift in Sources */,
 				620C02D323FED4EC00999057 /* GalleryVC.swift in Sources */,
 				62619359240D096000562BDF /* LandingVC.swift in Sources */,
+				620E18DB241A2E1C00097A16 /* SPDrawerVC.swift in Sources */,
 				62AE6896240D7E54001EA58D /* CurrentPageVC.swift in Sources */,
 				62619357240D094F00562BDF /* SignUpVC.swift in Sources */,
 				6261935E240D4CA800562BDF /* HeaderPageVC.swift in Sources */,
-				6279CF2223FEBB0C008B18DA /* SceneDelegate.swift in Sources */,
 				624658D0240F99730050F18F /* KeyManagement.swift in Sources */,
+				625F32A92419EB1E00477881 /* SPCollectionHeader.swift in Sources */,
 				620C02D923FED52E00999057 /* SettingsVC.swift in Sources */,
 				624658CD240F96540050F18F /* SPApplication.swift in Sources */,
 				62E7545C2413306300D8FB96 /* SyncManager.swift in Sources */,
@@ -825,6 +869,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6FR7795JTL;
 				INFOPLIST_FILE = Stingle/Application/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -832,7 +877,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.photos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -844,6 +889,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6FR7795JTL;
 				INFOPLIST_FILE = Stingle/Application/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -851,7 +897,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.photos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

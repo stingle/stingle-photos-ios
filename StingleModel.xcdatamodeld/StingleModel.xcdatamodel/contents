@@ -15,6 +15,7 @@
         </uniquenessConstraints>
     </entity>
     <entity name="File" representedClassName=".FileMO" isAbstract="YES" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dateCreated" optional="YES" attributeType="String"/>
         <attribute name="dateModified" optional="YES" attributeType="String"/>
         <attribute name="file" optional="YES" attributeType="String"/>
@@ -34,11 +35,11 @@
     <entity name="Updates" representedClassName=".FileMO" parentEntity="File" syncable="YES"/>
     <elements>
         <element name="AppInfo" positionX="-241.609375" positionY="-37.96484375" width="128" height="73"/>
-        <element name="File" positionX="-574.859375" positionY="-218.88671875" width="128" height="148"/>
-        <element name="Trash" positionX="-726.640625" positionY="-18.93359375" width="128" height="43"/>
         <element name="Deletes" positionX="-323.75" positionY="-208.26953125" width="128" height="88"/>
+        <element name="File" positionX="-574.859375" positionY="-218.88671875" width="128" height="163"/>
         <element name="Files" positionX="-568.578125" positionY="-17.24609375" width="128" height="43"/>
         <element name="Pending" positionX="-432" positionY="-18" width="128" height="43"/>
+        <element name="Trash" positionX="-726.640625" positionY="-18.93359375" width="128" height="43"/>
         <element name="Updates" positionX="-883.51953125" positionY="-18.5859375" width="128" height="43"/>
     </elements>
 </model>
