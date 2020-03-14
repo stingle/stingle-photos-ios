@@ -40,8 +40,7 @@ class BaseVC: UIViewController {
 		guard Thread.current.isMainThread else {
 			fatalError()
 		}
-		var viewController:UIViewController? = nil
-		viewController = UIStoryboard(name:scene, bundle: nil).instantiateViewController(withIdentifier: name)
+		let viewController:UIViewController? = UIStoryboard(name:scene, bundle: nil).instantiateViewController(withIdentifier: name)
 		return viewController
 	}
 }

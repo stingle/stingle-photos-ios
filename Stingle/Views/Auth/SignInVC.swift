@@ -20,12 +20,7 @@ class SignInVC : BaseVC {
 					DispatchQueue.main.async {
 						let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
 						let home = storyboard.instantiateInitialViewController()
-						let appDelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
-						let rootViewController = appDelegate.window?.rootViewController
-						UIView.transition(from: rootViewController!.view, to: home!.view, duration: 0.6, options: [.transitionCrossDissolve], completion: {
-							_ in
-							appDelegate.window?.rootViewController = home
-						})
+						self.navigationController?.pushViewController(home!, animated: false)
 					}
 				}
 			}

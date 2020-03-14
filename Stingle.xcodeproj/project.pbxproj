@@ -18,10 +18,7 @@
 		620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D623FED51E00999057 /* BackupPhraseVC.swift */; };
 		620C02D923FED52E00999057 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620C02D823FED52E00999057 /* SettingsVC.swift */; };
 		620E18CD2419F48200097A16 /* SPCollectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 620E18CC2419F48200097A16 /* SPCollectionHeader.xib */; };
-		620E18DB241A2E1C00097A16 /* SPDrawerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E18D7241A2E1C00097A16 /* SPDrawerVC.swift */; };
-		620E18DC241A2E1C00097A16 /* SPDrawerRootVCr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E18D8241A2E1C00097A16 /* SPDrawerRootVCr.swift */; };
 		620E18DD241A2E1C00097A16 /* SPMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E18D9241A2E1C00097A16 /* SPMenuVC.swift */; };
-		620E18DE241A2E1C00097A16 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620E18DA241A2E1C00097A16 /* HomeVC.swift */; };
 		6233925F2406D11600A0F64F /* SPFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6233925E2406D11600A0F64F /* SPFileManager.swift */; };
 		6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6239B147240096B60041F703 /* Crypto+Extensions.swift */; };
 		6242B7B1240DDEA00090BFE4 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6242B7B0240DDEA00090BFE4 /* String+Extensions.swift */; };
@@ -66,6 +63,8 @@
 		62AE6899240DDD21001EA58D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 62AE689B240DDD21001EA58D /* Localizable.strings */; };
 		62AE68A0240DDDBE001EA58D /* Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AE689F240DDDBE001EA58D /* Localize.swift */; };
 		62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B9F6392407EE2E0014E3AF /* CryptoError.swift */; };
+		62E3136E241C557500AD79CF /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E3136D241C557500AD79CF /* SwipeInteractionController.swift */; };
+		62E31370241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E3136F241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift */; };
 		62E754562412DE9600D8FB96 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E754552412DE9600D8FB96 /* Date.swift */; };
 		62E7545C2413306300D8FB96 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E7545B2413306300D8FB96 /* SyncManager.swift */; };
 		62E7545E241331D400D8FB96 /* SPEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E7545D241331D400D8FB96 /* SPEvent.swift */; };
@@ -97,10 +96,7 @@
 		620C02D623FED51E00999057 /* BackupPhraseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupPhraseVC.swift; sourceTree = "<group>"; };
 		620C02D823FED52E00999057 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		620E18CC2419F48200097A16 /* SPCollectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SPCollectionHeader.xib; sourceTree = "<group>"; };
-		620E18D7241A2E1C00097A16 /* SPDrawerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPDrawerVC.swift; sourceTree = "<group>"; };
-		620E18D8241A2E1C00097A16 /* SPDrawerRootVCr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPDrawerRootVCr.swift; sourceTree = "<group>"; };
 		620E18D9241A2E1C00097A16 /* SPMenuVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPMenuVC.swift; sourceTree = "<group>"; };
-		620E18DA241A2E1C00097A16 /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		6233925E2406D11600A0F64F /* SPFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFileManager.swift; sourceTree = "<group>"; };
 		6239B147240096B60041F703 /* Crypto+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Crypto+Extensions.swift"; sourceTree = "<group>"; };
 		6242B7B0240DDEA00090BFE4 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
@@ -149,6 +145,8 @@
 		62AE689A240DDD21001EA58D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		62AE689F240DDDBE001EA58D /* Localize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localize.swift; sourceTree = "<group>"; };
 		62B9F6392407EE2E0014E3AF /* CryptoError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoError.swift; sourceTree = "<group>"; };
+		62E3136D241C557500AD79CF /* SwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeInteractionController.swift; sourceTree = "<group>"; };
+		62E3136F241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTransitionAnimationControllers.swift; sourceTree = "<group>"; };
 		62E754552412DE9600D8FB96 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		62E7545B2413306300D8FB96 /* SyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		62E7545D241331D400D8FB96 /* SPEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPEvent.swift; sourceTree = "<group>"; };
@@ -200,14 +198,13 @@
 		620C02C923FED23F00999057 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				62E31377241CAFFD00AD79CF /* Auth */,
 				620E18CE241A166F00097A16 /* Menu */,
 				6284A4C524156E97003C3FA5 /* Gallery */,
 				6261935C240D43D400562BDF /* Landing */,
 				620C02D423FED4FB00999057 /* TrashVC.swift */,
 				620C02D623FED51E00999057 /* BackupPhraseVC.swift */,
 				620C02D823FED52E00999057 /* SettingsVC.swift */,
-				62619353240D092D00562BDF /* SignInVC.swift */,
-				62619356240D094F00562BDF /* SignUpVC.swift */,
 				6261935A240D0E8400562BDF /* BaseVC.swift */,
 			);
 			path = Views;
@@ -301,9 +298,6 @@
 		620E18CE241A166F00097A16 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				620E18DA241A2E1C00097A16 /* HomeVC.swift */,
-				620E18D8241A2E1C00097A16 /* SPDrawerRootVCr.swift */,
-				620E18D7241A2E1C00097A16 /* SPDrawerVC.swift */,
 				620E18D9241A2E1C00097A16 /* SPMenuVC.swift */,
 				62504373241ACD2400A90F3A /* SPMenuCell.swift */,
 			);
@@ -390,6 +384,7 @@
 		6279CF1E23FEBB0C008B18DA /* Stingle */ = {
 			isa = PBXGroup;
 			children = (
+				62E3136C241C54F200AD79CF /* Animations */,
 				624658CE240F988C0050F18F /* Shared */,
 				62048A70240F578C006207AC /* Application */,
 				62048A65240E9811006207AC /* Scense */,
@@ -451,6 +446,24 @@
 				62AE689F240DDDBE001EA58D /* Localize.swift */,
 			);
 			path = Localization;
+			sourceTree = "<group>";
+		};
+		62E3136C241C54F200AD79CF /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				62E3136D241C557500AD79CF /* SwipeInteractionController.swift */,
+				62E3136F241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift */,
+			);
+			path = Animations;
+			sourceTree = "<group>";
+		};
+		62E31377241CAFFD00AD79CF /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				62619353240D092D00562BDF /* SignInVC.swift */,
+				62619356240D094F00562BDF /* SignUpVC.swift */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		62E7545A2413304D00D8FB96 /* Sync */ = {
@@ -642,7 +655,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				624A197024116B370002F1ED /* GalleryVM.swift in Sources */,
-				620E18DE241A2E1C00097A16 /* HomeVC.swift in Sources */,
 				624A1947241115250002F1ED /* StingleModel.xcdatamodeld in Sources */,
 				62048A6B240EEC82006207AC /* NetworkManager.swift in Sources */,
 				62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */,
@@ -669,19 +681,19 @@
 				62E754562412DE9600D8FB96 /* Date.swift in Sources */,
 				62048A69240EDBDD006207AC /* SignInVM.swift in Sources */,
 				62E7545E241331D400D8FB96 /* SPEvent.swift in Sources */,
-				620E18DC241A2E1C00097A16 /* SPDrawerRootVCr.swift in Sources */,
 				62AE68A0240DDDBE001EA58D /* Localize.swift in Sources */,
 				62E85BCF2412C89A00FB9FD0 /* AppInfo.swift in Sources */,
 				620C02D323FED4EC00999057 /* GalleryVC.swift in Sources */,
 				62619359240D096000562BDF /* LandingVC.swift in Sources */,
-				620E18DB241A2E1C00097A16 /* SPDrawerVC.swift in Sources */,
 				62AE6896240D7E54001EA58D /* CurrentPageVC.swift in Sources */,
 				62619357240D094F00562BDF /* SignUpVC.swift in Sources */,
+				62E3136E241C557500AD79CF /* SwipeInteractionController.swift in Sources */,
 				6261935E240D4CA800562BDF /* HeaderPageVC.swift in Sources */,
 				624658D0240F99730050F18F /* KeyManagement.swift in Sources */,
 				625F32A92419EB1E00477881 /* SPCollectionHeader.swift in Sources */,
 				620C02D923FED52E00999057 /* SettingsVC.swift in Sources */,
 				624658CD240F96540050F18F /* SPApplication.swift in Sources */,
+				62E31370241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift in Sources */,
 				62E7545C2413306300D8FB96 /* SyncManager.swift in Sources */,
 				62048A67240E99BE006207AC /* User.swift in Sources */,
 			);
