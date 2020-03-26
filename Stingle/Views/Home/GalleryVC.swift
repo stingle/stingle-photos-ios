@@ -54,7 +54,8 @@ extension GalleryVC : UICollectionViewDelegate {
 		guard let vc = viewController(with: "SPImagePageVC", from: "Home") as! SPImagePageVC? else {
 			return
 		}
-		vc.viewModel = viewModel
+		vc.initialIndex = indexPath
+		vc.viewModel = SPImagePreviewVM(dataSource: viewModel.dataSource)
 		vc.modalPresentationStyle = .fullScreen
 		self.navigationController?.pushViewController(vc, animated: false)
 	}

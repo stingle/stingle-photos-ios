@@ -8,7 +8,7 @@ protocol GalleryDelegate {
 
 class GalleryVM : DataSourceDelegate, SPEventHandler {
 	
-	private var dataSource = DataSource(type: .Gallery)
+	public var dataSource = DataSource(type: .Gallery)
 	
 	var delegate:GalleryDelegate?
 	

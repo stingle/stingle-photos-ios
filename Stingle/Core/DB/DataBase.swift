@@ -30,10 +30,10 @@ class DataBase {
 		
 	}
 	
-	private func frc<T:SPFileInfo>(for:T.Type) -> NSFetchedResultsController<FileMO>? {
-		if T.self is SPFile.Type {
+	private func frc<T:SPFileInfo>(for type:T.Type) -> NSFetchedResultsController<FileMO>? {
+		if type is SPFile.Type {
 			return galleryFRC
-		} else if T.self is SPTrashFile.Type {
+		} else if type is SPTrashFile.Type {
 			return trashFRC
 		}
 		return nil
@@ -219,7 +219,31 @@ class DataBase {
 		let sectionInfo = sections[section]
 		return sectionInfo.name
 	}
+		
+	func fileForIndexPath<T:SPFileInfo>(indexPath:IndexPath, with type:T.Type) -> T? {
+		guard let frc = frc(for: type) else {
+			return nil
+		}
+		let objMO = frc.object(at: indexPath)
+		return T.init(file: objMO)
+	}
 	
+	func indexPath<T:SPFileInfo>(for file:String, with type:T.Type) -> IndexPath? {
+		let fetchRequest = NSFetchRequest<FileMO>(entityName: T.mo())
+		fetchRequest.predicate = NSPredicate(format: "file == %@", file)
+		do {
+			guard let obj = try container.viewContext.fetch(fetchRequest).first else {
+				return nil
+			}
+			guard let frc = frc(for: type) else {
+				return nil
+			}
+			return frc.indexPath(forObject: obj)
+		} catch {
+			print(error)
+			return nil
+		}
+	}
 	
 	func filesSortedByDate<T:SPFileInfo> () -> [T]? {
 		guard let frc = frc(for: T.self) else {
@@ -235,29 +259,48 @@ class DataBase {
 		return files
 	}
 	
-	func fileForIndexPath<T:SPFileInfo>(indexPath:IndexPath) -> T? {
+	func filesCount<T:SPFileInfo>(for type:T.Type) -> Int {
+		guard let frc = frc(for: type) else {
+			return 0
+		}
+		guard let objects = frc.fetchedObjects else {
+			return 0
+		}
+		return objects.count
+	}
+	
+	func fileForIndex<T:SPFileInfo>(index:Int) -> T? {
 		guard let frc = frc(for: T.self) else {
 			return nil
 		}
-		let objMO = frc.object(at: indexPath)
-		return T.init(file: objMO)
-	}
-	
-	func indexPath<T:SPFileInfo>(for file:String, with type:T.Type) -> IndexPath? {
-		let fetchRequest = NSFetchRequest<FileMO>(entityName: T.mo())
-		fetchRequest.predicate = NSPredicate(format: "file == %@", file)
-		do {
-			guard let obj = try container.viewContext.fetch(fetchRequest).first else {
-				return nil
-			}
-			guard let frc = frc(for: T.self) else {
-				return nil
-			}
-			return frc.indexPath(forObject: obj)
-		} catch {
-			print(error)
+		guard let objs = frc.fetchedObjects else {
 			return nil
 		}
+		let obj = objs[index]
+		return T.init(file: obj)
+	}
+	
+	func index<T:SPFileInfo>(of file:SPFileInfo, with type:T.Type) -> Int {
+		guard let frc = frc(for: type) else {
+			return 0
+		}
+		guard let objs = frc.fetchedObjects else {
+			return 0
+		}
+		let index = objs.firstIndex { (fileMO) -> Bool in
+			return fileMO.file == file.file
+		}
+		if index != nil {
+			return index!
+		}
+		return 0
+	}
+	
+	func index<T:SPFileInfo>(for indexPath:IndexPath, of type:T.Type) ->Int {
+		guard let file = fileForIndexPath(indexPath: indexPath, with: type) else {
+			return NSNotFound
+		}
+		return index(of: file, with: type)
 	}
 	
 	func objectsForRange<T:SPFileInfo>(start:Int, count:Int) -> [T]? {
@@ -267,7 +310,7 @@ class DataBase {
 	func getAllFilesCount() -> Int {
 		return 0
 	}
-	
+		
 	func getFiles(mode:Int, sort:Int) -> [SPFile]? {
 		return nil
 	}
@@ -303,33 +346,4 @@ class DataBase {
 
 extension DataBase {
 	
-	/*func indexPathToIndex<T:SPFileInfo>(indexPath:IndexPath, type:T.Type) -> Int {
-	guard let ip = indexPaths(type: type) else {
-	return 0
-	}
-	var index = 0
-	for i in 0...indexPath.section  - 1 {
-	index += ip[i]!
-	}
-	index += indexPath.row
-	return index
-	}
-	
-	func indexToIndexPath<T:SPFileInfo> (index:Int, type:T.Type) -> IndexPath? {
-	guard let ip = indexPaths(type: type) else {
-	return nil
-	}
-	var idx = 0
-	var section = 0
-	var row = 0
-	while idx < index {
-	if idx + ip[section]! >= index {
-	row = index - idx
-	break
-	}
-	idx += ip[section]!
-	section += 1
-	}
-	return IndexPath(row: row, section: section)
-	}*/
 }

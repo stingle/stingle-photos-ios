@@ -3,7 +3,7 @@ import UIKit
 
 class SPImagePreviewVC: BaseVC {
 	
-	var index:IndexPath?
+	var index:Int = NSNotFound
 	
 	weak var image:UIImage?
 	
@@ -19,7 +19,6 @@ class SPImagePreviewVC: BaseVC {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		imageView.enableZoom()
-
 	}
     
 

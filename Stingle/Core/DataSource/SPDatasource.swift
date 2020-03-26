@@ -14,7 +14,7 @@ protocol DataSourceDelegate {
 }
 
 class DataSource {
-	private let type:SourceType
+	public var type:SourceType
 	private static let db = DataBase()
 	private static let crypto = Crypto()
 	private static let network = NetworkManager()
@@ -31,11 +31,9 @@ class DataSource {
 	}
 	
 	static func update(completionHandler:  @escaping (Bool) -> Swift.Void) {
-		
 		guard let info = db.getAppInfo() else {
 			return
 		}
-		
 		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
 		
 		//		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "0", lastDelSeenTime: "0")
@@ -56,7 +54,6 @@ class DataSource {
 				}
 				SyncManager.dispatch(event: SPEvent(name: SPEvenetType.DB.update.gallery.rawValue, info:["fileName" : [fileName]]))
 			}
-			
 			self.download(files: data.parts.trash) { (fileName, error) in
 				guard let fileName = fileName, error == nil else {
 					print(error.debugDescription)
@@ -91,48 +88,37 @@ class DataSource {
 	}
 	
 	private var trash:[SPTrashFile]?  { get {
-		guard let files:[SPTrashFile] = DataSource.db.filesSortedByDate(), files.count > 0   else {
+		guard let files:[SPTrashFile] = DataSource.db.filesSortedByDate() else {
 			return nil
 		}
 		return files
 		}
 	}
 	
+//	MARK: - IndexPath related getters
+	
 	public func numberOfSections()  -> Int {
-		switch type {
-		case .Gallery:
-			return DataSource.db.numberOfSections(for: SPFile.self)
-		case .Trash:
-			return DataSource.db.numberOfSections(for: SPTrashFile.self)
-		default:
-			return 0
-		}
+		return DataSource.db.numberOfSections(for: fileType())
 	}
 	
 	public func numberOfRows(forSecion:Int) -> Int {
-		switch type {
-		case .Gallery:
-			return DataSource.db.numberOfRows(for: forSecion, with: SPFile.self)
-		case .Trash:
-			return DataSource.db.numberOfRows(for: forSecion, with: SPTrashFile.self)
-		default:
-			return 0
-		}
+		return DataSource.db.numberOfRows(for: forSecion, with: fileType())
 	}
 	
 	public func sectionTitle(for secion:Int) -> String? {
-		switch type {
-		case .Gallery:
-			return DataSource.db.sectionTitle(for: secion, with: SPFile.self)
-		case .Trash:
-			return DataSource.db.sectionTitle(for: secion, with: SPTrashFile.self)
-		default:
-			return nil
-		}
+		return DataSource.db.sectionTitle(for: secion, with: fileType())
+	}
+	
+	func file(for indexPath:IndexPath) -> SPFileInfo? {
+		return DataSource.db.fileForIndexPath(indexPath: indexPath, with: fileType())
+	}
+	
+	func indexPath(for file:String) -> IndexPath? {
+		return DataSource.db.indexPath(for: file, with: fileType())
 	}
 	
 	func image(for indexPath:IndexPath) -> UIImage? {
-		guard let file:SPFile = DataSource.db.fileForIndexPath(indexPath: indexPath) else {
+		guard let file:SPFileInfo = DataSource.db.fileForIndexPath(indexPath: indexPath, with: fileType()) else {
 			return nil
 		}
 		
@@ -171,13 +157,40 @@ class DataSource {
 		})
 		return nil
 	}
-
-	func file(for indexPath:IndexPath) -> SPFile? {
-		return DataSource.db.fileForIndexPath(indexPath: indexPath)
+	
+//	MARK: - Index related getters
+	func numberOfFiles () -> Int {
+		return DataSource.db.filesCount(for: fileType())
 	}
 	
-	func indexPath(for file:String) -> IndexPath? {
-		return DataSource.db.indexPath(for: file, with: SPFile.self)
+	func image(for index:Int) -> UIImage? {
+		guard let file:SPFile = DataSource.db.fileForIndex(index: index) else {
+			return nil
+		}
+		guard let image = memoryCache[file.file] else {
+			return nil
+		}
+		return image
+	}
+	
+	func index(of file:SPFileInfo) -> Int {
+		return 0
+	}
+	
+	func index(for indexPath:IndexPath) -> Int {
+		return DataSource.db.index(for: indexPath, of: fileType())
+	}
+	
+//	MARK: - Helpers
+	func fileType() -> SPFileInfo.Type {
+		switch type {
+		case .Gallery:
+			return  SPFile.self
+		case .Trash:
+			return  SPTrashFile.self
+		default:
+			return SPFileInfo.self
+		}
 	}
 	
 }

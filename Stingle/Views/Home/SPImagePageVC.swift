@@ -3,10 +3,10 @@ import UIKit
 
 class SPImagePageVC: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
 	
-	var viewModel:GalleryVM?
+	var viewModel:SPImagePreviewVM?
 	
-	var initialIndex:IndexPath? = nil
-	
+	var initialIndex:IndexPath?
+		
 	@objc func share(_ sender: Any) {
 		
 	}
@@ -22,95 +22,57 @@ class SPImagePageVC: UIPageViewController, UIPageViewControllerDataSource, UIPag
 		super.viewDidLoad()
 		self.dataSource = self
 		self.delegate = self
-		let index = initialIndex ?? IndexPath(row: 0, section: 0)
-		guard let initialPage = createPage(index: index) else {
+    }
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		guard let currentPage = createPage(index: viewModel?.index(from: initialIndex)) else {
 			return
 		}
-		setViewControllers([initialPage], direction: UIPageViewController.NavigationDirection.forward, animated: true) { (completed) in
+		setViewControllers([currentPage], direction: UIPageViewController.NavigationDirection.forward, animated: true) { (completed) in
 		}
-    }
+	}
     
-	private func createPage  (index:IndexPath?) -> SPImagePreviewVC? {
+	private func createPage  (index:Int?) -> SPImagePreviewVC? {
 		guard let index = index else {
 			return nil
 		}
 		let viewController:SPImagePreviewVC = UIStoryboard(name: "Home", bundle: nil).instantiateViewController(withIdentifier: "SPImagePreviewVC") as! SPImagePreviewVC
 		viewController.index = index
+		viewController.image = viewModel?.image(for: index)
 		return viewController
 	}
-	
+		
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-		guard let index = (viewController as! SPImagePreviewVC).index else {
+		var index = (viewController as! SPImagePreviewVC).index
+		if index == NSNotFound || index == 0 {
 			return nil
 		}
-		return createPage(index: prevIndex(for: index))
-	}
-	
-	func prevIndex(for index:IndexPath?) -> IndexPath? {
-		guard let index = index else {
-			return nil
-		}
-		if index.row == 0 {
-			if index.section == 0 {
-				return nil
-			} else {
-				return IndexPath(row: 0, section: index.section - 1)
-			}
-		} else {
-			return IndexPath(row: index.row - 1, section: index.section)
-		}
-	}
-	
-	func nextIndex(for index:IndexPath?) -> IndexPath? {
-		guard let index = index else {
-			return nil
-		}
-		return nil
-//		let numberOfRows = viewModel?.numberOfRows(forSecion: index.section) ?? 0
-//		let numberOfSections = viewModel?.numberOfSections() ?? 0
-//		if index.row == numberOfRows - 1 {
-//			if index.section == numberOfSections - 1 {
-//				return nil
-//			} else {
-//				return IndexPath(row: 0, section: index.section + 1)
-//			}
-//		} else {
-//			return IndexPath(row: index.row + 1, section: index.section)
-//		}
+		index -= 1
+		return createPage(index: index)
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-		guard let  index = (viewController as! SPImagePreviewVC).index else {
+		var index = (viewController as! SPImagePreviewVC).index
+		let lastIndex = presentationCount(for: pageViewController)
+		if index == NSNotFound || index == lastIndex {
 			return nil
 		}
-		return createPage(index: nextIndex(for: index))
+		index += 1
+		return createPage(index: index)
 	}
 		
 	func presentationCount(for pageViewController: UIPageViewController) -> Int {
-//		guard let numberofSections = viewModel?.numberOfSections() else {
-//			return 0
-//		}
-//		var count = 0
-//		for i in 0...numberofSections {
-//			count += viewModel?.numberOfRows(forSecion: i) ?? 0
-//		}
-//		return count
-		return 0
+		guard let count = viewModel?.numberOfPages() else {
+			return 0
+		}
+		return count - 1
 	}
 	
 	func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-		return 0
+		guard let index = viewModel?.index(from: initialIndex) else {
+			return 0
+		}
+		return index
 	}
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
