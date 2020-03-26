@@ -17,11 +17,15 @@ class SignInVC : BaseVC {
 		_ = viewModel.signIn(email: "grig.davit@gmail.com", password: "mekicvec" ) { (status, error) in
 			do {
 				if status {
-					DispatchQueue.main.async {
-						let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
-						let home = storyboard.instantiateInitialViewController()
-						self.navigationController?.pushViewController(home!, animated: false)
-					}
+					_ = DataSource.update(completionHandler: { (status) in
+						if status == true {
+							DispatchQueue.main.async {
+								let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
+								let home = storyboard.instantiateInitialViewController()
+								self.navigationController?.pushViewController(home!, animated: false)
+							}
+						}
+					})
 				}
 			}
 		}

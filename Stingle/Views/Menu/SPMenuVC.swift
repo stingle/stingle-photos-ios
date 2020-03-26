@@ -1,10 +1,8 @@
-
 import UIKit
 
 class SPMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 	
 	private var viewModel = SPMenuVM()
-	
 	var swipeInteractionController: SwipeInteractionController?
 	
 	@IBOutlet weak var logo: UIImageView!

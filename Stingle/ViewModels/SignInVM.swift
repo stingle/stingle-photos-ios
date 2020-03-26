@@ -28,7 +28,6 @@ class SignInVM: NSObject {
 					return
 				}
 				KeyManagement.key = try self.crypto.getPrivateKey(password: password)
-				_ = SyncManager.update()
 				completionHandler(true, nil)
 			} catch {
 				completionHandler(false, error)

@@ -5,7 +5,7 @@
         <attribute name="lastSeen" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="Deletes" representedClassName=".DeletedFileMO" syncable="YES">
-        <attribute name="date" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="file" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <uniquenessConstraints>
@@ -31,7 +31,7 @@
     </entity>
     <entity name="Files" representedClassName=".FileMO" parentEntity="File" syncable="YES"/>
     <entity name="Pending" representedClassName="FileMO" parentEntity="File" syncable="YES"/>
-    <entity name="Trash" representedClassName=".TarshMO" parentEntity="File" syncable="YES"/>
+    <entity name="Trash" representedClassName=".TrashMO" parentEntity="File" syncable="YES"/>
     <entity name="Updates" representedClassName=".FileMO" parentEntity="File" syncable="YES"/>
     <elements>
         <element name="AppInfo" positionX="-241.609375" positionY="-37.96484375" width="128" height="73"/>

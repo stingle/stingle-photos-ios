@@ -2,7 +2,6 @@ import Foundation
 import Sodium
 import Clibsodium
 
-
 fileprivate struct Constants {
 	public static let FileTypeGeneral = 1
 	public static let FileTypePhoto = 2
@@ -47,7 +46,6 @@ fileprivate struct Constants {
 	public static let KdfDifficultyHard = 2
 	public static let KdfDifficultyUltra = 3
 	public static let PWHASH_LEN = 64
-	
 }
 
 public class Crypto {
@@ -368,7 +366,7 @@ public class Crypto {
 	
 	public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, fileId:Bytes?, videoDuration:Int) throws -> Bytes {
 		
-		let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename);
+		let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
 		let symmetricKey = so.keyDerivation.key()
 		
 		guard let fileId = so.randomBytes.buf(length: Constants.FileFileIdLen) else {
@@ -426,6 +424,25 @@ public class Crypto {
 		return true;
 	}
 	
+	public func decryptFileAsync(input:InputStream, output:OutputStream, completion:((Bool, Error?) -> Void)? = nil) {
+	let body = {() -> Void in
+		var result = false
+		var decError:Error? = nil
+		do {
+			result = try self.decryptFile(input: input, output: output)
+		} catch {
+			decError = error
+			result = false
+		}
+		guard let completion = completion else {
+			return
+		}
+			completion(result, decError)
+		}
+		DispatchQueue.global(qos: .background).async {
+			body()
+		}
+	}
 	
 	public func decryptFile(input:InputStream, output:OutputStream) throws -> Bool {
 		let header = try getFileHeader(input:input)
@@ -579,7 +596,6 @@ extension Crypto {
 		assert(data.count > 0)
 		return so.utils.base642bin(data, variant: .ORIGINAL)
 	}
-	
 	
 	public func toBytes(header:Header) -> Bytes {
 		

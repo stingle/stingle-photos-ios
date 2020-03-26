@@ -52,6 +52,10 @@
 		6261935B240D0E8400562BDF /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935A240D0E8400562BDF /* BaseVC.swift */; };
 		6261935E240D4CA800562BDF /* HeaderPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935D240D4CA800562BDF /* HeaderPageVC.swift */; };
 		62619360240D4D2A00562BDF /* LandingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935F240D4D2A00562BDF /* LandingVM.swift */; };
+		626AB75A2426BB0000168659 /* SPImagePageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB7592426BB0000168659 /* SPImagePageVC.swift */; };
+		626AB75C2426C04000168659 /* SPImagePreviewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB75B2426C04000168659 /* SPImagePreviewVM.swift */; };
+		626AB75F24280E2800168659 /* SPDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB75E24280E2800168659 /* SPDatasource.swift */; };
+		627057AA24265A85006B70F4 /* SPImagePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627057A924265A85006B70F4 /* SPImagePreviewVC.swift */; };
 		6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */; };
 		6279CF2723FEBB0C008B18DA /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2523FEBB0C008B18DA /* Welcome.storyboard */; };
 		6279CF2923FEBB0D008B18DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2823FEBB0D008B18DA /* Assets.xcassets */; };
@@ -132,6 +136,10 @@
 		6261935A240D0E8400562BDF /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		6261935D240D4CA800562BDF /* HeaderPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderPageVC.swift; sourceTree = "<group>"; };
 		6261935F240D4D2A00562BDF /* LandingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingVM.swift; sourceTree = "<group>"; };
+		626AB7592426BB0000168659 /* SPImagePageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePageVC.swift; sourceTree = "<group>"; };
+		626AB75B2426C04000168659 /* SPImagePreviewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePreviewVM.swift; sourceTree = "<group>"; };
+		626AB75E24280E2800168659 /* SPDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDatasource.swift; sourceTree = "<group>"; };
+		627057A924265A85006B70F4 /* SPImagePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePreviewVC.swift; sourceTree = "<group>"; };
 		6279CF1C23FEBB0C008B18DA /* Stingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6279CF2623FEBB0C008B18DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Welcome.storyboard; sourceTree = "<group>"; };
@@ -200,7 +208,7 @@
 			children = (
 				62E31377241CAFFD00AD79CF /* Auth */,
 				620E18CE241A166F00097A16 /* Menu */,
-				6284A4C524156E97003C3FA5 /* Gallery */,
+				6284A4C524156E97003C3FA5 /* Home */,
 				6261935C240D43D400562BDF /* Landing */,
 				620C02D423FED4FB00999057 /* TrashVC.swift */,
 				620C02D623FED51E00999057 /* BackupPhraseVC.swift */,
@@ -247,6 +255,7 @@
 				6261935F240D4D2A00562BDF /* LandingVM.swift */,
 				62048A68240EDBDD006207AC /* SignInVM.swift */,
 				62504375241AD24C00A90F3A /* SPMenuVM.swift */,
+				626AB75B2426C04000168659 /* SPImagePreviewVM.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -254,6 +263,7 @@
 		620C02CE23FED2F700999057 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				626AB75D2428081000168659 /* DataSource */,
 				62E7545A2413304D00D8FB96 /* Sync */,
 				620C02D123FED39D00999057 /* DB */,
 				620C02D023FED38900999057 /* Util */,
@@ -359,6 +369,14 @@
 			path = Landing;
 			sourceTree = "<group>";
 		};
+		626AB75D2428081000168659 /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				626AB75E24280E2800168659 /* SPDatasource.swift */,
+			);
+			path = DataSource;
+			sourceTree = "<group>";
+		};
 		6279CF1323FEBB0C008B18DA = {
 			isa = PBXGroup;
 			children = (
@@ -397,7 +415,7 @@
 			path = Stingle;
 			sourceTree = "<group>";
 		};
-		6284A4C524156E97003C3FA5 /* Gallery */ = {
+		6284A4C524156E97003C3FA5 /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				620C02D223FED4EC00999057 /* GalleryVC.swift */,
@@ -405,8 +423,10 @@
 				6284A4CB241582F8003C3FA5 /* SPCollectionViewCell.xib */,
 				625F32A72419EB1E00477881 /* SPCollectionHeader.swift */,
 				620E18CC2419F48200097A16 /* SPCollectionHeader.xib */,
+				627057A924265A85006B70F4 /* SPImagePreviewVC.swift */,
+				626AB7592426BB0000168659 /* SPImagePageVC.swift */,
 			);
-			path = Gallery;
+			path = Home;
 			sourceTree = "<group>";
 		};
 		62AE6892240D554D001EA58D /* Styles */ = {
@@ -656,6 +676,7 @@
 			files = (
 				624A197024116B370002F1ED /* GalleryVM.swift in Sources */,
 				624A1947241115250002F1ED /* StingleModel.xcdatamodeld in Sources */,
+				626AB75C2426C04000168659 /* SPImagePreviewVM.swift in Sources */,
 				62048A6B240EEC82006207AC /* NetworkManager.swift in Sources */,
 				62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */,
 				6242B7B1240DDEA00090BFE4 /* String+Extensions.swift in Sources */,
@@ -664,6 +685,7 @@
 				6261935B240D0E8400562BDF /* BaseVC.swift in Sources */,
 				62619360240D4D2A00562BDF /* LandingVM.swift in Sources */,
 				6233925F2406D11600A0F64F /* SPFileManager.swift in Sources */,
+				626AB75A2426BB0000168659 /* SPImagePageVC.swift in Sources */,
 				624A197224116D8B0002F1ED /* DataBase.swift in Sources */,
 				62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */,
 				62504374241ACD2400A90F3A /* SPMenuCell.swift in Sources */,
@@ -688,6 +710,8 @@
 				62AE6896240D7E54001EA58D /* CurrentPageVC.swift in Sources */,
 				62619357240D094F00562BDF /* SignUpVC.swift in Sources */,
 				62E3136E241C557500AD79CF /* SwipeInteractionController.swift in Sources */,
+				627057AA24265A85006B70F4 /* SPImagePreviewVC.swift in Sources */,
+				626AB75F24280E2800168659 /* SPDatasource.swift in Sources */,
 				6261935E240D4CA800562BDF /* HeaderPageVC.swift in Sources */,
 				624658D0240F99730050F18F /* KeyManagement.swift in Sources */,
 				625F32A92419EB1E00477881 /* SPCollectionHeader.swift in Sources */,

@@ -12,7 +12,7 @@ class FileMO : NSManagedObject {
 	@NSManaged var reUpload:Int
 	@NSManaged var date:Date
 	
-	func update(file:SPFile) {
+	func update(file:SPFileInfo) {
 		dateCreated = file.dateCreated
 		dateModified = file.dateModified
 		self.file = file.file
@@ -30,32 +30,26 @@ class FileMO : NSManagedObject {
 	}
 }
 
-class TarshMO : FileMO {
+class TrashMO : FileMO {
 	
 }
 
 class DeletedFileMO : NSManagedObject {
-	@NSManaged var date:Int64
+	@NSManaged var date:Date
 	@NSManaged var file:String
 	@NSManaged var type:Int
 	
 	func update(info:SPDeletedFile) {
-		if let intDate = Int64(info.date) {
-			date = intDate
-		} else {
-			date = 0
-		}
+		let timeInterval = (info.date as NSString).integerValue / 1000
+		date = Date(timeIntervalSince1970: Double(timeInterval))
 		file = info.file
 		type = info.type
 	}
 }
 
 //MARK : Codable(serializable) objects 
-protocol SPFileInfo : Codable {
-	func mo() -> String
-}
-
-class SPFile: SPFileInfo {
+class SPFileInfo : Codable {
+	
 	var dateCreated:String
 	var dateModified:String
 	var file:String
@@ -64,9 +58,21 @@ class SPFile: SPFileInfo {
 	var isLocal:Bool?
 	var reUpload:Int?
 	var date:Date?
+
 	
-	func mo() -> String {
-		return "Files"
+	class func mo() -> String {
+		fatalError()
+	}
+	
+	required init(file:FileMO) {
+		dateCreated = file.dateCreated ?? ""
+		dateModified = file.dateModified ?? ""
+		self.file = file.file
+		headers = file.headers ?? ""
+		version = file.version ?? ""
+		isLocal = file.isLocal
+		reUpload = file.reUpload
+		date = file.date
 	}
 	
 	enum CodingKeys : CodingKey {
@@ -76,29 +82,33 @@ class SPFile: SPFileInfo {
 		case headers
 		case version
 	}
-	
-	init(file:FileMO) {
-		dateCreated = file.dateCreated ?? ""
-		dateModified = file.dateModified ?? ""
-		self.file = file.file 
-		headers = file.headers ?? ""
-		version = file.version ?? ""
-		isLocal = file.isLocal
-		reUpload = file.reUpload
-		date = file.date
+}
+
+class SPFile: SPFileInfo {
+	override class func mo() -> String {
+		return "Files"
 	}
 }
 
-class SPTrashFile : SPFile {
-	override func mo() -> String {
+class SPTrashFile : SPFileInfo {
+	override class func mo() -> String {
 		return "Trash"
 	}
 }
 
-class SPDeletedFile: SPFileInfo {
+
+class SPDeletedFile: Codable {
+	
 	var date:String
 	var file:String
 	var type:Int
+	
+	required init(file: FileMO) {
+		type = 1
+		date = "\(file.date.timeIntervalSince1970)"
+		self.file = file.file
+	}
+
 	
 	func mo() -> String {
 		return "Deletes"

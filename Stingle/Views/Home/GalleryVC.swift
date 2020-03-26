@@ -2,7 +2,7 @@ import UIKit
 
 class GalleryVC : BaseVC, GalleryDelegate {
 	
-	var viewModel:GalleryVM?
+	var viewModel:GalleryVM = GalleryVM()
 	var settingsVisible = false
 	private var menuVC:SPMenuVC?
 	
@@ -11,7 +11,7 @@ class GalleryVC : BaseVC, GalleryDelegate {
 	@IBAction func menuTapped(_ sender: Any) {
 		present(menuVC!, animated: true, completion: nil)
 	}
-		
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		collectionView.register(UINib(nibName: "SPCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "GalleryCell")
@@ -19,14 +19,17 @@ class GalleryVC : BaseVC, GalleryDelegate {
 		collectionView.dataSource = self
 		collectionView.delegate = self
 		
-		viewModel = GalleryVM()
-		viewModel?.delegate = self
+		viewModel.delegate = self
 		
 		menuVC = viewController(with: "SPMenuVC", from: "Home") as! SPMenuVC?
 		menuVC?.transitioningDelegate = self
 		menuVC?.modalPresentationStyle = .custom
 		menuVC?.swipeInteractionController = SwipeInteractionController(viewController: self, maxTransition: 500)
-
+		
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
 	}
 	
 	
@@ -35,15 +38,33 @@ class GalleryVC : BaseVC, GalleryDelegate {
 			self.collectionView.reloadData()
 		}
 	}
+	
+	func updateItems(items:[IndexPath]) {
+		DispatchQueue.main.async {
+			self.collectionView.reloadItems(at: items)
+		}
+	}
+	
 }
 
+
+//MARK: - Collection View Delegate
+extension GalleryVC : UICollectionViewDelegate {
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		guard let vc = viewController(with: "SPImagePageVC", from: "Home") as! SPImagePageVC? else {
+			return
+		}
+		vc.viewModel = viewModel
+		vc.modalPresentationStyle = .fullScreen
+		self.navigationController?.pushViewController(vc, animated: false)
+	}
+}
+
+//MARK: - Collection View Datasource
 extension GalleryVC : UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		guard let count =  viewModel?.numberOfrows(forSecion: section) else {
-			return 0
-		}
-		return count
+		return  viewModel.numberOfRows(forSecion: section)
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -52,18 +73,14 @@ extension GalleryVC : UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
 	}
 	
 	func numberOfSections(in collectionView: UICollectionView) -> Int {
-		guard let count = viewModel?.numberOfSections() else {
-			return 0
-		}
-		return count
+		return viewModel.numberOfSections()
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCell", for: indexPath) as! SPCollectionViewCell
-		guard let outCell = viewModel?.setupCell(cell: cell, forIndexPath: indexPath) else {
-			return cell
-		}
-		return outCell
+		cell.ImageView.image = nil
+		viewModel.setupCell(cell: cell, for: indexPath)
+		return cell
 	}
 	
 	func collectionView(_ collectionView: UICollectionView,
@@ -74,16 +91,7 @@ extension GalleryVC : UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
 			guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "\(SPCollectionHeader.self)", for: indexPath) as? SPCollectionHeader else {
 				fatalError("Invalid view type")
 			}
-			
-			//TODO : move calculation and styles code to VM
-			guard let dates = viewModel?.sections else {
-				return headerView
-			}
-			let date = dates[indexPath.section]
-			let formatter = DateFormatter()
-			formatter.dateFormat = "MMMM d, yyyy"
-			print(formatter.string(from: date))
-			headerView.dateIndicator.text = formatter.string(from: date)
+			headerView.dateIndicator.text = viewModel.sectionTitle(forSection: indexPath.section)
 			return headerView
 		default:
 			assert(false, "Invalid element type")
@@ -94,13 +102,13 @@ extension GalleryVC : UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
 //MARK: - Transiotion delegates
 extension GalleryVC: UIViewControllerTransitioningDelegate {
 	
-
+	
 	
 	func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
 		guard let animator = animator as? MenuPresentAnimationController,
-		  let interactionController = animator.interactionController
-		  else {
-			return nil
+			let interactionController = animator.interactionController
+			else {
+				return nil
 		}
 		return interactionController
 	}
@@ -109,32 +117,26 @@ extension GalleryVC: UIViewControllerTransitioningDelegate {
 							 presenting: UIViewController,
 							 source: UIViewController)
 		-> UIViewControllerAnimatedTransitioning? {
-			guard let menu = presented as? SPMenuVC else {
-			  return nil
-			}
-			return MenuPresentAnimationController(originFrame: self.view.frame, interactionController: menu.swipeInteractionController)
+			return MenuPresentAnimationController(originFrame: self.view.frame, interactionController: 	nil)
 	}
 	
 	func animationController(forDismissed dismissed: UIViewController)
 		-> UIViewControllerAnimatedTransitioning? {
-			guard let menu = dismissed as? SPMenuVC else {
-			  return nil
-			}
 			return MenuDismissAnimationController(destinationFrame: self.view.frame,
-												  interactionController: menu.swipeInteractionController)
-
+												  interactionController: nil)
+			
 	}
 	
 	func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning)
 		-> UIViewControllerInteractiveTransitioning? {
 			guard let animator = animator as? MenuDismissAnimationController,
-			  let interactionController = animator.interactionController,
-			  interactionController.interactionInProgress
-			  else {
-				return nil
+				let interactionController = animator.interactionController,
+				interactionController.interactionInProgress
+				else {
+					return nil
 			}
 			return interactionController
-
+			
 	}
 	
 }

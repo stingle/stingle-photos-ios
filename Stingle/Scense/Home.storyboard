@@ -248,6 +248,41 @@
             </objects>
             <point key="canvasLocation" x="614.49275362318849" y="-137.27678571428569"/>
         </scene>
+        <!--Image PageVC-->
+        <scene sceneID="G2X-z2-zOD">
+            <objects>
+                <pageViewController storyboardIdentifier="SPImagePageVC" autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="S4d-7N-RRX" customClass="SPImagePageVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xZ4-46-Km2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1435" y="-135"/>
+        </scene>
+        <!--Image PreviewVC-->
+        <scene sceneID="DDH-hM-Lew">
+            <objects>
+                <viewController storyboardIdentifier="SPImagePreviewVC" id="MFS-QQ-PZG" customClass="SPImagePreviewVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UXa-SU-Yhb">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_logo" translatesAutoresizingMaskIntoConstraints="NO" id="ZwY-3R-3O4">
+                                <rect key="frame" x="187" y="428" width="40" height="40"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="ZwY-3R-3O4" firstAttribute="centerY" secondItem="UXa-SU-Yhb" secondAttribute="centerY" id="bKi-No-iFT"/>
+                            <constraint firstItem="ZwY-3R-3O4" firstAttribute="centerX" secondItem="UXa-SU-Yhb" secondAttribute="centerX" id="x1Q-dM-sLy"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="QOb-SM-Kpm"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="ZwY-3R-3O4" id="AHY-v1-o8e"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OzA-bJ-XLV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2171" y="-135"/>
+        </scene>
     </scenes>
     <resources>
         <image name="arrow_back" width="24" height="24"/>

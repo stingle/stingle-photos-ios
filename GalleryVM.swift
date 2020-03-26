@@ -2,123 +2,83 @@ import Foundation
 import UIKit
 
 protocol GalleryDelegate {
-	func update();
+	func update()
+	func updateItems(items:[IndexPath])
 }
 
-class GalleryVM : SPEventHandler {
+class GalleryVM : DataSourceDelegate, SPEventHandler {
 	
-	private var dataSource = [String: UIImage]()
-	
-	private let db = DataBase()
-	
-	private let crypto = Crypto()
-	
-	private var galleryFiles:Dictionary<Date, Array<SPFile>>?
-		
-	init() {
-		let event:SPEvent = SPEvent(name: SPEvenetType.DB.update.gallery.rawValue, info: nil)
-		SyncManager.subscribe(to: event, reciever: self)
-		galleryFiles = files
-	}
-	
-	private var files:Dictionary<Date, Array<SPFile>>?  { get {
-		guard let files = db.filesFilteredByDate(), files.count > 0   else {
-			return nil
-		}
-		return files
-		}
-	}
-	
-	public var sections:[Date]?  {
-		get {
-			galleryFiles?.keys.sorted().reversed()
-		}
-	}
-	
-	public func numberOfSections()  -> Int {
-		guard let sections = sections else {
-			return 0
-		}
-		return sections.count
-	}
-		
-	public func numberOfrows(forSecion:Int) -> Int {
-		
-		guard let keys = sections else {
-			return 0
-		}
-		
-		let key = keys[forSecion]
-		
-		guard let filesInSection = galleryFiles?[key] else {
-			return 0
-		}
-		return filesInSection.count
-	}
+	private var dataSource = DataSource(type: .Gallery)
 	
 	var delegate:GalleryDelegate?
+	
+	init() {
+		let event:SPEvent = SPEvent(name: SPEvenetType.DB.update.gallery.rawValue, info: nil)
+		let eventTrash:SPEvent = SPEvent(name: SPEvenetType.DB.update.trash.rawValue, info: nil)
+		SyncManager.subscribe(to: event, reciever: self)
+		SyncManager.subscribe(to: eventTrash, reciever: self)
+		dataSource.delegate = self
+	}
+	
+	func numberOfSections() -> Int {
+		return dataSource.numberOfSections()
+	}
+	
+	func numberOfRows(forSecion: Int) -> Int {
+		return dataSource.numberOfRows(forSecion: forSecion)
+	}
+	
+	func sectionTitle(forSection:Int) -> String? {
+		guard let title = dataSource.sectionTitle(for: forSection) else {
+			return nil
+		}
+		let olDateFormatter = DateFormatter()
+		olDateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+		guard let oldDate = olDateFormatter.date(from: title) else {
+			return nil
+		}
+		let convertDateFormatter = DateFormatter()
+		convertDateFormatter.dateFormat = "MMMM d, yyyy"
+		return convertDateFormatter.string(from: oldDate)
+	}
+	
+	func setupCell(cell:SPCollectionViewCell, for indexPath:IndexPath) {
+		if let image = dataSource.image(for: indexPath) {
+			DispatchQueue.main.async {
+				cell.ImageView.image = image
+			}
+			return
+		}
+	}
+}
+
+
+//MARK: - DataSource Delagate
+extension GalleryVM {
+	func imageReady(at indexPath: IndexPath) {
+		self.delegate?.updateItems(items: [indexPath])
+	}
 	
 	func recieve(event: SPEvent) {
 		switch event.name {
 		case SPEvenetType.DB.update.gallery.rawValue:
-			galleryFiles = files
-			DispatchQueue.main.async {
+			
+			if let info = event.info {
+				guard let fileName = info["fileName"]?.first else {
+					return
+				}
+				guard let index = dataSource.indexPath(for: fileName) else {
+					return
+				}
+				self.delegate?.updateItems(items: [index])
+			} else {
 				self.delegate?.update()
 			}
+			
 			break
 		default:
 			break
 		}
-	}
-	
-	func setupCell(cell:SPCollectionViewCell, forIndexPath:IndexPath) -> SPCollectionViewCell? {
-		
-		
-		guard let keys = sections else {
-			return nil
-		}
-		
-		let key = keys[forIndexPath.section]
-		
-		guard let filesInSection = galleryFiles?[key] else {
-			return nil
-		}
-		
-		let file = filesInSection[forIndexPath.row].file
-		
-		if let image = dataSource[file] {
-			cell.ImageView.image = image
-			return cell
-		}
-		
-		guard let filePath = SPFileManager.fullPathOfFile(fileName:file) else {
-			return nil
-		}
-		
-		guard let input = InputStream(url: filePath) else {
-			return nil
-		}
-		input.open()
-		
-		let out = OutputStream.init(toMemory: ())
-		out.open()
-		
-		do {
-			_ = try crypto.decryptFile(input: input, output: out)
-		} catch {
-			print(error)
-			return nil
-		}
-		
-		let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
-		let screenSize: CGRect = UIScreen.main.bounds
-		let width = screenSize.size.width / 3
-		let height = width
-
-		let newImage = UIImage(data:imageData)?.resize(size: CGSize(width: width, height: height))
-		dataSource[file] = newImage
-		cell.ImageView.image = newImage
-		return cell
 	}
 	
 }
