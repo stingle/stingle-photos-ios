@@ -5,7 +5,7 @@ class SPImagePreviewVC: BaseVC {
 	
 	var index:Int = NSNotFound
 	
-	weak var image:UIImage?
+	var image:UIImage?
 	
 	@IBOutlet weak var imageView: UIImageView!
 	
@@ -15,7 +15,6 @@ class SPImagePreviewVC: BaseVC {
         // Do any additional setup after loading the view.
     }
 	
-
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		imageView.enableZoom()

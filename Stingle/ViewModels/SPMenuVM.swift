@@ -1,8 +1,14 @@
 import Foundation
 import UIKit
 
+protocol SPMenuDelegate {
+	func selectedMenuItem(with index:Int)
+}
 
 class SPMenuVM {
+	
+	var delegate:SPMenuDelegate?
+	
 	func setup(cell:SPMenuCell, forIndexPath:IndexPath) {
 		cell.textLabel?.text = title(forIndexPath: forIndexPath)
 		cell.imageView?.image = image(forIndexPath: forIndexPath)
@@ -47,7 +53,44 @@ class SPMenuVM {
 		default:
 			return nil
 		}
-		
-		
 	}
+	
+	func email() -> String {
+		guard let user = SPApplication.user else {
+			return ""
+		}
+		return user.email
+	}
+	
+	func storageProgress() -> Float {
+		guard let info = DataSource.db.getAppInfo() else {
+			return 0.0
+		}
+		guard let quota = Int(info.spaceQuota) else {
+			return 0.0
+		}
+		guard let used = Int(info.spaceUsed) else {
+			return 0.0
+		}
+		let progress:Float = Float(used)/Float(quota)
+		return progress
+	}
+	
+	func storageProgressDescription() -> String {
+		guard let info = DataSource.db.getAppInfo() else {
+			return "1.0 GB of 1.0 GB (100%) used"
+		}
+		guard let quota = Int(info.spaceQuota) else {
+			return "1.0 GB of 1.0 GB (100%) used"
+		}
+		guard let used = Int(info.spaceUsed) else {
+			return "1.0 GB of 1.0 GB (100%) used"
+		}
+		let u:Float = ceilf(Float(used)/Float(1024) * 1000) / 1000
+		let q = Float(quota)/Float(1024)
+		let progress:Float = Float(used)/Float(quota)
+		let percent = "\(Int(100*progress))"
+		return "\(u) GB of \(q) GB (\(percent)%) used"
+	}
+
 }

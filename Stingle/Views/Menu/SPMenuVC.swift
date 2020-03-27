@@ -2,7 +2,7 @@ import UIKit
 
 class SPMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 	
-	private var viewModel = SPMenuVM()
+	var viewModel = SPMenuVM()
 	var swipeInteractionController: SwipeInteractionController?
 	
 	@IBOutlet weak var logo: UIImageView!
@@ -21,6 +21,13 @@ class SPMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 		super.viewDidLoad()
 		tableView.delegate = self
 		tableView.dataSource = self
+		email.text = viewModel.email()
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		strorageProgress.progress = viewModel.storageProgress()
+		storageProgressDescption.text = viewModel.storageProgressDescription()
 	}
 
 	//MARK - UITableView protocols stubs
@@ -35,6 +42,8 @@ class SPMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		print(indexPath.row)
+			self.dismiss(animated: true, completion: {
+				self.viewModel.delegate?.selectedMenuItem(with: indexPath.row)
+			})
 	}
 }

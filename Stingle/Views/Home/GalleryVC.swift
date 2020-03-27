@@ -1,7 +1,6 @@
 import UIKit
 
 class GalleryVC : BaseVC, GalleryDelegate {
-	
 	var viewModel:GalleryVM = GalleryVM()
 	var settingsVisible = false
 	private var menuVC:SPMenuVC?
@@ -11,40 +10,38 @@ class GalleryVC : BaseVC, GalleryDelegate {
 	@IBAction func menuTapped(_ sender: Any) {
 		present(menuVC!, animated: true, completion: nil)
 	}
-	
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		collectionView.register(UINib(nibName: "SPCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "GalleryCell")
 		collectionView.register(UINib(nibName: "\(SPCollectionHeader.self)", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader , withReuseIdentifier: "\(SPCollectionHeader.self)")
 		collectionView.dataSource = self
 		collectionView.delegate = self
-		
 		viewModel.delegate = self
-		
+
 		menuVC = viewController(with: "SPMenuVC", from: "Home") as! SPMenuVC?
 		menuVC?.transitioningDelegate = self
 		menuVC?.modalPresentationStyle = .custom
 		menuVC?.swipeInteractionController = SwipeInteractionController(viewController: self, maxTransition: 500)
-		
+		menuVC?.viewModel.delegate = viewModel
 	}
-	
+
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 	}
-	
-	
+
+
 	func update() {
 		DispatchQueue.main.async {
 			self.collectionView.reloadData()
 		}
 	}
-	
+
 	func updateItems(items:[IndexPath]) {
 		DispatchQueue.main.async {
 			self.collectionView.reloadItems(at: items)
 		}
 	}
-	
 }
 
 

@@ -30,7 +30,6 @@ class NetworkManager : NSObject {
 	
 	static fileprivate let base_url = "https://api.stingle.org"
 	
-	
 	static private func create(request:SPRequest) -> URLRequest? {
 		switch request.method() {
 		case .POST:
@@ -47,7 +46,6 @@ class NetworkManager : NSObject {
 		default:
 			return nil
 		}
-		
 	}
 	
 	static public func send<T: SPResponse>(request:SPRequest, completionHandler: @escaping (T?, Error?) -> Swift.Void) -> URLSessionDataTask {
@@ -74,9 +72,7 @@ class NetworkManager : NSObject {
 		return task
 	}
 	
-	
 	static public func download(request:SPRequest, completionHandler: @escaping (URL?, Error?) -> Swift.Void) -> URLSessionDownloadTask {
-		
 		guard let urlRequest = NetworkManager.create(request: request) else { fatalError() }
 		let s = session()
 		s.downloadsSession.configuration.httpShouldUsePipelining = true
@@ -87,7 +83,10 @@ class NetworkManager : NSObject {
 			}
 			let downloadFileRequest:SPDownloadFileRequest = request as! SPDownloadFileRequest
 			do {
-				_ = try SPFileManager.moveToHomeFolder(fileURL: url, withName: downloadFileRequest.fileName)
+				let status = try SPFileManager.moveToHomeFolder(fileURL: url, withName: downloadFileRequest.fileName)
+				if !status {
+					completionHandler(nil, nil)
+				}
 			} catch {
 				completionHandler(nil, error)
 				return

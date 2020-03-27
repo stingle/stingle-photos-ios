@@ -15,19 +15,21 @@ protocol DataSourceDelegate {
 
 class DataSource {
 	public var type:SourceType
-	private static let db = DataBase()
+	static let db = DataBase()
 	private static let crypto = Crypto()
 	private static let network = NetworkManager()
 	private static let sync = SyncManager()
 	
 	//TODO : Replace with round buffer
-	private var memoryCache:[String: UIImage]
+	private var thumbCache:[String: UIImage]
+	private var imageCache:[String: UIImage]
 	
 	var delegate:DataSourceDelegate?
 	
 	init(type:SourceType) {
 		self.type = type
-		memoryCache = [String: UIImage]()
+		thumbCache = [String: UIImage]()
+		imageCache = [String: UIImage]()
 	}
 	
 	static func update(completionHandler:  @escaping (Bool) -> Swift.Void) {
@@ -35,8 +37,7 @@ class DataSource {
 			return
 		}
 		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
-		
-		//		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "0", lastDelSeenTime: "0")
+//		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "0", lastDelSeenTime: "0")
 		_ = NetworkManager.send(request: request) { (data:SPUpdateInfo?, error:Error?) in
 			guard let data = data , error == nil else {
 				print(error.debugDescription)
@@ -44,15 +45,14 @@ class DataSource {
 				return
 			}
 			let timeinterval = Date.init().millisecondsSince1970
-			self.db.updateAppInfo(info: AppInfo(lastSeen: timeinterval, lastDelSeen: info.lastDelSeen))
+			self.db.updateAppInfo(info: AppInfo(lastSeen: timeinterval, lastDelSeen: info.lastDelSeen, spaceQuota: data.parts.spaceQuota, spaceUsed: data.parts.spaceUsed))
 			self.db.update(parts: data.parts)
-			
 			self.download(files: data.parts.files) { (fileName, error) in
 				guard let fileName = fileName, error == nil else {
 					print(error.debugDescription)
 					return
 				}
-				SyncManager.dispatch(event: SPEvent(name: SPEvenetType.DB.update.gallery.rawValue, info:["fileName" : [fileName]]))
+				SyncManager.dispatch(event:	 SPEvent(name: SPEvenetType.DB.update.gallery.rawValue, info:["fileName" : [fileName]]))
 			}
 			self.download(files: data.parts.trash) { (fileName, error) in
 				guard let fileName = fileName, error == nil else {
@@ -67,8 +67,14 @@ class DataSource {
 	}
 	
 	static func download <T:SPFileInfo>(files:[T], completionHandler:  @escaping (String?, Error?) -> Swift.Void) {
+		var folder = NSNotFound
+		if T.self is SPFile.Type {
+				folder = 0
+		} else if T.self is SPTrashFile.Type {
+			folder = 1
+		}
 		for item in files {
-			let req = SPDownloadFileRequest(token: SPApplication.user!.token, fileName: item.file, isThumb: true)
+			let req = SPDownloadFileRequest(token: SPApplication.user!.token, fileName: item.file, isThumb: true, folder:folder)
 			_ = NetworkManager.download(request: req) { (url, error) in
 				if error != nil {
 					completionHandler(nil, error)
@@ -122,7 +128,7 @@ class DataSource {
 			return nil
 		}
 		
-		if let image = memoryCache[file.file] {
+		if let image = imageCache[file.file] {
 			return image
 		}
 		
@@ -144,12 +150,8 @@ class DataSource {
 					return
 				}
 				let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
-				let screenSize: CGRect = UIScreen.main.bounds
-				let width = screenSize.size.width / 3
-				let height = width
 				DispatchQueue.main.async {
-					let newImage = UIImage(data:imageData)?.resize(size: CGSize(width: width, height: height))
-					self.memoryCache[file.file] = newImage
+					self.imageCache[file.file] = UIImage(data:imageData)
 					self.delegate?.imageReady(at: indexPath)
 				}
 			}
@@ -157,21 +159,32 @@ class DataSource {
 		})
 		return nil
 	}
-	
+
 //	MARK: - Index related getters
 	func numberOfFiles () -> Int {
 		return DataSource.db.filesCount(for: fileType())
 	}
 	
-	func image(for index:Int) -> UIImage? {
-		guard let file:SPFile = DataSource.db.fileForIndex(index: index) else {
+	func thumb(for index:Int) -> UIImage? {
+		guard let file:SPFileInfo = DataSource.db.fileForIndex(index: index, for: fileType()) else {
 			return nil
 		}
-		guard let image = memoryCache[file.file] else {
+		guard let image = thumbCache[file.file] else {
 			return nil
 		}
 		return image
 	}
+	
+	func image(for index:Int) -> UIImage? {
+		guard let file:SPFileInfo = DataSource.db.fileForIndex(index: index, for: fileType()) else {
+			return nil
+		}
+		guard let image = imageCache[file.file] else {
+			return nil
+		}
+		return image
+	}
+
 	
 	func index(of file:SPFileInfo) -> Int {
 		return 0

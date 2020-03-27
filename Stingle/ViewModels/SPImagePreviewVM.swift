@@ -15,7 +15,10 @@ class SPImagePreviewVM {
 	}
 	
 	func image( for index:Int) -> UIImage? {
-		return dataSource.image(for: index)
+		guard let image = dataSource.image(for: index) else {
+			return nil
+		}
+		return image
 	}
 	
 	func index(from indexPath:IndexPath?) -> Int {

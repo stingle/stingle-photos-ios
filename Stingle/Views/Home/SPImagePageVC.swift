@@ -39,7 +39,9 @@ class SPImagePageVC: UIPageViewController, UIPageViewControllerDataSource, UIPag
 		}
 		let viewController:SPImagePreviewVC = UIStoryboard(name: "Home", bundle: nil).instantiateViewController(withIdentifier: "SPImagePreviewVC") as! SPImagePreviewVC
 		viewController.index = index
-		viewController.image = viewModel?.image(for: index)
+		let screenSize: CGRect = UIScreen.main.bounds
+		let width = screenSize.size.width
+		viewController.image = viewModel?.image(for: index)?.scale(to: width)
 		return viewController
 	}
 		

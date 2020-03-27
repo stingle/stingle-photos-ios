@@ -26,7 +26,7 @@ class DataBase {
 		
 		let trashFetchRequest = NSFetchRequest<FileMO>(entityName: "Trash")
 		trashFetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-		trashFRC = NSFetchedResultsController(fetchRequest: trashFetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: nil, cacheName: "Trash")
+		trashFRC = NSFetchedResultsController(fetchRequest: trashFetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: "date", cacheName: "Trash")
 		
 	}
 	
@@ -126,7 +126,7 @@ class DataBase {
 				guard let newInfo = NSEntityDescription.insertNewObject(forEntityName: "AppInfo", into: context) as? AppInfoMO else {
 					return nil
 				}
-				newInfo.update(lastSeen: 0, lastDelSeen: 0)
+				newInfo.update(lastSeen: 0, lastDelSeen: 0 , spaceQuota: "0", spaceUsed: "0")
 				info = newInfo
 			}
 		} catch {
@@ -165,7 +165,7 @@ class DataBase {
 		context.performAndWait {
 			let infoMo = getAppinfoMO(context: context)
 			if infoMo != nil {
-				infoMo?.update(lastSeen: info.lastSeen, lastDelSeen: info.lastDelSeen)
+				infoMo?.update(lastSeen: info.lastSeen, lastDelSeen: info.lastDelSeen, spaceQuota: info.spaceQuota, spaceUsed: info.spaceUsed)
 			}
 			if context.hasChanges {
 				do {
@@ -229,7 +229,7 @@ class DataBase {
 	}
 	
 	func indexPath<T:SPFileInfo>(for file:String, with type:T.Type) -> IndexPath? {
-		let fetchRequest = NSFetchRequest<FileMO>(entityName: T.mo())
+		let fetchRequest = NSFetchRequest<FileMO>(entityName: type.mo())
 		fetchRequest.predicate = NSPredicate(format: "file == %@", file)
 		do {
 			guard let obj = try container.viewContext.fetch(fetchRequest).first else {
@@ -269,8 +269,8 @@ class DataBase {
 		return objects.count
 	}
 	
-	func fileForIndex<T:SPFileInfo>(index:Int) -> T? {
-		guard let frc = frc(for: T.self) else {
+	func fileForIndex<T:SPFileInfo>(index:Int, for type:T.Type) -> T? {
+		guard let frc = frc(for: type) else {
 			return nil
 		}
 		guard let objs = frc.fetchedObjects else {

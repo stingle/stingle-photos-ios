@@ -35,6 +35,19 @@ extension UIImage {
 		UIGraphicsEndImageContext()
 		return newImage
 	}
+	
+	func scale(to width: CGFloat) -> UIImage? {
+		
+		let scale = size.width / width
+		//Resize cropped image to prefered size
+		let newRect = CGRect(x: 0, y: 0, width: width, height: size.height / scale)
+		UIGraphicsBeginImageContextWithOptions(newRect.size, false, 1 / scale)
+		UIImage(cgImage: self.cgImage!).draw(in: newRect)
+		let newImage = UIGraphicsGetImageFromCurrentImageContext()
+		UIGraphicsEndImageContext()
+		return newImage
+	}
+
 }
 
 

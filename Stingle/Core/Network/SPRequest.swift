@@ -20,23 +20,18 @@ protocol SPRequest {
 struct SPPreSignInRequest : SPRequest {
 
 	let email:String
-	
 	init(email:String) {
 		self.email = email
 	}
-
 	func params () -> String? {
 		return "email=\(email)"
 	}
-	
 	func path () -> String {
 		return "login/preLogin"
 	}
-	
 	func method () -> SPRequestMethod {
 		return .POST
 	}
-	
 	func headers() -> Array<(String, String)>? {
 		return nil
 	}
@@ -134,11 +129,13 @@ struct SPDownloadFileRequest : SPRequest {
 	let token:String
 	let fileName:String
 	let isThumb:Bool
+	let folder:Int
 	
-	init(token:String, fileName:String, isThumb:Bool = false) {
+	init(token:String, fileName:String, isThumb:Bool = false, folder:Int) {
 		self.token = token
 		self.fileName = fileName
 		self.isThumb = isThumb
+		self.folder = folder
 	}
 	
 	func path () -> String {
@@ -155,7 +152,7 @@ struct SPDownloadFileRequest : SPRequest {
 
 	func params () -> String? {
 		var components = URLComponents()
-		components.queryItems = [URLQueryItem(name: "folder", value: "0"),URLQueryItem(name: "file", value: fileName), URLQueryItem(name: "token", value: token)]
+		components.queryItems = [URLQueryItem(name: "folder", value: "\(folder)"),URLQueryItem(name: "file", value: fileName), URLQueryItem(name: "token", value: token)]
 		if isThumb {
 			components.queryItems?.append(URLQueryItem(name: "thumb", value: "1"))
 		}
