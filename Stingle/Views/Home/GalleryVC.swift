@@ -5,6 +5,7 @@ class GalleryVC : BaseVC, GalleryDelegate {
 	var settingsVisible = false
 	private var menuVC:SPMenuVC?
 	
+	@IBOutlet weak var importImage: UIButton!
 	@IBOutlet var collectionView: UICollectionView!
 	
 	@IBAction func menuTapped(_ sender: Any) {
@@ -24,6 +25,13 @@ class GalleryVC : BaseVC, GalleryDelegate {
 		menuVC?.modalPresentationStyle = .custom
 		menuVC?.swipeInteractionController = SwipeInteractionController(viewController: self, maxTransition: 500)
 		menuVC?.viewModel.delegate = viewModel
+		guard let maskVC = viewController(with: "GalleryFrontVC", from: "Home") else {
+			return
+		}
+		maskVC.view.backgroundColor = .clear
+		maskVC.view.frame = self.view.frame
+		self.addChild(maskVC)
+		self.view.addSubview(maskVC.view)
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -90,10 +98,24 @@ extension GalleryVC : UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
 				fatalError("Invalid view type")
 			}
 			headerView.dateIndicator.text = viewModel.sectionTitle(forSection: indexPath.section)
+			if indexPath.section == 0 {
+				headerView.spaceFromCenter.constant = headerView.frame.height / 2 - headerView.dateIndicator.frame.height / 2 - 10
+			} else {
+				headerView.spaceFromCenter.constant = 0
+			}
 			return headerView
 		default:
 			assert(false, "Invalid element type")
 		}
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+		let height = self.view.frame.height / 12
+		var finalHeight =  height
+		if section == 0 {
+			finalHeight = 2 * height + 20
+		}
+		return CGSize(width: self.view.frame.width, height: finalHeight)
 	}
 }
 

@@ -74,12 +74,12 @@ class DataSource {
 			folder = 1
 		}
 		for item in files {
-			let req = SPDownloadFileRequest(token: SPApplication.user!.token, fileName: item.file, isThumb: true, folder:folder)
+			let req = SPDownloadFileRequest(token: SPApplication.user!.token, fileName: item.name, isThumb: true, folder:folder)
 			_ = NetworkManager.download(request: req) { (url, error) in
 				if error != nil {
 					completionHandler(nil, error)
 				} else {
-					completionHandler(item.file, nil)
+					completionHandler(item.name, nil)
 				}
 			}
 		}
@@ -128,13 +128,13 @@ class DataSource {
 			return nil
 		}
 		
-		if let image = imageCache[file.file] {
+		if let image = imageCache[file.name] {
 			return image
 		}
-		
-		guard let filePath = SPFileManager.fullPathOfFile(fileName:file.file) else {
+		guard var filePath = SPFileManager.thumbFolder() else {
 			return nil
 		}
+		filePath.appendPathComponent(file.name)
 		
 		guard let input = InputStream(url: filePath) else {
 			return nil
@@ -151,7 +151,7 @@ class DataSource {
 				}
 				let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
 				DispatchQueue.main.async {
-					self.imageCache[file.file] = UIImage(data:imageData)
+					self.imageCache[file.name] = UIImage(data:imageData)
 					self.delegate?.imageReady(at: indexPath)
 				}
 			}
@@ -169,7 +169,7 @@ class DataSource {
 		guard let file:SPFileInfo = DataSource.db.fileForIndex(index: index, for: fileType()) else {
 			return nil
 		}
-		guard let image = thumbCache[file.file] else {
+		guard let image = thumbCache[file.name] else {
 			return nil
 		}
 		return image
@@ -179,7 +179,7 @@ class DataSource {
 		guard let file:SPFileInfo = DataSource.db.fileForIndex(index: index, for: fileType()) else {
 			return nil
 		}
-		guard let image = imageCache[file.file] else {
+		guard let image = imageCache[file.name] else {
 			return nil
 		}
 		return image

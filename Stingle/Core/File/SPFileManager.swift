@@ -1,5 +1,9 @@
 import Foundation
 
+public enum Folder: String {
+	case main = "main"
+	case thumb = "thumb"
+}
 
 public enum FileExistence: Equatable {
     case none
@@ -60,14 +64,24 @@ class SPFileManager : FileManager {
 		}
 	}
 	
-	public static func moveToHomeFolder(fileURL:URL?, withName:String?) throws -> Bool {
+	public static func moveToFolder(fileURL:URL?, with name:String?, folder:Folder) throws -> Bool {
 		//TODO : Throw exception
-		guard let fileURL = fileURL, let name = withName else {
+		guard let fileURL = fileURL, let name = name else {
 			return false
 		}
-		guard let dest = SPFileManager.fullPathOfFile(fileName: name) else {
+		var destFolder:URL? = nil
+		switch folder {
+		case .thumb:
+			destFolder = SPFileManager.thumbFolder()
+			break
+		case .main:
+			destFolder = SPFileManager.mainFolder()
+			break
+		}
+		guard var dest = destFolder else {
 			return false
 		}
+		dest.appendPathComponent(name)
 		do {
 			try self.default.moveItem(at: fileURL, to: dest)
 		} catch {
@@ -76,10 +90,38 @@ class SPFileManager : FileManager {
 		return true
 	}
 	
-	public static func fullPathOfFile(fileName:String) -> URL? {
-		guard let fullPath = (SPFileManager.storagePath?.appendingPathComponent(fileName)) else {
+	public static func fullPathOfFile(fileName:String, isDirectory:Bool = false) -> URL? {
+		guard let fullPath = (SPFileManager.storagePath?.appendingPathComponent(fileName, isDirectory: isDirectory)) else {
 			return nil
 		}
 		return fullPath
+	}
+	
+	public static func thumbFolder() -> URL? {
+		guard let dest = SPFileManager.fullPathOfFile(fileName: Folder.thumb.rawValue, isDirectory: true) else {
+			return nil
+		}
+		if self.default.existence(atUrl: dest) != .directory {
+			do {
+				try self.default.createDirectory(at: dest, withIntermediateDirectories: false, attributes: nil)
+			} catch {
+				return nil
+			}
+		}
+		return dest
+	}
+	
+	public static func mainFolder() -> URL? {
+		guard let dest = SPFileManager.fullPathOfFile(fileName: Folder.main.rawValue, isDirectory: true) else {
+			return nil
+		}
+		if self.default.existence(atUrl: dest) != .directory {
+			do {
+				try self.default.createDirectory(at: dest, withIntermediateDirectories: false, attributes: nil)
+			} catch {
+				return nil
+			}
+		}
+		return dest
 	}
 }

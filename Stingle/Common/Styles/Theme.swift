@@ -7,6 +7,7 @@ struct Theme {
 		static var SPLightRed:UIColor { return #colorLiteral(red: 0.7254901961, green: 0.2235294118, blue: 0.2235294118, alpha: 1)}
         static var SPLightGray: UIColor { return #colorLiteral(red: 0.8745098039, green: 0.8745098039, blue: 0.8745098039, alpha: 1)}
         static var SPBlackOpacity87: UIColor { return #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.87)}
+        static var SPBlackOpacity12: UIColor { return #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.12)}
     }
     
     struct Fonts {

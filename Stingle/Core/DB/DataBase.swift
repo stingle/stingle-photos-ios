@@ -230,7 +230,7 @@ class DataBase {
 	
 	func indexPath<T:SPFileInfo>(for file:String, with type:T.Type) -> IndexPath? {
 		let fetchRequest = NSFetchRequest<FileMO>(entityName: type.mo())
-		fetchRequest.predicate = NSPredicate(format: "file == %@", file)
+		fetchRequest.predicate = NSPredicate(format: "name == %@", file)
 		do {
 			guard let obj = try container.viewContext.fetch(fetchRequest).first else {
 				return nil
@@ -288,7 +288,7 @@ class DataBase {
 			return 0
 		}
 		let index = objs.firstIndex { (fileMO) -> Bool in
-			return fileMO.file == file.file
+			return fileMO.name == file.name
 		}
 		if index != nil {
 			return index!

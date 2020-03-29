@@ -5,28 +5,27 @@ import CoreData
 class FileMO : NSManagedObject {
 	@NSManaged var dateCreated:String?
 	@NSManaged var dateModified:String?
-	@NSManaged var file:String
+	@NSManaged var name:String
 	@NSManaged var headers:String?
 	@NSManaged var version:String?
 	@NSManaged var isLocal:Bool
+	@NSManaged var isRemote:Bool
 	@NSManaged var reUpload:Int
 	@NSManaged var date:Date
 	
 	func update(file:SPFileInfo) {
 		dateCreated = file.dateCreated
 		dateModified = file.dateModified
-		self.file = file.file
+		name = file.name
 		headers = file.headers
 		version = file.version
 		let cut = 24 * 3600 * 1000
 		let back = 24 * 3600
 		let timeInterval = (((dateCreated ?? "0") as NSString).integerValue / cut) * back
 		date = Date(timeIntervalSince1970: Double(timeInterval))
-		guard let newIsLocal = file.isLocal, let newReUpload = file.reUpload else {
-			return
-		}
-		isLocal = newIsLocal
-		reUpload = newReUpload
+		isLocal = file.isLocal ?? true
+		isRemote = file.isRemote ?? true
+		reUpload = file.reUpload ?? 0
 	}
 }
 
@@ -36,28 +35,30 @@ class TrashMO : FileMO {
 
 class DeletedFileMO : NSManagedObject {
 	@NSManaged var date:Date
-	@NSManaged var file:String
+	@NSManaged var name:String
 	@NSManaged var type:Int
 	
 	func update(info:SPDeletedFile) {
 		let timeInterval = (info.date as NSString).integerValue / 1000
 		date = Date(timeIntervalSince1970: Double(timeInterval))
-		file = info.file
+		name = info.name
 		type = info.type
 	}
 }
 
-//MARK : Codable(serializable) objects 
 class SPFileInfo : Codable {
 	
 	var dateCreated:String
 	var dateModified:String
-	var file:String
+	var name:String
 	var headers:String
 	var version:String
 	var isLocal:Bool?
+	var isRemote:Bool?
 	var reUpload:Int?
 	var date:Date?
+	var type:Int?
+	var duration:Int?
 
 	
 	class func mo() -> String {
@@ -67,18 +68,19 @@ class SPFileInfo : Codable {
 	required init(file:FileMO) {
 		dateCreated = file.dateCreated ?? ""
 		dateModified = file.dateModified ?? ""
-		self.file = file.file
+		name = file.name
 		headers = file.headers ?? ""
 		version = file.version ?? ""
 		isLocal = file.isLocal
+		isRemote = file.isRemote
 		reUpload = file.reUpload
 		date = file.date
 	}
 	
-	enum CodingKeys : CodingKey {
+	enum CodingKeys : String, CodingKey {
 		case dateCreated
 		case dateModified
-		case file
+		case name = "file"
 		case headers
 		case version
 	}
@@ -100,14 +102,21 @@ class SPTrashFile : SPFileInfo {
 class SPDeletedFile: Codable {
 	
 	var date:String
-	var file:String
+	var name:String
 	var type:Int
 	
 	required init(file: FileMO) {
 		type = 1
 		date = "\(file.date.timeIntervalSince1970)"
-		self.file = file.file
+		name = file.name
 	}
+	
+	enum CodingKeys : String, CodingKey {
+		case date
+		case name = "file"
+		case type
+	}
+
 
 	
 	func mo() -> String {
@@ -115,4 +124,3 @@ class SPDeletedFile: Codable {
 	}
 
 }
-

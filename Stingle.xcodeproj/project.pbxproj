@@ -55,6 +55,7 @@
 		626AB75A2426BB0000168659 /* SPImagePageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB7592426BB0000168659 /* SPImagePageVC.swift */; };
 		626AB75C2426C04000168659 /* SPImagePreviewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB75B2426C04000168659 /* SPImagePreviewVM.swift */; };
 		626AB75F24280E2800168659 /* SPDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB75E24280E2800168659 /* SPDatasource.swift */; };
+		626B0607242EDDE60092B55E /* GalleryFrontVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626B0606242EDDE60092B55E /* GalleryFrontVC.swift */; };
 		627057AA24265A85006B70F4 /* SPImagePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627057A924265A85006B70F4 /* SPImagePreviewVC.swift */; };
 		6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */; };
 		6279CF2723FEBB0C008B18DA /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2523FEBB0C008B18DA /* Welcome.storyboard */; };
@@ -139,6 +140,7 @@
 		626AB7592426BB0000168659 /* SPImagePageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePageVC.swift; sourceTree = "<group>"; };
 		626AB75B2426C04000168659 /* SPImagePreviewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePreviewVM.swift; sourceTree = "<group>"; };
 		626AB75E24280E2800168659 /* SPDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDatasource.swift; sourceTree = "<group>"; };
+		626B0606242EDDE60092B55E /* GalleryFrontVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryFrontVC.swift; sourceTree = "<group>"; };
 		627057A924265A85006B70F4 /* SPImagePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePreviewVC.swift; sourceTree = "<group>"; };
 		6279CF1C23FEBB0C008B18DA /* Stingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -425,6 +427,7 @@
 				620E18CC2419F48200097A16 /* SPCollectionHeader.xib */,
 				627057A924265A85006B70F4 /* SPImagePreviewVC.swift */,
 				626AB7592426BB0000168659 /* SPImagePageVC.swift */,
+				626B0606242EDDE60092B55E /* GalleryFrontVC.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -683,6 +686,7 @@
 				62619354240D092D00562BDF /* SignInVC.swift in Sources */,
 				620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */,
 				6261935B240D0E8400562BDF /* BaseVC.swift in Sources */,
+				626B0607242EDDE60092B55E /* GalleryFrontVC.swift in Sources */,
 				62619360240D4D2A00562BDF /* LandingVM.swift in Sources */,
 				6233925F2406D11600A0F64F /* SPFileManager.swift in Sources */,
 				626AB75A2426BB0000168659 /* SPImagePageVC.swift in Sources */,

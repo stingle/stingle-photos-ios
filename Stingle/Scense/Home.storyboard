@@ -73,6 +73,67 @@
             </objects>
             <point key="canvasLocation" x="-149" y="-135"/>
         </scene>
+        <!--Gallery FrontVC-->
+        <scene sceneID="X7h-f4-MV1">
+            <objects>
+                <viewController storyboardIdentifier="GalleryFrontVC" id="gjK-iv-4gr" customClass="GalleryFrontVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hJa-Kc-9Vn" customClass="GalleryFrontVIew" customModule="Stingle" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UlD-AB-3Ia">
+                                <rect key="frame" x="16" y="64" width="382" height="68"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Backup/Sync complete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VnR-gz-d5E">
+                                        <rect key="frame" x="8" y="23.5" width="176.5" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cloud_done" translatesAutoresizingMaskIntoConstraints="NO" id="BbU-vL-SKd">
+                                        <rect key="frame" x="342" y="16" width="24" height="36"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="VnR-gz-d5E" firstAttribute="leading" secondItem="UlD-AB-3Ia" secondAttribute="leading" constant="8" id="QSw-N1-ozs"/>
+                                    <constraint firstAttribute="trailing" secondItem="BbU-vL-SKd" secondAttribute="trailing" constant="16" id="WPf-Vn-4hS"/>
+                                    <constraint firstItem="BbU-vL-SKd" firstAttribute="top" secondItem="UlD-AB-3Ia" secondAttribute="top" constant="16" id="ayY-s6-CdG"/>
+                                    <constraint firstAttribute="bottom" secondItem="BbU-vL-SKd" secondAttribute="bottom" constant="16" id="s03-CC-mP2"/>
+                                    <constraint firstItem="VnR-gz-d5E" firstAttribute="centerY" secondItem="UlD-AB-3Ia" secondAttribute="centerY" id="zDY-V1-8B5"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGm-w6-ejJ">
+                                <rect key="frame" x="324" y="790" width="74" height="74"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="10"/>
+                                <state key="normal" image="import_plus" backgroundImage="import"/>
+                                <connections>
+                                    <action selector="importPressed:" destination="gjK-iv-4gr" eventType="touchUpInside" id="LC9-F8-foa"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="UlD-AB-3Ia" firstAttribute="height" secondItem="cJd-0m-v0E" secondAttribute="height" multiplier="1/12" id="7sy-u1-2RI"/>
+                            <constraint firstItem="UlD-AB-3Ia" firstAttribute="top" secondItem="cJd-0m-v0E" secondAttribute="top" constant="20" id="jET-Ro-f3o"/>
+                            <constraint firstItem="cJd-0m-v0E" firstAttribute="trailing" secondItem="TGm-w6-ejJ" secondAttribute="trailing" constant="16" id="mJ3-0a-IwX"/>
+                            <constraint firstItem="UlD-AB-3Ia" firstAttribute="leading" secondItem="cJd-0m-v0E" secondAttribute="leading" constant="16" id="pCM-ZB-gES"/>
+                            <constraint firstItem="cJd-0m-v0E" firstAttribute="trailing" secondItem="UlD-AB-3Ia" secondAttribute="trailing" constant="16" id="prG-Bc-VTm"/>
+                            <constraint firstItem="TGm-w6-ejJ" firstAttribute="bottom" secondItem="cJd-0m-v0E" secondAttribute="bottom" constant="2" id="v9b-kt-mu2"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="cJd-0m-v0E"/>
+                    </view>
+                    <connections>
+                        <outlet property="backupSyncIcon" destination="BbU-vL-SKd" id="y9Q-3M-LKD"/>
+                        <outlet property="backupSyncView" destination="UlD-AB-3Ia" id="XPB-A1-Lsa"/>
+                        <outlet property="importImage" destination="TGm-w6-ejJ" id="tri-dh-1HT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="j1K-1V-GQx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-149.27536231884059" y="593.97321428571422"/>
+        </scene>
         <!--MenuVC-->
         <scene sceneID="nCW-Bo-w5S">
             <objects>
@@ -246,7 +307,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="27N-SG-5R7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="614.49275362318849" y="-137.27678571428569"/>
+            <point key="canvasLocation" x="-149" y="-867"/>
         </scene>
         <!--Image PageVC-->
         <scene sceneID="G2X-z2-zOD">
@@ -254,7 +315,7 @@
                 <pageViewController storyboardIdentifier="SPImagePageVC" autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="S4d-7N-RRX" customClass="SPImagePageVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xZ4-46-Km2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1435" y="-135"/>
+            <point key="canvasLocation" x="609" y="-135"/>
         </scene>
         <!--Image PreviewVC-->
         <scene sceneID="DDH-hM-Lew">
@@ -281,11 +342,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OzA-bJ-XLV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2171" y="-135"/>
+            <point key="canvasLocation" x="1323" y="-135"/>
         </scene>
     </scenes>
     <resources>
         <image name="arrow_back" width="24" height="24"/>
+        <image name="cloud_done" width="24" height="24"/>
+        <image name="import" width="74" height="74"/>
+        <image name="import_plus" width="14" height="14"/>
         <image name="menu" width="24" height="24"/>
         <image name="menu_logo" width="40" height="40"/>
     </resources>

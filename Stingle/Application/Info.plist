@@ -53,5 +53,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Stingle Photos requires access to your phone&apos;s camera.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Stingle Photos requires access to your Photos Library.</string>
 </dict>
 </plist>

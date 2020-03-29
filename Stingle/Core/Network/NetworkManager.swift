@@ -72,7 +72,7 @@ class NetworkManager : NSObject {
 		return task
 	}
 	
-	static public func download(request:SPRequest, completionHandler: @escaping (URL?, Error?) -> Swift.Void) -> URLSessionDownloadTask {
+	static public func download(request:SPRequest, completionHandler: @escaping (String?, Error?) -> Swift.Void) -> URLSessionDownloadTask {
 		guard let urlRequest = NetworkManager.create(request: request) else { fatalError() }
 		let s = session()
 		s.downloadsSession.configuration.httpShouldUsePipelining = true
@@ -83,7 +83,8 @@ class NetworkManager : NSObject {
 			}
 			let downloadFileRequest:SPDownloadFileRequest = request as! SPDownloadFileRequest
 			do {
-				let status = try SPFileManager.moveToHomeFolder(fileURL: url, withName: downloadFileRequest.fileName)
+				let folder = downloadFileRequest.isThumb ? Folder.thumb : Folder.main
+				let status = try SPFileManager.moveToFolder(fileURL: url, with: downloadFileRequest.fileName, folder:folder)
 				if !status {
 					completionHandler(nil, nil)
 				}
@@ -91,7 +92,7 @@ class NetworkManager : NSObject {
 				completionHandler(nil, error)
 				return
 			}
-			completionHandler(SPFileManager.fullPathOfFile(fileName: downloadFileRequest.fileName), nil)
+			completionHandler(downloadFileRequest.fileName, nil)
 		}
 		task.resume()
 		return task
