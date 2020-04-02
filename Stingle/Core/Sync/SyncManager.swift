@@ -1,18 +1,15 @@
 import Foundation
 
 class SyncManager {
-		
-	private static let db = DataBase()
 	
+	private static let db = DataBase()
+		
 	private static var subscribers = Dictionary<String, [SPEventHandler]>()
 	
 	init() {
-		NotificationCenter.default.addObserver(self, selector: #selector(contextObjectsDidChange(_:)), name: Notification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(contextWillSave(_:)), name: Notification.Name.NSManagedObjectContextWillSave, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(contextDidSave(_:)), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
 	}
 	
-	
+		
 	// MARK : Funcions for handle DB updates
 	@objc func contextObjectsDidChange(_ notification: Notification) {
 	}
@@ -41,6 +38,9 @@ class SyncManager {
 			//TODO : make sure that the reciever can handle event
 			reciever.recieve(event: event)
 		}
+	}
+	
+	deinit {
 	}
 	
 }

@@ -30,7 +30,7 @@ class FileMO : NSManagedObject {
 }
 
 class TrashMO : FileMO {
-	
+
 }
 
 class DeletedFileMO : NSManagedObject {
@@ -50,16 +50,18 @@ class SPFileInfo : Codable {
 	
 	var dateCreated:String
 	var dateModified:String
+	
 	var name:String
 	var headers:String
 	var version:String
+	
 	var isLocal:Bool?
 	var isRemote:Bool?
 	var reUpload:Int?
+	
 	var date:Date?
 	var type:Int?
 	var duration:Int?
-
 	
 	class func mo() -> String {
 		fatalError()
@@ -76,7 +78,7 @@ class SPFileInfo : Codable {
 		reUpload = file.reUpload
 		date = file.date
 	}
-	
+		
 	enum CodingKeys : String, CodingKey {
 		case dateCreated
 		case dateModified
@@ -98,7 +100,6 @@ class SPTrashFile : SPFileInfo {
 	}
 }
 
-
 class SPDeletedFile: Codable {
 	
 	var date:String
@@ -117,8 +118,6 @@ class SPDeletedFile: Codable {
 		case type
 	}
 
-
-	
 	func mo() -> String {
 		return "Deletes"
 	}

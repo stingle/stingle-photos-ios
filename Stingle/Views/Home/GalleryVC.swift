@@ -4,6 +4,9 @@ class GalleryVC : BaseVC, GalleryDelegate {
 	var viewModel:GalleryVM = GalleryVM()
 	var settingsVisible = false
 	private var menuVC:SPMenuVC?
+	private var frontVC:GalleryFrontVC?
+	private var pageVC:SPImagePageVC?
+
 	
 	@IBOutlet weak var importImage: UIButton!
 	@IBOutlet var collectionView: UICollectionView!
@@ -20,18 +23,18 @@ class GalleryVC : BaseVC, GalleryDelegate {
 		collectionView.delegate = self
 		viewModel.delegate = self
 
+		pageVC = viewController(with: "SPImagePageVC", from: "Home") as! SPImagePageVC?
+		pageVC?.modalPresentationStyle = .fullScreen
+		
 		menuVC = viewController(with: "SPMenuVC", from: "Home") as! SPMenuVC?
 		menuVC?.transitioningDelegate = self
 		menuVC?.modalPresentationStyle = .custom
 		menuVC?.swipeInteractionController = SwipeInteractionController(viewController: self, maxTransition: 500)
 		menuVC?.viewModel.delegate = viewModel
-		guard let maskVC = viewController(with: "GalleryFrontVC", from: "Home") else {
-			return
-		}
-		maskVC.view.backgroundColor = .clear
-		maskVC.view.frame = self.view.frame
-		self.addChild(maskVC)
-		self.view.addSubview(maskVC.view)
+		
+		frontVC = viewController(with: "GalleryFrontVC", from: "Home") as! GalleryFrontVC?
+		self.addChild(frontVC!)
+		self.view.addSubview(frontVC!.view)
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -52,17 +55,27 @@ class GalleryVC : BaseVC, GalleryDelegate {
 	}
 }
 
-
 //MARK: - Collection View Delegate
 extension GalleryVC : UICollectionViewDelegate {
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		guard let vc = viewController(with: "SPImagePageVC", from: "Home") as! SPImagePageVC? else {
+		guard let vc = pageVC else {
+			collectionView.deselectItem(at: indexPath, animated: false)
 			return
 		}
 		vc.initialIndex = indexPath
 		vc.viewModel = SPImagePreviewVM(dataSource: viewModel.dataSource)
 		vc.modalPresentationStyle = .fullScreen
 		self.navigationController?.pushViewController(vc, animated: false)
+	}
+	
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		let offsetY = scrollView.contentOffset.y
+		if offsetY > 100
+		{
+			frontVC?.hideBackUpSyncView()
+		} else if offsetY < 100 {
+			frontVC?.showBackUpSyncView()
+		}
 	}
 }
 
@@ -121,8 +134,6 @@ extension GalleryVC : UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
 
 //MARK: - Transiotion delegates
 extension GalleryVC: UIViewControllerTransitioningDelegate {
-	
-	
 	
 	func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
 		guard let animator = animator as? MenuPresentAnimationController,

@@ -312,7 +312,7 @@
         <!--Image PageVC-->
         <scene sceneID="G2X-z2-zOD">
             <objects>
-                <pageViewController storyboardIdentifier="SPImagePageVC" autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="S4d-7N-RRX" customClass="SPImagePageVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController"/>
+                <pageViewController storyboardIdentifier="SPImagePageVC" autoresizesArchivedViewToFullSize="NO" modalTransitionStyle="flipHorizontal" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="S4d-7N-RRX" customClass="SPImagePageVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xZ4-46-Km2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="609" y="-135"/>

@@ -487,7 +487,7 @@ public class Crypto {
 	
 	private func savePrivateFile(filename:String, data:Bytes?) throws -> Bool {
 		
-		guard let fullPath = SPFileManager.fullPathOfFile(fileName: filename) else {
+		guard let fullPath = SPFileManager.folder(for: .Private)?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
 		
@@ -509,7 +509,7 @@ public class Crypto {
 	
 	private func readPrivateFile(filename:String ) throws -> Bytes {
 		
-		guard let fullPath = SPFileManager.fullPathOfFile(fileName: filename) else {
+		guard let fullPath = SPFileManager.folder(for: .Private)?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
 		guard let input:InputStream = InputStream(url: fullPath) else {

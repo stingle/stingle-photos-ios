@@ -56,25 +56,15 @@ class SPImagePageVC: UIPageViewController, UIPageViewControllerDataSource, UIPag
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
 		var index = (viewController as! SPImagePreviewVC).index
-		let lastIndex = presentationCount(for: pageViewController)
+		guard let count = viewModel?.numberOfPages() else {
+			return nil
+		}
+
+		let lastIndex = count - 1
 		if index == NSNotFound || index == lastIndex {
 			return nil
 		}
 		index += 1
 		return createPage(index: index)
-	}
-		
-	func presentationCount(for pageViewController: UIPageViewController) -> Int {
-		guard let count = viewModel?.numberOfPages() else {
-			return 0
-		}
-		return count - 1
-	}
-	
-	func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-		guard let index = viewModel?.index(from: initialIndex) else {
-			return 0
-		}
-		return index
 	}
 }

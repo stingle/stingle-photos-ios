@@ -18,7 +18,6 @@ class DataSource {
 	static let db = DataBase()
 	private static let crypto = Crypto()
 	private static let network = NetworkManager()
-	private static let sync = SyncManager()
 	
 	//TODO : Replace with round buffer
 	private var thumbCache:[String: UIImage]
@@ -37,7 +36,6 @@ class DataSource {
 			return
 		}
 		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
-//		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "0", lastDelSeenTime: "0")
 		_ = NetworkManager.send(request: request) { (data:SPUpdateInfo?, error:Error?) in
 			guard let data = data , error == nil else {
 				print(error.debugDescription)
@@ -101,7 +99,7 @@ class DataSource {
 		}
 	}
 	
-//	MARK: - IndexPath related getters
+//	MARK: - IndexPath getters
 	
 	public func numberOfSections()  -> Int {
 		return DataSource.db.numberOfSections(for: fileType())
@@ -131,10 +129,9 @@ class DataSource {
 		if let image = imageCache[file.name] {
 			return image
 		}
-		guard var filePath = SPFileManager.thumbFolder() else {
+		guard let filePath = SPFileManager.folder(for: .StorageThumbs)?.appendingPathComponent(file.name) else {
 			return nil
 		}
-		filePath.appendPathComponent(file.name)
 		
 		guard let input = InputStream(url: filePath) else {
 			return nil
@@ -160,7 +157,7 @@ class DataSource {
 		return nil
 	}
 
-//	MARK: - Index related getters
+//	MARK: - Index getters
 	func numberOfFiles () -> Int {
 		return DataSource.db.filesCount(for: fileType())
 	}
@@ -185,7 +182,6 @@ class DataSource {
 		return image
 	}
 
-	
 	func index(of file:SPFileInfo) -> Int {
 		return 0
 	}

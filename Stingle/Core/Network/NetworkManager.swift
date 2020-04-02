@@ -83,7 +83,7 @@ class NetworkManager : NSObject {
 			}
 			let downloadFileRequest:SPDownloadFileRequest = request as! SPDownloadFileRequest
 			do {
-				let folder = downloadFileRequest.isThumb ? Folder.thumb : Folder.main
+				let folder:SPFolder = downloadFileRequest.isThumb ?  .StorageThumbs : .StorageOriginals
 				let status = try SPFileManager.moveToFolder(fileURL: url, with: downloadFileRequest.fileName, folder:folder)
 				if !status {
 					completionHandler(nil, nil)
