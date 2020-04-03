@@ -8,6 +8,8 @@ class SPMediaFileManager {
 	
 	private let phManager = PHImageManager.default()
 	
+	private let sync = SPApplication.sync
+	
 	public func checkAndReqauestAuthorization(completion:@escaping (PHAuthorizationStatus) -> Void) {
 		let status = PHPhotoLibrary.authorizationStatus()
 		if status == .notDetermined  {
@@ -40,10 +42,12 @@ class SPMediaFileManager {
 	func processMediia(asset:PHAsset, fileUrl:URL) {
 		let option = PHImageRequestOptions()
 		option.isSynchronous = true
-		_ = phManager.requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .default, options: option) {
-			(thumb, info) in
-			print(info)
+		//TODO : Handle error case
+		do {
+			let file = try SPFile(asset: asset, path: fileUrl)
+			SyncManager.importImage(file:file, withWidth: asset.pixelWidth, withHeight: asset.pixelHeight)
+		} catch {
+			print(error)
 		}
-		
 	}
 }

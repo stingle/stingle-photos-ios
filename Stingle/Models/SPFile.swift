@@ -1,12 +1,14 @@
 import Foundation
 import CoreData
+import Photos
 
 //MARK : Core Data Managed Objects
 class FileMO : NSManagedObject {
-	@NSManaged var dateCreated:String?
-	@NSManaged var dateModified:String?
+	@NSManaged var dateCreated:String
+	@NSManaged var dateModified:String
 	@NSManaged var name:String
-	@NSManaged var headers:String?
+	@NSManaged var type:Int
+	@NSManaged var headers:String
 	@NSManaged var version:String?
 	@NSManaged var isLocal:Bool
 	@NSManaged var isRemote:Bool
@@ -21,7 +23,7 @@ class FileMO : NSManagedObject {
 		version = file.version
 		let cut = 24 * 3600 * 1000
 		let back = 24 * 3600
-		let timeInterval = (((dateCreated ?? "0") as NSString).integerValue / cut) * back
+		let timeInterval = ((dateCreated  as NSString).integerValue / cut) * back
 		date = Date(timeIntervalSince1970: Double(timeInterval))
 		isLocal = file.isLocal ?? true
 		isRemote = file.isRemote ?? true
@@ -54,30 +56,55 @@ class SPFileInfo : Codable {
 	var name:String
 	var headers:String
 	var version:String
+	var type:Int?
+	var duration:Int = 0
 	
 	var isLocal:Bool?
 	var isRemote:Bool?
 	var reUpload:Int?
-	
+
 	var date:Date?
-	var type:Int?
-	var duration:Int?
-	
+	var data:Data?
+
 	class func mo() -> String {
 		fatalError()
 	}
 	
 	required init(file:FileMO) {
-		dateCreated = file.dateCreated ?? ""
-		dateModified = file.dateModified ?? ""
+		dateCreated = file.dateCreated
+		dateModified = file.dateModified
 		name = file.name
-		headers = file.headers ?? ""
+		type = file.type
+		headers = file.headers
 		version = file.version ?? ""
 		isLocal = file.isLocal
 		isRemote = file.isRemote
 		reUpload = file.reUpload
 		date = file.date
 	}
+	
+	init(asset:PHAsset, path:URL) throws {
+		let interval = Date.init().millisecondsSince1970
+		dateCreated = "\(interval)"
+		dateModified = dateCreated
+		guard let fileName = Utils.getNewEncFilename() else {
+			throw CryptoError.Internal.randomBytesGenerationFailure
+		}
+		name = fileName
+		let cut = 24 * 3600 * 1000
+		let back = 24 * 3600
+		let timeInterval = (Int(interval) / cut) * back
+		type = (asset.mediaType == .image) ? Constants.FileTypePhoto : Constants.FileTypeVideo
+		headers = ""
+		version = "\(Constants.CurrentFileVersion)"
+		isLocal = true
+		isRemote = false
+		reUpload = 0
+		date = Date(timeIntervalSince1970: Double(timeInterval))
+		data = try Data(contentsOf: path)
+		duration = Int(asset.duration)
+	}
+
 		
 	enum CodingKeys : String, CodingKey {
 		case dateCreated

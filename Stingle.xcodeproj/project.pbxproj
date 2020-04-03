@@ -63,6 +63,8 @@
 		6279CF2723FEBB0C008B18DA /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2523FEBB0C008B18DA /* Welcome.storyboard */; };
 		6279CF2923FEBB0D008B18DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2823FEBB0D008B18DA /* Assets.xcassets */; };
 		6279CF2C23FEBB0D008B18DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6279CF2A23FEBB0D008B18DA /* LaunchScreen.storyboard */; };
+		6283C73124363E1B0084C361 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6283C73024363E1B0084C361 /* Constants.swift */; };
+		6283C73324364BAF0084C361 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6283C73224364BAF0084C361 /* Utils.swift */; };
 		6284A4CC241582F8003C3FA5 /* SPCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6284A4CA241582F8003C3FA5 /* SPCollectionViewCell.swift */; };
 		6284A4CD241582F8003C3FA5 /* SPCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6284A4CB241582F8003C3FA5 /* SPCollectionViewCell.xib */; };
 		62AE6894240D55CD001EA58D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AE6893240D55CD001EA58D /* Theme.swift */; };
@@ -152,6 +154,8 @@
 		6279CF2823FEBB0D008B18DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6279CF2B23FEBB0D008B18DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6279CF2D23FEBB0D008B18DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6283C73024363E1B0084C361 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Stingle/Models/Constants.swift; sourceTree = SOURCE_ROOT; };
+		6283C73224364BAF0084C361 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Stingle/Models/Utils.swift; sourceTree = SOURCE_ROOT; };
 		6284A4CA241582F8003C3FA5 /* SPCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCollectionViewCell.swift; sourceTree = "<group>"; };
 		6284A4CB241582F8003C3FA5 /* SPCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SPCollectionViewCell.xib; sourceTree = "<group>"; };
 		62AE6893240D55CD001EA58D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -273,7 +277,7 @@
 				626AB75D2428081000168659 /* DataSource */,
 				62E7545A2413304D00D8FB96 /* Sync */,
 				620C02D123FED39D00999057 /* DB */,
-				620C02D023FED38900999057 /* Util */,
+				620C02D023FED38900999057 /* Utils */,
 				620C02CF23FED34D00999057 /* File */,
 				620C02CC23FED27600999057 /* Crypto */,
 				620C02CB23FED26A00999057 /* Network */,
@@ -290,11 +294,12 @@
 			path = File;
 			sourceTree = "<group>";
 		};
-		620C02D023FED38900999057 /* Util */ = {
+		620C02D023FED38900999057 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				6283C73224364BAF0084C361 /* Utils.swift */,
 			);
-			path = Util;
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		620C02D123FED39D00999057 /* DB */ = {
@@ -363,6 +368,7 @@
 		6250436E241AB6B600A90F3A /* Uitils */ = {
 			isa = PBXGroup;
 			children = (
+				6283C73024363E1B0084C361 /* Constants.swift */,
 			);
 			path = Uitils;
 			sourceTree = "<group>";
@@ -708,6 +714,8 @@
 				62048A6F240F1766006207AC /* SPRequest.swift in Sources */,
 				62048A6D240F1759006207AC /* SPResponse.swift in Sources */,
 				62504376241AD24C00A90F3A /* SPMenuVM.swift in Sources */,
+				6283C73124363E1B0084C361 /* Constants.swift in Sources */,
+				6283C73324364BAF0084C361 /* Utils.swift in Sources */,
 				62504370241AB6FF00A90F3A /* Image+Extension.swift in Sources */,
 				6284A4CC241582F8003C3FA5 /* SPCollectionViewCell.swift in Sources */,
 				62E754562412DE9600D8FB96 /* Date.swift in Sources */,

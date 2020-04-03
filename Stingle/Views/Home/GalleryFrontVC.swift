@@ -80,6 +80,7 @@ class GalleryFrontVC: UIViewController {
 extension GalleryFrontVC : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 		mediaManager.prepareMedia(info: info)
+		picker.dismiss(animated: false, completion: nil)
 	}
 	
 }

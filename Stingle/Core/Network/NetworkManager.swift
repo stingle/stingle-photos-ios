@@ -57,7 +57,7 @@ class NetworkManager : NSObject {
 			}
 			if let data = data {
 				do {
-//					print(try JSONSerialization.jsonObject(with:data, options:[]))
+					print(try JSONSerialization.jsonObject(with:data, options:[]))
 					let decoder = JSONDecoder()
 					decoder.keyDecodingStrategy = .convertFromSnakeCase
 					let response:T = try decoder.decode(T.self, from: data)

@@ -2,7 +2,7 @@ import Foundation
 import Sodium
 import Clibsodium
 
-fileprivate struct Constants {
+public struct Constants {
 	public static let FileTypeGeneral = 1
 	public static let FileTypePhoto = 2
 	public static let FileTypeVideo = 3
@@ -22,7 +22,9 @@ fileprivate struct Constants {
 	
 	public static let XCHACHA20POLY1305_IETF_CONTEXT = "__data__"
 	public static let MAX_BUFFER_LENGTH = 1024*1024*64;
-	
+	public static let FileExtension = ".sp"
+	public static let FileNameLen = 32
+
 	public static let FileBegginingLen:Int = Constants.FileBeggining.bytes.count
 	public static let FileFileVersionLen = 1
 	public static let FileChunksizeLen = 4
@@ -331,9 +333,6 @@ public class Crypto {
 		let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
 		
 		let privateKey:Bytes = KeyManagement.key
-		// TODO For unit tests : temp solution
-		//		let privateKey:Bytes = try getPrivateKey(password: "mekicvec")
-		
 		guard let headerBytes = so.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
 			throw CryptoError.Internal.openFailure
 		}
@@ -364,20 +363,13 @@ public class Crypto {
 		return header
 	}
 	
-	public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, fileId:Bytes?, videoDuration:Int) throws -> Bytes {
+	public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, fileId:Bytes, videoDuration:Int) throws {
 		
 		let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
 		let symmetricKey = so.keyDerivation.key()
-		
-		guard let fileId = so.randomBytes.buf(length: Constants.FileFileIdLen) else {
-			throw CryptoError.Internal.randomBytesGenerationFailure
-		}
-		
 		let header = try getNewHeader(symmetricKey: symmetricKey, dataSize: dataLength, filename: filename, fileType: fileType, fileId: fileId, videoDuration: videoDuration)
 		try writeHeader(output: output, header: header, publicKey: publicKey)
-		_ = try encryptData(input: input, output: output, header: header)
-		
-		return fileId;
+		_ = try encryptData(input: input, output: output, header: header)		
 	}
 	
 	private func encryptData(input:InputStream, output:OutputStream, header:Header?) throws -> Bool {
@@ -557,6 +549,14 @@ public class Crypto {
 
 extension Crypto {
 	
+	public func getRandomBytes(lenght:Int) -> Bytes? {
+		return so.randomBytes.buf(length: lenght)
+	}
+	
+	public func newFileId() -> Bytes? {
+		return getRandomBytes(lenght: Constants.FileFileIdLen)
+	}
+	
 	public static func toBytes<T:FixedWidthInteger>(value:T) -> Bytes {
 		var result:Bytes = []
 		let numOfBytes = MemoryLayout<T>.size
@@ -646,5 +646,66 @@ extension Crypto {
 		offset += fileNameSize
 		header.videoDuration = Crypto.fromBytes(b: Bytes(data[offset..<offset + Constants.FileVideoDurationlen]))
 		return header
+	}
+	
+	public func getFileHeaders(originalPath:String, thumbPath:String) throws -> String? {
+		guard let originBytes = try getFileHeaderBytes(path: originalPath) else {
+			return nil
+		}
+		guard let thumbBytes = try getFileHeaderBytes(path: thumbPath) else {
+			return nil
+		}
+
+        return bytesToBase64(data: originBytes)! + "*" + bytesToBase64(data: thumbBytes)!
+    }
+	
+	public func getFileHeaderBytes(path:String) throws -> Bytes? {
+		guard let input = InputStream(fileAtPath: path) else {
+			return nil
+		}
+		input.open()
+        let overallHeaderSize = try getOverallHeaderSize(input: input)
+		input.close()
+
+		guard let newInput = InputStream(fileAtPath: path) else {
+			return nil
+		}
+		newInput.open()
+		var header = Bytes(repeating: 0, count: overallHeaderSize)
+		guard overallHeaderSize == newInput.read(&header, maxLength: overallHeaderSize) else {
+			return nil
+		}
+		newInput.close()
+        return header
+    }
+
+	public func getOverallHeaderSize(input:InputStream) throws -> Int  {
+        // Read and validate file beginning
+		var buf:Bytes = Bytes(repeating: 0, count: Constants.FileHeaderBeginningLen)
+		guard Constants.FileHeaderBeginningLen == input.read(&buf, maxLength: Constants.FileHeaderBeginningLen) else {
+			throw CryptoError.IO.readFailure
+		}
+		var offset:Int = 0
+		let fileBegginingStr:String = String(bytes: Bytes(buf[offset..<(offset + Constants.FileBegginingLen)]), encoding: String.Encoding.utf8) ?? ""
+		if fileBegginingStr != Constants.FileBeggining {
+			throw CryptoError.Header.incorrectFileBeggining
+		}
+		offset += Constants.FileBegginingLen
+		
+		let fileVersion:UInt8 = buf[offset]
+		if fileVersion != Constants.CurrentFileVersion {
+			throw CryptoError.Header.incorrectFileVersion
+		}
+		offset += Constants.FileFileVersionLen
+		
+		offset += Constants.FileFileIdLen
+		
+		let headerSize:UInt32 = Crypto.fromBytes(b: Bytes((buf[offset..<offset + Constants.FileHeaderSizeLen])))
+		offset += Constants.FileHeaderSizeLen
+		guard headerSize > 0 else {
+			throw CryptoError.Header.incorrectHeaderSize
+		}
+		offset += Int(headerSize)
+        return offset
 	}
 }

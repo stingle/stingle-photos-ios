@@ -144,6 +144,7 @@ class DataSource {
 		DataSource.crypto.decryptFileAsync(input: input, output: out, completion: { (ok, error) in
 			let body = {() -> Void in
 				guard ok == true, error == nil else {
+					print(error)
 					return
 				}
 				let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
