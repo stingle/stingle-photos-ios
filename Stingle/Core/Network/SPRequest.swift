@@ -14,7 +14,14 @@ protocol SPRequest {
 	func params () -> String?
 	func path () -> String
 	func method () -> SPRequestMethod
-	func headers () -> Array<(String, String)>?
+	func headers () ->  [String : String]?
+	func boundary() -> String?
+}
+
+extension SPRequest {
+    func boundary() -> String? {
+		return "*****" + "\(Date.init().millisecondsSince1970)" + "*****"
+	}
 }
 
 struct SPPreSignInRequest : SPRequest {
@@ -32,7 +39,7 @@ struct SPPreSignInRequest : SPRequest {
 	func method () -> SPRequestMethod {
 		return .POST
 	}
-	func headers() -> Array<(String, String)>? {
+	func headers() ->  [String : String]? {
 		return nil
 	}
 }
@@ -59,21 +66,36 @@ struct SPSignInRequest : SPRequest {
 		return .POST
 	}
 	
-	func headers() -> Array<(String, String)>? {
+	func headers() ->  [String : String]? {
 		return nil
 	}
 }
 
 struct SPUploadFileRequest : SPRequest {
 	
-	public let boundary:String
-	
-	init(boundary:String) {
-		self.boundary = boundary
+	let token:String
+	let fileName:String
+	let version:String
+	let dateCreated:String
+	let dateModified:String
+	let fileHeaders:String
+	let folder:Int
+
+	init(file:SPFileInfo, folder:Int) {
+		token = SPApplication.user!.token
+		self.fileName = file.name
+		version = file.version
+		dateCreated = file.dateCreated
+		dateModified = file.dateModified
+		fileHeaders = file.headers
+		self.folder = folder
 	}
 	
 	func params () -> String? {
-		return ""
+		var components = URLComponents()
+		components.queryItems = [URLQueryItem(name: "folder", value: "\(folder)"), URLQueryItem(name: "token", value: token), URLQueryItem(name: "dateCreated", value: dateCreated), URLQueryItem(name: "dateModified", value: dateModified), URLQueryItem(name: "headers", value: fileHeaders), URLQueryItem(name: "version", value: version)]
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
 	}
 	
 	func path () -> String {
@@ -84,11 +106,12 @@ struct SPUploadFileRequest : SPRequest {
 		return .POST
 	}
 	
-	func headers() -> Array<(String, String)>? {
-		
-		return [("Connection", "Keep-Alive"), ("User-Agent", "Stingle Photos HTTP Client 1.0"), ("Content-Type", "multipart/form-data; boundary=\(boundary)")]
+	func headers() ->  [String : String]? {
+		guard let boundary = boundary() else {
+			return nil
+		}
+		return ["Connection" : "Keep-Alive", "User-Agent" :  "Stingle Photos HTTP Client 1.0", "Content-Type" : "multipart/form-data; boundary=\(boundary)"]
 	}
-
 }
 
 struct SPGetUpdateRequest : SPRequest {
@@ -119,7 +142,7 @@ struct SPGetUpdateRequest : SPRequest {
 		return .POST
 	}
 	
-	func headers () -> Array<(String, String)>? {
+	func headers () ->  [String : String]? {
 		return nil
 	}
 }
@@ -146,7 +169,7 @@ struct SPDownloadFileRequest : SPRequest {
 		return .POST
 	}
 	
-	func headers () -> Array<(String, String)>? {
+	func headers () ->  [String : String]? {
 		return nil
 	}
 

@@ -87,10 +87,7 @@ class SPFileInfo : Codable {
 		let interval = Date.init().millisecondsSince1970
 		dateCreated = "\(interval)"
 		dateModified = dateCreated
-		guard let fileName = Utils.getNewEncFilename() else {
-			throw CryptoError.Internal.randomBytesGenerationFailure
-		}
-		name = fileName
+		name = asset.value(forKey: "filename") as! String
 		let cut = 24 * 3600 * 1000
 		let back = 24 * 3600
 		let timeInterval = (Int(interval) / cut) * back

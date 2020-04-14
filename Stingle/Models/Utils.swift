@@ -12,4 +12,9 @@ class Utils {
 		let base64Str = crypto.bytesToBase64(data: randData)
 		return base64Str?.appending(Constants.FileExtension)
 	}
+	
+	public func createAndSaveThumb(file:SPFile) -> Bool {
+		
+		return false
+	}
 }

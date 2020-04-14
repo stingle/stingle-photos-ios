@@ -4,28 +4,63 @@ protocol SPEventHandler {
 	func recieve(event:SPEvent);
 }
 
-struct SPEvenetType {
-	struct DB {
+enum SPEvenetType  {
+	
+	 enum DB {
 		enum update : String {
-			case gallery
-			case trash
-			case appInfo
+			case gallery = "SPDBUpdateGallery"
+			case trash = "SPDBUpdateTrash"
+			case appInfo = "SPDBUpdateAppInfo"
+		}
+		
+		enum insert: String {
+			case gallery = "SPDBInsertGallery"
+			case trash = "SPDBInsertTrash"
+		}
+		
+		enum delete: String {
+			case gallery = "SPDBDeletetGallery"
+			case trash = "SPDBDeletetTrash"
 		}
 	}
 	
-	struct FS {
-		enum update: String {
-			case newFileImported
+	enum UI {
+
+		enum updates : String {
+			case begin = "SPUIBeginUpdates"
+			case end = "SPUIEndUpdates"
 		}
+				
+		enum delete: String {
+			case gallery = "SPUIDeletFromGallery"
+		}
+		
+		enum recover: String {
+			case trash = "SPUIRecoverFromTrash"
+		}
+		
+		enum ready: String {
+			case thumb = "SPUIThumbReady"
+			case image = "SPUIImageREady"
+			case video = "SPUIVideoReady"
+		}
+		
 	}
+	
+//	enum FS {
+//		enum `import`: String {
+//			case image
+//			case video
+//		}
+//	}
 }
 
 class SPEvent {
-	public let info:Dictionary<String, [String]>?
-	public let name:String
+	public let info:Dictionary<String, AnyHashable>?
+	public let type:String
 	
-	init(name:String, info:Dictionary<String, [String]>?) {
-		self.name = name
+	init(type:String, info:Dictionary<String, AnyHashable>?) {
+		self.type = type
 		self.info = info
 	}
 }

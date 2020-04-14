@@ -45,7 +45,16 @@ class SPMediaFileManager {
 		//TODO : Handle error case
 		do {
 			let file = try SPFile(asset: asset, path: fileUrl)
-			SyncManager.importImage(file:file, withWidth: asset.pixelWidth, withHeight: asset.pixelHeight)
+			let options = PHImageRequestOptions()
+			options.version = .original
+			options.isSynchronous = true
+			options.deliveryMode = .highQualityFormat
+			phManager.requestImageData(for: asset, options: options) { data, a, b, c in
+				if let data = data {
+					file.data = data
+					SyncManager.importImage(file:file, withWidth: asset.pixelWidth, withHeight: asset.pixelHeight)
+				}
+			}
 		} catch {
 			print(error)
 		}

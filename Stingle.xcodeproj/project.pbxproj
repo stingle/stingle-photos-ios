@@ -47,6 +47,8 @@
 		62504370241AB6FF00A90F3A /* Image+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6250436F241AB6FF00A90F3A /* Image+Extension.swift */; };
 		62504374241ACD2400A90F3A /* SPMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62504373241ACD2400A90F3A /* SPMenuCell.swift */; };
 		62504376241AD24C00A90F3A /* SPMenuVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62504375241AD24C00A90F3A /* SPMenuVM.swift */; };
+		6251FC152444FF35002023B2 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6251FC142444FF35002023B2 /* UITextField+Extensions.swift */; };
+		6251FC1724454585002023B2 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6251FC1624454585002023B2 /* EventManager.swift */; };
 		625F32A92419EB1E00477881 /* SPCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625F32A72419EB1E00477881 /* SPCollectionHeader.swift */; };
 		62619354240D092D00562BDF /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619353240D092D00562BDF /* SignInVC.swift */; };
 		62619357240D094F00562BDF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619356240D094F00562BDF /* SignUpVC.swift */; };
@@ -136,6 +138,8 @@
 		6250436F241AB6FF00A90F3A /* Image+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Extension.swift"; sourceTree = "<group>"; };
 		62504373241ACD2400A90F3A /* SPMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMenuCell.swift; sourceTree = "<group>"; };
 		62504375241AD24C00A90F3A /* SPMenuVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMenuVM.swift; sourceTree = "<group>"; };
+		6251FC142444FF35002023B2 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
+		6251FC1624454585002023B2 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		625F32A72419EB1E00477881 /* SPCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCollectionHeader.swift; sourceTree = "<group>"; };
 		62619353240D092D00562BDF /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
 		62619356240D094F00562BDF /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
@@ -470,6 +474,7 @@
 				6242B7B0240DDEA00090BFE4 /* String+Extensions.swift */,
 				62E754552412DE9600D8FB96 /* Date.swift */,
 				6250436F241AB6FF00A90F3A /* Image+Extension.swift */,
+				6251FC142444FF35002023B2 /* UITextField+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -506,6 +511,7 @@
 			children = (
 				62E7545B2413306300D8FB96 /* SyncManager.swift */,
 				62E7545D241331D400D8FB96 /* SPEvent.swift */,
+				6251FC1624454585002023B2 /* EventManager.swift */,
 			);
 			path = Sync;
 			sourceTree = "<group>";
@@ -702,6 +708,7 @@
 				62619360240D4D2A00562BDF /* LandingVM.swift in Sources */,
 				6233925F2406D11600A0F64F /* SPFileManager.swift in Sources */,
 				626AB75A2426BB0000168659 /* SPImagePageVC.swift in Sources */,
+				6251FC152444FF35002023B2 /* UITextField+Extensions.swift in Sources */,
 				624A197224116D8B0002F1ED /* DataBase.swift in Sources */,
 				62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */,
 				62504374241ACD2400A90F3A /* SPMenuCell.swift in Sources */,
@@ -737,6 +744,7 @@
 				625F32A92419EB1E00477881 /* SPCollectionHeader.swift in Sources */,
 				620C02D923FED52E00999057 /* SettingsVC.swift in Sources */,
 				624658CD240F96540050F18F /* SPApplication.swift in Sources */,
+				6251FC1724454585002023B2 /* EventManager.swift in Sources */,
 				62E31370241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift in Sources */,
 				62E7545C2413306300D8FB96 /* SyncManager.swift in Sources */,
 				62048A67240E99BE006207AC /* User.swift in Sources */,
@@ -950,7 +958,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.photos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.photos.Stingle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -963,14 +971,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6FR7795JTL;
+				DEVELOPMENT_TEAM = NS9MN69HPH;
 				INFOPLIST_FILE = Stingle/Application/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.photos;
+				PRODUCT_BUNDLE_IDENTIFIER = org.photos.stingle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

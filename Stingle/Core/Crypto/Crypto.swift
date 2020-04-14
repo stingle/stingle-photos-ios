@@ -283,7 +283,6 @@ public class Crypto {
 		// Write header
 		numWritten += output.write(encHeader, maxLength: encHeader.count)
 		guard numWritten ==  (Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Constants.FileHeaderSizeLen + encHeader.count) else {
-			output.write([], maxLength: 0)
 			throw CryptoError.IO.writeFailure
 		}
 	}
@@ -305,7 +304,7 @@ public class Crypto {
 		if fileVersion != Constants.CurrentFileVersion {
 			throw CryptoError.Header.incorrectFileVersion
 		}
-		offset += 1
+		offset += Constants.FileFileVersionLen
 		
 		let fileId:Bytes = Bytes(buf[offset..<offset + Constants.FileFileIdLen])
 		offset += Constants.FileFileIdLen
@@ -333,13 +332,15 @@ public class Crypto {
 		let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
 		
 		let privateKey:Bytes = KeyManagement.key
+		//For testing only 
+//		let privateKey:Bytes = try getPrivateKey(password: "mekicvec")
 		guard let headerBytes = so.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
 			throw CryptoError.Internal.openFailure
 		}
 		
 		offset = 0
 		header.headerVersion = headerBytes[offset]
-		offset += 1
+		offset += Constants.HeaderVersionLen
 		
 		header.chunkSize = Crypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileChunksizeLen]))
 		offset += Constants.FileChunksizeLen
@@ -351,7 +352,7 @@ public class Crypto {
 		offset += so.keyDerivation.KeyBytes
 		
 		header.fileType = headerBytes[offset]
-		offset += 1
+		offset += Constants.FileTypeLen
 		
 		let fileNameSize:Int = Crypto.fromBytes(b:Bytes(headerBytes[offset..<offset + Constants.FileNameSizeLen]))
 		offset += Constants.FileNameSizeLen
@@ -359,7 +360,6 @@ public class Crypto {
 		
 		offset += fileNameSize
 		header.videoDuration = Crypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileVideoDurationlen]))
-		
 		return header
 	}
 	
@@ -377,7 +377,6 @@ public class Crypto {
 			throw CryptoError.Header.incorrectChunkSize
 		}
 		
-		let contextBytes:Bytes = Constants.XCHACHA20POLY1305_IETF_CONTEXT.bytes
 		var chunkNumber:UInt64 = 1
 		
 		var buf:Bytes = []
@@ -401,7 +400,7 @@ public class Crypto {
 			guard chunkKey.count == so.aead.xchacha20poly1305ietf.KeyBytes else {
 				throw CryptoError.General.incorrectKeySize
 			}
-			guard let (authenticatedCipherText, chunkNonce) : (Bytes, Bytes)  = so.aead.xchacha20poly1305ietf.encrypt(message: buf, secretKey: chunkKey, additionalData: contextBytes) else {
+			guard let (authenticatedCipherText, chunkNonce) : (Bytes, Bytes)  = so.aead.xchacha20poly1305ietf.encrypt(message: buf, secretKey: chunkKey) else {
 				throw CryptoError.General.incorrectKeySize
 			}
 			numWrite = output.write(chunkNonce, maxLength: chunkNonce.count)
@@ -544,6 +543,20 @@ public class Crypto {
 		public var fileName:String?
 		public var videoDuration:UInt32 = 0
 		public var overallHeaderSize:UInt32?
+		
+		func desc() {
+			print("fileVersion : \(fileVersion)")
+			print("fileId : \(fileId)")
+			print("headerSize : \(headerSize ?? 0)")
+			print("headerVersion : \(headerVersion)")
+			print("chunkSize : \(chunkSize)")
+			print("dataSize : \(dataSize)")
+			print("symmetricKey : \(symmetricKey)")
+			print("fileType : \(fileType)")
+			print("fileName : \(fileName ?? "noname")")
+			print("videoDuration : \(videoDuration)")
+			print("overallHeaderSize : \(overallHeaderSize ?? 0)")
+		}
 	}
 }
 
@@ -617,7 +630,7 @@ extension Crypto {
 		let name = header.fileName ?? ""
 		if name != "" {
 			let bytes:Bytes = name.bytes
-			headerBytes += Crypto.toBytes(value: bytes.count)
+			headerBytes += Crypto.toBytes(value: UInt32(bytes.count))
 			headerBytes += bytes
 		} else {
 			headerBytes += Crypto.toBytes(value: Int(0))

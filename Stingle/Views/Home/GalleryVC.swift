@@ -1,13 +1,15 @@
 import UIKit
 
 class GalleryVC : BaseVC, GalleryDelegate {
+	
 	var viewModel:GalleryVM = GalleryVM()
 	var settingsVisible = false
 	private var menuVC:SPMenuVC?
 	private var frontVC:GalleryFrontVC?
 	private var pageVC:SPImagePageVC?
 
-	
+	var blockOperations: [BlockOperation] = []
+
 	@IBOutlet weak var importImage: UIButton!
 	@IBOutlet var collectionView: UICollectionView!
 	
@@ -41,11 +43,44 @@ class GalleryVC : BaseVC, GalleryDelegate {
 		super.viewDidAppear(animated)
 	}
 
+	func beginUpdates() {
+		blockOperations.removeAll(keepingCapacity: false)
+	}
+	
+	func endUpdates() {
+		collectionView!.performBatchUpdates({ () -> Void in
+			for operation: BlockOperation in self.blockOperations {
+				operation.start()
+			}
+		}, completion: { (finished) -> Void in
+			self.blockOperations.removeAll(keepingCapacity: false)
+		})
+	}
 
 	func update() {
 		DispatchQueue.main.async {
 			self.collectionView.reloadData()
 		}
+	}
+	
+	func insertItems(items:[IndexPath]) {
+		self.blockOperations.append(
+			BlockOperation(block: { [weak self] in
+				if let this = self {
+					this.collectionView!.insertItems(at: items)
+				}
+			})
+		)
+	}
+	
+	func insertSections(sections: IndexSet) {
+		self.blockOperations.append(
+			BlockOperation(block: { [weak self] in
+				if let this = self {
+					this.collectionView!.insertSections(sections)
+				}
+			})
+		)
 	}
 
 	func updateItems(items:[IndexPath]) {
@@ -105,11 +140,11 @@ extension GalleryVC : UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
 	func collectionView(_ collectionView: UICollectionView,
 						viewForSupplementaryElementOfKind kind: String,
 						at indexPath: IndexPath) -> UICollectionReusableView {
+		guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "\(SPCollectionHeader.self)", for: indexPath) as? SPCollectionHeader else {
+			fatalError("Invalid view type")
+		}
 		switch kind {
 		case UICollectionView.elementKindSectionHeader:
-			guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "\(SPCollectionHeader.self)", for: indexPath) as? SPCollectionHeader else {
-				fatalError("Invalid view type")
-			}
 			headerView.dateIndicator.text = viewModel.sectionTitle(forSection: indexPath.section)
 			if indexPath.section == 0 {
 				headerView.spaceFromCenter.constant = headerView.frame.height / 2 - headerView.dateIndicator.frame.height / 2 - 10
@@ -119,6 +154,7 @@ extension GalleryVC : UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
 			return headerView
 		default:
 			assert(false, "Invalid element type")
+			return headerView
 		}
 	}
 	

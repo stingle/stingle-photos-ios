@@ -25,6 +25,9 @@ class CryptoTests: XCTestCase {
 
     func encrypt() {
         do {
+			guard let fileId = crypto.newFileId() else {
+				return
+			}
 
             try crypto.generateMainKeypair(password: "mekicvec")
             let input:InputStream = InputStream(fileAtPath: "\(filePath)\(inEncFileName)")!
@@ -35,8 +38,7 @@ class CryptoTests: XCTestCase {
             let fileSize = attr[FileAttributeKey.size] as! UInt
             let asset : AVURLAsset = AVURLAsset(url: URL(fileURLWithPath: "\(filePath)\(inEncFileName)")) as AVURLAsset
             let totalSeconds = Int(CMTimeGetSeconds(asset.duration))
-            
-            _ = try crypto.encryptFile(input: input, output: output, filename: inEncFileName, fileType: 3, dataLength: fileSize, fileId: nil, videoDuration: totalSeconds)
+            _ = try crypto.encryptFile(input: input, output: output, filename: inEncFileName, fileType: 3, dataLength: fileSize, fileId: fileId, videoDuration: totalSeconds)
             input.close()
             output.close()
             

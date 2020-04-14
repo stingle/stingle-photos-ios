@@ -10,12 +10,14 @@ enum SourceType {
 }
 
 protocol DataSourceDelegate {
+	
 	func imageReady(at indexPath:IndexPath)
+	func originalImageReady(at index:Int)
 }
 
 class DataSource {
 	public var type:SourceType
-	static let db = DataBase()
+	static let db = SyncManager.db
 	private static let crypto = Crypto()
 	private static let network = NetworkManager()
 	
@@ -24,65 +26,13 @@ class DataSource {
 	private var imageCache:[String: UIImage]
 	
 	var delegate:DataSourceDelegate?
-	
+		
 	init(type:SourceType) {
 		self.type = type
 		thumbCache = [String: UIImage]()
 		imageCache = [String: UIImage]()
 	}
-	
-	static func update(completionHandler:  @escaping (Bool) -> Swift.Void) {
-		guard let info = db.getAppInfo() else {
-			return
-		}
-		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
-		_ = NetworkManager.send(request: request) { (data:SPUpdateInfo?, error:Error?) in
-			guard let data = data , error == nil else {
-				print(error.debugDescription)
-				completionHandler(false)
-				return
-			}
-			let timeinterval = Date.init().millisecondsSince1970
-			self.db.updateAppInfo(info: AppInfo(lastSeen: timeinterval, lastDelSeen: info.lastDelSeen, spaceQuota: data.parts.spaceQuota, spaceUsed: data.parts.spaceUsed))
-			self.db.update(parts: data.parts)
-			self.download(files: data.parts.files) { (fileName, error) in
-				guard let fileName = fileName, error == nil else {
-					print(error.debugDescription)
-					return
-				}
-				SyncManager.dispatch(event:	 SPEvent(name: SPEvenetType.DB.update.gallery.rawValue, info:["fileName" : [fileName]]))
-			}
-			self.download(files: data.parts.trash) { (fileName, error) in
-				guard let fileName = fileName, error == nil else {
-					print(error.debugDescription)
-					return
-				}
-				SyncManager.dispatch(event: SPEvent(name: SPEvenetType.DB.update.trash.rawValue, info:["fileName" : [fileName]]))
-			}
-			completionHandler(true)
-		}
-		return
-	}
-	
-	static func download <T:SPFileInfo>(files:[T], completionHandler:  @escaping (String?, Error?) -> Swift.Void) {
-		var folder = NSNotFound
-		if T.self is SPFile.Type {
-				folder = 0
-		} else if T.self is SPTrashFile.Type {
-			folder = 1
-		}
-		for item in files {
-			let req = SPDownloadFileRequest(token: SPApplication.user!.token, fileName: item.name, isThumb: true, folder:folder)
-			_ = NetworkManager.download(request: req) { (url, error) in
-				if error != nil {
-					completionHandler(nil, error)
-				} else {
-					completionHandler(item.name, nil)
-				}
-			}
-		}
-	}
-	
+		
 	private var files:[SPFile]?  { get {
 		guard let files:[SPFile] = DataSource.db.filesSortedByDate()  else {
 			return nil
@@ -121,12 +71,13 @@ class DataSource {
 		return DataSource.db.indexPath(for: file, with: fileType())
 	}
 	
-	func image(for indexPath:IndexPath) -> UIImage? {
+	func thumb(indexPath:IndexPath) -> UIImage? {
+		print(indexPath)
 		guard let file:SPFileInfo = DataSource.db.fileForIndexPath(indexPath: indexPath, with: fileType()) else {
 			return nil
 		}
 		
-		if let image = imageCache[file.name] {
+		if let image = thumbCache[file.name] {
 			return image
 		}
 		guard let filePath = SPFileManager.folder(for: .StorageThumbs)?.appendingPathComponent(file.name) else {
@@ -144,12 +95,15 @@ class DataSource {
 		DataSource.crypto.decryptFileAsync(input: input, output: out, completion: { (ok, error) in
 			let body = {() -> Void in
 				guard ok == true, error == nil else {
-					print(error)
 					return
 				}
 				let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
 				DispatchQueue.main.async {
-					self.imageCache[file.name] = UIImage(data:imageData)
+					guard let image = UIImage(data:imageData) else {
+						print("Ivnalid data for image")
+						return
+					}
+					self.thumbCache[file.name] = image
 					self.delegate?.imageReady(at: indexPath)
 				}
 			}
@@ -163,7 +117,7 @@ class DataSource {
 		return DataSource.db.filesCount(for: fileType())
 	}
 	
-	func thumb(for index:Int) -> UIImage? {
+	func thumb(index:Int) -> UIImage? {
 		guard let file:SPFileInfo = DataSource.db.fileForIndex(index: index, for: fileType()) else {
 			return nil
 		}
@@ -173,18 +127,45 @@ class DataSource {
 		return image
 	}
 	
-	func image(for index:Int) -> UIImage? {
+	func image(index:Int) -> UIImage? {
 		guard let file:SPFileInfo = DataSource.db.fileForIndex(index: index, for: fileType()) else {
 			return nil
 		}
-		guard let image = imageCache[file.name] else {
+		if let image = imageCache[file.name] {
+			return image
+		}
+		
+		
+		guard let filePath = SPFileManager.folder(for: .StorageOriginals)?.appendingPathComponent(file.name) else {
 			return nil
 		}
-		return image
-	}
-
-	func index(of file:SPFileInfo) -> Int {
-		return 0
+		
+		guard let input = InputStream(url: filePath) else {
+			return nil
+		}
+		input.open()
+		
+		let out = OutputStream.init(toMemory: ())
+		out.open()
+		
+		DataSource.crypto.decryptFileAsync(input: input, output: out, completion: { (ok, error) in
+			let body = {() -> Void in
+				guard ok == true, error == nil else {
+					return
+				}
+				let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
+				DispatchQueue.main.async {
+					guard let image = UIImage(data:imageData) else {
+						print("Ivnalid data for image")
+						return
+					}
+					self.imageCache[file.name] = image
+					self.delegate?.originalImageReady(at: index)
+				}
+			}
+			body()
+		})
+		return nil
 	}
 	
 	func index(for indexPath:IndexPath) -> Int {

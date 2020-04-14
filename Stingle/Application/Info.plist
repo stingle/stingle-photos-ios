@@ -20,6 +20,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Stingle Photos requires access to your phone's camera.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Stingle Photos requires access to your Photos Library.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Medium.ttf</string>
@@ -53,9 +57,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Stingle Photos requires access to your phone&apos;s camera.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Stingle Photos requires access to your Photos Library.</string>
 </dict>
 </plist>

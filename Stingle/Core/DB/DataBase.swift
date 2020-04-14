@@ -1,14 +1,33 @@
 import Foundation
 import CoreData
-class DataBase {
+
+class DataBase : NSObject {
 	
 	private let container:NSPersistentContainer
 	
-	fileprivate let galleryFRC:NSFetchedResultsController<FileMO>
-	fileprivate let trashFRC:NSFetchedResultsController<FileMO>
+	static let shared:DataBase = {
+		let db = DataBase()
+		do {
+		_ = try db.load()
+		} catch {
+			print(error)
+		}
+		return db
+	}()
 	
+	private lazy var galleryFRC:NSFetchedResultsController<FileMO> = {
+		let filesFetchRequest = NSFetchRequest<FileMO>(entityName: "Files")
+		filesFetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+		return NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: "date", cacheName: "Files")
+	}()
 	
-	init() {
+	private lazy var trashFRC:NSFetchedResultsController<FileMO> = {
+		let trashFetchRequest = NSFetchRequest<FileMO>(entityName: "Trash")
+		trashFetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+		return NSFetchedResultsController(fetchRequest: trashFetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: "date", cacheName: "Trash")
+	}()
+	
+	private override init() {
 		container = NSPersistentContainer(name: "StingleModel")
 		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
 			if let error = error as NSError? {
@@ -19,15 +38,14 @@ class DataBase {
 		container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 		container.viewContext.undoManager = nil
 		container.viewContext.shouldDeleteInaccessibleFaults = true
-		
-		let filesFetchRequest = NSFetchRequest<FileMO>(entityName: "Files")
-		filesFetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-		galleryFRC = NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: "date", cacheName: "Files")
-		
-		let trashFetchRequest = NSFetchRequest<FileMO>(entityName: "Trash")
-		trashFetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-		trashFRC = NSFetchedResultsController(fetchRequest: trashFetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: "date", cacheName: "Trash")
-		
+	}
+	
+	public func load() throws -> Bool {
+		try galleryFRC.performFetch()
+		galleryFRC.delegate = self
+		try trashFRC.performFetch()
+		trashFRC.delegate = self
+		return true
 	}
 	
 	private func frc<T:SPFileInfo>(for type:T.Type) -> NSFetchedResultsController<FileMO>? {
@@ -39,10 +57,14 @@ class DataBase {
 		return nil
 	}
 	
-	public func add<T:SPFileInfo>(spfile:T) {
-		let context = container.newBackgroundContext()
-		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-		context.undoManager = nil
+	public func add<T:SPFileInfo>(files:[T]) {
+		for file in files {
+			add(spfile: file)
+		}
+	}
+	
+	private func add<T:SPFileInfo>(spfile:T) {
+		let context = container.viewContext
 		context.performAndWait {
 			let file = NSEntityDescription.insertNewObject(forEntityName: T.mo(), into: context) as! FileMO
 			file.update(file: spfile)
@@ -87,25 +109,24 @@ class DataBase {
 		add(files: parts.files)
 		add(files: parts.trash)
 		add(deletes: parts.deletes)
+	}
+		
+	public func isFileExist<T:SPFileInfo>(name:String) -> T? {
+		let fetchRequest = NSFetchRequest<FileMO>(entityName: T.mo())
+		fetchRequest.predicate = NSPredicate(format: "name == %@", name)
 		do {
-			try galleryFRC.performFetch()
-			try trashFRC.performFetch()
+			 let objects = try container.viewContext.fetch(fetchRequest)
+			guard let obj = objects.first else {
+				return nil
+			}
+			return T(file: obj)
 		} catch {
 			print(error)
+			return nil
 		}
 	}
 	
-	public func add<T:SPFileInfo>(files:[T]) {
-		for file in files {
-			add(spfile: file)
-		}
-	}
-	
-	public func isFileExist(name:String) -> Bool {
-		return false
-	}
-	
-	public func updateFile(file:SPFile) -> Bool {
+	public func updateFile<T:SPFileInfo>(file:T) -> Bool {
 		return false
 	}
 	
@@ -186,12 +207,6 @@ class DataBase {
 		if let sections = frc.sections  {
 			return sections.count
 		} else {
-			do {
-				try frc.performFetch()
-			} catch {
-				print(error)
-				return 0
-			}
 			guard let sections = frc.sections else {
 				return 0
 			}
@@ -232,7 +247,8 @@ class DataBase {
 		let fetchRequest = NSFetchRequest<FileMO>(entityName: type.mo())
 		fetchRequest.predicate = NSPredicate(format: "name == %@", file)
 		do {
-			guard let obj = try container.viewContext.fetch(fetchRequest).first else {
+			 let objects = try container.viewContext.fetch(fetchRequest)
+			guard let obj = objects.first else {
 				return nil
 			}
 			guard let frc = frc(for: type) else {
@@ -307,22 +323,29 @@ class DataBase {
 		return nil
 	}
 	
-	func getAllFilesCount() -> Int {
-		return 0
-	}
-		
-	func getFiles(mode:Int, sort:Int) -> [SPFile]? {
-		return nil
+	//MARK: - Update file Info
+	
+	func marFileAsRemote(file:SPFile) {
+		guard let frc = frc(for: SPFile.self) else {
+			return
+		}
+		let objs:[FileMO]? = frc.fetchedObjects?.filter {$0.name == file.name}
+		objs?.first?.isRemote = true
+		let context = container.viewContext
+		context.performAndWait {
+			if context.hasChanges {
+				do {
+					try context.save()
+				} catch {
+					print("Error: \(error)\nCould not save Core Data context.")
+					return
+				}
+				context.reset()
+			}
+		}
+
 	}
 	
-	
-	func getReuploadFilesList() -> [SPFile]? {
-		return nil
-	}
-	
-	public func deleteFile(fileName:String) {
-		
-	}
 	
 	public func deleteAll() {
 		
@@ -342,8 +365,49 @@ class DataBase {
 }
 
 
-//MARK: - Helpers
+//MARK: - NSFetched Resluts Cotroller Delegate
 
-extension DataBase {
+extension DataBase: NSFetchedResultsControllerDelegate {
+
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+		if controller == galleryFRC {
+			EventManager.dispatch(event: SPEvent(type: SPEvenetType.UI.updates.begin.rawValue, info:nil))
+		} else if controller == trashFRC {
+			EventManager.dispatch(event: SPEvent(type: SPEvenetType.UI.updates.begin.rawValue, info:nil))
+		}
+    }
+
+	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+		switch(type) {
+		case .insert:
+			EventManager.dispatch(event: SPEvent(type: SPEvenetType.DB.insert.gallery.rawValue, info:["indexPaths" : [indexPath]]))
+			break
+		case .delete:
+			break
+		default:
+			break
+		}
+	}
 	
+	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+		switch(type) {
+		case .insert:
+			EventManager.dispatch(event: SPEvent(type: SPEvenetType.DB.insert.gallery.rawValue, info:["sections" : IndexSet(integer: sectionIndex)]))
+			break
+		case .delete:
+			break
+		default:
+			break
+		}
+
+	}
+	
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+		if controller == galleryFRC {
+			EventManager.dispatch(event: SPEvent(type: SPEvenetType.UI.updates.end.rawValue, info:nil))
+		} else if controller == trashFRC {
+			EventManager.dispatch(event: SPEvent(type: SPEvenetType.UI.updates.end.rawValue, info:nil))
+		}
+    }
+
 }
