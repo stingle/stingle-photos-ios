@@ -57,14 +57,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="4hh-p9-IEh"/>
                     </view>
-                    <navigationItem key="navigationItem" id="JLq-Ek-hfM">
-                        <barButtonItem key="leftBarButtonItem" image="menu" id="kLb-ao-kC9">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="menuTapped:" destination="OU2-rh-DL2" id="Myl-Lj-HoQ"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="JLq-Ek-hfM"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="collectionView" destination="pk1-2f-1rq" id="vtT-38-zQm"/>
@@ -324,37 +317,72 @@
         <!--Image PreviewVC-->
         <scene sceneID="DDH-hM-Lew">
             <objects>
-                <viewController storyboardIdentifier="SPImagePreviewVC" id="MFS-QQ-PZG" customClass="SPImagePreviewVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SPImagePreviewVC" modalPresentationStyle="fullScreen" id="MFS-QQ-PZG" customClass="SPImagePreviewVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UXa-SU-Yhb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_logo" translatesAutoresizingMaskIntoConstraints="NO" id="ZwY-3R-3O4">
-                                <rect key="frame" x="187" y="428" width="40" height="40"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZwY-3R-3O4">
+                                <rect key="frame" x="0.0" y="153.5" width="414" height="589"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sfW-Xd-FBB">
+                                <rect key="frame" x="20" y="64" width="8" height="22"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="chevron.left"/>
+                                <connections>
+                                    <action selector="back:" destination="MFS-QQ-PZG" eventType="touchUpInside" id="Abr-ch-0Rd"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hN0-lo-Yme">
+                                <rect key="frame" x="339" y="64" width="15" height="22"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="square.and.arrow.up"/>
+                                <connections>
+                                    <action selector="share:" destination="MFS-QQ-PZG" eventType="touchUpInside" id="o2z-20-8Jd"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kF3-uS-u3m">
+                                <rect key="frame" x="374" y="64" width="20" height="22"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="trash" catalog="system"/>
+                                <connections>
+                                    <action selector="deleteItem:" destination="MFS-QQ-PZG" eventType="touchUpInside" id="HIk-ex-Sze"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="sfW-Xd-FBB" firstAttribute="leading" secondItem="QOb-SM-Kpm" secondAttribute="leading" constant="20" id="BmM-cN-NtF"/>
+                            <constraint firstItem="QOb-SM-Kpm" firstAttribute="trailing" secondItem="kF3-uS-u3m" secondAttribute="trailing" constant="20" id="I4J-SA-Nkb"/>
+                            <constraint firstItem="kF3-uS-u3m" firstAttribute="centerY" secondItem="sfW-Xd-FBB" secondAttribute="centerY" id="QZM-Sm-Qdx"/>
+                            <constraint firstItem="sfW-Xd-FBB" firstAttribute="top" secondItem="QOb-SM-Kpm" secondAttribute="top" constant="20" id="Vbb-SG-uWU"/>
                             <constraint firstItem="ZwY-3R-3O4" firstAttribute="centerY" secondItem="UXa-SU-Yhb" secondAttribute="centerY" id="bKi-No-iFT"/>
+                            <constraint firstItem="ZwY-3R-3O4" firstAttribute="height" secondItem="UXa-SU-Yhb" secondAttribute="height" multiplier="0.657366" id="bmM-KB-oVq"/>
+                            <constraint firstItem="ZwY-3R-3O4" firstAttribute="width" secondItem="UXa-SU-Yhb" secondAttribute="width" id="ccP-Bg-4t8"/>
+                            <constraint firstItem="kF3-uS-u3m" firstAttribute="leading" secondItem="hN0-lo-Yme" secondAttribute="trailing" constant="20" id="dWP-EU-A0n"/>
                             <constraint firstItem="ZwY-3R-3O4" firstAttribute="centerX" secondItem="UXa-SU-Yhb" secondAttribute="centerX" id="x1Q-dM-sLy"/>
+                            <constraint firstItem="hN0-lo-Yme" firstAttribute="centerY" secondItem="sfW-Xd-FBB" secondAttribute="centerY" id="yAV-OA-e9U"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QOb-SM-Kpm"/>
                     </view>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="imageView" destination="ZwY-3R-3O4" id="AHY-v1-o8e"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OzA-bJ-XLV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1323" y="-135"/>
+            <point key="canvasLocation" x="1321.7391304347827" y="-135.26785714285714"/>
         </scene>
     </scenes>
     <resources>
         <image name="arrow_back" width="24" height="24"/>
+        <image name="chevron.left" width="8" height="15"/>
         <image name="cloud_done" width="24" height="24"/>
         <image name="import" width="74" height="74"/>
         <image name="import_plus" width="14" height="14"/>
-        <image name="menu" width="24" height="24"/>
         <image name="menu_logo" width="40" height="40"/>
+        <image name="square.and.arrow.up" width="15" height="19"/>
+        <image name="trash" catalog="system" width="60" height="64"/>
     </resources>
 </document>

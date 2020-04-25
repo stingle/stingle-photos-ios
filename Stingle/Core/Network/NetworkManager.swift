@@ -28,7 +28,11 @@ class Session : NSObject, URLSessionDelegate, URLSessionDownloadDelegate {
 
 class NetworkManager : NSObject {
 	
-	static fileprivate let base_url = "https://api.stingle.org"
+//	static fileprivate let base_url = "https://api.stingle.org"
+	static fileprivate let base_url = "http://127.0.0.1"
+//	static fileprivate let base_url = "http://192.168.5.10"
+
+	
 	static private func createMultipart(request:SPUploadFileRequest, files:[String]) -> URLRequest? {
 		
 		let twoHyphens = "--"
@@ -175,6 +179,7 @@ class NetworkManager : NSObject {
 			let downloadFileRequest:SPDownloadFileRequest = request as! SPDownloadFileRequest
 			do {
 				let folder:SPFolder = downloadFileRequest.isThumb ?  .StorageThumbs : .StorageOriginals
+				//TODO : Remove if exists (to update the file)
 				let status = try SPFileManager.moveToFolder(fileURL: url, with: downloadFileRequest.fileName, folder:folder)
 				if !status {
 					completionHandler(nil, nil)

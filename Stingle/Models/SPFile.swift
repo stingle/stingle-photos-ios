@@ -9,6 +9,7 @@ class FileMO : NSManagedObject {
 	@NSManaged var name:String
 	@NSManaged var type:Int
 	@NSManaged var headers:String
+	@NSManaged var duration:UInt32
 	@NSManaged var version:String?
 	@NSManaged var isLocal:Bool
 	@NSManaged var isRemote:Bool
@@ -28,6 +29,7 @@ class FileMO : NSManagedObject {
 		isLocal = file.isLocal ?? true
 		isRemote = file.isRemote ?? true
 		reUpload = file.reUpload ?? 0
+		duration = file.duration
 	}
 }
 
@@ -57,7 +59,7 @@ class SPFileInfo : Codable {
 	var headers:String
 	var version:String
 	var type:Int?
-	var duration:Int = 0
+	var duration:UInt32 = 0
 	
 	var isLocal:Bool?
 	var isRemote:Bool?
@@ -81,6 +83,7 @@ class SPFileInfo : Codable {
 		isRemote = file.isRemote
 		reUpload = file.reUpload
 		date = file.date
+		duration = file.duration
 	}
 	
 	init(asset:PHAsset, path:URL) throws {
@@ -99,7 +102,7 @@ class SPFileInfo : Codable {
 		reUpload = 0
 		date = Date(timeIntervalSince1970: Double(timeInterval))
 		data = try Data(contentsOf: path)
-		duration = Int(asset.duration)
+		duration = UInt32(asset.duration)
 	}
 
 		

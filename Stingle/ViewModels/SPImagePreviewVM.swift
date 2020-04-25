@@ -14,12 +14,19 @@ class SPImagePreviewVM {
 		return dataSource.numberOfFiles()
 	}
 	
-	func image( for index:Int) -> UIImage? {
-		guard let image = dataSource.image(index: index) else {
+	func thumb( for index:Int) -> UIImage? {
+		guard let image = dataSource.thumb(index: index) else {
 			return nil
 		}
 		return image
 	}
+	
+	func image( for index:Int,completionHandler:  @escaping (UIImage?) -> Swift.Void) {
+		dataSource.image(index: index) { image in
+			completionHandler(image)
+		}
+	}
+
 	
 	func index(from indexPath:IndexPath?) -> Int {
 		guard let indexPath = indexPath else {

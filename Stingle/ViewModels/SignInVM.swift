@@ -28,6 +28,8 @@ class SignInVM: NSObject {
 					return
 				}
 				KeyManagement.key = try self.crypto.getPrivateKey(password: password)
+				let pubKey = data.parts.serverPublicKey
+				KeyManagement.importServerPublicKey(pbk: pubKey)
 				completionHandler(true, nil)
 			} catch {
 				completionHandler(false, error)

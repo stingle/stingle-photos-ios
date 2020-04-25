@@ -31,7 +31,10 @@ struct SPPreSignInRequest : SPRequest {
 		self.email = email
 	}
 	func params () -> String? {
-		return "email=\(email)"
+		var components = URLComponents()
+		components.queryItems = [URLQueryItem(name: "email", value: "\(email)")]
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
 	}
 	func path () -> String {
 		return "login/preLogin"
@@ -55,11 +58,55 @@ struct SPSignInRequest : SPRequest {
 	}
 
 	func params () -> String? {
-		return "email=\(email)&password=\(password)"
+		var components = URLComponents()
+		components.queryItems = [URLQueryItem(name: "email", value: "\(email)"),URLQueryItem(name: "password", value: password)]
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
 	}
 	
 	func path () -> String {
 		return "login/login"
+	}
+	
+	func method () -> SPRequestMethod {
+		return .POST
+	}
+	
+	func headers() ->  [String : String]? {
+		return nil
+	}
+}
+
+struct SPSignUpRequest : SPRequest {
+	
+	let email:String
+	let password:String
+	let salt:String
+	let isBackup:Bool
+	let keyBundle:String
+	
+	init(email:String, password:String, salt:String, keyBundle:String, isBackup:Bool) {
+		self.email = email
+		self.password = password
+		self.salt = salt
+		self.keyBundle = keyBundle
+		self.isBackup = isBackup
+	}
+
+	func params () -> String? {
+		var components = URLComponents()
+		components.queryItems = [URLQueryItem(name: "email", value: "\(email)"),URLQueryItem(name: "password", value: password), URLQueryItem(name: "salt", value: salt), URLQueryItem(name: "keyBundle", value: keyBundle)]
+		if isBackup {
+			components.queryItems?.append(URLQueryItem(name: "isBackup", value: "1"))
+		} else {
+			components.queryItems?.append(URLQueryItem(name: "isBackup", value: "0"))
+		}
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
+	}
+	
+	func path () -> String {
+		return "register/createAccount"
 	}
 	
 	func method () -> SPRequestMethod {
@@ -178,8 +225,100 @@ struct SPDownloadFileRequest : SPRequest {
 		components.queryItems = [URLQueryItem(name: "folder", value: "\(folder)"),URLQueryItem(name: "file", value: fileName), URLQueryItem(name: "token", value: token)]
 		if isThumb {
 			components.queryItems?.append(URLQueryItem(name: "thumb", value: "1"))
+		} else {
+			components.queryItems?.append(URLQueryItem(name: "thumb", value: "0"))
 		}
 		let strParams = components.url?.absoluteString
 		return String((strParams?.dropFirst())!)
 	}
 }
+
+struct SPMoveFilesRequest : SPRequest {
+	let token:String
+	let to:Int
+	let from:Int
+	let isMoving:Bool
+	let files:[SPFileInfo]
+	
+	init(token:String, to:Int, from:Int, files:[SPFileInfo], isMoving:Bool) {
+		self.token = token
+		self.to = to
+		self.from = from
+		self.files = files
+		self.isMoving = isMoving
+	}
+	
+	func path () -> String {
+		return "sync/moveFile"
+	}
+	
+	func method () -> SPRequestMethod {
+		return .POST
+	}
+	
+	func headers () ->  [String : String]? {
+		return nil
+	}
+
+	func params () -> String? {
+		var params = [String:String?]()
+		params["setTo"] = "\(to)"
+		params["setFrom"] = "\(from)"
+		params["albumIdFrom"] = nil
+		params["albumIdTo"] = nil
+		params["isMoving"] = "\( isMoving ? 1 : 0)"
+		params["count"] = "\(files.count)"
+		var index = 0
+		for file in files {
+			params["filename\(index)"] = file.name
+			index += 1
+		}
+		return nil
+	}
+}
+
+struct SPDeleteFilesRequest : SPRequest {
+	let token:String
+	let files:[SPFileInfo]
+	
+	init(token:String, files:[SPFileInfo]) {
+		self.token = token
+		self.files = files
+	}
+	
+	func path () -> String {
+		return "sync/trash"
+	}
+	
+	func method () -> SPRequestMethod {
+		return .POST
+	}
+	
+	func headers () ->  [String : String]? {
+		return nil
+	}
+
+	func params() -> String? {
+		var components = URLComponents()
+		//TODO : Remove v : 16
+		components.queryItems = [ URLQueryItem(name: "v", value: "16"), URLQueryItem(name: "token", value: token), URLQueryItem(name: "params", value: bodyParams())]
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
+	}
+	
+	func bodyParams () -> String {
+		var params = [String:String]()
+		params["count"] = "\(files.count)"
+		var index = 0
+		for file in files {
+			params["filename\(index)"] = file.name
+			index += 1
+		}
+		let crypto = Crypto()
+		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+			return ""
+		}
+		return encParams
+	}
+}
+

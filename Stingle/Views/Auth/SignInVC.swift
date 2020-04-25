@@ -14,7 +14,7 @@ class SignInVC : BaseVC {
 	@IBOutlet weak var dontHaveAnAccount: UILabel!
 	
 	@IBAction func singInClicked(_ sender: Any) {
-		_ = viewModel.signIn(email: "grig.davit@gmail.com", password: "mekicvec" ) { (status, error) in
+		_ = viewModel.signIn(email: "b@mail.com", password: "123456" ) { (status, error) in
 			do {
 				if status {
 					_ = SyncManager.update(completionHandler: { (status) in
@@ -31,6 +31,8 @@ class SignInVC : BaseVC {
 		}
 	}
 	
+	@IBAction func signUpClicked(_ sender: Any) {
+	}
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		createBackBarButton(forNavigationItem: self.navigationItem)
@@ -64,6 +66,6 @@ class SignInVC : BaseVC {
 	}
 	
 	@objc public func backButtonTapped() {
-		self.navigationController?.popToRootViewController(animated: true)
+		self.navigationController?.popViewController(animated: true)
 	}
 }

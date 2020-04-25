@@ -80,35 +80,38 @@ class DataBase : NSObject {
 		}
 	}
 	
-	public func add(deletes:[SPDeletedFile]) {
-		for item in deletes {
-			add(deleted: item)
-		}
-	}
-	
-	public func add(deleted:SPDeletedFile) {
-		let context = container.newBackgroundContext()
-		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-		context.undoManager = nil
-		context.performAndWait {
-			let file = NSEntityDescription.insertNewObject(forEntityName: deleted.mo(), into: context) as! DeletedFileMO
-			file.update(info: deleted)
-			if context.hasChanges {
-				do {
-					try context.save()
-				} catch {
-					print("Error: \(error)\nCould not save Core Data context.")
-					return
-				}
-				context.reset()
+	public func delete<T:SPFileInfo, F:SPFileInfo>(file:T) -> F? {
+		let context = container.viewContext
+		let fetchRequest = NSFetchRequest<FileMO>(entityName: T.mo())
+		fetchRequest.predicate = NSPredicate(format: "name == %@", file.name)
+		do {
+			let objects = try context.fetch(fetchRequest)
+			guard let obj = objects.first else {
+				return nil
 			}
+			let result = F(file: obj)
+			context.performAndWait {
+				context.delete(obj)
+				if context.hasChanges {
+					do {
+						try context.save()
+					} catch {
+						print("Error: \(error)\nCould not save Core Data context.")
+						return
+					}
+					context.reset()
+				}
+			}
+			return result
+		} catch {
+			print(error)
+			return nil
 		}
 	}
-	
+		
 	public func update(parts:SPUpdateInfo.Parts) {
 		add(files: parts.files)
 		add(files: parts.trash)
-		add(deletes: parts.deletes)
 	}
 		
 	public func isFileExist<T:SPFileInfo>(name:String) -> T? {
@@ -127,7 +130,28 @@ class DataBase : NSObject {
 	}
 	
 	public func updateFile<T:SPFileInfo>(file:T) -> Bool {
-		return false
+		let fetchRequest = NSFetchRequest<FileMO>(entityName: T.mo())
+		fetchRequest.predicate = NSPredicate(format: "name == %@", file.name)
+		do {
+			 let objects = try container.viewContext.fetch(fetchRequest)
+			guard let obj = objects.first else {
+				return false
+			}
+			obj.update(file: file)
+			if container.viewContext.hasChanges {
+				do {
+					try container.viewContext.save()
+				} catch {
+					print("Error: \(error)\nCould not save Core Data context.")
+					return false
+				}
+				container.viewContext.reset()
+			}
+			return true
+		} catch {
+			print(error)
+			return false
+		}
 	}
 	
 	public func markFileAsRemote(name:String) -> Bool {
@@ -371,18 +395,28 @@ extension DataBase: NSFetchedResultsControllerDelegate {
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 		if controller == galleryFRC {
-			EventManager.dispatch(event: SPEvent(type: SPEvenetType.UI.updates.begin.rawValue, info:nil))
+			EventManager.dispatch(event: SPEvent(type: SPEvent.UI.updates.begin.rawValue, info:nil))
 		} else if controller == trashFRC {
-			EventManager.dispatch(event: SPEvent(type: SPEvenetType.UI.updates.begin.rawValue, info:nil))
+			EventManager.dispatch(event: SPEvent(type: SPEvent.UI.updates.begin.rawValue, info:nil))
 		}
     }
 
 	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
 		switch(type) {
 		case .insert:
-			EventManager.dispatch(event: SPEvent(type: SPEvenetType.DB.insert.gallery.rawValue, info:["indexPaths" : [indexPath]]))
+			if controller == galleryFRC {
+				EventManager.dispatch(event: SPEvent(type: SPEvent.DB.insert.gallery.rawValue, info:[SPEvent.Keys.IndexPaths.rawValue : [newIndexPath]]))
+			} else if controller == trashFRC {
+				EventManager.dispatch(event: SPEvent(type: SPEvent.DB.insert.trash.rawValue, info:[SPEvent.Keys.IndexPaths.rawValue : [newIndexPath]]))
+			}
 			break
 		case .delete:
+			print("delete : ", indexPath ?? "")
+			if controller == galleryFRC {
+				EventManager.dispatch(event: SPEvent(type: SPEvent.DB.delete.gallery.rawValue, info:[SPEvent.Keys.IndexPaths.rawValue : [newIndexPath]]))
+			} else if controller == trashFRC {
+				EventManager.dispatch(event: SPEvent(type: SPEvent.DB.delete.trash.rawValue, info:[SPEvent.Keys.IndexPaths.rawValue : [newIndexPath]]))
+			}
 			break
 		default:
 			break
@@ -392,9 +426,18 @@ extension DataBase: NSFetchedResultsControllerDelegate {
 	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
 		switch(type) {
 		case .insert:
-			EventManager.dispatch(event: SPEvent(type: SPEvenetType.DB.insert.gallery.rawValue, info:["sections" : IndexSet(integer: sectionIndex)]))
+			if controller == galleryFRC {
+				EventManager.dispatch(event: SPEvent(type: SPEvent.DB.insert.gallery.rawValue, info:[SPEvent.Keys.Sections.rawValue : IndexSet(integer: sectionIndex)]))
+			} else if controller == trashFRC {
+				EventManager.dispatch(event: SPEvent(type: SPEvent.DB.insert.trash.rawValue, info:[SPEvent.Keys.Sections.rawValue : IndexSet(integer: sectionIndex)]))
+			}
 			break
 		case .delete:
+			if controller == galleryFRC {
+				EventManager.dispatch(event: SPEvent(type: SPEvent.DB.delete.gallery.rawValue, info:[SPEvent.Keys.Sections.rawValue : IndexSet(integer: sectionIndex)]))
+			} else if controller == trashFRC {
+				EventManager.dispatch(event: SPEvent(type: SPEvent.DB.delete.trash.rawValue, info:[SPEvent.Keys.Sections.rawValue : IndexSet(integer: sectionIndex)]))
+			}
 			break
 		default:
 			break
@@ -404,9 +447,9 @@ extension DataBase: NSFetchedResultsControllerDelegate {
 	
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 		if controller == galleryFRC {
-			EventManager.dispatch(event: SPEvent(type: SPEvenetType.UI.updates.end.rawValue, info:nil))
+			EventManager.dispatch(event: SPEvent(type: SPEvent.UI.updates.end.rawValue, info:nil))
 		} else if controller == trashFRC {
-			EventManager.dispatch(event: SPEvent(type: SPEvenetType.UI.updates.end.rawValue, info:nil))
+			EventManager.dispatch(event: SPEvent(type: SPEvent.UI.updates.end.rawValue, info:nil))
 		}
     }
 

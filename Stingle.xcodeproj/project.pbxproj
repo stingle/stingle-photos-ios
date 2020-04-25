@@ -74,6 +74,7 @@
 		62AE6899240DDD21001EA58D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 62AE689B240DDD21001EA58D /* Localizable.strings */; };
 		62AE68A0240DDDBE001EA58D /* Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AE689F240DDDBE001EA58D /* Localize.swift */; };
 		62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B9F6392407EE2E0014E3AF /* CryptoError.swift */; };
+		62D9D0392453B4C60001D0D8 /* SignUpVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D9D0382453B4C60001D0D8 /* SignUpVM.swift */; };
 		62E3136E241C557500AD79CF /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E3136D241C557500AD79CF /* SwipeInteractionController.swift */; };
 		62E31370241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E3136F241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift */; };
 		62E754562412DE9600D8FB96 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E754552412DE9600D8FB96 /* Date.swift */; };
@@ -167,6 +168,7 @@
 		62AE689A240DDD21001EA58D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		62AE689F240DDDBE001EA58D /* Localize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localize.swift; sourceTree = "<group>"; };
 		62B9F6392407EE2E0014E3AF /* CryptoError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoError.swift; sourceTree = "<group>"; };
+		62D9D0382453B4C60001D0D8 /* SignUpVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVM.swift; sourceTree = "<group>"; };
 		62E3136D241C557500AD79CF /* SwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeInteractionController.swift; sourceTree = "<group>"; };
 		62E3136F241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTransitionAnimationControllers.swift; sourceTree = "<group>"; };
 		62E754552412DE9600D8FB96 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				62048A68240EDBDD006207AC /* SignInVM.swift */,
 				62504375241AD24C00A90F3A /* SPMenuVM.swift */,
 				626AB75B2426C04000168659 /* SPImagePreviewVM.swift */,
+				62D9D0382453B4C60001D0D8 /* SignUpVM.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -705,6 +708,7 @@
 				620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */,
 				6261935B240D0E8400562BDF /* BaseVC.swift in Sources */,
 				626B0607242EDDE60092B55E /* GalleryFrontVC.swift in Sources */,
+				62D9D0392453B4C60001D0D8 /* SignUpVM.swift in Sources */,
 				62619360240D4D2A00562BDF /* LandingVM.swift in Sources */,
 				6233925F2406D11600A0F64F /* SPFileManager.swift in Sources */,
 				626AB75A2426BB0000168659 /* SPImagePageVC.swift in Sources */,

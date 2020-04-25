@@ -114,7 +114,6 @@ public class Crypto {
 	}
 	
 	public func getKeyFromPassword(password:String, difficulty:Int) throws -> Bytes {
-		
 		let salt = try readPrivateFile(filename: Constants.PwdSaltFilename)
 		guard salt.count == so.pwHash.SaltBytes else {
 			throw CryptoError.General.incorrectParameterSize
@@ -141,6 +140,18 @@ public class Crypto {
 		}
 		return key
 	}
+		
+	public func getPasswordHashForStorage(password:String) throws -> [String: String]? {
+		guard let salt = getRandomBytes(lenght: so.pwHash.SaltBytes) else {
+			return nil
+		}
+		let hash =  try getPasswordHashForStorage(password: password, salt: salt)
+		guard let saltHex = so.utils.bin2hex(salt) else {
+			return nil
+		}
+		return ["hash": hash, "salt": saltHex]
+	}
+
 	
 	public func getPasswordHashForStorage(password:String, salt:String) throws -> String {
 		guard let data = so.utils.hex2bin(salt) else {
@@ -202,6 +213,59 @@ public class Crypto {
 		}
 	}
 	
+	func importServerPublicKey(pbk:Bytes) throws {
+		_ = try savePrivateFile(filename: Constants.ServerPublicKeyFilename, data: pbk)
+	}
+		
+    func getServerPublicKey() throws -> Bytes {
+		return try readPrivateFile(filename: Constants.ServerPublicKeyFilename)
+    }
+	
+	public func getPrivateKeyForExport(password:String) throws -> Bytes? {
+		do {
+			let encPK = try readPrivateFile(filename: Constants.PrivateKeyFilename)
+			let nonce = try readPrivateFile(filename: Constants.SKNONCEFilename)
+			let decPK = try decryptSymmetric(key: getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal), nonce: nonce, data: encPK)
+			return try encryptSymmetric(key: getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard), nonce: nonce, data: decPK)
+		} catch {
+			throw error
+		}
+	}
+	
+	public func exportPublicKey () throws -> Bytes {
+		var pbk = [UInt8]()
+		pbk += Constants.KeyFileBeggining.bytes
+		pbk += Crypto.toBytes(value: Constants.CurrentKeyFileVersion)
+		pbk += Crypto.toBytes(value: Constants.KeyFileTypePublicPlain)
+		do {
+			let pbkBytes = try readPrivateFile(filename: Constants.PublicKeyFilename)
+			pbk += pbkBytes
+		} catch {
+			throw error
+		}
+		return pbk
+	}
+	
+	public func exportKeyBundle(password:String) throws -> Bytes? {
+		var bundle = [UInt8]()
+		do {
+			bundle += Constants.KeyFileBeggining.bytes
+			bundle += Crypto.toBytes(value: Constants.CurrentKeyFileVersion)
+			bundle += Crypto.toBytes(value: Constants.KeyFileTypeBundleEncrypted)
+			bundle += try readPrivateFile(filename: Constants.PublicKeyFilename)
+			guard let pk = try getPrivateKeyForExport(password: password) else {
+				//TODO : Throw error
+				return nil
+			}
+			bundle += pk
+			bundle += try readPrivateFile(filename: Constants.PwdSaltFilename)
+			bundle += try readPrivateFile(filename: Constants.SKNONCEFilename)
+			return Bytes(bundle)
+		} catch {
+			throw error
+		}
+	}
+	
 	private func encryptSymmetric(key:Bytes?, nonce:Bytes?, data:Bytes?) throws -> Bytes {
 		
 		guard let key = key, key.count ==  so.secretBox.KeyBytes else {
@@ -244,7 +308,7 @@ public class Crypto {
 		return plainText
 	}
 	
-	private func getNewHeader(symmetricKey:Bytes?, dataSize:UInt, filename:String, fileType:Int, fileId:Bytes?, videoDuration:Int) throws  -> Header {
+	private func getNewHeader(symmetricKey:Bytes?, dataSize:UInt, filename:String, fileType:Int, fileId:Bytes?, videoDuration:UInt32) throws  -> Header {
 		guard  let symmetricKey = symmetricKey, symmetricKey.count == so.keyDerivation.KeyBytes else {
 			throw CryptoError.General.incorrectKeySize
 		}
@@ -287,8 +351,8 @@ public class Crypto {
 		}
 	}
 	
-	private func getFileHeader(input:InputStream) throws -> Header? {
 		
+	func getFileHeader(input:InputStream) throws -> Header? {
 		var buf:Bytes = Bytes(repeating: 0, count: Constants.FileHeaderBeginningLen)
 		guard Constants.FileHeaderBeginningLen == input.read(&buf, maxLength: Constants.FileHeaderBeginningLen) else {
 			throw CryptoError.IO.readFailure
@@ -316,19 +380,18 @@ public class Crypto {
 		}
 		
 		var header:Header = Header()
-		header.overallHeaderSize = 0
 		
 		header.fileId = fileId
 		header.fileVersion = fileVersion
 		header.headerSize = headerSize
-		header.overallHeaderSize! += UInt32(Constants.FileBegginingLen) + UInt32(Constants.FileFileVersionLen) + UInt32(Constants.FileFileIdLen) + UInt32(Constants.FileHeaderSizeLen) + headerSize
+		header.overallHeaderSize = UInt32(Constants.FileHeaderBeginningLen) + headerSize
 		
 		var encHeaderBytes = Bytes(repeating: 0, count: Int(headerSize))
 		let numRead = input.read(&encHeaderBytes, maxLength: Int(headerSize))
-		guard headerSize ==  numRead else {
+		guard numRead > 0  else {
 			throw CryptoError.IO.readFailure
 		}
-		
+		encHeaderBytes = encHeaderBytes.dropLast(Int(headerSize) - numRead)
 		let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
 		
 		let privateKey:Bytes = KeyManagement.key
@@ -363,7 +426,7 @@ public class Crypto {
 		return header
 	}
 	
-	public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, fileId:Bytes, videoDuration:Int) throws {
+	public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, fileId:Bytes, videoDuration:UInt32) throws {
 		
 		let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
 		let symmetricKey = so.keyDerivation.key()
@@ -411,12 +474,11 @@ public class Crypto {
 		} while (diff == 0)
 		
 		output.close();
-		input.close();
 		return true;
 	}
 	
 	public func decryptFileAsync(input:InputStream, output:OutputStream, completion:((Bool, Error?) -> Void)? = nil) {
-	let body = {() -> Void in
+//	let body = {() -> Void in
 		var result = false
 		var decError:Error? = nil
 		do {
@@ -428,11 +490,11 @@ public class Crypto {
 		guard let completion = completion else {
 			return
 		}
-			completion(result, decError)
-		}
-		DispatchQueue.global(qos: .background).async {
-			body()
-		}
+		completion(result, decError)
+//		}
+//		DispatchQueue.global(qos: .background).async {
+//			body()
+//		}
 	}
 	
 	public func decryptFile(input:InputStream, output:OutputStream) throws -> Bool {
@@ -472,7 +534,6 @@ public class Crypto {
 			chunkNumber += UInt64(1)
 		} while (diff == 0)
 		output.close();
-		input.close();
 		return true;
 	}
 	
@@ -526,11 +587,7 @@ public class Crypto {
 		input.close()
 		return outBuff
 	}
-	
-	public struct SPFile {
-		public var header:Header?
-	}
-	
+		
 	public struct Header {
 		public var fileVersion:UInt8 = 0
 		public var fileId:Bytes = []
@@ -720,5 +777,54 @@ extension Crypto {
 		}
 		offset += Int(headerSize)
         return offset
+	}
+	/*
+	public static String encryptParamsForServer(HashMap<String, String> params, byte[] serverPK, byte[] privateKey) throws CryptoException {
+		JSONObject json = new JSONObject(params);
+
+		if(serverPK == null){
+			serverPK = StinglePhotosApplication.getCrypto().getServerPublicKey();
+		}
+		if(privateKey == null){
+			privateKey = StinglePhotosApplication.getKey();
+		}
+
+		if(serverPK == null || privateKey == null){
+			return "";
+		}
+
+		return Crypto.byteArrayToBase64(
+				StinglePhotosApplication.getCrypto().encryptCryptoBox(
+						json.toString().getBytes(),
+						serverPK,
+						privateKey
+				)
+		);
+	}
+
+	
+	*/
+	
+	
+	public func encryptCryptoBox(message:Bytes, publicKey:Bytes, privateKey:Bytes) throws  -> Bytes? {
+		guard let result:Bytes = so.box.seal(message: message, recipientPublicKey: publicKey, senderSecretKey: privateKey) else {
+			return nil
+		}
+		return result
+    }
+
+	func encryptParamsForServer(params:[String:String]) -> String? {
+		do {
+			let spbk  = try getServerPublicKey()
+			let pks = KeyManagement.key
+			let json = try JSONSerialization.data(withJSONObject: params)
+			guard let res  = try encryptCryptoBox(message: (Bytes)(json), publicKey: spbk, privateKey: pks) else {
+				return nil
+			}
+			return bytesToBase64(data: res)
+		} catch {
+			print(error)
+			return nil
+		}
 	}
 }

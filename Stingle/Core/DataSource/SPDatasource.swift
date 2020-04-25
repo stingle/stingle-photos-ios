@@ -26,13 +26,13 @@ class DataSource {
 	private var imageCache:[String: UIImage]
 	
 	var delegate:DataSourceDelegate?
-		
+	
 	init(type:SourceType) {
 		self.type = type
 		thumbCache = [String: UIImage]()
 		imageCache = [String: UIImage]()
 	}
-		
+	
 	private var files:[SPFile]?  { get {
 		guard let files:[SPFile] = DataSource.db.filesSortedByDate()  else {
 			return nil
@@ -49,7 +49,7 @@ class DataSource {
 		}
 	}
 	
-//	MARK: - IndexPath getters
+	//	MARK: - IndexPath getters
 	
 	public func numberOfSections()  -> Int {
 		return DataSource.db.numberOfSections(for: fileType())
@@ -72,7 +72,6 @@ class DataSource {
 	}
 	
 	func thumb(indexPath:IndexPath) -> UIImage? {
-		print(indexPath)
 		guard let file:SPFileInfo = DataSource.db.fileForIndexPath(indexPath: indexPath, with: fileType()) else {
 			return nil
 		}
@@ -94,16 +93,19 @@ class DataSource {
 		
 		DataSource.crypto.decryptFileAsync(input: input, output: out, completion: { (ok, error) in
 			let body = {() -> Void in
+				input.close()
 				guard ok == true, error == nil else {
 					return
 				}
 				let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
+				out.close()
 				DispatchQueue.main.async {
 					guard let image = UIImage(data:imageData) else {
 						print("Ivnalid data for image")
 						return
 					}
 					self.thumbCache[file.name] = image
+					//Dispatch event
 					self.delegate?.imageReady(at: indexPath)
 				}
 			}
@@ -111,8 +113,8 @@ class DataSource {
 		})
 		return nil
 	}
-
-//	MARK: - Index getters
+	
+	//	MARK: - Index getters
 	func numberOfFiles () -> Int {
 		return DataSource.db.filesCount(for: fileType())
 	}
@@ -127,29 +129,39 @@ class DataSource {
 		return image
 	}
 	
-	func image(index:Int) -> UIImage? {
+	func image(index:Int, completionHandler:  @escaping (UIImage?) -> Swift.Void) {
+		var folder:Int = 0
+		if type == .Gallery {
+			folder = 0
+		} else if type == .Trash {
+			folder = 1
+		}
+		
 		guard let file:SPFileInfo = DataSource.db.fileForIndex(index: index, for: fileType()) else {
-			return nil
+			completionHandler(nil)
+			return
 		}
 		if let image = imageCache[file.name] {
-			return image
+			completionHandler(image)
 		}
-		
 		
 		guard let filePath = SPFileManager.folder(for: .StorageOriginals)?.appendingPathComponent(file.name) else {
-			return nil
+			completionHandler(nil)
+			return
 		}
 		
-		guard let input = InputStream(url: filePath) else {
-			return nil
-		}
-		input.open()
 		
 		let out = OutputStream.init(toMemory: ())
 		out.open()
-		
-		DataSource.crypto.decryptFileAsync(input: input, output: out, completion: { (ok, error) in
-			let body = {() -> Void in
+		if  SPFileManager.default.existence(atUrl: filePath) == .file {
+			guard let input = InputStream(url: filePath) else {
+				completionHandler(nil)
+				return
+			}
+			input.open()
+			
+			DataSource.crypto.decryptFileAsync(input: input, output: out, completion: { (ok, error) in
+				input.close()
 				guard ok == true, error == nil else {
 					return
 				}
@@ -160,19 +172,43 @@ class DataSource {
 						return
 					}
 					self.imageCache[file.name] = image
-					self.delegate?.originalImageReady(at: index)
+					completionHandler(image)
 				}
+			})
+			return
+		}
+		
+		SyncManager.download(files: [file], isThumb: false, folder: folder) { (path, error) in
+			
+			guard let input = InputStream(url: filePath) else {
+				completionHandler(nil)
+				return
 			}
-			body()
-		})
-		return nil
+			input.open()
+			
+			DataSource.crypto.decryptFileAsync(input: input, output: out, completion: { (ok, error) in
+				input.close()
+				guard ok == true, error == nil else {
+					return
+				}
+				let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
+				DispatchQueue.main.async {
+					guard let image = UIImage(data:imageData) else {
+						print("Ivnalid data for image")
+						return
+					}
+					self.imageCache[file.name] = image
+					completionHandler(image)
+				}
+			})
+		}
 	}
 	
 	func index(for indexPath:IndexPath) -> Int {
 		return DataSource.db.index(for: indexPath, of: fileType())
 	}
 	
-//	MARK: - Helpers
+	//	MARK: - Helpers
 	func fileType() -> SPFileInfo.Type {
 		switch type {
 		case .Gallery:

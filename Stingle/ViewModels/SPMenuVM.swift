@@ -12,12 +12,16 @@ class SPMenuVM {
 	func setup(cell:SPMenuCell, forIndexPath:IndexPath) {
 		cell.textLabel?.text = title(forIndexPath: forIndexPath)
 		cell.imageView?.image = image(forIndexPath: forIndexPath)
+		cell.imageView?.tintColor = .red
 	}
 	
 	func image(forIndexPath:IndexPath) -> UIImage? {
 		switch forIndexPath.row {
 		case 0:
-			return UIImage(named: "Gallery")
+			guard let image:UIImage = UIImage(named: "photo.on.rectangle") else {
+				return nil
+			}
+			return image
 		case 1:
 			return UIImage(named: "Trash")
 		case 2:
@@ -27,8 +31,7 @@ class SPMenuVM {
 		case 4:
 			return UIImage(named: "Settings")
 		case 5:
-			return UIImage(named: "Log Out")
-			
+			return UIImage(named: "Log Out")			
 		default:
 			return nil
 		}

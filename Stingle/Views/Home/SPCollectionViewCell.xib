@@ -19,21 +19,51 @@
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rkX-cn-1aj">
                         <rect key="frame" x="0.0" y="0.0" width="100" height="102"/>
+                        <gestureRecognizers/>
+                    </imageView>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="not_synced" translatesAutoresizingMaskIntoConstraints="NO" id="4yy-ps-JPO">
+                        <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FeU-aR-DQM">
+                        <rect key="frame" x="43" y="2" width="33" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Cj6-FF-bK0">
+                        <rect key="frame" x="76" y="0.0" width="24" height="24"/>
                     </imageView>
                 </subviews>
             </view>
             <constraints>
+                <constraint firstItem="Cj6-FF-bK0" firstAttribute="leading" secondItem="FeU-aR-DQM" secondAttribute="trailing" id="5Ws-iS-12f"/>
                 <constraint firstItem="rkX-cn-1aj" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="JC6-oZ-aDs"/>
+                <constraint firstItem="Cj6-FF-bK0" firstAttribute="centerY" secondItem="FeU-aR-DQM" secondAttribute="centerY" id="KzT-QW-NcO"/>
+                <constraint firstAttribute="trailing" secondItem="Cj6-FF-bK0" secondAttribute="trailing" id="LkH-0D-GhN"/>
+                <constraint firstItem="Cj6-FF-bK0" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="TgP-rS-mQW"/>
+                <constraint firstItem="4yy-ps-JPO" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="gOD-Zl-PLa"/>
                 <constraint firstItem="rkX-cn-1aj" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="hxX-eY-7Rt"/>
                 <constraint firstAttribute="trailing" secondItem="rkX-cn-1aj" secondAttribute="trailing" id="oab-Wx-bg3"/>
+                <constraint firstItem="4yy-ps-JPO" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="s4f-7C-JXp"/>
                 <constraint firstAttribute="bottom" secondItem="rkX-cn-1aj" secondAttribute="bottom" id="vu8-Qr-dM1"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="106" height="88"/>
             <connections>
                 <outlet property="ImageView" destination="rkX-cn-1aj" id="ZpD-9m-xmA"/>
+                <outlet property="bottom" destination="vu8-Qr-dM1" id="iU3-Mo-SOh"/>
+                <outlet property="duration" destination="FeU-aR-DQM" id="VtH-Z8-WKO"/>
+                <outlet property="leading" destination="JC6-oZ-aDs" id="k6x-cm-VEG"/>
+                <outlet property="notSyncedIcon" destination="4yy-ps-JPO" id="rhB-7g-R98"/>
+                <outlet property="top" destination="hxX-eY-7Rt" id="YhD-al-ARi"/>
+                <outlet property="trailing" destination="oab-Wx-bg3" id="wfP-jf-tDF"/>
+                <outlet property="videoIcon" destination="Cj6-FF-bK0" id="Q6O-Pd-isE"/>
             </connections>
             <point key="canvasLocation" x="169.56521739130437" y="164.73214285714286"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="not_synced" width="24" height="24"/>
+        <image name="video_icon" width="24" height="24"/>
+    </resources>
 </document>

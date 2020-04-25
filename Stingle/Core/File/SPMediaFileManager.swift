@@ -47,14 +47,17 @@ class SPMediaFileManager {
 			let file = try SPFile(asset: asset, path: fileUrl)
 			let options = PHImageRequestOptions()
 			options.version = .original
-			options.isSynchronous = true
+			options.isSynchronous = false
 			options.deliveryMode = .highQualityFormat
-			phManager.requestImageData(for: asset, options: options) { data, a, b, c in
-				if let data = data {
-					file.data = data
-					SyncManager.importImage(file:file, withWidth: asset.pixelWidth, withHeight: asset.pixelHeight)
+			options.isNetworkAccessAllowed = true
+			let size = UIConstants.thumbSize(for: CGSize(width: asset.pixelWidth, height: asset.pixelHeight))
+
+			phManager.requestImage(for: asset, targetSize:size, contentMode: .aspectFit, options: options) { thumb,info  in
+				if let thumb = thumb {
+					SyncManager.importImage(file:file, thumb:thumb)
 				}
 			}
+
 		} catch {
 			print(error)
 		}

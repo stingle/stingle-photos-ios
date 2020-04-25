@@ -21,7 +21,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Stingle Photos requires access to your phone's camera.</string>
+	<string>Stingle Photos requires access to your phone&apos;s camera.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Stingle Photos requires access to your Photos Library.</string>
 	<key>UIAppFonts</key>
@@ -57,5 +57,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

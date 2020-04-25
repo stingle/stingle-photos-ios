@@ -4,9 +4,27 @@ protocol SPEventHandler {
 	func recieve(event:SPEvent);
 }
 
-enum SPEvenetType  {
+
+class SPEvent {
+	public let info:Dictionary<String, AnyHashable>?
+	public let type:String
 	
-	 enum DB {
+	init(type:String, info:Dictionary<String, AnyHashable>?) {
+		self.type = type
+		self.info = info
+		
+	}
+}
+
+extension SPEvent {
+	enum Keys : String {
+		case IndexPaths
+		case Indexes
+		case Sections
+	}
+	
+	enum DB {
+		
 		enum update : String {
 			case gallery = "SPDBUpdateGallery"
 			case trash = "SPDBUpdateTrash"
@@ -25,12 +43,12 @@ enum SPEvenetType  {
 	}
 	
 	enum UI {
-
+		
 		enum updates : String {
 			case begin = "SPUIBeginUpdates"
 			case end = "SPUIEndUpdates"
 		}
-				
+		
 		enum delete: String {
 			case gallery = "SPUIDeletFromGallery"
 		}
@@ -41,26 +59,8 @@ enum SPEvenetType  {
 		
 		enum ready: String {
 			case thumb = "SPUIThumbReady"
-			case image = "SPUIImageREady"
+			case image = "SPUIImageReady"
 			case video = "SPUIVideoReady"
 		}
-		
-	}
-	
-//	enum FS {
-//		enum `import`: String {
-//			case image
-//			case video
-//		}
-//	}
-}
-
-class SPEvent {
-	public let info:Dictionary<String, AnyHashable>?
-	public let type:String
-	
-	init(type:String, info:Dictionary<String, AnyHashable>?) {
-		self.type = type
-		self.info = info
 	}
 }
