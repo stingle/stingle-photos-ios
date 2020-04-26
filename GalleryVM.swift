@@ -105,14 +105,18 @@ class GalleryVM : DataSourceDelegate, SPEventHandler {
 		}
 		
 		if mode == .Editing {
-			cell.updateSpaces(constant: 20)
-			if selectedItems[indexPath] != nil {
-				cell.backgroundColor = .red
+			cell.selectIcon.isHidden = false
+			cell.updateSpaces(constant: 14)
+			if selectedItems[indexPath] == nil {
+				cell.selectIcon.tintColor = .lightGray
+				cell.selectIcon.image = UIImage(named: "rectangle")
 			} else {
-				cell.backgroundColor = .white
+				cell.selectIcon.image = UIImage(named: "checkmark.rectangle.fill")
+				cell.selectIcon.tintColor = Theme.Colors.SPRed
 			}
 		} else {
 			cell.updateSpaces(constant: 0)
+			cell.selectIcon.isHidden = true
 		}
 		
 		guard let file = dataSource.file(for: indexPath) else {
@@ -133,7 +137,7 @@ class GalleryVM : DataSourceDelegate, SPEventHandler {
 		}
 		
 		if let isRemote = file.isRemote {
-			cell.notSyncedIcon.isHidden = isRemote
+			cell.notSyncedIcon.isHidden = (isRemote && (mode != .Editing))
 		}
 		
 	}

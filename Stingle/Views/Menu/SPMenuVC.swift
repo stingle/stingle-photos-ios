@@ -44,6 +44,8 @@ class SPMenuVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 			self.dismiss(animated: true, completion: {
 				self.viewModel.delegate?.selectedMenuItem(with: indexPath.row)
+				let cell = tableView.cellForRow(at: indexPath) as! SPMenuCell
+				self.viewModel.selectItem(cell: cell)
 			})
 	}
 }

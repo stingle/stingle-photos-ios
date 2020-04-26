@@ -64,5 +64,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Photos access premisions decription</string>
 </dict>
 </plist>

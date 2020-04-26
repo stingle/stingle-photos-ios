@@ -8,7 +8,10 @@ class SPImagePreviewVC: UIViewController, SPEventHandler {
 	
 	@IBAction func share(_ sender: Any) {
 		print("share")
-		let items = ["This app is my favorite"]
+		guard let image = imageView.image else {
+			return
+		}
+		let items = [image]
 		let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
 		present(ac, animated: true)
 	}
@@ -40,11 +43,6 @@ class SPImagePreviewVC: UIViewController, SPEventHandler {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		navigationController?.setNavigationBarHidden(true, animated: false)
-//		if #available(iOS 13.0, *) {
-//			 UIApplication.shared.keyWindow?.addSubview(statusBar!)
-//		}
-//
-//		statusBar?.backgroundColor = .darkGray
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -59,10 +57,6 @@ class SPImagePreviewVC: UIViewController, SPEventHandler {
 	
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
-//		if #available(iOS 13.0, *) {
-//			statusBar?.removeFromSuperview()
-//			statusBar?.backgroundColor = Theme.Colors.SPDarkRed
-//		}
 	}
 	
 	func recieve(event: SPEvent) {

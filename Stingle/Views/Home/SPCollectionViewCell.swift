@@ -7,6 +7,7 @@ class SPCollectionViewCell: UICollectionViewCell {
 	@IBOutlet weak var duration: UILabel!
 	@IBOutlet weak var ImageView: UIImageView!
 	@IBOutlet weak var videoIcon: UIImageView!
+	@IBOutlet weak var selectIcon: UIImageView!
 	
 	@IBOutlet weak var trailing: NSLayoutConstraint!
 	@IBOutlet weak var leading: NSLayoutConstraint!
@@ -21,9 +22,11 @@ class SPCollectionViewCell: UICollectionViewCell {
 		trailing.constant = constant
 		leading.constant = constant
 	}
-		
+			
 	override func awakeFromNib() {
         super.awakeFromNib()
+		selectIcon.tintColor = .lightGray
+
         // Initialization code
     }
 }

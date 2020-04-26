@@ -7,31 +7,45 @@ protocol SPMenuDelegate {
 
 class SPMenuVM {
 	
+	var selectedItem:SPMenuCell?
+	
 	var delegate:SPMenuDelegate?
+	
+	func selectItem(cell:SPMenuCell) {
+		selectedItem?.imageView?.tintColor = .darkGray
+		cell.imageView?.tintColor = Theme.Colors.SPRed
+		selectedItem = cell
+	}
 	
 	func setup(cell:SPMenuCell, forIndexPath:IndexPath) {
 		cell.textLabel?.text = title(forIndexPath: forIndexPath)
 		cell.imageView?.image = image(forIndexPath: forIndexPath)
-		cell.imageView?.tintColor = .red
+		cell.imageView?.tintColor = .darkGray
+		if forIndexPath.row == 0 {
+			if selectedItem == nil {
+				selectedItem = cell
+				selectedItem?.imageView?.tintColor = Theme.Colors.SPRed
+			}
+		}
 	}
 	
 	func image(forIndexPath:IndexPath) -> UIImage? {
 		switch forIndexPath.row {
 		case 0:
-			guard let image:UIImage = UIImage(named: "photo.on.rectangle") else {
+			guard let image:UIImage = UIImage(named: "photo.fill.on.rectangle.fill") else {
 				return nil
 			}
 			return image
 		case 1:
-			return UIImage(named: "Trash")
+			return UIImage(named: "trash.fill")
 		case 2:
-			return UIImage(named: "Account")
+			return UIImage(named: "person.crop.square.fill")
 		case 3:
-			return UIImage(named: "Change Password")
+			return UIImage(named: "shield.lefthalf.fill")
 		case 4:
-			return UIImage(named: "Settings")
+			return UIImage(named: "gear")
 		case 5:
-			return UIImage(named: "Log Out")			
+			return UIImage(named: "arrow.right.to.line")
 		default:
 			return nil
 		}
