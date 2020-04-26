@@ -4,9 +4,9 @@ class KeyManagement {
 	
 	static private let crypto = Crypto()
 	
-	private static var secret:[UInt8] = []
+	private static var secret:[UInt8]?
 	//TODO : maybe KayChain is better place to store the secret
-	static public var key:[UInt8] { get { return KeyManagement.secret } set(newKey) { KeyManagement.secret = newKey } }
+	static public var key:[UInt8]? { get { return KeyManagement.secret } set(newKey) { KeyManagement.secret = newKey } }
 	
 	static public func importServerPublicKey(pbk:String) {
 		guard let pbkData = crypto.base64ToByte(data: pbk) else {
@@ -31,6 +31,20 @@ class KeyManagement {
 			return false
 		}
 		return true
+	}
+	
+	static public func signOut() {
+		KeyManagement.key = nil
+		SPApplication.user = nil
+		guard let privateFolder = SPFileManager.folder(for: .Private) else {
+			print("Can't delete local folder")
+			return
+		}
+		do {
+			try SPFileManager.default.removeItem(at: privateFolder)
+		} catch {
+			print(error)
+		}
 	}
 	
 	static public func getUploadKeyBundle(password:String, includePrivateKey:Bool) throws -> String? {

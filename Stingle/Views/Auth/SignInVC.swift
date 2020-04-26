@@ -3,11 +3,12 @@ import UIKit
 class SignInVC : BaseVC {
 	
 	private let viewModel = SignInVM()
-	
+	var dismissKeyboard:UIGestureRecognizer? = nil
+
 	@IBOutlet weak var emailInput: UITextField!
-	@IBOutlet weak var emailSeparattor: UIView!
+	@IBOutlet weak var emailSeparator: UIView!
 	@IBOutlet weak var passwordInput: UITextField!
-	@IBOutlet weak var passwordSeparattor: UIView!
+	@IBOutlet weak var passwordSeparator: UIView!
 	@IBOutlet weak var forgotPassword: UIButton!
 	@IBOutlet weak var signIn: UIButton!
 	@IBOutlet weak var signUp: UIButton!
@@ -35,7 +36,11 @@ class SignInVC : BaseVC {
 	}
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		emailInput.delegate = self
+		passwordInput.delegate = self
 		createBackBarButton(forNavigationItem: self.navigationItem)
+		dismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
+		self.view .addGestureRecognizer(dismissKeyboard!)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -53,8 +58,6 @@ class SignInVC : BaseVC {
 		backButton.setImage(backButtonImage!, for: .normal)
 		backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
 		let backBarButton = UIBarButtonItem(customView: backButton)
-		let spaceBar = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.fixedSpace, target: nil, action: nil)
-		spaceBar.width = 30
 		let titleLabel = UILabel()
 		let text = "landing_sign_in".localized
 		let string = NSMutableAttributedString(string: text)
@@ -62,10 +65,58 @@ class SignInVC : BaseVC {
 		string.setColor(color: .white, forText: text)
 		titleLabel.attributedText = string
 		let titleBar = UIBarButtonItem(customView: titleLabel)
-		navigationItem.leftBarButtonItems = [backBarButton, spaceBar, titleBar]
+		navigationItem.leftBarButtonItems = [backBarButton, titleBar]
 	}
 	
 	@objc public func backButtonTapped() {
 		self.navigationController?.popViewController(animated: true)
+	}
+}
+
+extension SignInVC : UITextFieldDelegate {
+	
+	@objc func hideKeyboard(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+		guard let responder = currentResponder() else {
+			return
+		}
+		responder.resignFirstResponder()
+	}
+
+	func currentResponder() -> UITextField? {
+		if emailInput.isFirstResponder {return emailInput}
+		if passwordInput.isFirstResponder {return passwordInput}
+		return nil
+	}
+	
+	func separator(for textField:UITextField) -> UIView? {
+		if textField == emailInput {
+			return emailSeparator
+		} else if textField == passwordInput {
+			return passwordSeparator
+		}
+		return nil
+	}
+	
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+		guard let separator = separator(for: textField) else {
+			return
+		}
+		separator.backgroundColor = Theme.Colors.SPRed
+	}
+	
+	func textFieldDidEndEditing(_ textField: UITextField) {
+		guard let separator = separator(for: textField) else {
+			return
+		}
+		separator.backgroundColor = Theme.Colors.SPLightGray
+	}
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		if textField == emailInput {
+			passwordInput.becomeFirstResponder()
+		} else if textField == passwordInput {
+			passwordInput.resignFirstResponder()
+		}
+		return true
 	}
 }

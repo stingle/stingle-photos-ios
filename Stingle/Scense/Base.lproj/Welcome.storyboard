@@ -63,8 +63,11 @@
                                         </connections>
                                     </containerView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZH5-tE-YJu">
-                                        <rect key="frame" x="32" y="535" width="350" height="29"/>
+                                        <rect key="frame" x="32" y="528" width="350" height="36"/>
                                         <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="36" id="pZQ-Gt-OFm"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                         <state key="normal" title="Sign Up">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -119,15 +122,15 @@
             <objects>
                 <viewController id="5AL-Pd-fTH" customClass="SignInVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dKi-sh-BI2">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oHG-x0-lVZ">
-                                <rect key="frame" x="16" y="119" width="382" height="20"/>
+                                <rect key="frame" x="16" y="107" width="382" height="20"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="16"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="next" textContentType="email"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
                                         <color key="value" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -135,14 +138,14 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MQ6-4Z-Ycs">
-                                <rect key="frame" x="16" y="143" width="382" height="2"/>
-                                <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="16" y="131" width="382" height="2"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="9iY-ma-UhY"/>
                                 </constraints>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UzW-2i-qgc">
-                                <rect key="frame" x="16" y="181" width="382" height="20"/>
+                                <rect key="frame" x="16" y="169" width="382" height="20"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="16"/>
@@ -154,8 +157,11 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xqg-rv-lAk">
-                                <rect key="frame" x="16" y="276" width="382" height="30"/>
+                                <rect key="frame" x="16" y="264" width="382" height="36"/>
                                 <color key="backgroundColor" red="0.71764705880000002" green="0.10980392160000001" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="ZHu-mW-idq"/>
+                                </constraints>
                                 <state key="normal" title="Sign In">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -164,7 +170,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MXY-8p-WeV">
-                                <rect key="frame" x="275" y="316.66666666666669" width="54" height="30"/>
+                                <rect key="frame" x="275" y="310.66666666666669" width="54" height="30"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Sign Up">
                                     <color key="titleColor" red="0.71764705880000002" green="0.10980392160000001" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -174,20 +180,20 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an accout?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mO5-iQ-pGN">
-                                <rect key="frame" x="85" y="321" width="170" height="21"/>
+                                <rect key="frame" x="85" y="315" width="170" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nHz-VP-j9X">
-                                <rect key="frame" x="16" y="205" width="382" height="2"/>
+                                <rect key="frame" x="16" y="193" width="382" height="2"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="Qv0-2J-RpN"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sbU-O3-LJh">
-                                <rect key="frame" x="271" y="211" width="127" height="30"/>
+                                <rect key="frame" x="271" y="199" width="127" height="30"/>
                                 <state key="normal" title="Forgot  password?">
                                     <color key="titleColor" red="0.71764705880000002" green="0.10980392160000001" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
@@ -228,28 +234,28 @@
                     <connections>
                         <outlet property="dontHaveAnAccount" destination="mO5-iQ-pGN" id="bFR-UF-UbG"/>
                         <outlet property="emailInput" destination="oHG-x0-lVZ" id="1S3-q4-6Q4"/>
-                        <outlet property="emailSeparattor" destination="MQ6-4Z-Ycs" id="zjJ-dy-uPR"/>
+                        <outlet property="emailSeparator" destination="MQ6-4Z-Ycs" id="SJH-0b-bs4"/>
                         <outlet property="forgotPassword" destination="sbU-O3-LJh" id="Hd2-b1-QL7"/>
                         <outlet property="passwordInput" destination="UzW-2i-qgc" id="gTc-U6-F2l"/>
-                        <outlet property="passwordSeparattor" destination="nHz-VP-j9X" id="adc-bg-2uH"/>
+                        <outlet property="passwordSeparator" destination="nHz-VP-j9X" id="q3z-E8-o7l"/>
                         <outlet property="signIn" destination="Xqg-rv-lAk" id="GdT-r7-2Kt"/>
                         <outlet property="signUp" destination="MXY-8p-WeV" id="G57-4a-Xwa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MvW-Bv-nj9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1097.1014492753625" y="-188.31521739130437"/>
+            <point key="canvasLocation" x="1170" y="179"/>
         </scene>
         <!--Sign UpVC-->
         <scene sceneID="IkX-GY-Tu7">
             <objects>
                 <viewController id="ir3-Pq-jm2" customClass="SignUpVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="a4F-n2-edq">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vTK-Oa-wj6">
-                                <rect key="frame" x="27.333333333333343" y="123" width="359.33333333333326" height="100.33333333333331"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vTK-Oa-wj6">
+                                <rect key="frame" x="16" y="67" width="382" height="100.33333333333331"/>
                                 <string key="text">Please choose your master password. While no limit
 is put on what you can enter here, it is strongly advised
 that your password has at least 12 characters and contains 
@@ -261,10 +267,10 @@ may be vulnerable to brute force attacks.</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AUe-d6-Sm3">
-                                <rect key="frame" x="16" y="264.33333333333331" width="382" height="22"/>
+                                <rect key="frame" x="16" y="208.33333333333334" width="382" height="22"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
                                         <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -272,16 +278,17 @@ may be vulnerable to brute force attacks.</string>
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gNO-p2-Hw0">
-                                <rect key="frame" x="16" y="290.33333333333331" width="382" height="2"/>
-                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="16" y="234.33333333333334" width="382" height="2"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="wq3-9t-0K4"/>
                                 </constraints>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3FE-IP-qch">
-                                <rect key="frame" x="16" y="333.33333333333331" width="382" height="22"/>
+                                <rect key="frame" x="16" y="277.33333333333331" width="382" height="22"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="next" secureTextEntry="YES" textContentType="password"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
                                         <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -289,16 +296,17 @@ may be vulnerable to brute force attacks.</string>
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZIT-La-qhF">
-                                <rect key="frame" x="16" y="359.33333333333331" width="382" height="2"/>
-                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="16" y="303.33333333333331" width="382" height="2"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="58y-xP-HS4"/>
                                 </constraints>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WDw-av-dIW">
-                                <rect key="frame" x="16" y="402.33333333333331" width="382" height="22"/>
+                                <rect key="frame" x="16" y="346.33333333333331" width="382" height="22"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
                                         <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -306,14 +314,14 @@ may be vulnerable to brute force attacks.</string>
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ua-We-UwR">
-                                <rect key="frame" x="16" y="428.33333333333331" width="382" height="2"/>
-                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="16" y="372.33333333333331" width="382" height="2"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="e9F-q5-cga"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jB6-Yp-1uH">
-                                <rect key="frame" x="16" y="470.33333333333331" width="382" height="36"/>
+                                <rect key="frame" x="16" y="414.33333333333331" width="382" height="36"/>
                                 <color key="backgroundColor" red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="HDK-4x-a6Z"/>
@@ -326,16 +334,16 @@ may be vulnerable to brute force attacks.</string>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F07-65-jNg">
-                                <rect key="frame" x="67.333333333333343" y="514.33333333333337" width="279.33333333333326" height="36"/>
+                                <rect key="frame" x="67.333333333333343" y="458.33333333333331" width="279.33333333333326" height="36"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already  have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iaf-bc-Hxy">
-                                        <rect key="frame" x="35.333333333333343" y="8.3333333333332558" width="175" height="19.333333333333329"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Already  have an account?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iaf-bc-Hxy">
+                                        <rect key="frame" x="0.0" y="8.6666666666666856" width="175" height="19"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="osS-kF-nFu">
-                                        <rect key="frame" x="220.33333333333337" y="2" width="47" height="32"/>
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="osS-kF-nFu">
+                                        <rect key="frame" x="232.33333333333337" y="2" width="47" height="32"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="16"/>
                                         <color key="tintColor" red="0.71764705880000002" green="0.10980392160000001" blue="0.10980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Sign In"/>
@@ -348,9 +356,9 @@ may be vulnerable to brute force attacks.</string>
                                 <constraints>
                                     <constraint firstItem="osS-kF-nFu" firstAttribute="centerY" secondItem="F07-65-jNg" secondAttribute="centerY" id="8Gl-py-Nh3"/>
                                     <constraint firstItem="Iaf-bc-Hxy" firstAttribute="centerY" secondItem="F07-65-jNg" secondAttribute="centerY" id="Acn-pb-X31"/>
-                                    <constraint firstAttribute="trailing" secondItem="osS-kF-nFu" secondAttribute="trailing" constant="12" id="Kee-gU-lDP"/>
-                                    <constraint firstItem="Iaf-bc-Hxy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="F07-65-jNg" secondAttribute="leading" constant="20" symbolic="YES" id="Ltq-x5-U58"/>
-                                    <constraint firstItem="osS-kF-nFu" firstAttribute="leading" secondItem="Iaf-bc-Hxy" secondAttribute="trailing" constant="10" id="Tur-v3-bJS"/>
+                                    <constraint firstAttribute="trailing" secondItem="osS-kF-nFu" secondAttribute="trailing" id="Kee-gU-lDP"/>
+                                    <constraint firstItem="Iaf-bc-Hxy" firstAttribute="leading" secondItem="F07-65-jNg" secondAttribute="leading" id="N4s-JO-b67"/>
+                                    <constraint firstItem="osS-kF-nFu" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Iaf-bc-Hxy" secondAttribute="trailing" constant="57.329999999999998" id="N8H-gK-Eaj"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -359,7 +367,7 @@ may be vulnerable to brute force attacks.</string>
                             <constraint firstItem="gNO-p2-Hw0" firstAttribute="trailing" secondItem="AUe-d6-Sm3" secondAttribute="trailing" id="0LU-xt-QlW"/>
                             <constraint firstItem="ZIT-La-qhF" firstAttribute="centerX" secondItem="gNO-p2-Hw0" secondAttribute="centerX" id="1pm-Lc-lRa"/>
                             <constraint firstItem="jB6-Yp-1uH" firstAttribute="top" secondItem="8ua-We-UwR" secondAttribute="bottom" constant="40" id="1zV-sq-5ft"/>
-                            <constraint firstItem="jB6-Yp-1uH" firstAttribute="centerX" secondItem="a4F-n2-edq" secondAttribute="centerX" id="5QJ-XY-VcD"/>
+                            <constraint firstItem="vTK-Oa-wj6" firstAttribute="leading" secondItem="MUu-g9-ooz" secondAttribute="leading" constant="16" id="4Wm-Lu-ofL"/>
                             <constraint firstItem="WDw-av-dIW" firstAttribute="top" secondItem="ZIT-La-qhF" secondAttribute="bottom" constant="41" id="804-Fd-ojG"/>
                             <constraint firstItem="8ua-We-UwR" firstAttribute="width" secondItem="gNO-p2-Hw0" secondAttribute="width" id="E1R-s9-VeJ"/>
                             <constraint firstItem="8ua-We-UwR" firstAttribute="centerX" secondItem="gNO-p2-Hw0" secondAttribute="centerX" id="EbZ-SV-naa"/>
@@ -368,10 +376,10 @@ may be vulnerable to brute force attacks.</string>
                             <constraint firstItem="F07-65-jNg" firstAttribute="top" secondItem="jB6-Yp-1uH" secondAttribute="bottom" constant="8" id="Iqb-eJ-cIS"/>
                             <constraint firstItem="F07-65-jNg" firstAttribute="height" secondItem="jB6-Yp-1uH" secondAttribute="height" id="MZf-bB-W6P"/>
                             <constraint firstItem="AUe-d6-Sm3" firstAttribute="leading" secondItem="MUu-g9-ooz" secondAttribute="leading" constant="16" id="Q3n-Ce-bcm"/>
+                            <constraint firstItem="MUu-g9-ooz" firstAttribute="trailing" secondItem="vTK-Oa-wj6" secondAttribute="trailing" constant="16" id="RSl-JL-w66"/>
                             <constraint firstItem="WDw-av-dIW" firstAttribute="centerX" secondItem="gNO-p2-Hw0" secondAttribute="centerX" id="SMH-GP-bnZ"/>
                             <constraint firstItem="ZIT-La-qhF" firstAttribute="top" secondItem="3FE-IP-qch" secondAttribute="bottom" constant="4" id="TSW-kH-eaF"/>
                             <constraint firstItem="8ua-We-UwR" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="WDw-av-dIW" secondAttribute="trailing" id="U0k-nH-npz"/>
-                            <constraint firstItem="vTK-Oa-wj6" firstAttribute="centerX" secondItem="a4F-n2-edq" secondAttribute="centerX" id="UsY-Tx-D7s"/>
                             <constraint firstItem="3FE-IP-qch" firstAttribute="centerX" secondItem="gNO-p2-Hw0" secondAttribute="centerX" id="VHJ-X6-fqv"/>
                             <constraint firstItem="vTK-Oa-wj6" firstAttribute="top" secondItem="MUu-g9-ooz" secondAttribute="top" constant="67" id="WRH-SL-WeE"/>
                             <constraint firstItem="ZIT-La-qhF" firstAttribute="width" secondItem="gNO-p2-Hw0" secondAttribute="width" id="XAl-fp-2Cb"/>
@@ -394,13 +402,16 @@ may be vulnerable to brute force attacks.</string>
                     <navigationItem key="navigationItem" id="kHU-NM-908"/>
                     <connections>
                         <outlet property="confirmPasswordInput" destination="WDw-av-dIW" id="bBj-VE-eG7"/>
+                        <outlet property="confirmPasswordSeparator" destination="8ua-We-UwR" id="6qr-dH-QS1"/>
                         <outlet property="emailInput" destination="AUe-d6-Sm3" id="qfn-8p-W1c"/>
+                        <outlet property="emailSeparator" destination="gNO-p2-Hw0" id="Okc-I2-eHD"/>
                         <outlet property="passwordInput" destination="3FE-IP-qch" id="Ocl-UA-Gcs"/>
+                        <outlet property="passwordSeparator" destination="ZIT-La-qhF" id="pq1-ob-Wmo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rz4-x9-qnl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1749.2753623188407" y="-188.31521739130437"/>
+            <point key="canvasLocation" x="2411.594202898551" y="-423.09782608695656"/>
         </scene>
         <!--Header PageVC-->
         <scene sceneID="xED-OX-JHp">
@@ -495,7 +506,7 @@ may be vulnerable to brute force attacks.</string>
         <image name="landing_trust_no_one" width="191" height="235.33332824707031"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="3MB-Vg-C4L"/>
-        <segue reference="Fde-SP-RW7"/>
+        <segue reference="SXZ-22-ZQH"/>
+        <segue reference="7Bh-ai-W5m"/>
     </inferredMetricsTieBreakers>
 </document>

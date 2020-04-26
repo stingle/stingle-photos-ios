@@ -118,6 +118,35 @@ struct SPSignUpRequest : SPRequest {
 	}
 }
 
+struct SPSignOutRequest : SPRequest {
+	
+	let token:String
+	
+	init(token:String) {
+		self.token = token
+	}
+
+	func params () -> String? {
+		var components = URLComponents()
+		components.queryItems = [URLQueryItem(name: "token", value: "\(token)")]
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
+	}
+	
+	func path () -> String {
+		return "login/logout"
+	}
+	
+	func method () -> SPRequestMethod {
+		return .POST
+	}
+	
+	func headers() ->  [String : String]? {
+		return nil
+	}
+}
+
+
 struct SPUploadFileRequest : SPRequest {
 	
 	let token:String
@@ -301,7 +330,7 @@ struct SPDeleteFilesRequest : SPRequest {
 	func params() -> String? {
 		var components = URLComponents()
 		//TODO : Remove v : 16
-		components.queryItems = [ URLQueryItem(name: "v", value: "16"), URLQueryItem(name: "token", value: token), URLQueryItem(name: "params", value: bodyParams())]
+		components.queryItems = [URLQueryItem(name: "token", value: token), URLQueryItem(name: "params", value: bodyParams())]
 		let strParams = components.url?.absoluteString
 		return String((strParams?.dropFirst())!)
 	}

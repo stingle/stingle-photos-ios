@@ -3,14 +3,31 @@ import UIKit
 class SignUpVC: BaseVC {
 	
 	private let viewModel = SignUpVM()
+	var dismissKeyboard:UIGestureRecognizer? = nil
 
 	
 	@IBOutlet weak var emailInput: UITextField!
+	@IBOutlet var emailSeparator: UIView!
 	@IBOutlet weak var passwordInput: UITextField!
+	@IBOutlet weak var passwordSeparator: UIView!
 	@IBOutlet weak var confirmPasswordInput: UITextField!
+	@IBOutlet weak var confirmPasswordSeparator: UIView!
 	@IBAction func signUpPressed(_ sender: Any) {
-		viewModel.signUp(email: emailInput.text, password: passwordInput.text) { (status, error) in
-			print(status, error)
+		_ = viewModel.signUp(email: emailInput.text, password: passwordInput.text) { (status, error) in
+			do {
+				if status {
+					_ = SyncManager.update(completionHandler: { (status) in
+						if status == true {
+							DispatchQueue.main.async {
+								let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
+								let home = storyboard.instantiateInitialViewController()
+								self.navigationController?.pushViewController(home!, animated: false)
+							}
+						}
+					})
+				}
+			}
+
 		}
 	}
 	
@@ -20,6 +37,8 @@ class SignUpVC: BaseVC {
 		passwordInput.delegate = self
 		confirmPasswordInput.delegate = self
 		createBackBarButton(forNavigationItem: self.navigationItem)
+		dismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
+		self.view .addGestureRecognizer(dismissKeyboard!)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -37,8 +56,6 @@ class SignUpVC: BaseVC {
 		backButton.setImage(backButtonImage!, for: .normal)
 		backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
 		let backBarButton = UIBarButtonItem(customView: backButton)
-		let spaceBar = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.fixedSpace, target: nil, action: nil)
-		spaceBar.width = 30
 		let titleLabel = UILabel()
 		let text = "landing_sign_up".localized
 		let string = NSMutableAttributedString(string: text)
@@ -46,7 +63,7 @@ class SignUpVC: BaseVC {
 		string.setColor(color: .white, forText: text)
 		titleLabel.attributedText = string
 		let titleBar = UIBarButtonItem(customView: titleLabel)
-		navigationItem.leftBarButtonItems = [backBarButton, spaceBar, titleBar]
+		navigationItem.leftBarButtonItems = [backBarButton, titleBar]
 	}
 	
 	@objc public func backButtonTapped() {
@@ -56,8 +73,54 @@ class SignUpVC: BaseVC {
 }
 
 extension SignUpVC : UITextFieldDelegate {
+	
+	@objc func hideKeyboard(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+		guard let responder = currentResponder() else {
+			return
+		}
+		responder.resignFirstResponder()
+	}
+
+	func currentResponder() -> UITextField? {
+		if emailInput.isFirstResponder {return emailInput}
+		if passwordInput.isFirstResponder {return passwordInput}
+		if confirmPasswordInput.isFirstResponder {return confirmPasswordInput}
+		return nil
+	}
+	
+	func separator(for textField:UITextField) -> UIView? {
+		if textField == confirmPasswordInput {
+			return confirmPasswordSeparator
+		} else if textField == emailInput {
+			return emailSeparator
+		} else if textField == passwordInput {
+			return passwordSeparator
+		}
+		return nil
+	}
+	
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+		guard let separator = separator(for: textField) else {
+			return
+		}
+		separator.backgroundColor = Theme.Colors.SPRed
+	}
+	
+	func textFieldDidEndEditing(_ textField: UITextField) {
+		guard let separator = separator(for: textField) else {
+			return
+		}
+		separator.backgroundColor = Theme.Colors.SPLightGray
+	}
+	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
+		if textField == confirmPasswordInput {
+			textField.resignFirstResponder()
+		} else if textField == emailInput {
+			passwordInput.becomeFirstResponder()
+		} else if textField == passwordInput {
+			confirmPasswordInput.becomeFirstResponder()
+		}
 		return true
 	}
 }

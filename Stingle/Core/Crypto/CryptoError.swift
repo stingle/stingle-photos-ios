@@ -25,6 +25,7 @@ enum CryptoError: Error {
 		case incorrectKeyFileBeginning
 		case incorrectKeyFileVersion
 		case incorrectKeyFileType
+		case pivateKeyIsEmpty
 	}
 
     enum Internal : Error {

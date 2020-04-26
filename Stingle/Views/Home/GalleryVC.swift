@@ -161,6 +161,14 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 		}
 	}
 
+	func signOut() {
+		DispatchQueue.main.async {
+			let storyboard = UIStoryboard.init(name: "Welcome", bundle: nil)
+			let welcome = storyboard.instantiateInitialViewController()
+			self.navigationController?.popToRootViewController(animated: false)
+			self.navigationController?.pushViewController(welcome!, animated: false)
+		}
+	}
 	
 	//TODO : Chnage update logic based on exact item
 	func beginUpdates() {

@@ -2,6 +2,9 @@ import Foundation
 import UIKit
 
 protocol GalleryDelegate {
+	
+	func signOut()
+	
 	func update()
 	func setSet(set:GalleryVC.Set)
 	
@@ -250,8 +253,15 @@ extension GalleryVM : SPMenuDelegate {
 			if dataSource.type != .Trash {dataSource.type = .Trash}
 			self.delegate?.setSet(set: .Trash)
 			self.delegate?.update()
-		case 2, 3, 4, 5:
+		case 2, 3, 4:
 			return
+		case 5:
+			_ = SyncManager.signOut { (status, error) in
+				KeyManagement.signOut()
+				self.delegate?.signOut()
+			}
+			return
+
 		default:
 			return
 		}

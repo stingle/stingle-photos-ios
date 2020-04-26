@@ -3,6 +3,21 @@ import Foundation
 protocol SPResponse : Codable {
 }
 
+struct SPSignUpResponse: SPResponse {
+	
+	var status:String
+	var parts:SignUpPart
+	var infos:[String]
+	var errors:[String]
+	
+	struct SignUpPart : Codable {
+		var homeFolder:String
+		var token:String
+		var userId:String
+	}
+}
+
+
 struct SPPreSignInResponse: SPResponse {
 	
 	var status:String
@@ -31,6 +46,14 @@ struct SPSignInResponse: SPResponse {
 		var userId:String
 	}
 }
+
+struct SPSignOutResponse: SPResponse {
+	var status:String
+	var parts:[String]
+	var infos:[String]
+	var errors:[String]
+}
+
 
 struct SPUpdateInfo: SPResponse {
 

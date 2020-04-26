@@ -394,7 +394,9 @@ public class Crypto {
 		encHeaderBytes = encHeaderBytes.dropLast(Int(headerSize) - numRead)
 		let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
 		
-		let privateKey:Bytes = KeyManagement.key
+		guard let privateKey:Bytes = KeyManagement.key else {
+			throw CryptoError.Bundle.pivateKeyIsEmpty
+		}
 		//For testing only 
 //		let privateKey:Bytes = try getPrivateKey(password: "mekicvec")
 		guard let headerBytes = so.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
@@ -659,7 +661,7 @@ extension Crypto {
 	
 	public func bytesToBase64(data:Bytes) -> String? {
 		assert(data.count > 0)
-		return so.utils.bin2base64(data)
+		return so.utils.bin2base64(data, variant: .ORIGINAL)
 	}
 	
 	public func base64ToByte(data:String) -> Bytes? {
@@ -778,46 +780,22 @@ extension Crypto {
 		offset += Int(headerSize)
         return offset
 	}
-	/*
-	public static String encryptParamsForServer(HashMap<String, String> params, byte[] serverPK, byte[] privateKey) throws CryptoException {
-		JSONObject json = new JSONObject(params);
-
-		if(serverPK == null){
-			serverPK = StinglePhotosApplication.getCrypto().getServerPublicKey();
-		}
-		if(privateKey == null){
-			privateKey = StinglePhotosApplication.getKey();
-		}
-
-		if(serverPK == null || privateKey == null){
-			return "";
-		}
-
-		return Crypto.byteArrayToBase64(
-				StinglePhotosApplication.getCrypto().encryptCryptoBox(
-						json.toString().getBytes(),
-						serverPK,
-						privateKey
-				)
-		);
-	}
-
-	
-	*/
-	
 	
 	public func encryptCryptoBox(message:Bytes, publicKey:Bytes, privateKey:Bytes) throws  -> Bytes? {
-		guard let result:Bytes = so.box.seal(message: message, recipientPublicKey: publicKey, senderSecretKey: privateKey) else {
+		let nonce = try readPrivateFile(filename: Constants.SKNONCEFilename)
+		guard let result:Bytes = so.box.seal(message: message, recipientPublicKey: publicKey, senderSecretKey: privateKey, nonce: nonce) else {
 			return nil
 		}
-		return result
+		return nonce + result
     }
 
 	func encryptParamsForServer(params:[String:String]) -> String? {
 		do {
 			let spbk  = try getServerPublicKey()
-			let pks = KeyManagement.key
-			let json = try JSONSerialization.data(withJSONObject: params)
+			guard let pks = KeyManagement.key else {
+				throw CryptoError.Bundle.pivateKeyIsEmpty
+			}
+			let json = try JSONSerialization.data(withJSONObject: params, options: .fragmentsAllowed)
 			guard let res  = try encryptCryptoBox(message: (Bytes)(json), publicKey: spbk, privateKey: pks) else {
 				return nil
 			}

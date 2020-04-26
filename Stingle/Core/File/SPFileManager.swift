@@ -63,11 +63,10 @@ class SPFileManager : FileManager {
 			guard let path = self.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
 				return nil
 			}
-			var home = SPApplication.user?.homeFolder
-			if home == nil {
-				home = SPFolder.Private.rawValue
+			guard let  home = SPApplication.user?.homeFolder else {
+				return nil
 			}
-			let homePath = "\(path)\(home!)"
+			let homePath = "\(path)\(home)"
 			guard let homePathUrl = URL(string: homePath) else {
 				return nil
 			}
@@ -82,11 +81,35 @@ class SPFileManager : FileManager {
 		}
 	}
 	
+	private static var privatePath:URL? {
+		get {
+			guard let path = self.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+				return nil
+			}
+			let privatePath = "\(path)\(SPFolder.Private.rawValue)"
+			guard let privatePathUrl = URL(string: privatePath) else {
+				return nil
+			}
+			if self.default.existence(atUrl: privatePathUrl) != .directory {
+				do {
+					try self.default.createDirectory(at: privatePathUrl, withIntermediateDirectories: false, attributes: nil)
+				} catch {
+					return nil
+				}
+			}
+			return privatePathUrl
+		}
+	}
+
+	
 	public static func homeFolder() -> URL? {
 		return self.storagePath
 	}
 	
 	public static func folder(for folder:SPFolder) -> URL? {
+		if folder == .Private {
+			return privatePath
+		}
 		guard let dest = SPFileManager.fullPathOfFile(fileName: folder.rawValue, isDirectory: true) else {
 			return nil
 		}

@@ -21,6 +21,115 @@ class SyncManager {
 	private static let fileManager = SPFileManager()
 	private static let crypto = Crypto()
 	
+	static func signUp(email:String?, password:String?, completionHandler: @escaping (Bool, Error?) -> Swift.Void) -> Bool {
+		guard let email = email, let password = password else {
+			return false
+		}
+		var request:SPSignUpRequest? = nil
+		do {
+			try crypto.generateMainKeypair(password: password)
+			guard let pwdHash = try crypto.getPasswordHashForStorage(password: password) else {
+				completionHandler(false, nil)
+				return false
+			}
+			guard let salt = pwdHash["salt"] else {
+				completionHandler(false, nil)
+				return false
+			}
+			guard let pwd = pwdHash["hash"] else {
+				completionHandler(false, nil)
+				return false
+			}
+			guard let keyBundle = try KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: true) else {
+				completionHandler(false, nil)
+				return false
+			}
+			request = SPSignUpRequest(email: email, password: pwd, salt: salt, keyBundle: keyBundle, isBackup: true)
+
+		} catch {
+			completionHandler(false, error)
+			return false
+		}
+		guard let signUpRequest = request else {
+			completionHandler(false, nil)
+			return false
+		}
+		_ = NetworkManager.send(request:signUpRequest) { (data:SPSignUpResponse?, error)  in
+			guard let data = data, error == nil else {
+				completionHandler(false, error)
+				return
+			}
+			if data.status == "ok" {
+				do {
+					KeyManagement.key = try self.crypto.getPrivateKey(password: password)
+				} catch {
+					print(error)
+				}
+				_ = SyncManager.signIn(email: email, password: password) { (status, error) in
+					completionHandler(status, error)
+				}
+			}
+		}
+		return true
+	}
+
+	static func signOut( completionHandler: @escaping (Bool, Error?) -> Swift.Void) -> Bool {
+		let request = SPSignOutRequest(token: SPApplication.user!.token)
+		_ = NetworkManager.send(request:request) { (data:SPSignOutResponse?, error)  in
+			guard let data = data, error == nil else {
+				completionHandler(false, error)
+				return
+			}
+			completionHandler(data.status == "ok", nil)
+		}
+
+		return false
+	}
+
+	
+	static func signIn(email:String?, password:String?, completionHandler: @escaping (Bool, Error?) -> Swift.Void) -> Bool {
+		guard let email = email, let password = password else {
+			return false
+		}
+		
+		let request = SPPreSignInRequest(email: email)
+		_ = NetworkManager.send(request:request) { (data:SPPreSignInResponse?, error)  in do {
+			guard let data = data, error == nil else {
+				completionHandler(false, error)
+				return
+			}
+			let pHash = try crypto.getPasswordHashForStorage(password: password, salt: data.parts.salt)
+			let request = SPSignInRequest(email: email, password: pHash)
+			_ = NetworkManager.send(request: request) { (data:SPSignInResponse?, error) in do {
+				guard let data = data, error == nil else {
+					completionHandler(false, error)
+					return
+				}
+				let isKeyBackedUp:Bool = (data.parts.isKeyBackedUp == 1)
+				SPApplication.user = User(token: data.parts.token, userId: data.parts.userId, isKeyBackedUp: isKeyBackedUp, homeFolder: data.parts.homeFolder, email: email)
+				if KeyManagement.key == nil {
+					guard true == KeyManagement.importKeyBundle(keyBundle: data.parts.keyBundle, password: password) else {
+						print("Can't import key bundle")
+						return
+					}
+					if isKeyBackedUp {
+						KeyManagement.key = try self.crypto.getPrivateKey(password: password)
+					}
+					let pubKey = data.parts.serverPublicKey
+					KeyManagement.importServerPublicKey(pbk: pubKey)
+				}
+				completionHandler(true, nil)
+			} catch {
+				completionHandler(false, error)
+				}
+			}
+		} catch {
+			completionHandler(false, error)
+			}
+		}
+		return false
+	}
+
 	
 	static func update(completionHandler:  @escaping (Bool) -> Swift.Void) {
 		guard let info = db.getAppInfo() else {
