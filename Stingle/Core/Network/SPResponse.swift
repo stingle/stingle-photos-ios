@@ -3,6 +3,29 @@ import Foundation
 protocol SPResponse : Codable {
 }
 
+struct SPDefaultResponse: SPResponse {
+	
+	var status:String
+	var parts:[String]
+	var infos:[String]
+	var errors:[String]
+}
+
+struct SPTrashResponse: SPResponse {
+	
+	var status:String
+	var parts:[String]
+	var infos:[String]
+	var errors:[String]
+	
+	struct ServerPart : Codable {
+		var server_data:String
+		var server_nonce:String
+		var server_genKey:String
+	}
+}
+
+
 struct SPSignUpResponse: SPResponse {
 	
 	var status:String

@@ -330,9 +330,11 @@ struct SPDeleteFilesRequest : SPRequest {
 	func params() -> String? {
 		var components = URLComponents()
 		//TODO : Remove v : 16
-		components.queryItems = [URLQueryItem(name: "token", value: token), URLQueryItem(name: "params", value: bodyParams())]
-		let strParams = components.url?.absoluteString
-		return String((strParams?.dropFirst())!)
+		components.queryItems = [URLQueryItem(name: "token", value: token)]
+		guard let strToken = components.url?.absoluteString.dropFirst() else {
+			return nil
+		}
+		return "\(strToken)&params=\(bodyParams())"
 	}
 	
 	func bodyParams () -> String {

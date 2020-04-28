@@ -93,12 +93,11 @@ class GalleryVM : DataSourceDelegate, SPEventHandler {
 		}
 	}
 	
-	func setupCell(cell:SPCollectionViewCell, for indexPath:IndexPath, mode:GalleryVC.Mode) {
-		let screenSize: CGRect = UIScreen.main.bounds
-		let width = screenSize.size.width / 3
-
-		let height = width
-		if let image = dataSource.thumb(indexPath: indexPath)?.resize(size: CGSize(width: width, height: height)) {
+	func setupCell(cell:SPCollectionViewCell, for indexPath:IndexPath, mode:GalleryVC.Mode, with size:CGSize?) {
+		guard let size = size else {
+			return
+		}
+		if let image = dataSource.thumb(indexPath: indexPath)?.resize(size: size) {
 			DispatchQueue.main.async {
 				cell.ImageView.image = image
 			}

@@ -15,7 +15,8 @@ class SignInVC : BaseVC {
 	@IBOutlet weak var dontHaveAnAccount: UILabel!
 	
 	@IBAction func singInClicked(_ sender: Any) {
-		_ = viewModel.signIn(email: "b@mail.com", password: "123456" ) { (status, error) in
+		_ = viewModel.signIn(email: "android@stingle.org", password: "mekicvec" ) { (status, error) in
+//		_ = viewModel.signIn(email: emailInput.text, password: passwordInput.text ) { (status, error) in
 			do {
 				if status {
 					_ = SyncManager.update(completionHandler: { (status) in

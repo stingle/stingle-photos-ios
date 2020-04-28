@@ -6,6 +6,7 @@ class SignUpVC: BaseVC {
 	var dismissKeyboard:UIGestureRecognizer? = nil
 
 	
+	@IBOutlet weak var top: NSLayoutConstraint!
 	@IBOutlet weak var emailInput: UITextField!
 	@IBOutlet var emailSeparator: UIView!
 	@IBOutlet weak var passwordInput: UITextField!
@@ -25,6 +26,8 @@ class SignUpVC: BaseVC {
 							}
 						}
 					})
+				} else {
+					print(error!)
 				}
 			}
 
@@ -47,8 +50,25 @@ class SignUpVC: BaseVC {
 			return
 		}
 		navigationController.setNavigationBarHidden(false, animated: false)
+		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillDisappear), name: UIResponder.keyboardWillHideNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear), name: UIResponder.keyboardWillShowNotification, object: nil)
+
 	}
 	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		NotificationCenter.default.removeObserver(self)
+	}
+
+	@objc func keyboardWillAppear() {
+		top.constant = 0
+	}
+
+	@objc func keyboardWillDisappear() {
+		top.constant = 67
+		//Do something here
+	}
+
 	//TODO : create reusable components (with style ) such as navigation bar, navigation bar items ...
 	func createBackBarButton(forNavigationItem navigationItem:UINavigationItem) {
 		let backButtonImage = UIImage(named: "arrow_back")

@@ -14,6 +14,7 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	
 	private var mode = Mode.Preview
 	private var set:Set = Set.Gallery
+	private var cellSize:CGSize? = nil
 	
 	var viewModel:GalleryVM = GalleryVM()
 	var settingsVisible = false
@@ -43,12 +44,10 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 
 	@objc func deleteSelectedItems(_ sender: Any) {
 		viewModel.deleteSelected()
-		print("Delete")
-	}
+		}
 
 	
 	@objc func didLongPress(_ gestureRecognizer : UILongPressGestureRecognizer) {
-//		print(gestureRecognizer)
 		if (gestureRecognizer.state != UIGestureRecognizer.State.ended){
 			return
 		}
@@ -65,8 +64,14 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	}
 
 	override func viewDidLoad() {
+
 		super.viewDidLoad()
-		
+		let screenSize: CGRect = UIScreen.main.bounds
+		let width = screenSize.size.width / 3
+
+		let height = width
+		cellSize = CGSize(width: width, height: height)
+
 		longPress = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress(_:)))
 		longPress.minimumPressDuration = 0.5
 		longPress.delaysTouchesBegan = true
@@ -294,7 +299,7 @@ extension GalleryVC : UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCell", for: indexPath) as! SPCollectionViewCell
 		cell.ImageView.image = nil
-		viewModel.setupCell(cell: cell, for: indexPath, mode:mode)
+		viewModel.setupCell(cell: cell, for: indexPath, mode:mode, with: cellSize)
 		return cell
 	}
 	

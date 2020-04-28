@@ -407,6 +407,7 @@ may be vulnerable to brute force attacks.</string>
                         <outlet property="emailSeparator" destination="gNO-p2-Hw0" id="Okc-I2-eHD"/>
                         <outlet property="passwordInput" destination="3FE-IP-qch" id="Ocl-UA-Gcs"/>
                         <outlet property="passwordSeparator" destination="ZIT-La-qhF" id="pq1-ob-Wmo"/>
+                        <outlet property="top" destination="WRH-SL-WeE" id="kEz-pX-eKE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rz4-x9-qnl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -507,6 +508,6 @@ may be vulnerable to brute force attacks.</string>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="SXZ-22-ZQH"/>
-        <segue reference="7Bh-ai-W5m"/>
+        <segue reference="Fde-SP-RW7"/>
     </inferredMetricsTieBreakers>
 </document>

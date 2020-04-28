@@ -60,11 +60,6 @@ class SyncManager {
 				return
 			}
 			if data.status == "ok" {
-				do {
-					KeyManagement.key = try self.crypto.getPrivateKey(password: password)
-				} catch {
-					print(error)
-				}
 				_ = SyncManager.signIn(email: email, password: password) { (status, error) in
 					completionHandler(status, error)
 				}
@@ -238,6 +233,7 @@ class SyncManager {
 
 					if let data = Data(base64Encoded: st, options: .ignoreUnknownCharacters) {
 						let input = InputStream(data: data)
+						input.open()
 						do {
 							if let header = try crypto.getFileHeader(input: input) {
 								file.duration = header.videoDuration
@@ -335,7 +331,7 @@ class SyncManager {
 	
 	static func notifyCloudAboutFileMove(files:[SPFileInfo], from:Int, to:Int) -> Bool {
 		let request = SPDeleteFilesRequest(token: SPApplication.user!.token, files: files)
-		NetworkManager.send(request: request) { (resp:SPUpdateInfo?, err) in
+		NetworkManager.send(request: request) { (resp:SPTrashResponse?, err) in
 			print(resp, err)
 		}
 		return false
