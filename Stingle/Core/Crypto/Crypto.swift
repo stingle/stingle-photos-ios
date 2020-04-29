@@ -397,8 +397,6 @@ public class Crypto {
 		guard let privateKey:Bytes = KeyManagement.key else {
 			throw CryptoError.Bundle.pivateKeyIsEmpty
 		}
-		//For testing only 
-//		let privateKey:Bytes = try getPrivateKey(password: "mekicvec")
 		guard let headerBytes = so.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
 			throw CryptoError.Internal.openFailure
 		}
@@ -661,12 +659,17 @@ extension Crypto {
 	
 	public func bytesToBase64(data:Bytes) -> String? {
 		assert(data.count > 0)
-		return so.utils.bin2base64(data, variant: .ORIGINAL)
+		let str = Data(data).base64EncodedString(options: [])
+		print(str)
+		return str
 	}
 	
 	public func base64ToByte(data:String) -> Bytes? {
 		assert(data.count > 0)
-		return so.utils.base642bin(data, variant: .ORIGINAL)
+		guard let data = Data(base64Encoded: data, options: .ignoreUnknownCharacters) else {
+			return nil
+		}
+		return Bytes(data)
 	}
 	
 	public func toBytes(header:Header) -> Bytes {
@@ -782,7 +785,9 @@ extension Crypto {
 	}
 	
 	public func encryptCryptoBox(message:Bytes, publicKey:Bytes, privateKey:Bytes) throws  -> Bytes? {
-		let nonce = try readPrivateFile(filename: Constants.SKNONCEFilename)
+		guard let nonce = getRandomBytes(lenght: so.box.NonceBytes) else {
+			throw CryptoError.Internal.randomBytesGenerationFailure
+		}
 		guard let result:Bytes = so.box.seal(message: message, recipientPublicKey: publicKey, senderSecretKey: privateKey, nonce: nonce) else {
 			return nil
 		}
@@ -795,7 +800,7 @@ extension Crypto {
 			guard let pks = KeyManagement.key else {
 				throw CryptoError.Bundle.pivateKeyIsEmpty
 			}
-			let json = try JSONSerialization.data(withJSONObject: params, options: .fragmentsAllowed)
+			let json = try JSONSerialization.data(withJSONObject: params)
 			guard let res  = try encryptCryptoBox(message: (Bytes)(json), publicKey: spbk, privateKey: pks) else {
 				return nil
 			}

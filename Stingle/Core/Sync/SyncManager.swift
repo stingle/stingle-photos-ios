@@ -9,10 +9,11 @@ enum DeleteEvent: Int {
 }
 
 enum Set : Int {
-	case Gallery = 0
-	case Trash = 1
-	case Album = 2
-	case Share = 3
+	case Null = 0
+	case Empty = 1
+	case Gallery = 2
+	case Trash = 3
+	case Album = 4
 }
 
 class SyncManager {
@@ -231,8 +232,8 @@ class SyncManager {
 					
 					let st = base64urlToBase64(base64url: String(hdr))
 
-					if let data = Data(base64Encoded: st, options: .ignoreUnknownCharacters) {
-						let input = InputStream(data: data)
+					if let data = crypto.base64ToByte(data: st) {
+						let input = InputStream(data: Data(data))
 						input.open()
 						do {
 							if let header = try crypto.getFileHeader(input: input) {
@@ -295,11 +296,10 @@ class SyncManager {
 		}
 	}
 
-
-		static func moveFiles(files:[SPFileInfo], from:Int, to:Int) -> Bool {
+		static func moveFiles(files:[SPFileInfo], from:Set, to:Set) -> Bool {
 			
-			if from == Set.Gallery.rawValue && to == Set.Trash.rawValue {
-				if SyncManager.notifyCloudAboutFileMove(files: files, from: from, to: to) {
+			if from == Set.Gallery && to == Set.Trash {
+				if SyncManager.notifyCloudAboutTrash(files: files) {
 					for file in files {
 						let trashFile:SPTrashFile = file as! SPTrashFile
 						guard let f:SPFile = db.delete(file: trashFile) else {
@@ -311,8 +311,8 @@ class SyncManager {
 				} else {
 					return false
 				}
-			} else if from == Set.Trash.rawValue && to == Set.Gallery.rawValue {
-				if SyncManager.notifyCloudAboutFileMove(files: files, from: from, to: to) {
+			} else if from == Set.Trash && to == Set.Gallery {
+				if SyncManager.notifyCloudAboutRestore(files: files) {
 					for file in files {
 						let trashFile:SPFile = file as! SPFile
 						guard let f:SPTrashFile = db.delete(file: trashFile) else {
@@ -329,10 +329,42 @@ class SyncManager {
 			return true
 		}
 	
-	static func notifyCloudAboutFileMove(files:[SPFileInfo], from:Int, to:Int) -> Bool {
+	static func notifyCloudAboutTrash(files:[SPFileInfo]) -> Bool {
+		let request = SPTrashFilesRequest(token: SPApplication.user!.token, files: files)
+		_ = NetworkManager.send(request: request) { (resp:SPTrashResponse?, err) in
+			if resp?.status == "ok" {
+				print(resp!)
+			}
+		}
+		return false
+	}
+
+	static func notifyCloudAboutRestore(files:[SPFileInfo]) -> Bool {
+		let request = SPRestoreFilesRequest(token: SPApplication.user!.token, files: files)
+		_ = NetworkManager.send(request: request) { (resp:SPTrashResponse?, err) in
+			if resp?.status == "ok" {
+				print(resp!)
+			}
+		}
+		return false
+	}
+
+	static func notifyCloudAboutDelete(files:[SPFileInfo]) -> Bool {
 		let request = SPDeleteFilesRequest(token: SPApplication.user!.token, files: files)
-		NetworkManager.send(request: request) { (resp:SPTrashResponse?, err) in
-			print(resp, err)
+		_ = NetworkManager.send(request: request) { (resp:SPTrashResponse?, err) in
+			if resp?.status == "ok" {
+				print(resp!)
+			}
+		}
+		return false
+	}
+
+	static func notifyCloudAboutEmpty(files:[SPFileInfo]) -> Bool {
+		let request = SPEmptyTrashRequest(token: SPApplication.user!.token, files: files)
+		_ = NetworkManager.send(request: request) { (resp:SPTrashResponse?, err) in
+			if resp?.status == "ok" {
+				print(resp!)
+			}
 		}
 		return false
 	}

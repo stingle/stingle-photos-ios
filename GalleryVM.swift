@@ -81,8 +81,8 @@ class GalleryVM : DataSourceDelegate, SPEventHandler {
 	}
 	
 	func deleteSelected() {
-		let file = selectedItems.first
-		SyncManager.notifyCloudAboutFileMove(files: [file!.value], from: 0, to: 0)
+		let files:[SPFileInfo] = [SPFileInfo](selectedItems.values)
+		_ = SyncManager.moveFiles(files: files, from: .Gallery, to: .Trash)
 	}
 	
 	func select(item cell:SPCollectionViewCell, at indexPath:IndexPath) {

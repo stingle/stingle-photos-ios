@@ -10,6 +10,9 @@ enum SPRequestMethod : String {
 	}
 }
 
+let crypto:Crypto  = Crypto()
+
+
 protocol SPRequest {
 	func params () -> String?
 	func path () -> String
@@ -19,6 +22,7 @@ protocol SPRequest {
 }
 
 extension SPRequest {
+		
     func boundary() -> String? {
 		return "*****" + "\(Date.init().millisecondsSince1970)" + "*****"
 	}
@@ -306,7 +310,7 @@ struct SPMoveFilesRequest : SPRequest {
 	}
 }
 
-struct SPDeleteFilesRequest : SPRequest {
+struct SPTrashFilesRequest : SPRequest {
 	let token:String
 	let files:[SPFileInfo]
 	
@@ -330,11 +334,10 @@ struct SPDeleteFilesRequest : SPRequest {
 	func params() -> String? {
 		var components = URLComponents()
 		//TODO : Remove v : 16
-		components.queryItems = [URLQueryItem(name: "token", value: token)]
-		guard let strToken = components.url?.absoluteString.dropFirst() else {
-			return nil
-		}
-		return "\(strToken)&params=\(bodyParams())"
+		components.queryItems = [URLQueryItem(name: "token", value: token), URLQueryItem(name: "params", value: bodyParams())]
+		components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
 	}
 	
 	func bodyParams () -> String {
@@ -345,7 +348,139 @@ struct SPDeleteFilesRequest : SPRequest {
 			params["filename\(index)"] = file.name
 			index += 1
 		}
-		let crypto = Crypto()
+		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+			return ""
+		}
+		return encParams
+	}
+}
+
+
+struct SPRestoreFilesRequest : SPRequest {
+	let token:String
+	let files:[SPFileInfo]
+	
+	init(token:String, files:[SPFileInfo]) {
+		self.token = token
+		self.files = files
+	}
+	
+	func path () -> String {
+		return "sync/restore"
+	}
+	
+	func method () -> SPRequestMethod {
+		return .POST
+	}
+	
+	func headers () ->  [String : String]? {
+		return nil
+	}
+
+	func params() -> String? {
+		var components = URLComponents()
+		//TODO : Remove v : 16
+		components.queryItems = [URLQueryItem(name: "token", value: token), URLQueryItem(name: "params", value: bodyParams())]
+		components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
+	}
+	
+	func bodyParams () -> String {
+		var params = [String:String]()
+		params["count"] = "\(files.count)"
+		var index = 0
+		for file in files {
+			params["filename\(index)"] = file.name
+			index += 1
+		}
+		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+			return ""
+		}
+		return encParams
+	}
+}
+
+
+struct SPDeleteFilesRequest : SPRequest {
+	let token:String
+	let files:[SPFileInfo]
+	
+	init(token:String, files:[SPFileInfo]) {
+		self.token = token
+		self.files = files
+	}
+	
+	func path () -> String {
+		return "sync/delete"
+	}
+	
+	func method () -> SPRequestMethod {
+		return .POST
+	}
+	
+	func headers () ->  [String : String]? {
+		return nil
+	}
+
+	func params() -> String? {
+		var components = URLComponents()
+		//TODO : Remove v : 16
+		components.queryItems = [URLQueryItem(name: "token", value: token), URLQueryItem(name: "params", value: bodyParams())]
+		components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
+	}
+	
+	func bodyParams () -> String {
+		var params = [String:String]()
+		params["count"] = "\(files.count)"
+		var index = 0
+		for file in files {
+			params["filename\(index)"] = file.name
+			index += 1
+		}
+		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+			return ""
+		}
+		return encParams
+	}
+}
+
+
+struct SPEmptyTrashRequest : SPRequest {
+	let token:String
+	let files:[SPFileInfo]
+	
+	init(token:String, files:[SPFileInfo]) {
+		self.token = token
+		self.files = files
+	}
+	
+	func path () -> String {
+		return "sync/emptyTrash"
+	}
+	
+	func method () -> SPRequestMethod {
+		return .POST
+	}
+	
+	func headers () ->  [String : String]? {
+		return nil
+	}
+
+	func params() -> String? {
+		var components = URLComponents()
+		//TODO : Remove v : 16
+		components.queryItems = [URLQueryItem(name: "token", value: token), URLQueryItem(name: "params", value: bodyParams())]
+		components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
+	}
+	
+	func bodyParams () -> String {
+		var params = [String:String]()
+		params["time"] = "\(Date.init().millisecondsSince1970)"
 		guard let encParams = crypto.encryptParamsForServer(params: params) else {
 			return ""
 		}

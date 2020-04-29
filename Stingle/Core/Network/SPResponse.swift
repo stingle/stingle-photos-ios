@@ -14,15 +14,9 @@ struct SPDefaultResponse: SPResponse {
 struct SPTrashResponse: SPResponse {
 	
 	var status:String
-	var parts:[String]
+	var parts:[[String:String]]
 	var infos:[String]
-	var errors:[String]
-	
-	struct ServerPart : Codable {
-		var server_data:String
-		var server_nonce:String
-		var server_genKey:String
-	}
+	var errors:[String]	
 }
 
 

@@ -28,6 +28,8 @@ class SignInVC : BaseVC {
 							}
 						}
 					})
+				} else {
+					print(error!)
 				}
 			}
 		}
