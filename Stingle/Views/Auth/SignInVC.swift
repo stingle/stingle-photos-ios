@@ -56,11 +56,9 @@ class SignInVC : BaseVC {
 	
 	//TODO : create reusable components (with style ) such as navigation bar, navigation bar items ... 
 	func createBackBarButton(forNavigationItem navigationItem:UINavigationItem) {
-		let backButtonImage = UIImage(named: "arrow_back")
-		let backButton = UIButton(frame: CGRect(x: 0, y: 0, width: backButtonImage!.size.width, height: backButtonImage!.size.height))
-		backButton.setImage(backButtonImage!, for: .normal)
-		backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-		let backBarButton = UIBarButtonItem(customView: backButton)
+		let backButtonImage = UIImage(named: "chevron.left")
+		let backBarButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backButtonTapped))
+		backBarButton.tintColor = .white
 		let titleLabel = UILabel()
 		let text = "landing_sign_in".localized
 		let string = NSMutableAttributedString(string: text)

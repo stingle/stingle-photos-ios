@@ -450,11 +450,9 @@ struct SPDeleteFilesRequest : SPRequest {
 
 struct SPEmptyTrashRequest : SPRequest {
 	let token:String
-	let files:[SPFileInfo]
 	
-	init(token:String, files:[SPFileInfo]) {
+	init(token:String) {
 		self.token = token
-		self.files = files
 	}
 	
 	func path () -> String {

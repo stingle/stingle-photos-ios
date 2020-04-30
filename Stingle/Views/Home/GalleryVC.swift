@@ -26,7 +26,7 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	var longPress: UILongPressGestureRecognizer!
 	var blockOperations: [BlockOperation] = []
 	private var loadingData = false
-
+	
 	@IBOutlet weak var importImage: UIButton!
 	@IBOutlet var collectionView: UICollectionView!
 	
@@ -36,22 +36,41 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	
 	@objc func cancelEditing(_ sender: Any) {
 		print("Cancel!")
-		viewModel.cancelEditing()
-		mode = .Preview
-		setupNavigationItems()
-		update()
-	}
-
-	@objc func deleteSelectedItems(_ sender: Any) {
-		viewModel.deleteSelected()
+		DispatchQueue.main.async {
+			self.viewModel.cancelEditing()
+			self.mode = .Preview
+			self.setupNavigationItems()
+			self.update()
 		}
-
+	}
+	
+	func endEditing() {
+		self.cancelEditing(self)
+	}
+	
+	@objc func deleteSelectedItems(_ sender: Any) {
+		if set == .Trash {
+			viewModel.deleteSelected()
+		} else if set == .Gallery {
+			viewModel.trashSelected()
+		}
+	}
+	
+	@objc func emptyTrash(_ sender: Any) {
+		viewModel.emptyTrash()
+	}
+	
+	@objc func restore(_ sender: Any) {
+		viewModel.restoreSelected()
+	}
+	
+	
 	
 	@objc func didLongPress(_ gestureRecognizer : UILongPressGestureRecognizer) {
 		if (gestureRecognizer.state != UIGestureRecognizer.State.ended){
 			return
 		}
-
+		
 		let p:CGPoint = gestureRecognizer.location(in: self.collectionView)
 		if let indexPath : IndexPath = self.collectionView?.indexPathForItem(at: p) {
 			print(indexPath)
@@ -62,16 +81,16 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 			setupNavigationItems()
 		}
 	}
-
+	
 	override func viewDidLoad() {
-
+		
 		super.viewDidLoad()
 		let screenSize: CGRect = UIScreen.main.bounds
 		let width = screenSize.size.width / 3
-
+		
 		let height = width
 		cellSize = CGSize(width: width, height: height)
-
+		
 		longPress = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress(_:)))
 		longPress.minimumPressDuration = 0.5
 		longPress.delaysTouchesBegan = true
@@ -85,7 +104,7 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 		collectionView.alwaysBounceVertical = true
 		
 		viewModel.delegate = self
-
+		
 		pageVC = viewController(with: "SPImagePageVC", from: "Home") as! SPImagePageVC?
 		pageVC?.modalPresentationStyle = .fullScreen
 		
@@ -103,42 +122,48 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	
 	func navBarItem(image:String?, title:String?, selector:Selector?) -> UIBarButtonItem {
 		
-		let button = UIButton()
-		button.tintColor = .white
-		
+		var barButton:UIBarButtonItem? = nil
 		if let title = title {
-			button.titleLabel?.text = title
+			barButton = UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
+		} else if let image = image {
+			let img = UIImage(named: image)
+			barButton = UIBarButtonItem(image: img, style: .plain, target: self, action: selector)
 		}
-		if let image = image {
-			let buttonImage = UIImage(named: image)
-			button.setImage(buttonImage, for: .normal)
-		}
-		if let selector = selector {
-			button.addTarget(self, action: selector, for: .touchUpInside)
-		}
-		let barButton = UIBarButtonItem(customView: button)
-		return barButton
+		barButton?.tintColor = .white
+		return barButton!
 	}
 	
 	func setupNavigationItems() {
+		var leftItems = [UIBarButtonItem]()
+		var rightItems = [UIBarButtonItem]()
+		
 		if mode == .Preview {
 			let menuItem = navBarItem(image: "menu", title: nil, selector: #selector(menuTapped(_:)))
 			var title = "Gallery"
 			if set == .Trash {
 				title = "Trash"
+				let emptyTrash = navBarItem(image: "trash.slash", title: nil, selector: #selector(emptyTrash(_:)))
+				rightItems = [emptyTrash]
 			}
 			let titleItem = UIBarButtonItem(title: title, style: UIBarButtonItem.Style.plain, target: nil, action: nil)
 			titleItem.tintColor = .white
-			navigationItem.leftBarButtonItems = [menuItem, titleItem]
-			navigationItem.rightBarButtonItems = nil
-		} else {
-			let cancel = navBarItem(image: "arrow_back", title: nil, selector: #selector(cancelEditing(_:)))
-			let delete = navBarItem(image: "Trash", title: nil, selector: #selector(deleteSelectedItems(_:)))
-			navigationItem.leftBarButtonItems = [cancel]
-			navigationItem.rightBarButtonItems = [delete]
+			leftItems = [menuItem, titleItem]
+		} else if mode == .Editing {
+			let cancel = navBarItem(image: "chevron.left", title: nil, selector: #selector(cancelEditing(_:)))
+			leftItems = [cancel]
+			let delete = navBarItem(image: "trash.fill", title: nil, selector: #selector(deleteSelectedItems(_:)))
+			let restore = navBarItem(image: "timer", title: nil, selector: #selector(restore(_:)))
+			if set == .Trash {
+				rightItems = [delete, restore]
+			} else if set == .Gallery {
+				rightItems = [delete]
+			}
+			
 		}
+		navigationItem.leftBarButtonItems = leftItems
+		navigationItem.rightBarButtonItems = rightItems
 	}
-
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		collectionView.reloadData()
@@ -165,7 +190,7 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 			}
 		}
 	}
-
+	
 	func signOut() {
 		DispatchQueue.main.async {
 			let storyboard = UIStoryboard.init(name: "Welcome", bundle: nil)
@@ -177,19 +202,19 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	
 	//TODO : Chnage update logic based on exact item
 	func beginUpdates() {
-//		blockOperations.removeAll(keepingCapacity: false)
+		//		blockOperations.removeAll(keepingCapacity: false)
 	}
 	
 	func endUpdates() {
-//		collectionView!.performBatchUpdates({ () -> Void in
-//			for operation: BlockOperation in self.blockOperations {
-//				operation.start()
-//			}
-//		}, completion: { (finished) -> Void in
-//			self.blockOperations.removeAll(keepingCapacity: false)
-//		})
+		//		collectionView!.performBatchUpdates({ () -> Void in
+		//			for operation: BlockOperation in self.blockOperations {
+		//				operation.start()
+		//			}
+		//		}, completion: { (finished) -> Void in
+		//			self.blockOperations.removeAll(keepingCapacity: false)
+		//		})
 	}
-
+	
 	func setSet(set: GalleryVC.Set) {
 		self.set = set
 		setupNavigationItems()
@@ -203,48 +228,48 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	
 	func insertItems(items:[IndexPath]) {
 		update()
-//		self.blockOperations.append(
-//			BlockOperation(block: { [weak self] in
-//				if let this = self {
-//					this.collectionView!.insertItems(at: items)
-//				}
-//			})
-//		)
+		//		self.blockOperations.append(
+		//			BlockOperation(block: { [weak self] in
+		//				if let this = self {
+		//					this.collectionView!.insertItems(at: items)
+		//				}
+		//			})
+		//		)
 	}
 	
 	func insertSections(sections: IndexSet) {
 		update()
-//		self.blockOperations.append(
-//			BlockOperation(block: { [weak self] in
-//				if let this = self {
-//					this.collectionView!.insertSections(sections)
-//				}
-//			})
-//		)
+		//		self.blockOperations.append(
+		//			BlockOperation(block: { [weak self] in
+		//				if let this = self {
+		//					this.collectionView!.insertSections(sections)
+		//				}
+		//			})
+		//		)
 	}
-
+	
 	func updateItems(items:[IndexPath]) {
 		update()
-//		DispatchQueue.main.async {
-//			self.collectionView.reloadItems(at: items)
-//		}
+		//		DispatchQueue.main.async {
+		//			self.collectionView.reloadItems(at: items)
+		//		}
 	}
 	
 	func deleteItems(items:[IndexPath]) {
 		update()
-//		DispatchQueue.main.async {
-//			self.collectionView.deleteItems(at: items)
-//		}
+		//		DispatchQueue.main.async {
+		//			self.collectionView.deleteItems(at: items)
+		//		}
 	}
 	
 	func deleteSections(sections: IndexSet) {
 		update()
-//		DispatchQueue.main.async {
-//			self.collectionView.deleteSections(sections)
-//		}
+		//		DispatchQueue.main.async {
+		//			self.collectionView.deleteSections(sections)
+		//		}
 	}
-
-
+	
+	
 }
 
 //MARK: - Collection View Delegate

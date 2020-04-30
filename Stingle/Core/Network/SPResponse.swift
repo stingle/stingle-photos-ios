@@ -89,3 +89,16 @@ struct SPUpdateInfo: SPResponse {
 		var trash:[SPTrashFile]
 	}
 }
+
+struct SPUploadResponse: SPResponse {
+
+	var status:String
+	var parts:Parts
+	var infos:[String]
+	var errors:[String]
+
+	struct Parts : Codable {
+		var spaceQuota:String
+		var spaceUsed:String
+	}
+}

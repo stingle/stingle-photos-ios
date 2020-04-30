@@ -63,9 +63,19 @@ class DataSource {
 		return DataSource.db.sectionTitle(for: secion, with: fileType())
 	}
 	
-	func file(for indexPath:IndexPath) -> SPFileInfo? {
+	func fileInfo(for indexPath:IndexPath) -> SPFileInfo? {
 		return DataSource.db.fileForIndexPath(indexPath: indexPath, with: fileType())
 	}
+
+	
+	func file(for indexPath:IndexPath) -> SPFile? {
+		return DataSource.db.fileForIndexPath(indexPath: indexPath)
+	}
+	
+	func trashFile(for indexPath:IndexPath) -> SPTrashFile? {
+		return DataSource.db.trashFileForIndexPath(indexPath: indexPath)
+	}
+
 	
 	func indexPath(for file:String) -> IndexPath? {
 		return DataSource.db.indexPath(for: file, with: fileType())

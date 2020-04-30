@@ -4,8 +4,8 @@ import UIKit
 protocol GalleryDelegate {
 	
 	func signOut()
-	
 	func update()
+	func endEditing()
 	func setSet(set:GalleryVC.Set)
 	
 	func beginUpdates()
@@ -79,17 +79,51 @@ class GalleryVM : DataSourceDelegate, SPEventHandler {
 	func cancelEditing() {
 		selectedItems.removeAll()
 	}
+
+	func trashSelected() {
+		let files:[SPFileInfo] = [SPFileInfo](selectedItems.values)
+		moveFiles(files: files, from: .Gallery, to: .Trash)
+	}
 	
 	func deleteSelected() {
 		let files:[SPFileInfo] = [SPFileInfo](selectedItems.values)
-		_ = SyncManager.moveFiles(files: files, from: .Gallery, to: .Trash)
+		moveFiles(files: files, from: .Trash, to: .Null)
 	}
+	
+	func restoreSelected() {
+		let files:[SPFileInfo] = [SPFileInfo](selectedItems.values)
+		moveFiles(files: files, from: .Trash, to: .Gallery)
+	}
+
+	func emptyTrash() {
+		let files:[SPFileInfo] = [SPFileInfo](selectedItems.values)
+		moveFiles(files: files, from: .Trash, to: .Empty)
+	}
+	
+	func moveFiles(files:[SPFileInfo], from:SPSet, to:SPSet) {
+		_ = SyncManager.moveFiles(files: files, from: from, to: to) { error in
+			if error == nil {
+				self.delegate?.endEditing()
+			}
+		}
+	}
+
 	
 	func select(item cell:SPCollectionViewCell, at indexPath:IndexPath) {
 		if selectedItems[indexPath] != nil {
 			selectedItems.removeValue(forKey: indexPath)
 		} else {
-			selectedItems[indexPath] = dataSource.file(for: indexPath)
+			if dataSource.fileType() == SPTrashFile.self {
+				guard let file:SPTrashFile = dataSource.trashFile(for: indexPath) else {
+					return
+				}
+				selectedItems[indexPath] = file
+			} else {
+				guard let file:SPFile = dataSource.file(for: indexPath) else {
+					return
+				}
+				selectedItems[indexPath] = file
+			}
 		}
 	}
 	
@@ -118,7 +152,7 @@ class GalleryVM : DataSourceDelegate, SPEventHandler {
 			cell.selectIcon.isHidden = true
 		}
 		
-		guard let file = dataSource.file(for: indexPath) else {
+		guard let file = dataSource.fileInfo(for: indexPath) else {
 			return
 		}
 		if file.duration > 0 {

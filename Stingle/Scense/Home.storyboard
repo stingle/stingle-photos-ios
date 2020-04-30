@@ -214,14 +214,14 @@
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EiL-Od-MGC">
-                                                                            <rect key="frame" x="59" y="0.0" width="252" height="44"/>
+                                                                            <rect key="frame" x="43" y="0.0" width="268" height="44"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                             <nil key="textColor"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
-                                                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="arrow_back" id="7rk-Im-u6F">
-                                                                            <rect key="frame" x="20" y="10" width="24" height="24"/>
+                                                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="chevron.left" id="7rk-Im-u6F">
+                                                                            <rect key="frame" x="20" y="14.5" width="8" height="15"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                         </imageView>
                                                                     </subviews>
@@ -376,7 +376,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow_back" width="24" height="24"/>
         <image name="chevron.left" width="8" height="15"/>
         <image name="cloud_done" width="24" height="24"/>
         <image name="import" width="74" height="74"/>

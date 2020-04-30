@@ -172,7 +172,7 @@ class NetworkManager : NSObject {
 		///Invokes delegate methods (can be usefull for progress calculation)
 		//		let task = s.session.downloadTask(with: urlRequest)
 		let task = s.session.downloadTask(with: urlRequest){ (url, response, error) in
-			guard  let url = url, error == nil else {
+			guard let url = url, error == nil else {
 				completionHandler(nil, error)
 				return
 			}
@@ -180,6 +180,12 @@ class NetworkManager : NSObject {
 			do {
 				let folder:SPFolder = downloadFileRequest.isThumb ?  .StorageThumbs : .StorageOriginals
 				//TODO : Remove if exists (to update the file)
+				guard let fileURL = SPFileManager.folder(for: folder)?.appendingPathComponent(downloadFileRequest.fileName, isDirectory: true) else {
+					return
+				}
+				if SPFileManager.default.existence(atUrl: fileURL) == .file {
+					try SPFileManager.deleteFile(path: fileURL)
+				}
 				let status = try SPFileManager.moveToFolder(fileURL: url, with: downloadFileRequest.fileName, folder:folder)
 				if !status {
 					completionHandler(nil, nil)

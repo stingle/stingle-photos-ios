@@ -5,15 +5,15 @@ class DataBase : NSObject {
 	
 	private let container:NSPersistentContainer
 	
-	static let shared:DataBase = {
-		let db = DataBase()
-		do {
-		_ = try db.load()
-		} catch {
-			print(error)
+	static private var db:DataBase?
+	
+	static func shared() throws -> DataBase {
+		if db == nil {
+			db = DataBase()
+			_ = try db?.load()
 		}
-		return db
-	}()
+		return db!
+	}
 	
 	private lazy var galleryFRC:NSFetchedResultsController<FileMO> = {
 		let filesFetchRequest = NSFetchRequest<FileMO>(entityName: "Files")
@@ -79,6 +79,62 @@ class DataBase : NSObject {
 			}
 		}
 	}
+	
+	public func delete<F:SPFileInfo>(file:String, from:String) -> F? {
+		let context = container.viewContext
+		let fetchRequest = NSFetchRequest<FileMO>(entityName: from)
+		fetchRequest.predicate = NSPredicate(format: "name == %@", file)
+		do {
+			let objects = try context.fetch(fetchRequest)
+			guard let obj = objects.first else {
+				return nil
+			}
+			let result = F(file: obj)
+			context.performAndWait {
+				context.delete(obj)
+				if context.hasChanges {
+					do {
+						try context.save()
+					} catch {
+						print("Error: \(error)\nCould not save Core Data context.")
+						return
+					}
+					context.reset()
+				}
+			}
+			return result
+		} catch {
+			print(error)
+			return nil
+		}
+	}
+
+	public func deleteAll(from:String) {
+		let context = container.viewContext
+		let fetchRequest = NSFetchRequest<FileMO>(entityName: from)
+		do {
+			let objects = try context.fetch(fetchRequest)
+			for obj in objects {
+				context.performAndWait {
+					context.delete(obj)
+				}
+			}
+			context.performAndWait {
+				if context.hasChanges {
+					do {
+						try context.save()
+					} catch {
+						print("Error: \(error)\nCould not save Core Data context.")
+						return
+					}
+					context.reset()
+				}
+			}
+		} catch {
+			print(error)
+		}
+	}
+
 	
 	public func delete<T:SPFileInfo, F:SPFileInfo>(file:T) -> F? {
 		let context = container.viewContext
@@ -258,7 +314,7 @@ class DataBase : NSObject {
 		let sectionInfo = sections[section]
 		return sectionInfo.name
 	}
-		
+
 	func fileForIndexPath<T:SPFileInfo>(indexPath:IndexPath, with type:T.Type) -> T? {
 		guard let frc = frc(for: type) else {
 			return nil
@@ -266,6 +322,17 @@ class DataBase : NSObject {
 		let objMO = frc.object(at: indexPath)
 		return T.init(file: objMO)
 	}
+	
+	func fileForIndexPath(indexPath:IndexPath) -> SPFile? {
+		let objMO = galleryFRC.object(at: indexPath)
+		return SPFile.init(file: objMO)
+	}
+	
+	func trashFileForIndexPath(indexPath:IndexPath) -> SPTrashFile? {
+		let objMO = trashFRC.object(at: indexPath)
+		return SPTrashFile.init(file: objMO)
+	}
+
 	
 	func indexPath<T:SPFileInfo>(for file:String, with type:T.Type) -> IndexPath? {
 		let fetchRequest = NSFetchRequest<FileMO>(entityName: type.mo())

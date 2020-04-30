@@ -66,6 +66,8 @@ class SPFileInfo : Codable {
 	var reUpload:Int?
 
 	var date:Date?
+	
+	// Original File data
 	var data:Data?
 
 	class func mo() -> String {

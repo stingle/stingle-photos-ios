@@ -1,4 +1,8 @@
 import Foundation
+enum SPFileManagerError: Error {
+	case fileIsNotExist
+	case pathIsEmpty
+}
 
 enum SPFolder  : String {
 	///Paths where downloaded images or videos should be placed
@@ -121,6 +125,25 @@ class SPFileManager : FileManager {
 			}
 		}
 		return dest
+	}
+	
+	public static func deleteFile(path:URL) throws {
+		try self.default.removeItem(at: path)
+	}
+
+	public static func deleteFile(file:SPFileInfo) throws {
+		guard let thumb = folder(for: .StorageThumbs)?.appendingPathComponent(file.name) else {
+			throw SPFileManagerError.pathIsEmpty
+		}
+		if SPFileManager.default.existence(atUrl: thumb) == .file {
+			try self.default.removeItem(at: thumb)
+		}
+		guard let original = folder(for: .StorageOriginals)?.appendingPathComponent(file.name) else {
+			throw SPFileManagerError.pathIsEmpty
+		}
+		if SPFileManager.default.existence(atUrl: original) == .file {
+			try self.default.removeItem(at: original)
+		}
 	}
 	
 	public static func moveToFolder(fileURL:URL?, with name:String?, folder:SPFolder) throws -> Bool {
