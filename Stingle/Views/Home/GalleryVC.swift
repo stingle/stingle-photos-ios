@@ -120,6 +120,8 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 		setupNavigationItems()
 	}
 	
+
+	
 	func navBarItem(image:String?, title:String?, selector:Selector?) -> UIBarButtonItem {
 		
 		var barButton:UIBarButtonItem? = nil
@@ -171,6 +173,7 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		navigationController?.navigationBar.barTintColor = Theme.Colors.SPRed
 		navigationController?.setNavigationBarHidden(false, animated: false)
 	}
 	

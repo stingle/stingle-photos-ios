@@ -27,6 +27,9 @@ class SPImagePreviewVM {
 		}
 	}
 
+	func trashSelected() {
+	}
+
 	
 	func index(from indexPath:IndexPath?) -> Int {
 		guard let indexPath = indexPath else {

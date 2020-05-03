@@ -17,13 +17,13 @@ class DataBase : NSObject {
 	
 	private lazy var galleryFRC:NSFetchedResultsController<FileMO> = {
 		let filesFetchRequest = NSFetchRequest<FileMO>(entityName: "Files")
-		filesFetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+		filesFetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
 		return NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: "date", cacheName: "Files")
 	}()
 	
 	private lazy var trashFRC:NSFetchedResultsController<FileMO> = {
 		let trashFetchRequest = NSFetchRequest<FileMO>(entityName: "Trash")
-		trashFetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+		trashFetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
 		return NSFetchedResultsController(fetchRequest: trashFetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: "date", cacheName: "Trash")
 	}()
 	

@@ -29,8 +29,8 @@ class Session : NSObject, URLSessionDelegate, URLSessionDownloadDelegate {
 class NetworkManager : NSObject {
 	
 //	static fileprivate let base_url = "https://api.stingle.org"
-//	static fileprivate let base_url = "http://127.0.0.1"
-	static fileprivate let base_url = "http://192.168.5.8"
+	static fileprivate let base_url = "http://127.0.0.1"
+//	static fileprivate let base_url = "http://192.168.5.7"
 
 	
 	static private func createMultipart(request:SPUploadFileRequest, files:[String]) -> URLRequest? {
