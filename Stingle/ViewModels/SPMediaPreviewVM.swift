@@ -2,7 +2,7 @@
 import Foundation
 import UIKit
 
-class SPImagePreviewVM {
+class SPMediaPreviewVM {
 	
 	private let dataSource:DataSource
 	
@@ -20,17 +20,28 @@ class SPImagePreviewVM {
 		}
 		return image
 	}
-	
+
 	func image( for index:Int,completionHandler:  @escaping (UIImage?) -> Swift.Void) {
 		dataSource.image(index: index) { image in
 			completionHandler(image)
 		}
 	}
 
-	func trashSelected() {
+	func trashSelected(index:Int) {
+		guard let file = dataSource.file(for: index) else {
+			return
+		}
+		_ = SyncManager.moveFiles(files: [file], from: .Gallery, to: .Trash) { error in
+			if let error = error {
+				print(error)
+			}
+		}
+	}
+	
+	func file(for index:Int) -> SPFileInfo? {
+		return dataSource.file(for: index)
 	}
 
-	
 	func index(from indexPath:IndexPath?) -> Int {
 		guard let indexPath = indexPath else {
 			return 0
