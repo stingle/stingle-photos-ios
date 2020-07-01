@@ -1,13 +1,8 @@
 
 import UIKit
 
-class SPImagePreviewVC: UIViewController, SPEventHandler {
+class SPImagePreviewVC: SPMediaPreviewVC, SPEventHandler {
 	
-	
-	var index:Int = NSNotFound
-	public var dataSource:DataSource? = nil
-	var viewModel:SPImagePreviewVM? = nil
-
 	let db = SyncManager.db
 	
 	@IBOutlet weak var imageView: UIImageView!

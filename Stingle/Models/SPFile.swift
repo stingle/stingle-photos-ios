@@ -29,7 +29,6 @@ class FileMO : NSManagedObject {
 		isLocal = file.isLocal ?? true
 		isRemote = file.isRemote ?? true
 		reUpload = file.reUpload ?? 0
-		duration = file.duration
 	}
 }
 
@@ -50,6 +49,17 @@ class DeletedFileMO : NSManagedObject {
 	}
 }
 
+class CredsMO : NSManagedObject {
+	@NSManaged var token:String
+	@NSManaged var isSignedIn:Bool
+		
+	func update(isSignedIn:Bool, token:String) {
+		self.isSignedIn = isSignedIn
+		self.token = token
+	}
+}
+
+
 class SPFileInfo : Codable {
 	
 	var dateCreated:String
@@ -58,8 +68,6 @@ class SPFileInfo : Codable {
 	var name:String
 	var headers:String
 	var version:String
-	var type:Int?
-	var duration:UInt32 = 0
 	
 	var isLocal:Bool?
 	var isRemote:Bool?
@@ -78,14 +86,12 @@ class SPFileInfo : Codable {
 		dateCreated = file.dateCreated
 		dateModified = file.dateModified
 		name = file.name
-		type = file.type
 		headers = file.headers
 		version = file.version ?? ""
 		isLocal = file.isLocal
 		isRemote = file.isRemote
 		reUpload = file.reUpload
 		date = file.date
-		duration = file.duration
 	}
 	
 	init(asset:PHAsset, path:URL) throws {
@@ -96,7 +102,6 @@ class SPFileInfo : Codable {
 		let cut = 24 * 3600 * 1000
 		let back = 24 * 3600
 		let timeInterval = (Int(interval) / cut) * back
-		type = (asset.mediaType == .image) ? Constants.FileTypePhoto : Constants.FileTypeVideo
 		headers = ""
 		version = "\(Constants.CurrentFileVersion)"
 		isLocal = true
@@ -104,10 +109,75 @@ class SPFileInfo : Codable {
 		reUpload = 0
 		date = Date(timeIntervalSince1970: Double(timeInterval))
 		data = try Data(contentsOf: path)
-		duration = UInt32(asset.duration)
 	}
 
-		
+	func duration() -> UInt32 {
+		let headers = self.headers
+		let hdrs = headers.split(separator: "*")
+		for hdr in hdrs {
+			
+			let st = crypto.base64urlToBase64(base64urlString:String(hdr))
+			if let data = crypto.base64ToByte(data: st) {
+				let input = InputStream(data: Data(data))
+				input.open()
+				do {
+					if let header = try crypto.getFileHeader(input: input) {
+						input.close()
+						return header.videoDuration
+					}
+				} catch {
+					print(error)
+				}
+				input.close()
+			}
+		}
+		return 0
+	}
+	
+	func getOriginalHeader () -> Header? {
+		let headers = self.headers
+		let hdrs = headers.split(separator: "*")
+		let hdr = hdrs[0]
+		let st = crypto.base64urlToBase64(base64urlString:String(hdr))
+		if let data = crypto.base64ToByte(data: st) {
+			let input = InputStream(data: Data(data))
+			input.open()
+			do {
+				if let header = try crypto.getFileHeader(input: input) {
+					input.close()
+					return header
+				}
+			} catch {
+				print(error)
+			}
+			input.close()
+		}
+		return nil
+	}
+	
+	func type() -> Int {
+		let headers = self.headers
+		let hdrs = headers.split(separator: "*")
+		for hdr in hdrs {
+			
+			let st = crypto.base64urlToBase64(base64urlString:String(hdr))
+			if let data = crypto.base64ToByte(data: st) {
+				let input = InputStream(data: Data(data))
+				input.open()
+				do {
+					if let header = try crypto.getFileHeader(input: input) {
+						input.close()
+						return Int(header.fileType)
+					}
+				} catch {
+					print(error)
+				}
+				input.close()
+			}
+		}
+		return -1
+	}
+	
 	enum CodingKeys : String, CodingKey {
 		case dateCreated
 		case dateModified

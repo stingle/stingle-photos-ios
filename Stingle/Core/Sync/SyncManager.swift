@@ -111,7 +111,11 @@ class SyncManager {
 					return
 				}
 				let isKeyBackedUp:Bool = (data.parts.isKeyBackedUp == 1)
-				SPApplication.user = User(token: data.parts.token, userId: data.parts.userId, isKeyBackedUp: isKeyBackedUp, homeFolder: data.parts.homeFolder, email: email)
+				let userId = Int(data.parts.userId) ?? -1
+				let user = User(token: data.parts.token, userId: userId, isKeyBackedUp: isKeyBackedUp, homeFolder: data.parts.homeFolder, email: email)
+				db.updateUser(user: user)
+				let info = AppInfo(lastSeen: 0, lastDelSeen: 0, spaceQuota: "1024", spaceUsed: "0", userId: userId)
+				db.updateAppInfo(info: info)
 				if KeyManagement.key == nil {
 					guard true == KeyManagement.importKeyBundle(keyBundle: data.parts.keyBundle, password: password) else {
 						print("Can't import key bundle")
@@ -138,10 +142,15 @@ class SyncManager {
 	
 	static func update(completionHandler:  @escaping (Bool) -> Swift.Void) {
 		guard let info = db.getAppInfo() else {
+			completionHandler(false)
+			return
+		}
+		guard let userId = info.userId else {
+			completionHandler(false)
 			return
 		}
 //		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
-		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "0", lastDelSeenTime: "0")
+		let request = SPGetUpdateRequest(token: SPApplication.`user`!.token, lastSeen: "0", lastDelSeenTime: "0")
 
 		_ = NetworkManager.send(request: request) { (data:SPUpdateInfo?, error:Error?) in
 			guard let data = data , error == nil else {
@@ -150,7 +159,7 @@ class SyncManager {
 				return
 			}
 			let timeinterval = Date.init().millisecondsSince1970
-			self.db.updateAppInfo(info: AppInfo(lastSeen: timeinterval, lastDelSeen: info.lastDelSeen, spaceQuota: data.parts.spaceQuota, spaceUsed: data.parts.spaceUsed))
+			self.db.updateAppInfo(info: AppInfo(lastSeen: timeinterval, lastDelSeen: info.lastDelSeen, spaceQuota: data.parts.spaceQuota, spaceUsed: data.parts.spaceUsed, userId:userId))
 			processDeletes(deletes: data.parts.deletes)
 			processFiles(files: data.parts.files)
 			processFiles(files: data.parts.trash)
@@ -159,17 +168,7 @@ class SyncManager {
 		}
 		return
 	}
-	
-	static func base64urlToBase64(base64url: String) -> String {
-		var base64 = base64url
-			.replacingOccurrences(of: "-", with: "+")
-			.replacingOccurrences(of: "_", with: "/")
-		if base64.count % 4 != 0 {
-			base64.append(String(repeating: "=", count: 4 - base64.count % 4))
-		}
-		return base64
-	}
-	
+		
 	static func deleteFileFromPhone (file:SPFileInfo) {
 		do {
 			if let path = SPFileManager.folder(for: .StorageThumbs)?.appendingPathComponent(file.name) {
@@ -235,26 +234,6 @@ class SyncManager {
 				}
 			} else {
 				db.add(files: [file])
-				let headers = file.headers
-				let hdrs = headers.split(separator: "*")
-				for hdr in hdrs {
-					
-					let st = base64urlToBase64(base64url: String(hdr))
-
-					if let data = crypto.base64ToByte(data: st) {
-						let input = InputStream(data: Data(data))
-						input.open()
-						do {
-							if let header = try crypto.getFileHeader(input: input) {
-								file.duration = header.videoDuration
-							}
-						} catch {
-							print(error)
-						}
-						input.close()
-					}
-
-				}
 				self.downloadThumbs(files: [file], folder: folder) { (fileName, error) in
 					if let indexPath = db.indexPath(for: file.name, with: T.self) {
 					EventManager.dispatch(event: SPEvent(type: type, info:[SPEvent.Keys.IndexPaths.rawValue : [indexPath]]))
@@ -291,6 +270,18 @@ class SyncManager {
 	static func downloadThumbs <T:SPFileInfo>(files:[T], folder:Int, completionHandler:  @escaping (String?, Error?) -> Swift.Void) {
 		download(files: files, isThumb: true, folder: folder, completionHandler: completionHandler)
 	}
+	
+	static func download(from url:URL, with offset:UInt64, size:UInt, dataReadycompletionHandler:  @escaping ([UInt8]?) -> Swift.Void, contentLenghtCompletionHandler:  @escaping (Int) -> Swift.Void) -> URLSessionDataTask? {
+		let request = SPPartialDownloadRequest(url: url, offset: offset, size: size)
+		return NetworkManager.downloadPartial(request: request, dataReadycompletionHandler: dataReadycompletionHandler, contentLenghtCompletionHandler: contentLenghtCompletionHandler)
+	}
+	
+	static func getFileUrl(file:SPFileInfo, folder:Int) -> URL? {
+		let request = SPGetFileUrl(token: SPApplication.user!.token, fileName: file.name, folder:folder)
+		let resp:SPGetFileUrlResponse? = NetworkManager.syncSend(request: request)
+		return resp?.parts.url
+	}
+
 
 	static func download <T:SPFileInfo>(files:[T], isThumb: Bool, folder:Int, completionHandler:  @escaping (String?, Error?) -> Swift.Void) {
 		for item in files {
@@ -397,7 +388,7 @@ class SyncManager {
 
 	
 	
-	static func importImage(file:SPFile, thumb:UIImage?) {
+	static func importImage(file:SPFile, thumb:UIImage?, type:Int, duration:UInt32) {
 		guard let fileName = Utils.getNewEncFilename() else {
 			return
 		}
@@ -431,21 +422,21 @@ class SyncManager {
 		}
 		outputOrigin.open()
 		do {
-			guard let type = file.type else {
+			guard type >= 0 else {
 				throw CryptoError.General.incorrectParameterSize
 			}
-			try crypto.encryptFile(input: inputThumb, output: outputThumb, filename: file.name, fileType: type, dataLength: UInt(thumbData.count), fileId: fileId, videoDuration: file.duration)
+			try crypto.encryptFile(input: inputThumb, output: outputThumb, filename: file.name, fileType: type, dataLength: UInt(thumbData.count), fileId: fileId, videoDuration: duration)
 			inputThumb.close()
 			outputThumb.close()
-			try crypto.encryptFile(input: inputOrigin, output: outputOrigin, filename: file.name, fileType: type, dataLength: UInt(data.count), fileId: fileId, videoDuration: file.duration)
-			inputOrigin.close()
-			outputOrigin.close()
+			try crypto.encryptFile(input: inputOrigin, output: outputOrigin, filename: file.name, fileType: type, dataLength: UInt(data.count), fileId: fileId, videoDuration: duration)
 			guard let headers = try SPApplication.crypto.getFileHeaders(originalPath: originalPath.path, thumbPath: thumbPath.path) else {
 				//TODO : throw right exception
 				throw CryptoError.General.incorrectParameterSize
 			}
 			file.headers = headers
 			file.name = fileName
+			inputOrigin.close()
+			outputOrigin.close()
 			db.add(files: [file])
 			NetworkManager.upload(file: file, folder: 0) { (space, quota, error) in
 				if nil == error {

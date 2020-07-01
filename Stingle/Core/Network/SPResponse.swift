@@ -102,3 +102,14 @@ struct SPUploadResponse: SPResponse {
 		var spaceUsed:String
 	}
 }
+
+struct SPGetFileUrlResponse: SPResponse {
+	var status:String
+	var parts:Parts
+	var infos:[String]
+	var errors:[String]
+	
+	struct Parts : Codable {
+		var url:URL
+	}
+}

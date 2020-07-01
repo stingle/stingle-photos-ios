@@ -255,7 +255,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vTK-Oa-wj6">
-                                <rect key="frame" x="16" y="67" width="382" height="100.33333333333331"/>
+                                <rect key="frame" x="16" y="111" width="382" height="100.33333333333331"/>
                                 <string key="text">Please choose your master password. While no limit
 is put on what you can enter here, it is strongly advised
 that your password has at least 12 characters and contains 
@@ -267,7 +267,7 @@ may be vulnerable to brute force attacks.</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AUe-d6-Sm3">
-                                <rect key="frame" x="16" y="208.33333333333334" width="382" height="22"/>
+                                <rect key="frame" x="16" y="252.33333333333337" width="382" height="22"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="email"/>
@@ -278,14 +278,14 @@ may be vulnerable to brute force attacks.</string>
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gNO-p2-Hw0">
-                                <rect key="frame" x="16" y="234.33333333333334" width="382" height="2"/>
+                                <rect key="frame" x="16" y="278.33333333333331" width="382" height="2"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="wq3-9t-0K4"/>
                                 </constraints>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3FE-IP-qch">
-                                <rect key="frame" x="16" y="277.33333333333331" width="382" height="22"/>
+                                <rect key="frame" x="16" y="321.33333333333331" width="382" height="22"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="next" secureTextEntry="YES" textContentType="password"/>
@@ -296,14 +296,14 @@ may be vulnerable to brute force attacks.</string>
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZIT-La-qhF">
-                                <rect key="frame" x="16" y="303.33333333333331" width="382" height="2"/>
+                                <rect key="frame" x="16" y="347.33333333333331" width="382" height="2"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="58y-xP-HS4"/>
                                 </constraints>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WDw-av-dIW">
-                                <rect key="frame" x="16" y="346.33333333333331" width="382" height="22"/>
+                                <rect key="frame" x="16" y="390.33333333333331" width="382" height="22"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
@@ -314,14 +314,14 @@ may be vulnerable to brute force attacks.</string>
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ua-We-UwR">
-                                <rect key="frame" x="16" y="372.33333333333331" width="382" height="2"/>
+                                <rect key="frame" x="16" y="416.33333333333331" width="382" height="2"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="e9F-q5-cga"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jB6-Yp-1uH">
-                                <rect key="frame" x="16" y="414.33333333333331" width="382" height="36"/>
+                                <rect key="frame" x="16" y="458.33333333333331" width="382" height="36"/>
                                 <color key="backgroundColor" red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="HDK-4x-a6Z"/>
@@ -334,7 +334,7 @@ may be vulnerable to brute force attacks.</string>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F07-65-jNg">
-                                <rect key="frame" x="67.333333333333343" y="458.33333333333331" width="279.33333333333326" height="36"/>
+                                <rect key="frame" x="67.333333333333343" y="502.33333333333326" width="279.33333333333326" height="36"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Already  have an account?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iaf-bc-Hxy">
                                         <rect key="frame" x="0.0" y="8.6666666666666856" width="175" height="19"/>
@@ -507,7 +507,7 @@ may be vulnerable to brute force attacks.</string>
         <image name="landing_trust_no_one" width="191" height="235.33332824707031"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="SXZ-22-ZQH"/>
-        <segue reference="Fde-SP-RW7"/>
+        <segue reference="3MB-Vg-C4L"/>
+        <segue reference="7Bh-ai-W5m"/>
     </inferredMetricsTieBreakers>
 </document>

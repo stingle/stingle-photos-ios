@@ -25,10 +25,15 @@ class SPMediaFileManager {
 		guard let asset:PHAsset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else {
 			return
 		}
+		var type = Constants.FileTypeGeneral
+		var duration:UInt32 = 0
 		var mediaUrl:URL? = nil
 		if asset.mediaType == .video {
+			type = Constants.FileTypeVideo
+			duration = UInt32(asset.duration)
 			mediaUrl = info[UIImagePickerController.InfoKey.mediaURL] as! URL?
 		} else if asset.mediaType == .image {
+			type = Constants.FileTypePhoto
 			mediaUrl = info[UIImagePickerController.InfoKey.imageURL] as! URL?
 		} else {
 			fatalError()
@@ -36,10 +41,10 @@ class SPMediaFileManager {
 		guard let fileUrl = mediaUrl else {
 			return
 		}
-		processMediia(asset: asset, fileUrl: fileUrl)
+		processMediia(asset: asset, fileUrl: fileUrl, type:type, duration:duration)
 	}
 	
-	func processMediia(asset:PHAsset, fileUrl:URL) {
+	func processMediia(asset:PHAsset, fileUrl:URL, type:Int, duration:UInt32) {
 		let option = PHImageRequestOptions()
 		option.isSynchronous = true
 		//TODO : Handle error case
@@ -54,7 +59,7 @@ class SPMediaFileManager {
 
 			phManager.requestImage(for: asset, targetSize:size, contentMode: .aspectFit, options: options) { thumb,info  in
 				if let thumb = thumb {
-					SyncManager.importImage(file:file, thumb:thumb)
+					SyncManager.importImage(file:file, thumb:thumb, type:type, duration:duration)
 				}
 			}
 

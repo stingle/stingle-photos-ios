@@ -1,9 +1,12 @@
-//
-//  Window.swift
-//  Stingle
-//
-//  Created by Davit on 5/5/20.
-//  Copyright © 2020 Stingle. All rights reserved.
-//
-
 import Foundation
+import UIKit
+
+extension UIWindow {
+    static var key: UIWindow? {
+        if #available(iOS 13, *) {
+            return UIApplication.shared.windows.first { $0.isKeyWindow }
+        } else {
+            return UIApplication.shared.keyWindow
+        }
+    }
+}

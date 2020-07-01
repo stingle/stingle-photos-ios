@@ -26,6 +26,13 @@ class SPMediaPreviewVM {
 			completionHandler(image)
 		}
 	}
+	
+//	func video( for index:Int, from offset:UInt64, size:UInt, completionHandler:  @escaping (URL?, [UInt8]?, Error?) -> Swift.Void) {
+//		dataSource.video(index: index,  from: offset, size: size) {(url, data, error) in
+//			completionHandler(url, data, error)
+//		}
+//	}
+
 
 	func trashSelected(index:Int) {
 		guard let file = dataSource.file(for: index) else {

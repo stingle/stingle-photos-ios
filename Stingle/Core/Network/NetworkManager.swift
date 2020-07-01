@@ -1,7 +1,9 @@
 import Foundation
 
-class Session : NSObject, URLSessionDelegate, URLSessionDownloadDelegate {
+class Session : NSObject, URLSessionDelegate, URLSessionDownloadDelegate, URLSessionDataDelegate {
 	
+	public var dataTasksWithCompletions = [URLSessionDataTask : [Any]] ()
+		
 	lazy var session: URLSession = {
 		let configuration = URLSessionConfiguration.default
 		
@@ -13,24 +15,53 @@ class Session : NSObject, URLSessionDelegate, URLSessionDownloadDelegate {
 	var dataTask: URLSessionDataTask?
 	
 	func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-		
+		print("didFinishDownloadingTo location : \(location)")
 	}
 	
 	func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-		
+		print("didWriteData bytesWritten : \(bytesWritten)\n totalBytesWritten : \(totalBytesWritten)")
 	}
 	
 	func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-		
+		guard let err = error else {
+			if let completion = dataTasksWithCompletions[task as! URLSessionDataTask]![0] as? (([UInt8]?) -> Swift.Void) {
+				completion(nil)
+			}
+			return
+		}
+		print("didCompleteWithError")
 	}
 	
+	func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+		
+		print((response as! HTTPURLResponse).allHeaderFields["Content-Length"]!)
+		completionHandler(.allow)
+	}
+
+    
+	func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didBecome downloadTask: URLSessionDownloadTask) {
+		print("didBecome downloadTask")
+	}
+
+    
+	func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didBecome streamTask: URLSessionStreamTask) {
+		print("didBecome streamTask")
+	}
+
+    
+	func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+		if let completion = dataTasksWithCompletions[dataTask]![0] as? (([UInt8]?) -> Swift.Void) {
+			completion(([UInt8])(data))
+		}
+//		print("didReceive data with lenght : \(data.count)")
+	}
 }
 
 class NetworkManager : NSObject {
 	
 //	static fileprivate let base_url = "https://api.stingle.org"
-	static fileprivate let base_url = "http://127.0.0.1"
-//	static fileprivate let base_url = "http://192.168.5.7"
+//	static fileprivate let base_url = "http://127.0.0.1"
+	static fileprivate let base_url = "http://192.168.5.9"
 
 	
 	static private func createMultipart(request:SPUploadFileRequest, files:[String]) -> URLRequest? {
@@ -122,23 +153,56 @@ class NetworkManager : NSObject {
 		return urlRequest
 	}
 	
+
+	static private func createWithDirectUrl(request:SPRequest) -> URLRequest? {
+		let url = URL(string: request.path())
+		guard let requestUrl = url else { return nil }
+		var urlRequest = URLRequest(url: requestUrl)
+		urlRequest.httpMethod = request.method().value()
+		if let headers = request.headers() {
+			for key in headers.keys {
+				if let value = headers[key] {
+					urlRequest.setValue(value, forHTTPHeaderField: key)
+				}
+			}
+		}
+		if let params = request.params() {
+			urlRequest.httpBody = params.data(using: .utf8)
+		}
+		return urlRequest
+	}
+
 	
 	static private func create(request:SPRequest) -> URLRequest? {
-		switch request.method() {
-		case .POST:
-			let url = URL(string: "\(NetworkManager.base_url)/\(request.path())")
-			guard let requestUrl = url else { fatalError() }
-			var urlRequest = URLRequest(url: requestUrl)
-			urlRequest.httpMethod = request.method().value()
-			if let params = request.params() {
-				urlRequest.httpBody = params.data(using: .utf8)
+		let url = URL(string: "\(NetworkManager.base_url)/\(request.path())")
+		guard let requestUrl = url else { return nil }
+		var urlRequest = URLRequest(url: requestUrl)
+		urlRequest.httpMethod = request.method().value()
+		if let headers = request.headers() {
+			for key in headers.keys {
+				if let value = headers[key] {
+					urlRequest.setValue(value, forHTTPHeaderField: key)
+				}
 			}
-			return urlRequest
-		case .GET:
-			return nil
-		default:
-			return nil
 		}
+		if let params = request.params() {
+			urlRequest.httpBody = params.data(using: .utf8)
+		}
+		return urlRequest
+	}
+	
+	
+	static func syncSend<T: SPResponse>(request:SPRequest) -> T? {
+		let semaphore = DispatchSemaphore(value: 0)
+			var response:T?
+
+		_ = send(request: request) { (resp:T?, err) in
+            response = resp
+            semaphore.signal()
+		}
+		_ = semaphore.wait(timeout: .distantFuture)
+
+		return response
 	}
 	
 	static public func send<T: SPResponse>(request:SPRequest, completionHandler: @escaping (T?, Error?) -> Swift.Void) -> URLSessionDataTask {
@@ -150,7 +214,7 @@ class NetworkManager : NSObject {
 			}
 			if let data = data {
 				do {
-					print(try JSONSerialization.jsonObject(with:data, options:[]))
+//					print(try JSONSerialization.jsonObject(with:data, options:[]))
 					let decoder = JSONDecoder()
 					decoder.keyDecodingStrategy = .convertFromSnakeCase
 					let response:T = try decoder.decode(T.self, from: data)
@@ -164,9 +228,19 @@ class NetworkManager : NSObject {
 		task.resume()
 		return task
 	}
+		
+	static func downloadPartial (request:SPRequest, dataReadycompletionHandler:  @escaping ([UInt8]?) -> Swift.Void, contentLenghtCompletionHandler:  @escaping (Int) -> Swift.Void) -> URLSessionDataTask? {
+		guard let urlRequest = NetworkManager.createWithDirectUrl(request: request) else {return nil}
+		let s = Session()
+		s.session.configuration.httpShouldUsePipelining = true
+		let task = s.session.dataTask(with: urlRequest)
+		task.resume()
+		s.dataTasksWithCompletions[task] = [dataReadycompletionHandler, contentLenghtCompletionHandler]
+		return task
+	}
 	
-	static public func download(request:SPRequest, completionHandler: @escaping (String?, Error?) -> Swift.Void) -> URLSessionDownloadTask {
-		guard let urlRequest = NetworkManager.create(request: request) else { fatalError() }
+	static public func download(request:SPRequest, completionHandler: @escaping (String?, Error?) -> Swift.Void) -> URLSessionTask? {
+		guard let urlRequest = NetworkManager.create(request: request) else { return nil }
 		let s = Session()
 		s.session.configuration.httpShouldUsePipelining = true
 		///Invokes delegate methods (can be usefull for progress calculation)
@@ -220,7 +294,8 @@ class NetworkManager : NSObject {
 			do {
 				//TODO : Serialize to aprotiate response object(SPUploadResponse)
 				let resp = try JSONSerialization.jsonObject(with:data, options:[])
-				completionHandler("", "", nil)
+				print(resp)
+				completionHandler("", "", error)
 			} catch {
 				completionHandler(nil, nil, error)
 			}

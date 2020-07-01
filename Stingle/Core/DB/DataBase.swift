@@ -135,7 +135,6 @@ class DataBase : NSObject {
 		}
 	}
 
-	
 	public func delete<T:SPFileInfo, F:SPFileInfo>(file:T) -> F? {
 		let context = container.viewContext
 		let fetchRequest = NSFetchRequest<FileMO>(entityName: T.mo())
@@ -227,7 +226,7 @@ class DataBase : NSObject {
 				guard let newInfo = NSEntityDescription.insertNewObject(forEntityName: "AppInfo", into: context) as? AppInfoMO else {
 					return nil
 				}
-				newInfo.update(lastSeen: 0, lastDelSeen: 0 , spaceQuota: "0", spaceUsed: "0")
+				newInfo.update(lastSeen: 0, lastDelSeen: 0 , spaceQuota: "1024", spaceUsed: "0", userId: -1)
 				info = newInfo
 			}
 		} catch {
@@ -258,15 +257,18 @@ class DataBase : NSObject {
 		}
 		return info
 	}
-	
+		
 	func updateAppInfo(info:AppInfo) {
+		guard let userId = info.userId else {
+			return
+		}
 		let context = container.newBackgroundContext()
 		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 		context.undoManager = nil
 		context.performAndWait {
 			let infoMo = getAppinfoMO(context: context)
 			if infoMo != nil {
-				infoMo?.update(lastSeen: info.lastSeen, lastDelSeen: info.lastDelSeen, spaceQuota: info.spaceQuota, spaceUsed: info.spaceUsed)
+				infoMo?.update(lastSeen: info.lastSeen, lastDelSeen: info.lastDelSeen, spaceQuota: info.spaceQuota, spaceUsed: info.spaceUsed, userId: userId)
 			}
 			if context.hasChanges {
 				do {
@@ -279,6 +281,94 @@ class DataBase : NSObject {
 			}
 		}
 	}
+	
+	func updateUserId(userId:Int) {
+		let context = container.newBackgroundContext()
+		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		context.undoManager = nil
+		context.performAndWait {
+			guard let infoMO = getAppinfoMO(context: context) else {
+				return
+			}
+			infoMO.userId = userId
+			if context.hasChanges {
+				do {
+					try context.save()
+				} catch {
+					print("Error: \(error)\nCould not save Core Data context.")
+					return
+				}
+				context.reset()
+			}
+		}
+	}
+		
+	func getUserId() -> Int? {
+		let context = container.newBackgroundContext()
+		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		context.undoManager = nil
+		guard let infoMO = getAppinfoMO(context: context) else {
+			return nil
+		}
+		if context.hasChanges {
+			do {
+				try context.save()
+			} catch {
+				print("Error: \(error)\nCould not save Core Data context.")
+				return nil
+			}
+		}
+		return infoMO.userId
+	}
+
+	func getUser(userId:Int) -> User? {
+		let context = container.newBackgroundContext()
+		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		context.undoManager = nil
+		let fetchRequest = NSFetchRequest<UserMO>(entityName: "User")
+		fetchRequest.predicate = NSPredicate(format: "userId ==%d", userId)
+		do {
+			guard let user = try context.fetch(fetchRequest).first else {
+				return nil
+			}
+			return User(mo: user)
+		} catch {
+			return nil
+		}
+	}
+	
+	func updateUser(user:User) {
+		let context = container.newBackgroundContext()
+		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+		context.undoManager = nil
+		let fetchRequest = NSFetchRequest<UserMO>(entityName: "User")
+		fetchRequest.predicate = NSPredicate(format: "userId ==%d", user.userId)
+		context.performAndWait {
+			do {
+				if let userMO = try context.fetch(fetchRequest).first {
+					userMO.update(user: user)
+				} else {
+					guard let newUser = NSEntityDescription.insertNewObject(forEntityName: "User", into: context) as? UserMO else {
+						return
+					}
+					newUser.update(user:user)
+				}
+			} catch {
+				print(error)
+			}
+
+			if context.hasChanges {
+				do {
+					try context.save()
+				} catch {
+					print("Error: \(error)\nCould not save Core Data context.")
+					return
+				}
+				context.reset()
+			}
+		}
+	}
+
 	
 	func numberOfSections<T:SPFileInfo>(for fileType:T.Type) -> Int {
 		guard let frc = frc(for:fileType) else {

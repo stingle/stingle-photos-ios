@@ -3,6 +3,7 @@ import Foundation
 enum SPRequestMethod : String {
 	case POST
 	case GET
+	case HEAD
 	case NOTIMPLEMENTED
 	
 	func value() -> String {
@@ -150,7 +151,6 @@ struct SPSignOutRequest : SPRequest {
 	}
 }
 
-
 struct SPUploadFileRequest : SPRequest {
 	
 	let token:String
@@ -227,6 +227,46 @@ struct SPGetUpdateRequest : SPRequest {
 	}
 }
 
+
+struct SPDownloadFileHeadReaquest : SPRequest {
+	let token:String
+	let fileName:String
+	let isThumb:Bool
+	let folder:Int
+	
+	init(token:String, fileName:String, isThumb:Bool = false, folder:Int) {
+		self.token = token
+		self.fileName = fileName
+		self.isThumb = isThumb
+		self.folder = folder
+	}
+	
+	func path () -> String {
+		return "sync/download"
+	}
+	
+	func method () -> SPRequestMethod {
+		return .HEAD
+	}
+	
+	func headers () ->  [String : String]? {
+		return ["Accept" : "*/*"]
+	}
+
+	func params () -> String? {
+		var components = URLComponents()
+		components.queryItems = [URLQueryItem(name: "folder", value: "\(folder)"),URLQueryItem(name: "file", value: fileName), URLQueryItem(name: "token", value: token)]
+		if isThumb {
+			components.queryItems?.append(URLQueryItem(name: "thumb", value: "1"))
+		} else {
+			components.queryItems?.append(URLQueryItem(name: "thumb", value: "0"))
+		}
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
+	}
+}
+
+
 struct SPDownloadFileRequest : SPRequest {
 	
 	let token:String
@@ -265,6 +305,69 @@ struct SPDownloadFileRequest : SPRequest {
 		return String((strParams?.dropFirst())!)
 	}
 }
+
+struct SPPartialDownloadRequest : SPRequest {
+	
+	let url:URL
+	let size:UInt
+	let offset:UInt64
+	
+	init(url:URL, offset:UInt64, size:UInt) {
+		self.url = url
+		self.offset = offset
+		self.size = size
+	}
+	
+	func path () -> String {
+		return url.absoluteString
+	}
+	
+	func method () -> SPRequestMethod {
+		return .GET
+	}
+	
+	func headers () ->  [String : String]? {
+		return ["Range" : "bytes=\(offset)-", "User-Agent" : "stingle", "Accept-Encoding" : "identity"]
+	}
+
+	func params () -> String? {
+		return nil
+	}
+}
+
+struct SPGetFileUrl : SPRequest {
+	
+	let token:String
+	let fileName:String
+	let folder:Int
+	
+	init(token:String, fileName:String, isThumb:Bool = false, folder:Int) {
+		self.token = token
+		self.fileName = fileName
+		self.folder = folder
+	}
+	
+	func path () -> String {
+		return "sync/getUrl"
+	}
+	
+	func method () -> SPRequestMethod {
+		return .POST
+	}
+	
+	func headers () ->  [String : String]? {
+		return nil
+	}
+	
+	func params () -> String? {
+		var components = URLComponents()
+		components.queryItems = [URLQueryItem(name: "folder", value: "\(folder)"),URLQueryItem(name: "file", value: fileName), URLQueryItem(name: "token", value: token)]
+		let strParams = components.url?.absoluteString
+		return String((strParams?.dropFirst())!)
+	}
+	
+}
+
 
 struct SPMoveFilesRequest : SPRequest {
 	let token:String

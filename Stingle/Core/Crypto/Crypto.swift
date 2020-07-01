@@ -21,7 +21,7 @@ public struct Constants {
 	public static let ServerPublicKeyFilename = "server_public"
 	
 	public static let XCHACHA20POLY1305_IETF_CONTEXT = "__data__"
-	public static let MAX_BUFFER_LENGTH = 1024*1024*64;
+	public static let MAX_BUFFER_LENGTH = 64 * 1024*1024
 	public static let FileExtension = ".sp"
 	public static let FileNameLen = 32
 
@@ -99,7 +99,7 @@ public class Crypto {
 		_ = try savePrivateFile(filename: Constants.PublicKeyFilename, data: newPublicKey!)
 	}
 	
-	public func getPrivateKey(password:String) throws  -> Bytes {
+	public func getPrivateKey(password:String) throws  -> Bytes? {
 		let encKey = try getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
 		let encPrivKey = try readPrivateFile(filename: Constants.PrivateKeyFilename)
 		let nonce = try readPrivateFile(filename: Constants.SKNONCEFilename)
@@ -344,13 +344,12 @@ public class Crypto {
 		// Write header size - 4 bytes
 		numWritten += output.write(Crypto.toBytes(value: Int32(encHeader.count)), maxLength: Constants.FileHeaderSizeLen)
 		
-		// Write header
+		// Write header3
 		numWritten += output.write(encHeader, maxLength: encHeader.count)
 		guard numWritten ==  (Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Constants.FileHeaderSizeLen + encHeader.count) else {
 			throw CryptoError.IO.writeFailure
 		}
 	}
-	
 		
 	func getFileHeader(input:InputStream) throws -> Header? {
 		var buf:Bytes = Bytes(repeating: 0, count: Constants.FileHeaderBeginningLen)
@@ -478,7 +477,7 @@ public class Crypto {
 	}
 	
 	public func decryptFileAsync(input:InputStream, output:OutputStream, completion:((Bool, Error?) -> Void)? = nil) {
-//	let body = {() -> Void in
+	let body = {() -> Void in
 		var result = false
 		var decError:Error? = nil
 		do {
@@ -491,50 +490,85 @@ public class Crypto {
 			return
 		}
 		completion(result, decError)
-//		}
-//		DispatchQueue.global(qos: .background).async {
-//			body()
-//		}
+		}
+		DispatchQueue.global(qos: .background).async {
+			body()
+		}
 	}
 	
-	public func decryptFile(input:InputStream, output:OutputStream) throws -> Bool {
+	public func decryptFile(input:InputStream, output:OutputStream, completionHandler:  ((Bytes?) -> Swift.Void)? = nil) throws -> Bool {
 		let header = try getFileHeader(input:input)
-		_ = try decryptData(input: input, output: output, header: header)
+		_ = try decryptData(input: input, header: header) {chunk in
+			guard let chunk = chunk else {
+				return
+			}
+			if let completion = completionHandler {
+				completion(chunk)
+			} else {
+				let numWrite = output.write(chunk, maxLength: chunk.count)
+				assert(numWrite == chunk.count)
+			}
+		}
+		output.close();
 		return true
 	}
 	
-	private func decryptData(input:InputStream, output:OutputStream, header:Header?) throws -> Bool {
+	public func decryptData(data:Bytes, header:Header?, chunkNumber:UInt64, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
+		guard let header = header, (1...bufSize).contains(Int(header.chunkSize)) else {
+			throw CryptoError.Header.incorrectChunkSize
+		}
+		let dataReadSize:Int = Int(header.chunkSize) + so.aead.xchacha20poly1305ietf.ABytes + so.aead.xchacha20poly1305ietf.NonceBytes
+		var offset = 0
+		var index:UInt64 = 0
+		repeat {
+			let size = min(dataReadSize, data.count - offset)
+			let buf:Bytes = Bytes(data[offset..<size])
+			offset += size
+			guard let  decryptedData = try decryptChunk(chunkData: buf, chunkNumber: chunkNumber + index, header: header) else {
+				throw CryptoError.Internal.decryptFailure
+			}
+			assert(header.chunkSize == decryptedData.count || (size < dataReadSize))
+			completionHandler(decryptedData)
+			index += UInt64(1)
+		} while (offset < data.count)
+		return true
+	}
+	
+	public func decryptData(input:InputStream, header:Header?, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
 		guard let header = header, (1...bufSize).contains(Int(header.chunkSize)) else {
 			throw CryptoError.Header.incorrectChunkSize
 		}
 		var chunkNumber:UInt64 = 1
-		
 		let dataReadSize:Int = Int(header.chunkSize) + so.aead.xchacha20poly1305ietf.ABytes + so.aead.xchacha20poly1305ietf.NonceBytes
 		var buf:Bytes = Bytes(repeating: 0, count: dataReadSize)
 		var numRead = 0
 		var diff:Int = 0
-		var numWrite:Int = 0
 		repeat {
 			numRead = input.read(&buf, maxLength: buf.count)
 			diff = dataReadSize - numRead
 			if diff > 0 {
 				buf = buf.dropLast(diff)
 			}
-			let keyBytesLength = so.aead.xchacha20poly1305ietf.KeyBytes
-			guard let chunkKey = so.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
-				throw CryptoError.Internal.keyDerivationFailure
-			}
-			assert(keyBytesLength == chunkKey.count)
-			guard let  decryptedData = so.aead.xchacha20poly1305ietf.decrypt(nonceAndAuthenticatedCipherText: buf, secretKey: chunkKey) else {
-				throw CryptoError.Internal.decrypFailure
+			guard let  decryptedData = try decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header) else {
+				throw CryptoError.Internal.decryptFailure
 			}
 			assert(header.chunkSize == decryptedData.count || (diff != 0))
-			numWrite = output.write(decryptedData, maxLength: decryptedData.count)
-			assert(numWrite == decryptedData.count)
+			completionHandler(decryptedData)
 			chunkNumber += UInt64(1)
 		} while (diff == 0)
-		output.close();
-		return true;
+		return true
+	}
+	
+	private func decryptChunk(chunkData:Bytes, chunkNumber:UInt64, header:Header) throws -> Bytes? {
+		let keyBytesLength = so.aead.xchacha20poly1305ietf.KeyBytes
+		guard let chunkKey = so.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
+			throw CryptoError.Internal.keyDerivationFailure
+		}
+		assert(keyBytesLength == chunkKey.count)
+		guard let  decryptedData = so.aead.xchacha20poly1305ietf.decrypt(nonceAndAuthenticatedCipherText: chunkData, secretKey: chunkKey) else {
+			throw CryptoError.Internal.decryptFailure
+		}
+		return decryptedData
 	}
 	
 	private func savePrivateFile(filename:String, data:Bytes?) throws -> Bool {
@@ -587,37 +621,41 @@ public class Crypto {
 		input.close()
 		return outBuff
 	}
-		
-	public struct Header {
-		public var fileVersion:UInt8 = 0
-		public var fileId:Bytes = []
-		public var headerSize:UInt32?
-		public var headerVersion:UInt8 = 0
-		public var chunkSize:UInt32 = 0
-		public var dataSize:UInt64 = 0
-		public var symmetricKey:Bytes = []
-		public var fileType:UInt8 = 0
-		public var fileName:String?
-		public var videoDuration:UInt32 = 0
-		public var overallHeaderSize:UInt32?
-		
-		func desc() {
-			print("fileVersion : \(fileVersion)")
-			print("fileId : \(fileId)")
-			print("headerSize : \(headerSize ?? 0)")
-			print("headerVersion : \(headerVersion)")
-			print("chunkSize : \(chunkSize)")
-			print("dataSize : \(dataSize)")
-			print("symmetricKey : \(symmetricKey)")
-			print("fileType : \(fileType)")
-			print("fileName : \(fileName ?? "noname")")
-			print("videoDuration : \(videoDuration)")
-			print("overallHeaderSize : \(overallHeaderSize ?? 0)")
-		}
+}
+
+public struct Header {
+	public var fileVersion:UInt8 = 0
+	public var fileId:Bytes = []
+	public var headerSize:UInt32?
+	public var headerVersion:UInt8 = 0
+	public var chunkSize:UInt32 = 0
+	public var dataSize:UInt64 = 0
+	public var symmetricKey:Bytes = []
+	public var fileType:UInt8 = 0
+	public var fileName:String?
+	public var videoDuration:UInt32 = 0
+	public var overallHeaderSize:UInt32?
+	
+	func desc() {
+		print("fileVersion : \(fileVersion)")
+		print("fileId : \(fileId)")
+		print("headerSize : \(headerSize ?? 0)")
+		print("headerVersion : \(headerVersion)")
+		print("chunkSize : \(chunkSize)")
+		print("dataSize : \(dataSize)")
+		print("symmetricKey : \(symmetricKey)")
+		print("fileType : \(fileType)")
+		print("fileName : \(fileName ?? "noname")")
+		print("videoDuration : \(videoDuration)")
+		print("overallHeaderSize : \(overallHeaderSize ?? 0)")
 	}
 }
 
 extension Crypto {
+	
+	public func chunkAdditionalSize  () -> Int {
+		return so.aead.xchacha20poly1305ietf.ABytes + so.aead.xchacha20poly1305ietf.NonceBytes
+	}
 	
 	public func getRandomBytes(lenght:Int) -> Bytes? {
 		return so.randomBytes.buf(length: lenght)
@@ -670,6 +708,16 @@ extension Crypto {
 			return nil
 		}
 		return Bytes(data)
+	}
+	
+	func base64urlToBase64(base64urlString:String) -> String {
+		var base64 = base64urlString
+			.replacingOccurrences(of: "-", with: "+")
+			.replacingOccurrences(of: "_", with: "/")
+		if base64.count % 4 != 0 {
+			base64.append(String(repeating: "=", count: 4 - base64.count % 4))
+		}
+		return base64
 	}
 	
 	public func toBytes(header:Header) -> Bytes {

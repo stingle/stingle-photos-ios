@@ -214,9 +214,38 @@ class DataSource {
 		}
 	}
 	
+//	func video(index:Int, from offset:UInt64, size:UInt, completionHandler:  @escaping (URL?, [UInt8]?, Error?) -> Swift.Void) {
+//		var folder:Int = 0
+//		if type == .Gallery {
+//			folder = 0
+//		} else if type == .Trash {
+//			folder = 1
+//		}
+//		
+//		guard let file:SPFileInfo = DataSource.db.fileForIndex(index: index, for: fileType()) else {
+//			return
+//		}
+////		if let fileURL = SPFileManager.folder(for: .StorageOriginals)?.appendingPathComponent(file.name) {
+////			if SPFileManager.default.existence(atUrl: fileURL) == .file {
+////				completionHandler(fileURL, nil)
+////				return
+////			}
+////		}
+//		
+//	}
+
+	
 	func index(for indexPath:IndexPath) -> Int {
 		return DataSource.db.index(for: indexPath, of: fileType())
 	}
+	
+	func file(for index:Int) -> SPFileInfo? {
+		guard let file:SPFileInfo = DataSource.db.fileForIndex(index: index, for: fileType()) else {
+			return nil
+		}
+		return file
+	}
+
 	
 	//	MARK: - Helpers
 	func fileType() -> SPFileInfo.Type {

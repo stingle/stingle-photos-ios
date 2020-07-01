@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AppInfo" representedClassName=".AppInfoMO" syncable="YES">
-        <attribute name="lastDelSeen" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="lastSeen" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lastDelSeen" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lastSeen" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="spaceQuota" optional="YES" attributeType="String"/>
         <attribute name="spaceUsed" optional="YES" attributeType="String"/>
+        <attribute name="userId" optional="YES" attributeType="Integer 64" minValueString="-1" defaultValueString="-1" usesScalarValueType="YES"/>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="User" inverseName="user" inverseEntity="User"/>
     </entity>
     <entity name="Deletes" representedClassName=".DeletedFileMO" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -20,13 +22,11 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="dateCreated" optional="YES" attributeType="String"/>
         <attribute name="dateModified" optional="YES" attributeType="String"/>
-        <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="headers" optional="YES" attributeType="String"/>
         <attribute name="isLocal" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isRemote" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="reUpload" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="version" optional="YES" attributeType="String"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -37,12 +37,21 @@
     <entity name="Files" representedClassName=".FileMO" parentEntity="File" syncable="YES"/>
     <entity name="Trash" representedClassName=".TrashMO" parentEntity="File" syncable="YES"/>
     <entity name="Updates" representedClassName=".FileMO" parentEntity="File" syncable="YES"/>
+    <entity name="User" representedClassName=".UserMO" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="homeFolder" optional="YES" attributeType="String"/>
+        <attribute name="isKeyBackedUp" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="token" optional="YES" attributeType="String"/>
+        <attribute name="userId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AppInfo" inverseName="users" inverseEntity="AppInfo"/>
+    </entity>
     <elements>
-        <element name="AppInfo" positionX="-241.609375" positionY="-37.96484375" width="128" height="103"/>
+        <element name="AppInfo" positionX="-1166.03515625" positionY="-242.953125" width="128" height="133"/>
         <element name="Deletes" positionX="-323.75" positionY="-208.26953125" width="128" height="88"/>
-        <element name="File" positionX="-574.859375" positionY="-218.88671875" width="128" height="208"/>
+        <element name="File" positionX="-574.859375" positionY="-218.88671875" width="128" height="178"/>
         <element name="Files" positionX="-568.578125" positionY="-17.24609375" width="128" height="43"/>
         <element name="Trash" positionX="-726.640625" positionY="-18.93359375" width="128" height="43"/>
-        <element name="Updates" positionX="-883.51953125" positionY="-18.5859375" width="128" height="43"/>
+        <element name="Updates" positionX="-802.12890625" positionY="177.90625" width="128" height="43"/>
+        <element name="User" positionX="-908.11328125" positionY="-191.53515625" width="128" height="133"/>
     </elements>
 </model>

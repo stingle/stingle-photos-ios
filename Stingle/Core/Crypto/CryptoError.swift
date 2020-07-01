@@ -31,7 +31,7 @@ enum CryptoError: Error {
     enum Internal : Error {
         case keyPairGenerationFailure
         case keyDerivationFailure
-        case decrypFailure
+        case decryptFailure
         case randomBytesGenerationFailure
         case hashGenerationFailure
         case sealFailure

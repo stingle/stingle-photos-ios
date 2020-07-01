@@ -15,6 +15,13 @@ class LandingVC: BaseVC {
             return
         }
         navigationController.setNavigationBarHidden(true, animated: false)
+		if SPApplication.isLogedIn() {
+			DispatchQueue.main.async {
+				let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
+				let home = storyboard.instantiateInitialViewController()
+				self.navigationController?.pushViewController(home!, animated: false)
+			}
+		}
 	}
 	
 	override func viewDidLoad() {

@@ -57,7 +57,7 @@
 		6261935E240D4CA800562BDF /* HeaderPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935D240D4CA800562BDF /* HeaderPageVC.swift */; };
 		62619360240D4D2A00562BDF /* LandingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935F240D4D2A00562BDF /* LandingVM.swift */; };
 		626AB75A2426BB0000168659 /* SPImagePageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB7592426BB0000168659 /* SPImagePageVC.swift */; };
-		626AB75C2426C04000168659 /* SPImagePreviewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB75B2426C04000168659 /* SPImagePreviewVM.swift */; };
+		626AB75C2426C04000168659 /* SPMediaPreviewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB75B2426C04000168659 /* SPMediaPreviewVM.swift */; };
 		626AB75F24280E2800168659 /* SPDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB75E24280E2800168659 /* SPDatasource.swift */; };
 		626B0607242EDDE60092B55E /* GalleryFrontVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626B0606242EDDE60092B55E /* GalleryFrontVC.swift */; };
 		627057AA24265A85006B70F4 /* SPImagePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627057A924265A85006B70F4 /* SPImagePreviewVC.swift */; };
@@ -74,7 +74,25 @@
 		62AE6899240DDD21001EA58D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 62AE689B240DDD21001EA58D /* Localizable.strings */; };
 		62AE68A0240DDDBE001EA58D /* Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AE689F240DDDBE001EA58D /* Localize.swift */; };
 		62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B9F6392407EE2E0014E3AF /* CryptoError.swift */; };
+		62C0CAEA2461A6AC003C5756 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C0CAE92461A6AC003C5756 /* Window.swift */; };
 		62D9D0392453B4C60001D0D8 /* SignUpVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D9D0382453B4C60001D0D8 /* SignUpVM.swift */; };
+		62E20E502468046A00563FC3 /* MobileVLCKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E4F2468046A00563FC3 /* MobileVLCKit.framework */; };
+		62E20E522468062300563FC3 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E512468062300563FC3 /* CoreImage.framework */; };
+		62E20E542468062E00563FC3 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E532468062E00563FC3 /* libc++.tbd */; };
+		62E20E562468063500563FC3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E552468063500563FC3 /* AVFoundation.framework */; };
+		62E20E582468064500563FC3 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E572468064500563FC3 /* CoreMedia.framework */; };
+		62E20E5A2468064D00563FC3 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E592468064D00563FC3 /* CoreVideo.framework */; };
+		62E20E5C2468065800563FC3 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E5B2468065800563FC3 /* VideoToolbox.framework */; };
+		62E20E602468066B00563FC3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E5F2468066B00563FC3 /* QuartzCore.framework */; };
+		62E20E622468068200563FC3 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E612468068200563FC3 /* libiconv.tbd */; };
+		62E20E642468068B00563FC3 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E632468068B00563FC3 /* libbz2.tbd */; };
+		62E20E662468069500563FC3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E652468069500563FC3 /* CoreText.framework */; };
+		62E20E6A246806A900563FC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E69246806A900563FC3 /* OpenGLES.framework */; };
+		62E20E6C246806B100563FC3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E6B246806B100563FC3 /* AudioToolbox.framework */; };
+		62E20E70246806C700563FC3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E6F246806C700563FC3 /* CoreGraphics.framework */; };
+		62E20E7224680DDB00563FC3 /* SPFileSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E20E7124680DDB00563FC3 /* SPFileSource.swift */; };
+		62E20E7624682A4B00563FC3 /* SPVideoPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E20E7524682A4B00563FC3 /* SPVideoPreviewVC.swift */; };
+		62E20E782469CB6300563FC3 /* SPMediaPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E20E772469CB6300563FC3 /* SPMediaPreviewVC.swift */; };
 		62E3136E241C557500AD79CF /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E3136D241C557500AD79CF /* SwipeInteractionController.swift */; };
 		62E31370241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E3136F241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift */; };
 		62E754562412DE9600D8FB96 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E754552412DE9600D8FB96 /* Date.swift */; };
@@ -149,7 +167,7 @@
 		6261935D240D4CA800562BDF /* HeaderPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderPageVC.swift; sourceTree = "<group>"; };
 		6261935F240D4D2A00562BDF /* LandingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingVM.swift; sourceTree = "<group>"; };
 		626AB7592426BB0000168659 /* SPImagePageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePageVC.swift; sourceTree = "<group>"; };
-		626AB75B2426C04000168659 /* SPImagePreviewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePreviewVM.swift; sourceTree = "<group>"; };
+		626AB75B2426C04000168659 /* SPMediaPreviewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMediaPreviewVM.swift; sourceTree = "<group>"; };
 		626AB75E24280E2800168659 /* SPDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDatasource.swift; sourceTree = "<group>"; };
 		626B0606242EDDE60092B55E /* GalleryFrontVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryFrontVC.swift; sourceTree = "<group>"; };
 		627057A924265A85006B70F4 /* SPImagePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePreviewVC.swift; sourceTree = "<group>"; };
@@ -168,7 +186,27 @@
 		62AE689A240DDD21001EA58D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		62AE689F240DDDBE001EA58D /* Localize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localize.swift; sourceTree = "<group>"; };
 		62B9F6392407EE2E0014E3AF /* CryptoError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoError.swift; sourceTree = "<group>"; };
+		62C0CAE92461A6AC003C5756 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		62D9D0382453B4C60001D0D8 /* SignUpVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVM.swift; sourceTree = "<group>"; };
+		62E20E4F2468046A00563FC3 /* MobileVLCKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileVLCKit.framework; path = ../probes/VLCKit/build/MobileVLCKit.framework; sourceTree = "<group>"; };
+		62E20E512468062300563FC3 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		62E20E532468062E00563FC3 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		62E20E552468063500563FC3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		62E20E572468064500563FC3 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		62E20E592468064D00563FC3 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		62E20E5B2468065800563FC3 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		62E20E5D2468066100563FC3 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		62E20E5F2468066B00563FC3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		62E20E612468068200563FC3 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		62E20E632468068B00563FC3 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
+		62E20E652468069500563FC3 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		62E20E69246806A900563FC3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		62E20E6B246806B100563FC3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		62E20E6D246806BC00563FC3 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		62E20E6F246806C700563FC3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		62E20E7124680DDB00563FC3 /* SPFileSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPFileSource.swift; sourceTree = "<group>"; };
+		62E20E7524682A4B00563FC3 /* SPVideoPreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPVideoPreviewVC.swift; sourceTree = "<group>"; };
+		62E20E772469CB6300563FC3 /* SPMediaPreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMediaPreviewVC.swift; sourceTree = "<group>"; };
 		62E3136D241C557500AD79CF /* SwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeInteractionController.swift; sourceTree = "<group>"; };
 		62E3136F241C5E3D00AD79CF /* MenuTransitionAnimationControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTransitionAnimationControllers.swift; sourceTree = "<group>"; };
 		62E754552412DE9600D8FB96 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
@@ -192,6 +230,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62E20E70246806C700563FC3 /* CoreGraphics.framework in Frameworks */,
+				62E20E6C246806B100563FC3 /* AudioToolbox.framework in Frameworks */,
+				62E20E6A246806A900563FC3 /* OpenGLES.framework in Frameworks */,
+				62E20E662468069500563FC3 /* CoreText.framework in Frameworks */,
+				62E20E642468068B00563FC3 /* libbz2.tbd in Frameworks */,
+				62E20E622468068200563FC3 /* libiconv.tbd in Frameworks */,
+				62E20E602468066B00563FC3 /* QuartzCore.framework in Frameworks */,
+				62E20E5C2468065800563FC3 /* VideoToolbox.framework in Frameworks */,
+				62E20E5A2468064D00563FC3 /* CoreVideo.framework in Frameworks */,
+				62E20E582468064500563FC3 /* CoreMedia.framework in Frameworks */,
+				62E20E562468063500563FC3 /* AVFoundation.framework in Frameworks */,
+				62E20E542468062E00563FC3 /* libc++.tbd in Frameworks */,
+				62E20E522468062300563FC3 /* CoreImage.framework in Frameworks */,
+				62E20E502468046A00563FC3 /* MobileVLCKit.framework in Frameworks */,
 				D25D6B2D323167EF3A5485AD /* Pods_Stingle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -272,7 +324,7 @@
 				6261935F240D4D2A00562BDF /* LandingVM.swift */,
 				62048A68240EDBDD006207AC /* SignInVM.swift */,
 				62504375241AD24C00A90F3A /* SPMenuVM.swift */,
-				626AB75B2426C04000168659 /* SPImagePreviewVM.swift */,
+				626AB75B2426C04000168659 /* SPMediaPreviewVM.swift */,
 				62D9D0382453B4C60001D0D8 /* SignUpVM.swift */,
 			);
 			path = ViewModels;
@@ -320,6 +372,22 @@
 		620C02FD23FED61900999057 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				62E20E6F246806C700563FC3 /* CoreGraphics.framework */,
+				62E20E6D246806BC00563FC3 /* AudioUnit.framework */,
+				62E20E6B246806B100563FC3 /* AudioToolbox.framework */,
+				62E20E69246806A900563FC3 /* OpenGLES.framework */,
+				62E20E652468069500563FC3 /* CoreText.framework */,
+				62E20E632468068B00563FC3 /* libbz2.tbd */,
+				62E20E612468068200563FC3 /* libiconv.tbd */,
+				62E20E5F2468066B00563FC3 /* QuartzCore.framework */,
+				62E20E5D2468066100563FC3 /* Security.framework */,
+				62E20E5B2468065800563FC3 /* VideoToolbox.framework */,
+				62E20E592468064D00563FC3 /* CoreVideo.framework */,
+				62E20E572468064500563FC3 /* CoreMedia.framework */,
+				62E20E552468063500563FC3 /* AVFoundation.framework */,
+				62E20E532468062E00563FC3 /* libc++.tbd */,
+				62E20E512468062300563FC3 /* CoreImage.framework */,
+				62E20E4F2468046A00563FC3 /* MobileVLCKit.framework */,
 				6F579C6E8456773E872F6272 /* Pods_Stingle.framework */,
 			);
 			name = Frameworks;
@@ -394,6 +462,7 @@
 			isa = PBXGroup;
 			children = (
 				626AB75E24280E2800168659 /* SPDatasource.swift */,
+				62E20E7124680DDB00563FC3 /* SPFileSource.swift */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -447,6 +516,8 @@
 				627057A924265A85006B70F4 /* SPImagePreviewVC.swift */,
 				626AB7592426BB0000168659 /* SPImagePageVC.swift */,
 				626B0606242EDDE60092B55E /* GalleryFrontVC.swift */,
+				62E20E7524682A4B00563FC3 /* SPVideoPreviewVC.swift */,
+				62E20E772469CB6300563FC3 /* SPMediaPreviewVC.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -478,6 +549,7 @@
 				62E754552412DE9600D8FB96 /* Date.swift */,
 				6250436F241AB6FF00A90F3A /* Image+Extension.swift */,
 				6251FC142444FF35002023B2 /* UITextField+Extensions.swift */,
+				62C0CAE92461A6AC003C5756 /* Window.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -700,7 +772,7 @@
 			files = (
 				624A197024116B370002F1ED /* GalleryVM.swift in Sources */,
 				624A1947241115250002F1ED /* StingleModel.xcdatamodeld in Sources */,
-				626AB75C2426C04000168659 /* SPImagePreviewVM.swift in Sources */,
+				626AB75C2426C04000168659 /* SPMediaPreviewVM.swift in Sources */,
 				62048A6B240EEC82006207AC /* NetworkManager.swift in Sources */,
 				62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */,
 				6242B7B1240DDEA00090BFE4 /* String+Extensions.swift in Sources */,
@@ -715,10 +787,12 @@
 				6251FC152444FF35002023B2 /* UITextField+Extensions.swift in Sources */,
 				624A197224116D8B0002F1ED /* DataBase.swift in Sources */,
 				62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */,
+				62E20E7224680DDB00563FC3 /* SPFileSource.swift in Sources */,
 				62504374241ACD2400A90F3A /* SPMenuCell.swift in Sources */,
 				620C02D523FED4FB00999057 /* TrashVC.swift in Sources */,
 				620E18DD241A2E1C00097A16 /* SPMenuVC.swift in Sources */,
 				62AE6894240D55CD001EA58D /* Theme.swift in Sources */,
+				62C0CAEA2461A6AC003C5756 /* Window.swift in Sources */,
 				624A197424118CAE0002F1ED /* SPFile.swift in Sources */,
 				6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */,
 				6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */,
@@ -734,6 +808,7 @@
 				62E7545E241331D400D8FB96 /* SPEvent.swift in Sources */,
 				62AE68A0240DDDBE001EA58D /* Localize.swift in Sources */,
 				62E85BCF2412C89A00FB9FD0 /* AppInfo.swift in Sources */,
+				62E20E782469CB6300563FC3 /* SPMediaPreviewVC.swift in Sources */,
 				620C02D323FED4EC00999057 /* GalleryVC.swift in Sources */,
 				6226ABE9243149DA0053152E /* SPMediaFileManager.swift in Sources */,
 				62619359240D096000562BDF /* LandingVC.swift in Sources */,
@@ -742,6 +817,7 @@
 				6226ABEB243149FA0053152E /* SPMediaFile.swift in Sources */,
 				62E3136E241C557500AD79CF /* SwipeInteractionController.swift in Sources */,
 				627057AA24265A85006B70F4 /* SPImagePreviewVC.swift in Sources */,
+				62E20E7624682A4B00563FC3 /* SPVideoPreviewVC.swift in Sources */,
 				626AB75F24280E2800168659 /* SPDatasource.swift in Sources */,
 				6261935E240D4CA800562BDF /* HeaderPageVC.swift in Sources */,
 				624658D0240F99730050F18F /* KeyManagement.swift in Sources */,
@@ -956,6 +1032,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6FR7795JTL;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Sodium\"",
+					"\"$(SRCROOT)/../probes/VLCKit/build/\"",
+				);
 				INFOPLIST_FILE = Stingle/Application/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -975,14 +1057,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = NS9MN69HPH;
+				DEVELOPMENT_TEAM = 6FR7795JTL;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Sodium\"",
+					"\"$(SRCROOT)/../probes/VLCKit/build/\"",
+				);
 				INFOPLIST_FILE = Stingle/Application/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.photos.stingle;
+				PRODUCT_BUNDLE_IDENTIFIER = org.photos.stingle1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

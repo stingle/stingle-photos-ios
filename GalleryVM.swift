@@ -155,10 +155,10 @@ class GalleryVM : DataSourceDelegate, SPEventHandler {
 		guard let file = dataSource.fileInfo(for: indexPath) else {
 			return
 		}
-		if file.duration > 0 {
+		if file.duration() > 0 {
 			cell.duration.isHidden = false
 			cell.videoIcon.isHidden = false
-			let duration = file.duration
+			let duration = file.duration()
 			let minutes = duration / 60
 			let seconds = duration - minutes * 60
 			let secondsText = seconds < 10 ? "0\(seconds)" : "\(seconds)"
@@ -172,9 +172,9 @@ class GalleryVM : DataSourceDelegate, SPEventHandler {
 		if let isRemote = file.isRemote {
 			cell.notSyncedIcon.isHidden = (isRemote && (mode != .Editing))
 		}
-		
 	}
 }
+
 
 
 //MARK: - DataSource Delagate
@@ -265,7 +265,7 @@ extension GalleryVM {
 			}
 			break
 		case SPEvent.DB.update.appInfo.rawValue:
-//			self.delegate?.update()
+//			self.delegate?.updateData()
 			break
 		case SPEvent.UI.updates.begin.rawValue:
 			beginUpdates()

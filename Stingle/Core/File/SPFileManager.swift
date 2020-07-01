@@ -61,7 +61,7 @@ extension FileManager {
 }
 
 class SPFileManager : FileManager {
-	
+		
 	private static var storagePath:URL? {
 		get {
 			guard let path = self.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
@@ -162,6 +162,16 @@ class SPFileManager : FileManager {
 			throw error
 		}
 		return true
+	}
+	
+	public static func tempFolder(name:String) -> URL {
+		let dest = URL(fileURLWithPath: NSTemporaryDirectory() + name)
+		do {
+			try self.default.createDirectory(at: dest, withIntermediateDirectories: true, attributes: nil)
+		} catch {
+			print(error)
+		}
+		return dest
 	}
 	
 	private static func fullPathOfFile(fileName:String, isDirectory:Bool = false) -> URL? {

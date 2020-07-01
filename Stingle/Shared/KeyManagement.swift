@@ -10,7 +10,6 @@ class KeyManagement {
 	
 	static public func importServerPublicKey(pbk:String) {
 		guard let pbkData = crypto.base64ToByte(data: pbk) else {
-			
 			return
 		}
 		do {
@@ -35,7 +34,6 @@ class KeyManagement {
 	
 	static public func signOut() {
 		KeyManagement.key = nil
-		SPApplication.user = nil
 		guard let privateFolder = SPFileManager.folder(for: .Private) else {
 			print("Can't delete local folder")
 			return

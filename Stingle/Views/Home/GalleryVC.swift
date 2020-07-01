@@ -120,7 +120,7 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 		setupNavigationItems()
 	}
 	
-
+	
 	
 	func navBarItem(image:String?, title:String?, selector:Selector?) -> UIBarButtonItem {
 		
@@ -168,7 +168,9 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		collectionView.reloadData()
+		if SPApplication.isLocked() {
+			showLockAlertDialog()
+		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -177,102 +179,127 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 		navigationController?.setNavigationBarHidden(false, animated: false)
 	}
 	
-	func loadData() {
-		if loadingData {
-			return
+	func showLockAlertDialog () {
+		collectionView.isHidden = true
+		let alertController = UIAlertController(title: "Stingle Photos is locked", message: "Please enter your password to unlock", preferredStyle: UIAlertController.Style.alert)
+		alertController.addTextField { (textField : UITextField!) -> Void in
+			textField.placeholder = "Password"
+			textField.isSecureTextEntry = true
 		}
-		loadingData = true
-		print("start loading data", loadingData)
-		DispatchQueue.main.async {
-			SyncManager.update { (status) in
-				DispatchQueue.main.async {
-					self.update()
-					self.loadingData = false
-					print("end loading data : ", self.loadingData, "\n status : ", status)
-				}
+		let loginAction = UIAlertAction(title: "LOGIN", style: UIAlertAction.Style.default, handler: { alert -> Void in
+			
+			do {
+				try SPApplication.unLock(with: "mekicvec")
+				self.collectionView.isHidden = false
+				self.loadData()
+			} catch {
+				self.showLockAlertDialog()
+			}
+		})
+		let logOutAction = UIAlertAction(title: "LOG OUT", style: UIAlertAction.Style.default, handler: { (action : UIAlertAction!) -> Void in
+			
+		})
+		
+		alertController.addAction(loginAction)
+		alertController.addAction(logOutAction)
+		
+		self.present(alertController, animated: true, completion: nil)
+	}
+
+func loadData() {
+	if loadingData {
+		return
+	}
+	loadingData = true
+	print("start loading data", loadingData)
+		SyncManager.update { (status) in
+			DispatchQueue.main.async {
+				self.update()
+				self.loadingData = false
+				print("end loading data : ", self.loadingData, "\n status : ", status)
 			}
 		}
+}
+
+func signOut() {
+	DispatchQueue.main.async {
+		let storyboard = UIStoryboard.init(name: "Welcome", bundle: nil)
+		let welcome = storyboard.instantiateInitialViewController()
+		self.navigationController?.popToRootViewController(animated: false)
+		self.navigationController?.pushViewController(welcome!, animated: false)
 	}
-	
-	func signOut() {
-		DispatchQueue.main.async {
-			let storyboard = UIStoryboard.init(name: "Welcome", bundle: nil)
-			let welcome = storyboard.instantiateInitialViewController()
-			self.navigationController?.popToRootViewController(animated: false)
-			self.navigationController?.pushViewController(welcome!, animated: false)
-		}
+}
+
+//TODO : Chnage update logic based on exact item
+func beginUpdates() {
+	//		blockOperations.removeAll(keepingCapacity: false)
+}
+
+func endUpdates() {
+	//		collectionView!.performBatchUpdates({ () -> Void in
+	//			for operation: BlockOperation in self.blockOperations {
+	//				operation.start()
+	//			}
+	//		}, completion: { (finished) -> Void in
+	//			self.blockOperations.removeAll(keepingCapacity: false)
+	//		})
+}
+
+func setSet(set: GalleryVC.Set) {
+	self.set = set
+	setupNavigationItems()
+}
+
+func update() {
+	DispatchQueue.main.async {
+		self.collectionView.reloadData()
 	}
-	
-	//TODO : Chnage update logic based on exact item
-	func beginUpdates() {
-		//		blockOperations.removeAll(keepingCapacity: false)
-	}
-	
-	func endUpdates() {
-		//		collectionView!.performBatchUpdates({ () -> Void in
-		//			for operation: BlockOperation in self.blockOperations {
-		//				operation.start()
-		//			}
-		//		}, completion: { (finished) -> Void in
-		//			self.blockOperations.removeAll(keepingCapacity: false)
-		//		})
-	}
-	
-	func setSet(set: GalleryVC.Set) {
-		self.set = set
-		setupNavigationItems()
-	}
-	
-	func update() {
-		DispatchQueue.main.async {
-			self.collectionView.reloadData()
-		}
-	}
-	
-	func insertItems(items:[IndexPath]) {
-		update()
-		//		self.blockOperations.append(
-		//			BlockOperation(block: { [weak self] in
-		//				if let this = self {
-		//					this.collectionView!.insertItems(at: items)
-		//				}
-		//			})
-		//		)
-	}
-	
-	func insertSections(sections: IndexSet) {
-		update()
-		//		self.blockOperations.append(
-		//			BlockOperation(block: { [weak self] in
-		//				if let this = self {
-		//					this.collectionView!.insertSections(sections)
-		//				}
-		//			})
-		//		)
-	}
-	
-	func updateItems(items:[IndexPath]) {
-		update()
-		//		DispatchQueue.main.async {
-		//			self.collectionView.reloadItems(at: items)
-		//		}
-	}
-	
-	func deleteItems(items:[IndexPath]) {
-		update()
-		//		DispatchQueue.main.async {
-		//			self.collectionView.deleteItems(at: items)
-		//		}
-	}
-	
-	func deleteSections(sections: IndexSet) {
-		update()
-		//		DispatchQueue.main.async {
-		//			self.collectionView.deleteSections(sections)
-		//		}
-	}
-	
-	
+}
+
+func insertItems(items:[IndexPath]) {
+	update()
+	//		self.blockOperations.append(
+	//			BlockOperation(block: { [weak self] in
+	//				if let this = self {
+	//					this.collectionView!.insertItems(at: items)
+	//				}
+	//			})
+	//		)
+}
+
+func insertSections(sections: IndexSet) {
+	update()
+	//		self.blockOperations.append(
+	//			BlockOperation(block: { [weak self] in
+	//				if let this = self {
+	//					this.collectionView!.insertSections(sections)
+	//				}
+	//			})
+	//		)
+}
+
+func updateItems(items:[IndexPath]) {
+	update()
+	//		DispatchQueue.main.async {
+	//			self.collectionView.reloadItems(at: items)
+	//		}
+}
+
+func deleteItems(items:[IndexPath]) {
+	update()
+	//		DispatchQueue.main.async {
+	//			self.collectionView.deleteItems(at: items)
+	//		}
+}
+
+func deleteSections(sections: IndexSet) {
+	update()
+	//		DispatchQueue.main.async {
+	//			self.collectionView.deleteSections(sections)
+	//		}
+}
+
+
 }
 
 //MARK: - Collection View Delegate
@@ -284,7 +311,7 @@ extension GalleryVC : UICollectionViewDelegate {
 				return
 			}
 			vc.initialIndex = indexPath
-			vc.viewModel = SPImagePreviewVM(dataSource: viewModel.dataSource)
+			vc.viewModel = SPMediaPreviewVM(dataSource: viewModel.dataSource)
 			vc.modalPresentationStyle = .fullScreen
 			self.navigationController?.pushViewController(vc, animated: false)
 		} else if mode == .Editing {
