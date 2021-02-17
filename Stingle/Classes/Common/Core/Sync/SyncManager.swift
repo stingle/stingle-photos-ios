@@ -64,6 +64,7 @@ class SyncManager {
 			completionHandler(false, nil)
 			return false
 		}
+		
 		_ = NetworkManager.send(request:signUpRequest) { (data:SPSignUpResponse?, error)  in
 			guard let data = data, error == nil else {
 				completionHandler(false, error)

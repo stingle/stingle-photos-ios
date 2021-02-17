@@ -55,7 +55,7 @@ class SPMediaFileManager {
 			options.isSynchronous = false
 			options.deliveryMode = .highQualityFormat
 			options.isNetworkAccessAllowed = true
-			let size = UIConstants.thumbSize(for: CGSize(width: asset.pixelWidth, height: asset.pixelHeight))
+			let size = STConstants.thumbSize(for: CGSize(width: asset.pixelWidth, height: asset.pixelHeight))
 
 			phManager.requestImage(for: asset, targetSize:size, contentMode: .aspectFit, options: options) { thumb,info  in
 				if let thumb = thumb {

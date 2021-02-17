@@ -1,7 +1,8 @@
 import Foundation
 import UIKit
 
-class UIConstants {
+class STConstants {
+	
 	static func thumbSize (for originalSize:CGSize) -> CGSize {
 		let screenSize: CGRect = UIScreen.main.bounds
 		let width = (screenSize.size.width * originalSize.width) / (screenSize.size.width + originalSize.width)
@@ -9,4 +10,5 @@ class UIConstants {
 		let height = originalSize.height / scale
 		return CGSize(width: width, height: height)
 	}
+	
 }
