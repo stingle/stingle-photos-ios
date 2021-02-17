@@ -66,11 +66,11 @@ class SPVideoPreviewVC : SPMediaPreviewVC {
 		mediaPlayer.addObserver(self, forKeyPath: "position", options: .new, context: nil)
 		if let file = viewModel?.file(for: index) {
 			source = SPFileSource(file: file)
-			if let src = source {
+			if source != nil {
 				mediaPlayer.delegate = self
 				mediaPlayer.drawable = self.videoLayer
-				let media = VLCMedia.init(source: src)
-				mediaPlayer.media = media
+//				let media = VLCMedia(stream: src)
+//				mediaPlayer.media = media
 			}
 		}
 	}

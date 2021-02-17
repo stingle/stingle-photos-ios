@@ -15,5 +15,17 @@
 "landing_fast_easy_to_use_description"="Stingle Photos is optimized not only for security, but also for speed. it's so fast that you don't really feel that you are browsing through encrypted files.";
 
 "landing_have_an_account"="Already have an account?";
-"landing_sign_up"="Sign Up";
-"landing_sign_in"="Sign In";
+
+//MARK: - sign up-in
+
+"sign_up_description" = "Please choose your master password. While no limit is put on what you can enter here, it is strongly advised that your password has at least 12 characters and contains lowercase and uppercase letters, digits and special symbols. If your password is not secure enough then your photosvideos may be vulnerable to brute force attacks.";
+
+"sign_up"="Sign Up";
+"sign_in"="Sign In";
+
+//MARK: - Common
+
+"email" = "Email";
+"password" = "Password";
+"confirm_password" = "Confirm password";
+"already_have_an_account" = "Already  have an account?";

@@ -100,6 +100,8 @@
 		62E7545E241331D400D8FB96 /* SPEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E7545D241331D400D8FB96 /* SPEvent.swift */; };
 		62E85BCF2412C89A00FB9FD0 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E85BCE2412C89A00FB9FD0 /* AppInfo.swift */; };
 		62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62EDF4CC23FEDE3700C868F5 /* Crypto.swift */; };
+		A09B3CD325DC73690036CF3E /* STTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09B3CD225DC73690036CF3E /* STTextField.swift */; };
+		A09B3D0025DC904F0036CF3E /* STNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09B3CFF25DC904F0036CF3E /* STNavigationController.swift */; };
 		D25D6B2D323167EF3A5485AD /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F579C6E8456773E872F6272 /* Pods_Stingle.framework */; };
 /* End PBXBuildFile section */
 
@@ -177,7 +179,7 @@
 		6279CF2823FEBB0D008B18DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6279CF2B23FEBB0D008B18DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6279CF2D23FEBB0D008B18DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6283C73024363E1B0084C361 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Stingle/Models/Constants.swift; sourceTree = SOURCE_ROOT; };
+		6283C73024363E1B0084C361 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Stingle/Common/Uitils/Constants.swift; sourceTree = SOURCE_ROOT; };
 		6283C73224364BAF0084C361 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Stingle/Models/Utils.swift; sourceTree = SOURCE_ROOT; };
 		6284A4CA241582F8003C3FA5 /* SPCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCollectionViewCell.swift; sourceTree = "<group>"; };
 		6284A4CB241582F8003C3FA5 /* SPCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SPCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -216,6 +218,8 @@
 		62EDF4CC23FEDE3700C868F5 /* Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crypto.swift; sourceTree = "<group>"; };
 		6F579C6E8456773E872F6272 /* Pods_Stingle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stingle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CCA8E0B47DFA4BA2AA7368A /* Pods-Stingle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug.xcconfig"; sourceTree = "<group>"; };
+		A09B3CD225DC73690036CF3E /* STTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTextField.swift; sourceTree = "<group>"; };
+		A09B3CFF25DC904F0036CF3E /* STNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -440,14 +444,6 @@
 			path = CryptoTests;
 			sourceTree = "<group>";
 		};
-		6250436E241AB6B600A90F3A /* Uitils */ = {
-			isa = PBXGroup;
-			children = (
-				6283C73024363E1B0084C361 /* Constants.swift */,
-			);
-			path = Uitils;
-			sourceTree = "<group>";
-		};
 		6261935C240D43D400562BDF /* Landing */ = {
 			isa = PBXGroup;
 			children = (
@@ -533,7 +529,9 @@
 		62AE689C240DDD59001EA58D /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				6250436E241AB6B600A90F3A /* Uitils */,
+				A09B3CFE25DC90320036CF3E /* Controllers */,
+				A09B3CD125DC73420036CF3E /* Views */,
+				A09B3CD025DC73390036CF3E /* Uitils */,
 				6242B7B2240DE6930090BFE4 /* Fonts */,
 				62AE689E240DDDA2001EA58D /* Localization */,
 				62AE689D240DDD6B001EA58D /* Extensions */,
@@ -591,6 +589,30 @@
 			path = Sync;
 			sourceTree = "<group>";
 		};
+		A09B3CD025DC73390036CF3E /* Uitils */ = {
+			isa = PBXGroup;
+			children = (
+				6283C73024363E1B0084C361 /* Constants.swift */,
+			);
+			path = Uitils;
+			sourceTree = "<group>";
+		};
+		A09B3CD125DC73420036CF3E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A09B3CD225DC73690036CF3E /* STTextField.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A09B3CFE25DC90320036CF3E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A09B3CFF25DC904F0036CF3E /* STNavigationController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		F0EAE25FDBA481D663076C4E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -646,8 +668,9 @@
 		6279CF1423FEBB0C008B18DA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = ST;
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1240;
 				ORGANIZATIONNAME = Stingle;
 				TargetAttributes = {
 					624A678024040E9000436C2F = {
@@ -792,6 +815,7 @@
 				620C02D523FED4FB00999057 /* TrashVC.swift in Sources */,
 				620E18DD241A2E1C00097A16 /* SPMenuVC.swift in Sources */,
 				62AE6894240D55CD001EA58D /* Theme.swift in Sources */,
+				A09B3D0025DC904F0036CF3E /* STNavigationController.swift in Sources */,
 				62C0CAEA2461A6AC003C5756 /* Window.swift in Sources */,
 				624A197424118CAE0002F1ED /* SPFile.swift in Sources */,
 				6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */,
@@ -802,6 +826,7 @@
 				6283C73124363E1B0084C361 /* Constants.swift in Sources */,
 				6283C73324364BAF0084C361 /* Utils.swift in Sources */,
 				62504370241AB6FF00A90F3A /* Image+Extension.swift in Sources */,
+				A09B3CD325DC73690036CF3E /* STTextField.swift in Sources */,
 				6284A4CC241582F8003C3FA5 /* SPCollectionViewCell.swift in Sources */,
 				62E754562412DE9600D8FB96 /* Date.swift in Sources */,
 				62048A69240EDBDD006207AC /* SignInVM.swift in Sources */,
@@ -935,6 +960,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -996,6 +1022,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1039,7 +1066,7 @@
 					"\"$(SRCROOT)/../probes/VLCKit/build/\"",
 				);
 				INFOPLIST_FILE = Stingle/Application/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1065,7 +1092,7 @@
 					"\"$(SRCROOT)/../probes/VLCKit/build/\"",
 				);
 				INFOPLIST_FILE = Stingle/Application/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

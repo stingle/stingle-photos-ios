@@ -241,7 +241,8 @@ class SPFileSource {
 }
 
 ///VLC Callbakcs
-extension SPFileSource : VLCMediaSource {
+//: VLCMediaSource
+extension SPFileSource {
 	
 	func restart(_ offset:UInt64) {
 		readOffset = offset

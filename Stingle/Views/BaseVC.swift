@@ -2,9 +2,6 @@ import UIKit
 
 class BaseVC: UIViewController {
 	
-	let screenWidth = UIScreen.main.bounds.size.width
-	let screenHeight = UIScreen.main.bounds.size.height
-	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		if #available(iOS 13.0, *) {

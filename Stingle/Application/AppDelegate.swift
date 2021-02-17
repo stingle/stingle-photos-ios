@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 	
 	func applicationDidEnterBackground(_ application: UIApplication) {
-		_ = SPApplication.lock()
+		SPApplication.lock()
 	}
 }
 

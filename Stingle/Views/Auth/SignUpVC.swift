@@ -1,23 +1,25 @@
 import UIKit
 
-class SignUpVC: BaseVC {
+class SignUpVC: UITableViewController {
 	
 	private let viewModel = SignUpVM()
-	var dismissKeyboard:UIGestureRecognizer? = nil
-
 	
-	@IBOutlet weak var top: NSLayoutConstraint!
-	@IBOutlet weak var emailInput: UITextField!
-	@IBOutlet var emailSeparator: UIView!
-	@IBOutlet weak var passwordInput: UITextField!
-	@IBOutlet weak var passwordSeparator: UIView!
-	@IBOutlet weak var confirmPasswordInput: UITextField!
-	@IBOutlet weak var confirmPasswordSeparator: UIView!
-	@IBAction func signUpPressed(_ sender: Any) {
-		_ = viewModel.signUp(email: emailInput.text, password: passwordInput.text) { (status, error) in
+	@IBOutlet weak private var emailTextField: UITextField!
+	@IBOutlet weak private var passwordTextField: UITextField!
+	@IBOutlet weak private var confirmPasswordTextField: UITextField!
+	
+	@IBOutlet weak private var descriptionLabel: UILabel!
+	@IBOutlet weak private var alreadyHaveAnAccountLabel: UILabel!
+	@IBOutlet weak private var signUpButton: UIButton!
+	@IBOutlet weak private var signInButton: UIButton!
+	
+	
+	@IBAction func didSelectSignUp(_ sender: Any) {
+		
+		_ = viewModel.signUp(email: self.emailTextField.text, password: self.passwordTextField.text) { (status, error) in
 			do {
 				if status {
-					_ = SyncManager.update(completionHandler: { (status) in
+					SyncManager.update(completionHandler: { (status) in
 						if status == true {
 							DispatchQueue.main.async {
 								let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
@@ -30,114 +32,58 @@ class SignUpVC: BaseVC {
 					print(error!)
 				}
 			}
-
 		}
+	}
+	
+	@IBAction func didSelectSignIn(_ sender: Any) {
+		guard let navigationController = self.navigationController else {
+			return
+		}
+		let signInVC = self.storyboard!.instantiateViewController(withIdentifier: "SignInVC")
+		UIView.transition(with: navigationController.view, duration: 0.5, options: .transitionFlipFromRight, animations: {
+			navigationController.popViewController(animated: false)
+			navigationController.pushViewController(signInVC, animated: false)
+		}, completion:nil)
 	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		emailInput.delegate = self
-		passwordInput.delegate = self
-		confirmPasswordInput.delegate = self
-		createBackBarButton(forNavigationItem: self.navigationItem)
-		dismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
-		self.view .addGestureRecognizer(dismissKeyboard!)
+		self.configurebBackBarButton()
+		self.configureLocalizable()
 	}
 	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		guard let navigationController = self.navigationController else {
-			return
-		}
-		navigationController.setNavigationBarHidden(false, animated: false)
-		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillDisappear), name: UIResponder.keyboardWillHideNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillAppear), name: UIResponder.keyboardWillShowNotification, object: nil)
-
+	//MARK: private func
+	
+	private func configurebBackBarButton() {
+		self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "chevron.left"), style: .done, target: self, action: #selector(self.backButtonTapped))
 	}
 	
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-		NotificationCenter.default.removeObserver(self)
-	}
-
-	@objc func keyboardWillAppear() {
-		top.constant = 0
-	}
-
-	@objc func keyboardWillDisappear() {
-		top.constant = 67
-		//Do something here
-	}
-
-	//TODO : create reusable components (with style ) such as navigation bar, navigation bar items ...
-	func createBackBarButton(forNavigationItem navigationItem:UINavigationItem) {
-		let backButtonImage = UIImage(named: "chevron.left")
-		let backBarButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backButtonTapped))
-		backBarButton.tintColor = .white
-		let titleLabel = UILabel()
-		let text = "landing_sign_up".localized
-		let string = NSMutableAttributedString(string: text)
-		string.setFont(font: Theme.Fonts.SFProMedium(size: 20), forText: text)
-		string.setColor(color: .white, forText: text)
-		titleLabel.attributedText = string
-		let titleBar = UIBarButtonItem(customView: titleLabel)
-		navigationItem.leftBarButtonItems = [backBarButton, titleBar]
+	private func configureLocalizable() {
+		self.emailTextField.placeholder = "email".localized
+		self.passwordTextField.placeholder = "password".localized
+		self.confirmPasswordTextField.placeholder = "confirm_password".localized
+		self.descriptionLabel.text = "sign_up_description".localized
+		self.alreadyHaveAnAccountLabel.text = "already_have_an_account".localized
+		self.navigationItem.title = "sign_up".localized
+		self.signUpButton.setTitle("sign_up".localized, for: .normal)
+		self.signInButton.setTitle("sign_in".localized, for: .normal)
 	}
 	
-	@objc public func backButtonTapped() {
+	@objc private func backButtonTapped() {
 		self.navigationController?.popViewController(animated: true)
 	}
-
+	
 }
 
 extension SignUpVC : UITextFieldDelegate {
-	
-	@objc func hideKeyboard(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
-		guard let responder = currentResponder() else {
-			return
-		}
-		responder.resignFirstResponder()
-	}
 
-	func currentResponder() -> UITextField? {
-		if emailInput.isFirstResponder {return emailInput}
-		if passwordInput.isFirstResponder {return passwordInput}
-		if confirmPasswordInput.isFirstResponder {return confirmPasswordInput}
-		return nil
-	}
-	
-	func separator(for textField:UITextField) -> UIView? {
-		if textField == confirmPasswordInput {
-			return confirmPasswordSeparator
-		} else if textField == emailInput {
-			return emailSeparator
-		} else if textField == passwordInput {
-			return passwordSeparator
-		}
-		return nil
-	}
-	
-	func textFieldDidBeginEditing(_ textField: UITextField) {
-		guard let separator = separator(for: textField) else {
-			return
-		}
-		separator.backgroundColor = Theme.Colors.SPRed
-	}
-	
-	func textFieldDidEndEditing(_ textField: UITextField) {
-		guard let separator = separator(for: textField) else {
-			return
-		}
-		separator.backgroundColor = Theme.Colors.SPLightGray
-	}
-	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		if textField == confirmPasswordInput {
+		if textField == self.confirmPasswordTextField {
 			textField.resignFirstResponder()
-		} else if textField == emailInput {
-			passwordInput.becomeFirstResponder()
-		} else if textField == passwordInput {
-			confirmPasswordInput.becomeFirstResponder()
+		} else if textField == self.emailTextField {
+			self.passwordTextField.becomeFirstResponder()
+		} else if textField == self.passwordTextField {
+			self.confirmPasswordTextField.becomeFirstResponder()
 		}
 		return true
 	}

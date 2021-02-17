@@ -23,7 +23,7 @@ class Session : NSObject, URLSessionDelegate, URLSessionDownloadDelegate, URLSes
 	}
 	
 	func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-		guard let err = error else {
+		guard error != nil else {
 			if let completion = dataTasksWithCompletions[task as! URLSessionDataTask]![0] as? (([UInt8]?) -> Swift.Void) {
 				completion(nil)
 			}

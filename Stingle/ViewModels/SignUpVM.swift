@@ -2,6 +2,7 @@ import Foundation
 import Foundation
 
 class SignUpVM: NSObject {
+	
 	private let crypto:Crypto = Crypto()
 
 	public func signUp(email:String?, password:String?, completionHandler: @escaping (Bool, Error?) -> Swift.Void) -> Bool {

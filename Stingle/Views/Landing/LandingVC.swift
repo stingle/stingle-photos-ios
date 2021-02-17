@@ -14,7 +14,7 @@ class LandingVC: BaseVC {
         guard let navigationController = self.navigationController else {
             return
         }
-        navigationController.setNavigationBarHidden(true, animated: false)
+//        navigationController.setNavigationBarHidden(true, animated: false)
 		if SPApplication.isLogedIn() {
 			DispatchQueue.main.async {
 				let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
@@ -36,5 +36,9 @@ class LandingVC: BaseVC {
 		signUp.backgroundColor = Theme.Colors.SPRed
 
 		alreadyHaveAnAccount?.attributedText = viewModel.haveAnAccountTitle()
+	}
+	
+	override func isNavigationBarHidden() -> Bool {
+		return true
 	}
 }

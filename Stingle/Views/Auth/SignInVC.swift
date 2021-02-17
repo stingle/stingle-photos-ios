@@ -19,7 +19,7 @@ class SignInVC : BaseVC {
 //		_ = viewModel.signIn(email: emailInput.text, password: passwordInput.text ) { (status, error) in
 			do {
 				if status {
-					_ = SyncManager.update(completionHandler: { (status) in
+					SyncManager.update(completionHandler: { (status) in
 						if status == true {
 							DispatchQueue.main.async {
 								let storyboard = UIStoryboard.init(name: "Home", bundle: nil)

@@ -1,16 +1,20 @@
 PODS:
+  - MobileVLCKit (3.3.15)
   - Sodium (0.8.0)
 
 DEPENDENCIES:
+  - MobileVLCKit
   - Sodium (~> 0.8.0)
 
 SPEC REPOS:
   trunk:
+    - MobileVLCKit
     - Sodium
 
 SPEC CHECKSUMS:
+  MobileVLCKit: 9a04c9fa19e35c376ddf59425dd82e397d5899ad
   Sodium: 63c0ca312a932e6da481689537d4b35568841bdc
 
-PODFILE CHECKSUM: fa551a964fa6074f18c1bdacec1abc4168225603
+PODFILE CHECKSUM: 979d7dcf72223a864a3894b40ae51d4927fd9b10
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3
