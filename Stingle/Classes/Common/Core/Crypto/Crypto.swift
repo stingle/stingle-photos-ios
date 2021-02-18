@@ -55,7 +55,7 @@ public class Crypto {
 	private let bufSize = 1024 * 1024
 	private let pivateBufferSize = 256
 	
-	private let so:Sodium
+	private let so: Sodium
 	
 	private let hexArray:[Character] = [Character]("0123456789ABCDEF")
 	
@@ -141,7 +141,7 @@ public class Crypto {
 		return key
 	}
 		
-	public func getPasswordHashForStorage(password:String) throws -> [String: String]? {
+	public func getPasswordHashForStorage(password: String) throws -> [String: String]? {
 		guard let salt = getRandomBytes(lenght: so.pwHash.SaltBytes) else {
 			return nil
 		}
@@ -151,7 +151,6 @@ public class Crypto {
 		}
 		return ["hash": hash, "salt": saltHex]
 	}
-
 	
 	public func getPasswordHashForStorage(password:String, salt:String) throws -> String {
 		guard let data = so.utils.hex2bin(salt) else {
@@ -593,7 +592,7 @@ public class Crypto {
 		return true
 	}
 	
-	private func readPrivateFile(filename:String ) throws -> Bytes {
+	private func readPrivateFile(filename: String) throws -> Bytes {
 		
 		guard let fullPath = SPFileManager.folder(for: .Private)?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
@@ -624,6 +623,7 @@ public class Crypto {
 }
 
 public struct Header {
+	
 	public var fileVersion:UInt8 = 0
 	public var fileId:Bytes = []
 	public var headerSize:UInt32?

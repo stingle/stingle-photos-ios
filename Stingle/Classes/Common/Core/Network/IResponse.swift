@@ -1,9 +1,32 @@
 import Foundation
 
-protocol SPResponse : Codable {
+protocol IResponse: Codable {
 }
 
-struct SPDefaultResponse: SPResponse {
+class STResponse<T: Codable>: IResponse {
+	
+	private enum CodingKeys: String, CodingKey {
+		case status = "status"
+		case parts = "parts"
+		case infos = "infos"
+		case errors = "errors"
+	}
+	
+	var status: String
+	var parts: T?
+	var infos: [String]
+	var errors: [String]
+	
+	required init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		self.status = try container.decode(String.self, forKey: .status)
+		self.parts = try? container.decodeIfPresent(T.self, forKey: .parts)
+		self.infos = try container.decode([String].self, forKey: .infos)
+		self.errors = try container.decode([String].self, forKey: .errors)
+	}
+}
+
+struct SPDefaultResponse: IResponse {
 	
 	var status:String
 	var parts:[String]
@@ -11,7 +34,7 @@ struct SPDefaultResponse: SPResponse {
 	var errors:[String]
 }
 
-struct SPTrashResponse: SPResponse {
+struct SPTrashResponse: IResponse {
 	
 	var status:String
 	var parts:[[String:String]]
@@ -19,23 +42,17 @@ struct SPTrashResponse: SPResponse {
 	var errors:[String]	
 }
 
-
-struct SPSignUpResponse: SPResponse {
+class SPSignUpResponse: STResponse<SPSignUpResponse.SignUpPart> {
 	
-	var status:String
-	var parts:SignUpPart
-	var infos:[String]
-	var errors:[String]
-	
-	struct SignUpPart : Codable {
-		var homeFolder:String
-		var token:String
-		var userId:String
+	struct SignUpPart: Codable {
+		var homeFolder: String
+		var token: String
+		var userId: String
 	}
 }
 
 
-struct SPPreSignInResponse: SPResponse {
+struct SPPreSignInResponse: IResponse {
 	
 	var status:String
 	var parts:PreSignInPart
@@ -47,7 +64,7 @@ struct SPPreSignInResponse: SPResponse {
 	}
 }
 
-struct SPSignInResponse: SPResponse {
+struct SPSignInResponse: IResponse {
 	
 	var status:String
 	var parts:SignInPart
@@ -64,7 +81,7 @@ struct SPSignInResponse: SPResponse {
 	}
 }
 
-struct SPSignOutResponse: SPResponse {
+struct SPSignOutResponse: IResponse {
 	var status:String
 	var parts:[String]
 	var infos:[String]
@@ -72,7 +89,7 @@ struct SPSignOutResponse: SPResponse {
 }
 
 
-struct SPUpdateInfo: SPResponse {
+struct SPUpdateInfo: IResponse {
 
 	var status:String
 	var parts:Parts
@@ -90,7 +107,7 @@ struct SPUpdateInfo: SPResponse {
 	}
 }
 
-struct SPUploadResponse: SPResponse {
+struct SPUploadResponse: IResponse {
 
 	var status:String
 	var parts:Parts
@@ -103,7 +120,7 @@ struct SPUploadResponse: SPResponse {
 	}
 }
 
-struct SPGetFileUrlResponse: SPResponse {
+struct SPGetFileUrlResponse: IResponse {
 	var status:String
 	var parts:Parts
 	var infos:[String]

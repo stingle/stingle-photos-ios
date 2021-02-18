@@ -29,3 +29,19 @@
 "password" = "Password";
 "confirm_password" = "Confirm password";
 "already_have_an_account" = "Already  have an account?";
+"advanced" = "Advanced";
+"backup_my_keys" = "Backup my keys";
+
+"error_empty_email" = "Email cannot be empty";
+"error_empty_password" = "Password cannot be empty";
+"error_incorrect_email" = "Email not valid";
+"error_incorrect_password" = "Password must have at least 5 characters";
+
+"error_incorrect_confirm_password" = "Confirm  passwordnot valid";
+
+//MARK: - Error
+
+"warning" = "Warning";
+"empty_data" = "Empty data";
+"incorrect_password" = "Incorrect password";
+

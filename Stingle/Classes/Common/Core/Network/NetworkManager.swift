@@ -190,7 +190,7 @@ class NetworkManager : NSObject {
 	}
 	
 	
-	static func syncSend<T: SPResponse>(request:SPRequest) -> T? {
+	static func syncSend<T: IResponse>(request:SPRequest) -> T? {
 		let semaphore = DispatchSemaphore(value: 0)
 			var response:T?
 
@@ -203,7 +203,8 @@ class NetworkManager : NSObject {
 		return response
 	}
 	
-	static public func send<T: SPResponse>(request:SPRequest, completionHandler: @escaping (T?, Error?) -> Swift.Void) -> URLSessionDataTask {
+	@discardableResult
+	static public func send<T: IResponse>(request:SPRequest, completionHandler: @escaping (T?, Error?) -> Swift.Void) -> URLSessionDataTask {
 		guard let urlRequest = NetworkManager.create(request: request) else { fatalError() }
 		let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
 			if let error = error {

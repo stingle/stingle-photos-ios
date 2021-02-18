@@ -18,7 +18,7 @@ enum SPSet : Int {
 
 class SyncManager {
 
-	public static var db:DataBase = {
+	public static var db: DataBase = {
 		do {
 			return try DataBase.shared()
 		} catch {
@@ -26,7 +26,6 @@ class SyncManager {
 			assert(false)
 		}
 	}()
-	
 	
 	private static let fileManager = SPFileManager()
 	private static let crypto = Crypto()
@@ -111,7 +110,7 @@ class SyncManager {
 					completionHandler(false, error)
 					return
 				}
-				let isKeyBackedUp:Bool = (data.parts.isKeyBackedUp == 1)
+				let isKeyBackedUp: Bool = (data.parts.isKeyBackedUp == 1)
 				let userId = Int(data.parts.userId) ?? -1
 				let user = User(token: data.parts.token, userId: userId, isKeyBackedUp: isKeyBackedUp, homeFolder: data.parts.homeFolder, email: email)
 				db.updateUser(user: user)

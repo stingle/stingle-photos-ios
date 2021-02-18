@@ -245,18 +245,18 @@
             </objects>
             <point key="canvasLocation" x="1170" y="179"/>
         </scene>
-        <!--Hell-->
+        <!--Sign Up-->
         <scene sceneID="OZA-R6-evH">
             <objects>
-                <tableViewController id="tey-I4-8sm" customClass="SignUpVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" id="okH-iI-7fd">
+                <tableViewController title="Sign Up" id="tey-I4-8sm" customClass="SignUpVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="100" sectionHeaderHeight="120" sectionFooterHeight="1" id="okH-iI-7fd">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
                             <tableViewSection id="W1v-PC-Fyy">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="H62-Wj-9kc">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="130" id="H62-Wj-9kc">
                                         <rect key="frame" x="0.0" y="28" width="414" height="130"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="H62-Wj-9kc" id="lqN-K9-MbC">
@@ -284,11 +284,11 @@ may be vulnerable to brute force attacks.</string>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Wml-Wp-IWm">
-                                        <rect key="frame" x="0.0" y="158" width="414" height="71"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="Wml-Wp-IWm">
+                                        <rect key="frame" x="0.0" y="158" width="414" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Wml-Wp-IWm" id="Ddd-xy-D3p">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="71"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="94"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yTq-Wo-xGu" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
@@ -320,15 +320,15 @@ may be vulnerable to brute force attacks.</string>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="3a0-mM-RtJ">
-                                        <rect key="frame" x="0.0" y="229" width="414" height="71"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="79" id="3a0-mM-RtJ">
+                                        <rect key="frame" x="0.0" y="252" width="414" height="79"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3a0-mM-RtJ" id="vcp-ys-hCv">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="71"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hFL-fg-WsP" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="382" height="22"/>
+                                                    <rect key="frame" x="16" y="18" width="382" height="43"/>
                                                     <color key="textColor" systemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
@@ -352,19 +352,19 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstItem="hFL-fg-WsP" firstAttribute="top" secondItem="vcp-ys-hCv" secondAttribute="top" constant="18" id="FMb-Ff-eBP"/>
                                                 <constraint firstItem="hFL-fg-WsP" firstAttribute="leading" secondItem="vcp-ys-hCv" secondAttribute="leading" constant="16" id="V7Z-jC-1DP"/>
                                                 <constraint firstAttribute="trailing" secondItem="hFL-fg-WsP" secondAttribute="trailing" constant="16" id="afZ-x2-eR4"/>
-                                                <constraint firstAttribute="bottom" secondItem="hFL-fg-WsP" secondAttribute="bottom" priority="200" constant="18" id="nnG-QJ-BBE"/>
+                                                <constraint firstAttribute="bottom" secondItem="hFL-fg-WsP" secondAttribute="bottom" constant="18" id="nnG-QJ-BBE"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="pIe-1Y-0SP">
-                                        <rect key="frame" x="0.0" y="300" width="414" height="71"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="99" id="pIe-1Y-0SP">
+                                        <rect key="frame" x="0.0" y="331" width="414" height="99"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pIe-1Y-0SP" id="jTe-HT-PKX">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="71"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LwS-on-PRS" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="382" height="22"/>
+                                                    <rect key="frame" x="16" y="18" width="382" height="21"/>
                                                     <color key="textColor" systemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
@@ -392,8 +392,86 @@ may be vulnerable to brute force attacks.</string>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="tlO-rd-9fc">
-                                        <rect key="frame" x="0.0" y="371" width="414" height="126"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="77" id="h8R-AL-IQS">
+                                        <rect key="frame" x="0.0" y="430" width="414" height="77"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="h8R-AL-IQS" id="jIp-ZT-UUV">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="77"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yyw-JV-l6l">
+                                                    <rect key="frame" x="16" y="8" width="105.5" height="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="tintColor" name="STPrimary"/>
+                                                    <inset key="contentEdgeInsets" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="-30" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <state key="normal" title="Advanced" image="arrowtriangle.right.fill" catalog="system">
+                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="didSelectAdvancedButton:" destination="tey-I4-8sm" eventType="touchUpInside" id="FZV-o1-SsD"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Yyw-JV-l6l" firstAttribute="leading" secondItem="jIp-ZT-UUV" secondAttribute="leading" constant="16" id="1AH-9r-azs"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Yyw-JV-l6l" secondAttribute="trailing" constant="20" symbolic="YES" id="QBE-4c-vN2"/>
+                                                <constraint firstAttribute="bottom" secondItem="Yyw-JV-l6l" secondAttribute="bottom" priority="200" constant="8" id="RGL-vE-xYE"/>
+                                                <constraint firstItem="Yyw-JV-l6l" firstAttribute="top" secondItem="jIp-ZT-UUV" secondAttribute="top" constant="8" id="vhF-jJ-osL"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="46" id="ZUm-3f-761">
+                                        <rect key="frame" x="0.0" y="507" width="414" height="46"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZUm-3f-761" id="ZTP-vW-OE8">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="46"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="78K-JV-W32">
+                                                    <rect key="frame" x="16" y="8" width="382" height="31"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="fSV-GU-Xat">
+                                                            <rect key="frame" x="0.0" y="0.5" width="20" height="30"/>
+                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Backup my keys" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bqk-Fn-Yt6">
+                                                            <rect key="frame" x="28" y="0.0" width="123.5" height="31"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p38-Pc-4ec">
+                                                            <rect key="frame" x="333" y="0.0" width="51" height="31"/>
+                                                        </switch>
+                                                    </subviews>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstItem="fSV-GU-Xat" firstAttribute="leading" secondItem="78K-JV-W32" secondAttribute="leading" id="3Ho-Ph-Saj"/>
+                                                        <constraint firstItem="fSV-GU-Xat" firstAttribute="top" secondItem="78K-JV-W32" secondAttribute="top" id="6qk-9v-zde"/>
+                                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="p38-Pc-4ec" secondAttribute="bottom" id="DDJ-pp-Z6q"/>
+                                                        <constraint firstItem="Bqk-Fn-Yt6" firstAttribute="top" secondItem="78K-JV-W32" secondAttribute="top" priority="750" id="GLw-cX-CCZ"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Bqk-Fn-Yt6" secondAttribute="bottom" priority="750" id="IIi-TC-YjN"/>
+                                                        <constraint firstAttribute="trailing" secondItem="p38-Pc-4ec" secondAttribute="trailing" id="Ijs-Sc-zrl"/>
+                                                        <constraint firstItem="p38-Pc-4ec" firstAttribute="top" relation="greaterThanOrEqual" secondItem="78K-JV-W32" secondAttribute="top" id="LHL-NM-B9X"/>
+                                                        <constraint firstItem="Bqk-Fn-Yt6" firstAttribute="centerY" secondItem="78K-JV-W32" secondAttribute="centerY" id="PIa-fX-TJo"/>
+                                                        <constraint firstItem="Bqk-Fn-Yt6" firstAttribute="leading" secondItem="fSV-GU-Xat" secondAttribute="trailing" constant="8" id="V9W-9Q-Xhm"/>
+                                                        <constraint firstItem="p38-Pc-4ec" firstAttribute="centerY" secondItem="78K-JV-W32" secondAttribute="centerY" id="bKY-GH-CCn"/>
+                                                        <constraint firstAttribute="bottom" secondItem="fSV-GU-Xat" secondAttribute="bottom" id="c38-8U-xhJ"/>
+                                                        <constraint firstItem="p38-Pc-4ec" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Bqk-Fn-Yt6" secondAttribute="trailing" constant="20" id="jW3-vq-aMh"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="78K-JV-W32" secondAttribute="trailing" constant="16" id="177-cJ-wII"/>
+                                                <constraint firstItem="78K-JV-W32" firstAttribute="leading" secondItem="ZTP-vW-OE8" secondAttribute="leading" constant="16" id="9Ks-fo-JXR"/>
+                                                <constraint firstAttribute="bottom" secondItem="78K-JV-W32" secondAttribute="bottom" priority="200" constant="8" id="KPk-Yd-7Sh"/>
+                                                <constraint firstItem="78K-JV-W32" firstAttribute="top" secondItem="ZTP-vW-OE8" secondAttribute="top" constant="8" id="RwV-6l-qeC"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="126" id="tlO-rd-9fc">
+                                        <rect key="frame" x="0.0" y="553" width="414" height="126"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tlO-rd-9fc" id="lh0-cZ-dwM">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="126"/>
@@ -410,7 +488,6 @@ may be vulnerable to brute force attacks.</string>
                                                     <state key="normal" title="Sign Up"/>
                                                     <connections>
                                                         <action selector="didSelectSignUp:" destination="tey-I4-8sm" eventType="touchUpInside" id="A3U-Cf-KxC"/>
-                                                        <action selector="signUpPressed:" destination="e3L-U2-mfo" eventType="touchUpInside" id="tU3-Mu-pae"/>
                                                     </connections>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fnF-rr-Svb">
@@ -465,14 +542,15 @@ may be vulnerable to brute force attacks.</string>
                             <outlet property="delegate" destination="tey-I4-8sm" id="U9T-rM-RaT"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Hell" id="0aO-Ro-tZT">
-                        <barButtonItem key="backBarButtonItem" title="ddd" id="tL2-n3-dQ3"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Sign Up" id="0aO-Ro-tZT"/>
                     <connections>
+                        <outlet property="advancedButton" destination="Yyw-JV-l6l" id="U0c-sa-P9m"/>
                         <outlet property="alreadyHaveAnAccountLabel" destination="jBb-l9-uvf" id="pZN-kJ-Y4S"/>
+                        <outlet property="backupMyKeysLabel" destination="Bqk-Fn-Yt6" id="LkY-NU-QLq"/>
                         <outlet property="confirmPasswordTextField" destination="LwS-on-PRS" id="sJa-kc-i4m"/>
                         <outlet property="descriptionLabel" destination="9cc-JH-4tF" id="XgR-5g-4sM"/>
                         <outlet property="emailTextField" destination="yTq-Wo-xGu" id="kX6-m4-MU4"/>
+                        <outlet property="includePrivateKeySwitch" destination="p38-Pc-4ec" id="23Y-Zs-ElZ"/>
                         <outlet property="passwordTextField" destination="hFL-fg-WsP" id="8Sg-pm-m4N"/>
                         <outlet property="signInButton" destination="ypJ-I1-wYL" id="yD4-vR-hcQ"/>
                         <outlet property="signUpButton" destination="C2X-Wc-yRK" id="VRM-zm-dl9"/>
@@ -552,154 +630,6 @@ may be vulnerable to brute force attacks.</string>
             </objects>
             <point key="canvasLocation" x="1097" y="-704"/>
         </scene>
-        <!--Sign UpVC-->
-        <scene sceneID="Bmk-HL-1Ch">
-            <objects>
-                <viewController id="e3L-U2-mfo" customClass="SignUpVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Uxu-5N-8ji">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WaP-Rd-bXY">
-                                <rect key="frame" x="16" y="208.33333333333331" width="382" height="23.333333333333343"/>
-                                <color key="textColor" systemColor="darkTextColor"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="email"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                        <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wnl-6U-8nc">
-                                <rect key="frame" x="16" y="235.66666666666666" width="382" height="2"/>
-                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="2" id="HEq-Fu-lVL"/>
-                                </constraints>
-                            </view>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JBr-CC-YYj">
-                                <rect key="frame" x="16" y="278.66666666666669" width="382" height="22"/>
-                                <color key="textColor" systemColor="darkTextColor"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="next" secureTextEntry="YES" textContentType="password"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                        <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PIh-OO-MCD">
-                                <rect key="frame" x="16" y="304.66666666666669" width="382" height="2"/>
-                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="2" id="tp1-pp-3RT"/>
-                                </constraints>
-                            </view>
-                            <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kZf-P9-xUZ">
-                                <rect key="frame" x="16" y="347.66666666666669" width="382" height="22"/>
-                                <color key="textColor" systemColor="darkTextColor"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                        <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Zo-Rn-dz3">
-                                <rect key="frame" x="16" y="373.66666666666669" width="382" height="2"/>
-                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="2" id="TVf-Yb-g5t"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cVN-J0-Fsj">
-                                <rect key="frame" x="16" y="415.66666666666669" width="382" height="36"/>
-                                <color key="backgroundColor" red="0.71764705880000002" green="0.10980392160000001" blue="0.10980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="36" id="wUd-V6-VGK"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="16"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Sign Up"/>
-                                <connections>
-                                    <action selector="signUpPressed:" destination="e3L-U2-mfo" eventType="touchUpInside" id="uze-01-Frb"/>
-                                </connections>
-                            </button>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZnT-Rm-OaK">
-                                <rect key="frame" x="67" y="459.66666666666669" width="280" height="36"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Already  have an account?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x60-9a-wD3">
-                                        <rect key="frame" x="0.0" y="8.5" width="175" height="19"/>
-                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
-                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c6L-is-1fA">
-                                        <rect key="frame" x="232.5" y="2" width="47.5" height="32"/>
-                                        <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="16"/>
-                                        <color key="tintColor" red="0.71764705880000002" green="0.10980392160000001" blue="0.10980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" title="Sign In"/>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="c6L-is-1fA" firstAttribute="leading" relation="lessThanOrEqual" secondItem="x60-9a-wD3" secondAttribute="trailing" constant="57.329999999999998" id="HGa-rG-uQ8"/>
-                                    <constraint firstItem="x60-9a-wD3" firstAttribute="centerY" secondItem="ZnT-Rm-OaK" secondAttribute="centerY" id="KCE-eY-GF2"/>
-                                    <constraint firstItem="c6L-is-1fA" firstAttribute="centerY" secondItem="ZnT-Rm-OaK" secondAttribute="centerY" id="Noe-DA-SW6"/>
-                                    <constraint firstAttribute="trailing" secondItem="c6L-is-1fA" secondAttribute="trailing" id="U8a-E1-mLM"/>
-                                    <constraint firstItem="x60-9a-wD3" firstAttribute="leading" secondItem="ZnT-Rm-OaK" secondAttribute="leading" id="YW3-bU-7jr"/>
-                                </constraints>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="eaN-pt-ewB"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="cVN-J0-Fsj" firstAttribute="leading" secondItem="eaN-pt-ewB" secondAttribute="leading" constant="16" id="1fQ-8Z-bPA"/>
-                            <constraint firstItem="6Zo-Rn-dz3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="kZf-P9-xUZ" secondAttribute="leading" id="1kG-Bj-ZPl"/>
-                            <constraint firstItem="kZf-P9-xUZ" firstAttribute="centerX" secondItem="Wnl-6U-8nc" secondAttribute="centerX" id="43i-Ug-7JB"/>
-                            <constraint firstItem="Wnl-6U-8nc" firstAttribute="leading" secondItem="WaP-Rd-bXY" secondAttribute="leading" id="DgQ-Al-mOz"/>
-                            <constraint firstItem="6Zo-Rn-dz3" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kZf-P9-xUZ" secondAttribute="trailing" id="EHB-at-SwJ"/>
-                            <constraint firstItem="6Zo-Rn-dz3" firstAttribute="centerX" secondItem="Wnl-6U-8nc" secondAttribute="centerX" id="GOp-Vc-7Ip"/>
-                            <constraint firstItem="eaN-pt-ewB" firstAttribute="trailing" secondItem="cVN-J0-Fsj" secondAttribute="trailing" constant="16" id="GcN-EL-t4w"/>
-                            <constraint firstItem="PIh-OO-MCD" firstAttribute="centerX" secondItem="Wnl-6U-8nc" secondAttribute="centerX" id="Jtz-Hp-aTx"/>
-                            <constraint firstItem="WaP-Rd-bXY" firstAttribute="leading" secondItem="eaN-pt-ewB" secondAttribute="leading" constant="16" id="KgV-qS-O8a"/>
-                            <constraint firstItem="cVN-J0-Fsj" firstAttribute="top" secondItem="6Zo-Rn-dz3" secondAttribute="bottom" constant="40" id="Le1-og-8g9"/>
-                            <constraint firstItem="PIh-OO-MCD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="JBr-CC-YYj" secondAttribute="leading" id="PpB-2x-lqR"/>
-                            <constraint firstItem="PIh-OO-MCD" firstAttribute="width" secondItem="Wnl-6U-8nc" secondAttribute="width" id="SYP-dr-mIg"/>
-                            <constraint firstItem="6Zo-Rn-dz3" firstAttribute="width" secondItem="Wnl-6U-8nc" secondAttribute="width" id="Sry-W2-Pd6"/>
-                            <constraint firstItem="JBr-CC-YYj" firstAttribute="top" secondItem="Wnl-6U-8nc" secondAttribute="bottom" constant="41" id="VJb-9M-3jx"/>
-                            <constraint firstItem="PIh-OO-MCD" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="JBr-CC-YYj" secondAttribute="trailing" id="VuR-PN-Dah"/>
-                            <constraint firstItem="Wnl-6U-8nc" firstAttribute="trailing" secondItem="WaP-Rd-bXY" secondAttribute="trailing" id="WZk-O1-qqM"/>
-                            <constraint firstItem="ZnT-Rm-OaK" firstAttribute="width" secondItem="cVN-J0-Fsj" secondAttribute="width" multiplier="0.731707" id="cU5-jD-p86"/>
-                            <constraint firstItem="kZf-P9-xUZ" firstAttribute="width" secondItem="Wnl-6U-8nc" secondAttribute="width" id="cdV-gA-TJM"/>
-                            <constraint firstItem="PIh-OO-MCD" firstAttribute="top" secondItem="JBr-CC-YYj" secondAttribute="bottom" constant="4" id="dIq-L2-EXF"/>
-                            <constraint firstItem="6Zo-Rn-dz3" firstAttribute="top" secondItem="kZf-P9-xUZ" secondAttribute="bottom" constant="4" id="dWe-IC-YIR"/>
-                            <constraint firstItem="eaN-pt-ewB" firstAttribute="trailing" secondItem="WaP-Rd-bXY" secondAttribute="trailing" constant="16" id="jks-Sb-YCg"/>
-                            <constraint firstItem="ZnT-Rm-OaK" firstAttribute="centerX" secondItem="Uxu-5N-8ji" secondAttribute="centerX" id="kh1-aZ-qL8"/>
-                            <constraint firstItem="ZnT-Rm-OaK" firstAttribute="top" secondItem="cVN-J0-Fsj" secondAttribute="bottom" constant="8" id="pBm-eu-nkq"/>
-                            <constraint firstItem="Wnl-6U-8nc" firstAttribute="top" secondItem="WaP-Rd-bXY" secondAttribute="bottom" constant="4" id="qKI-gq-yDp"/>
-                            <constraint firstItem="kZf-P9-xUZ" firstAttribute="top" secondItem="PIh-OO-MCD" secondAttribute="bottom" constant="41" id="rce-nM-Dw2"/>
-                            <constraint firstItem="JBr-CC-YYj" firstAttribute="centerX" secondItem="Wnl-6U-8nc" secondAttribute="centerX" id="x8f-62-jsm"/>
-                            <constraint firstItem="JBr-CC-YYj" firstAttribute="width" secondItem="Wnl-6U-8nc" secondAttribute="width" id="xYs-vw-hsR"/>
-                            <constraint firstItem="ZnT-Rm-OaK" firstAttribute="height" secondItem="cVN-J0-Fsj" secondAttribute="height" id="y0r-7O-Z5A"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="bk3-bP-Uz6"/>
-                    <connections>
-                        <outlet property="confirmPasswordInput" destination="kZf-P9-xUZ" id="wCL-ul-ung"/>
-                        <outlet property="confirmPasswordSeparator" destination="6Zo-Rn-dz3" id="4tN-V5-XQ4"/>
-                        <outlet property="emailInput" destination="WaP-Rd-bXY" id="7gI-te-iPU"/>
-                        <outlet property="emailSeparator" destination="Wnl-6U-8nc" id="ycb-nP-OQb"/>
-                        <outlet property="passwordInput" destination="JBr-CC-YYj" id="9mL-J4-Pzk"/>
-                        <outlet property="passwordSeparator" destination="PIh-OO-MCD" id="GBW-1V-oQD"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="T0B-51-e1q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2967" y="-551"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="8et-ph-f7e">
             <objects>
@@ -725,16 +655,18 @@ may be vulnerable to brute force attacks.</string>
     </scenes>
     <designables>
         <designable name="LwS-on-PRS">
-            <size key="intrinsicContentSize" width="142" height="22"/>
+            <size key="intrinsicContentSize" width="148" height="21"/>
         </designable>
         <designable name="hFL-fg-WsP">
-            <size key="intrinsicContentSize" width="76" height="22"/>
+            <size key="intrinsicContentSize" width="80" height="21"/>
         </designable>
         <designable name="yTq-Wo-xGu">
-            <size key="intrinsicContentSize" width="42.5" height="23"/>
+            <size key="intrinsicContentSize" width="44.5" height="22.5"/>
         </designable>
     </designables>
     <resources>
+        <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>
+        <image name="info.circle.fill" catalog="system" width="128" height="121"/>
         <image name="landing_trust_no_one" width="191" height="235.5"/>
         <namedColor name="STPrimary">
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

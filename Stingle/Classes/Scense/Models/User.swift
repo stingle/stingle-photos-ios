@@ -48,6 +48,7 @@ class User {
 }
 
 class UserMO: NSManagedObject {
+	
 	@NSManaged var token:String
 	@NSManaged var userId:Int
 	@NSManaged var isKeyBackedUp:Bool

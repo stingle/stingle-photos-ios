@@ -3,6 +3,7 @@ import UIKit
 class SignUpVC: UITableViewController {
 	
 	private let viewModel = SignUpVM()
+	private var hiddenCells = Set<CellType>()
 	
 	@IBOutlet weak private var emailTextField: UITextField!
 	@IBOutlet weak private var passwordTextField: UITextField!
@@ -12,27 +13,28 @@ class SignUpVC: UITableViewController {
 	@IBOutlet weak private var alreadyHaveAnAccountLabel: UILabel!
 	@IBOutlet weak private var signUpButton: UIButton!
 	@IBOutlet weak private var signInButton: UIButton!
+	@IBOutlet weak private var includePrivateKeySwitch: UISwitch!
+	@IBOutlet weak private var advancedButton: UIButton!
+	@IBOutlet weak private var backupMyKeysLabel: UILabel!
 	
+	//MARK: User action
+	
+	@IBAction func didSelectAdvancedButton(_ sender: UIButton) {
+		var transform = CGAffineTransform.identity
+		if self.hiddenCells.contains(.backupMyKeys) {
+			self.hiddenCells.remove(.backupMyKeys)
+			transform = .init(rotationAngle: CGFloat.pi / 2)
+		}else {
+			self.hiddenCells.insert(.backupMyKeys)
+		}
+		UIView.animate(withDuration: 0.3) {
+			self.tableView.reloadRows(at: [IndexPath(row: CellType.backupMyKeys.rawValue, section: 0)], with: .bottom)
+			sender.imageView?.transform = transform
+		}
+	}
 	
 	@IBAction func didSelectSignUp(_ sender: Any) {
-		
-		_ = viewModel.signUp(email: self.emailTextField.text, password: self.passwordTextField.text) { (status, error) in
-			do {
-				if status {
-					SyncManager.update(completionHandler: { (status) in
-						if status == true {
-							DispatchQueue.main.async {
-								let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
-								let home = storyboard.instantiateInitialViewController()
-								self.navigationController?.pushViewController(home!, animated: false)
-							}
-						}
-					})
-				} else {
-					print(error!)
-				}
-			}
-		}
+		self.registr()
 	}
 	
 	@IBAction func didSelectSignIn(_ sender: Any) {
@@ -46,13 +48,78 @@ class SignUpVC: UITableViewController {
 		}, completion:nil)
 	}
 	
+	//MARK: Override func
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		self.hiddenCells.insert(.backupMyKeys)
 		self.configurebBackBarButton()
 		self.configureLocalizable()
 	}
 	
-	//MARK: private func
+	override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+		return 1
+	}
+	
+	override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+		return 1
+	}
+	
+	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		var isHidden = false
+		if let cellType = CellType(rawValue: indexPath.row) {
+			isHidden = self.hiddenCells.contains(cellType)
+		}
+		return isHidden ? 0 : UITableView.automaticDimension
+	}
+	
+	override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		let view = UIView()
+		view.backgroundColor = .clear
+		return view
+	}
+	
+	override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+		let view = UIView()
+		view.backgroundColor = .clear
+		return view
+	}
+	
+	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = super.tableView(tableView, cellForRowAt: indexPath)
+		var isHidden = false
+		if let cellType = CellType(rawValue: indexPath.row) {
+			isHidden = self.hiddenCells.contains(cellType)
+		}
+		cell.alpha = isHidden ? 0 : 1
+		return cell
+	}
+	
+	//MARK: Private func
+	
+	func registr() {
+		
+		self.tableView.endEditing(true)
+		
+		STLoadingView.show(in: self.navigationController?.view ?? self.view)
+		
+		let email = self.emailTextField.text
+		let passwort = self.passwordTextField.text
+		let includePrivateKey = self.includePrivateKeySwitch.isOn
+		
+		self.viewModel.registr(email: email, password: passwort, confirmPassword: self.confirmPasswordTextField.text, includePrivateKey: includePrivateKey) { [weak self] (registr) in
+			guard let weakSelf = self else {
+				return
+			}
+			STLoadingView.hide(in: weakSelf.navigationController?.view ?? weakSelf.view)
+		} failure: { [weak self] (error) in
+			guard let weakSelf = self else {
+				return
+			}
+			STLoadingView.hide(in: weakSelf.navigationController?.view ?? weakSelf.view)
+			self?.showError(error: error)
+		}
+	}
 	
 	private func configurebBackBarButton() {
 		self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "chevron.left"), style: .done, target: self, action: #selector(self.backButtonTapped))
@@ -67,6 +134,8 @@ class SignUpVC: UITableViewController {
 		self.navigationItem.title = "sign_up".localized
 		self.signUpButton.setTitle("sign_up".localized, for: .normal)
 		self.signInButton.setTitle("sign_in".localized, for: .normal)
+		self.advancedButton.setTitle("advanced".localized, for: .normal)
+		self.backupMyKeysLabel.text = "backup_my_keys".localized
 	}
 	
 	@objc private func backButtonTapped() {
@@ -87,4 +156,19 @@ extension SignUpVC : UITextFieldDelegate {
 		}
 		return true
 	}
+
 }
+
+extension SignUpVC {
+
+	private enum CellType: Int {
+		case description
+		case email
+		case password
+		case confirmPassword
+		case advanced
+		case backupMyKeys
+	}
+
+}
+

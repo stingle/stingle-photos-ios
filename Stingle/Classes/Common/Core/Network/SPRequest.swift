@@ -11,7 +11,7 @@ enum SPRequestMethod : String {
 	}
 }
 
-let crypto:Crypto  = Crypto()
+let crypto: Crypto  = Crypto()
 
 
 protocol SPRequest {
