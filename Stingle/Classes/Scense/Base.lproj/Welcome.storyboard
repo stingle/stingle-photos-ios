@@ -364,7 +364,7 @@ may be vulnerable to brute force attacks.</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LwS-on-PRS" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="382" height="21"/>
+                                                    <rect key="frame" x="16" y="18" width="382" height="22"/>
                                                     <color key="textColor" systemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
@@ -429,36 +429,34 @@ may be vulnerable to brute force attacks.</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="78K-JV-W32">
-                                                    <rect key="frame" x="16" y="8" width="382" height="31"/>
+                                                    <rect key="frame" x="16" y="8" width="382" height="38"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="fSV-GU-Xat">
-                                                            <rect key="frame" x="0.0" y="0.5" width="20" height="30"/>
-                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Backup my keys" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bqk-Fn-Yt6">
-                                                            <rect key="frame" x="28" y="0.0" width="123.5" height="31"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p38-Pc-4ec">
-                                                            <rect key="frame" x="333" y="0.0" width="51" height="31"/>
+                                                            <rect key="frame" x="333" y="3.5" width="51" height="31"/>
                                                         </switch>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAT-4l-uwz">
+                                                            <rect key="frame" x="0.0" y="0.0" width="166" height="38"/>
+                                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                                            <inset key="imageEdgeInsets" minX="-8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                            <state key="normal" title="Backup my keys" image="info.circle.fill" catalog="system">
+                                                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="didSelectbackupMyKeysButton:" destination="tey-I4-8sm" eventType="touchUpInside" id="xeG-NL-S1U"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
-                                                        <constraint firstItem="fSV-GU-Xat" firstAttribute="leading" secondItem="78K-JV-W32" secondAttribute="leading" id="3Ho-Ph-Saj"/>
-                                                        <constraint firstItem="fSV-GU-Xat" firstAttribute="top" secondItem="78K-JV-W32" secondAttribute="top" id="6qk-9v-zde"/>
+                                                        <constraint firstItem="p38-Pc-4ec" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fAT-4l-uwz" secondAttribute="trailing" constant="8" id="Aum-lr-1iP"/>
+                                                        <constraint firstItem="fAT-4l-uwz" firstAttribute="top" secondItem="78K-JV-W32" secondAttribute="top" id="COl-Xg-V2p"/>
                                                         <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="p38-Pc-4ec" secondAttribute="bottom" id="DDJ-pp-Z6q"/>
-                                                        <constraint firstItem="Bqk-Fn-Yt6" firstAttribute="top" secondItem="78K-JV-W32" secondAttribute="top" priority="750" id="GLw-cX-CCZ"/>
-                                                        <constraint firstAttribute="bottom" secondItem="Bqk-Fn-Yt6" secondAttribute="bottom" priority="750" id="IIi-TC-YjN"/>
                                                         <constraint firstAttribute="trailing" secondItem="p38-Pc-4ec" secondAttribute="trailing" id="Ijs-Sc-zrl"/>
                                                         <constraint firstItem="p38-Pc-4ec" firstAttribute="top" relation="greaterThanOrEqual" secondItem="78K-JV-W32" secondAttribute="top" id="LHL-NM-B9X"/>
-                                                        <constraint firstItem="Bqk-Fn-Yt6" firstAttribute="centerY" secondItem="78K-JV-W32" secondAttribute="centerY" id="PIa-fX-TJo"/>
-                                                        <constraint firstItem="Bqk-Fn-Yt6" firstAttribute="leading" secondItem="fSV-GU-Xat" secondAttribute="trailing" constant="8" id="V9W-9Q-Xhm"/>
+                                                        <constraint firstItem="fAT-4l-uwz" firstAttribute="leading" secondItem="78K-JV-W32" secondAttribute="leading" id="MnV-wD-tWx"/>
+                                                        <constraint firstAttribute="bottom" secondItem="fAT-4l-uwz" secondAttribute="bottom" id="Sjw-cZ-YUY"/>
                                                         <constraint firstItem="p38-Pc-4ec" firstAttribute="centerY" secondItem="78K-JV-W32" secondAttribute="centerY" id="bKY-GH-CCn"/>
-                                                        <constraint firstAttribute="bottom" secondItem="fSV-GU-Xat" secondAttribute="bottom" id="c38-8U-xhJ"/>
-                                                        <constraint firstItem="p38-Pc-4ec" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Bqk-Fn-Yt6" secondAttribute="trailing" constant="20" id="jW3-vq-aMh"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
@@ -546,7 +544,7 @@ may be vulnerable to brute force attacks.</string>
                     <connections>
                         <outlet property="advancedButton" destination="Yyw-JV-l6l" id="U0c-sa-P9m"/>
                         <outlet property="alreadyHaveAnAccountLabel" destination="jBb-l9-uvf" id="pZN-kJ-Y4S"/>
-                        <outlet property="backupMyKeysLabel" destination="Bqk-Fn-Yt6" id="LkY-NU-QLq"/>
+                        <outlet property="backupMyKeysButton" destination="fAT-4l-uwz" id="WzP-Lp-JDR"/>
                         <outlet property="confirmPasswordTextField" destination="LwS-on-PRS" id="sJa-kc-i4m"/>
                         <outlet property="descriptionLabel" destination="9cc-JH-4tF" id="XgR-5g-4sM"/>
                         <outlet property="emailTextField" destination="yTq-Wo-xGu" id="kX6-m4-MU4"/>
@@ -655,13 +653,13 @@ may be vulnerable to brute force attacks.</string>
     </scenes>
     <designables>
         <designable name="LwS-on-PRS">
-            <size key="intrinsicContentSize" width="148" height="21"/>
+            <size key="intrinsicContentSize" width="142" height="22"/>
         </designable>
         <designable name="hFL-fg-WsP">
-            <size key="intrinsicContentSize" width="80" height="21"/>
+            <size key="intrinsicContentSize" width="76" height="22"/>
         </designable>
         <designable name="yTq-Wo-xGu">
-            <size key="intrinsicContentSize" width="44.5" height="22.5"/>
+            <size key="intrinsicContentSize" width="42.5" height="23"/>
         </designable>
     </designables>
     <resources>

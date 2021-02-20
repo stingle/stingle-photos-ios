@@ -15,9 +15,13 @@ class SignUpVC: UITableViewController {
 	@IBOutlet weak private var signInButton: UIButton!
 	@IBOutlet weak private var includePrivateKeySwitch: UISwitch!
 	@IBOutlet weak private var advancedButton: UIButton!
-	@IBOutlet weak private var backupMyKeysLabel: UILabel!
+	@IBOutlet weak private var backupMyKeysButton: UIButton!
 	
 	//MARK: User action
+    
+    @IBAction func didSelectbackupMyKeysButton(_ sender: UIButton) {
+		self.showInfoAlert(title: "info".localized, message: "backup_my_keys_description".localized)
+    }
 	
 	@IBAction func didSelectAdvancedButton(_ sender: UIButton) {
 		var transform = CGAffineTransform.identity
@@ -135,7 +139,7 @@ class SignUpVC: UITableViewController {
 		self.signUpButton.setTitle("sign_up".localized, for: .normal)
 		self.signInButton.setTitle("sign_in".localized, for: .normal)
 		self.advancedButton.setTitle("advanced".localized, for: .normal)
-		self.backupMyKeysLabel.text = "backup_my_keys".localized
+        self.backupMyKeysButton.setTitle("backup_my_keys".localized, for: .normal)
 	}
 	
 	@objc private func backButtonTapped() {

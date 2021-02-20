@@ -10,13 +10,17 @@ import UIKit
 
 extension UIViewController {
 	
-	func showError(error: IError, handler: (() -> Void)? = nil) {
-		let alert = UIAlertController(title: error.title, message: error.message, preferredStyle: .alert)
+	func showInfoAlert(title: String?, message: String?, handler: (() -> Void)? = nil) {
+		let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 		let okAction = UIAlertAction(title:  "ok".localized, style: .default) { (_) in
 			handler?()
 		}
 		alert.addAction(okAction)
 		self.present(alert, animated: true)
+	}
+	
+	func showError(error: IError, handler: (() -> Void)? = nil) {
+		self.showInfoAlert(title: error.title, message: error.message, handler: handler)
 	}
 	
 }
