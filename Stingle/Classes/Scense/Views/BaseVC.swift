@@ -5,9 +5,10 @@ class BaseVC: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		if #available(iOS 13.0, *) {
-			let statusBar = UIView(frame: UIApplication.shared.keyWindow?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
+			let window = UIApplication.shared.windows.first
+			let statusBar = UIView(frame: window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
 			 statusBar.backgroundColor = Theme.Colors.SPDarkRed
-			 UIApplication.shared.keyWindow?.addSubview(statusBar)
+			window?.addSubview(statusBar)
 		} else {
 			let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
 			statusBar?.backgroundColor = Theme.Colors.SPDarkRed
