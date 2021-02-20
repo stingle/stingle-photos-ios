@@ -1,0 +1,12 @@
+{
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "symbols" : [
+    {
+      "filename" : "photo.fill.on.rectangle.fill.svg",
+      "idiom" : "universal"
+    }
+  ]
+}
