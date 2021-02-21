@@ -51,11 +51,11 @@
 		6251FC1724454585002023B2 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6251FC1624454585002023B2 /* EventManager.swift */; };
 		625F32A92419EB1E00477881 /* SPCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 625F32A72419EB1E00477881 /* SPCollectionHeader.swift */; };
 		62619354240D092D00562BDF /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619353240D092D00562BDF /* SignInVC.swift */; };
-		62619357240D094F00562BDF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619356240D094F00562BDF /* SignUpVC.swift */; };
-		62619359240D096000562BDF /* LandingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619358240D096000562BDF /* LandingVC.swift */; };
+		62619357240D094F00562BDF /* STSignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619356240D094F00562BDF /* STSignUpVC.swift */; };
+		62619359240D096000562BDF /* STLandingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62619358240D096000562BDF /* STLandingVC.swift */; };
 		6261935B240D0E8400562BDF /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935A240D0E8400562BDF /* BaseVC.swift */; };
 		6261935E240D4CA800562BDF /* HeaderPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935D240D4CA800562BDF /* HeaderPageVC.swift */; };
-		62619360240D4D2A00562BDF /* LandingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935F240D4D2A00562BDF /* LandingVM.swift */; };
+		62619360240D4D2A00562BDF /* STLandingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6261935F240D4D2A00562BDF /* STLandingVM.swift */; };
 		626AB75A2426BB0000168659 /* SPImagePageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB7592426BB0000168659 /* SPImagePageVC.swift */; };
 		626AB75C2426C04000168659 /* SPMediaPreviewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB75B2426C04000168659 /* SPMediaPreviewVM.swift */; };
 		626AB75F24280E2800168659 /* SPDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626AB75E24280E2800168659 /* SPDatasource.swift */; };
@@ -73,7 +73,7 @@
 		62AE68A0240DDDBE001EA58D /* Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62AE689F240DDDBE001EA58D /* Localize.swift */; };
 		62B9F63A2407EE2E0014E3AF /* CryptoError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62B9F6392407EE2E0014E3AF /* CryptoError.swift */; };
 		62C0CAEA2461A6AC003C5756 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C0CAE92461A6AC003C5756 /* Window.swift */; };
-		62D9D0392453B4C60001D0D8 /* SignUpVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D9D0382453B4C60001D0D8 /* SignUpVM.swift */; };
+		62D9D0392453B4C60001D0D8 /* STSignUpVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D9D0382453B4C60001D0D8 /* STSignUpVM.swift */; };
 		62E20E502468046A00563FC3 /* MobileVLCKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E4F2468046A00563FC3 /* MobileVLCKit.framework */; };
 		62E20E522468062300563FC3 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E512468062300563FC3 /* CoreImage.framework */; };
 		62E20E542468062E00563FC3 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E532468062E00563FC3 /* libc++.tbd */; };
@@ -103,6 +103,9 @@
 		A0123C7525DF126D004BBDFF /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0123C7425DF126D004BBDFF /* UIView+Extensions.swift */; };
 		A0123C8025DF1A3E004BBDFF /* STValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0123C7F25DF1A3E004BBDFF /* STValidator.swift */; };
 		A0123C8425DF2023004BBDFF /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0123C8325DF2023004BBDFF /* UIViewController+Extension.swift */; };
+		A01B99AB25E2CF430080FEC8 /* STMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01B99AA25E2CF430080FEC8 /* STMainVC.swift */; };
+		A01B99AF25E2CF950080FEC8 /* STMainVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01B99AE25E2CF950080FEC8 /* STMainVM.swift */; };
+		A01B99B625E2D1B90080FEC8 /* STRootWindowSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01B99B525E2D1B90080FEC8 /* STRootWindowSegue.swift */; };
 		A03D86AC25E1A3B00089F620 /* STResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D86AB25E1A3B00089F620 /* STResponse.swift */; };
 		A03D86B125E1A4490089F620 /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D86B025E1A4490089F620 /* IRequest.swift */; };
 		A03D86B525E1C57D0089F620 /* STNetworkDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D86B425E1C57D0089F620 /* STNetworkDispatcher.swift */; };
@@ -176,11 +179,11 @@
 		6251FC1624454585002023B2 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		625F32A72419EB1E00477881 /* SPCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPCollectionHeader.swift; sourceTree = "<group>"; };
 		62619353240D092D00562BDF /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
-		62619356240D094F00562BDF /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
-		62619358240D096000562BDF /* LandingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingVC.swift; sourceTree = "<group>"; };
+		62619356240D094F00562BDF /* STSignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSignUpVC.swift; sourceTree = "<group>"; };
+		62619358240D096000562BDF /* STLandingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLandingVC.swift; sourceTree = "<group>"; };
 		6261935A240D0E8400562BDF /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		6261935D240D4CA800562BDF /* HeaderPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderPageVC.swift; sourceTree = "<group>"; };
-		6261935F240D4D2A00562BDF /* LandingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingVM.swift; sourceTree = "<group>"; };
+		6261935F240D4D2A00562BDF /* STLandingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLandingVM.swift; sourceTree = "<group>"; };
 		626AB7592426BB0000168659 /* SPImagePageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPImagePageVC.swift; sourceTree = "<group>"; };
 		626AB75B2426C04000168659 /* SPMediaPreviewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPMediaPreviewVM.swift; sourceTree = "<group>"; };
 		626AB75E24280E2800168659 /* SPDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPDatasource.swift; sourceTree = "<group>"; };
@@ -200,7 +203,7 @@
 		62AE689F240DDDBE001EA58D /* Localize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localize.swift; sourceTree = "<group>"; };
 		62B9F6392407EE2E0014E3AF /* CryptoError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoError.swift; sourceTree = "<group>"; };
 		62C0CAE92461A6AC003C5756 /* Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
-		62D9D0382453B4C60001D0D8 /* SignUpVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVM.swift; sourceTree = "<group>"; };
+		62D9D0382453B4C60001D0D8 /* STSignUpVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSignUpVM.swift; sourceTree = "<group>"; };
 		62E20E4F2468046A00563FC3 /* MobileVLCKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileVLCKit.framework; path = ../probes/VLCKit/build/MobileVLCKit.framework; sourceTree = "<group>"; };
 		62E20E512468062300563FC3 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		62E20E532468062E00563FC3 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -234,6 +237,9 @@
 		A0123C7425DF126D004BBDFF /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		A0123C7F25DF1A3E004BBDFF /* STValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STValidator.swift; sourceTree = "<group>"; };
 		A0123C8325DF2023004BBDFF /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		A01B99AA25E2CF430080FEC8 /* STMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMainVC.swift; sourceTree = "<group>"; };
+		A01B99AE25E2CF950080FEC8 /* STMainVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMainVM.swift; sourceTree = "<group>"; };
+		A01B99B525E2D1B90080FEC8 /* STRootWindowSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STRootWindowSegue.swift; sourceTree = "<group>"; };
 		A03D86AB25E1A3B00089F620 /* STResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STResponse.swift; sourceTree = "<group>"; };
 		A03D86B025E1A4490089F620 /* IRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IRequest.swift; sourceTree = "<group>"; };
 		A03D86B425E1C57D0089F620 /* STNetworkDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkDispatcher.swift; sourceTree = "<group>"; };
@@ -284,10 +290,10 @@
 		62048A65240E9811006207AC /* Scense */ = {
 			isa = PBXGroup;
 			children = (
+				62E31377241CAFFD00AD79CF /* Welcome */,
 				620C02CD23FED2BB00999057 /* ViewModels */,
 				620C02CA23FED26200999057 /* Models */,
 				620C02C923FED23F00999057 /* Views */,
-				6279CF2523FEBB0C008B18DA /* Welcome.storyboard */,
 				62048A63240E97FF006207AC /* Home.storyboard */,
 			);
 			path = Scense;
@@ -296,10 +302,8 @@
 		620C02C923FED23F00999057 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				62E31377241CAFFD00AD79CF /* Auth */,
 				620E18CE241A166F00097A16 /* Menu */,
 				6284A4C524156E97003C3FA5 /* Home */,
-				6261935C240D43D400562BDF /* Landing */,
 				620C02D423FED4FB00999057 /* TrashVC.swift */,
 				620C02D623FED51E00999057 /* BackupPhraseVC.swift */,
 				620C02D823FED52E00999057 /* SettingsVC.swift */,
@@ -345,11 +349,8 @@
 			isa = PBXGroup;
 			children = (
 				624A196F24116B370002F1ED /* GalleryVM.swift */,
-				6261935F240D4D2A00562BDF /* LandingVM.swift */,
-				62048A68240EDBDD006207AC /* SignInVM.swift */,
 				62504375241AD24C00A90F3A /* SPMenuVM.swift */,
 				626AB75B2426C04000168659 /* SPMediaPreviewVM.swift */,
-				62D9D0382453B4C60001D0D8 /* SignUpVM.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -457,14 +458,14 @@
 			path = CryptoTests;
 			sourceTree = "<group>";
 		};
-		6261935C240D43D400562BDF /* Landing */ = {
+		6261935C240D43D400562BDF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				62619358240D096000562BDF /* LandingVC.swift */,
+				62619358240D096000562BDF /* STLandingVC.swift */,
 				6261935D240D4CA800562BDF /* HeaderPageVC.swift */,
 				62AE6895240D7E54001EA58D /* CurrentPageVC.swift */,
 			);
-			path = Landing;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		626AB75D2428081000168659 /* DataSource */ = {
@@ -574,13 +575,16 @@
 			path = Animations;
 			sourceTree = "<group>";
 		};
-		62E31377241CAFFD00AD79CF /* Auth */ = {
+		62E31377241CAFFD00AD79CF /* Welcome */ = {
 			isa = PBXGroup;
 			children = (
-				62619353240D092D00562BDF /* SignInVC.swift */,
-				62619356240D094F00562BDF /* SignUpVC.swift */,
+				A01B99A925E2CEE40080FEC8 /* Main */,
+				A01B99BF25E2DB000080FEC8 /* Landing */,
+				A01B999D25E2C8160080FEC8 /* Register */,
+				A01B99A025E2C8D90080FEC8 /* Login */,
+				A01B99A225E2C9190080FEC8 /* Common */,
 			);
-			path = Auth;
+			path = Welcome;
 			sourceTree = "<group>";
 		};
 		62E7545A2413304D00D8FB96 /* Sync */ = {
@@ -611,6 +615,58 @@
 				A0123C8325DF2023004BBDFF /* UIViewController+Extension.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		A01B999D25E2C8160080FEC8 /* Register */ = {
+			isa = PBXGroup;
+			children = (
+				62D9D0382453B4C60001D0D8 /* STSignUpVM.swift */,
+				62619356240D094F00562BDF /* STSignUpVC.swift */,
+			);
+			path = Register;
+			sourceTree = "<group>";
+		};
+		A01B99A025E2C8D90080FEC8 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				62619353240D092D00562BDF /* SignInVC.swift */,
+				62048A68240EDBDD006207AC /* SignInVM.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		A01B99A225E2C9190080FEC8 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				6279CF2523FEBB0C008B18DA /* Welcome.storyboard */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		A01B99A925E2CEE40080FEC8 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				A01B99AA25E2CF430080FEC8 /* STMainVC.swift */,
+				A01B99AE25E2CF950080FEC8 /* STMainVM.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		A01B99B425E2D1A50080FEC8 /* Segue */ = {
+			isa = PBXGroup;
+			children = (
+				A01B99B525E2D1B90080FEC8 /* STRootWindowSegue.swift */,
+			);
+			path = Segue;
+			sourceTree = "<group>";
+		};
+		A01B99BF25E2DB000080FEC8 /* Landing */ = {
+			isa = PBXGroup;
+			children = (
+				6261935C240D43D400562BDF /* Views */,
+				6261935F240D4D2A00562BDF /* STLandingVM.swift */,
+			);
+			path = Landing;
 			sourceTree = "<group>";
 		};
 		A03D86AA25E1A3990089F620 /* Response */ = {
@@ -684,6 +740,7 @@
 		A0EA3A6C25DDBA6400461041 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A01B99B425E2D1A50080FEC8 /* Segue */,
 				62E3136C241C54F200AD79CF /* Animations */,
 				A09B3CFE25DC90320036CF3E /* Controllers */,
 				A09B3CD125DC73420036CF3E /* Views */,
@@ -893,6 +950,7 @@
 				624A197024116B370002F1ED /* GalleryVM.swift in Sources */,
 				624A1947241115250002F1ED /* StingleModel.xcdatamodeld in Sources */,
 				626AB75C2426C04000168659 /* SPMediaPreviewVM.swift in Sources */,
+				A01B99AF25E2CF950080FEC8 /* STMainVM.swift in Sources */,
 				62048A6B240EEC82006207AC /* NetworkManager.swift in Sources */,
 				A0123C8425DF2023004BBDFF /* UIViewController+Extension.swift in Sources */,
 				62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */,
@@ -902,8 +960,8 @@
 				620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */,
 				6261935B240D0E8400562BDF /* BaseVC.swift in Sources */,
 				626B0607242EDDE60092B55E /* GalleryFrontVC.swift in Sources */,
-				62D9D0392453B4C60001D0D8 /* SignUpVM.swift in Sources */,
-				62619360240D4D2A00562BDF /* LandingVM.swift in Sources */,
+				62D9D0392453B4C60001D0D8 /* STSignUpVM.swift in Sources */,
+				62619360240D4D2A00562BDF /* STLandingVM.swift in Sources */,
 				6233925F2406D11600A0F64F /* SPFileManager.swift in Sources */,
 				626AB75A2426BB0000168659 /* SPImagePageVC.swift in Sources */,
 				6251FC152444FF35002023B2 /* UITextField+Extensions.swift in Sources */,
@@ -922,6 +980,7 @@
 				624A197424118CAE0002F1ED /* SPFile.swift in Sources */,
 				6279CF2023FEBB0C008B18DA /* AppDelegate.swift in Sources */,
 				6239B148240096B60041F703 /* Crypto+Extensions.swift in Sources */,
+				A01B99AB25E2CF430080FEC8 /* STMainVC.swift in Sources */,
 				62048A6F240F1766006207AC /* SPRequest.swift in Sources */,
 				62048A6D240F1759006207AC /* IResponse.swift in Sources */,
 				62504376241AD24C00A90F3A /* SPMenuVM.swift in Sources */,
@@ -938,13 +997,14 @@
 				62048A69240EDBDD006207AC /* SignInVM.swift in Sources */,
 				62E7545E241331D400D8FB96 /* SPEvent.swift in Sources */,
 				62AE68A0240DDDBE001EA58D /* Localize.swift in Sources */,
+				A01B99B625E2D1B90080FEC8 /* STRootWindowSegue.swift in Sources */,
 				62E85BCF2412C89A00FB9FD0 /* AppInfo.swift in Sources */,
 				62E20E782469CB6300563FC3 /* SPMediaPreviewVC.swift in Sources */,
 				620C02D323FED4EC00999057 /* GalleryVC.swift in Sources */,
 				6226ABE9243149DA0053152E /* SPMediaFileManager.swift in Sources */,
-				62619359240D096000562BDF /* LandingVC.swift in Sources */,
+				62619359240D096000562BDF /* STLandingVC.swift in Sources */,
 				62AE6896240D7E54001EA58D /* CurrentPageVC.swift in Sources */,
-				62619357240D094F00562BDF /* SignUpVC.swift in Sources */,
+				62619357240D094F00562BDF /* STSignUpVC.swift in Sources */,
 				6226ABEB243149FA0053152E /* SPMediaFile.swift in Sources */,
 				62E3136E241C557500AD79CF /* SwipeInteractionController.swift in Sources */,
 				627057AA24265A85006B70F4 /* SPImagePreviewVC.swift in Sources */,

@@ -2,7 +2,7 @@ import UIKit
 
 class CurrentPageVC: UIViewController {
 
-	let viewModel = LandingVM()
+	let viewModel = STLandingVM()
 	var index:Int = NSNotFound
 	
 	@IBOutlet weak var image: UIImageView!

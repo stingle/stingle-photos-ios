@@ -4,18 +4,6 @@ class BaseVC: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		if #available(iOS 13.0, *) {
-			let window = UIApplication.shared.windows.first
-			let statusBar = UIView(frame: window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
-			 statusBar.backgroundColor = Theme.Colors.SPDarkRed
-			window?.addSubview(statusBar)
-		} else {
-			let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
-			statusBar?.backgroundColor = Theme.Colors.SPDarkRed
-		}
-		if let navigationController = self.navigationController {
-			navigationController.navigationBar.barTintColor = Theme.Colors.SPRed
-		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

@@ -37,6 +37,7 @@ class SignInVC : BaseVC {
 	
 	@IBAction func signUpClicked(_ sender: Any) {
 	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		emailInput.delegate = self

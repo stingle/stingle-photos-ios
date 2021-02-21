@@ -1,8 +1,9 @@
 import UIKit
 
-
-class LandingVM {
+class STLandingVM {
+	
 	private var index:Int = NSNotFound
+	
 	var page:Int {
 		get {
 			return index

@@ -1,7 +1,7 @@
 import Foundation
 import Foundation
 
-class SignUpVM {
+class STSignUpVM {
 	
 	let authWorker = STAuthWorker()
 	let validator = STValidator()
@@ -20,6 +20,8 @@ class SignUpVM {
 		}
 	}
 	
+	//MARK: - Private funcs
+	
 	private func validateEmail(email: String) -> Bool {
 		return true
 	}
@@ -34,7 +36,7 @@ class SignUpVM {
 	
 }
 
-extension SignUpVM {
+extension STSignUpVM {
 	
 	private enum SignUpVMError: IError {
 		case confirmPassword

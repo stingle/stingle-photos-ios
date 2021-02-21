@@ -1,8 +1,8 @@
 import UIKit
 
-class SignUpVC: UITableViewController {
+class STSignUpVC: UITableViewController {
 	
-	private let viewModel = SignUpVM()
+	private let viewModel = STSignUpVM()
 	private var hiddenCells = Set<CellType>()
 	
 	@IBOutlet weak private var emailTextField: UITextField!
@@ -38,7 +38,7 @@ class SignUpVC: UITableViewController {
 	}
 	
 	@IBAction func didSelectSignUp(_ sender: Any) {
-		self.registr()
+		self.register()
 	}
 	
 	@IBAction func didSelectSignIn(_ sender: Any) {
@@ -101,7 +101,7 @@ class SignUpVC: UITableViewController {
 	
 	//MARK: Private func
 	
-	func registr() {
+	private func register() {
 		
 		self.tableView.endEditing(true)
 		
@@ -148,7 +148,7 @@ class SignUpVC: UITableViewController {
 	
 }
 
-extension SignUpVC : UITextFieldDelegate {
+extension STSignUpVC : UITextFieldDelegate {
 
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		if textField == self.confirmPasswordTextField {
@@ -163,7 +163,7 @@ extension SignUpVC : UITextFieldDelegate {
 
 }
 
-extension SignUpVC {
+extension STSignUpVC {
 
 	private enum CellType: Int {
 		case description
