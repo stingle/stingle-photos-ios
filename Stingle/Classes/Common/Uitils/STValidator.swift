@@ -28,7 +28,7 @@ class STValidator {
 		guard let password = password, !password.isEmpty else {
 			throw ValidatorError.passwordIsNil
 		}
-		let isValid = password.trimmingCharacters(in: .whitespaces).count > 5
+		let isValid = password.trimmingCharacters(in: .whitespaces).count > 4
 		if !isValid {
 			throw ValidatorError.passwordIncorrect
 		}

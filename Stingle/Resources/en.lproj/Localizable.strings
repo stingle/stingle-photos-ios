@@ -1,5 +1,6 @@
 
 //Landing Page
+
 "welcome"="Welcome";
 
 "landing_trust_no_one_title"="Trust no one Encryption";
@@ -48,3 +49,9 @@
 
 "error_incorrect_confirm_password" = "Confirm  passwordnot valid";
 
+//MARK: - NETWORK
+
+"nework_error_data_not_found" = "Data not found";
+"nework_error_request_not_valed" = "Request not valed";
+"nework_error_bad_request" = "Bad request to server";
+"nework_error_data_not_found" = "Data not found";

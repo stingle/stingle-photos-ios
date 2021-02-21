@@ -1,15 +1,5 @@
 import Foundation
 
-enum SPRequestMethod : String {
-	case POST
-	case GET
-	case HEAD
-	case NOTIMPLEMENTED
-	
-	func value() -> String {
-		return self.rawValue
-	}
-}
 
 let crypto: Crypto  = Crypto()
 
@@ -17,7 +7,7 @@ let crypto: Crypto  = Crypto()
 protocol SPRequest {
 	func params () -> String?
 	func path () -> String
-	func method () -> SPRequestMethod
+	func method () -> STRequestMethod
 	func headers () ->  [String : String]?
 	func boundary() -> String?
 }
@@ -35,18 +25,22 @@ struct SPPreSignInRequest : SPRequest {
 	init(email:String) {
 		self.email = email
 	}
+	
 	func params () -> String? {
 		var components = URLComponents()
 		components.queryItems = [URLQueryItem(name: "email", value: "\(email)")]
 		let strParams = components.url?.absoluteString
 		return String((strParams?.dropFirst())!)
 	}
+	
 	func path () -> String {
 		return "login/preLogin"
 	}
-	func method () -> SPRequestMethod {
+	
+	func method () -> STRequestMethod {
 		return .POST
 	}
+	
 	func headers() ->  [String : String]? {
 		return nil
 	}
@@ -73,7 +67,7 @@ struct SPSignInRequest : SPRequest {
 		return "login/login"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -90,7 +84,7 @@ struct SPSignUpRequest : SPRequest {
 	let isBackup:Bool
 	let keyBundle:String
 	
-	init(email:String, password:String, salt:String, keyBundle:String, isBackup:Bool) {
+	init(email:String, password:String, salt:String, keyBundle: String, isBackup:Bool) {
 		self.email = email
 		self.password = password
 		self.salt = salt
@@ -114,7 +108,7 @@ struct SPSignUpRequest : SPRequest {
 		return "register/createAccount"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -125,9 +119,9 @@ struct SPSignUpRequest : SPRequest {
 
 struct SPSignOutRequest : SPRequest {
 	
-	let token:String
+	let token: String
 	
-	init(token:String) {
+	init(token: String) {
 		self.token = token
 	}
 
@@ -142,7 +136,7 @@ struct SPSignOutRequest : SPRequest {
 		return "login/logout"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -182,7 +176,7 @@ struct SPUploadFileRequest : SPRequest {
 		return "sync/upload"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -218,7 +212,7 @@ struct SPGetUpdateRequest : SPRequest {
 		return "sync/getUpdates"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -245,7 +239,7 @@ struct SPDownloadFileHeadReaquest : SPRequest {
 		return "sync/download"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .HEAD
 	}
 	
@@ -285,7 +279,7 @@ struct SPDownloadFileRequest : SPRequest {
 		return "sync/download"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -322,7 +316,7 @@ struct SPPartialDownloadRequest : SPRequest {
 		return url.absoluteString
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .GET
 	}
 	
@@ -351,7 +345,7 @@ struct SPGetFileUrl : SPRequest {
 		return "sync/getUrl"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -388,7 +382,7 @@ struct SPMoveFilesRequest : SPRequest {
 		return "sync/moveFile"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -426,7 +420,7 @@ struct SPTrashFilesRequest : SPRequest {
 		return "sync/trash"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -472,7 +466,7 @@ struct SPRestoreFilesRequest : SPRequest {
 		return "sync/restore"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -518,7 +512,7 @@ struct SPDeleteFilesRequest : SPRequest {
 		return "sync/delete"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	
@@ -562,7 +556,7 @@ struct SPEmptyTrashRequest : SPRequest {
 		return "sync/emptyTrash"
 	}
 	
-	func method () -> SPRequestMethod {
+	func method () -> STRequestMethod {
 		return .POST
 	}
 	

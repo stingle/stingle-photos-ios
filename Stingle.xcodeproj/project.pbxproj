@@ -103,13 +103,17 @@
 		A0123C7525DF126D004BBDFF /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0123C7425DF126D004BBDFF /* UIView+Extensions.swift */; };
 		A0123C8025DF1A3E004BBDFF /* STValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0123C7F25DF1A3E004BBDFF /* STValidator.swift */; };
 		A0123C8425DF2023004BBDFF /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0123C8325DF2023004BBDFF /* UIViewController+Extension.swift */; };
+		A03D86AC25E1A3B00089F620 /* STResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D86AB25E1A3B00089F620 /* STResponse.swift */; };
+		A03D86B125E1A4490089F620 /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D86B025E1A4490089F620 /* IRequest.swift */; };
+		A03D86B525E1C57D0089F620 /* STNetworkDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D86B425E1C57D0089F620 /* STNetworkDispatcher.swift */; };
+		A03D86BB25E1DF980089F620 /* STAuthRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D86BA25E1DF980089F620 /* STAuthRequest.swift */; };
 		A09B3CD325DC73690036CF3E /* STTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09B3CD225DC73690036CF3E /* STTextField.swift */; };
 		A09B3D0025DC904F0036CF3E /* STNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09B3CFF25DC904F0036CF3E /* STNavigationController.swift */; };
 		A0C5DCD125DDB65600DC812D /* STConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C5DCC125DDB61C00DC812D /* STConstants.swift */; };
 		A0C5DCD925DDB76200DC812D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C5DCD825DDB76200DC812D /* Utils.swift */; };
 		A0EA3A6E25DDBB2800461041 /* STError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EA3A6D25DDBB2800461041 /* STError.swift */; };
 		A0EA3A7325DDC8FF00461041 /* STWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EA3A7225DDC8FF00461041 /* STWorker.swift */; };
-		A0EA3A7C25DDD1E900461041 /* STRegister.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EA3A7B25DDD1E900461041 /* STRegister.swift */; };
+		A0EA3A7C25DDD1E900461041 /* STAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EA3A7B25DDD1E900461041 /* STAuth.swift */; };
 		A0EA3A8025DDD25E00461041 /* STAuthWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EA3A7F25DDD25E00461041 /* STAuthWorker.swift */; };
 		D25D6B2D323167EF3A5485AD /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F579C6E8456773E872F6272 /* Pods_Stingle.framework */; };
 /* End PBXBuildFile section */
@@ -230,13 +234,17 @@
 		A0123C7425DF126D004BBDFF /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		A0123C7F25DF1A3E004BBDFF /* STValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STValidator.swift; sourceTree = "<group>"; };
 		A0123C8325DF2023004BBDFF /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		A03D86AB25E1A3B00089F620 /* STResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STResponse.swift; sourceTree = "<group>"; };
+		A03D86B025E1A4490089F620 /* IRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IRequest.swift; sourceTree = "<group>"; };
+		A03D86B425E1C57D0089F620 /* STNetworkDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkDispatcher.swift; sourceTree = "<group>"; };
+		A03D86BA25E1DF980089F620 /* STAuthRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAuthRequest.swift; sourceTree = "<group>"; };
 		A09B3CD225DC73690036CF3E /* STTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTextField.swift; sourceTree = "<group>"; };
 		A09B3CFF25DC904F0036CF3E /* STNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNavigationController.swift; sourceTree = "<group>"; };
 		A0C5DCC125DDB61C00DC812D /* STConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STConstants.swift; sourceTree = "<group>"; };
 		A0C5DCD825DDB76200DC812D /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		A0EA3A6D25DDBB2800461041 /* STError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STError.swift; sourceTree = "<group>"; };
 		A0EA3A7225DDC8FF00461041 /* STWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STWorker.swift; sourceTree = "<group>"; };
-		A0EA3A7B25DDD1E900461041 /* STRegister.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STRegister.swift; sourceTree = "<group>"; };
+		A0EA3A7B25DDD1E900461041 /* STAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAuth.swift; sourceTree = "<group>"; };
 		A0EA3A7F25DDD25E00461041 /* STAuthWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAuthWorker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -314,8 +322,10 @@
 		620C02CB23FED26A00999057 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				A03D86AF25E1A4000089F620 /* Request */,
+				A03D86AA25E1A3990089F620 /* Response */,
 				62048A6A240EEC82006207AC /* NetworkManager.swift */,
-				62048A6C240F1759006207AC /* IResponse.swift */,
+				A03D86B425E1C57D0089F620 /* STNetworkDispatcher.swift */,
 				62048A6E240F1766006207AC /* SPRequest.swift */,
 			);
 			path = Network;
@@ -603,6 +613,24 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
+		A03D86AA25E1A3990089F620 /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				62048A6C240F1759006207AC /* IResponse.swift */,
+				A03D86AB25E1A3B00089F620 /* STResponse.swift */,
+			);
+			path = Response;
+			sourceTree = "<group>";
+		};
+		A03D86AF25E1A4000089F620 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				A03D86B025E1A4490089F620 /* IRequest.swift */,
+				A03D86BA25E1DF980089F620 /* STAuthRequest.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
 		A09B3CD025DC73390036CF3E /* Uitils */ = {
 			isa = PBXGroup;
 			children = (
@@ -675,7 +703,7 @@
 		A0EA3A7A25DDD1CE00461041 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A0EA3A7B25DDD1E900461041 /* STRegister.swift */,
+				A0EA3A7B25DDD1E900461041 /* STAuth.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -861,6 +889,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A03D86BB25E1DF980089F620 /* STAuthRequest.swift in Sources */,
 				624A197024116B370002F1ED /* GalleryVM.swift in Sources */,
 				624A1947241115250002F1ED /* StingleModel.xcdatamodeld in Sources */,
 				626AB75C2426C04000168659 /* SPMediaPreviewVM.swift in Sources */,
@@ -868,6 +897,7 @@
 				A0123C8425DF2023004BBDFF /* UIViewController+Extension.swift in Sources */,
 				62EDF4CD23FEDE3700C868F5 /* Crypto.swift in Sources */,
 				6242B7B1240DDEA00090BFE4 /* String+Extensions.swift in Sources */,
+				A03D86AC25E1A3B00089F620 /* STResponse.swift in Sources */,
 				62619354240D092D00562BDF /* SignInVC.swift in Sources */,
 				620C02D723FED51E00999057 /* BackupPhraseVC.swift in Sources */,
 				6261935B240D0E8400562BDF /* BaseVC.swift in Sources */,
@@ -886,6 +916,7 @@
 				A0123C6D25DF1232004BBDFF /* STLoadingView.swift in Sources */,
 				62AE6894240D55CD001EA58D /* Theme.swift in Sources */,
 				A0EA3A6E25DDBB2800461041 /* STError.swift in Sources */,
+				A03D86B525E1C57D0089F620 /* STNetworkDispatcher.swift in Sources */,
 				A09B3D0025DC904F0036CF3E /* STNavigationController.swift in Sources */,
 				62C0CAEA2461A6AC003C5756 /* Window.swift in Sources */,
 				624A197424118CAE0002F1ED /* SPFile.swift in Sources */,
@@ -895,7 +926,7 @@
 				62048A6D240F1759006207AC /* IResponse.swift in Sources */,
 				62504376241AD24C00A90F3A /* SPMenuVM.swift in Sources */,
 				62504370241AB6FF00A90F3A /* Image+Extension.swift in Sources */,
-				A0EA3A7C25DDD1E900461041 /* STRegister.swift in Sources */,
+				A0EA3A7C25DDD1E900461041 /* STAuth.swift in Sources */,
 				A09B3CD325DC73690036CF3E /* STTextField.swift in Sources */,
 				6284A4CC241582F8003C3FA5 /* SPCollectionViewCell.swift in Sources */,
 				62E754562412DE9600D8FB96 /* Date.swift in Sources */,
@@ -903,6 +934,7 @@
 				A0123C8025DF1A3E004BBDFF /* STValidator.swift in Sources */,
 				A0C5DCD925DDB76200DC812D /* Utils.swift in Sources */,
 				A0EA3A8025DDD25E00461041 /* STAuthWorker.swift in Sources */,
+				A03D86B125E1A4490089F620 /* IRequest.swift in Sources */,
 				62048A69240EDBDD006207AC /* SignInVM.swift in Sources */,
 				62E7545E241331D400D8FB96 /* SPEvent.swift in Sources */,
 				62AE68A0240DDDBE001EA58D /* Localize.swift in Sources */,
