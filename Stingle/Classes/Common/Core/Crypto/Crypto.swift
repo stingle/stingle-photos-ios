@@ -695,10 +695,9 @@ extension Crypto {
 		return result
 	}
 	
-	public func bytesToBase64(data:Bytes) -> String? {
+	public func bytesToBase64(data: Bytes) -> String? {
 		assert(data.count > 0)
-		let str = Data(data).base64EncodedString(options: [])
-		print(str)
+		let str = Data(data).base64EncodedString(options: .endLineWithLineFeed)
 		return str
 	}
 	

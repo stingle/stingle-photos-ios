@@ -363,7 +363,7 @@ may be vulnerable to brute force attacks.</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LwS-on-PRS" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="288" height="22"/>
+                                                    <rect key="frame" x="16" y="18" width="288" height="21"/>
                                                     <color key="textColor" systemColor="darkTextColor"/>
                                                     <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
@@ -488,16 +488,16 @@ may be vulnerable to brute force attacks.</string>
                                                     </connections>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fnF-rr-Svb">
-                                                    <rect key="frame" x="48.5" y="70" width="223" height="29"/>
+                                                    <rect key="frame" x="39" y="70" width="242" height="29"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Already  have an account?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBb-l9-uvf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="175" height="29"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="190" height="29"/>
                                                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ypJ-I1-wYL">
-                                                            <rect key="frame" x="183" y="0.0" width="40" height="29"/>
+                                                            <rect key="frame" x="198" y="0.0" width="44" height="29"/>
                                                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                                             <state key="normal" title="Sign In">
                                                                 <color key="titleColor" name="STPrimary"/>
@@ -692,17 +692,6 @@ may be vulnerable to brute force attacks.</string>
             <point key="canvasLocation" x="-1601" y="470"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="LwS-on-PRS">
-            <size key="intrinsicContentSize" width="142" height="22"/>
-        </designable>
-        <designable name="hFL-fg-WsP">
-            <size key="intrinsicContentSize" width="76" height="22"/>
-        </designable>
-        <designable name="yTq-Wo-xGu">
-            <size key="intrinsicContentSize" width="42.5" height="23"/>
-        </designable>
-    </designables>
     <resources>
         <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>
         <image name="ic_app_logo_rounded" width="512" height="512"/>

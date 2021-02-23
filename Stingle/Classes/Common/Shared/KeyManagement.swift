@@ -49,14 +49,14 @@ class KeyManagement {
 		var keyBundleBytes:[UInt8]? = nil
 		do {
 			if includePrivateKey {
-				keyBundleBytes = try crypto.exportKeyBundle(password: password)
+				keyBundleBytes = try self.crypto.exportKeyBundle(password: password)
 			} else {
-				keyBundleBytes = try crypto.exportPublicKey()
+				keyBundleBytes = try self.crypto.exportPublicKey()
 			}
 		} catch {
 			throw error
 		}
-		guard let keyBundle = crypto.bytesToBase64(data: keyBundleBytes!) else {
+		guard let keyBundle = self.crypto.bytesToBase64(data: keyBundleBytes!) else {
 			//TODO : throw error
 			return nil
 		}

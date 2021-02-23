@@ -12,11 +12,12 @@ class STWorker {
 	
 	typealias Result<T> = STNetworkDispatcher.Result<T>
 	typealias Success<T> = (_ result: T) -> Void
-	typealias Failure = (_ error: WorkerError) -> Void
+	typealias Failure = (_ error: IError) -> Void
 	
 	let networkManager = NetworkManager.self
 	let network = STNetworkDispatcher.sheared
 		
+	//MARK: Old request
 	
 	func request<T: IResponse>(request: SPRequest, success: Success<T>? = nil, failure: Failure? = nil) {
 		self.networkManager.send(request: request) { (response: T?, error) in
@@ -55,7 +56,7 @@ class STWorker {
 	}
 	
 	
-	//MARK: New
+	//MARK: New request
 	
 	func request<T: IResponse>(request: IRequest, success: Success<T>? = nil, failure: Failure? = nil) {
 		self.network.request(request: request) { (resultNetwork: Result<T>) in

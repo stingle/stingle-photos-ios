@@ -6,7 +6,7 @@ class STSignUpVM {
 	let authWorker = STAuthWorker()
 	let validator = STValidator()
 	
-	func registr(email: String?, password: String?, confirmPassword: String?, includePrivateKey: Bool, success: @escaping ((_ result: STAuth.Register) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
+	func registr(email: String?, password: String?, confirmPassword: String?, includePrivateKey: Bool, success: @escaping ((_ result: User) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
 		do {
 			let email = try self.validator.validate(email: email)
 			let password = try self.validator.validate(password: password)
@@ -30,8 +30,8 @@ class STSignUpVM {
 		return true
 	}
 	
-	private func registr(email: String, password: String, includePrivateKey: Bool, success: @escaping ((_ result: STAuth.Register) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
-		self.authWorker.register(email: email, password: password, includePrivateKey: includePrivateKey, success: success, failure: failure)
+	private func registr(email: String, password: String, includePrivateKey: Bool, success: @escaping ((_ result: User) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
+		self.authWorker.registerAndLogin(email: email, password: password, includePrivateKey: includePrivateKey, success: success, failure: failure)
 	}
 	
 }

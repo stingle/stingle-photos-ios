@@ -15,11 +15,20 @@ enum STAuth {
 		var token: String
 		var userId: String
 	}
-
-	struct Login : Codable {
-		var salt:String
+	
+	struct PreLogin: Codable {
+		var salt: String
 	}
 	
+	struct Login: Codable {
+		var homeFolder: String
+		var isKeyBackedUp: Int
+		var keyBundle: String
+		var serverPublicKey: String
+		var token: String
+		var userId: String
+	}
+			
 }
 
 

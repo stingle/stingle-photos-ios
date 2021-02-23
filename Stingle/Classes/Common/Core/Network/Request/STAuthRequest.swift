@@ -10,7 +10,8 @@ import Foundation
 
 enum STAuthRequest {
 	case register(email: String, password: String, salt: String, keyBundle: String, isBackup: Bool)
-	case login(email:String, password:String)
+	case preLogin(email: String)
+	case login(email: String, password: String)
 }
 
 extension STAuthRequest: STRequest {
@@ -19,6 +20,8 @@ extension STAuthRequest: STRequest {
 		switch self {
 		case .register:
 			return "register/createAccount"
+		case .preLogin:
+			return "login/preLogin"
 		case .login:
 			return "login/login"
 		}
@@ -28,6 +31,8 @@ extension STAuthRequest: STRequest {
 		switch self {
 		case .register:
 			return .post
+		case .preLogin:
+			return .post
 		case .login:
 			return .post
 		}
@@ -36,6 +41,8 @@ extension STAuthRequest: STRequest {
 	var headers: [String : String]? {
 		switch self {
 		case .register:
+			return nil
+		case .preLogin:
 			return nil
 		case .login:
 			return nil
@@ -47,6 +54,8 @@ extension STAuthRequest: STRequest {
 		case .register(let email, let password, let salt, let keyBundle, let isBackup):
 			let isBackup = isBackup ? "1" : "0"
 			return ["email": email, "password": password, "salt": salt, "keyBundle": keyBundle, "isBackup": isBackup]
+		case .preLogin(let email):
+			return ["email": email]
 		case .login(let email, let password):
 			return ["email": email, "password": password]
 		}
@@ -56,6 +65,8 @@ extension STAuthRequest: STRequest {
 		switch self {
 		case .register:
 			return JSONDecoder()
+		case .preLogin:
+			return JSONDecoder()
 		case .login:
 			return JSONDecoder()
 		}
@@ -64,6 +75,8 @@ extension STAuthRequest: STRequest {
 	var encoding: RequestEncoding {
 		switch self {
 		case .register:
+			return STNetworkDispatcher.Encoding.body
+		case .preLogin:
 			return STNetworkDispatcher.Encoding.body
 		case .login:
 			return STNetworkDispatcher.Encoding.body

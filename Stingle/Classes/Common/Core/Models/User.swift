@@ -2,6 +2,7 @@ import Foundation
 import CoreData
 
 class User {
+	
 	static public var shared:User? = {
 		if let user = User.current {
 			return user

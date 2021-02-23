@@ -41,8 +41,8 @@ protocol IRequest {
 }
 
 fileprivate struct STEnviorment {
-	static let baseUrl = "https://api.stingle.org/v2"
-//	static let baseUrl = "https://apidev.stingle.org"
+//	static let baseUrl = "https://api.stingle.org/v2"
+	static let baseUrl = "https://apidev.stingle.org"
 }
 
 protocol STRequest: IRequest {

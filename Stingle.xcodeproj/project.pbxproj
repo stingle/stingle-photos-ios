@@ -292,7 +292,6 @@
 			children = (
 				62E31377241CAFFD00AD79CF /* Welcome */,
 				620C02CD23FED2BB00999057 /* ViewModels */,
-				620C02CA23FED26200999057 /* Models */,
 				620C02C923FED23F00999057 /* Views */,
 				62048A63240E97FF006207AC /* Home.storyboard */,
 			);
@@ -310,17 +309,6 @@
 				6261935A240D0E8400562BDF /* BaseVC.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		620C02CA23FED26200999057 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				62048A66240E99BE006207AC /* User.swift */,
-				624A197324118CAE0002F1ED /* SPFile.swift */,
-				62E85BCE2412C89A00FB9FD0 /* AppInfo.swift */,
-				6226ABEA243149FA0053152E /* SPMediaFile.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		620C02CB23FED26A00999057 /* Network */ = {
@@ -761,6 +749,10 @@
 			isa = PBXGroup;
 			children = (
 				A0EA3A7B25DDD1E900461041 /* STAuth.swift */,
+				62048A66240E99BE006207AC /* User.swift */,
+				624A197324118CAE0002F1ED /* SPFile.swift */,
+				62E85BCE2412C89A00FB9FD0 /* AppInfo.swift */,
+				6226ABEA243149FA0053152E /* SPMediaFile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1226,7 +1218,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6FR7795JTL;
+				DEVELOPMENT_TEAM = CW49KPVSFU;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1252,7 +1244,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6FR7795JTL;
+				DEVELOPMENT_TEAM = CW49KPVSFU;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
