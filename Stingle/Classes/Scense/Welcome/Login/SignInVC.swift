@@ -1,9 +1,8 @@
 import UIKit
 
-class SignInVC : BaseVC {
+class SignInVC: UITableViewController {
 	
 	private let viewModel = SignInVM()
-	var dismissKeyboard:UIGestureRecognizer? = nil
 
 	@IBOutlet weak var emailInput: UITextField!
 	@IBOutlet weak var emailSeparator: UIView!
@@ -15,24 +14,10 @@ class SignInVC : BaseVC {
 	@IBOutlet weak var dontHaveAnAccount: UILabel!
 	
 	@IBAction func singInClicked(_ sender: Any) {
-		_ = viewModel.signIn(email: "android@stingle.org", password: "mekicvec" ) { (status, error) in
-//		_ = viewModel.signIn(email: emailInput.text, password: passwordInput.text ) { (status, error) in
-			do {
-				if status {
-					SyncManager.update(completionHandler: { (status) in
-						if status == true {
-							DispatchQueue.main.async {
-								let storyboard = UIStoryboard.init(name: "Home", bundle: nil)
-								let home = storyboard.instantiateInitialViewController()
-								self.navigationController?.pushViewController(home!, animated: false)
-							}
-						}
-					})
-				} else {
-					print(error!)
-				}
-			}
-		}
+		
+//		self.viewModel.signIn(email: <#T##String?#>, password: self.passwordInput.text, success: <#T##((User) -> Void)##((User) -> Void)##(User) -> Void#>, failure: <#T##((IError) -> Void)##((IError) -> Void)##(IError) -> Void#>)
+		
+
 	}
 	
 	@IBAction func signUpClicked(_ sender: Any) {
@@ -43,8 +28,6 @@ class SignInVC : BaseVC {
 		emailInput.delegate = self
 		passwordInput.delegate = self
 		createBackBarButton(forNavigationItem: self.navigationItem)
-		dismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
-		self.view .addGestureRecognizer(dismissKeyboard!)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

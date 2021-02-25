@@ -220,15 +220,13 @@ public class Crypto {
 		return try readPrivateFile(filename: Constants.ServerPublicKeyFilename)
     }
 	
-	public func getPrivateKeyForExport(password:String) throws -> Bytes? {
-		do {
-			let encPK = try readPrivateFile(filename: Constants.PrivateKeyFilename)
-			let nonce = try readPrivateFile(filename: Constants.SKNONCEFilename)
-			let decPK = try decryptSymmetric(key: getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal), nonce: nonce, data: encPK)
-			return try encryptSymmetric(key: getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard), nonce: nonce, data: decPK)
-		} catch {
-			throw error
-		}
+	public func getPrivateKeyForExport(password: String) throws -> Bytes {
+		let encPK = try readPrivateFile(filename: Constants.PrivateKeyFilename)
+		let nonce = try readPrivateFile(filename: Constants.SKNONCEFilename)
+		let key = try getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
+		let decPK = try decryptSymmetric(key: key, nonce: nonce, data: encPK)
+		let encryptKey = try getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard)
+		return try encryptSymmetric(key: encryptKey, nonce: nonce, data: decPK)
 	}
 	
 	public func exportPublicKey () throws -> Bytes {
@@ -245,24 +243,16 @@ public class Crypto {
 		return pbk
 	}
 	
-	public func exportKeyBundle(password:String) throws -> Bytes? {
+	public func exportKeyBundle(password:String) throws -> Bytes {
 		var bundle = [UInt8]()
-		do {
-			bundle += Constants.KeyFileBeggining.bytes
-			bundle += Crypto.toBytes(value: Constants.CurrentKeyFileVersion)
-			bundle += Crypto.toBytes(value: Constants.KeyFileTypeBundleEncrypted)
-			bundle += try readPrivateFile(filename: Constants.PublicKeyFilename)
-			guard let pk = try getPrivateKeyForExport(password: password) else {
-				//TODO : Throw error
-				return nil
-			}
-			bundle += pk
-			bundle += try readPrivateFile(filename: Constants.PwdSaltFilename)
-			bundle += try readPrivateFile(filename: Constants.SKNONCEFilename)
-			return Bytes(bundle)
-		} catch {
-			throw error
-		}
+		bundle += Constants.KeyFileBeggining.bytes
+		bundle += Crypto.toBytes(value: Constants.CurrentKeyFileVersion)
+		bundle += Crypto.toBytes(value: Constants.KeyFileTypeBundleEncrypted)
+		bundle += try readPrivateFile(filename: Constants.PublicKeyFilename)
+		bundle += try getPrivateKeyForExport(password: password)
+		bundle += try readPrivateFile(filename: Constants.PwdSaltFilename)
+		bundle += try readPrivateFile(filename: Constants.SKNONCEFilename)
+		return Bytes(bundle)
 	}
 	
 	private func encryptSymmetric(key:Bytes?, nonce:Bytes?, data:Bytes?) throws -> Bytes {
@@ -665,7 +655,7 @@ extension Crypto {
 		return getRandomBytes(lenght: Constants.FileFileIdLen)
 	}
 	
-	public static func toBytes<T:FixedWidthInteger>(value:T) -> Bytes {
+	public static func toBytes<T: FixedWidthInteger>(value: T) -> Bytes {
 		var result:Bytes = []
 		let numOfBytes = MemoryLayout<T>.size
 		if numOfBytes == 1 {
@@ -680,7 +670,7 @@ extension Crypto {
 		return result
 	}
 	
-	public static func fromBytes<T:FixedWidthInteger>(b:Bytes) -> T  {
+	public static func fromBytes<T: FixedWidthInteger>(b:Bytes) -> T  {
 		assert(0 != b.count)
 		if b.count == 1 {
 			return T(b[0] & 255)
@@ -695,18 +685,17 @@ extension Crypto {
 		return result
 	}
 	
+	//ENCODE
 	public func bytesToBase64(data: Bytes) -> String? {
-		assert(data.count > 0)
-		let str = Data(data).base64EncodedString(options: .endLineWithLineFeed)
-		return str
+		 return Data(data).base64EncodedString()
 	}
 	
-	public func base64ToByte(data:String) -> Bytes? {
-		assert(data.count > 0)
-		guard let data = Data(base64Encoded: data, options: .ignoreUnknownCharacters) else {
+	//DECODE
+	public func base64ToByte(encodedStr: String) -> Bytes? {
+		guard let decodedData = Data(base64Encoded: encodedStr) else {
 			return nil
 		}
-		return Bytes(data)
+		return Bytes(decodedData)
 	}
 	
 	func base64urlToBase64(base64urlString:String) -> String {

@@ -3,8 +3,8 @@ import Foundation
 
 class STSignUpVM {
 	
-	let authWorker = STAuthWorker()
-	let validator = STValidator()
+	private let authWorker = STAuthWorker()
+	private let validator = STValidator()
 	
 	func registr(email: String?, password: String?, confirmPassword: String?, includePrivateKey: Bool, success: @escaping ((_ result: User) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
 		do {
@@ -21,15 +21,7 @@ class STSignUpVM {
 	}
 	
 	//MARK: - Private funcs
-	
-	private func validateEmail(email: String) -> Bool {
-		return true
-	}
-	
-	private func validatePassord(email: String) -> Bool {
-		return true
-	}
-	
+
 	private func registr(email: String, password: String, includePrivateKey: Bool, success: @escaping ((_ result: User) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
 		self.authWorker.registerAndLogin(email: email, password: password, includePrivateKey: includePrivateKey, success: success, failure: failure)
 	}

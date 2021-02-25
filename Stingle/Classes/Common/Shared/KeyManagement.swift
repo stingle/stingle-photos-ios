@@ -9,7 +9,7 @@ class KeyManagement {
 	static public var key:[UInt8]? { get { return KeyManagement.secret } set(newKey) { KeyManagement.secret = newKey } }
 	
 	static public func importServerPublicKey(pbk:String) {
-		guard let pbkData = crypto.base64ToByte(data: pbk) else {
+		guard let pbkData = self.crypto.base64ToByte(encodedStr: pbk) else {
 			return
 		}
 		do {
@@ -20,11 +20,11 @@ class KeyManagement {
 	}
 	
 	static public func importKeyBundle(keyBundle:String, password:String) -> Bool {
-		guard let keyBundleBytes = SPApplication.crypto.base64ToByte(data: keyBundle) else {
+		guard let keyBundleBytes = self.crypto.base64ToByte(encodedStr: keyBundle) else {
 			return false
 		}
 		do {
-			try SPApplication.crypto.importKeyBundle(keys: keyBundleBytes, password: password)
+			try self.crypto.importKeyBundle(keys: keyBundleBytes, password: password)
 		} catch {
 			print(error)
 			return false

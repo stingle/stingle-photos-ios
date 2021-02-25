@@ -1,19 +1,26 @@
 import Foundation
 
-class SignInVM: NSObject {
+class SignInVM {
 	
-	public func signIn(email:String?, password:String?, completionHandler: @escaping (Bool, Error?) -> Swift.Void) -> Bool {
-		return SyncManager.signIn(email: email, password: password) { (status, error) in
-			completionHandler(status, error)
+	private let authWorker = STAuthWorker()
+	private let validator = STValidator()
+	
+	func login(email: String?, password: String?, success: @escaping ((_ result: User) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
+//		let email = "alex1@stingle.org"
+//		let password = "123456"
+		do {
+			let validEmail = try self.validator.validate(email: email)
+			let validPassword = try self.validator.validate(password: password)
+			self.login(email: validEmail, password: validPassword, success: success, failure: failure)
+		} catch {
+			failure(error as! IError)
 		}
 	}
 	
-	private func validateEmail(email:String) -> Bool{
-		return true
-	}
+	//MARK: - Private funcs
 	
-	private func validatePassord(email:String) -> Bool{
-		return true
+	private func login(email: String, password: String, success: @escaping ((_ result: User) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
+		self.authWorker.login(email: email, password: password, success: success, failure: failure)
 	}
 	
 }
