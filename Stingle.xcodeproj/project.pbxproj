@@ -468,7 +468,6 @@
 		6279CF1323FEBB0C008B18DA = {
 			isa = PBXGroup;
 			children = (
-				624A1945241115250002F1ED /* StingleModel.xcdatamodeld */,
 				6279CF1E23FEBB0C008B18DA /* Stingle */,
 				624A678224040E9000436C2F /* CryptoTests */,
 				6279CF1D23FEBB0C008B18DA /* Products */,
@@ -524,6 +523,7 @@
 		62AE689C240DDD59001EA58D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */,
 				A0EA3A6C25DDBA6400461041 /* UI */,
 				620C02CE23FED2F700999057 /* Core */,
 				624658CE240F988C0050F18F /* Shared */,
@@ -706,7 +706,6 @@
 		A0C5DCB425DDB44000DC812D /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				6279CF1F23FEBB0C008B18DA /* AppDelegate.swift */,
 				62048A65240E9811006207AC /* Scense */,
 				62AE689C240DDD59001EA58D /* Common */,
 			);
@@ -716,6 +715,7 @@
 		A0C5DCB525DDB4C100DC812D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				624A1945241115250002F1ED /* StingleModel.xcdatamodeld */,
 				6279CF2823FEBB0D008B18DA /* Assets.xcassets */,
 				6279CF2D23FEBB0D008B18DA /* Info.plist */,
 				6279CF2A23FEBB0D008B18DA /* LaunchScreen.storyboard */,
@@ -1234,7 +1234,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.photos.Stingle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1260,7 +1260,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.photos.stingle1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
