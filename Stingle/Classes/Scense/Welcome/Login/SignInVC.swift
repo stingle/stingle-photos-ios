@@ -4,103 +4,106 @@ class SignInVC: UITableViewController {
 	
 	private let viewModel = SignInVM()
 
-	@IBOutlet weak var emailInput: UITextField!
-	@IBOutlet weak var emailSeparator: UIView!
-	@IBOutlet weak var passwordInput: UITextField!
-	@IBOutlet weak var passwordSeparator: UIView!
+	@IBOutlet weak var emailTextField: UITextField!
+	@IBOutlet weak var passwordTextField: UITextField!
 	@IBOutlet weak var forgotPassword: UIButton!
-	@IBOutlet weak var signIn: UIButton!
-	@IBOutlet weak var signUp: UIButton!
+	@IBOutlet weak var signInButton: UIButton!
+	@IBOutlet weak var signUpButton: UIButton!
 	@IBOutlet weak var dontHaveAnAccount: UILabel!
-	
-	@IBAction func singInClicked(_ sender: Any) {
-		
-//		self.viewModel.signIn(email: <#T##String?#>, password: self.passwordInput.text, success: <#T##((User) -> Void)##((User) -> Void)##(User) -> Void#>, failure: <#T##((IError) -> Void)##((IError) -> Void)##(IError) -> Void#>)
-		
-
+    
+    @IBAction func didSelectSingInButton(_ sender: Any) {
+		self.login()
 	}
 	
-	@IBAction func signUpClicked(_ sender: Any) {
-	}
-	
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		emailInput.delegate = self
-		passwordInput.delegate = self
-		createBackBarButton(forNavigationItem: self.navigationItem)
-	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
+	@IBAction func didSelectSingUpButton(_ sender: Any) {
 		guard let navigationController = self.navigationController else {
 			return
 		}
-		navigationController.setNavigationBarHidden(false, animated: false)
+		let signInVC = self.storyboard!.instantiateViewController(withIdentifier: "SignUpVC")
+		UIView.transition(with: navigationController.view, duration: 0.5, options: .transitionFlipFromRight, animations: {
+			navigationController.popViewController(animated: false)
+			navigationController.pushViewController(signInVC, animated: false)
+		}, completion:nil)
+
 	}
 	
-	//TODO : create reusable components (with style ) such as navigation bar, navigation bar items ... 
-	func createBackBarButton(forNavigationItem navigationItem:UINavigationItem) {
-		let backButtonImage = UIImage(named: "chevron.left")
-		let backBarButton = UIBarButtonItem(image: backButtonImage, style: .plain, target: self, action: #selector(backButtonTapped))
-		backBarButton.tintColor = .white
-		let titleLabel = UILabel()
-		let text = "landing_sign_in".localized
-		let string = NSMutableAttributedString(string: text)
-		string.setFont(font: Theme.Fonts.SFProMedium(size: 20), forText: text)
-		string.setColor(color: .white, forText: text)
-		titleLabel.attributedText = string
-		let titleBar = UIBarButtonItem(customView: titleLabel)
-		navigationItem.leftBarButtonItems = [backBarButton, titleBar]
+	//MARK: - Override func
+	 
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		self.configurebBackBarButton()
+		self.configureLocalizable()
 	}
 	
-	@objc public func backButtonTapped() {
+	override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+		return 1
+	}
+	
+	override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+		return 1
+	}
+	
+	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return UITableView.automaticDimension
+	}
+	
+	override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		let view = UIView()
+		view.backgroundColor = .clear
+		return view
+	}
+	
+	override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+		let view = UIView()
+		view.backgroundColor = .clear
+		return view
+	}
+	
+	//MARK: - Private func
+	
+	private func login() {
+		self.tableView.endEditing(true)
+		STLoadingView.show(in: self.navigationController?.view ?? self.view)
+		self.viewModel.login(email:  self.emailTextField.text, password: self.passwordTextField.text) { (_) in
+			
+			
+			
+		} failure: { [weak self] (error) in
+			guard let weakSelf = self else {
+				return
+			}
+			STLoadingView.hide(in: weakSelf.navigationController?.view ?? weakSelf.view)
+			self?.showError(error: error)
+		}
+
+	}
+	
+	private func configurebBackBarButton() {
+		self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "chevron.left"), style: .done, target: self, action: #selector(self.backButtonTapped))
+	}
+	
+	private func configureLocalizable() {
+		self.emailTextField.placeholder = "email".localized
+		self.passwordTextField.placeholder = "password".localized
+		self.dontHaveAnAccount.text = "dont_have_an_accout".localized
+		self.navigationItem.title = "sign_in".localized
+		self.signUpButton.setTitle("sign_up".localized, for: .normal)
+		self.signInButton.setTitle("sign_in".localized, for: .normal)
+		self.forgotPassword.setTitle("forgot_password?".localized, for: .normal)
+	}
+	
+	@objc private func backButtonTapped() {
 		self.navigationController?.popViewController(animated: true)
 	}
 }
 
 extension SignInVC : UITextFieldDelegate {
 	
-	@objc func hideKeyboard(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
-		guard let responder = currentResponder() else {
-			return
-		}
-		responder.resignFirstResponder()
-	}
-
-	func currentResponder() -> UITextField? {
-		if emailInput.isFirstResponder {return emailInput}
-		if passwordInput.isFirstResponder {return passwordInput}
-		return nil
-	}
-	
-	func separator(for textField:UITextField) -> UIView? {
-		if textField == emailInput {
-			return emailSeparator
-		} else if textField == passwordInput {
-			return passwordSeparator
-		}
-		return nil
-	}
-	
-	func textFieldDidBeginEditing(_ textField: UITextField) {
-		guard let separator = separator(for: textField) else {
-			return
-		}
-		separator.backgroundColor = Theme.Colors.SPRed
-	}
-	
-	func textFieldDidEndEditing(_ textField: UITextField) {
-		guard let separator = separator(for: textField) else {
-			return
-		}
-		separator.backgroundColor = Theme.Colors.SPLightGray
-	}
-	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		if textField == emailInput {
-			passwordInput.becomeFirstResponder()
-		} else if textField == passwordInput {
-			passwordInput.resignFirstResponder()
+		if textField == self.emailTextField {
+			self.passwordTextField.becomeFirstResponder()
+		} else if textField == self.passwordTextField {
+			self.login()
 		}
 		return true
 	}

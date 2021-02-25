@@ -29,6 +29,7 @@ class STMainVC: UIViewController {
 		let statusBar = UIView(frame: window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
 		statusBar.backgroundColor = Theme.Colors.SPDarkRed
 		window?.addSubview(statusBar)
+		statusBar.autoresizingMask = [.flexibleHeight, .flexibleWidth]
 		statusBar.layer.zPosition = 1200
 	}
 	

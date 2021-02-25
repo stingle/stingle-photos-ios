@@ -10,7 +10,7 @@ class SignInVM {
 //		let password = "123456"
 		do {
 			let validEmail = try self.validator.validate(email: email)
-			let validPassword = try self.validator.validate(password: password)
+			let validPassword = try self.validator.validate(password: password, withCharacters: false)
 			self.login(email: validEmail, password: validPassword, success: success, failure: failure)
 		} catch {
 			failure(error as! IError)

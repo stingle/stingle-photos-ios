@@ -26,9 +26,9 @@ class STLoadingView: UIView {
             view.addSubviewFullContent(view: loadingView)
         }
         
+		loadingView.activityIndicatorView.startAnimating()
         UIView.animate(withDuration: 0.3) {
             loadingView.alpha = 1
-            loadingView.activityIndicatorView.startAnimating()
         }
     }
     
@@ -37,9 +37,9 @@ class STLoadingView: UIView {
             return
         }
         
+		loadingView.activityIndicatorView.stopAnimating()
         UIView.animate(withDuration: 0.3, animations: {
             loadingView.alpha = 0
-            loadingView.activityIndicatorView.stopAnimating()
         }) { (_) in
             loadingView.removeFromSuperview()
         }
