@@ -131,9 +131,9 @@ extension STAuthWorker {
 			case .passwordError:
 				return "incorrect_password".localized
 			case .loginError:
-				return "empty_data".localized
+				return "nework_error_unknown_error".localized
 			case .cantImportKeyBundle:
-				return "Can't import key bundle"
+				return "nework_error_unknown_error".localized
 			}
 		}
 		

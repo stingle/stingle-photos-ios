@@ -134,13 +134,12 @@ extension STNetworkDispatcher.Encoding: RequestEncoding {
 			urlRequest.url = components?.url
 			return urlRequest
 		case .body:
-			var components = URLComponents()
-			components.queryItems = parameters?.compactMap({ (arg0) -> URLQueryItem in
-				return URLQueryItem(name: arg0.key, value: arg0.value)
-			})
-			let strParams = components.url?.absoluteString
-			let bodyStr = String((strParams?.dropFirst())!)
-			urlRequest.httpBody = bodyStr.data(using: .utf8)
+			let httpBody = parameters?.map { key, value in
+				let escapedKey = "\(key)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+				let escapedValue = "\(value ?? "")".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+				return escapedKey + "=" + escapedValue
+			}.joined(separator: "&").data(using: .utf8)
+			urlRequest.httpBody = httpBody
 			return urlRequest
 		}
 	}

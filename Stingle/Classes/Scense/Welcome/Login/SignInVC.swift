@@ -64,10 +64,8 @@ class SignInVC: UITableViewController {
 	private func login() {
 		self.tableView.endEditing(true)
 		STLoadingView.show(in: self.navigationController?.view ?? self.view)
-		self.viewModel.login(email:  self.emailTextField.text, password: self.passwordTextField.text) { (_) in
-			
-			
-			
+		self.viewModel.login( email:  self.emailTextField.text, password: self.passwordTextField.text) {[weak self] (_) in
+			self?.performSegue(withIdentifier: "goToHome", sender: nil)
 		} failure: { [weak self] (error) in
 			guard let weakSelf = self else {
 				return
@@ -75,7 +73,6 @@ class SignInVC: UITableViewController {
 			STLoadingView.hide(in: weakSelf.navigationController?.view ?? weakSelf.view)
 			self?.showError(error: error)
 		}
-
 	}
 	
 	private func configurebBackBarButton() {
