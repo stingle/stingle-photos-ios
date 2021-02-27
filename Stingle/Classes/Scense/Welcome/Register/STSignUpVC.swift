@@ -116,6 +116,7 @@ class STSignUpVC: UITableViewController {
 				return
 			}
 			STLoadingView.hide(in: weakSelf.navigationController?.view ?? weakSelf.view)
+			self?.performSegue(withIdentifier: "goToHome", sender: nil)
 		} failure: { [weak self] (error) in
 			guard let weakSelf = self else {
 				return
@@ -152,7 +153,7 @@ extension STSignUpVC : UITextFieldDelegate {
 
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		if textField == self.confirmPasswordTextField {
-			textField.resignFirstResponder()
+			self.register()
 		} else if textField == self.emailTextField {
 			self.passwordTextField.becomeFirstResponder()
 		} else if textField == self.passwordTextField {

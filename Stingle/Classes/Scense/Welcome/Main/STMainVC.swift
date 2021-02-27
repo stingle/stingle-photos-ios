@@ -25,12 +25,7 @@ class STMainVC: UIViewController {
 	//MARK: - Private func
 	
 	private func configure() {
-		let window = UIApplication.shared.windows.first
-		let statusBar = UIView(frame: window?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero)
-		statusBar.backgroundColor = Theme.Colors.SPDarkRed
-		window?.addSubview(statusBar)
-		statusBar.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-		statusBar.layer.zPosition = 1200
+		STStatusBar(for: self.view.window)
 	}
 	
 	private func openAppController() {
@@ -38,5 +33,4 @@ class STMainVC: UIViewController {
 		self.performSegue(withIdentifier: identifier, sender: nil)
 	}
     
-
 }

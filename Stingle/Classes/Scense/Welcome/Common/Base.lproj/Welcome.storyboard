@@ -440,6 +440,7 @@ may be vulnerable to brute force attacks.</string>
                         <outlet property="passwordTextField" destination="hFL-fg-WsP" id="8Sg-pm-m4N"/>
                         <outlet property="signInButton" destination="ypJ-I1-wYL" id="yD4-vR-hcQ"/>
                         <outlet property="signUpButton" destination="C2X-Wc-yRK" id="VRM-zm-dl9"/>
+                        <segue destination="XhX-E3-oy5" kind="custom" identifier="goToHome" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" id="ty4-hQ-4RS"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bKn-4a-xZ0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -767,25 +768,8 @@ may be vulnerable to brute force attacks.</string>
             <point key="canvasLocation" x="1237.5" y="-18.75"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="GOP-25-xwS">
-            <size key="intrinsicContentSize" width="75.666666666666671" height="22"/>
-        </designable>
-        <designable name="LwS-on-PRS">
-            <size key="intrinsicContentSize" width="142" height="22"/>
-        </designable>
-        <designable name="W7y-BA-ely">
-            <size key="intrinsicContentSize" width="42.333333333333336" height="23.333333333333332"/>
-        </designable>
-        <designable name="hFL-fg-WsP">
-            <size key="intrinsicContentSize" width="75.666666666666671" height="22"/>
-        </designable>
-        <designable name="yTq-Wo-xGu">
-            <size key="intrinsicContentSize" width="42.333333333333336" height="23.333333333333332"/>
-        </designable>
-    </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="Yve-OW-1gT"/>
+        <segue reference="ty4-hQ-4RS"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>
