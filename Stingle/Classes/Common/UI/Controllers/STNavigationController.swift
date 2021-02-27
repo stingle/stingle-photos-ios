@@ -18,8 +18,13 @@ class STNavigationController: UINavigationController {
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 		if let first = self.viewControllers.first {
-			self.updateNavigationBar(for: first)
+			self.updateNavigationBar(for: first, animated: false)
 		}
+	}
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		self.interactivePopGestureRecognizer?.delegate = self
 	}
 	
 	override var shouldAutorotate: Bool {
@@ -73,14 +78,21 @@ class STNavigationController: UINavigationController {
 		return super.popToRootViewController(animated: animated)
 	}
 	
-	private func updateNavigationBar(for viewController: UIViewController) {
+	private func updateNavigationBar(for viewController: UIViewController, animated: Bool = true) {
 		let isNavigationBarHidden = viewController.isNavigationBarHidden()
 		if self.isNavigationBarHidden != isNavigationBarHidden {
-			self.setNavigationBarHidden(isNavigationBarHidden, animated: true)
+			self.setNavigationBarHidden(isNavigationBarHidden, animated: animated)
 		}
 	}
 }
 
+extension STNavigationController: UIGestureRecognizerDelegate {
+	
+	func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+		return self.viewControllers.count > 1
+	}
+	
+}
 
 @objc extension UIViewController {
 	

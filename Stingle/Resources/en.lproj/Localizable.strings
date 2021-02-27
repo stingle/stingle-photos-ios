@@ -1,5 +1,6 @@
 
 //Landing Page
+
 "welcome"="Welcome";
 
 "landing_trust_no_one_title"="Trust no one Encryption";
@@ -14,16 +15,18 @@
 "landing_fast_easy_to_use_title"="Fast, Easy to use";
 "landing_fast_easy_to_use_description"="Stingle Photos is optimized not only for security, but also for speed. it's so fast that you don't really feel that you are browsing through encrypted files.";
 
-"landing_have_an_account"="Already have an account?";
+"landing_have_an_account" = "Already have an account?";
 
 //MARK: - sign up-in
 
 "sign_up_description" = "Please choose your master password. While no limit is put on what you can enter here, it is strongly advised that your password has at least 12 characters and contains lowercase and uppercase letters, digits and special symbols. If your password is not secure enough then your photosvideos may be vulnerable to brute force attacks.";
 
-"sign_up"="Sign Up";
-"sign_in"="Sign In";
+"sign_up" = "Sign Up";
+"sign_in" = "Sign In";
 
 "backup_my_keys_description" = "When you create an account keys will be generated locally which are the main secret of your account.\n\nIf you choose to backup them they will be strongly encrypted before backup and you will be able to login from another device effortlessly.\n\nHowever you can choose not backup keys, in that case you will absolutely need to write down your backup phrase, otherwise you will NOT be able to login again in the future.";
+
+
 
 //MARK: - Common
 
@@ -31,9 +34,12 @@
 "password" = "Password";
 "confirm_password" = "Confirm password";
 "already_have_an_account" = "Already  have an account?";
+"dont_have_an_accout" = "Don't have an accout?";
 "advanced" = "Advanced";
 "backup_my_keys" = "Backup my keys";
 "info" = "Info";
+
+"forgot_password?" = "Forgot  password?";
 
 //MARK: - Error
 
@@ -44,7 +50,13 @@
 "error_empty_email" = "Email cannot be empty";
 "error_empty_password" = "Password cannot be empty";
 "error_incorrect_email" = "Email not valid";
-"error_incorrect_password" = "Password must have at least 5 characters";
-
+"error_incorrect_password" = "Password must have at least 6 characters";
+"nework_error_unknown_error" = "Something went wrong, please try again later";
 "error_incorrect_confirm_password" = "Confirm  passwordnot valid";
 
+//MARK: - NETWORK
+
+"nework_error_data_not_found" = "Data not found";
+"nework_error_request_not_valed" = "Request not valed";
+"nework_error_bad_request" = "Bad request to server";
+"nework_error_data_not_found" = "Data not found";

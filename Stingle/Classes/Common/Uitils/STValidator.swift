@@ -24,10 +24,15 @@ class STValidator {
 	}
 	
 	
-	func validate(password: String?) throws -> String {
+	func validate(password: String?, withCharacters: Bool = true) throws -> String {
 		guard let password = password, !password.isEmpty else {
 			throw ValidatorError.passwordIsNil
 		}
+		
+		if !withCharacters {
+			return password
+		}
+		
 		let isValid = password.trimmingCharacters(in: .whitespaces).count > 5
 		if !isValid {
 			throw ValidatorError.passwordIncorrect
