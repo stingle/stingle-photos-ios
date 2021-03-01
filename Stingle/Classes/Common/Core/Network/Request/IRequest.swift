@@ -27,11 +27,6 @@ protocol IRequest {
 	var encoding: STNetworkDispatcher.Encoding { get }
 }
 
-fileprivate struct STEnviorment {
-//	static let baseUrl = "https://api.stingle.org/v2"
-	static let baseUrl = "https://apidev.stingle.org"
-}
-
 protocol STRequest: IRequest {
 	var path: String { get }
 }
@@ -39,7 +34,7 @@ protocol STRequest: IRequest {
 extension STRequest {
 	
 	var url: String {
-		return "\(STEnviorment.baseUrl)/\(self.path)"
+		return "\(STEnvironment.current.baseUrl)/\(self.path)"
 	}
 	
 }

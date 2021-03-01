@@ -111,6 +111,7 @@
 		A03D86B525E1C57D0089F620 /* STNetworkDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D86B425E1C57D0089F620 /* STNetworkDispatcher.swift */; };
 		A03D86BB25E1DF980089F620 /* STAuthRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D86BA25E1DF980089F620 /* STAuthRequest.swift */; };
 		A04347C625EA798800CA1625 /* STStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04347C525EA798800CA1625 /* STStatusBar.swift */; };
+		A04E790125ED942A009F95C8 /* STEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04E790025ED942A009F95C8 /* STEnvironment.swift */; };
 		A09B3CD325DC73690036CF3E /* STTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09B3CD225DC73690036CF3E /* STTextField.swift */; };
 		A09B3D0025DC904F0036CF3E /* STNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09B3CFF25DC904F0036CF3E /* STNavigationController.swift */; };
 		A0C5DCD125DDB65600DC812D /* STConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C5DCC125DDB61C00DC812D /* STConstants.swift */; };
@@ -246,6 +247,7 @@
 		A03D86B425E1C57D0089F620 /* STNetworkDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkDispatcher.swift; sourceTree = "<group>"; };
 		A03D86BA25E1DF980089F620 /* STAuthRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAuthRequest.swift; sourceTree = "<group>"; };
 		A04347C525EA798800CA1625 /* STStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStatusBar.swift; sourceTree = "<group>"; };
+		A04E790025ED942A009F95C8 /* STEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STEnvironment.swift; sourceTree = "<group>"; };
 		A09B3CD225DC73690036CF3E /* STTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTextField.swift; sourceTree = "<group>"; };
 		A09B3CFF25DC904F0036CF3E /* STNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNavigationController.swift; sourceTree = "<group>"; };
 		A0C5DCC125DDB61C00DC812D /* STConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STConstants.swift; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 				A0C5DCD825DDB76200DC812D /* Utils.swift */,
 				A0EA3A6D25DDBB2800461041 /* STError.swift */,
 				A0123C7F25DF1A3E004BBDFF /* STValidator.swift */,
+				A04E790025ED942A009F95C8 /* STEnvironment.swift */,
 			);
 			path = Uitils;
 			sourceTree = "<group>";
@@ -969,6 +972,7 @@
 				A0123C6D25DF1232004BBDFF /* STLoadingView.swift in Sources */,
 				62AE6894240D55CD001EA58D /* Theme.swift in Sources */,
 				A0EA3A6E25DDBB2800461041 /* STError.swift in Sources */,
+				A04E790125ED942A009F95C8 /* STEnvironment.swift in Sources */,
 				A03D86B525E1C57D0089F620 /* STNetworkDispatcher.swift in Sources */,
 				A09B3D0025DC904F0036CF3E /* STNavigationController.swift in Sources */,
 				62C0CAEA2461A6AC003C5756 /* Window.swift in Sources */,
