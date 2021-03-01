@@ -85,7 +85,6 @@
 		62E20E622468068200563FC3 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E612468068200563FC3 /* libiconv.tbd */; };
 		62E20E642468068B00563FC3 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E632468068B00563FC3 /* libbz2.tbd */; };
 		62E20E662468069500563FC3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E652468069500563FC3 /* CoreText.framework */; };
-		62E20E6A246806A900563FC3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E69246806A900563FC3 /* OpenGLES.framework */; };
 		62E20E6C246806B100563FC3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E6B246806B100563FC3 /* AudioToolbox.framework */; };
 		62E20E70246806C700563FC3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62E20E6F246806C700563FC3 /* CoreGraphics.framework */; };
 		62E20E7224680DDB00563FC3 /* SPFileSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E20E7124680DDB00563FC3 /* SPFileSource.swift */; };
@@ -272,7 +271,6 @@
 			files = (
 				62E20E70246806C700563FC3 /* CoreGraphics.framework in Frameworks */,
 				62E20E6C246806B100563FC3 /* AudioToolbox.framework in Frameworks */,
-				62E20E6A246806A900563FC3 /* OpenGLES.framework in Frameworks */,
 				62E20E662468069500563FC3 /* CoreText.framework in Frameworks */,
 				62E20E642468068B00563FC3 /* libbz2.tbd in Frameworks */,
 				62E20E622468068200563FC3 /* libiconv.tbd in Frameworks */,
