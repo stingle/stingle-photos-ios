@@ -27,7 +27,7 @@ extension STAuthRequest: STRequest {
 		}
 	}
 	
-	var method: HTTPMethod {
+	var method: STNetworkDispatcher.Method {
 		switch self {
 		case .register:
 			return .post
@@ -61,18 +61,7 @@ extension STAuthRequest: STRequest {
 		}
 	}
 	
-	var decoder: IDecoder {
-		switch self {
-		case .register:
-			return JSONDecoder()
-		case .preLogin:
-			return JSONDecoder()
-		case .login:
-			return JSONDecoder()
-		}
-	}
-	
-	var encoding: RequestEncoding {
+	var encoding: STNetworkDispatcher.Encoding {
 		switch self {
 		case .register:
 			return STNetworkDispatcher.Encoding.body

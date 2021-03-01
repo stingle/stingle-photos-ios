@@ -6,6 +6,7 @@ use_frameworks!
 
 pod 'Sodium'
 pod 'MobileVLCKit'
+pod 'Alamofire'
 
 end
 
