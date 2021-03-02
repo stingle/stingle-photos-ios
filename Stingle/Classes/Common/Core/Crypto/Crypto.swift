@@ -3,6 +3,7 @@ import Sodium
 import Clibsodium
 
 public struct Constants {
+	
 	public static let FileTypeGeneral = 1
 	public static let FileTypePhoto = 2
 	public static let FileTypeVideo = 3
@@ -54,122 +55,119 @@ public class Crypto {
 	
 	private let bufSize = 1024 * 1024
 	private let pivateBufferSize = 256
-	
-	private let so: Sodium
-	
+	private let sodium: Sodium
 	private let hexArray:[Character] = [Character]("0123456789ABCDEF")
 	
 	public init() {
-		so = Sodium()
+		self.sodium = Sodium()
 	}
 	
 	public func generateMainKeypair(password:String ) throws {
-		try generateMainKeypair(password:password, privateKey:nil, publicKey:nil)
+		try self.generateMainKeypair(password:password, privateKey:nil, publicKey:nil)
 	}
 	
-	public func generateMainKeypair(password:String , privateKey:Bytes?, publicKey:Bytes?) throws {
-		
-		guard let pwdSalt:Bytes = so.randomBytes.buf(length: so.pwHash.SaltBytes) else {
+	public func generateMainKeypair(password: String , privateKey: Bytes?, publicKey: Bytes?) throws {
+		guard let pwdSalt: Bytes = self.sodium.randomBytes.buf(length: self.sodium.pwHash.SaltBytes) else {
 			throw CryptoError.Internal.randomBytesGenerationFailure
 		}
 		
-		_ = try savePrivateFile(filename: Constants.PwdSaltFilename, data: pwdSalt)
+		_ = try self.savePrivateFile(filename: Constants.PwdSaltFilename, data: pwdSalt)
 		
-		var newPrivateKey:Bytes?  = nil
-		var newPublicKey:Bytes?  = nil
+		var newPrivateKey: Bytes?  = nil
+		var newPublicKey: Bytes?  = nil
 		
 		if(privateKey == nil || publicKey == nil) {
-			guard let keyPair = so.box.keyPair() else {
+			guard let keyPair = sodium.box.keyPair() else {
 				throw CryptoError.Internal.keyPairGenerationFailure
 			}
 			newPrivateKey = privateKey ?? keyPair.secretKey
 			newPublicKey = publicKey ?? keyPair.publicKey
 		}
 		
-		let pwdKey = try getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
+		let pwdKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
 		
-		guard let pwdEncNonce = so.randomBytes.buf(length: so.secretBox.NonceBytes) else {
+		guard let pwdEncNonce = self.sodium.randomBytes.buf(length: sodium.secretBox.NonceBytes) else {
 			throw CryptoError.Internal.randomBytesGenerationFailure
 		}
-		_ = try savePrivateFile(filename: Constants.SKNONCEFilename, data: pwdEncNonce)
+		_ = try self.savePrivateFile(filename: Constants.SKNONCEFilename, data: pwdEncNonce)
 		
-		let encryptedPrivateKey = try encryptSymmetric(key: pwdKey, nonce: pwdEncNonce, data: newPrivateKey)
+		let encryptedPrivateKey = try self.encryptSymmetric(key: pwdKey, nonce: pwdEncNonce, data: newPrivateKey)
 		
-		_ = try savePrivateFile(filename: Constants.PrivateKeyFilename, data: encryptedPrivateKey)
-		_ = try savePrivateFile(filename: Constants.PublicKeyFilename, data: newPublicKey!)
+		_ = try self.savePrivateFile(filename: Constants.PrivateKeyFilename, data: encryptedPrivateKey)
+		_ = try self.savePrivateFile(filename: Constants.PublicKeyFilename, data: newPublicKey!)
 	}
 	
-	public func getPrivateKey(password:String) throws  -> Bytes? {
-		let encKey = try getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
-		let encPrivKey = try readPrivateFile(filename: Constants.PrivateKeyFilename)
-		let nonce = try readPrivateFile(filename: Constants.SKNONCEFilename)
-		let privateKey = try decryptSymmetric(key:encKey, nonce:nonce, data:encPrivKey)
+	public func getPrivateKey(password: String) throws  -> Bytes {
+		let encKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
+		let encPrivKey = try self.readPrivateFile(filename: Constants.PrivateKeyFilename)
+		let nonce = try self.readPrivateFile(filename: Constants.SKNONCEFilename)
+		let privateKey = try self.decryptSymmetric(key:encKey, nonce:nonce, data:encPrivKey)
 		return privateKey
 	}
 	
-	public func getPrivateKeyFromExportedKey(password:String, encPrivKey:Bytes) throws -> Bytes {
-		let nonce = try readPrivateFile(filename: Constants.SKNONCEFilename)
-		let decPK = try decryptSymmetric(key: getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard), nonce: nonce, data: encPrivKey)
-		return try encryptSymmetric(key: getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal), nonce: nonce, data: decPK)
+	public func getPrivateKeyFromExportedKey(password: String, encPrivKey: Bytes) throws -> Bytes {
+		let nonce = try self.readPrivateFile(filename: Constants.SKNONCEFilename)
+		let decPK = try self.decryptSymmetric(key: self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard), nonce: nonce, data: encPrivKey)
+		return try self.encryptSymmetric(key: self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal), nonce: nonce, data: decPK)
 	}
 	
-	public func getKeyFromPassword(password:String, difficulty:Int) throws -> Bytes {
-		let salt = try readPrivateFile(filename: Constants.PwdSaltFilename)
-		guard salt.count == so.pwHash.SaltBytes else {
+	public func getKeyFromPassword(password: String, difficulty: Int) throws -> Bytes {
+		let salt = try self.readPrivateFile(filename: Constants.PwdSaltFilename)
+		guard salt.count == self.sodium.pwHash.SaltBytes else {
 			throw CryptoError.General.incorrectParameterSize
 		}
 		
-		var opsLimit = so.pwHash.OpsLimitInteractive
-		var memlimit = so.pwHash.MemLimitInteractive
+		var opsLimit = self.sodium.pwHash.OpsLimitInteractive
+		var memlimit = self.sodium.pwHash.MemLimitInteractive
 		
 		switch difficulty {
 		case Constants.KdfDifficultyHard:
-			opsLimit = so.pwHash.OpsLimitModerate
-			memlimit = so.pwHash.MemLimitModerate
+			opsLimit = self.sodium.pwHash.OpsLimitModerate
+			memlimit = self.sodium.pwHash.MemLimitModerate
 			break
 		case Constants.KdfDifficultyUltra:
-			opsLimit = so.pwHash.OpsLimitSensitive
-			memlimit = so.pwHash.MemLimitSensitive
+			opsLimit = self.sodium.pwHash.OpsLimitSensitive
+			memlimit = self.sodium.pwHash.MemLimitSensitive
 			break
 		default:
 			break
 		}
 		
-		guard let key = so.pwHash.hash(outputLength: so.secretBox.KeyBytes, passwd: password.bytes, salt: salt, opsLimit: opsLimit, memLimit: memlimit, alg: .Argon2ID13) else {
+		guard let key = sodium.pwHash.hash(outputLength: self.sodium.secretBox.KeyBytes, passwd: password.bytes, salt: salt, opsLimit: opsLimit, memLimit: memlimit, alg: .Argon2ID13) else {
 			throw CryptoError.Internal.hashGenerationFailure
 		}
 		return key
 	}
 		
 	public func getPasswordHashForStorage(password: String) throws -> [String: String]? {
-		guard let salt = getRandomBytes(lenght: so.pwHash.SaltBytes) else {
+		guard let salt = self.getRandomBytes(lenght: sodium.pwHash.SaltBytes) else {
 			return nil
 		}
-		let hash =  try getPasswordHashForStorage(password: password, salt: salt)
-		guard let saltHex = so.utils.bin2hex(salt) else {
+		let hash =  try self.getPasswordHashForStorage(password: password, salt: salt)
+		guard let saltHex = sodium.utils.bin2hex(salt) else {
 			return nil
 		}
 		return ["hash": hash, "salt": saltHex]
 	}
 	
-	public func getPasswordHashForStorage(password:String, salt:String) throws -> String {
-		guard let data = so.utils.hex2bin(salt) else {
+	public func getPasswordHashForStorage(password: String, salt: String) throws -> String {
+		guard let data = self.sodium.utils.hex2bin(salt) else {
 			return ""
 		}
-		return try getPasswordHashForStorage(password: password, salt: data)
+		return try self.getPasswordHashForStorage(password: password, salt: data)
 	}
 	
-	private func getPasswordHashForStorage(password:String, salt:Bytes) throws -> String {
-		guard let hash = so.pwHash.hash(outputLength: Constants.PWHASH_LEN, passwd: password.bytes, salt: salt, opsLimit: so.pwHash.OpsLimitModerate, memLimit: so.pwHash.MemLimitModerate, alg: .Argon2ID13) else {
+	private func getPasswordHashForStorage(password: String, salt: Bytes) throws -> String {
+		guard let hash = self.sodium.pwHash.hash(outputLength: Constants.PWHASH_LEN, passwd: password.bytes, salt: salt, opsLimit: self.sodium.pwHash.OpsLimitModerate, memLimit: self.sodium.pwHash.MemLimitModerate, alg: .Argon2ID13) else {
 			throw CryptoError.Internal.hashGenerationFailure
 		}
-		guard let hex = so.utils.bin2hex(hash)?.uppercased() else {
+		guard let hex = self.sodium.utils.bin2hex(hash)?.uppercased() else {
 			throw CryptoError.Internal.hashGenerationFailure
 		}
 		return hex
 	}
 	
-	public func importKeyBundle(keys:Bytes, password:String) throws {
+	public func importKeyBundle(keys: Bytes, password: String) throws {
 		var offset:Int = 0
 		let fileBegginingStr:String = String(bytes: Bytes(keys[offset..<(offset + Constants.KeyFileBegginingLen)]), encoding: String.Encoding.utf8) ?? ""
 		if fileBegginingStr != Constants.KeyFileBeggining {
@@ -188,35 +186,35 @@ public class Crypto {
 		}
 		offset += 1
 		
-		let publicKey = keys[offset..<(offset + so.box.PublicKeyBytes)]
-		offset += so.box.PublicKeyBytes
+		let publicKey = keys[offset..<(offset + self.sodium.box.PublicKeyBytes)]
+		offset += self.sodium.box.PublicKeyBytes
 		if keyFileType == Constants.KeyFileTypeBundleEncrypted {
-			let encryptedPrivateKey = keys[offset..<(offset + so.box.SecretKeyBytes + so.secretBox.MacBytes)]
-			offset += so.box.SecretKeyBytes + so.secretBox.MacBytes
+			let encryptedPrivateKey = keys[offset..<(offset + sodium.box.SecretKeyBytes + sodium.secretBox.MacBytes)]
+			offset += self.sodium.box.SecretKeyBytes + self.sodium.secretBox.MacBytes
 			
-			let pwdSalt = keys[offset..<(offset + so.pwHash.SaltBytes)]
-			offset += so.pwHash.SaltBytes
+			let pwdSalt = keys[offset..<(offset + self.sodium.pwHash.SaltBytes)]
+			offset += self.sodium.pwHash.SaltBytes
 			
-			let skNonce = keys[offset..<(offset + so.secretBox.NonceBytes)]
-			offset += so.secretBox.NonceBytes
+			let skNonce = keys[offset..<(offset + self.sodium.secretBox.NonceBytes)]
+			offset += self.sodium.secretBox.NonceBytes
 			
-			_ = try savePrivateFile(filename: Constants.PublicKeyFilename, data: Bytes(publicKey))
-			_ = try savePrivateFile(filename: Constants.PwdSaltFilename, data: Bytes(pwdSalt))
-			_ = try savePrivateFile(filename: Constants.SKNONCEFilename, data: Bytes(skNonce))
-			let pK = try getPrivateKeyFromExportedKey(password: password, encPrivKey: Bytes(encryptedPrivateKey))
-			_ = try savePrivateFile(filename: Constants.PrivateKeyFilename, data: pK)
+			try self.savePrivateFile(filename: Constants.PublicKeyFilename, data: Bytes(publicKey))
+			try self.savePrivateFile(filename: Constants.PwdSaltFilename, data: Bytes(pwdSalt))
+			try self.savePrivateFile(filename: Constants.SKNONCEFilename, data: Bytes(skNonce))
+			let pK = try self.getPrivateKeyFromExportedKey(password: password, encPrivKey: Bytes(encryptedPrivateKey))
+			try self.savePrivateFile(filename: Constants.PrivateKeyFilename, data: pK)
 			
 		} else if keyFileType == Constants.KeyFileTypePublicPlain {
-			_ = try savePrivateFile(filename: Constants.PublicKeyFilename, data: Bytes(publicKey))
+			_ = try self.savePrivateFile(filename: Constants.PublicKeyFilename, data: Bytes(publicKey))
 		}
 	}
 	
 	func importServerPublicKey(pbk:Bytes) throws {
-		_ = try savePrivateFile(filename: Constants.ServerPublicKeyFilename, data: pbk)
+		_ = try self.savePrivateFile(filename: Constants.ServerPublicKeyFilename, data: pbk)
 	}
 		
     func getServerPublicKey() throws -> Bytes {
-		return try readPrivateFile(filename: Constants.ServerPublicKeyFilename)
+		return try self.readPrivateFile(filename: Constants.ServerPublicKeyFilename)
     }
 	
 	public func getPrivateKeyForExport(password: String) throws -> Bytes {
@@ -236,7 +234,7 @@ public class Crypto {
 		pbk += Crypto.toBytes(value: Constants.CurrentKeyFileVersion)
 		pbk += Crypto.toBytes(value: Constants.KeyFileTypePublicPlain)
 		do {
-			let pbkBytes = try readPrivateFile(filename: Constants.PublicKeyFilename)
+			let pbkBytes = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
 			pbk += pbkBytes
 		} catch {
 			throw error
@@ -244,7 +242,7 @@ public class Crypto {
 		return pbk
 	}
 	
-	public func exportKeyBundle(password:String) throws -> Bytes {
+	public func exportKeyBundle(password: String) throws -> Bytes {
 		var result = [UInt8]()
 		result.append(contentsOf: Constants.KeyFileBeggining.bytes)
 		result.append(UInt8(Constants.CurrentKeyFileVersion))
@@ -265,13 +263,13 @@ public class Crypto {
 		return result
 	}
 	
-	private func encryptSymmetric(key:Bytes?, nonce:Bytes?, data:Bytes?) throws -> Bytes {
+	private func encryptSymmetric(key: Bytes?, nonce: Bytes?, data: Bytes?) throws -> Bytes {
 		
-		guard let key = key, key.count ==  so.secretBox.KeyBytes else {
+		guard let key = key, key.count ==  self.sodium.secretBox.KeyBytes else {
 			throw CryptoError.General.incorrectKeySize
 		}
 		
-		guard let nonce = nonce, nonce.count == so.secretBox.NonceBytes else {
+		guard let nonce = nonce, nonce.count == self.sodium.secretBox.NonceBytes else {
 			throw CryptoError.General.incorrectParameterSize
 		}
 		
@@ -279,20 +277,20 @@ public class Crypto {
 			throw CryptoError.General.incorrectParameterSize
 		}
 		
-		guard let cypherText = so.secretBox.seal(message: data, secretKey: key, nonce: nonce) else {
+		guard let cypherText = self.sodium.secretBox.seal(message: data, secretKey: key, nonce: nonce) else {
 			throw CryptoError.Internal.sealFailure
 		}
 		
 		return cypherText
 	}
 	
-	private func decryptSymmetric(key:Bytes?, nonce:Bytes?, data:Bytes?) throws -> Bytes {
+	private func decryptSymmetric(key: Bytes?, nonce: Bytes?, data: Bytes?) throws -> Bytes {
 		
-		guard let key = key, key.count == so.secretBox.KeyBytes else {
+		guard let key = key, key.count == self.sodium.secretBox.KeyBytes else {
 			throw CryptoError.General.incorrectKeySize
 		}
 		
-		guard let nonce = nonce, nonce.count == so.secretBox.NonceBytes else {
+		guard let nonce = nonce, nonce.count == self.sodium.secretBox.NonceBytes else {
 			throw CryptoError.General.incorrectParameterSize
 		}
 		
@@ -300,15 +298,15 @@ public class Crypto {
 			throw CryptoError.General.incorrectParameterSize
 		}
 		
-		guard let plainText = so.secretBox.open(authenticatedCipherText: data, secretKey: key, nonce: nonce) else {
+		guard let plainText = sodium.secretBox.open(authenticatedCipherText: data, secretKey: key, nonce: nonce) else {
 			throw CryptoError.Internal.openFailure
 		}
 		
 		return plainText
 	}
 	
-	private func getNewHeader(symmetricKey:Bytes?, dataSize:UInt, filename:String, fileType:Int, fileId:Bytes?, videoDuration:UInt32) throws  -> Header {
-		guard  let symmetricKey = symmetricKey, symmetricKey.count == so.keyDerivation.KeyBytes else {
+	private func getNewHeader(symmetricKey: Bytes?, dataSize: UInt, filename: String, fileType: Int, fileId: Bytes?, videoDuration: UInt32) throws  -> Header {
+		guard  let symmetricKey = symmetricKey, symmetricKey.count == self.sodium.keyDerivation.KeyBytes else {
 			throw CryptoError.General.incorrectKeySize
 		}
 		
@@ -320,7 +318,7 @@ public class Crypto {
 		return header
 	}
 	
-	private func writeHeader(output:OutputStream, header:Header, publicKey:Bytes?) throws  {
+	private func writeHeader(output: OutputStream, header: Header, publicKey: Bytes?) throws  {
 		// File beggining - 2 bytes
 		var numWritten = output.write(Constants.FileBeggining.bytes, maxLength: Constants.FileBegginingLen)
 		
@@ -334,9 +332,9 @@ public class Crypto {
 			throw CryptoError.General.incorrectParameterSize
 		}
 		
-		let headerBytes = toBytes(header:header)
+		let headerBytes = self.toBytes(header:header)
 		
-		guard let encHeader = so.box.seal(message: headerBytes, recipientPublicKey: publicKey) else {
+		guard let encHeader = self.sodium.box.seal(message: headerBytes, recipientPublicKey: publicKey) else {
 			throw CryptoError.Internal.sealFailure
 		}
 		
@@ -350,13 +348,13 @@ public class Crypto {
 		}
 	}
 		
-	func getFileHeader(input:InputStream) throws -> Header? {
+	func getFileHeader(input: InputStream) throws -> Header {
 		var buf:Bytes = Bytes(repeating: 0, count: Constants.FileHeaderBeginningLen)
 		guard Constants.FileHeaderBeginningLen == input.read(&buf, maxLength: Constants.FileHeaderBeginningLen) else {
 			throw CryptoError.IO.readFailure
 		}
 		var offset:Int = 0
-		let fileBegginingStr:String = String(bytes: Bytes(buf[offset..<(offset + Constants.FileBegginingLen)]), encoding: String.Encoding.utf8) ?? ""
+		let fileBegginingStr: String = String(bytes: Bytes(buf[offset..<(offset + Constants.FileBegginingLen)]), encoding: String.Encoding.utf8) ?? ""
 		if fileBegginingStr != Constants.FileBeggining {
 			throw CryptoError.Header.incorrectFileBeggining
 		}
@@ -395,7 +393,7 @@ public class Crypto {
 		guard let privateKey:Bytes = KeyManagement.key else {
 			throw CryptoError.Bundle.pivateKeyIsEmpty
 		}
-		guard let headerBytes = so.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
+		guard let headerBytes = sodium.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
 			throw CryptoError.Internal.openFailure
 		}
 		
@@ -409,8 +407,8 @@ public class Crypto {
 		header.dataSize = Crypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileDataSizeLen]))
 		offset += Constants.FileDataSizeLen
 		
-		header.symmetricKey = Bytes(headerBytes[offset..<offset + so.keyDerivation.KeyBytes])
-		offset += so.keyDerivation.KeyBytes
+		header.symmetricKey = Bytes(headerBytes[offset..<offset + sodium.keyDerivation.KeyBytes])
+		offset += sodium.keyDerivation.KeyBytes
 		
 		header.fileType = headerBytes[offset]
 		offset += Constants.FileTypeLen
@@ -424,17 +422,17 @@ public class Crypto {
 		return header
 	}
 	
-	public func encryptFile(input:InputStream, output:OutputStream, filename:String, fileType:Int, dataLength:UInt, fileId:Bytes, videoDuration:UInt32) throws {
-		
-		let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
-		let symmetricKey = so.keyDerivation.key()
+	public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration:UInt32) throws {
+		let publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+		let symmetricKey = self.sodium.keyDerivation.key()
 		let header = try getNewHeader(symmetricKey: symmetricKey, dataSize: dataLength, filename: filename, fileType: fileType, fileId: fileId, videoDuration: videoDuration)
-		try writeHeader(output: output, header: header, publicKey: publicKey)
-		_ = try encryptData(input: input, output: output, header: header)		
+		try self.writeHeader(output: output, header: header, publicKey: publicKey)
+		try self.encryptData(input: input, output: output, header: header)
 	}
 	
-	private func encryptData(input:InputStream, output:OutputStream, header:Header?) throws -> Bool {
-		guard let header = header, (1...bufSize).contains(Int(header.chunkSize)) else {
+	@discardableResult
+	private func encryptData(input: InputStream, output: OutputStream, header: Header?) throws -> Bool {
+		guard let header = header, (1...self.bufSize).contains(Int(header.chunkSize)) else {
 			throw CryptoError.Header.incorrectChunkSize
 		}
 		
@@ -442,9 +440,9 @@ public class Crypto {
 		
 		var buf:Bytes = []
 		var numRead = 0
-		var diff:Int = 0
+		var diff: Int = 0
 		
-		var numWrite:Int = 0
+		var numWrite: Int = 0
 		repeat {
 			buf = Bytes(repeating: 0, count: Int(header.chunkSize))
 			numRead = input.read(&buf, maxLength: buf.count)
@@ -454,14 +452,14 @@ public class Crypto {
 			if diff > 0 {
 				buf = Bytes(buf[..<numRead])
 			}
-			let keyBytesLength = so.aead.xchacha20poly1305ietf.KeyBytes
-			guard let chunkKey = so.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
+			let keyBytesLength = self.sodium.aead.xchacha20poly1305ietf.KeyBytes
+			guard let chunkKey = self.sodium.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
 				throw CryptoError.Internal.keyDerivationFailure
 			}
-			guard chunkKey.count == so.aead.xchacha20poly1305ietf.KeyBytes else {
+			guard chunkKey.count == self.sodium.aead.xchacha20poly1305ietf.KeyBytes else {
 				throw CryptoError.General.incorrectKeySize
 			}
-			guard let (authenticatedCipherText, chunkNonce) : (Bytes, Bytes)  = so.aead.xchacha20poly1305ietf.encrypt(message: buf, secretKey: chunkKey) else {
+			guard let (authenticatedCipherText, chunkNonce) : (Bytes, Bytes)  = sodium.aead.xchacha20poly1305ietf.encrypt(message: buf, secretKey: chunkKey) else {
 				throw CryptoError.General.incorrectKeySize
 			}
 			numWrite = output.write(chunkNonce, maxLength: chunkNonce.count)
@@ -475,7 +473,7 @@ public class Crypto {
 		return true;
 	}
 	
-	public func decryptFileAsync(input:InputStream, output:OutputStream, completion:((Bool, Error?) -> Void)? = nil) {
+	public func decryptFileAsync(input: InputStream, output: OutputStream, completion: ((Bool, Error?) -> Void)? = nil) {
 	let body = {() -> Void in
 		var result = false
 		var decError:Error? = nil
@@ -495,9 +493,9 @@ public class Crypto {
 		}
 	}
 	
-	public func decryptFile(input:InputStream, output:OutputStream, completionHandler:  ((Bytes?) -> Swift.Void)? = nil) throws -> Bool {
+	public func decryptFile(input: InputStream, output: OutputStream, completionHandler:  ((Bytes?) -> Swift.Void)? = nil) throws -> Bool {
 		let header = try getFileHeader(input:input)
-		_ = try decryptData(input: input, header: header) {chunk in
+		try self.decryptData(input: input, header: header) { chunk in
 			guard let chunk = chunk else {
 				return
 			}
@@ -512,20 +510,18 @@ public class Crypto {
 		return true
 	}
 	
-	public func decryptData(data:Bytes, header:Header?, chunkNumber:UInt64, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
-		guard let header = header, (1...bufSize).contains(Int(header.chunkSize)) else {
+	public func decryptData(data: Bytes, header: Header?, chunkNumber: UInt64, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
+		guard let header = header, (1...self.bufSize).contains(Int(header.chunkSize)) else {
 			throw CryptoError.Header.incorrectChunkSize
 		}
-		let dataReadSize:Int = Int(header.chunkSize) + so.aead.xchacha20poly1305ietf.ABytes + so.aead.xchacha20poly1305ietf.NonceBytes
+		let dataReadSize:Int = Int(header.chunkSize) + self.sodium.aead.xchacha20poly1305ietf.ABytes + sodium.aead.xchacha20poly1305ietf.NonceBytes
 		var offset = 0
 		var index:UInt64 = 0
 		repeat {
 			let size = min(dataReadSize, data.count - offset)
 			let buf:Bytes = Bytes(data[offset..<size])
 			offset += size
-			guard let  decryptedData = try decryptChunk(chunkData: buf, chunkNumber: chunkNumber + index, header: header) else {
-				throw CryptoError.Internal.decryptFailure
-			}
+			let  decryptedData = try self.decryptChunk(chunkData: buf, chunkNumber: chunkNumber + index, header: header)
 			assert(header.chunkSize == decryptedData.count || (size < dataReadSize))
 			completionHandler(decryptedData)
 			index += UInt64(1)
@@ -533,12 +529,13 @@ public class Crypto {
 		return true
 	}
 	
+	@discardableResult
 	public func decryptData(input:InputStream, header:Header?, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
-		guard let header = header, (1...bufSize).contains(Int(header.chunkSize)) else {
+		guard let header = header, (1...self.bufSize).contains(Int(header.chunkSize)) else {
 			throw CryptoError.Header.incorrectChunkSize
 		}
 		var chunkNumber:UInt64 = 1
-		let dataReadSize:Int = Int(header.chunkSize) + so.aead.xchacha20poly1305ietf.ABytes + so.aead.xchacha20poly1305ietf.NonceBytes
+		let dataReadSize:Int = Int(header.chunkSize) + self.sodium.aead.xchacha20poly1305ietf.ABytes + self.sodium.aead.xchacha20poly1305ietf.NonceBytes
 		var buf:Bytes = Bytes(repeating: 0, count: dataReadSize)
 		var numRead = 0
 		var diff:Int = 0
@@ -548,9 +545,7 @@ public class Crypto {
 			if diff > 0 {
 				buf = buf.dropLast(diff)
 			}
-			guard let  decryptedData = try decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header) else {
-				throw CryptoError.Internal.decryptFailure
-			}
+			let  decryptedData = try self.decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header)
 			assert(header.chunkSize == decryptedData.count || (diff != 0))
 			completionHandler(decryptedData)
 			chunkNumber += UInt64(1)
@@ -558,19 +553,20 @@ public class Crypto {
 		return true
 	}
 	
-	private func decryptChunk(chunkData:Bytes, chunkNumber:UInt64, header:Header) throws -> Bytes? {
-		let keyBytesLength = so.aead.xchacha20poly1305ietf.KeyBytes
-		guard let chunkKey = so.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
+	private func decryptChunk(chunkData: Bytes, chunkNumber: UInt64, header: Header) throws -> Bytes {
+		let keyBytesLength = self.sodium.aead.xchacha20poly1305ietf.KeyBytes
+		guard let chunkKey = self.sodium.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
 			throw CryptoError.Internal.keyDerivationFailure
 		}
 		assert(keyBytesLength == chunkKey.count)
-		guard let  decryptedData = so.aead.xchacha20poly1305ietf.decrypt(nonceAndAuthenticatedCipherText: chunkData, secretKey: chunkKey) else {
+		guard let  decryptedData = self.sodium.aead.xchacha20poly1305ietf.decrypt(nonceAndAuthenticatedCipherText: chunkData, secretKey: chunkKey) else {
 			throw CryptoError.Internal.decryptFailure
 		}
 		return decryptedData
 	}
 	
-	private func savePrivateFile(filename:String, data:Bytes?) throws -> Bool {
+	@discardableResult
+	private func savePrivateFile(filename: String, data: Bytes?) throws -> Bool {
 		
 		guard let fullPath = SPFileManager.folder(for: .Private)?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
@@ -602,12 +598,12 @@ public class Crypto {
 		}
 		input.open()
 		
-		var buffer = Bytes(repeating: 0, count: pivateBufferSize)
+		var buffer = Bytes(repeating: 0, count: self.pivateBufferSize)
 		var numRead:Int = 0
 		var outBuff = Bytes(repeating: 0, count: 0)
 		
 		repeat {
-			numRead = input.read(&buffer, maxLength: pivateBufferSize)
+			numRead = input.read(&buffer, maxLength: self.pivateBufferSize)
 			if numRead < 0 {
 				throw CryptoError.IO.readFailure
 			}
@@ -655,11 +651,11 @@ public struct Header {
 extension Crypto {
 	
 	public func chunkAdditionalSize  () -> Int {
-		return so.aead.xchacha20poly1305ietf.ABytes + so.aead.xchacha20poly1305ietf.NonceBytes
+		return sodium.aead.xchacha20poly1305ietf.ABytes + sodium.aead.xchacha20poly1305ietf.NonceBytes
 	}
 	
 	public func getRandomBytes(lenght:Int) -> Bytes? {
-		return so.randomBytes.buf(length: lenght)
+		return sodium.randomBytes.buf(length: lenght)
 	}
 	
 	public func newFileId() -> Bytes? {
@@ -699,7 +695,7 @@ extension Crypto {
 		return Bytes(decodedData)
 	}
 	
-	func base64urlToBase64(base64urlString:String) -> String {
+	func base64urlToBase64(base64urlString: String) -> String {
 		var base64 = base64urlString
 			.replacingOccurrences(of: "-", with: "+")
 			.replacingOccurrences(of: "_", with: "/")
@@ -709,7 +705,7 @@ extension Crypto {
 		return base64
 	}
 	
-	public func toBytes(header:Header) -> Bytes {
+	public func toBytes(header: Header) -> Bytes {
 		
 		// Current header version - 1 byte
 		var headerBytes = [UInt8(header.headerVersion & 255)]
@@ -748,8 +744,8 @@ extension Crypto {
 		offset += Constants.FileChunksizeLen
 		header.dataSize = Crypto.fromBytes(b: Bytes(data[offset..<offset + Constants.FileDataSizeLen]))
 		offset += Constants.FileDataSizeLen
-		header.symmetricKey = Bytes(data[offset..<so.keyDerivation.KeyBytes])
-		offset += so.keyDerivation.KeyBytes
+		header.symmetricKey = Bytes(data[offset..<sodium.keyDerivation.KeyBytes])
+		offset += sodium.keyDerivation.KeyBytes
 		header.fileType = data[offset]
 		offset += Constants.FileTypeLen
 		let fileNameSize:Int = Crypto.fromBytes(b:Bytes(data[offset..<offset + Constants.FileNameSizeLen]))
@@ -760,7 +756,7 @@ extension Crypto {
 		return header
 	}
 	
-	public func getFileHeaders(originalPath:String, thumbPath:String) throws -> String? {
+	public func getFileHeaders(originalPath: String, thumbPath: String) throws -> String? {
 		guard let originBytes = try getFileHeaderBytes(path: originalPath) else {
 			return nil
 		}
@@ -768,10 +764,10 @@ extension Crypto {
 			return nil
 		}
 
-        return bytesToBase64(data: originBytes)! + "*" + bytesToBase64(data: thumbBytes)!
+		return self.bytesToBase64(data: originBytes)! + "*" + self.bytesToBase64(data: thumbBytes)!
     }
 	
-	public func getFileHeaderBytes(path:String) throws -> Bytes? {
+	public func getFileHeaderBytes(path: String) throws -> Bytes? {
 		guard let input = InputStream(fileAtPath: path) else {
 			return nil
 		}
@@ -791,14 +787,14 @@ extension Crypto {
         return header
     }
 
-	public func getOverallHeaderSize(input:InputStream) throws -> Int  {
+	public func getOverallHeaderSize(input: InputStream) throws -> Int  {
         // Read and validate file beginning
 		var buf:Bytes = Bytes(repeating: 0, count: Constants.FileHeaderBeginningLen)
 		guard Constants.FileHeaderBeginningLen == input.read(&buf, maxLength: Constants.FileHeaderBeginningLen) else {
 			throw CryptoError.IO.readFailure
 		}
 		var offset:Int = 0
-		let fileBegginingStr:String = String(bytes: Bytes(buf[offset..<(offset + Constants.FileBegginingLen)]), encoding: String.Encoding.utf8) ?? ""
+		let fileBegginingStr: String = String(bytes: Bytes(buf[offset..<(offset + Constants.FileBegginingLen)]), encoding: String.Encoding.utf8) ?? ""
 		if fileBegginingStr != Constants.FileBeggining {
 			throw CryptoError.Header.incorrectFileBeggining
 		}
@@ -821,29 +817,28 @@ extension Crypto {
         return offset
 	}
 	
-	public func encryptCryptoBox(message:Bytes, publicKey:Bytes, privateKey:Bytes) throws  -> Bytes? {
-		guard let nonce = getRandomBytes(lenght: so.box.NonceBytes) else {
+	public func encryptCryptoBox(message: Bytes, publicKey: Bytes, privateKey: Bytes) throws  -> Bytes? {
+		guard let nonce = self.getRandomBytes(lenght: self.sodium.box.NonceBytes) else {
 			throw CryptoError.Internal.randomBytesGenerationFailure
 		}
-		guard let result:Bytes = so.box.seal(message: message, recipientPublicKey: publicKey, senderSecretKey: privateKey, nonce: nonce) else {
+		guard let result:Bytes = self.sodium.box.seal(message: message, recipientPublicKey: publicKey, senderSecretKey: privateKey, nonce: nonce) else {
 			return nil
 		}
 		return nonce + result
     }
 
-	func encryptParamsForServer(params:[String:String]) -> String? {
+	func encryptParamsForServer(params: [String:String]) -> String? {
 		do {
-			let spbk  = try getServerPublicKey()
+			let spbk  = try self.getServerPublicKey()
 			guard let pks = KeyManagement.key else {
 				throw CryptoError.Bundle.pivateKeyIsEmpty
 			}
 			let json = try JSONSerialization.data(withJSONObject: params)
-			guard let res  = try encryptCryptoBox(message: (Bytes)(json), publicKey: spbk, privateKey: pks) else {
+			guard let res  = try self.encryptCryptoBox(message: (Bytes)(json), publicKey: spbk, privateKey: pks) else {
 				return nil
 			}
-			return bytesToBase64(data: res)
+			return self.bytesToBase64(data: res)
 		} catch {
-			print(error)
 			return nil
 		}
 	}

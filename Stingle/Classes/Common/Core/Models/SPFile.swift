@@ -121,10 +121,9 @@ class SPFileInfo : Codable {
 				let input = InputStream(data: Data(data))
 				input.open()
 				do {
-					if let header = try crypto.getFileHeader(input: input) {
-						input.close()
-						return header.videoDuration
-					}
+					let header = try crypto.getFileHeader(input: input)
+					input.close()
+					return header.videoDuration
 				} catch {
 					print(error)
 				}
@@ -143,10 +142,9 @@ class SPFileInfo : Codable {
 			let input = InputStream(data: Data(data))
 			input.open()
 			do {
-				if let header = try crypto.getFileHeader(input: input) {
-					input.close()
-					return header
-				}
+				let header = try crypto.getFileHeader(input: input)
+				input.close()
+				return header
 			} catch {
 				print(error)
 			}
@@ -165,10 +163,9 @@ class SPFileInfo : Codable {
 				let input = InputStream(data: Data(data))
 				input.open()
 				do {
-					if let header = try crypto.getFileHeader(input: input) {
-						input.close()
-						return Int(header.fileType)
-					}
+					let header = try crypto.getFileHeader(input: input)
+					input.close()
+					return Int(header.fileType)
 				} catch {
 					print(error)
 				}
