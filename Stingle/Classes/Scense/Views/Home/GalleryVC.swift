@@ -16,7 +16,7 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	private var set:Set = Set.Gallery
 	private var cellSize:CGSize? = nil
 	
-	var viewModel:GalleryVM = GalleryVM()
+	var viewModel: GalleryVM = GalleryVM()
 	var settingsVisible = false
 	
 	private var menuVC:SPMenuVC?

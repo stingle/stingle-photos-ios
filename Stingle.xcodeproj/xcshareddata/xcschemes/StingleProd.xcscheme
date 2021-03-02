@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6279CF1B23FEBB0C008B18DA"
+               BlueprintIdentifier = "A02203BC25EED86800D07C98"
                BuildableName = "Stingle.app"
                BlueprintName = "Stingle"
                ReferencedContainer = "container:Stingle.xcodeproj">
@@ -23,27 +23,18 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Debug-Dev"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "624A678024040E9000436C2F"
-               BuildableName = "CryptoTests.xctest"
-               BlueprintName = "CryptoTests"
-               ReferencedContainer = "container:Stingle.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Debug-Prod"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      customLLDBInitFile = "/Users/khorenasatryan/Documents/Workspace/Apps/Github/Alex/Stingle/stingle-photos-ios/Stingle/Resources/Config/Production.xcconfig"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -54,27 +45,15 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6279CF1B23FEBB0C008B18DA"
+            BlueprintIdentifier = "A02203BC25EED86800D07C98"
             BuildableName = "Stingle.app"
             BlueprintName = "Stingle"
             ReferencedContainer = "container:Stingle.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "BUILD_TYPE"
-            value = "Production"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "BASE_API_URL"
-            value = "https://api.stingle.org/v2"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Release-Prod"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -83,7 +62,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6279CF1B23FEBB0C008B18DA"
+            BlueprintIdentifier = "A02203BC25EED86800D07C98"
             BuildableName = "Stingle.app"
             BlueprintName = "Stingle"
             ReferencedContainer = "container:Stingle.xcodeproj">
@@ -91,10 +70,10 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Debug">
+      buildConfiguration = "Debug-Dev">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Release-Prod"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

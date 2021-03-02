@@ -1,0 +1,14 @@
+//
+//  Development.xcconfig
+//  Stingle
+//
+//  Created by Khoren Asatryan on 3/3/21.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+APP_NAME = StingleDev
+APP_BUNDLE_ID = com.photos.Stingle.dev
+BASE_API_URL = http:/$()/apidev.stingle.org
+BUILD_TYPE = Development

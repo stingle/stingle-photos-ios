@@ -17,7 +17,7 @@ class STAuthWorker: STWorker {
 			return try DataBase.shared()
 		} catch {
 			print(error)
-			assert(false)
+			fatalError()
 		}
 	}()
 	
