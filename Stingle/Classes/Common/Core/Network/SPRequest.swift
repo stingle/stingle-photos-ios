@@ -190,9 +190,9 @@ struct SPUploadFileRequest : SPRequest {
 
 struct SPGetUpdateRequest : SPRequest {
 
-	private let token:String
-	private let lastSeen:String
-	private let lastDelSeenTime:String
+	private let token: String
+	private let lastSeen: String
+	private let lastDelSeenTime: String
 	
 	init(token:String, lastSeen:String = "0", lastDelSeenTime:String = "0") {
 		self.token = token
