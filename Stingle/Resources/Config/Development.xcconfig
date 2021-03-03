@@ -10,5 +10,5 @@
 
 APP_NAME = StingleDev
 APP_BUNDLE_ID = com.photos.Stingle.dev
-BASE_API_URL = http:/$()/apidev.stingle.org
+BASE_API_URL = https:/$()/apidev.stingle.org
 BUILD_TYPE = Development

@@ -198,3 +198,13 @@ extension IRequestEncoding {
 	
 }
 
+extension AFError: IError {
+    
+    var message: String {
+        switch self {
+        default:
+            return "nework_error_bad_request".localized
+        }
+    }
+
+}

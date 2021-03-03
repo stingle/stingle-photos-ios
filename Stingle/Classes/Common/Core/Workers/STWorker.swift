@@ -109,6 +109,9 @@ extension STWorker {
 			case .emptyData:
 				return "empty_data".localized
 			case .error(let error):
+                if let error = error as? IError {
+                    return error.message
+                }
 				return error.localizedDescription
 			case .errors(let errors):
 				return errors.joined(separator: "\n")

@@ -10,5 +10,5 @@
 
 APP_NAME = Stingle
 APP_BUNDLE_ID = com.photos.Stingle
-BASE_API_URL = http:/$()/api.stingle.org/v2
+BASE_API_URL = https:/$()/api.stingle.org/v2
 BUILD_TYPE = Production

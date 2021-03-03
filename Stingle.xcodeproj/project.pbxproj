@@ -271,8 +271,8 @@
 		A02203F125EEDBEB00D07C98 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A02203F325EEDC0300D07C98 /* Common */,
 				A022043E25EEDC0300D07C98 /* Scense */,
+				A02203F325EEDC0300D07C98 /* Common */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -522,8 +522,8 @@
 		A022043E25EEDC0300D07C98 /* Scense */ = {
 			isa = PBXGroup;
 			children = (
+				A06AF3BC25F0291800B44A87 /* Home */,
 				A022043F25EEDC0300D07C98 /* ViewModels */,
-				A022044225EEDC0300D07C98 /* Home.storyboard */,
 				A022044525EEDC0300D07C98 /* Welcome */,
 				A022045825EEDC0400D07C98 /* Views */,
 			);
@@ -543,10 +543,10 @@
 			isa = PBXGroup;
 			children = (
 				A022044625EEDC0300D07C98 /* Landing */,
-				A022044C25EEDC0300D07C98 /* Common */,
 				A022044F25EEDC0300D07C98 /* Register */,
 				A022045225EEDC0400D07C98 /* Main */,
 				A022045525EEDC0400D07C98 /* Login */,
+				A022044C25EEDC0300D07C98 /* Common */,
 			);
 			path = Welcome;
 			sourceTree = "<group>";
@@ -608,7 +608,6 @@
 		A022045825EEDC0400D07C98 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A022045925EEDC0400D07C98 /* Home */,
 				A022046425EEDC0400D07C98 /* BaseVC.swift */,
 				A022046525EEDC0400D07C98 /* TrashVC.swift */,
 				A022046625EEDC0400D07C98 /* BackupPhraseVC.swift */,
@@ -651,6 +650,31 @@
 				A02204FA25EEE6B500D07C98 /* Development.xcconfig */,
 			);
 			path = Config;
+			sourceTree = "<group>";
+		};
+		A06AF3BC25F0291800B44A87 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A06AF3BF25F0295400B44A87 /* TabBar */,
+				A022045925EEDC0400D07C98 /* Home */,
+				A06AF3BD25F0292C00B44A87 /* Common */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		A06AF3BD25F0292C00B44A87 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				A022044225EEDC0300D07C98 /* Home.storyboard */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		A06AF3BF25F0295400B44A87 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		A272D5165D532FF317889C48 /* Pods */ = {
