@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20D80" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AppInfo" representedClassName=".AppInfoMO" syncable="YES">
         <attribute name="lastDelSeen" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="lastSeen" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
@@ -35,6 +35,7 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Files" representedClassName=".FileMO" parentEntity="File" syncable="YES"/>
+    <entity name="STCDLibrary" representedClassName="STCDLibrary" syncable="YES" codeGenerationType="class"/>
     <entity name="Trash" representedClassName=".TrashMO" parentEntity="File" syncable="YES"/>
     <entity name="Updates" representedClassName=".FileMO" parentEntity="File" syncable="YES"/>
     <entity name="User" representedClassName=".UserMO" syncable="YES">
@@ -51,7 +52,8 @@
         <element name="File" positionX="-574.859375" positionY="-218.88671875" width="128" height="178"/>
         <element name="Files" positionX="-568.578125" positionY="-17.24609375" width="128" height="43"/>
         <element name="Trash" positionX="-726.640625" positionY="-18.93359375" width="128" height="43"/>
-        <element name="Updates" positionX="-802.12890625" positionY="177.90625" width="128" height="43"/>
+        <element name="Updates" positionX="-900.8409423828125" positionY="13.4737548828125" width="128" height="43"/>
         <element name="User" positionX="-908.11328125" positionY="-191.53515625" width="128" height="133"/>
+        <element name="STCDLibrary" positionX="-1173.636352539062" positionY="23.60076904296875" width="128" height="43"/>
     </elements>
 </model>

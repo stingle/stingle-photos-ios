@@ -23,7 +23,7 @@ protocol IRequest {
 	var url: String { get }
 	var method: STNetworkDispatcher.Method { get }
 	var headers: [String: String]? { get }
-	var parameters: [String: String]? { get }
+	var parameters: [String: Any]? { get }
 	var encoding: STNetworkDispatcher.Encoding { get }
 }
 
@@ -36,5 +36,9 @@ extension STRequest {
 	var url: String {
 		return "\(STEnvironment.current.baseUrl)/\(self.path)"
 	}
-	
+    
+    var token: String? {
+        return SPApplication.user?.token
+    }
+    
 }

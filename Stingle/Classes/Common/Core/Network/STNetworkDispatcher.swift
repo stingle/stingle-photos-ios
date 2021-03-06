@@ -31,10 +31,16 @@ class STNetworkDispatcher {
 	static let sheared: STNetworkDispatcher = STNetworkDispatcher()
 	
 	private init() {}
+    
+    lazy var decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return decoder
+    }()
 		
 	@discardableResult
-	func request<T: Codable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
-		let decoder = decoder ?? JSONDecoder()
+	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
+        let decoder = decoder ?? self.decoder
 		let request = self.create(request: request)
 		request.responseDecodable(decoder: decoder) { (response: AFDataResponse<T>) in
 			switch response.result {
@@ -47,6 +53,37 @@ class STNetworkDispatcher {
 		}
 		return Task(request: request)
 	}
+    
+    @discardableResult
+    func requestJSON(request: IRequest, completion: @escaping (Result<Any>) -> Swift.Void) -> NetworkTask? {
+        let request = self.create(request: request)
+        request.responseJSON(completionHandler: { (response: AFDataResponse<Any>) in
+            switch response.result {
+            case .success(let value):
+                completion(.success(result: value))
+            case .failure(let networkError):
+                let error = NetworkError.error(error: networkError)
+                completion(.failure(error: error))
+            }
+        })
+            
+        return Task(request: request)
+    }
+    
+    @discardableResult
+    func requestData(request: IRequest, completion: @escaping (Result<Data>) -> Swift.Void) -> NetworkTask? {
+        let request = self.create(request: request)
+        request.responseData { (response) in
+            switch response.result {
+            case .success(let value):
+                completion(.success(result: value))
+            case .failure(let networkError):
+                let error = NetworkError.error(error: networkError)
+                completion(.failure(error: error))
+            }
+        }
+        return Task(request: request)
+    }
 	
 	//MARK: - Private func
 	

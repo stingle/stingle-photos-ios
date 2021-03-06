@@ -49,7 +49,7 @@ extension STAuthRequest: STRequest {
 		}
 	}
 	
-	var parameters: [String : String]? {
+	var parameters: [String : Any]? {
 		switch self {
 		case .register(let email, let password, let salt, let keyBundle, let isBackup):
 			let isBackup = isBackup ? "1" : "0"

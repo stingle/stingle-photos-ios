@@ -30,7 +30,6 @@
 		A022047A25EEDC0400D07C98 /* IResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022040F25EEDC0300D07C98 /* IResponse.swift */; };
 		A022047B25EEDC0400D07C98 /* STResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022041025EEDC0300D07C98 /* STResponse.swift */; };
 		A022047C25EEDC0400D07C98 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022041125EEDC0300D07C98 /* NetworkManager.swift */; };
-		A022047D25EEDC0400D07C98 /* SPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022041225EEDC0300D07C98 /* SPRequest.swift */; };
 		A022047E25EEDC0400D07C98 /* STSyncRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022041425EEDC0300D07C98 /* STSyncRequest.swift */; };
 		A022047F25EEDC0400D07C98 /* IRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022041525EEDC0300D07C98 /* IRequest.swift */; };
 		A022048025EEDC0400D07C98 /* STAuthRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022041625EEDC0300D07C98 /* STAuthRequest.swift */; };
@@ -94,6 +93,16 @@
 		A02204BC25EEDC0400D07C98 /* SPMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022046A25EEDC0400D07C98 /* SPMenuVC.swift */; };
 		A02204C625EEDD5900D07C98 /* GalleryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02204C525EEDD5900D07C98 /* GalleryVM.swift */; };
 		A02204F225EEE12000D07C98 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A02204F425EEE12000D07C98 /* Localizable.strings */; };
+		A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */; };
+		A0623F3825F41EBB0018D378 /* STLibraryDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */; };
+		A0623F3B25F420050018D378 /* STTrashFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3A25F420050018D378 /* STTrashFile.swift */; };
+		A0B3EA6525F28798000091E1 /* STLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B3EA6425F28798000091E1 /* STLibrary.swift */; };
+		A0C88FE125F3D36A0061A41D /* STLibraryFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C88FE025F3D36A0061A41D /* STLibraryFile.swift */; };
+		A0C88FE425F3D6360061A41D /* STSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C88FE325F3D6360061A41D /* STSync.swift */; };
+		A0C88FE725F3D6CD0061A41D /* STLibraryAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C88FE625F3D6CD0061A41D /* STLibraryAlbum.swift */; };
+		A0CFBD8F25F171ED003095BE /* STTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CFBD8E25F171ED003095BE /* STTabBarVC.swift */; };
+		A0CFBD9225F172CC003095BE /* SPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022041225EEDC0300D07C98 /* SPRequest.swift */; };
+		A0CFBD9625F17734003095BE /* STSyncWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CFBD9525F17734003095BE /* STSyncWorker.swift */; };
 		E6A4D89B896332CB7C65B74E /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D06FF69A05EB1AEC50C12C /* Pods_Stingle.framework */; };
 /* End PBXBuildFile section */
 
@@ -195,6 +204,15 @@
 		A02204F325EEE12000D07C98 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A02204F925EEE5A200D07C98 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		A02204FA25EEE6B500D07C98 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
+		A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryAlbumFile.swift; sourceTree = "<group>"; };
+		A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryDelete.swift; sourceTree = "<group>"; };
+		A0623F3A25F420050018D378 /* STTrashFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashFile.swift; sourceTree = "<group>"; };
+		A0B3EA6425F28798000091E1 /* STLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibrary.swift; sourceTree = "<group>"; };
+		A0C88FE025F3D36A0061A41D /* STLibraryFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryFile.swift; sourceTree = "<group>"; };
+		A0C88FE325F3D6360061A41D /* STSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSync.swift; sourceTree = "<group>"; };
+		A0C88FE625F3D6CD0061A41D /* STLibraryAlbum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryAlbum.swift; sourceTree = "<group>"; };
+		A0CFBD8E25F171ED003095BE /* STTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTabBarVC.swift; sourceTree = "<group>"; };
+		A0CFBD9525F17734003095BE /* STSyncWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSyncWorker.swift; sourceTree = "<group>"; };
 		C59B20CC9ED4970F5FE2DBE3 /* Pods-Stingle.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -356,7 +374,6 @@
 				A022040D25EEDC0300D07C98 /* Network */,
 				A022041825EEDC0300D07C98 /* Models */,
 				A022041E25EEDC0300D07C98 /* DB */,
-				A022042025EEDC0300D07C98 /* Workers */,
 				A022042325EEDC0300D07C98 /* Sync */,
 			);
 			path = Core;
@@ -393,10 +410,11 @@
 		A022040D25EEDC0300D07C98 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				A022041325EEDC0300D07C98 /* Request */,
 				A022040E25EEDC0300D07C98 /* Response */,
+				A022042025EEDC0300D07C98 /* Workers */,
 				A022041125EEDC0300D07C98 /* NetworkManager.swift */,
 				A022041225EEDC0300D07C98 /* SPRequest.swift */,
-				A022041325EEDC0300D07C98 /* Request */,
 				A022041725EEDC0300D07C98 /* STNetworkDispatcher.swift */,
 			);
 			path = Network;
@@ -414,9 +432,9 @@
 		A022041325EEDC0300D07C98 /* Request */ = {
 			isa = PBXGroup;
 			children = (
-				A022041425EEDC0300D07C98 /* STSyncRequest.swift */,
 				A022041525EEDC0300D07C98 /* IRequest.swift */,
 				A022041625EEDC0300D07C98 /* STAuthRequest.swift */,
+				A022041425EEDC0300D07C98 /* STSyncRequest.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -424,11 +442,9 @@
 		A022041825EEDC0300D07C98 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A022041925EEDC0300D07C98 /* SPFile.swift */,
-				A022041A25EEDC0300D07C98 /* AppInfo.swift */,
-				A022041B25EEDC0300D07C98 /* STAuth.swift */,
-				A022041C25EEDC0300D07C98 /* SPMediaFile.swift */,
-				A022041D25EEDC0300D07C98 /* User.swift */,
+				A0B3EA6725F287B0000091E1 /* ST */,
+				A0CFBD8C25F17090003095BE /* SP */,
+				A0CFBD8B25F17085003095BE /* DB */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -446,6 +462,7 @@
 			children = (
 				A022042125EEDC0300D07C98 /* STWorker.swift */,
 				A022042225EEDC0300D07C98 /* STAuthWorker.swift */,
+				A0CFBD9525F17734003095BE /* STSyncWorker.swift */,
 			);
 			path = Workers;
 			sourceTree = "<group>";
@@ -652,6 +669,19 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
+		A0623F3325F419730018D378 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				A0B3EA6425F28798000091E1 /* STLibrary.swift */,
+				A0C88FE325F3D6360061A41D /* STSync.swift */,
+				A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */,
+				A0D8A97225F42BC2005C12F8 /* Album */,
+				A0C88FE025F3D36A0061A41D /* STLibraryFile.swift */,
+				A0623F3A25F420050018D378 /* STTrashFile.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
 		A06AF3BC25F0291800B44A87 /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -673,8 +703,45 @@
 		A06AF3BF25F0295400B44A87 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
+				A0CFBD8E25F171ED003095BE /* STTabBarVC.swift */,
 			);
 			path = TabBar;
+			sourceTree = "<group>";
+		};
+		A0B3EA6725F287B0000091E1 /* ST */ = {
+			isa = PBXGroup;
+			children = (
+				A0623F3325F419730018D378 /* Library */,
+				A022041B25EEDC0300D07C98 /* STAuth.swift */,
+			);
+			path = ST;
+			sourceTree = "<group>";
+		};
+		A0CFBD8B25F17085003095BE /* DB */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DB;
+			sourceTree = "<group>";
+		};
+		A0CFBD8C25F17090003095BE /* SP */ = {
+			isa = PBXGroup;
+			children = (
+				A022041925EEDC0300D07C98 /* SPFile.swift */,
+				A022041A25EEDC0300D07C98 /* AppInfo.swift */,
+				A022041C25EEDC0300D07C98 /* SPMediaFile.swift */,
+				A022041D25EEDC0300D07C98 /* User.swift */,
+			);
+			path = SP;
+			sourceTree = "<group>";
+		};
+		A0D8A97225F42BC2005C12F8 /* Album */ = {
+			isa = PBXGroup;
+			children = (
+				A0C88FE625F3D6CD0061A41D /* STLibraryAlbum.swift */,
+				A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */,
+			);
+			path = Album;
 			sourceTree = "<group>";
 		};
 		A272D5165D532FF317889C48 /* Pods */ = {
@@ -718,6 +785,7 @@
 		A02203B525EED86800D07C98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = ST;
 				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
@@ -809,9 +877,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */,
 				A022049025EEDC0400D07C98 /* STConstants.swift in Sources */,
 				A022049A25EEDC0400D07C98 /* Window.swift in Sources */,
 				A022048B25EEDC0400D07C98 /* EventManager.swift in Sources */,
+				A0C88FE425F3D6360061A41D /* STSync.swift in Sources */,
+				A0623F3B25F420050018D378 /* STTrashFile.swift in Sources */,
 				A022048025EEDC0400D07C98 /* STAuthRequest.swift in Sources */,
 				A022049225EEDC0400D07C98 /* STValidator.swift in Sources */,
 				A02203E725EEDB4100D07C98 /* StingleModel.xcdatamodeld in Sources */,
@@ -828,16 +899,18 @@
 				A022046E25EEDC0400D07C98 /* STLoadingView.swift in Sources */,
 				A02204A525EEDC0400D07C98 /* STLandingVC.swift in Sources */,
 				A022048E25EEDC0400D07C98 /* KeyManagement.swift in Sources */,
-				A022047D25EEDC0400D07C98 /* SPRequest.swift in Sources */,
 				A022049525EEDC0400D07C98 /* UIView+Extensions.swift in Sources */,
 				A022048625EEDC0400D07C98 /* User.swift in Sources */,
 				A022048325EEDC0400D07C98 /* AppInfo.swift in Sources */,
 				A022048825EEDC0400D07C98 /* STWorker.swift in Sources */,
+				A0623F3825F41EBB0018D378 /* STLibraryDelete.swift in Sources */,
 				A022048525EEDC0400D07C98 /* SPMediaFile.swift in Sources */,
+				A0B3EA6525F28798000091E1 /* STLibrary.swift in Sources */,
 				A022049125EEDC0400D07C98 /* Utils.swift in Sources */,
 				A02204BC25EEDC0400D07C98 /* SPMenuVC.swift in Sources */,
 				A022049F25EEDC0400D07C98 /* SPMediaPreviewVM.swift in Sources */,
 				A022047A25EEDC0400D07C98 /* IResponse.swift in Sources */,
+				A0CFBD9625F17734003095BE /* STSyncWorker.swift in Sources */,
 				A02204A325EEDC0400D07C98 /* CurrentPageVC.swift in Sources */,
 				A02204A925EEDC0400D07C98 /* STMainVC.swift in Sources */,
 				A022047025EEDC0400D07C98 /* STStatusBar.swift in Sources */,
@@ -848,6 +921,7 @@
 				A022047125EEDC0400D07C98 /* MenuTransitionAnimationControllers.swift in Sources */,
 				A022048F25EEDC0400D07C98 /* STError.swift in Sources */,
 				A02204B925EEDC0400D07C98 /* BackupPhraseVC.swift in Sources */,
+				A0CFBD9225F172CC003095BE /* SPRequest.swift in Sources */,
 				A022047F25EEDC0400D07C98 /* IRequest.swift in Sources */,
 				A022047225EEDC0400D07C98 /* SwipeInteractionController.swift in Sources */,
 				A02204B525EEDC0400D07C98 /* SPVideoPreviewVC.swift in Sources */,
@@ -882,8 +956,11 @@
 				A022048125EEDC0400D07C98 /* STNetworkDispatcher.swift in Sources */,
 				A022047425EEDC0400D07C98 /* SPFileSource.swift in Sources */,
 				A022046D25EEDC0400D07C98 /* STTextField.swift in Sources */,
+				A0CFBD8F25F171ED003095BE /* STTabBarVC.swift in Sources */,
 				A02204AD25EEDC0400D07C98 /* SPImagePageVC.swift in Sources */,
+				A0C88FE725F3D6CD0061A41D /* STLibraryAlbum.swift in Sources */,
 				A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */,
+				A0C88FE125F3D36A0061A41D /* STLibraryFile.swift in Sources */,
 				A022048D25EEDC0400D07C98 /* SPApplication.swift in Sources */,
 				A02204B625EEDC0400D07C98 /* GalleryVC.swift in Sources */,
 				A022048A25EEDC0400D07C98 /* SyncManager.swift in Sources */,
