@@ -19,30 +19,12 @@ enum STRequestMethod : String {
 	}
 }
 
-enum HTTPMethod: String {
-	case get     = "GET"
-	case post    = "POST"
-	case put     = "PUT"
-	case patch   = "PATCH"
-	case delete  = "DELETE"
-}
-
-protocol RequestEncoding {
-	func encode(_ urlRequest: URLRequest, with parameters: [String: String?]?) throws -> URLRequest
-}
-
 protocol IRequest {
 	var url: String { get }
-	var method: HTTPMethod { get }
+	var method: STNetworkDispatcher.Method { get }
 	var headers: [String: String]? { get }
-	var parameters: [String: String]? { get }
-	var decoder: IDecoder { get }
-	var encoding: RequestEncoding { get }
-}
-
-fileprivate struct STEnviorment {
-//	static let baseUrl = "https://api.stingle.org/v2"
-	static let baseUrl = "https://apidev.stingle.org"
+	var parameters: [String: Any]? { get }
+	var encoding: STNetworkDispatcher.Encoding { get }
 }
 
 protocol STRequest: IRequest {
@@ -52,7 +34,11 @@ protocol STRequest: IRequest {
 extension STRequest {
 	
 	var url: String {
-		return "\(STEnviorment.baseUrl)/\(self.path)"
+		return "\(STEnvironment.current.baseUrl)/\(self.path)"
 	}
-	
+    
+    var token: String? {
+        return SPApplication.user?.token
+    }
+    
 }

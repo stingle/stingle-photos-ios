@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Alamofire
 
 protocol NetworkTask {
 	
@@ -23,128 +24,77 @@ extension URLSessionDataTask: NetworkTask {
 	}
 }
 
-protocol IDecoder {
-	func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable
-}
-
-extension JSONDecoder: IDecoder {}
+typealias IDecoder = DataDecoder
 
 class STNetworkDispatcher {
 		
 	static let sheared: STNetworkDispatcher = STNetworkDispatcher()
+	
 	private init() {}
-	
-	private let session = URLSession.shared
-	
+    
+    lazy var decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return decoder
+    }()
+		
 	@discardableResult
-	func request<T: IResponse>(request: IRequest, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
-		do {
-			let urlRequest = try self.create(request: request)
-			let task = self.resume(request: urlRequest) { (resultData) in
-				switch resultData{
-				case .success(let result):
-					let decoder = JSONDecoder()
-					decoder.keyDecodingStrategy = .convertFromSnakeCase
-					do {
-						let response: T = try decoder.decode(T.self, from: result)
-						completion(.success(result: response))
-					} catch {
-						completion(.failure(error: .error(error: error)))
-					}
-					break
-				case .failure(let error):
-					completion(.failure(error: error))
-				}
+	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
+        let decoder = decoder ?? self.decoder
+		let request = self.create(request: request)
+		request.responseDecodable(decoder: decoder) { (response: AFDataResponse<T>) in
+			switch response.result {
+			case .success(let value):
+				completion(.success(result: value))
+			case .failure(let networkError):
+				let error = NetworkError.error(error: networkError)
+				completion(.failure(error: error))
 			}
-			task.resume()
-			return task
-		} catch {
-			completion(.failure(error: NetworkError.error(error: error)))
-			return nil
 		}
+		return Task(request: request)
 	}
+    
+    @discardableResult
+    func requestJSON(request: IRequest, completion: @escaping (Result<Any>) -> Swift.Void) -> NetworkTask? {
+        let request = self.create(request: request)
+        request.responseJSON(completionHandler: { (response: AFDataResponse<Any>) in
+            switch response.result {
+            case .success(let value):
+                completion(.success(result: value))
+            case .failure(let networkError):
+                let error = NetworkError.error(error: networkError)
+                completion(.failure(error: error))
+            }
+        })
+            
+        return Task(request: request)
+    }
+    
+    @discardableResult
+    func requestData(request: IRequest, completion: @escaping (Result<Data>) -> Swift.Void) -> NetworkTask? {
+        let request = self.create(request: request)
+        request.responseData { (response) in
+            switch response.result {
+            case .success(let value):
+                completion(.success(result: value))
+            case .failure(let networkError):
+                let error = NetworkError.error(error: networkError)
+                completion(.failure(error: error))
+            }
+        }
+        return Task(request: request)
+    }
 	
 	//MARK: - Private func
 	
-	private func resume(request: URLRequest, completion: @escaping (Result<Data>) -> Swift.Void) -> NetworkTask {
-		let task = self.session.dataTask(with: request) { (data, response, error) in
-			guard let data = data, error == nil else {
-				if let error = error {
-					completion(.failure(error: .error(error: error)))
-					return
-				}
-				completion(.failure(error: .dataNotFound))
-				return
-			}
-			completion(.success(result: data))
+	private func create(request: IRequest) -> DataRequest {
+		let url = request.url
+		guard let components = URLComponents(string: url) else {
+			fatalError()
 		}
-		
-		return task
+		return AF.request(components, method: request.method.AFMethod, parameters: request.parameters, encoding: request.encoding, headers: request.afHeaders, interceptor: nil).validate(statusCode: 200..<300)
 	}
 	
-	private func create(request: IRequest) throws -> URLRequest {
-		let url = URL(string: request.url)
-		guard let requestUrl = url else {
-			throw NetworkError.badRequest
-		}
-		var urlRequest = URLRequest(url: requestUrl)
-		urlRequest.httpMethod = request.method.rawValue
-		if let headers = request.headers {
-			for key in headers.keys {
-				if let value = headers[key] {
-					urlRequest.setValue(value, forHTTPHeaderField: key)
-				}
-			}
-		}
-		urlRequest = try request.encoding.encode(urlRequest, with: request.parameters)
-		return urlRequest
-	}
-	
-}
-
-extension STNetworkDispatcher {
-	
-	enum TaskState: Int {
-		case running = 0
-		case suspended = 1
-		case canceling = 2
-		case completed = 3
-	}
-	
-	enum Encoding {
-		case queryString
-		case body
-	}
-		
-}
-
-extension STNetworkDispatcher.Encoding: RequestEncoding {
-
-	func encode(_ urlRequest: URLRequest, with parameters: [String : String?]?) throws -> URLRequest {
-		var urlRequest = urlRequest
-		switch self {
-		case .queryString:
-			guard let url = urlRequest.url?.absoluteString else {
-				throw STNetworkDispatcher.NetworkError.badRequest
-			}
-			var components = URLComponents(string: url)
-			components?.queryItems = parameters?.compactMap({ (arg0) -> URLQueryItem in
-				return URLQueryItem(name: arg0.key, value: arg0.value)
-			})
-			urlRequest.url = components?.url
-			return urlRequest
-		case .body:
-			let httpBody = parameters?.map { key, value in
-				let escapedKey = "\(key)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
-				let escapedValue = "\(value ?? "")".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
-				return escapedKey + "=" + escapedValue
-			}.joined(separator: "&").data(using: .utf8)
-			urlRequest.httpBody = httpBody
-			return urlRequest
-		}
-	}
-	
-
 }
 
 extension STNetworkDispatcher {
@@ -175,4 +125,123 @@ extension STNetworkDispatcher {
 		}
 	}
 	
+	enum Encoding {
+		case queryString
+		case body
+		case coustom(encoer: IRequestEncoding)
+	}
+	
+	enum Method: String {
+		case get     = "GET"
+		case post    = "POST"
+		case put     = "PUT"
+		case patch   = "PATCH"
+		case delete  = "DELETE"
+	}
+	
+	enum TaskState: Int {
+		case running = 0
+		case suspended = 1
+		case canceling = 2
+		case completed = 3
+	}
+	
+	fileprivate struct Task: NetworkTask {
+		
+		let request: Request
+		
+		func cancel() {
+			self.request.cancel()
+		}
+		
+		func suspend() {
+			self.request.suspend()
+		}
+		
+		func resume() {
+			self.request.resume()
+		}
+		
+		var taskState: STNetworkDispatcher.TaskState {
+			switch self.request.state {
+			case .initialized, .resumed:
+				return .running
+			case .suspended:
+				return .suspended
+			case .cancelled:
+				return .canceling
+			case .finished:
+				return .completed
+			}
+		}
+		
+	}
+}
+
+extension STNetworkDispatcher.Encoding: IRequestEncoding {
+
+	func encodeParameters(_ urlRequest: URLRequest, with parameters: [String : Any]?) throws -> URLRequest {
+		switch self {
+		case .queryString:
+			return try URLEncoding.queryString.encode(urlRequest, with: parameters)
+		case .body:
+			return try URLEncoding.default.encode(urlRequest, with: parameters)
+		case .coustom(let encoer):
+			return try encoer.encodeParameters(urlRequest, with: parameters)
+		}
+	}
+
+}
+
+private extension STNetworkDispatcher.Method {
+	
+	var AFMethod: Alamofire.HTTPMethod {
+		switch self {
+		case .get:
+			return .get
+		case .post:
+			return .post
+		case .put:
+			return .put
+		case .patch:
+			return .patch
+		case .delete:
+			return .delete
+		}
+	}
+	
+}
+
+extension IRequest {
+	
+	var afHeaders: Alamofire.HTTPHeaders? {
+		if let header = self.headers {
+			return Alamofire.HTTPHeaders(header)
+		}
+		return nil
+	}
+	
+}
+
+protocol IRequestEncoding: ParameterEncoding {
+	func encodeParameters(_ urlRequest: URLRequest, with parameters: [String : Any]?) throws -> URLRequest
+}
+
+extension IRequestEncoding {
+	
+	func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+		return try self.encodeParameters(urlRequest.asURLRequest(), with: parameters)
+	}
+	
+}
+
+extension AFError: IError {
+    
+    var message: String {
+        switch self {
+        default:
+            return "nework_error_bad_request".localized
+        }
+    }
+
 }

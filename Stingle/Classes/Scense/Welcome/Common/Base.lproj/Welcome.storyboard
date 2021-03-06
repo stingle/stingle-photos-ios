@@ -10,9 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="SF-Pro-Display-Medium.otf">
-            <string>SFProDisplay-Medium</string>
-        </array>
         <array key="SF-Pro-Display-Regular.otf">
             <string>SFProDisplay-Regular</string>
         </array>
@@ -143,14 +140,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cc-JH-4tF">
-                                                    <rect key="frame" x="16" y="21.999999999999993" width="396" height="100.33333333333331"/>
+                                                    <rect key="frame" x="16" y="22" width="396" height="117"/>
                                                     <string key="text">Please choose your master password. While no limit
 is put on what you can enter here, it is strongly advised
 that your password has at least 12 characters and contains 
 lowercase and uppercase letters, digits and special symbols.
 If your password is not secure enough then your photosvideos
 may be vulnerable to brute force attacks.</string>
-                                                    <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="0.87" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -176,7 +173,7 @@ may be vulnerable to brute force attacks.</string>
                                                         <constraint firstAttribute="height" constant="40" id="BOT-ek-TcD"/>
                                                     </constraints>
                                                     <color key="textColor" systemColor="darkTextColor"/>
-                                                    <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
@@ -215,7 +212,7 @@ may be vulnerable to brute force attacks.</string>
                                                         <constraint firstAttribute="height" constant="40" id="VTf-m6-AfL"/>
                                                     </constraints>
                                                     <color key="textColor" systemColor="darkTextColor"/>
-                                                    <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
@@ -254,7 +251,7 @@ may be vulnerable to brute force attacks.</string>
                                                         <constraint firstAttribute="height" constant="40" id="kJx-vP-SbF"/>
                                                     </constraints>
                                                     <color key="textColor" systemColor="darkTextColor"/>
-                                                    <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
@@ -369,7 +366,7 @@ may be vulnerable to brute force attacks.</string>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="36" id="gqY-ef-vzw"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Sign Up"/>
                                                     <connections>
@@ -381,13 +378,13 @@ may be vulnerable to brute force attacks.</string>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Already  have an account?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBb-l9-uvf">
                                                             <rect key="frame" x="0.0" y="0.0" width="190" height="29"/>
-                                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ypJ-I1-wYL">
                                                             <rect key="frame" x="198" y="0.0" width="44" height="29"/>
-                                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <state key="normal" title="Sign In">
                                                                 <color key="titleColor" name="STPrimary"/>
                                                             </state>
@@ -607,7 +604,7 @@ may be vulnerable to brute force attacks.</string>
                                                         <constraint firstAttribute="height" constant="40" id="nTS-EU-lLv"/>
                                                     </constraints>
                                                     <color key="textColor" systemColor="darkTextColor"/>
-                                                    <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
@@ -646,7 +643,7 @@ may be vulnerable to brute force attacks.</string>
                                                         <constraint firstAttribute="height" constant="40" id="9pk-Mm-iRU"/>
                                                     </constraints>
                                                     <color key="textColor" systemColor="darkTextColor"/>
-                                                    <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
@@ -694,7 +691,7 @@ may be vulnerable to brute force attacks.</string>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="36" id="vik-T7-Cgf"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Sign In"/>
                                                     <connections>
@@ -706,7 +703,7 @@ may be vulnerable to brute force attacks.</string>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Don't have an accout?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BH-MR-IFq">
                                                             <rect key="frame" x="0.0" y="0.0" width="161.66666666666666" height="29"/>
-                                                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="16"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -768,8 +765,25 @@ may be vulnerable to brute force attacks.</string>
             <point key="canvasLocation" x="1237.5" y="-18.75"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="GOP-25-xwS">
+            <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>
+        </designable>
+        <designable name="LwS-on-PRS">
+            <size key="intrinsicContentSize" width="146.33333333333334" height="22"/>
+        </designable>
+        <designable name="W7y-BA-ely">
+            <size key="intrinsicContentSize" width="43" height="23.333333333333332"/>
+        </designable>
+        <designable name="hFL-fg-WsP">
+            <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>
+        </designable>
+        <designable name="yTq-Wo-xGu">
+            <size key="intrinsicContentSize" width="43" height="23.333333333333332"/>
+        </designable>
+    </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="ty4-hQ-4RS"/>
+        <segue reference="es5-rA-LwU"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>

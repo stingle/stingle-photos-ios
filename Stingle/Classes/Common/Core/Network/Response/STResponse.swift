@@ -8,7 +8,7 @@
 
 import Foundation
 
-class STResponse<T: Codable>: IResponse {
+class STResponse<T: Decodable>: IResponse {
 	
 	private enum CodingKeys: String, CodingKey {
 		case status = "status"

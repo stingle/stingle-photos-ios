@@ -15,22 +15,60 @@ struct Theme {
     
     struct Fonts {
         static func SFProMedium(size:CGFloat) -> UIFont {
-            return UIFont(name: "SFProDisplay-Medium", size: size)!
+            return  .medium(light: size)
         }
         static func SFProRegular(size:CGFloat) -> UIFont {
-            return UIFont(name: "SFProDisplay-Regular", size: size)!
+            return .regular(light: size)
         }
         static func SFProBold(size:CGFloat) -> UIFont {
-            return UIFont(name: "SFProDisplay-Bold", size: size)!
+            return .bold(light: size)
         }
         static func SFProSemibold(size:CGFloat) -> UIFont {
-            return UIFont(name: "SFProDisplay-Semibold", size: size)!
+            return .semibold(light: size)
         }
         static func SFProHeavy(size:CGFloat) -> UIFont {
-            return UIFont(name: "SFProDisplay-Heavy", size: size)!
+            return .heavy(light: size)
         }
-        
-        
-        
+
     }
+}
+
+extension UIFont {
+    
+    class func light(light size: CGFloat) -> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: .light)
+    }
+    
+    class func ultraLight(light size: CGFloat) -> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: .ultraLight)
+    }
+    
+    class func thin(light size: CGFloat) -> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: .thin)
+    }
+    
+    class func regular(light size: CGFloat) -> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: .regular)
+    }
+    
+    class func medium(light size: CGFloat) -> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: .medium)
+    }
+    
+    class func semibold(light size: CGFloat) -> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: .semibold)
+    }
+    
+    class func bold(light size: CGFloat) -> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: .bold)
+    }
+    
+    class func heavy(light size: CGFloat) -> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: .heavy)
+    }
+    
+    class func black(light size: CGFloat) -> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: .black)
+    }
+
 }

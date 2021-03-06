@@ -28,9 +28,8 @@ class SPApplication {
 	}
 	
 	static func unLock(with password:String) throws {
-		if let key = try crypto.getPrivateKey(password: password) {
-			KeyManagement.key = key
-		}
+		let key = try crypto.getPrivateKey(password: password)
+		KeyManagement.key = key
 	}
 
 }

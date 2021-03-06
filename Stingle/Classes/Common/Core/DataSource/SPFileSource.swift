@@ -15,6 +15,7 @@ enum SPFileSourceStatus : Int32 {
 
 
 class SPFileSource {
+    
 	private let file:SPFileInfo
 	private let header:Header?
 	private var queue = DispatchQueue(label: "SPFileSource.queue", attributes: .concurrent)

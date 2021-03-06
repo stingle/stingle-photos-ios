@@ -321,7 +321,7 @@ class DataBase : NSObject {
 		return infoMO.userId
 	}
 
-	func getUser(userId:Int) -> User? {
+	func getUser(userId: Int) -> User? {
 		let context = container.newBackgroundContext()
 		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 		context.undoManager = nil

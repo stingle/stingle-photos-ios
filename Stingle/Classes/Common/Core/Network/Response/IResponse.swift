@@ -1,6 +1,6 @@
 import Foundation
 
-protocol IResponse: Codable {
+protocol IResponse: Decodable {
 }
 
 struct SPDefaultResponse: IResponse {
