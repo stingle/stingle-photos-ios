@@ -73,10 +73,10 @@ class SPMenuVM {
 	}
 	
 	func email() -> String {
-		guard let user = SPApplication.user else {
+        guard let email = STApplication.shared.user()?.email else {
 			return ""
 		}
-		return user.email
+		return email
 	}
 	
 	func storageProgress() -> Float {

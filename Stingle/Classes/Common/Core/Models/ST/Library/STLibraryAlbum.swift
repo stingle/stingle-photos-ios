@@ -9,8 +9,8 @@ import Foundation
 
 extension STLibrary {
     
-    class Album: Codable {
-        
+    class Album: ICDConvertable, Codable {
+                
         private enum CodingKeys: String, CodingKey {
             case albumId = "albumId"
             case encPrivateKey = "encPrivateKey"
@@ -64,9 +64,58 @@ extension STLibrary {
             }
             self.dateCreated = Date(milliseconds: dateCreated)
             self.dateModified = Date(milliseconds: dateModified)
-          
+            
+        }
+        
+        required init(model: STCDAlbum) throws {
+            
+            guard let albumId = model.albumId,
+                  let encPrivateKey = model.encPrivateKey,
+                  let publicKey = model.publicKey,
+                  let metadata = model.metadata,
+                  let dateCreated = model.dateCreated,
+                  let dateModified = model.dateModified else {
+                throw LibraryError.parsError
+            }
+            
+            self.albumId = albumId
+            self.encPrivateKey = encPrivateKey
+            self.publicKey = publicKey
+            self.metadata = metadata
+            self.isShared = model.isShared
+            self.isHidden = model.isHidden
+            self.isOwner = model.isOwner
+            self.permissions = model.permissions
+            
+            self.members = model.members
+            self.isLocked = model.isLocked
+            self.cover = model.cover
+            
+            self.dateCreated = dateCreated
+            self.dateModified = dateModified
+        }
+        
+        func toManagedModelJson() throws -> [String : Any] {
+            var json = [String : Any]()
+            json.addIfNeeded(key: "albumId", value: self.albumId)
+            json.addIfNeeded(key: "encPrivateKey", value: self.encPrivateKey)
+            json.addIfNeeded(key: "publicKey", value: self.publicKey)
+            json.addIfNeeded(key: "metadata", value: self.metadata)
+            json.addIfNeeded(key: "isShared", value: self.isShared)
+            json.addIfNeeded(key: "isHidden", value: self.isHidden)
+            json.addIfNeeded(key: "isOwner", value: self.isOwner)
+            json.addIfNeeded(key: "permissions", value: self.permissions)
+            json.addIfNeeded(key: "members", value: self.members)
+            json.addIfNeeded(key: "isLocked", value: self.isLocked)
+            json.addIfNeeded(key: "cover", value: self.cover)
+            json.addIfNeeded(key: "dateCreated", value: self.dateCreated)
+            json.addIfNeeded(key: "dateModified", value: self.dateModified)
+            return json
         }
    
     }
     
 }
+
+
+

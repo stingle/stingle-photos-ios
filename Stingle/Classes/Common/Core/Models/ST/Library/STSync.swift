@@ -17,6 +17,7 @@ class STSync: Decodable {
         case albumFiles = "albumFiles"
         case trash = "trash"
         case deletes = "deletes"
+        case contacts = "contacts"
     }
         
     let spaceUsed: String
@@ -26,6 +27,7 @@ class STSync: Decodable {
     let albums: [STLibrary.Album]?
     let albumFiles: [STLibrary.AlbumFile]?
     let trash: [STLibrary.TrashFile]?
-    let deletes: [STLibrary.DeleteFile]?
-        
+    let deletes: STLibrary.DeleteFile?
+    let contacts: [STContact]?
+            
 }

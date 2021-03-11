@@ -17,7 +17,7 @@ class STMainVM {
 	}
 	
 	func isLogined() -> Bool {
-		return SPApplication.isLogedIn()
+        return STApplication.shared.isLogedIn()
 	}
 	
 	

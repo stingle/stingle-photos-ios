@@ -38,7 +38,7 @@ extension STRequest {
 	}
     
     var token: String? {
-        return SPApplication.user?.token
+        return STApplication.shared.user()?.token
     }
     
 }

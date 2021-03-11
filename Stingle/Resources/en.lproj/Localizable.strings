@@ -54,6 +54,7 @@
 "empty_data" = "Empty data";
 "incorrect_password" = "Incorrect password";
 
+"error_empty_text" = "Text cannot be empty";
 "error_empty_email" = "Email cannot be empty";
 "error_empty_password" = "Password cannot be empty";
 "error_incorrect_email" = "Email not valid";
