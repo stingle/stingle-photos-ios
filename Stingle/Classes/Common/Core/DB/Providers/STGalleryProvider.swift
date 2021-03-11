@@ -14,18 +14,32 @@ protocol IGalleryProviderObserver {
 
 extension STDataBase {
     
-    class GalleryProvider: NSObject {
+    class GalleryProvider: DataBaseProvider<STLibrary.File, STCDFile> {
         
-        typealias ManagedModel = STCDFile
-        typealias Model = STLibrary.File
-        typealias Observer = IGalleryProviderObserver
+        override func newBatchInsertRequest(with files: [STLibrary.File], context: NSManagedObjectContext) throws -> (request: NSBatchInsertRequest, lastDate: Date) {
+            var lastDate: Date? = nil
+            var jsons = [[String : Any]]()
+            
+            try files.forEach { (file) in
+                let json = try file.toManagedModelJson()
+                jsons.append(json)
+                let currentLastDate = lastDate ?? file.dateModified
+                if currentLastDate <= file.dateModified {
+                    lastDate = file.dateModified
+                }
+            }
+            
+            guard let myLastDate = lastDate else {
+                throw STDataBase.DataBaseError.dateNotFound
+            }
+            
+            let insertRequest = NSBatchInsertRequest(entity: STCDFile.entity(), objects: jsons)
+            insertRequest.resultType = .statusOnly
+            return (insertRequest, myLastDate)
+        }
         
-        let container: STDataBaseContainer
-        private let observer = STObserverEvents<IGalleryProviderObserver>()
-        
-        required init(container: STDataBaseContainer) {
-            self.container = container
-            super.init()
+        func deleteObjects(_ objects: STLibrary.DeleteFile) {
+            
         }
         
     }
@@ -67,42 +81,3 @@ extension STDataBase {
 //    }()
     
 //}
-
-extension STDataBase.GalleryProvider: IDataBaseProvider {
-    
-    var viewContext: NSManagedObjectContext {
-        return self.container.viewContext
-    }
-    
-    func addObject(_ listener: IGalleryProviderObserver) {
-        self.observer.addObject(listener)
-    }
-    
-    func removeObject(_ listener: IGalleryProviderObserver) {
-        self.observer.removeObject(listener)
-    }
-    
-    func newBatchInsertRequest(with files: [STLibrary.File], context: NSManagedObjectContext) throws -> (request: NSBatchInsertRequest, lastDate: Date) {
-        var lastDate: Date? = nil
-        var jsons = [[String : Any]]()
-        
-        try files.forEach { (file) in
-            let json = try file.toManagedModelJson()
-            jsons.append(json)
-            let currentLastDate = lastDate ?? file.dateModified
-            if currentLastDate <= file.dateModified {
-                lastDate = file.dateModified
-            }
-        }
-        
-        guard let myLastDate = lastDate else {
-            throw STDataBase.DataBaseError.dateNotFound
-        }
-        
-        let insertRequest = NSBatchInsertRequest(entity: ManagedModel.entity(), objects: jsons)
-        insertRequest.resultType = .statusOnly
-        return (insertRequest, myLastDate)
-    }
-    
-}
-

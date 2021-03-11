@@ -7,24 +7,10 @@
 
 import CoreData
 
-protocol IUserProviderObserver {
-    
-}
-
 extension STDataBase {
     
-    class UserProvider: STObserverEvents<IUserProviderObserver>, IDataBaseProvider {
-        
-        typealias Observer = IUserProviderObserver
-        typealias ManagedModel = STCDUser
-        typealias Model = STUser
-                
-        let container: STDataBaseContainer
-
-        required init(container: STDataBaseContainer) {
-            self.container = container
-        }
-                
+    class UserProvider: DataBaseProvider<STUser, STCDUser> {
+               
         func update(model user: STUser) {
             let context = self.container.newBackgroundContext()
             context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
@@ -78,10 +64,6 @@ extension STDataBase.UserProvider {
         } catch  {
             return nil
         }
-    }
-    
-    var viewContext: NSManagedObjectContext {
-        return self.container.viewContext
     }
     
 }

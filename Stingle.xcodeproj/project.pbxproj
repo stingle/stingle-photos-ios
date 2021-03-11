@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		A0059E5225F813EC003ABB56 /* STDBInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0059E5125F813EC003ABB56 /* STDBInfo.swift */; };
 		A0059E5525F814AA003ABB56 /* STCDDBInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0059E5425F814AA003ABB56 /* STCDDBInfo.swift */; };
-		A0059E6625F8B70F003ABB56 /* IDataBaseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0059E6525F8B70F003ABB56 /* IDataBaseProvider.swift */; };
+		A0059E6625F8B70F003ABB56 /* STDataBaseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0059E6525F8B70F003ABB56 /* STDataBaseProvider.swift */; };
 		A02203C125EED86800D07C98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203C025EED86800D07C98 /* AppDelegate.swift */; };
 		A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203C225EED86800D07C98 /* SceneDelegate.swift */; };
 		A02203CA25EED86800D07C98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A02203C925EED86800D07C98 /* Assets.xcassets */; };
@@ -137,7 +137,7 @@
 		9BD6FA0BECCC5A6C76D6C7FC /* Pods-Stingle.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-prod.xcconfig"; sourceTree = "<group>"; };
 		A0059E5125F813EC003ABB56 /* STDBInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDBInfo.swift; sourceTree = "<group>"; };
 		A0059E5425F814AA003ABB56 /* STCDDBInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = STCDDBInfo.swift; path = "/Users/khorenasatryan/Documents/Workspace/Apps/Github/Alex/Stingle/stingle-photos-ios/Stingle/Classes/Common/Core/Models/DB/STCDDBInfo.swift"; sourceTree = "<absolute>"; };
-		A0059E6525F8B70F003ABB56 /* IDataBaseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDataBaseProvider.swift; sourceTree = "<group>"; };
+		A0059E6525F8B70F003ABB56 /* STDataBaseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDataBaseProvider.swift; sourceTree = "<group>"; };
 		A02203BD25EED86800D07C98 /* Stingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A02203C025EED86800D07C98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A02203C225EED86800D07C98 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -772,7 +772,7 @@
 		A086FD9B25F62AEF00A8BC9C /* Providers */ = {
 			isa = PBXGroup;
 			children = (
-				A0059E6525F8B70F003ABB56 /* IDataBaseProvider.swift */,
+				A0059E6525F8B70F003ABB56 /* STDataBaseProvider.swift */,
 				A086FD9025F5AC7200A8BC9C /* STUserProvider.swift */,
 				A024330C25F64B980054BED9 /* STGalleryProvider.swift */,
 				A0F467DF25F963CE00BF00AA /* STAlbumsProvider.swift */,
@@ -1025,7 +1025,7 @@
 				A02204AB25EEDC0400D07C98 /* SignInVC.swift in Sources */,
 				A0F467F625F992F400BF00AA /* STCDTrashFile.swift in Sources */,
 				A02204B325EEDC0400D07C98 /* GalleryFrontVC.swift in Sources */,
-				A0059E6625F8B70F003ABB56 /* IDataBaseProvider.swift in Sources */,
+				A0059E6625F8B70F003ABB56 /* STDataBaseProvider.swift in Sources */,
 				A022049B25EEDC0400D07C98 /* Theme.swift in Sources */,
 				A022049725EEDC0400D07C98 /* Image+Extension.swift in Sources */,
 				A022047C25EEDC0400D07C98 /* NetworkManager.swift in Sources */,
