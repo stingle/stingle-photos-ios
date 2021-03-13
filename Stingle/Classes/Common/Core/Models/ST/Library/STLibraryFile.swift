@@ -19,11 +19,11 @@ extension STLibrary {
             case dateModified = "dateModified"
         }
         
-        let file: String
-        let version: String
-        let headers: String
-        let dateCreated: Date
-        let dateModified: Date
+        var file: String
+        var version: String
+        var headers: String
+        var dateCreated: Date
+        var dateModified: Date
         
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -39,12 +39,12 @@ extension STLibrary {
             self.dateModified = Date(milliseconds: dateModified)
         }
         
-        required init(model: STCDFile) throws {
-            guard let file = model.file,
-                  let version = model.version,
-                  let headers = model.headers,
-                  let dateCreated = model.dateCreated,
-                  let dateModified = model.dateModified
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?) throws {
+            guard let file = file,
+                  let version = version,
+                  let headers = headers,
+                  let dateCreated = dateCreated,
+                  let dateModified = dateModified
             else {
                 throw LibraryError.parsError
             }
@@ -54,6 +54,14 @@ extension STLibrary {
             self.headers = headers
             self.dateCreated = dateCreated
             self.dateModified = dateModified
+        }
+        
+        required convenience init(model: STCDFile) throws {
+            try self.init(file: model.file,
+                           version: model.version,
+                           headers: model.headers,
+                           dateCreated: model.dateCreated,
+                           dateModified: model.dateModified)
         }
         
         func toManagedModelJson() throws -> [String : Any] {

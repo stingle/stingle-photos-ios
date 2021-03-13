@@ -14,12 +14,11 @@ protocol IGalleryProviderObserver {
 
 extension STDataBase {
     
-    class GalleryProvider: DataBaseProvider<STLibrary.File, STCDFile> {
+    class GalleryProvider: DataBaseCollectionProvider<STLibrary.File, STCDFile, STLibrary.DeleteFile.Gallery> {
         
-        override func newBatchInsertRequest(with files: [STLibrary.File], context: NSManagedObjectContext) throws -> (request: NSBatchInsertRequest, lastDate: Date) {
+        override func getInsertObjects(with files: [STLibrary.File]) throws -> (json: [[String : Any]], lastDate: Date) {
             var lastDate: Date? = nil
             var jsons = [[String : Any]]()
-            
             try files.forEach { (file) in
                 let json = try file.toManagedModelJson()
                 jsons.append(json)
@@ -28,20 +27,42 @@ extension STDataBase {
                     lastDate = file.dateModified
                 }
             }
-            
             guard let myLastDate = lastDate else {
                 throw STDataBase.DataBaseError.dateNotFound
             }
-            
-            let insertRequest = NSBatchInsertRequest(entity: STCDFile.entity(), objects: jsons)
-            insertRequest.resultType = .statusOnly
-            return (insertRequest, myLastDate)
+            return (jsons, myLastDate)
         }
-        
-        func deleteObjects(_ objects: STLibrary.DeleteFile) {
+                
+        override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Gallery], in context: NSManagedObjectContext) throws -> (models: [STCDFile], date: Date) {
+           
+            guard !deleteFiles.isEmpty else {
+                throw STDataBase.DataBaseError.dateNotFound
+            }
             
+            let context = self.container.newBackgroundContext()
+            let fileNames = deleteFiles.compactMap { (deleteFile) -> String in
+                return deleteFile.file
+            }
+            
+            let fetchRequest = NSFetchRequest<STCDFile>(entityName: STCDFile.entityName)
+            fetchRequest.includesSubentities = false
+            fetchRequest.predicate = NSPredicate(format: "file IN %@", fileNames)
+            let deleteingCDItems = try context.fetch(fetchRequest)
+            var deleteItems = [STCDFile]()
+            let groupCDItems = Dictionary(grouping: deleteingCDItems, by: { $0.file })
+            let defaultDate =  Date.defaultDate
+            var lastDate = defaultDate
+            
+            for delete in deleteFiles {
+                lastDate = max(delete.date, lastDate)
+                let cdModels = groupCDItems[delete.file]
+                if let deliteObjects = cdModels?.filter( { $0.dateModified ?? defaultDate <= delete.date} ) {
+                    deleteItems.append(contentsOf: deliteObjects)
+                }
+            }
+            return (deleteItems, lastDate)
         }
-        
+
     }
     
 }
@@ -61,7 +82,7 @@ extension STDataBase {
 //
 //        print("")
 //    }
-    
+
 //    func createResultsController() -> NSFetchedResultsController<STCDFile> {
 //        let filesFetchRequest = NSFetchRequest<STCDFile>(entityName: STCDFile.entityName)
 //        filesFetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
@@ -79,5 +100,5 @@ extension STDataBase {
 //            return nil
 //        }
 //    }()
-    
+
 //}

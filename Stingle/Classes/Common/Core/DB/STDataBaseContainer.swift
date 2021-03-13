@@ -55,12 +55,24 @@ class STDataBaseContainer {
         return self.container.newBackgroundContext()
     }
     
-    func performAndWait<T>(context: NSManagedObjectContext, _ executeBlock: @escaping () -> T) -> T {
+}
+
+extension NSManagedObjectContext {
+    
+    func performAndWait<T>(_ executeBlock: @escaping () -> T) -> T {
         var result: T!
-        context.performAndWait( {
+        self.performAndWait( {
             result = executeBlock()
         })
         return result
     }
-        
+    
+    func performAndWait<T>(_ executeBlock: @escaping () -> T?) -> T? {
+        var result: T?
+        self.performAndWait( {
+            result = executeBlock()
+        })
+        return result
+    }
+    
 }

@@ -54,7 +54,7 @@
 		A022049125EEDC0400D07C98 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022042D25EEDC0300D07C98 /* Utils.swift */; };
 		A022049225EEDC0400D07C98 /* STValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022042E25EEDC0300D07C98 /* STValidator.swift */; };
 		A022049325EEDC0400D07C98 /* STEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022042F25EEDC0300D07C98 /* STEnvironment.swift */; };
-		A022049425EEDC0400D07C98 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022043125EEDC0300D07C98 /* Date.swift */; };
+		A022049425EEDC0400D07C98 /* Date+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022043125EEDC0300D07C98 /* Date+Operation.swift */; };
 		A022049525EEDC0400D07C98 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022043325EEDC0300D07C98 /* UIView+Extensions.swift */; };
 		A022049625EEDC0400D07C98 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022043425EEDC0300D07C98 /* UIViewController+Extension.swift */; };
 		A022049725EEDC0400D07C98 /* Image+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022043525EEDC0300D07C98 /* Image+Extension.swift */; };
@@ -98,6 +98,7 @@
 		A024330325F6384C0054BED9 /* STObserverEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024330225F6384C0054BED9 /* STObserverEvents.swift */; };
 		A024330D25F64B980054BED9 /* STGalleryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024330C25F64B980054BED9 /* STGalleryProvider.swift */; };
 		A024331925F6B40A0054BED9 /* Codable+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024331825F6B40A0054BED9 /* Codable+Operation.swift */; };
+		A05AD2D825FCEAC500ABBA59 /* STDBInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05AD2D725FCEAC500ABBA59 /* STDBInfoProvider.swift */; };
 		A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */; };
 		A0623F3825F41EBB0018D378 /* STLibraryDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */; };
 		A084182325FA589B00DEAC89 /* STTrashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A084182225FA589B00DEAC89 /* STTrashProvider.swift */; };
@@ -185,7 +186,7 @@
 		A022042D25EEDC0300D07C98 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		A022042E25EEDC0300D07C98 /* STValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STValidator.swift; sourceTree = "<group>"; };
 		A022042F25EEDC0300D07C98 /* STEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STEnvironment.swift; sourceTree = "<group>"; };
-		A022043125EEDC0300D07C98 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		A022043125EEDC0300D07C98 /* Date+Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Operation.swift"; sourceTree = "<group>"; };
 		A022043325EEDC0300D07C98 /* UIView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		A022043425EEDC0300D07C98 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		A022043525EEDC0300D07C98 /* Image+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Image+Extension.swift"; sourceTree = "<group>"; };
@@ -232,6 +233,7 @@
 		A024330925F649E30054BED9 /* STSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSyncManager.swift; sourceTree = "<group>"; };
 		A024330C25F64B980054BED9 /* STGalleryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryProvider.swift; sourceTree = "<group>"; };
 		A024331825F6B40A0054BED9 /* Codable+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Operation.swift"; sourceTree = "<group>"; };
+		A05AD2D725FCEAC500ABBA59 /* STDBInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDBInfoProvider.swift; sourceTree = "<group>"; };
 		A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryAlbumFile.swift; sourceTree = "<group>"; };
 		A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryDelete.swift; sourceTree = "<group>"; };
 		A084182225FA589B00DEAC89 /* STTrashProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashProvider.swift; sourceTree = "<group>"; };
@@ -552,11 +554,11 @@
 		A022043025EEDC0300D07C98 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A022043125EEDC0300D07C98 /* Date.swift */,
-				A022043225EEDC0300D07C98 /* UI */,
+				A022043125EEDC0300D07C98 /* Date+Operation.swift */,
 				A022043725EEDC0300D07C98 /* String+Extensions.swift */,
 				A022043825EEDC0300D07C98 /* Window.swift */,
 				A024331825F6B40A0054BED9 /* Codable+Operation.swift */,
+				A022043225EEDC0300D07C98 /* UI */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -729,6 +731,18 @@
 			path = Observer;
 			sourceTree = "<group>";
 		};
+		A05AD2DA25FCEACF00ABBA59 /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				A024330C25F64B980054BED9 /* STGalleryProvider.swift */,
+				A0F467DF25F963CE00BF00AA /* STAlbumsProvider.swift */,
+				A0F467E325F9776600BF00AA /* STAlbumFilesProvider.swift */,
+				A084182225FA589B00DEAC89 /* STTrashProvider.swift */,
+				A0F1437825FAC67B004C0E87 /* STContactProvider.swift */,
+			);
+			path = Collection;
+			sourceTree = "<group>";
+		};
 		A0623F3325F419730018D378 /* Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -774,11 +788,8 @@
 			children = (
 				A0059E6525F8B70F003ABB56 /* STDataBaseProvider.swift */,
 				A086FD9025F5AC7200A8BC9C /* STUserProvider.swift */,
-				A024330C25F64B980054BED9 /* STGalleryProvider.swift */,
-				A0F467DF25F963CE00BF00AA /* STAlbumsProvider.swift */,
-				A0F467E325F9776600BF00AA /* STAlbumFilesProvider.swift */,
-				A084182225FA589B00DEAC89 /* STTrashProvider.swift */,
-				A0F1437825FAC67B004C0E87 /* STContactProvider.swift */,
+				A05AD2D725FCEAC500ABBA59 /* STDBInfoProvider.swift */,
+				A05AD2DA25FCEACF00ABBA59 /* Collection */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -971,6 +982,7 @@
 				A02203C125EED86800D07C98 /* AppDelegate.swift in Sources */,
 				A086FD9125F5AC7200A8BC9C /* STUserProvider.swift in Sources */,
 				A02204B225EEDC0400D07C98 /* SPMediaPreviewVC.swift in Sources */,
+				A05AD2D825FCEAC500ABBA59 /* STDBInfoProvider.swift in Sources */,
 				A0F467E425F9776600BF00AA /* STAlbumFilesProvider.swift in Sources */,
 				A022047725EEDC0400D07C98 /* Crypto+Extensions.swift in Sources */,
 				A022046C25EEDC0400D07C98 /* STNavigationController.swift in Sources */,
@@ -997,7 +1009,7 @@
 				A022047025EEDC0400D07C98 /* STStatusBar.swift in Sources */,
 				A086FD8E25F5AA4300A8BC9C /* STDataBase.swift in Sources */,
 				A022049D25EEDC0400D07C98 /* Localize.swift in Sources */,
-				A022049425EEDC0400D07C98 /* Date.swift in Sources */,
+				A022049425EEDC0400D07C98 /* Date+Operation.swift in Sources */,
 				A086FD2925F5A10900A8BC9C /* STCDFile.swift in Sources */,
 				A022048225EEDC0400D07C98 /* SPFile.swift in Sources */,
 				A0059E5225F813EC003ABB56 /* STDBInfo.swift in Sources */,

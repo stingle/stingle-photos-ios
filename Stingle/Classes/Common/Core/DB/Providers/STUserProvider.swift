@@ -42,7 +42,7 @@ extension STDataBase {
         }
                 
         private func createUserAndSave(context: NSManagedObjectContext, for user: STUser) -> STCDUser {
-            return self.container.performAndWait(context: context) { () -> STCDUser in
+            return context.performAndWait { () -> STCDUser in
                 let cdUser = STCDUser(model: user, context: context)
                 self.container.saveContext(context)
                 return cdUser

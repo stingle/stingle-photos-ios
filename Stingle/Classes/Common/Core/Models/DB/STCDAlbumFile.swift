@@ -10,10 +10,14 @@ import Foundation
 import CoreData
 
 @objc(STCDAlbumFile)
-public class STCDAlbumFile: STCDFile {
+public class STCDAlbumFile: NSManagedObject, IManagedObject {
 
     func update(model: STLibrary.AlbumFile, context: NSManagedObjectContext) {
-        super.update(model: model, context: context)
+        self.file = model.file
+        self.version = model.version
+        self.headers = model.headers
+        self.dateCreated = model.dateCreated
+        self.dateModified = model.dateModified
         self.albumId = model.albumId
     }
     

@@ -26,6 +26,11 @@ extension STLibrary {
             case type = "type"
         }
         
+        private enum CodingKeysDelete: String, CodingKey {
+            case dateCreated = "dateCreated"
+            case dateModified = "dateModified"
+        }
+        
         private enum PropertiesCodingKeys: String, CodingKey {
             case properties
         }
@@ -38,10 +43,10 @@ extension STLibrary {
         private(set) var contacts: [Contact] = [Contact]()
         
         required init(from decoder: Decoder) throws {
-            
+
             var containerType = try decoder.unkeyedContainer()
             var containerObject = try decoder.unkeyedContainer()
-            
+                        
             while containerType.isAtEnd == false {
             
                 let propertiesContainer = try containerType.nestedContainer(keyedBy: CodingKeys.self)
@@ -96,7 +101,7 @@ extension STLibrary.DeleteFile {
         }
     }
     
-    class Recovor: ILibraryDeleteFile {
+    class Trash: ILibraryDeleteFile {
         
         private enum CodingKeys: String, CodingKey {
             case fileName = "file"
@@ -117,25 +122,10 @@ extension STLibrary.DeleteFile {
         }
     }
     
-    class TrashDelete: ILibraryDeleteFile {
-        
-        private enum CodingKeys: String, CodingKey {
-            case fileName = "file"
-            case date = "date"
-        }
-        
-        let fileName: String
-        let date: Date
-        
-        required init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            let dateStr = try container.decode(String.self, forKey: .date)
-            guard let date = UInt64(dateStr) else {
-                throw STLibrary.LibraryError.parsError
-            }
-            self.date = Date(milliseconds: date)
-            self.fileName = try container.decode(String.self, forKey: .fileName)
-        }
+    class Recovor: Trash {
+    }
+    
+    class TrashDelete: Trash {
     }
     
     class Album: ILibraryDeleteFile {

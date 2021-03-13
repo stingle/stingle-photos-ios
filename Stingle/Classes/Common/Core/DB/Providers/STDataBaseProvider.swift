@@ -67,29 +67,74 @@ extension STDataBase {
             }
         }
         
-        func deleteAll() {
+        func deleteAll(completion: ((IError?) -> Void)? = nil) {
             let taskContext = self.container.newBackgroundContext()
             taskContext.perform {
                 let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedModel.entityName)
                 let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-                batchDeleteRequest.resultType = .resultTypeStatusOnly
-                _ = try? taskContext.execute(batchDeleteRequest)
+                batchDeleteRequest.resultType = .resultTypeCount
+                do {
+                    let _ = try taskContext.execute(batchDeleteRequest)
+                    completion?(nil)
+                } catch  {
+                    completion?(DataBaseError.error(error: error))
+                }
             }
         }
+       
+    }
+    
+}
+
+extension STDataBase {
+    
+    
+    class DataBaseCollectionProvider<Model: ICDConvertable, ManagedModel: IManagedObject, DeleteFile: ILibraryDeleteFile>: DataBaseProvider<Model, ManagedModel> {
         
-        //MARK: - Sync
+        //MARK: - Sync insert
         
-        func sync(db models: [Model], context: NSManagedObjectContext) throws -> Date {
-            let insert = try self.newBatchInsertRequest(with: models, context: context)
-            _ = try context.execute(insert.request)
-            return insert.lastDate
+        func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> Date {
+            guard let models = models, !models.isEmpty else {
+                return lastDate
+            }
+            let inserts = try self.getInsertObjects(with: models)
+            guard inserts.lastDate >= lastDate, !inserts.json.isEmpty else {
+                return max(lastDate, inserts.lastDate)
+            }
+            let insertRequest = NSBatchInsertRequest(entityName: ManagedModel.entityName, objects: inserts.json)
+            let _ = try context.execute(insertRequest)
+            return inserts.lastDate
         }
-        
-        func newBatchInsertRequest(with files: [Model], context: NSManagedObjectContext) throws -> (request: NSBatchInsertRequest, lastDate: Date) {
+                
+        func getInsertObjects(with files: [Model]) throws -> (json: [[String : Any]], lastDate: Date) {
             //Implement in chid classes
             throw STDataBase.DataBaseError.dateNotFound
         }
         
+        //MARK: - Sync delete
+        
+        func deleteObjects(_ deleteFiles: [DeleteFile]?, in context: NSManagedObjectContext, lastDate: Date) throws -> Date {
+            guard let deleteFiles = deleteFiles, !deleteFiles.isEmpty else {
+                return lastDate
+            }
+            let result = try self.getDeleteObjects(deleteFiles, in: context)
+            guard result.date >= lastDate, !result.models.isEmpty else {
+                return max(lastDate, result.date)
+            }
+            
+            let objectIDs = result.models.compactMap { (model) -> NSManagedObjectID? in
+                return model.objectID
+            }
+            let deleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
+            let _ = try context.execute(deleteRequest)
+            return result.date
+        }
+        
+        func getDeleteObjects(_ deleteFiles: [DeleteFile], in context: NSManagedObjectContext) throws -> (models: [ManagedModel], date: Date) {
+            
+            throw STDataBase.DataBaseError.dateNotFound
+        }
+        
     }
-    
+
 }

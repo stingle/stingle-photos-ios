@@ -12,6 +12,7 @@ class SPMenuVM {
 	var delegate:SPMenuDelegate?
 	
 	func selectItem(cell:SPMenuCell) {
+        
 		selectedItem?.imageView?.tintColor = .darkGray
 		cell.imageView?.tintColor = Theme.Colors.SPRed
 		selectedItem = cell

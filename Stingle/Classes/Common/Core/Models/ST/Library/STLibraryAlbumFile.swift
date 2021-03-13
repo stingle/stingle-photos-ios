@@ -17,7 +17,7 @@ extension STLibrary {
             case albumId = "albumId"
         }
         
-        let albumId: String
+        var albumId: String
         
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -30,7 +30,12 @@ extension STLibrary {
                 throw LibraryError.parsError
             }
             self.albumId = albumId
-            try super.init(model: model)
+            try super.init(file: model.file,
+                           version: model.version,
+                           headers: model.headers,
+                           dateCreated: model.dateCreated,
+                           dateModified: model.dateModified)
+            
         }
         
         required init(model: STCDFile) throws {

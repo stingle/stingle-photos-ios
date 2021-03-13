@@ -9,10 +9,14 @@ import Foundation
 import CoreData
 
 @objc(STCDTrashFile)
-public class STCDTrashFile: STCDFile {
+public class STCDTrashFile: NSManagedObject, IManagedObject {
 
     func update(model: STLibrary.TrashFile, context: NSManagedObjectContext) {
-        super.update(model: model, context: context)
+        self.file = model.file
+        self.version = model.version
+        self.headers = model.headers
+        self.dateCreated = model.dateCreated
+        self.dateModified = model.dateModified
     }
         
 }

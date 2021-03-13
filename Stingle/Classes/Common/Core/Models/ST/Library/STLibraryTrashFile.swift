@@ -14,7 +14,11 @@ extension STLibrary {
         typealias ManagedModel = STCDTrashFile
         
         required init(model: STCDTrashFile) throws {
-            try super.init(model: model)
+            try super.init(file: model.file,
+                           version: model.version,
+                           headers: model.headers,
+                           dateCreated: model.dateCreated,
+                           dateModified: model.dateModified)
         }
         
         required init(model: STCDFile) throws {
