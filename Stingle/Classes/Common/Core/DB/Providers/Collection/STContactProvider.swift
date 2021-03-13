@@ -11,7 +11,6 @@ extension STDataBase {
     
     class ContactProvider: DataBaseCollectionProvider<STContact, STCDContact, STLibrary.DeleteFile.Contact> {
         
-        
         override func getInsertObjects(with contacts: [STContact]) throws -> (json: [[String : Any]], lastDate: Date) {
             var lastDate: Date? = nil
             var jsons = [[String : Any]]()

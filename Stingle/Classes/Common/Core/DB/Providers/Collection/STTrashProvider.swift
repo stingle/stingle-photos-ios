@@ -7,10 +7,6 @@
 
 import CoreData
 
-protocol ITrashProviderObserver {
-    
-}
-
 extension STDataBase {
     
     class TrashProvider: DataBaseCollectionProvider<STLibrary.TrashFile, STCDTrashFile, STLibrary.DeleteFile.Trash> {

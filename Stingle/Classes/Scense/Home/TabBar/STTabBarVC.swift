@@ -15,7 +15,14 @@ class STTabBarVC: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        syncWorker.getUpdates()
+        syncWorker.getUpdates { (_) in
+           
+        } failure: { (error) in
+            
+        }
+
+        
+       
         
 
         // Do any additional setup after loading the view.

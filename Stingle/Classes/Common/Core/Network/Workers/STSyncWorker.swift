@@ -9,7 +9,8 @@ import Foundation
 
 class STSyncWorker: STWorker {
         
-    func getUpdates() {
+    func getUpdates(success: Success<STSync>? = nil, failure: Failure? = nil) {
+        
         let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
         let request = STSyncRequest.getUpdates(lastSeenTime: dbInfo.lastSeenTimeSeccounds,
                                                lastTrashSeenTime: dbInfo.lastTrashSeenTimeSeccounds,
@@ -18,29 +19,17 @@ class STSyncWorker: STWorker {
                                                lastDelSeenTime: dbInfo.lastDelSeenTimeSeccounds,
                                                lastContactsSeenTime: dbInfo.lastContactsSeenTimeSeccounds)
         
-        
-
         self.request(request: request) { (response: STSync) in
-            
             STApplication.shared.dataBase.sync(response, finish: { error in
-                
-                var files = STApplication.shared.dataBase.galleryProvider.getAllObjects()
-                var albums = STApplication.shared.dataBase.albumsProvider.getAllObjects()
-                var albumFiles = STApplication.shared.dataBase.albumFilesProvider.getAllObjects()
-                var trashFiles = STApplication.shared.dataBase.trashProvider.getAllObjects()
-                var contacts = STApplication.shared.dataBase.contactProvider.getAllObjects()
-                
-                print("")
-                
+                if let error = error {
+                    failure?(error)
+                } else {
+                    success?(response)
+                }
             })
 
-            
-
         } failure: { (error) in
-
-
-            print(error.message)
-
+            failure?(error)
         }
         
     }

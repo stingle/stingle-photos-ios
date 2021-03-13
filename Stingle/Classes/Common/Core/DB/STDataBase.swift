@@ -30,7 +30,7 @@ class STDataBase {
         self.dbInfoProvider = DBInfoProvider(container: self.container)
     }
     
-    func sync(_ sync: STSync, finish: @escaping (Error?) -> Void) {
+    func sync(_ sync: STSync, finish: @escaping (IError?) -> Void) {
         let context = self.container.newBackgroundContext()
         context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
         context.performAndWait {
@@ -42,7 +42,7 @@ class STDataBase {
                 self.dbInfoProvider.update(model: info)
                 finish(nil)
             } catch {
-                finish(error)
+                finish(DataBaseError.error(error: error))
             }
         }
     }

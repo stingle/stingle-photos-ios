@@ -8,10 +8,6 @@
 import CoreData
 import UIKit
 
-protocol IGalleryProviderObserver {
-    
-}
-
 extension STDataBase {
     
     class GalleryProvider: DataBaseCollectionProvider<STLibrary.File, STCDFile, STLibrary.DeleteFile.Gallery> {
@@ -82,7 +78,7 @@ extension STDataBase {
 //
 //        print("")
 //    }
-
+//
 //    func createResultsController() -> NSFetchedResultsController<STCDFile> {
 //        let filesFetchRequest = NSFetchRequest<STCDFile>(entityName: STCDFile.entityName)
 //        filesFetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
@@ -93,12 +89,12 @@ extension STDataBase {
 //        return resultsController
 //    }
 //
-//    lazy var ds : UICollectionViewDiffableDataSource<String,NSManagedObjectID> = {
+//    lazy var ds : UICollectionViewDiffableDataSource<String, NSManagedObjectID> = {
 //        UICollectionViewDiffableDataSource(collectionView: UICollectionView()) {
 //            tv,ip,id in
 //
 //            return nil
 //        }
 //    }()
-
+//
 //}
