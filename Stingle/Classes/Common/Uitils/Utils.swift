@@ -4,7 +4,7 @@ import Foundation
 class Utils {
 	
 	public static func getNewEncFilename() -> String? {
-		let crypto:Crypto = SPApplication.crypto
+        let crypto:Crypto = STApplication.shared.crypto
 		guard let randData = crypto.getRandomBytes(lenght: Constants.FileNameLen) else {
 			return nil
 		}

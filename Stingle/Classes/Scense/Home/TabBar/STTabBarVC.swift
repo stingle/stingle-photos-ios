@@ -8,17 +8,11 @@
 import UIKit
 
 class STTabBarVC: UITabBarController {
-    
-    let syncWorker = STSyncWorker()
-    
+        
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        syncWorker.getUpdates()
-        
 
-        // Do any additional setup after loading the view.
     }
     
 

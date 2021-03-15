@@ -52,7 +52,7 @@ class DataSource {
 	//	MARK: - IndexPath getters
 	
 	public func numberOfSections()  -> Int {
-		return DataSource.db.numberOfSections(for: fileType())
+		return 0//DataSource.db.numberOfSections(for: fileType())
 	}
 	
 	public func numberOfRows(forSecion:Int) -> Int {

@@ -168,9 +168,9 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		if SPApplication.isLocked() {
-			showLockAlertDialog()
-		}
+//		if SPApplication.isLocked() {
+//			showLockAlertDialog()
+//		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -188,13 +188,13 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 		}
 		let loginAction = UIAlertAction(title: "LOGIN", style: UIAlertAction.Style.default, handler: { alert -> Void in
 			
-			do {
-				try SPApplication.unLock(with: "mekicvec")
-				self.collectionView.isHidden = false
-				self.loadData()
-			} catch {
-				self.showLockAlertDialog()
-			}
+//			do {
+//				try SPApplication.unLock(with: "mekicvec")
+//				self.collectionView.isHidden = false
+//				self.loadData()
+//			} catch {
+//				self.showLockAlertDialog()
+//			}
 		})
 		let logOutAction = UIAlertAction(title: "LOG OUT", style: UIAlertAction.Style.default, handler: { (action : UIAlertAction!) -> Void in
 			

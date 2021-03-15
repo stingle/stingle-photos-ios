@@ -9,17 +9,17 @@ import Foundation
 
 extension STLibrary {
         
-    class File: Codable {
-        
+    class File: Codable, ICDConvertable {
+                
         private enum CodingKeys: String, CodingKey {
-            case name = "file"
+            case file = "file"
             case version = "version"
             case headers = "headers"
             case dateCreated = "dateCreated"
             case dateModified = "dateModified"
         }
         
-        var name: String
+        var file: String
         var version: String
         var headers: String
         var dateCreated: Date
@@ -27,19 +27,47 @@ extension STLibrary {
         
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            self.name = try container.decode(String.self, forKey: .name)
+            self.file = try container.decode(String.self, forKey: .file)
             self.version = try container.decode(String.self, forKey: .version)
             self.headers = try container.decode(String.self, forKey: .headers)
-            
             let dateCreatedStr = try container.decode(String.self, forKey: .dateCreated)
             let dateModifiedStr = try container.decode(String.self, forKey: .dateModified)
-            
             guard let dateCreated = UInt64(dateCreatedStr), let dateModified = UInt64(dateModifiedStr) else {
                 throw LibraryError.parsError
             }
             self.dateCreated = Date(milliseconds: dateCreated)
             self.dateModified = Date(milliseconds: dateModified)
         }
+        
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?) throws {
+            guard let file = file,
+                  let version = version,
+                  let headers = headers,
+                  let dateCreated = dateCreated,
+                  let dateModified = dateModified
+            else {
+                throw LibraryError.parsError
+            }
+            
+            self.file = file
+            self.version = version
+            self.headers = headers
+            self.dateCreated = dateCreated
+            self.dateModified = dateModified
+        }
+        
+        required convenience init(model: STCDFile) throws {
+            try self.init(file: model.file,
+                           version: model.version,
+                           headers: model.headers,
+                           dateCreated: model.dateCreated,
+                           dateModified: model.dateModified)
+        }
+        
+        func toManagedModelJson() throws -> [String : Any] {
+            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified]
+        }
+        
     }
     
 }

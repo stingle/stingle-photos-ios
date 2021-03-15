@@ -10,6 +10,7 @@ import Foundation
 
 class STValidator {
 	
+    @discardableResult
 	func validate(email: String?) throws -> String {
 		guard let email = email, !email.isEmpty else {
 			throw ValidatorError.emailIsNil
@@ -23,7 +24,7 @@ class STValidator {
 		return email
 	}
 	
-	
+    @discardableResult
 	func validate(password: String?, withCharacters: Bool = true) throws -> String {
 		guard let password = password, !password.isEmpty else {
 			throw ValidatorError.passwordIsNil
@@ -39,6 +40,22 @@ class STValidator {
 		}
 		return password
 	}
+    
+    @discardableResult
+    func validate(string: String?) throws -> String {
+        guard let string = string, !string.isEmpty else {
+            throw ValidatorError.emptyText
+        }
+        return string
+    }
+    
+    func validate(user: STUser?) throws -> Bool {
+        try self.validate(email: user?.email)
+        try self.validate(string: user?.homeFolder)
+        try self.validate(string: user?.token)
+        try self.validate(string: user?.userId)
+        return true
+    }
 	
 }
 
@@ -50,6 +67,7 @@ extension STValidator {
 		case emailIncorrect
 		case passwordIsNil
 		case passwordIncorrect
+        case emptyText
 		
 		var message: String {
 		
@@ -62,6 +80,8 @@ extension STValidator {
 				return "error_empty_password".localized
 			case .passwordIncorrect:
 				return "error_incorrect_password".localized
+            case .emptyText:
+                return "error_empty_text".localized
 			}
 			
 		}

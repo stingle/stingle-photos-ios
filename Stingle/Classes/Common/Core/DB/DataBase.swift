@@ -28,7 +28,7 @@ class DataBase : NSObject {
 	}()
 	
 	private override init() {
-		container = NSPersistentContainer(name: "StingleModel")
+		container = NSPersistentContainer(name: "StingleModel_old")
 		container.loadPersistentStores(completionHandler: { (storeDescription, error) in
 			if let error = error as NSError? {
 				fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -258,7 +258,7 @@ class DataBase : NSObject {
 		return info
 	}
 		
-	func updateAppInfo(info:AppInfo) {
+	func updateAppInfo(info: AppInfo) {
 		guard let userId = info.userId else {
 			return
 		}
@@ -337,7 +337,7 @@ class DataBase : NSObject {
 		}
 	}
 	
-	func updateUser(user:User) {
+	func updateUser(user: User) {
 		let context = container.newBackgroundContext()
 		context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 		context.undoManager = nil

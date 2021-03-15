@@ -7,13 +7,9 @@
 
 import Foundation
 
-class STLibrary: Codable {
-    
-    
-    
+class STLibrary {
+  
 }
-
-
 
 extension STLibrary {
     

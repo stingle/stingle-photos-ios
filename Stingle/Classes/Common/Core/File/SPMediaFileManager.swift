@@ -8,7 +8,7 @@ class SPMediaFileManager {
 	
 	private let phManager = PHImageManager.default()
 	
-	private let sync = SPApplication.sync
+//	private let sync = STApplication.shared.sync
 	
 	public func checkAndReqauestAuthorization(completion:@escaping (PHAuthorizationStatus) -> Void) {
 		let status = PHPhotoLibrary.authorizationStatus()

@@ -10,7 +10,7 @@ import Foundation
 
 enum STSyncRequest {
     
-    case getUpdates(lastSeenTime: Int, lastTrashSeenTime: Int, lastAlbumsSeenTime: Int, lastAlbumFilesSeenTime: Int, lastDelSeenTime: Int, lastContactsSeenTime: Int)
+    case getUpdates(lastSeenTime: UInt64, lastTrashSeenTime: UInt64, lastAlbumsSeenTime: UInt64, lastAlbumFilesSeenTime: UInt64, lastDelSeenTime: UInt64, lastContactsSeenTime: UInt64)
 
 }
 

@@ -10,16 +10,9 @@ import Foundation
 
 class STAuthWorker: STWorker {
 	
-	private let crypto = Crypto()
-	
-	private lazy var db: DataBase = {
-		do {
-			return try DataBase.shared()
-		} catch {
-			print(error)
-			fatalError()
-		}
-	}()
+    private let crypto = STApplication.shared.crypto
+    private let userProvider = STApplication.shared.dataBase.userProvider
+    
 	
 	func register(email: String, password: String, includePrivateKey: Bool, success: Success<STAuth.Register>? = nil, failure: Failure? = nil) {
 		do {
@@ -30,7 +23,7 @@ class STAuthWorker: STWorker {
 		}
 	}
 		
-	func login(email: String, password: String, success: Success<User>? = nil, failure: Failure? = nil) {
+	func login(email: String, password: String, success: Success<STUser>? = nil, failure: Failure? = nil) {
 		self.preLogin(email: email, success: { [weak self] (preLogin) in
 			guard let weakSelf = self else {
 				failure?(AuthWorkerError.loginError)
@@ -45,7 +38,7 @@ class STAuthWorker: STWorker {
 		}, failure: failure)
 	}
 	
-	func registerAndLogin(email: String, password: String, includePrivateKey: Bool, success: Success<User>? = nil, failure: Failure? = nil) {
+	func registerAndLogin(email: String, password: String, includePrivateKey: Bool, success: Success<STUser>? = nil, failure: Failure? = nil) {
 		self.register(email: email, password: password, includePrivateKey: includePrivateKey, success: { [weak self] (register) in
 			guard let weakSelf = self else {
 				failure?(AuthWorkerError.loginError)
@@ -76,7 +69,7 @@ class STAuthWorker: STWorker {
 		self.request(request: request, success: success, failure: failure)
 	}
 	
-	private func finishLogin(email: String, password: String, pHash: String, success: Success<User>? = nil, failure: Failure? = nil) {
+	private func finishLogin(email: String, password: String, pHash: String, success: Success<STUser>? = nil, failure: Failure? = nil) {
 		let request = STAuthRequest.login(email: email, password: pHash)
 		self.request(request: request, success: { [weak self] (response: STAuth.Login) in
 			guard let weakSelf = self else {
@@ -93,7 +86,7 @@ class STAuthWorker: STWorker {
 		}, failure: failure)
 	}
 	
-	private func updateUserParams(login: STAuth.Login, email: String, password: String) throws -> User {
+	private func updateUserParams(login: STAuth.Login, email: String, password: String) throws -> STUser {
 		let isKeyBackedUp = login.isKeyBackedUp == 1 ? true : false
 		
 		if KeyManagement.key == nil {
@@ -106,13 +99,9 @@ class STAuthWorker: STWorker {
 			let pubKey = login.serverPublicKey
 			KeyManagement.importServerPublicKey(pbk: pubKey)
 		}
-		
-		let userId = Int(login.userId) ?? -1
-		let user = User(token: login.token, userId: userId, isKeyBackedUp: isKeyBackedUp, homeFolder: login.homeFolder, email: email)
-		self.db.updateUser(user: user)
-		let info = AppInfo(lastSeen: 0, lastDelSeen: 0, spaceQuota: "1024", spaceUsed: "0", userId: user.userId)
-		self.db.updateAppInfo(info: info)
-		
+				
+        let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId)
+        self.userProvider.update(model: user)
 		return user
 	}
 	

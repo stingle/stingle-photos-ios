@@ -25,7 +25,6 @@ class STMainVC: UIViewController {
 	//MARK: - Private func
 	
 	private func configure() {
-		STStatusBar(for: self.view.window)
 	}
 	
 	private func openAppController() {
