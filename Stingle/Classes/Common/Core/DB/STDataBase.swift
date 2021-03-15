@@ -45,9 +45,18 @@ class STDataBase {
                 finish(DataBaseError.error(error: error))
             }
         }
+        self.endSync()
     }
     
     //MARK: - private func
+    
+    private func endSync() {
+        self.galleryProvider.finishSync()
+        self.albumFilesProvider.finishSync()
+        self.albumsProvider.finishSync()
+        self.trashProvider.finishSync()
+        self.contactProvider.finishSync()
+    }
     
     private func syncImportFiles(sync: STSync, in context: NSManagedObjectContext, dbInfo: STDBInfo) throws -> STDBInfo {
         let lastSeenTime = try self.galleryProvider.sync(db: sync.files ?? [], context: context, lastDate: dbInfo.lastSeenTime)

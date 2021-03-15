@@ -63,38 +63,3 @@ extension STDataBase {
     
 }
 
-//extension STDataBase.GalleryProvider: NSFetchedResultsControllerDelegate {
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith diff: CollectionDifference<NSManagedObjectID>) {
-//
-//       print("")
-//    }
-//
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-//
-//        let snapshot = snapshot as NSDiffableDataSourceSnapshot<String, NSManagedObjectID>
-//        self.ds.apply(snapshot, animatingDifferences: false)
-//
-//
-//        print("")
-//    }
-//
-//    func createResultsController() -> NSFetchedResultsController<STCDFile> {
-//        let filesFetchRequest = NSFetchRequest<STCDFile>(entityName: STCDFile.entityName)
-//        filesFetchRequest.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
-//        let resultsController = NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: container.viewContext, sectionNameKeyPath: "dateModified", cacheName: "Files")
-//
-//
-//        resultsController.delegate = self
-//        return resultsController
-//    }
-//
-//    lazy var ds : UICollectionViewDiffableDataSource<String, NSManagedObjectID> = {
-//        UICollectionViewDiffableDataSource(collectionView: UICollectionView()) {
-//            tv,ip,id in
-//
-//            return nil
-//        }
-//    }()
-//
-//}

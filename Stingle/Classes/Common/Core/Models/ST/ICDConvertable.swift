@@ -10,7 +10,7 @@ import CoreData
 //MARK: - Model
 
 protocol ICDConvertable: Encodable {
-    associatedtype ManagedModel: NSManagedObject
+    associatedtype ManagedModel: IManagedObject
     init(model: ManagedModel) throws
     func toManagedModelJson() throws -> [String: Any]
 }

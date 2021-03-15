@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class UserProvider: DataBaseProvider<STUser, STCDUser> {
+    class UserProvider: DataBaseProvider<STUser> {
                
         func update(model user: STUser) {
             let context = self.container.newBackgroundContext()

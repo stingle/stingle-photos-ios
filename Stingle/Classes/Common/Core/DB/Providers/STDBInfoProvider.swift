@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class DBInfoProvider: DataBaseProvider<STDBInfo, STCDDBInfo> {
+    class DBInfoProvider: DataBaseProvider<STDBInfo> {
                
         func update(model info: STDBInfo) {
             let context = self.container.newBackgroundContext()
