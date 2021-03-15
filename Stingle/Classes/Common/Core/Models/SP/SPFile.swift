@@ -4,6 +4,7 @@ import Photos
 
 //MARK : Core Data Managed Objects
 class FileMO : NSManagedObject {
+    
 	@NSManaged var dateCreated:String
 	@NSManaged var dateModified:String
 	@NSManaged var name:String
@@ -133,7 +134,7 @@ class SPFileInfo : Codable {
 		return 0
 	}
 	
-	func getOriginalHeader () -> Header? {
+	func getOriginalHeader () -> STHeader? {
 		let headers = self.headers
 		let hdrs = headers.split(separator: "*")
 		let hdr = hdrs[0]

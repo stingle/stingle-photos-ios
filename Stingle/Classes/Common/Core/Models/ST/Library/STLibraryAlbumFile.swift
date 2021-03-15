@@ -17,7 +17,7 @@ extension STLibrary {
             case albumId = "albumId"
         }
         
-        var albumId: String
+        let albumId: String
         
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)

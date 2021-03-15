@@ -19,11 +19,11 @@ extension STLibrary {
             case dateModified = "dateModified"
         }
         
-        var file: String
-        var version: String
-        var headers: String
-        var dateCreated: Date
-        var dateModified: Date
+        let file: String
+        let version: String
+        let headers: String
+        let dateCreated: Date
+        let dateModified: Date
         
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)

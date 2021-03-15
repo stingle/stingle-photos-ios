@@ -385,8 +385,6 @@ class SyncManager {
 			completionHandler(error)
 		}
 	}
-
-	
 	
 	static func importImage(file:SPFile, thumb:UIImage?, type:Int, duration:UInt32) {
 		guard let fileName = Utils.getNewEncFilename() else {

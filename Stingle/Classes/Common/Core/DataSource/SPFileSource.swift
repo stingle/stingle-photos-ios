@@ -17,7 +17,7 @@ enum SPFileSourceStatus : Int32 {
 class SPFileSource {
     
 	private let file:SPFileInfo
-	private let header:Header?
+	private let header:STHeader?
 	private var queue = DispatchQueue(label: "SPFileSource.queue", attributes: .concurrent)
 	
 	private let isLocal:Bool
@@ -384,7 +384,7 @@ extension SPFileSource {
 
 class EncryptedChunk {
 	
-	private var header:Header
+	private var header:STHeader
 	public let number:Int
 	
 	public let capacity:Int
@@ -393,7 +393,7 @@ class EncryptedChunk {
 	private let fileUrl:URL
 	private let fileHandle:FileHandle
 	
-	init (number:Int, capacity:Int, header:Header, fileUrl:URL) throws {
+	init (number:Int, capacity:Int, header:STHeader, fileUrl:URL) throws {
 		self.number = number
 		self.capacity = capacity
 		self.header = header

@@ -112,6 +112,9 @@
 		A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */; };
 		A0623F3825F41EBB0018D378 /* STLibraryDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */; };
 		A077780125FFF81100BA2BDF /* STGalleryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A077780025FFF81100BA2BDF /* STGalleryVM.swift */; };
+		A077780925FFFEBB00BA2BDF /* Crypto+Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = A077780825FFFEBB00BA2BDF /* Crypto+Header.swift */; };
+		A077780D260000CC00BA2BDF /* Crypto+PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A077780C260000CC00BA2BDF /* Crypto+PrivateKey.swift */; };
+		A0777811260001B100BA2BDF /* Crypto+Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0777810260001B100BA2BDF /* Crypto+Common.swift */; };
 		A084182325FA589B00DEAC89 /* STTrashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A084182225FA589B00DEAC89 /* STTrashProvider.swift */; };
 		A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1525F5A10800A8BC9C /* STCDContact.swift */; };
 		A086FD2625F5A10900A8BC9C /* STCDAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1625F5A10800A8BC9C /* STCDAlbum.swift */; };
@@ -258,6 +261,9 @@
 		A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryAlbumFile.swift; sourceTree = "<group>"; };
 		A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryDelete.swift; sourceTree = "<group>"; };
 		A077780025FFF81100BA2BDF /* STGalleryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryVM.swift; sourceTree = "<group>"; };
+		A077780825FFFEBB00BA2BDF /* Crypto+Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Crypto+Header.swift"; sourceTree = "<group>"; };
+		A077780C260000CC00BA2BDF /* Crypto+PrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Crypto+PrivateKey.swift"; sourceTree = "<group>"; };
+		A0777810260001B100BA2BDF /* Crypto+Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Crypto+Common.swift"; sourceTree = "<group>"; };
 		A084182225FA589B00DEAC89 /* STTrashProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashProvider.swift; sourceTree = "<group>"; };
 		A086FD1525F5A10800A8BC9C /* STCDContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDContact.swift; sourceTree = "<group>"; };
 		A086FD1625F5A10800A8BC9C /* STCDAlbum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDAlbum.swift; sourceTree = "<group>"; };
@@ -490,6 +496,9 @@
 			isa = PBXGroup;
 			children = (
 				A022040725EEDC0300D07C98 /* Crypto.swift */,
+				A0777810260001B100BA2BDF /* Crypto+Common.swift */,
+				A077780825FFFEBB00BA2BDF /* Crypto+Header.swift */,
+				A077780C260000CC00BA2BDF /* Crypto+PrivateKey.swift */,
 				A022040825EEDC0300D07C98 /* CryptoError.swift */,
 				A022040925EEDC0300D07C98 /* Crypto+Extensions.swift */,
 			);
@@ -1041,6 +1050,7 @@
 				A022049225EEDC0400D07C98 /* STValidator.swift in Sources */,
 				A086FD3F25F5A2A900A8BC9C /* STDataBaseContainer.swift in Sources */,
 				A02203E725EEDB4100D07C98 /* StingleModel_old.xcdatamodeld in Sources */,
+				A0777811260001B100BA2BDF /* Crypto+Common.swift in Sources */,
 				A005FAFB25FF4D8F00E7D8B0 /* UICollectionView+Operation.swift in Sources */,
 				A005FAEF25FF48A500E7D8B0 /* UITraitCollection+Operation.swift in Sources */,
 				A02204B025EEDC0400D07C98 /* SPImagePreviewVC.swift in Sources */,
@@ -1117,6 +1127,7 @@
 				A02204B825EEDC0400D07C98 /* TrashVC.swift in Sources */,
 				A022047625EEDC0400D07C98 /* CryptoError.swift in Sources */,
 				A022048C25EEDC0400D07C98 /* SPEvent.swift in Sources */,
+				A077780925FFFEBB00BA2BDF /* Crypto+Header.swift in Sources */,
 				A022049925EEDC0400D07C98 /* String+Extensions.swift in Sources */,
 				A02204A825EEDC0400D07C98 /* STSignUpVM.swift in Sources */,
 				A0F467E825F98FE900BF00AA /* STLibraryTrashFile.swift in Sources */,
@@ -1124,6 +1135,7 @@
 				A086FD8A25F5A9ED00A8BC9C /* STApplication.swift in Sources */,
 				A022049325EEDC0400D07C98 /* STEnvironment.swift in Sources */,
 				A022046B25EEDC0400D07C98 /* STRootWindowSegue.swift in Sources */,
+				A077780D260000CC00BA2BDF /* Crypto+PrivateKey.swift in Sources */,
 				A022047325EEDC0400D07C98 /* SPDatasource.swift in Sources */,
 				A022047525EEDC0400D07C98 /* Crypto.swift in Sources */,
 				A084182325FA589B00DEAC89 /* STTrashProvider.swift in Sources */,

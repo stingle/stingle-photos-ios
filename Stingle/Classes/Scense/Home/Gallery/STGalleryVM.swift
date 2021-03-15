@@ -11,6 +11,7 @@ class STGalleryVM {
     
     private(set) var dataBaseDataSource: STDataBase.DataSource<STLibrary.File>
     private let syncWorker = STSyncWorker()
+    private let crypto = STApplication.shared.crypto
     
     init() {
         self.dataBaseDataSource = STApplication.shared.dataBase.galleryProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: #keyPath(STCDFile.day))
@@ -37,7 +38,17 @@ extension STGalleryVM {
     }
     
     func object(at indexPath: IndexPath) -> STLibrary.File? {
-        return self.dataBaseDataSource.object(at: indexPath)
+                
+        if let file = self.dataBaseDataSource.object(at: indexPath) {
+            
+            let headers = self.crypto.getHeaders(file: file)
+            
+            print("")
+            return file
+        }
+        
+        
+        return nil
     }
     
     

@@ -74,8 +74,11 @@ class STGalleryVC: UIViewController {
     
     private func createDataSourceReference()  {
         
-        self.dataSourceReference = UICollectionViewDiffableDataSourceReference(collectionView: self.collectionView, cellProvider: { (collectionView, indexPath, data) -> UICollectionViewCell? in
+        self.dataSourceReference = UICollectionViewDiffableDataSourceReference(collectionView: self.collectionView, cellProvider: { [weak self] (collectionView, indexPath, data) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "STGalleryCollectionViewCellID", for: indexPath)
+            
+            let obj = self?.viewModel.object(at: indexPath)
+            
             return cell
         })
         
