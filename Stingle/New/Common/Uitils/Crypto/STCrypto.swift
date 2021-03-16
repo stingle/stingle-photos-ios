@@ -51,7 +51,7 @@ public struct Constants {
 	public static let PWHASH_LEN = 64
 }
 
-public class Crypto {
+public class STCrypto {
     
     private let pivateBufferSize = 256
 	private let hexArray:[Character] = [Character]("0123456789ABCDEF")
@@ -155,8 +155,8 @@ public class Crypto {
 	public func exportPublicKey() throws -> Bytes {
 		var pbk = [UInt8]()
 		pbk += Constants.KeyFileBeggining.bytes
-		pbk += Crypto.toBytes(value: Constants.CurrentKeyFileVersion)
-		pbk += Crypto.toBytes(value: Constants.KeyFileTypePublicPlain)
+		pbk += STCrypto.toBytes(value: Constants.CurrentKeyFileVersion)
+		pbk += STCrypto.toBytes(value: Constants.KeyFileTypePublicPlain)
 		do {
 			let pbkBytes = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
 			pbk += pbkBytes

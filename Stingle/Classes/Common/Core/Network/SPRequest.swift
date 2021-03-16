@@ -1,9 +1,5 @@
 import Foundation
 
-
-let crypto: Crypto  = Crypto()
-
-
 protocol SPRequest {
 	func params () -> String?
 	func path () -> String
@@ -445,6 +441,7 @@ struct SPTrashFilesRequest : SPRequest {
 			params["filename\(index)"] = file.name
 			index += 1
 		}
+        let crypto = STApplication.shared.crypto
 		guard let encParams = crypto.encryptParamsForServer(params: params) else {
 			return ""
 		}
@@ -491,7 +488,7 @@ struct SPRestoreFilesRequest : SPRequest {
 			params["filename\(index)"] = file.name
 			index += 1
 		}
-		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+        guard let encParams = STApplication.shared.crypto.encryptParamsForServer(params: params) else {
 			return ""
 		}
 		return encParams
@@ -537,7 +534,7 @@ struct SPDeleteFilesRequest : SPRequest {
 			params["filename\(index)"] = file.name
 			index += 1
 		}
-		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+		guard let encParams = STApplication.shared.crypto.encryptParamsForServer(params: params) else {
 			return ""
 		}
 		return encParams
@@ -576,7 +573,7 @@ struct SPEmptyTrashRequest : SPRequest {
 	func bodyParams () -> String {
 		var params = [String:String]()
 		params["time"] = "\(Date.init().millisecondsSince1970)"
-		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+		guard let encParams = STApplication.shared.crypto.encryptParamsForServer(params: params) else {
 			return ""
 		}
 		return encParams

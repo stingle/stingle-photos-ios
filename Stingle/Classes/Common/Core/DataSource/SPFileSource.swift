@@ -49,7 +49,7 @@ class SPFileSource {
 	private var currentDataTask:URLSessionDataTask? = nil
 	private var fileHandle:FileHandle?
 	
-	private let chunkAdditionalSize:UInt64 = UInt64(crypto.chunkAdditionalSize())
+    private let chunkAdditionalSize:UInt64 = UInt64(STApplication.shared.crypto.chunkAdditionalSize())
 	
 	private let speed = Mesurements.Speed()
 	
@@ -60,7 +60,7 @@ class SPFileSource {
 		} else {
 			decChunkSize = chunkSize
 		}
-		encChunkSize = decChunkSize + UInt64(crypto.chunkAdditionalSize())
+		encChunkSize = decChunkSize + UInt64(STApplication.shared.crypto.chunkAdditionalSize())
 		
 		if let fileUrl = SPFileManager.folder(for: .StorageOriginals)?.appendingPathComponent(file.name), SPFileManager.default.existence(atUrl: fileUrl) == .file {
 			isLocal = true
@@ -307,7 +307,7 @@ extension SPFileSource {
 			let semaphore = DispatchSemaphore(value: 0)
 			var resData:[UInt8]? = nil
 			do {
-				_ = try crypto.decryptData(data: [UInt8](data), header: header, chunkNumber: UInt64(number + 1)) { (decData) in
+				_ = try STApplication.shared.crypto.decryptData(data: [UInt8](data), header: header, chunkNumber: UInt64(number + 1)) { (decData) in
 					resData = decData
 					self.writeOffset += UInt64(data.count)
 					semaphore.signal()
@@ -425,7 +425,7 @@ class EncryptedChunk {
 		let semaphore = DispatchSemaphore(value: 0)
 		var data:[UInt8]? = nil
 		do {
-			_ = try crypto.decryptData(data: elements, header: header, chunkNumber: UInt64(number + 1)) { (decData) in
+            _ = try STApplication.shared.crypto.decryptData(data: elements, header: header, chunkNumber: UInt64(number + 1)) { (decData) in
 				data = decData
 				semaphore.signal()
 			}

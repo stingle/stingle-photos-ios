@@ -16,9 +16,10 @@ protocol DataSourceDelegate {
 }
 
 class DataSource {
+    
 	public var type:SourceType
 	static let db = SyncManager.db
-	private static let crypto = Crypto()
+    private static let crypto = STApplication.shared.crypto
 	private static let network = NetworkManager()
 	
 	//TODO : Replace with round buffer

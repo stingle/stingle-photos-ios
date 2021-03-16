@@ -8,7 +8,7 @@
 import Sodium
 import Clibsodium
 
-extension Crypto {
+extension STCrypto {
     
     public func chunkAdditionalSize  () -> Int {
         return self.sodium.aead.xchacha20poly1305ietf.ABytes + sodium.aead.xchacha20poly1305ietf.NonceBytes
@@ -71,10 +71,10 @@ extension Crypto {
         var headerBytes = [UInt8(header.headerVersion & 255)]
         
         // Chunk size - 4 bytes
-        headerBytes += Crypto.toBytes(value: header.chunkSize)
+        headerBytes += STCrypto.toBytes(value: header.chunkSize)
         
         // Data size - 8 bytes
-        headerBytes += Crypto.toBytes(value:header.dataSize)
+        headerBytes += STCrypto.toBytes(value:header.dataSize)
         
         // Symmentric key - 32 bytes
         headerBytes += header.symmetricKey
@@ -85,13 +85,13 @@ extension Crypto {
         let name = header.fileName ?? ""
         if name != "" {
             let bytes:Bytes = name.bytes
-            headerBytes += Crypto.toBytes(value: UInt32(bytes.count))
+            headerBytes += STCrypto.toBytes(value: UInt32(bytes.count))
             headerBytes += bytes
         } else {
-            headerBytes += Crypto.toBytes(value: Int(0))
+            headerBytes += STCrypto.toBytes(value: Int(0))
         }
         
-        headerBytes += Crypto.toBytes(value: header.videoDuration)
+        headerBytes += STCrypto.toBytes(value: header.videoDuration)
         return headerBytes
     }
     

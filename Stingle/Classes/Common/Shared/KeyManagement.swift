@@ -2,7 +2,7 @@ import Foundation
 
 class KeyManagement {
 	
-	static private let crypto = Crypto()
+    static private let crypto = STApplication.shared.crypto
 	
 	private static var secret:[UInt8]?
 	//TODO : maybe KayChain is better place to store the secret
@@ -13,7 +13,7 @@ class KeyManagement {
 			return
 		}
 		do {
-			try crypto.importServerPublicKey(pbk: pbkData)
+            try self.crypto.importServerPublicKey(pbk: pbkData)
 		} catch {
 			print(error)
 		}

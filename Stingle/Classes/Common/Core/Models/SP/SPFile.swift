@@ -115,10 +115,10 @@ class SPFileInfo : Codable {
 	func duration() -> UInt32 {
 		let headers = self.headers
 		let hdrs = headers.split(separator: "*")
+        let crypto = STApplication.shared.crypto
 		for hdr in hdrs {
-			
-			let st = crypto.base64urlToBase64(base64urlString:String(hdr))
-			if let data = crypto.base64ToByte(encodedStr: st) {
+            let st = STApplication.shared.crypto.base64urlToBase64(base64urlString:String(hdr))
+            if let data = STApplication.shared.crypto.base64ToByte(encodedStr: st) {
 				let input = InputStream(data: Data(data))
 				input.open()
 				do {
@@ -138,6 +138,7 @@ class SPFileInfo : Codable {
 		let headers = self.headers
 		let hdrs = headers.split(separator: "*")
 		let hdr = hdrs[0]
+        let crypto = STApplication.shared.crypto
 		let st = crypto.base64urlToBase64(base64urlString:String(hdr))
 		if let data = crypto.base64ToByte(encodedStr: st) {
 			let input = InputStream(data: Data(data))
@@ -157,9 +158,9 @@ class SPFileInfo : Codable {
 	func type() -> Int {
 		let headers = self.headers
 		let hdrs = headers.split(separator: "*")
+        let crypto = STApplication.shared.crypto
 		for hdr in hdrs {
-			
-			let st = crypto.base64urlToBase64(base64urlString:String(hdr))
+            let st = crypto.base64urlToBase64(base64urlString:String(hdr))
 			if let data = crypto.base64ToByte(encodedStr: st) {
 				let input = InputStream(data: Data(data))
 				input.open()

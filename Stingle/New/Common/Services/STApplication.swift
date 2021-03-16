@@ -12,7 +12,7 @@ class STApplication {
     static let shared = STApplication()
     
     let dataBase = STDataBase()
-    let crypto = Crypto()
+    let crypto = STCrypto()
     
     private init() {}
     

@@ -42,26 +42,26 @@ struct STHeader {
     }
 }
 
-extension Crypto {
+extension STCrypto {
     
     func fromBytes(data: Bytes) -> STHeader {
         var header = STHeader()
         var offset:Int = 0
         header.headerVersion = data[0]
         offset += Constants.HeaderVersionLen
-        header.chunkSize = Crypto.fromBytes(b: Bytes(data[offset..<offset + Constants.FileChunksizeLen]))
+        header.chunkSize = STCrypto.fromBytes(b: Bytes(data[offset..<offset + Constants.FileChunksizeLen]))
         offset += Constants.FileChunksizeLen
-        header.dataSize = Crypto.fromBytes(b: Bytes(data[offset..<offset + Constants.FileDataSizeLen]))
+        header.dataSize = STCrypto.fromBytes(b: Bytes(data[offset..<offset + Constants.FileDataSizeLen]))
         offset += Constants.FileDataSizeLen
         header.symmetricKey = Bytes(data[offset..<sodium.keyDerivation.KeyBytes])
         offset += sodium.keyDerivation.KeyBytes
         header.fileType = data[offset]
         offset += Constants.FileTypeLen
-        let fileNameSize:Int = Crypto.fromBytes(b:Bytes(data[offset..<offset + Constants.FileNameSizeLen]))
+        let fileNameSize:Int = STCrypto.fromBytes(b:Bytes(data[offset..<offset + Constants.FileNameSizeLen]))
         offset += Constants.FileNameSizeLen
         header.fileName = String(bytes: Bytes(data[offset..<offset + fileNameSize]), encoding: String.Encoding.utf8) ?? ""
         offset += fileNameSize
-        header.videoDuration = Crypto.fromBytes(b: Bytes(data[offset..<offset + Constants.FileVideoDurationlen]))
+        header.videoDuration = STCrypto.fromBytes(b: Bytes(data[offset..<offset + Constants.FileVideoDurationlen]))
         return header
     }
     
@@ -127,6 +127,7 @@ extension Crypto {
         
         let headers = file.headers
         let hdrs = headers.split(separator: "*")
+        let crypto = STApplication.shared.crypto
         
         hdrs.enumerated().forEach { (index, hdr) in
             let st = self.base64urlToBase64(base64urlString:String(hdr))
@@ -205,7 +206,7 @@ extension Crypto {
         
         offset += Constants.FileFileIdLen
         
-        let headerSize:UInt32 = Crypto.fromBytes(b: Bytes((buf[offset..<offset + Constants.FileHeaderSizeLen])))
+        let headerSize:UInt32 = STCrypto.fromBytes(b: Bytes((buf[offset..<offset + Constants.FileHeaderSizeLen])))
         offset += Constants.FileHeaderSizeLen
         guard headerSize > 0 else {
             throw CryptoError.Header.incorrectHeaderSize
@@ -248,7 +249,7 @@ extension Crypto {
         }
         
         // Write header size - 4 bytes
-        numWritten += output.write(Crypto.toBytes(value: Int32(encHeader.count)), maxLength: Constants.FileHeaderSizeLen)
+        numWritten += output.write(STCrypto.toBytes(value: Int32(encHeader.count)), maxLength: Constants.FileHeaderSizeLen)
         
         // Write header3
         numWritten += output.write(encHeader, maxLength: encHeader.count)
@@ -278,7 +279,7 @@ extension Crypto {
         let fileId:Bytes = Bytes(buf[offset..<offset + Constants.FileFileIdLen])
         offset += Constants.FileFileIdLen
         
-        let headerSize:UInt32 = Crypto.fromBytes(b: Bytes((buf[offset..<offset + Constants.FileHeaderSizeLen])))
+        let headerSize:UInt32 = STCrypto.fromBytes(b: Bytes((buf[offset..<offset + Constants.FileHeaderSizeLen])))
         offset += Constants.FileHeaderSizeLen
         guard headerSize > 0 else {
             throw CryptoError.Header.incorrectHeaderSize
@@ -310,10 +311,10 @@ extension Crypto {
         header.headerVersion = headerBytes[offset]
         offset += Constants.HeaderVersionLen
         
-        header.chunkSize = Crypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileChunksizeLen]))
+        header.chunkSize = STCrypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileChunksizeLen]))
         offset += Constants.FileChunksizeLen
         
-        header.dataSize = Crypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileDataSizeLen]))
+        header.dataSize = STCrypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileDataSizeLen]))
         offset += Constants.FileDataSizeLen
         
         header.symmetricKey = Bytes(headerBytes[offset..<offset + sodium.keyDerivation.KeyBytes])
@@ -322,12 +323,12 @@ extension Crypto {
         header.fileType = headerBytes[offset]
         offset += Constants.FileTypeLen
         
-        let fileNameSize:Int = Crypto.fromBytes(b:Bytes(headerBytes[offset..<offset + Constants.FileNameSizeLen]))
+        let fileNameSize:Int = STCrypto.fromBytes(b:Bytes(headerBytes[offset..<offset + Constants.FileNameSizeLen]))
         offset += Constants.FileNameSizeLen
         header.fileName = String(bytes: Bytes(headerBytes[offset..<offset + fileNameSize]), encoding: String.Encoding.utf8) ?? ""
         
         offset += fileNameSize
-        header.videoDuration = Crypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileVideoDurationlen]))
+        header.videoDuration = STCrypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileVideoDurationlen]))
         return header
     }
     

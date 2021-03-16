@@ -9,7 +9,7 @@ import Foundation
 import Sodium
 import Clibsodium
 
-extension Crypto {
+extension STCrypto {
     
     func generateMainKeypair(password:String ) throws {
         try self.generateMainKeypair(password:password, privateKey:nil, publicKey:nil)

@@ -28,7 +28,7 @@ class SyncManager {
 	}()
 	
 	private static let fileManager = SPFileManager()
-	private static let crypto = Crypto()
+    private static let crypto = STApplication.shared.crypto
 	
 	static func signUp(email:String?, password:String?, completionHandler: @escaping (Bool, Error?) -> Swift.Void) -> Bool {
 		guard let email = email, let password = password else {
