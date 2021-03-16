@@ -413,6 +413,7 @@
 		A02203F425EEDC0300D07C98 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A02204C525EEDD5900D07C98 /* GalleryVM.swift */,
 				A02203FF25EEDC0300D07C98 /* Animations */,
 			);
 			path = UI;
@@ -430,7 +431,6 @@
 			isa = PBXGroup;
 			children = (
 				A02203F825EEDC0300D07C98 /* STNavigationController.swift */,
-				A02204C525EEDD5900D07C98 /* GalleryVM.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
