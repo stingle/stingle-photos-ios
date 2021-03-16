@@ -23,12 +23,12 @@ class SyncManager {
 			return try DataBase.shared()
 		} catch {
 			print(error)
-			assert(false)
+			fatalError()
 		}
 	}()
 	
 	private static let fileManager = SPFileManager()
-	private static let crypto = Crypto()
+    private static let crypto = STApplication.shared.crypto
 	
 	static func signUp(email:String?, password:String?, completionHandler: @escaping (Bool, Error?) -> Swift.Void) -> Bool {
 		guard let email = email, let password = password else {
@@ -79,7 +79,7 @@ class SyncManager {
 	}
 
 	static func signOut( completionHandler: @escaping (Bool, Error?) -> Swift.Void) -> Bool {
-		let request = SPSignOutRequest(token: SPApplication.user!.token)
+        let request = SPSignOutRequest(token: STApplication.shared.user()!.token)
 		_ = NetworkManager.send(request:request) { (data:SPSignOutResponse?, error)  in
 			guard let data = data, error == nil else {
 				completionHandler(false, error)
@@ -150,7 +150,7 @@ class SyncManager {
 			return
 		}
 //		let request = SPGetUpdateRequest(token: SPApplication.user!.token, lastSeen: "\(info.lastSeen)", lastDelSeenTime: "\(info.lastDelSeen)")
-		let request = SPGetUpdateRequest(token: SPApplication.`user`!.token, lastSeen: "0", lastDelSeenTime: "0")
+        let request = SPGetUpdateRequest(token: STApplication.shared.user()!.token, lastSeen: "0", lastDelSeenTime: "0")
 
 		_ = NetworkManager.send(request: request) { (data:SPUpdateInfo?, error:Error?) in
 			guard let data = data , error == nil else {
@@ -277,7 +277,7 @@ class SyncManager {
 	}
 	
 	static func getFileUrl(file:SPFileInfo, folder:Int) -> URL? {
-		let request = SPGetFileUrl(token: SPApplication.user!.token, fileName: file.name, folder:folder)
+        let request = SPGetFileUrl(token: STApplication.shared.user()!.token, fileName: file.name, folder:folder)
 		let resp:SPGetFileUrlResponse? = NetworkManager.syncSend(request: request)
 		return resp?.parts.url
 	}
@@ -285,7 +285,7 @@ class SyncManager {
 
 	static func download <T:SPFileInfo>(files:[T], isThumb: Bool, folder:Int, completionHandler:  @escaping (String?, Error?) -> Swift.Void) {
 		for item in files {
-			let request = SPDownloadFileRequest(token: SPApplication.user!.token, fileName: item.name, isThumb: isThumb, folder:folder)
+			let request = SPDownloadFileRequest(token: STApplication.shared.user()!.token, fileName: item.name, isThumb: isThumb, folder:folder)
 			_ = NetworkManager.download(request: request) { (url, error) in
 				if error != nil {
 					completionHandler(nil, error)
@@ -359,34 +359,32 @@ class SyncManager {
 	}
 	
 	static func notifyCloudAboutTrash(files:[SPFileInfo], completionHandler:  @escaping (Error?) -> Swift.Void) {
-		let request = SPTrashFilesRequest(token: SPApplication.user!.token, files: files)
+		let request = SPTrashFilesRequest(token: STApplication.shared.user()!.token, files: files)
 		_ = NetworkManager.send(request: request) { (resp:SPTrashResponse?, error) in
 				completionHandler(error)
 		}
 	}
 
 	static func notifyCloudAboutRestore(files:[SPFileInfo], completionHandler:  @escaping (Error?) -> Swift.Void) {
-		let request = SPRestoreFilesRequest(token: SPApplication.user!.token, files: files)
+		let request = SPRestoreFilesRequest(token: STApplication.shared.user()!.token, files: files)
 		_ = NetworkManager.send(request: request) { (resp:SPTrashResponse?, error) in
 			completionHandler(error)
 		}
 	}
 
 	static func notifyCloudAboutDelete(files:[SPFileInfo], completionHandler:  @escaping (Error?) -> Swift.Void) {
-		let request = SPDeleteFilesRequest(token: SPApplication.user!.token, files: files)
+		let request = SPDeleteFilesRequest(token: STApplication.shared.user()!.token, files: files)
 		_ = NetworkManager.send(request: request) { (resp:SPTrashResponse?, error) in
 			completionHandler(error)
 		}
 	}
 
 	static func notifyCloudAboutEmpty(completionHandler:  @escaping (Error?) -> Swift.Void) {
-		let request = SPEmptyTrashRequest(token: SPApplication.user!.token)
+        let request = SPEmptyTrashRequest(token: STApplication.shared.user()!.token)
 		_ = NetworkManager.send(request: request) { (resp:SPTrashResponse?, error) in
 			completionHandler(error)
 		}
 	}
-
-	
 	
 	static func importImage(file:SPFile, thumb:UIImage?, type:Int, duration:UInt32) {
 		guard let fileName = Utils.getNewEncFilename() else {
@@ -429,7 +427,7 @@ class SyncManager {
 			inputThumb.close()
 			outputThumb.close()
 			try crypto.encryptFile(input: inputOrigin, output: outputOrigin, filename: file.name, fileType: type, dataLength: UInt(data.count), fileId: fileId, videoDuration: duration)
-			guard let headers = try SPApplication.crypto.getFileHeaders(originalPath: originalPath.path, thumbPath: thumbPath.path) else {
+            guard let headers = try STApplication.shared.crypto.getFileHeaders(originalPath: originalPath.path, thumbPath: thumbPath.path) else {
 				//TODO : throw right exception
 				throw CryptoError.General.incorrectParameterSize
 			}

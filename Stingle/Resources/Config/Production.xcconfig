@@ -1,0 +1,14 @@
+//
+//  Production.xcconfig
+//  Stingle
+//
+//  Created by Khoren Asatryan on 3/3/21.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+APP_NAME = Stingle
+APP_BUNDLE_ID = com.photos.Stingle
+BASE_API_URL = https:/$()/api.stingle.org/v2
+BUILD_TYPE = Production

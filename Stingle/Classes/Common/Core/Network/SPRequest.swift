@@ -1,9 +1,5 @@
 import Foundation
 
-
-let crypto: Crypto  = Crypto()
-
-
 protocol SPRequest {
 	func params () -> String?
 	func path () -> String
@@ -156,7 +152,7 @@ struct SPUploadFileRequest : SPRequest {
 	let folder:Int
 
 	init(file:SPFileInfo, folder:Int) {
-		token = SPApplication.user!.token
+        token = STApplication.shared.user()!.token
 		self.fileName = file.name
 		version = file.version
 		dateCreated = file.dateCreated
@@ -190,9 +186,9 @@ struct SPUploadFileRequest : SPRequest {
 
 struct SPGetUpdateRequest : SPRequest {
 
-	private let token:String
-	private let lastSeen:String
-	private let lastDelSeenTime:String
+	private let token: String
+	private let lastSeen: String
+	private let lastDelSeenTime: String
 	
 	init(token:String, lastSeen:String = "0", lastDelSeenTime:String = "0") {
 		self.token = token
@@ -445,6 +441,7 @@ struct SPTrashFilesRequest : SPRequest {
 			params["filename\(index)"] = file.name
 			index += 1
 		}
+        let crypto = STApplication.shared.crypto
 		guard let encParams = crypto.encryptParamsForServer(params: params) else {
 			return ""
 		}
@@ -491,7 +488,7 @@ struct SPRestoreFilesRequest : SPRequest {
 			params["filename\(index)"] = file.name
 			index += 1
 		}
-		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+        guard let encParams = STApplication.shared.crypto.encryptParamsForServer(params: params) else {
 			return ""
 		}
 		return encParams
@@ -537,7 +534,7 @@ struct SPDeleteFilesRequest : SPRequest {
 			params["filename\(index)"] = file.name
 			index += 1
 		}
-		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+		guard let encParams = STApplication.shared.crypto.encryptParamsForServer(params: params) else {
 			return ""
 		}
 		return encParams
@@ -576,7 +573,7 @@ struct SPEmptyTrashRequest : SPRequest {
 	func bodyParams () -> String {
 		var params = [String:String]()
 		params["time"] = "\(Date.init().millisecondsSince1970)"
-		guard let encParams = crypto.encryptParamsForServer(params: params) else {
+		guard let encParams = STApplication.shared.crypto.encryptParamsForServer(params: params) else {
 			return ""
 		}
 		return encParams

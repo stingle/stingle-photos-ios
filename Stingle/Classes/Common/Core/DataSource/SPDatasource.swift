@@ -16,9 +16,10 @@ protocol DataSourceDelegate {
 }
 
 class DataSource {
+    
 	public var type:SourceType
 	static let db = SyncManager.db
-	private static let crypto = Crypto()
+    private static let crypto = STApplication.shared.crypto
 	private static let network = NetworkManager()
 	
 	//TODO : Replace with round buffer
@@ -52,7 +53,7 @@ class DataSource {
 	//	MARK: - IndexPath getters
 	
 	public func numberOfSections()  -> Int {
-		return DataSource.db.numberOfSections(for: fileType())
+		return 0//DataSource.db.numberOfSections(for: fileType())
 	}
 	
 	public func numberOfRows(forSecion:Int) -> Int {

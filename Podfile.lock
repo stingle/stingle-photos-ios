@@ -1,20 +1,28 @@
 PODS:
+  - Alamofire (5.4.1)
   - MobileVLCKit (3.3.15)
+  - netfox (1.19.0)
   - Sodium (0.9.1)
 
 DEPENDENCIES:
+  - Alamofire
   - MobileVLCKit
+  - netfox
   - Sodium
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - MobileVLCKit
+    - netfox
     - Sodium
 
 SPEC CHECKSUMS:
+  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   MobileVLCKit: 9a04c9fa19e35c376ddf59425dd82e397d5899ad
+  netfox: efeec1d23406df6cd605212f09a40957bb5654eb
   Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
 
-PODFILE CHECKSUM: 5ebcf09e415c86972be5357f3ccb87b03312a132
+PODFILE CHECKSUM: 8ce93fb26b14c076324b25d13d374c31bb2e3cad
 
 COCOAPODS: 1.10.1
