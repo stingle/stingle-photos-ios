@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import netfox
 
 class STMainVM {
 	
 	func setupApp(end: ((_ result: Bool) -> Void)) {
+        NFX.sharedInstance().start()
 		end(true)
 	}
 	
