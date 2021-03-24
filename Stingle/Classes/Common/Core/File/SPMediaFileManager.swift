@@ -25,15 +25,15 @@ class SPMediaFileManager {
 		guard let asset:PHAsset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else {
 			return
 		}
-		var type = Constants.FileTypeGeneral
+		var type = STCrypto.Constants.FileTypeGeneral
 		var duration:UInt32 = 0
 		var mediaUrl:URL? = nil
 		if asset.mediaType == .video {
-			type = Constants.FileTypeVideo
+			type = STCrypto.Constants.FileTypeVideo
 			duration = UInt32(asset.duration)
 			mediaUrl = info[UIImagePickerController.InfoKey.mediaURL] as! URL?
 		} else if asset.mediaType == .image {
-			type = Constants.FileTypePhoto
+			type = STCrypto.Constants.FileTypePhoto
 			mediaUrl = info[UIImagePickerController.InfoKey.imageURL] as! URL?
 		} else {
 			fatalError()

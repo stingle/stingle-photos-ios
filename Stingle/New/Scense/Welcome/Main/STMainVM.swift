@@ -8,11 +8,15 @@
 
 import Foundation
 import netfox
+import Kingfisher
 
 class STMainVM {
 	
 	func setupApp(end: ((_ result: Bool) -> Void)) {
         NFX.sharedInstance().start()
+        
+        
+        
 		end(true)
 	}
 	
@@ -20,5 +24,15 @@ class STMainVM {
         return STApplication.shared.isLogedIn()
 	}
 	
+    
+    //
+    
+    func setupImageCashe() {
+        
+//        MemoryStorage.Backend<KFCrossPlatformImage>(config: MemoryStorage.Config)
+//
+//        KingfisherManager.shared.cache = ImageCache(memoryStorage: MemoryStorage.Backend<KFCrossPlatformImage>, diskStorage: DiskStorage.Backend<Data>)
+        
+    }
 	
 }

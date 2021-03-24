@@ -9,9 +9,21 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    static func unLock(with password: String) throws {
+        
+        if STApplication.shared.dataBase.userProvider.user != nil {
+            let key = try STApplication.shared.crypto.getPrivateKey(password: password)
+            KeyManagement.key = key
+        }
+        
+        print("storagePath = ", STApplication.shared.fileSystem.storageURl ?? "")
+        
+        
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+        try? AppDelegate.unLock(with: "xoren010")
         return true
     }
 

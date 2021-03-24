@@ -104,7 +104,7 @@ class SPFileInfo : Codable {
 		let back = 24 * 3600
 		let timeInterval = (Int(interval) / cut) * back
 		headers = ""
-		version = "\(Constants.CurrentFileVersion)"
+        version = "\(STCrypto.Constants.CurrentFileVersion)"
 		isLocal = true
 		isRemote = false
 		reUpload = 0

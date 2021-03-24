@@ -82,7 +82,7 @@ class DataSource {
 		return DataSource.db.indexPath(for: file, with: fileType())
 	}
 	
-	func thumb(indexPath:IndexPath) -> UIImage? {
+	func thumb(indexPath: IndexPath) -> UIImage? {
 		guard let file:SPFileInfo = DataSource.db.fileForIndexPath(indexPath: indexPath, with: fileType()) else {
 			return nil
 		}
@@ -141,7 +141,8 @@ class DataSource {
 	}
 	
 	func image(index:Int, completionHandler:  @escaping (UIImage?) -> Swift.Void) {
-		var folder:Int = 0
+		
+        var folder:Int = 0
 		if type == .Gallery {
 			folder = 0
 		} else if type == .Trash {

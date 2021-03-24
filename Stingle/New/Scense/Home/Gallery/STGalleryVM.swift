@@ -21,8 +21,6 @@ class STGalleryVM {
         } failure: { (error) in
             print("")
         }
-
-        
     }
     
     func reloadData() {
@@ -38,19 +36,33 @@ extension STGalleryVM {
     }
     
     func object(at indexPath: IndexPath) -> STLibrary.File? {
-                
         if let file = self.dataBaseDataSource.object(at: indexPath) {
-            
-            let headers = self.crypto.getHeaders(file: file)
-            
-            print("")
+//            let headers = self.crypto.getHeaders(file: file)
             return file
         }
-        
-        
         return nil
     }
     
+    func item(at indexPath: IndexPath) -> STGalleryVC.ViewItem? {
+        
+//        let indexPath = IndexPath(row: 3, section: 1)
+        
+        
+        if let obj = self.object(at: indexPath) {
+            let image = STImageView.Image(file: obj, isThumb: true)
+            return STGalleryVC.ViewItem(image: image, name: obj.file)
+        }
+        return nil
+    }
+    
+}
+
+extension STGalleryVC {
+    
+    struct ViewItem {
+        let image: STImageView.Image?
+        let name: String?
+    }
     
 }
 

@@ -2,56 +2,60 @@ import Foundation
 import Sodium
 import Clibsodium
 
-public struct Constants {
-	
-	public static let FileTypeGeneral = 1
-	public static let FileTypePhoto = 2
-	public static let FileTypeVideo = 3
-	public static let FileTypeLen = 1
-	public static let FileBeggining:String = "SP"
-	public static let KeyFileBeggining:String = "SPK"
-	
-	public static let CurrentFileVersion:Int = 1
-	public static let CurrentHeaderVersion:Int = 1
-	public static let CurrentKeyFileVersion:Int = 1
-	
-	public static let PwdSaltFilename = "pwdSalt"
-	public static let SKNONCEFilename = "skNonce"
-	public static let PrivateKeyFilename = "private"
-	public static let PublicKeyFilename = "public"
-	public static let ServerPublicKeyFilename = "server_public"
-	
-	public static let XCHACHA20POLY1305_IETF_CONTEXT = "__data__"
-	public static let MAX_BUFFER_LENGTH = 1024*1024*64
-	public static let FileExtension = ".sp"
-	public static let FileNameLen = 32
-
-	public static let FileBegginingLen:Int = Constants.FileBeggining.bytes.count
-	public static let FileFileVersionLen = 1
-	public static let FileChunksizeLen = 4
-	public static let FileDataSizeLen = 8
-	public static let FileNameSizeLen = 4
-	public static let FileVideoDurationlen = 4
-	public static let HeaderVersionLen = 1
-	public static let FileHeaderSizeLen = 4
-	public static let FileFileIdLen = 32
-	public static let FileHeaderBeginningLen:Int = Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Constants.FileHeaderSizeLen
-	
-	public static let KeyFileTypeBundleEncrypted = 0
-	public static let KeyFileTypeBundlePlain = 1
-	public static let KeyFileTypePublicPlain = 2
-	
-	public static let KeyFileBegginingLen:Int = Constants.KeyFileBeggining.bytes.count
-	public static let KeyFileVerLen = 1
-	public static let KeyFileTypeLen = 1
-	public static let KeyFileHeaderLen = 0
-	public static let KdfDifficultyNormal = 1
-	public static let KdfDifficultyHard = 2
-	public static let KdfDifficultyUltra = 3
-	public static let PWHASH_LEN = 64
+extension STCrypto {
+    
+    struct Constants {
+        
+        static let FileTypeGeneral = 1
+        static let FileTypePhoto = 2
+        static let FileTypeVideo = 3
+        static let FileTypeLen = 1
+        static let FileBeggining:String = "SP"
+        static let KeyFileBeggining:String = "SPK"
+        
+        static let CurrentFileVersion:Int = 1
+        static let CurrentHeaderVersion:Int = 1
+        static let CurrentKeyFileVersion:Int = 1
+        
+        static let PwdSaltFilename = "pwdSalt"
+        static let SKNONCEFilename = "skNonce"
+        static let PrivateKeyFilename = "private"
+        static let PublicKeyFilename = "public"
+        static let ServerPublicKeyFilename = "server_public"
+        
+        static let XCHACHA20POLY1305_IETF_CONTEXT = "__data__"
+        static let MAX_BUFFER_LENGTH = 1024*1024*64
+        static let FileExtension = ".sp"
+        static let FileNameLen = 32
+        
+        static let FileBegginingLen:Int = Constants.FileBeggining.bytes.count
+        static let FileFileVersionLen = 1
+        static let FileChunksizeLen = 4
+        static let FileDataSizeLen = 8
+        static let FileNameSizeLen = 4
+        static let FileVideoDurationlen = 4
+        static let HeaderVersionLen = 1
+        static let FileHeaderSizeLen = 4
+        static let FileFileIdLen = 32
+        static let FileHeaderBeginningLen:Int = Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Constants.FileHeaderSizeLen
+        
+        public static let KeyFileTypeBundleEncrypted = 0
+        public static let KeyFileTypeBundlePlain = 1
+        public static let KeyFileTypePublicPlain = 2
+        
+        public static let KeyFileBegginingLen:Int = Constants.KeyFileBeggining.bytes.count
+        public static let KeyFileVerLen = 1
+        public static let KeyFileTypeLen = 1
+        public static let KeyFileHeaderLen = 0
+        public static let KdfDifficultyNormal = 1
+        public static let KdfDifficultyHard = 2
+        public static let KdfDifficultyUltra = 3
+        public static let PWHASH_LEN = 64
+    }
+    
 }
 
-public class STCrypto {
+class STCrypto {
     
     private let pivateBufferSize = 256
 	private let hexArray:[Character] = [Character]("0123456789ABCDEF")
@@ -229,7 +233,7 @@ public class STCrypto {
 		return plainText
 	}
 	
-	public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration:UInt32) throws {
+	public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32) throws {
 		let publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
 		let symmetricKey = self.sodium.keyDerivation.key()
 		let header = try getNewHeader(symmetricKey: symmetricKey, dataSize: dataLength, filename: filename, fileType: fileType, fileId: fileId, videoDuration: videoDuration)
@@ -238,7 +242,7 @@ public class STCrypto {
 	}
 	
 	@discardableResult
-	private func encryptData(input: InputStream, output: OutputStream, header: STHeader?) throws -> Bool {
+    func encryptData(input: InputStream, output: OutputStream, header: STHeader?) throws -> Bytes {
 		guard let header = header, (1...self.bufSize).contains(Int(header.chunkSize)) else {
 			throw CryptoError.Header.incorrectChunkSize
 		}
@@ -246,6 +250,7 @@ public class STCrypto {
 		var chunkNumber:UInt64 = 1
 		
 		var buf:Bytes = []
+        var result: Bytes = []
 		var numRead = 0
 		var diff: Int = 0
 		
@@ -274,10 +279,15 @@ public class STCrypto {
 			numWrite = output.write(authenticatedCipherText, maxLength:authenticatedCipherText.count)
 			assert(numWrite == authenticatedCipherText.count)
 			chunkNumber += UInt64(1)
+            
+            result.append(contentsOf: chunkNonce)
+            result.append(contentsOf: authenticatedCipherText)
+            print("maxLength", (authenticatedCipherText.count + chunkNonce.count))
+            
 		} while (diff == 0)
 		
-		output.close();
-		return true;
+		output.close()
+		return result
 	}
 	
 	public func decryptFileAsync(input: InputStream, output: OutputStream, completion: ((Bool, Error?) -> Void)? = nil) {
@@ -300,9 +310,15 @@ public class STCrypto {
 		}
 	}
 	
-	public func decryptFile(input: InputStream, output: OutputStream, completionHandler:  ((Bytes?) -> Swift.Void)? = nil) throws -> Bool {
-		let header = try getFileHeader(input:input)
-		try self.decryptData(input: input, header: header) { chunk in
+    @discardableResult
+    public func decryptFile(input: InputStream, output: OutputStream, header: STHeader? = nil, completionHandler:  ((Bytes?) -> Swift.Void)? = nil) throws -> Bool {
+                
+        var header = header
+        if header == nil {
+            header = try getFileHeader(input: input)
+        }
+
+		try self.decryptData(input: input, header: header!) { chunk in
 			guard let chunk = chunk else {
 				return
 			}
@@ -313,6 +329,7 @@ public class STCrypto {
 				assert(numWrite == chunk.count)
 			}
 		}
+        
 		output.close();
 		return true
 	}
@@ -320,7 +337,8 @@ public class STCrypto {
 	@discardableResult
     func savePrivateFile(filename: String, data: Bytes?) throws -> Bool {
 		
-		guard let fullPath = SPFileManager.folder(for: .Private)?.appendingPathComponent(filename) else {
+        let path = STApplication.shared.fileSystem.folder(for: .private)
+		guard let fullPath = path?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
 		
@@ -341,8 +359,8 @@ public class STCrypto {
 	}
 	
     func readPrivateFile(filename: String) throws -> Bytes {
-		
-		guard let fullPath = SPFileManager.folder(for: .Private)?.appendingPathComponent(filename) else {
+        let path = STApplication.shared.fileSystem.folder(for: .private)
+		guard let fullPath = path?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
 		guard let input:InputStream = InputStream(url: fullPath) else {

@@ -85,7 +85,7 @@ extension STCrypto {
     }
     
     @discardableResult
-    func decryptData(input:InputStream, header:STHeader?, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
+    func decryptData(input: InputStream, header: STHeader?, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
         guard let header = header, (1...self.bufSize).contains(Int(header.chunkSize)) else {
             throw CryptoError.Header.incorrectChunkSize
         }
@@ -228,15 +228,22 @@ extension STCrypto {
         return header
     }
     
-    func writeHeader(output: OutputStream, header: STHeader, publicKey: Bytes?) throws  {
+    @discardableResult
+    func writeHeader(output: OutputStream, header: STHeader, publicKey: Bytes?) throws -> Bytes {
         // File beggining - 2 bytes
+        
+        var result = Bytes()
+        
         var numWritten = output.write(Constants.FileBeggining.bytes, maxLength: Constants.FileBegginingLen)
+        result.append(contentsOf: Constants.FileBeggining.bytes)
         
         // File version number - 1 byte
         numWritten += output.write([UInt8(Constants.CurrentFileVersion)], maxLength: Constants.FileFileVersionLen)
+        result.append(UInt8(Constants.CurrentFileVersion))
         
         // File ID - 32 bytes
         numWritten += output.write(header.fileId, maxLength: Constants.FileFileIdLen)
+        result.append(contentsOf: header.fileId)
         
         guard let publicKey = publicKey else {
             throw CryptoError.General.incorrectParameterSize
@@ -249,13 +256,20 @@ extension STCrypto {
         }
         
         // Write header size - 4 bytes
-        numWritten += output.write(STCrypto.toBytes(value: Int32(encHeader.count)), maxLength: Constants.FileHeaderSizeLen)
+        
+        let write = STCrypto.toBytes(value: Int32(encHeader.count))
+        numWritten += output.write(write, maxLength: Constants.FileHeaderSizeLen)
+        result.append(contentsOf: write)
         
         // Write header3
         numWritten += output.write(encHeader, maxLength: encHeader.count)
+        result.append(contentsOf: encHeader)
+        
         guard numWritten ==  (Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Constants.FileHeaderSizeLen + encHeader.count) else {
             throw CryptoError.IO.writeFailure
         }
+        
+        return result
     }
         
     func getFileHeader(input: InputStream) throws -> STHeader {

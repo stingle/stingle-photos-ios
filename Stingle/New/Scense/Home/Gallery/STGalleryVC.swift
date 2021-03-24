@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class STGalleryVC: UIViewController {
     
@@ -15,6 +16,12 @@ class STGalleryVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        KingfisherManager.shared.cache.clearMemoryCache()
+        KingfisherManager.shared.cache.clearDiskCache()
+        KingfisherManager.shared.cache.cleanExpiredDiskCache()
+        
+        
         self.configureCollectionView()
         self.viewModel.reloadData()
     }
@@ -52,14 +59,20 @@ class STGalleryVC: UIViewController {
         let itemSizeHeight = itemSizeWidth
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(itemSizeHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: lineCount)
-        group.contentInsets = NSDirectionalEdgeInsets(top: inset / 2, leading: inset, bottom: inset / 2, trailing: inset)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 0, trailing: inset)
         group.interItemSpacing = .fixed(inset)
+                
         let section = NSCollectionLayoutSection(group: group)
         
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),  heightDimension: .estimated(55))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-        sectionHeader.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 9, bottom: 7, trailing: 9)
+                
+        sectionHeader.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 9, bottom: 0, trailing: 9)
+        
         section.boundarySupplementaryItems = [sectionHeader]
+        section.contentInsets = .zero
+        section.interGroupSpacing = inset
+        section.removeContentInsetsReference(safeAreaInsets: self.collectionView.window?.safeAreaInsets)
         
         return section
     }
@@ -67,6 +80,7 @@ class STGalleryVC: UIViewController {
     private func generateCollectionLayoutItem() -> NSCollectionLayoutItem {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1))
         let resutl = NSCollectionLayoutItem(layoutSize: itemSize)
+        resutl.contentInsets = .zero
         return resutl
     }
     
@@ -76,9 +90,8 @@ class STGalleryVC: UIViewController {
         
         self.dataSourceReference = UICollectionViewDiffableDataSourceReference(collectionView: self.collectionView, cellProvider: { [weak self] (collectionView, indexPath, data) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "STGalleryCollectionViewCellID", for: indexPath)
-            
-            let obj = self?.viewModel.object(at: indexPath)
-            
+            let item = self?.viewModel.item(at: indexPath)
+            (cell as? STGalleryCollectionViewCell)?.configure(viewItem: item)
             return cell
         })
         

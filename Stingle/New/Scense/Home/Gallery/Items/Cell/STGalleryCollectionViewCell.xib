@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="STGalleryCollectionViewCell" customModule="Stingle" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="174" height="92"/>
+            <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="174" height="92"/>
+                <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uxX-i2-5Vu" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
+                    </imageView>
+                </subviews>
             </view>
-            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
-            <color key="backgroundColor" systemColor="systemYellowColor"/>
-            <size key="customSize" width="174" height="92"/>
-            <point key="canvasLocation" x="227.536231884058" y="75.669642857142847"/>
+            <constraints>
+                <constraint firstItem="uxX-i2-5Vu" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="X05-9g-tMv"/>
+                <constraint firstAttribute="bottom" secondItem="uxX-i2-5Vu" secondAttribute="bottom" id="dQN-Ci-Ism"/>
+                <constraint firstAttribute="trailing" secondItem="uxX-i2-5Vu" secondAttribute="trailing" id="gLD-Qr-wBF"/>
+                <constraint firstItem="uxX-i2-5Vu" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="lmz-ft-6wB"/>
+            </constraints>
+            <size key="customSize" width="263" height="158"/>
+            <connections>
+                <outlet property="imageView" destination="uxX-i2-5Vu" id="Ndr-62-pSd"/>
+            </connections>
+            <point key="canvasLocation" x="292.02898550724638" y="97.098214285714278"/>
         </collectionViewCell>
     </objects>
-    <resources>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-    </resources>
 </document>

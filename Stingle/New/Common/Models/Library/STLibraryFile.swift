@@ -25,6 +25,11 @@ extension STLibrary {
         let dateCreated: Date
         let dateModified: Date
         
+        lazy var encryptsHeaders: STHeaders = {
+            let result = STApplication.shared.crypto.getHeaders(file: self)
+            return result
+        }()
+        
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.file = try container.decode(String.self, forKey: .file)

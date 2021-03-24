@@ -38,12 +38,12 @@ class SPImagePageVC: UIPageViewController, UIPageViewControllerDataSource, UIPag
 			return nil
 		}
 		
-		if file.type() == Constants.FileTypePhoto {
+		if file.type() == STCrypto.Constants.FileTypePhoto {
 			let viewController:SPImagePreviewVC = UIStoryboard(name: "Home", bundle: nil).instantiateViewController(withIdentifier: "SPImagePreviewVC") as! SPImagePreviewVC
 			viewController.index = index
 			viewController.viewModel = viewModel
 			return viewController
-		} else if file.type() == Constants.FileTypeVideo {
+		} else if file.type() == STCrypto.Constants.FileTypeVideo {
 			let viewController:SPVideoPreviewVC = UIStoryboard(name: "Home", bundle: nil).instantiateViewController(withIdentifier: "SPVideoPreviewVC") as! SPVideoPreviewVC
 			viewController.index = index
 			viewController.viewModel = viewModel

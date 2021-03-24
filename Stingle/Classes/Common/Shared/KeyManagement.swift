@@ -6,9 +6,9 @@ class KeyManagement {
 	
 	private static var secret:[UInt8]?
 	//TODO : maybe KayChain is better place to store the secret
-	static public var key:[UInt8]? { get { return KeyManagement.secret } set(newKey) { KeyManagement.secret = newKey } }
+	static public var key: [UInt8]? { get { return KeyManagement.secret } set(newKey) { KeyManagement.secret = newKey } }
 	
-	static public func importServerPublicKey(pbk:String) {
+	static public func importServerPublicKey(pbk: String) {
 		guard let pbkData = self.crypto.base64ToByte(encodedStr: pbk) else {
 			return
 		}

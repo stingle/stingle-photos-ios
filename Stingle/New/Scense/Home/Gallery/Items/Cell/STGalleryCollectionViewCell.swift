@@ -7,11 +7,14 @@
 
 import UIKit
 
+
+
 class STGalleryCollectionViewCell: UICollectionViewCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    @IBOutlet weak private var imageView: STImageView!
+    
+    func configure(viewItem: STGalleryVC.ViewItem?) {
+        self.imageView.setImage(viewItem?.image, placeholder: nil)
     }
-
+    
 }

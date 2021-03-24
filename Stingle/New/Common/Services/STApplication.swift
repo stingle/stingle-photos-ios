@@ -11,10 +11,24 @@ class STApplication {
     
     static let shared = STApplication()
     
-    let dataBase = STDataBase()
-    let crypto = STCrypto()
+    private(set) lazy var dataBase: STDataBase = {
+        return STDataBase()
+    }()
     
-    private init() {}
+    private(set) lazy var crypto: STCrypto = {
+        return STCrypto()
+    }()
+    
+    private(set) lazy var fileSystem: STFileSystem = {
+        return STFileSystem()
+    }()
+    
+    private(set) lazy var fileRetryer: STFileRetryer = {
+        return STFileRetryer()
+    }()
+    
+    
+    private init() { }
     
 }
 

@@ -89,6 +89,9 @@ class STAuthWorker: STWorker {
 	private func updateUserParams(login: STAuth.Login, email: String, password: String) throws -> STUser {
 		let isKeyBackedUp = login.isKeyBackedUp == 1 ? true : false
 		
+        let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId)
+        self.userProvider.update(model: user)
+        
 		if KeyManagement.key == nil {
 			guard true == KeyManagement.importKeyBundle(keyBundle: login.keyBundle, password: password) else {
 				throw AuthWorkerError.cantImportKeyBundle
@@ -99,9 +102,6 @@ class STAuthWorker: STWorker {
 			let pubKey = login.serverPublicKey
 			KeyManagement.importServerPublicKey(pbk: pubKey)
 		}
-				
-        let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId)
-        self.userProvider.update(model: user)
 		return user
 	}
 	
@@ -120,9 +120,9 @@ extension STAuthWorker {
 			case .passwordError:
 				return "incorrect_password".localized
 			case .loginError:
-				return "nework_error_unknown_error".localized
+				return "error_unknown_error".localized
 			case .cantImportKeyBundle:
-				return "nework_error_unknown_error".localized
+				return "error_unknown_error".localized
 			}
 		}
 		

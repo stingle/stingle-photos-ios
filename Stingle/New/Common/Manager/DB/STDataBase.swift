@@ -98,9 +98,9 @@ extension STDataBase {
         var message: String {
             switch self {
             case .parsError:
-                return "nework_error_unknown_error".localized
+                return "error_unknown_error".localized
             case .dateNotFound:
-                return "nework_error_unknown_error".localized
+                return "error_unknown_error".localized
             case .error(let error):
                 if let iError = error as? IError {
                     return iError.message

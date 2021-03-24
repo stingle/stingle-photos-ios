@@ -213,7 +213,7 @@ class SyncManager {
 		var folder = NSNotFound
 		var type = SPEvent.DB.update.gallery.rawValue
 		if T.self is SPFile.Type {
-				folder = 0
+            folder = 0
 		} else if T.self is SPTrashFile.Type {
 			folder = 1
 			type = SPEvent.DB.update.trash.rawValue
@@ -282,10 +282,9 @@ class SyncManager {
 		return resp?.parts.url
 	}
 
-
 	static func download <T:SPFileInfo>(files:[T], isThumb: Bool, folder:Int, completionHandler:  @escaping (String?, Error?) -> Swift.Void) {
 		for item in files {
-			let request = SPDownloadFileRequest(token: STApplication.shared.user()!.token, fileName: item.name, isThumb: isThumb, folder:folder)
+			let request = SPDownloadFileRequest(token: STApplication.shared.user()!.token, fileName: item.name, isThumb: isThumb, folder: folder)
 			_ = NetworkManager.download(request: request) { (url, error) in
 				if error != nil {
 					completionHandler(nil, error)
@@ -386,7 +385,7 @@ class SyncManager {
 		}
 	}
 	
-	static func importImage(file:SPFile, thumb:UIImage?, type:Int, duration:UInt32) {
+	static func importImage(file: SPFile, thumb: UIImage?, type: Int, duration: UInt32) {
 		guard let fileName = Utils.getNewEncFilename() else {
 			return
 		}
