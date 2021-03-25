@@ -309,6 +309,41 @@ class STCrypto {
 			body()
 		}
 	}
+    
+    func validateHeaderData(input: InputStream) throws {
+       
+        var buf:Bytes = Bytes(repeating: 0, count: Constants.FileHeaderBeginningLen)
+        guard Constants.FileHeaderBeginningLen == input.read(&buf, maxLength: Constants.FileHeaderBeginningLen) else {
+            throw CryptoError.IO.readFailure
+        }
+        var offset:Int = 0
+        let fileBegginingStr: String = String(bytes: Bytes(buf[offset..<(offset + Constants.FileBegginingLen)]), encoding: String.Encoding.utf8) ?? ""
+        if fileBegginingStr != Constants.FileBeggining {
+            throw CryptoError.Header.incorrectFileBeggining
+        }
+        offset += Constants.FileBegginingLen
+        
+        let fileVersion:UInt8 = buf[offset]
+        if fileVersion != Constants.CurrentFileVersion {
+            throw CryptoError.Header.incorrectFileVersion
+        }
+        offset += Constants.FileFileVersionLen
+        offset += Constants.FileFileIdLen
+        
+        let headerSize:UInt32 = STCrypto.fromBytes(b: Bytes((buf[offset..<offset + Constants.FileHeaderSizeLen])))
+        offset += Constants.FileHeaderSizeLen
+        guard headerSize > 0 else {
+            throw CryptoError.Header.incorrectHeaderSize
+        }
+        
+        var encHeaderBytes = Bytes(repeating: 0, count: Int(headerSize))
+        let numRead = input.read(&encHeaderBytes, maxLength: Int(headerSize))
+                
+        guard numRead > 0  else {
+            throw CryptoError.IO.readFailure
+        }
+               
+    }
 	
     @discardableResult
     public func decryptFile(input: InputStream, output: OutputStream, header: STHeader? = nil, completionHandler:  ((Bytes?) -> Swift.Void)? = nil) throws -> Bool {
@@ -316,6 +351,8 @@ class STCrypto {
         var header = header
         if header == nil {
             header = try getFileHeader(input: input)
+        } else {
+            try self.validateHeaderData(input: input)
         }
 
 		try self.decryptData(input: input, header: header!) { chunk in
@@ -384,7 +421,11 @@ class STCrypto {
 		if outBuff.count <= 0 {
 			throw CryptoError.IO.readFailure
 		}
-		input.close()
+        
+        defer {
+            input.close()
+        }
+		
 		return outBuff
 	}
 }

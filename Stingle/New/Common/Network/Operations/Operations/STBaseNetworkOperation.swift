@@ -36,9 +36,16 @@ class STBaseNetworkOperation<T>: Operation, INetworkOperation {
     private(set) var currentProgress: Progress?
     private(set) var request: IRequest
     private(set) var isRunning = false
+    private(set) var isStarted = false
+    private(set) var isRequardCanceled = false
     
     let networkDispatcher = STNetworkDispatcher.sheared
     var dataRequest: NetworkTask?
+    
+    var isExpired: Bool {
+        return !self.isCancelled && !self.isRequardCanceled && !self.isFinished
+    }
+    
     
     private weak var delegate: INetworkOperationQueue?
 
@@ -109,10 +116,21 @@ class STBaseNetworkOperation<T>: Operation, INetworkOperation {
 
     override func start() {
         super.start()
-        self.resume()
+        self.isStarted = true
+        if self.isRequardCanceled {
+            self.status = .executing
+            self.cancel()
+            self.finish()
+        } else {
+            self.resume()
+        }
     }
 
     override func cancel() {
+        guard self.isStarted else {
+            self.isRequardCanceled = true
+            return
+        }
         super.cancel()
         self.status = .canceled
         self.cancelDataRequest()
@@ -121,6 +139,9 @@ class STBaseNetworkOperation<T>: Operation, INetworkOperation {
     //MARK: - Public methods
     
     func finish() {
+        guard !self.isFinished else {
+            return
+        }
         self.status = .finished
         self.success = nil
         self.failure = nil

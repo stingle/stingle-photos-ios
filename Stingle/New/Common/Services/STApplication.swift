@@ -23,8 +23,8 @@ class STApplication {
         return STFileSystem()
     }()
     
-    private(set) lazy var fileRetryer: STFileRetryer = {
-        return STFileRetryer()
+    private(set) lazy var fileRetryer: STFileRetryerManager = {
+        return STFileRetryerManager()
     }()
     
     

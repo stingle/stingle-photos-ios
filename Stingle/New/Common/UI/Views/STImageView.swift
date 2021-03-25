@@ -11,14 +11,16 @@ import Kingfisher
 class STImageView: UIImageView {
     
     func setImage(_ image: Image?, placeholder: UIImage?) {
-        self.setImage(source: image, placeholder: placeholder)
+        let animator = STImageDownloadPlainAnimator()
+        self.setImage(source: image, placeholder: placeholder, animator: animator)
     }
     
     deinit {
-        print("")
+        print("deinit")
     }
 
 }
+
 
 extension STImageView {
     
@@ -33,11 +35,9 @@ extension STImageView {
         let header: STHeader
         
         init?(file: STLibrary.File, isThumb: Bool) {
-            
             guard let header = isThumb ? file.encryptsHeaders.thumb : file.encryptsHeaders.file else {
                 return nil
             }
-            
             self.fileName = file.file
             self.imageType = .file
             self.version = file.version

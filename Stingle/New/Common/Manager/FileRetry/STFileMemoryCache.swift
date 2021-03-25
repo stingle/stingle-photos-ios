@@ -7,8 +7,8 @@
 
 import Foundation
 
-extension STFileRetryer {
-    
+extension STFileRetryerManager {
+        
     class MemoryCache {
         
         func retryFile(source: IRetrySource, success: @escaping RetryerSuccess<Data>, failure: @escaping RetryerFailure) {

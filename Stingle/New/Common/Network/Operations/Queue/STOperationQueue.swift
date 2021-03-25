@@ -17,6 +17,7 @@ class ATOperationQueue: INetworkOperationQueue {
     
     let maxConcurrentOperationCount: Int
     let qualityOfService: QualityOfService
+    let queue: DispatchQueue?
     
     private lazy var operationsQueue: OperationQueue = {
         let operationQueue = OperationQueue()
@@ -25,9 +26,10 @@ class ATOperationQueue: INetworkOperationQueue {
         return operationQueue
     }()
     
-    init(maxConcurrentOperationCount: Int = 5, qualityOfService: QualityOfService = .userInitiated) {
+    init(maxConcurrentOperationCount: Int = 5, qualityOfService: QualityOfService = .userInitiated, queue: DispatchQueue? = nil) {
         self.maxConcurrentOperationCount = maxConcurrentOperationCount
         self.qualityOfService = qualityOfService
+        self.queue = queue
     }
     
     //MARK: - Public methods

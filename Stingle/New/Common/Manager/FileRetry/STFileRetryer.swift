@@ -1,222 +1,177 @@
 //
-//  STFileRetryer.swift
+//  STFileImageRetryer.swift
 //  Stingle
 //
-//  Created by Khoren Asatryan on 3/22/21.
+//  Created by Khoren Asatryan on 3/25/21.
 //
 
 import UIKit
 
-protocol IRetrySource: STDownloadRequest {
-    var fileName: String { get }
-    var version: String { get }
-    var header: STHeader { get }
-    var filePath: String { get }
+extension STFileRetryerManager {
     
-    var fileTmpUrl: URL { get }
-    var fileSaveUrl: URL { get }
-}
-
-extension IRetrySource {
-    
-    var identifier: String {
-        return "\(self.version)_\(self.filePath)_\(self.fileName)"
-    }
-    
-    var fileDownloadTmpUrl: URL? {
-        return self.fileTmpUrl
-    }
-    
-    var fileTmpUrl: URL {
-        guard var url = STApplication.shared.fileSystem.tmpURL else {
-            fatalError("tmpURL not found")
-        }
-        url.appendPathComponent(self.filePath)
-        url.appendPathComponent(self.fileName)
-        return url
-    }
-    
-    var fileSaveUrl: URL {
-        guard var url = STApplication.shared.fileSystem.cacheURL else {
-            fatalError("cacheURL not found")
-        }
-        url.appendPathComponent(self.filePath)
-        url.appendPathComponent(self.fileName)
-        return url
-    }
-    
-}
-
-class STFileRetryer {
-    
-    private let diskCache = DiskCache()
-    private let memoryCache = MemoryCache()
-    private var listeners = [String: Set<Result>]()
-    private let operationManager = STOperationManager.shared
-    private var dispatchQueue = DispatchQueue(label: "STFileRetryer.queue")
-    
-    lazy var operationQueue: ATOperationQueue = {
-        let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 10, qualityOfService: .userInitiated)
-        return queue
-    }()
-    
-    @discardableResult
-    func retryImage(source: IRetrySource, success: RetryerSuccess<UIImage>?, progress: RetryerProgress?, failure: RetryerFailure?) -> String {
-        let result = self.addListener(source: source, success: success, progress: progress, failure: failure)
-        self.downloadImage(source: source)
-        return result.listener
-    }
-    
-    //MARK: - Private
-    
-    private func addListener<T>(source: IRetrySource, success: RetryerSuccess<T>?, progress: RetryerProgress?, failure: RetryerFailure?) -> Result {
-        let result = Result(success: success, progress: progress, failure: failure)
-        self.dispatchQueue.sync { [weak self] in
-            if self?.listeners[source.identifier] != nil {
-                self?.listeners[source.identifier]?.insert(result)
-            } else {
-                var listener = Set<Result>()
-                listener.insert(result)
-                self?.listeners[source.identifier] = listener
-            }
-        }
-        return result
-    }
-    
-    private func downloadImage(source: IRetrySource) {
-
-        guard !self.operationQueue.allOperations().contains(where: { ($0 as? RetryOperation)?.identifier == source.identifier}) else {
-            return
+    class Retryer<T: IDiskCacheObject> {
+        
+        typealias Operation = RetryOperation<T>
+        
+        private var listeners = [String: Set<Result<T>>]()
+        private let operationManager = STOperationManager.shared
+        private let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)
+        private let mainQueue = DispatchQueue.main
+        
+        lazy var operationQueue: ATOperationQueue = {
+            let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 50, queue: self.dispatchQueue)
+            return queue
+        }()
+        
+        @discardableResult
+        func retry(source: IRetrySource, success: RetryerSuccess<T>?, progress: RetryerProgress?, failure: RetryerFailure?) -> String {
+            let result = Result<T>(success: success, progress: progress, failure: failure)
+            self.download(source: source, result: result)
+            return result.identifier
         }
         
-        let operation = RetryOperation(request: source, memoryCache: self.memoryCache, diskCache: self.diskCache) { [weak self] (image) in
-            self?.didDownloadImage(source: source, image: image)
-        } progress: { [weak self] (progress) in
-            self?.didProgressFile(source: source, progress: progress)
-        } failure: { [weak self] (error) in
-            self?.didFailureFile(source: source, error: error)
-        }
-        
-        self.operationManager.run(operation: operation, in: self.operationQueue)
-    }
-    
-    private func didDownloadImage(source: IRetrySource, image: UIImage) {
-        self.listeners[source.identifier]?.forEach({ (result) in
-            result.success(value: image)
-        })
-        self.dispatchQueue.sync { [weak self] in
-            self?.listeners[source.identifier] = nil
-        }
-    }
-    
-    private func didProgressFile(source: IRetrySource, progress: Progress) {
-        self.listeners[source.identifier]?.forEach({ (result) in
-            result.progress(progress: progress)
-        })
-    }
-    
-    private func didFailureFile(source: IRetrySource, error: IError) {
-        self.listeners[source.identifier]?.forEach({ (result) in
-            result.failure(error: error)
-        })
-        self.dispatchQueue.sync { [weak self] in
-            self?.listeners[source.identifier] = nil
-        }
-    }
-    
-}
-
-private extension IRetrySource {
-    
-    static private var fileSystem: STFileSystem {
-        return STApplication.shared.fileSystem
-    }
-    
-    func fileDirection() throws -> URL {
-        guard let path = Self.fileSystem.privateURL else {
-            throw STFileRetryer.RetryerError.appInvalidData
-        }
-        return path.appendingPathComponent(self.fileName)
-    }
-    
-    func removeOldVersions() throws {
-        let direction = try self.fileDirection()
-        let subDirectories = Self.fileSystem.subDirectories(atPath: direction.absoluteString)
-    }
-    
-}
-
-extension STFileRetryer {
-    
-    typealias RetryerSuccess<T> = (_ result: T) -> Void
-    typealias RetryerProgress = (_ progress: Progress) -> Void
-    typealias RetryerFailure = (_ error: IError) -> Void
-    
-    enum RetryerError: IError {
-        case appInvalidData
-        case fileNotFound
-        case invalidData
-        case unknown
-        
-        case error(error: Error)
-        
-        var message: String {
-            switch self {
-            case .appInvalidData:
-                return "error_data_not_found".localized
-            case .fileNotFound:
-                return "error_data_not_found".localized
-            case .invalidData:
-                return "error_data_not_found".localized
-            case .unknown:
-                return "error_unknown_error".localized
-            case .error(let error):
-                if let error = error as? IError {
-                    return error.message
-                }
-                return "error_data_not_found".localized
-            }
-        }
-    }
-        
-    class Result: Hashable {
+        func cancel(operation identifier: String, forceCancel: Bool = false) {
+            print("downloaddownload start cancel", identifier)
+            self.dispatchQueue.sync { [weak self] in
+                if let resultID = self?.getrResultIDIndex(resultIdentifier: identifier) {
+                    self?.listeners[resultID.operationIdentifier]?.remove(resultID.result)
+                    if (self?.listeners[resultID.operationIdentifier] ?? []).isEmpty {
+                        self?.listeners[resultID.operationIdentifier] = nil
+                        let operation = self?.operationQueue.allOperations().first(where: { ($0 as? RetryOperation<T>)?.identifier == resultID.operationIdentifier }) as? RetryOperation<T>
+                        var progress: Float = 0
+                        if let downloadProgress = operation?.downloadProgress {
+                            let total: Float = downloadProgress.totalUnitCount == 0 ? 1 : Float(downloadProgress.totalUnitCount)
+                            let completed = Float(downloadProgress.completedUnitCount)
+                            progress = completed / total
+                        }
                         
-        fileprivate var listener: String
-        private var success: RetryerSuccess<Any>?
-        private var progress: RetryerProgress?
-        private var failure: RetryerFailure?
-        
-        init<T>(success: RetryerSuccess<T>?, progress: RetryerProgress?, failure: RetryerFailure?) {
-            self.listener = UUID().uuidString
-            self.success = success as? STFileRetryer.RetryerSuccess<Any>
-            self.failure = failure
-            self.progress = progress
+                        if forceCancel || progress < 0.2 {
+//                            operation?.cancel()
+                            
+                            print("downloaddownload cancel", identifier)
+                        }
+                    }
+                }
+            }
         }
         
-        var hashValue: Int {
-            return self.listener.hashValue
+        //MARK: - Private methods
+        
+        func getrResultIDIndex(resultIdentifier: String) -> (operationIdentifier: String, result: Result<T>)? {
+            for keyValue in self.listeners {
+                if let result = keyValue.value.first(where: { $0.identifier == resultIdentifier }) {
+                    return (keyValue.key, result)
+                }
+            }
+            return nil
         }
         
-        func hash(into hasher: inout Hasher) {
-            return self.listener.hash(into: &hasher)
+        //MARK: - Internal methods
+        
+        internal func addListener(source: IRetrySource, success: RetryerSuccess<T>?, progress: RetryerProgress?, failure: RetryerFailure?) -> Result<T> {
+            let result = Result<T>(success: success, progress: progress, failure: failure)
+            self.dispatchQueue.sync { [weak self] in
+                if self?.listeners[source.identifier] != nil {
+                    self?.listeners[source.identifier]?.insert(result)
+                } else {
+                    var listener = Set<Result<T>>()
+                    listener.insert(result)
+                    self?.listeners[source.identifier] = listener
+                }
+            }
+            return result
         }
         
-        static func == (lhs: STFileRetryer.Result, rhs: STFileRetryer.Result) -> Bool {
-            return lhs.listener == rhs.listener
+        internal func createOperation(for source: IRetrySource) -> RetryOperation<T> {
+            fatalError("method not implemented")
         }
         
-        func success(value: Any) {
-            self.success?(value)
-        }
-        
-        func progress(progress: Progress) {
-            self.progress?(progress)
-        }
-        
-        func failure(error: IError) {
-            self.failure?(error)
-        }
+        internal func download(source: IRetrySource, result: Result<T>) {
+            
+            self.dispatchQueue.sync { [weak self] in
                 
-    }
+                print("downloaddownload start", result.identifier)
+                
+                guard let weakSelf = self else {
+                    return
+                }
+                if weakSelf.listeners[source.identifier] != nil {
+                    weakSelf.listeners[source.identifier]?.insert(result)
+                } else {
+                    var listener = Set<Result<T>>()
+                    listener.insert(result)
+                    weakSelf.listeners[source.identifier] = listener
+                }
+                let operation = self?.operationQueue.allOperations().first(where: { ($0 as? Operation)?.identifier == source.identifier } ) as? Operation
+                
+                if operation == nil || operation?.isExpired ?? true {
+                    let operation = weakSelf.createOperation(for: source)
+                    if !operation.isFinished {
+                       
+                        weakSelf.operationManager.run(operation: operation, in: weakSelf.operationQueue)
+                        
+                        print("downloaddownload run", result.identifier)
+                    }
+                }
+            }
+            
+        }
         
+        internal func didDownload(source: IRetrySource, image: T) {
+            self.mainQueue.async { [weak self] in
+                self?.listeners[source.identifier]?.forEach({ (result) in
+                    result.success(value: image)
+                })
+                self?.dispatchQueue.sync { [weak self] in
+                    self?.listeners[source.identifier] = nil
+                }
+            }
+        }
+        
+        internal func didProgressFile(source: IRetrySource, progress: Progress) {
+            self.mainQueue.async { [weak self] in
+                self?.listeners[source.identifier]?.forEach({ (result) in
+                    result.progress(progress: progress)
+                })
+            }
+        }
+        
+        internal func didFailureFile(source: IRetrySource, error: IError) {
+            self.mainQueue.async { [weak self] in
+                self?.listeners[source.identifier]?.forEach({ (result) in
+                    result.failure(error: error)
+                })
+                self?.dispatchQueue.sync { [weak self] in
+                    self?.listeners[source.identifier] = nil
+                }
+            }
+        }
+        
+        
+        
+        
+    }
+    
+}
+
+extension STFileRetryerManager {
+    
+    class ImageRetryer: Retryer<UIImage> {
+        
+        private let diskCache = DiskImageCache()
+        private let memoryCache = MemoryCache()
+        
+        override func createOperation(for source: IRetrySource) -> Operation {
+            let operation = RetryOperation(request: source, memoryCache: self.memoryCache, diskCache: self.diskCache) { [weak self] (image) in
+                self?.didDownload(source: source, image: image)
+            } progress: { [weak self] (progress) in
+                self?.didProgressFile(source: source, progress: progress)
+            } failure: { [weak self] (error) in
+                self?.didFailureFile(source: source, error: error)
+            }
+            return operation
+        }
+        
+    }
+    
 }

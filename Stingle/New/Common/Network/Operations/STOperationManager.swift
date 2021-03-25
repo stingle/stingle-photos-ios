@@ -15,8 +15,8 @@ class STOperationManager {
     
     private init() {}
     
-    func createQueue(maxConcurrentOperationCount: Int, qualityOfService: QualityOfService) -> ATOperationQueue {
-        let queue = ATOperationQueue(maxConcurrentOperationCount: maxConcurrentOperationCount, qualityOfService: qualityOfService)
+    func createQueue(maxConcurrentOperationCount: Int, qualityOfService: QualityOfService = .userInteractive, queue: DispatchQueue? = nil) -> ATOperationQueue {
+        let queue = ATOperationQueue(maxConcurrentOperationCount: maxConcurrentOperationCount, qualityOfService: qualityOfService, queue: queue)
         self.othersQueue.append(queue)
         return queue
     }

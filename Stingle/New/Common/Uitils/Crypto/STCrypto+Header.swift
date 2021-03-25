@@ -13,7 +13,7 @@ struct STHeaders {
     let thumb: STHeader?
 }
 
-struct STHeader {
+struct STHeader: Equatable {
     
     public var fileVersion: UInt8 = 0
     public var fileId: Bytes = []
@@ -39,6 +39,10 @@ struct STHeader {
         print("fileName : \(fileName ?? "noname")")
         print("videoDuration : \(videoDuration)")
         print("overallHeaderSize : \(overallHeaderSize ?? 0)")
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.fileVersion == rhs.fileVersion && lhs.fileId == rhs.fileId && lhs.headerSize == rhs.headerSize && lhs.headerVersion == rhs.headerVersion && lhs.chunkSize == rhs.chunkSize && lhs.dataSize == rhs.dataSize && lhs.symmetricKey == rhs.symmetricKey && lhs.fileType == rhs.fileType && lhs.fileName == rhs.fileName && lhs.videoDuration == rhs.videoDuration && lhs.overallHeaderSize == rhs.overallHeaderSize
     }
 }
 

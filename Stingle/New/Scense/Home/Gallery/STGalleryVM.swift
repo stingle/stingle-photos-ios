@@ -16,15 +16,19 @@ class STGalleryVM {
     init() {
         self.dataBaseDataSource = STApplication.shared.dataBase.galleryProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: #keyPath(STCDFile.day))
         
-        self.syncWorker.getUpdates { (_) in
-           print("")
-        } failure: { (error) in
-            print("")
-        }
+        self.sync()
     }
     
     func reloadData() {
         self.dataBaseDataSource.reloadData()
+    }
+    
+    func sync(end: ((_ isSuccess: Bool) -> Void)? = nil) {
+        self.syncWorker.getUpdates { (_) in
+            end?(true)
+        } failure: { (error) in
+            end?(false)
+        }
     }
     
 }
@@ -37,17 +41,12 @@ extension STGalleryVM {
     
     func object(at indexPath: IndexPath) -> STLibrary.File? {
         if let file = self.dataBaseDataSource.object(at: indexPath) {
-//            let headers = self.crypto.getHeaders(file: file)
             return file
         }
         return nil
     }
     
     func item(at indexPath: IndexPath) -> STGalleryVC.ViewItem? {
-        
-//        let indexPath = IndexPath(row: 3, section: 1)
-        
-        
         if let obj = self.object(at: indexPath) {
             let image = STImageView.Image(file: obj, isThumb: true)
             return STGalleryVC.ViewItem(image: image, name: obj.file)

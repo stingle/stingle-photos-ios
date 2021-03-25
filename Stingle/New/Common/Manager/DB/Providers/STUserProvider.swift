@@ -10,7 +10,9 @@ import CoreData
 extension STDataBase {
     
     class UserProvider: DataBaseProvider<STUser> {
-               
+        
+        fileprivate(set) var myUser: STUser? = nil
+                       
         func update(model user: STUser) {
             let context = self.container.newBackgroundContext()
             context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
@@ -24,6 +26,7 @@ extension STDataBase {
                 cdUser.update(model: user, context: context)
                 self.container.saveContext(context)
                 context.reset()
+                self.myUser = nil
             }
         }
         
@@ -49,21 +52,30 @@ extension STDataBase {
             }
         }
         
+        func updateMyUser() {
+            guard let cdUser = self.getUser(context: self.container.viewContext) else {
+                self.myUser = nil
+                return
+            }
+            do {
+                self.myUser = try STUser(model: cdUser)
+            } catch  {
+                self.myUser = nil
+            }
+        }
+        
     }
     
 }
 
+
 extension STDataBase.UserProvider {
     
     var user: STUser? {
-        guard  let cdUser = self.getUser(context: self.container.viewContext) else {
-            return nil
+        if self.myUser == nil {
+            self.updateMyUser()
         }
-        do {
-            return try STUser(model: cdUser)
-        } catch  {
-            return nil
-        }
+        return self.myUser
     }
     
 }

@@ -139,6 +139,20 @@ extension STNetworkDispatcher {
 				return error.localizedDescription
 			}
 		}
+        
+        var isCancelled: Bool {
+            switch self {
+            case .cancelled:
+                return true
+            case .error(let error):
+                if let asAFError = error.asAFError {
+                    return asAFError.isCancelled || asAFError.isExplicitlyCancelledError
+                }
+                return false
+            default:
+                return false
+            }
+        }
 	}
     
 	enum Encoding {

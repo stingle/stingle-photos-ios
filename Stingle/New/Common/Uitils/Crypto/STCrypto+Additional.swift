@@ -5,13 +5,15 @@
 //  Created by Khoren Asatryan on 3/20/21.
 //
 
-import UIKit
+import Sodium
 
 extension STCrypto {
-    
+        
     func decryptData(data: Data, header: STHeader?) throws -> Data {
+        
         let output = OutputStream(toMemory: ())
         let input = InputStream(data: data)
+                
         
         defer {
             input.close()

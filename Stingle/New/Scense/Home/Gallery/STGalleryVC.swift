@@ -14,16 +14,14 @@ class STGalleryVC: UIViewController {
     private var viewModel = STGalleryVM()
     private var dataSourceReference: UICollectionViewDiffableDataSourceReference!
     
+    private let refreshControl = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        KingfisherManager.shared.cache.clearMemoryCache()
-        KingfisherManager.shared.cache.clearDiskCache()
-        KingfisherManager.shared.cache.cleanExpiredDiskCache()
-        
-        
         self.configureCollectionView()
         self.viewModel.reloadData()
+        self.configureRefreshControl()
+//        self.perform(#selector(ff), with: nil, afterDelay: 5)
     }
     
     private func configureCollectionView() {
@@ -32,6 +30,19 @@ class STGalleryVC: UIViewController {
         self.configureLayout()
         self.createDataBaseDataSounrs()
         self.createDataSourceReference()
+    }
+    
+    private func configureRefreshControl() {
+        self.refreshControl.addTarget(self, action: #selector(self.refreshControl(didRefresh:)), for: .valueChanged)
+        self.collectionView.addSubview(self.refreshControl)
+    }
+    
+    //MARK: - User action
+    
+    @objc func refreshControl(didRefresh refreshControl: UIRefreshControl) {
+        self.viewModel.sync { [weak self] (_) in
+            self?.refreshControl.endRefreshing()
+        }
     }
 
     //MARK: - DataSource
@@ -87,7 +98,6 @@ class STGalleryVC: UIViewController {
     //MARK: - DataSourceReference
     
     private func createDataSourceReference()  {
-        
         self.dataSourceReference = UICollectionViewDiffableDataSourceReference(collectionView: self.collectionView, cellProvider: { [weak self] (collectionView, indexPath, data) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "STGalleryCollectionViewCellID", for: indexPath)
             let item = self?.viewModel.item(at: indexPath)
