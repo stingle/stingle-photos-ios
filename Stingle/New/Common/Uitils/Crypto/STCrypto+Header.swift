@@ -89,27 +89,42 @@ extension STCrypto {
     }
     
     @discardableResult
-    func decryptData(input: InputStream, header: STHeader?, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
-        guard let header = header, (1...self.bufSize).contains(Int(header.chunkSize)) else {
+    func decryptData(input: InputStream, header: STHeader, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
+
+        
+        
+        guard header.chunkSize >= 1 && header.chunkSize < Constants.MAX_BUFFER_LENGTH else {
             throw CryptoError.Header.incorrectChunkSize
         }
         var chunkNumber:UInt64 = 1
         let dataReadSize:Int = Int(header.chunkSize) + self.sodium.aead.xchacha20poly1305ietf.ABytes + self.sodium.aead.xchacha20poly1305ietf.NonceBytes
+        
         var buf:Bytes = Bytes(repeating: 0, count: dataReadSize)
         var numRead = 0
         var diff:Int = 0
+        
         repeat {
             numRead = input.read(&buf, maxLength: buf.count)
             diff = dataReadSize - numRead
             if diff > 0 {
-                buf = buf.dropLast(diff)
+                buf = copyMemoryStartingAtIndex(from: buf, startIndexAtPointer: numRead)
             }
             let  decryptedData = try self.decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header)
             assert(header.chunkSize == decryptedData.count || (diff != 0))
             completionHandler(decryptedData)
             chunkNumber += UInt64(1)
         } while (diff == 0)
+        
         return true
+    }
+    
+    func copyMemoryStartingAtIndex<T>(from array: [T], startIndexAtPointer toIndex: Int) -> [T] {
+        let arrayPointer = array.withUnsafeBufferPointer({ $0.baseAddress })//UnsafePointer<T>.init(array)
+        let resultMemry = UnsafeMutablePointer<T>.allocate(capacity: toIndex)
+        memcpy(resultMemry, arrayPointer, toIndex)
+        let arrary = Array(UnsafeBufferPointer(start: resultMemry, count: toIndex))
+        resultMemry.deallocate()
+        return arrary
     }
     
     private func decryptChunk(chunkData: Bytes, chunkNumber: UInt64, header: STHeader) throws -> Bytes {

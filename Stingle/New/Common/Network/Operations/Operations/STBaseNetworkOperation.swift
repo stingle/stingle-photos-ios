@@ -43,7 +43,7 @@ class STBaseNetworkOperation<T>: Operation, INetworkOperation {
     var dataRequest: NetworkTask?
     
     var isExpired: Bool {
-        return !self.isCancelled && !self.isRequardCanceled && !self.isFinished
+        return self.isCancelled || self.isRequardCanceled || self.isFinished
     }
     
     

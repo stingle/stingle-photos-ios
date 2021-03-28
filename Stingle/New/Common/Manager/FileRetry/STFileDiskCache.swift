@@ -11,6 +11,16 @@ protocol IDiskCacheObject: AnyObject {
     var diskCacheCost: Int? { get }
 }
 
+extension IDiskCacheObject {
+    var diskCacheCost: Int? {
+        return nil
+    }
+}
+
+//protocol IDiskCacheObject: AnyObject {
+//    var diskCacheCost: Int? { get }
+//}
+
 extension STFileRetryerManager {
     
     class DiskCache<T: IDiskCacheObject> {
@@ -44,7 +54,7 @@ extension STFileRetryerManager {
         
         func object(for identifier: String) -> T? {
             let result = self.storage.object(forKey: identifier as NSString)
-            return self.storage.object(forKey: identifier as NSString)
+            return result
         }
         
         func createObject(from data: Data, source: IRetrySource) throws -> T {
@@ -57,7 +67,7 @@ extension STFileRetryerManager {
         
         private let storage = NSCache<NSString, UIImage>()
         
-        override func createObject(from data: Data, source: IRetrySource) throws -> UIImage {
+        override func createObject(from data: Data, source: IRetrySource) throws -> UIImage {            
             let decryptData = try STApplication.shared.crypto.decryptData(data: data, header: source.header)
             guard let image = UIImage(data: decryptData) else {
                 throw RetryerError.invalidData
@@ -70,7 +80,7 @@ extension STFileRetryerManager {
 }
 
 extension UIImage: IDiskCacheObject {
-    
+
     var diskCacheCost: Int? {
         let pixel = Int(self.size.width * self.size.height * self.scale * self.scale)
         guard let cgImage = self.cgImage else {
@@ -79,6 +89,6 @@ extension UIImage: IDiskCacheObject {
         return pixel * cgImage.bitsPerPixel / 8
     }
 
-    
+
 }
 

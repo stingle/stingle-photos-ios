@@ -100,6 +100,7 @@ extension STFileRetryerManager {
             self.success = success
             self.failure = failure
             self.progress = progress
+            
         }
         
         init(success: RetryerSuccess<T>?, progress: RetryerProgress?, failure: RetryerFailure?, identifier: String) {

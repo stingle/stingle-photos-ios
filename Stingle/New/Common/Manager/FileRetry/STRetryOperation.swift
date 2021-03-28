@@ -36,7 +36,7 @@ extension STFileRetryerManager {
             self.memoryCache = memoryCache
             self.diskCache = diskCache
             super.init(request: request, success: nil, progress: nil, failure: nil)
-            self.startOperation(sendRequest: false)
+           
         }
         
         override func startRequest() {
@@ -66,6 +66,10 @@ extension STFileRetryerManager {
             self.retryerProgress(result)
         }
         
+        func localWork() {
+            self.startOperation(sendRequest: false)
+        }
+                
         //MARK: - private
         
         private func responseEndSucces(result: Any) {
@@ -73,12 +77,12 @@ extension STFileRetryerManager {
                 try self.memoryCache.didDownload(source: self.retrySource)
                 try self.diskCache.didAddedMemry(source: self.retrySource)
                 
-                guard let image = self.diskCache.object(for: self.retrySource.identifier) else {
-                    self.responseFailed(error: RetryerError.unknown)
-                    return
+                self.diskCache.retryFile(source: self.retrySource) { [weak self] (result) in
+                    self?.responseSucces(image: result)
+                } failure: { [weak self] (error) in
+                    self?.responseFailed(error: error)
                 }
-                self.retryerSuccess(image)
-                super.responseSucces(result: result)
+                
             } catch {
                 let error = RetryerError.error(error: error)
                 self.responseFailed(error: error)

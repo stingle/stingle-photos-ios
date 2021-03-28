@@ -14,7 +14,6 @@ extension STCrypto {
         let output = OutputStream(toMemory: ())
         let input = InputStream(data: data)
                 
-        
         defer {
             input.close()
             output.close()
@@ -22,11 +21,10 @@ extension STCrypto {
         
         input.open()
         var result: Data?
-                
+        
         try self.decryptFile(input: input, output: output, header: header) { (bytes) in
             result = Data(bytes ?? [])
         }
-        
         
         guard let resultData = result else {
             throw CryptoError.General.unknown

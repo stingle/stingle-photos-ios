@@ -17,6 +17,7 @@ protocol IImageViewDownloadAnimator {
 extension UIImageView {
     
     private static var retryerIdentifier: String = "retryerIdentifier"
+    private static var sourceIdentifier: String = "sourceIdentifier"
     
     typealias ISuccess = (_ result: UIImage) -> Void
     typealias IProgress = (_ progress: Progress) -> Void
@@ -29,20 +30,33 @@ extension UIImageView {
             objc_setAssociatedObject(self, &Self.retryerIdentifier, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         }
     }
+    
+    private(set) var source: IRetrySource? {
+        get {
+            return (objc_getAssociatedObject(self, &Self.sourceIdentifier) as? IRetrySource)
+        } set {
+            objc_setAssociatedObject(self, &Self.sourceIdentifier, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+    }
         
     func setImage(source: IRetrySource?, placeholder: UIImage? = nil, animator: IImageViewDownloadAnimator? = nil, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
+        
+        if let retryerIdentifier = self.retryerIdentifier {
+            STApplication.shared.fileRetryer.imageRetryer.cancel(operation: retryerIdentifier)
+        }
+                
         if let source = source {
-            if let retryerIdentifier = self.retryerIdentifier {
-                STApplication.shared.fileRetryer.imageRetryer.cancel(operation: retryerIdentifier)
-            }
+            self.source = source
             self.image = placeholder
             animator?.imageView(startAnimation: self)
             self.retryerIdentifier = STApplication.shared.fileRetryer.imageRetryer.retry(source: source) { [weak self] (image) in
+                self?.source = nil
                 self?.retrySuccess(image: image, animator: animator, success: success)
             } progress: { [weak self] (progress) in
                 self?.retryProgress(progressRetry: progress, animator: animator)
             } failure: { [weak self] (error) in
                 self?.retryFailure(error: error, animator: animator)
+                self?.source = nil
             }
         } else {
             self.image = placeholder
@@ -53,24 +67,30 @@ extension UIImageView {
     //MARK: - Private
     
     private func retrySuccess(image: UIImage, animator: IImageViewDownloadAnimator?, success: ISuccess? = nil) {
-        animator?.imageView(endAnimation: self)
-        self.image = image
-        success?(image)
+        DispatchQueue.main.async {
+            animator?.imageView(endAnimation: self)
+            self.image = image
+        }
+
     }
     
     private func retryProgress(progressRetry: Progress, animator: IImageViewDownloadAnimator?, progress: IProgress? = nil) {
-        let totalUnitCount = Float(progressRetry.totalUnitCount)
-        let completedUnitCount = Float(progressRetry.completedUnitCount)
-        animator?.imageView(progressAnimation: (totalUnitCount,completedUnitCount), imageView: self)
-        progress?(progressRetry)
+        DispatchQueue.main.async {
+            let totalUnitCount = Float(progressRetry.totalUnitCount)
+            let completedUnitCount = Float(progressRetry.completedUnitCount)
+            animator?.imageView(progressAnimation: (totalUnitCount,completedUnitCount), imageView: self)
+            progress?(progressRetry)
+        }
     }
     
     private func retryFailure(error: IError, animator: IImageViewDownloadAnimator?, failure: IFailure? = nil) {
         guard !error.isCancelled else {
             return
         }
-        animator?.imageView(failEndAnimation: self)
-        failure?(error)
+        DispatchQueue.main.async {
+            animator?.imageView(failEndAnimation: self)
+            failure?(error)
+        }
     }
         
 }
