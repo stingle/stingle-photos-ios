@@ -15,7 +15,9 @@ extension STFileRetryerManager {
         
         private var listeners = [Operation: Set<Result<T>>]()
         private let operationManager = STOperationManager.shared
-        private let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)
+        private let dispatchQueue = DispatchQueue.main
+        
+//        (label: "Retryer.queue.\(T.self)", attributes: .concurrent)
         
         lazy var operationQueue: ATOperationQueue = {
             let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 30, queue: self.dispatchQueue)
@@ -30,7 +32,7 @@ extension STFileRetryerManager {
         }
         
         func cancel(operation identifier: String, forceCancel: Bool = false) {
-            self.dispatchQueue.sync { [weak self] in
+            self.dispatchQueue.async { [weak self] in
                 self?.cancelQueue(operation: identifier, forceCancel: forceCancel)
             }
         }
@@ -66,7 +68,7 @@ extension STFileRetryerManager {
         }
         
         private func downloadWithQueue(source: IRetrySource, result: Result<T>) {
-            self.dispatchQueue.sync { [weak self] in
+            self.dispatchQueue.async { [weak self] in
                 self?.download(source: source, result: result)
             }
         }
@@ -100,7 +102,9 @@ extension STFileRetryerManager {
             self.listeners[operation]?.forEach({ (result) in
                 result.success(value: obj)
             })
-            self.listeners[operation] = nil
+            self.listeners.removeValue(forKey: operation)
+            
+//            [operation] = nil
         }
         
         internal func didFailureFileQueue(source: IRetrySource, error: IError, operation: Operation) {
@@ -117,19 +121,19 @@ extension STFileRetryerManager {
         }
         
         internal func didDownload(source: IRetrySource, obj: T, operation: Operation) {
-            self.dispatchQueue.sync { [weak self] in
+            self.dispatchQueue.async { [weak self] in
                 self?.didDownloadQueue(source: source, obj: obj, operation: operation)
             }
         }
         
         internal func didProgressFile(source: IRetrySource, progress: Progress, operation: Operation) {
-            self.dispatchQueue.sync { [weak self] in
+            self.dispatchQueue.async { [weak self] in
                 self?.didProgressFileQueue(source: source, progress: progress, operation: operation)
             }
         }
         
         internal func didFailureFile(source: IRetrySource, error: IError, operation: Operation) {
-            self.dispatchQueue.sync { [weak self] in
+            self.dispatchQueue.async { [weak self] in
                 self?.didFailureFileQueue(source: source, error: error, operation: operation)
             }
         }
