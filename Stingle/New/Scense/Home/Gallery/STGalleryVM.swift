@@ -59,7 +59,11 @@ extension STGalleryVM {
     func item(at indexPath: IndexPath) -> STGalleryVC.ViewItem? {
         if let obj = self.object(at: indexPath) {
             let image = STImageView.Image(file: obj, isThumb: true)
-            return STGalleryVC.ViewItem(image: image, name: obj.file)
+            var videoDurationStr: String? = nil
+            if let duration = obj.encryptsHeaders.file?.videoDuration, duration > 0 {
+                videoDurationStr = TimeInterval(duration).toString()
+            }
+            return STGalleryVC.ViewItem(image: image, name: obj.file, videoDuration: videoDurationStr)
         }
         return nil
     }
@@ -71,6 +75,7 @@ extension STGalleryVC {
     struct ViewItem {
         let image: STImageView.Image?
         let name: String?
+        let videoDuration: String?
     }
     
 }

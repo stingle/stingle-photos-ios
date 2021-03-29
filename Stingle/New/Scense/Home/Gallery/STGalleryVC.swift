@@ -11,8 +11,11 @@ import Kingfisher
 class STGalleryVC: UIViewController {
     
     @IBOutlet weak private var collectionView: UICollectionView!
+   
     private var viewModel = STGalleryVM()
+    private weak var syncHeaderView: STHomeSyncCollectionReusableView?
     private var dataSourceReference: UICollectionViewDiffableDataSourceReference!
+    private let globalHeaderViewKind = "globalHeaderViewKind"
     
     private let refreshControl = UIRefreshControl()
     
@@ -27,6 +30,7 @@ class STGalleryVC: UIViewController {
     private func configureCollectionView() {
         self.collectionView.registrCell(nibName: "STGalleryCollectionViewCell", identifier: "STGalleryCollectionViewCellID")
         self.collectionView.registerHeader(nibName: "STGaleryHeaderView", identifier: "STGaleryHeaderViewID")
+        self.collectionView.registerHeader(nibName: "STHomeSyncCollectionReusableView", kind: self.globalHeaderViewKind)
         self.configureLayout()
         self.createDataBaseDataSounrs()
         self.createDataSourceReference()
@@ -45,6 +49,7 @@ class STGalleryVC: UIViewController {
     //MARK: - User action
     
     @objc func refreshControl(didRefresh refreshControl: UIRefreshControl) {
+        self.syncHeaderView?.configure(state: .refreshing)
         self.viewModel.sync { [weak self] (_) in
             self?.refreshControl.endRefreshing()
         }
@@ -60,9 +65,17 @@ class STGalleryVC: UIViewController {
         
     @discardableResult
     private func configureLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let configuration = UICollectionViewCompositionalLayoutConfiguration()
+        let globalHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(44))
+        let globalHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: globalHeaderSize, elementKind: self.globalHeaderViewKind, alignment: .top)
+        globalHeader.zIndex = Int.max
+        globalHeader.pinToVisibleBounds = true
+        configuration.boundarySupplementaryItems = [globalHeader]
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             return self?.layoutSection(sectionIndex: sectionIndex, layoutEnvironment: layoutEnvironment)
-        }
+        }, configuration: configuration)
+        layout.register(UINib(nibName: "STHomeSyncCollectionReusableView", bundle: .main), forDecorationViewOfKind: self.globalHeaderViewKind)
+        layout.configuration.boundarySupplementaryItems = [globalHeader]
         self.collectionView.collectionViewLayout = layout
         return layout
     }
@@ -111,11 +124,26 @@ class STGalleryVC: UIViewController {
         })
         
         self.dataSourceReference.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "STGaleryHeaderViewID", for: indexPath)
-            let sectionName = self?.viewModel.sectionTitle(at: indexPath.section)
-            (header as? STGaleryHeaderView)?.configure(title: sectionName)
-            return header
+            if kind == self?.globalHeaderViewKind {
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind, for: indexPath)
+                self?.syncHeaderView = (header as? STHomeSyncCollectionReusableView)
+                return header
+            } else {
+                let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "STGaleryHeaderViewID", for: indexPath)
+                let sectionName = self?.viewModel.sectionTitle(at: indexPath.section)
+                (header as? STGaleryHeaderView)?.configure(title: sectionName)
+                return header
+            }
         }
+    }
+    
+}
+
+extension STGalleryVC: UICollectionViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let alpha: CGFloat = scrollView.contentOffset.y > 200 ? 0 : 1
+        self.syncHeaderView?.update(alpha: alpha)
     }
     
 }
@@ -128,11 +156,11 @@ extension STGalleryVC: IProviderDelegate {
     }
     
     func didEndSync(dataSource: IProviderDataSource) {
-        
+        self.syncHeaderView?.configure(state: .syncComplete)
     }
     
     func didStartSync(dataSource: IProviderDataSource) {
-        
+        self.syncHeaderView?.configure(state: .refreshing)
     }
     
 }

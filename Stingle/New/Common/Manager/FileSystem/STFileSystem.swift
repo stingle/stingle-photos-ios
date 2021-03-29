@@ -200,9 +200,12 @@ extension FileManager {
         guard let subpaths = self.subpaths(atPath: atPath) else {
             return nil
         }
-        var subDirs:[URL] = [URL]()
+        var subDirs: [URL] = [URL]()
         for item in subpaths {
-            
+            guard let url = URL(string: item) else {
+                continue
+            }
+            subDirs.append(url)
         }
         return subDirs
     }

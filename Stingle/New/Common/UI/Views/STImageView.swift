@@ -39,7 +39,6 @@ extension STImageView {
             self.version = file.version
             self.isThumb = isThumb
             let isThumbStr = self.isThumb ? "1" : "0"
-            
             self.header = header
             self.imageParameters = ["file": self.fileName, "set": "\(self.imageType.rawValue)", "is_thumb": isThumbStr]
         }

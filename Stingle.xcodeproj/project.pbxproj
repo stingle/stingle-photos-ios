@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A000F694261232FB00357953 /* STHomeSyncCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A000F692261232FB00357953 /* STHomeSyncCollectionReusableView.swift */; };
+		A000F695261232FB00357953 /* STHomeSyncCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A000F693261232FB00357953 /* STHomeSyncCollectionReusableView.xib */; };
 		A0028650260B8121004C0934 /* STRetryOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A002864F260B8121004C0934 /* STRetryOperation.swift */; };
 		A0059E6625F8B70F003ABB56 /* STDataBaseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0059E6525F8B70F003ABB56 /* STDataBaseProvider.swift */; };
 		A005FAEB25FEC1D600E7D8B0 /* STDateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A005FAEA25FEC1D600E7D8B0 /* STDateManager.swift */; };
@@ -170,6 +172,8 @@
 		78D3FBA18EBF08E7349C48DE /* Pods-Stingle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release.xcconfig"; sourceTree = "<group>"; };
 		85D06FF69A05EB1AEC50C12C /* Pods_Stingle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stingle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BD6FA0BECCC5A6C76D6C7FC /* Pods-Stingle.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-prod.xcconfig"; sourceTree = "<group>"; };
+		A000F692261232FB00357953 /* STHomeSyncCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STHomeSyncCollectionReusableView.swift; sourceTree = "<group>"; };
+		A000F693261232FB00357953 /* STHomeSyncCollectionReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STHomeSyncCollectionReusableView.xib; sourceTree = "<group>"; };
 		A002864F260B8121004C0934 /* STRetryOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STRetryOperation.swift; sourceTree = "<group>"; };
 		A0059E6525F8B70F003ABB56 /* STDataBaseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDataBaseProvider.swift; sourceTree = "<group>"; };
 		A005FAEA25FEC1D600E7D8B0 /* STDateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDateManager.swift; sourceTree = "<group>"; };
@@ -351,6 +355,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A000F690261232B800357953 /* Global */ = {
+			isa = PBXGroup;
+			children = (
+				A000F692261232FB00357953 /* STHomeSyncCollectionReusableView.swift */,
+				A000F693261232FB00357953 /* STHomeSyncCollectionReusableView.xib */,
+			);
+			path = Global;
+			sourceTree = "<group>";
+		};
+		A000F691261232C200357953 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				A005FB0025FF4F5D00E7D8B0 /* STGaleryHeaderView.swift */,
+				A005FB0125FF4F5D00E7D8B0 /* STGaleryHeaderView.xib */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
 		A005FAF225FF4C9B00E7D8B0 /* Items */ = {
 			isa = PBXGroup;
 			children = (
@@ -372,8 +394,8 @@
 		A005FAFE25FF4F0B00E7D8B0 /* Header */ = {
 			isa = PBXGroup;
 			children = (
-				A005FB0025FF4F5D00E7D8B0 /* STGaleryHeaderView.swift */,
-				A005FB0125FF4F5D00E7D8B0 /* STGaleryHeaderView.xib */,
+				A000F691261232C200357953 /* Section */,
+				A000F690261232B800357953 /* Global */,
 			);
 			path = Header;
 			sourceTree = "<group>";
@@ -1151,6 +1173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A005FB0325FF4F5D00E7D8B0 /* STGaleryHeaderView.xib in Resources */,
+				A000F695261232FB00357953 /* STHomeSyncCollectionReusableView.xib in Resources */,
 				A005FAF625FF4CBB00E7D8B0 /* STGalleryCollectionViewCell.xib in Resources */,
 				A02203EB25EEDB6300D07C98 /* LaunchScreen.storyboard in Resources */,
 				A02204A025EEDC0400D07C98 /* Home.storyboard in Resources */,
@@ -1300,6 +1323,7 @@
 				A02204A725EEDC0400D07C98 /* STSignUpVC.swift in Sources */,
 				A02204A425EEDC0400D07C98 /* HeaderPageVC.swift in Sources */,
 				A02204AB25EEDC0400D07C98 /* SignInVC.swift in Sources */,
+				A000F694261232FB00357953 /* STHomeSyncCollectionReusableView.swift in Sources */,
 				A0301DE825FD6D48005281EF /* STDBInfo.swift in Sources */,
 				A005FAEB25FEC1D600E7D8B0 /* STDateManager.swift in Sources */,
 				A0F467F625F992F400BF00AA /* STCDTrashFile.swift in Sources */,

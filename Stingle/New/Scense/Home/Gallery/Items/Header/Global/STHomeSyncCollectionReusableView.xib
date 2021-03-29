@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="U6b-Vx-4bR" customClass="STHomeSyncCollectionReusableView" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="378" height="145"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cE7-5J-SeZ" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                    <rect key="frame" x="16" y="12" width="346" height="121"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Backup/Sync complete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vb1-6c-5Hx">
+                            <rect key="frame" x="16" y="19" width="152" height="83"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                            <color key="textColor" name="STText"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_cloud_done" translatesAutoresizingMaskIntoConstraints="NO" id="FrJ-f4-jys">
+                            <rect key="frame" x="306" y="48.5" width="24" height="24"/>
+                            <color key="tintColor" name="STText"/>
+                        </imageView>
+                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="VYN-LO-mxM">
+                            <rect key="frame" x="310" y="50.5" width="20" height="20"/>
+                            <color key="color" name="STText"/>
+                        </activityIndicatorView>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="M8W-mD-BIV" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
+                            <rect key="frame" x="201.5" y="0.0" width="144.5" height="121"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="M8W-mD-BIV" secondAttribute="height" multiplier="153:128" id="pVr-4x-9yX"/>
+                            </constraints>
+                        </imageView>
+                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="9ea-fF-q31">
+                            <rect key="frame" x="0.0" y="117" width="346" height="4"/>
+                            <color key="progressTintColor" name="STPrimary"/>
+                        </progressView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemGray5Color"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="Vb1-6c-5Hx" secondAttribute="bottom" constant="19" id="1zD-8T-7Mo"/>
+                        <constraint firstItem="Vb1-6c-5Hx" firstAttribute="leading" secondItem="cE7-5J-SeZ" secondAttribute="leading" constant="16" id="8CI-Cs-dUb"/>
+                        <constraint firstItem="M8W-mD-BIV" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Vb1-6c-5Hx" secondAttribute="trailing" constant="8" id="AcZ-14-4sH"/>
+                        <constraint firstAttribute="trailing" secondItem="9ea-fF-q31" secondAttribute="trailing" id="CuA-v1-AUE"/>
+                        <constraint firstItem="9ea-fF-q31" firstAttribute="leading" secondItem="cE7-5J-SeZ" secondAttribute="leading" id="EYK-76-yNv"/>
+                        <constraint firstAttribute="trailing" secondItem="VYN-LO-mxM" secondAttribute="trailing" constant="16" id="Jxh-oj-YPQ"/>
+                        <constraint firstAttribute="bottom" secondItem="M8W-mD-BIV" secondAttribute="bottom" id="MS8-oS-m6M"/>
+                        <constraint firstItem="M8W-mD-BIV" firstAttribute="top" secondItem="cE7-5J-SeZ" secondAttribute="top" id="UtA-LP-PQk"/>
+                        <constraint firstAttribute="trailing" secondItem="FrJ-f4-jys" secondAttribute="trailing" constant="16" id="X7k-bs-KFB"/>
+                        <constraint firstItem="Vb1-6c-5Hx" firstAttribute="top" secondItem="cE7-5J-SeZ" secondAttribute="top" constant="19" id="brz-mW-ebh"/>
+                        <constraint firstItem="VYN-LO-mxM" firstAttribute="centerY" secondItem="cE7-5J-SeZ" secondAttribute="centerY" id="cDY-Db-QEg"/>
+                        <constraint firstAttribute="trailing" secondItem="M8W-mD-BIV" secondAttribute="trailing" id="cJf-qa-Wmn"/>
+                        <constraint firstAttribute="bottom" secondItem="9ea-fF-q31" secondAttribute="bottom" id="eVB-Qf-6Ye"/>
+                        <constraint firstItem="FrJ-f4-jys" firstAttribute="centerY" secondItem="cE7-5J-SeZ" secondAttribute="centerY" id="hIZ-aK-9fy"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                            <color key="value" name="STPlaceholder"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="2"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="cE7-5J-SeZ" secondAttribute="trailing" constant="16" id="ALN-dX-RJj"/>
+                <constraint firstItem="cE7-5J-SeZ" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" constant="12" id="CDm-LQ-z2p"/>
+                <constraint firstAttribute="bottom" secondItem="cE7-5J-SeZ" secondAttribute="bottom" constant="12" id="nek-tb-s7z"/>
+                <constraint firstItem="cE7-5J-SeZ" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" constant="16" id="x4f-ld-cxf"/>
+            </constraints>
+            <connections>
+                <outlet property="activityIndicatorView" destination="VYN-LO-mxM" id="5gH-jk-fYS"/>
+                <outlet property="backgroundView" destination="cE7-5J-SeZ" id="YjC-2l-dKe"/>
+                <outlet property="iconImageView" destination="FrJ-f4-jys" id="zZR-ne-8Ya"/>
+                <outlet property="imageView" destination="M8W-mD-BIV" id="V4m-Hz-x93"/>
+                <outlet property="progressView" destination="9ea-fF-q31" id="ZSt-sk-PNp"/>
+                <outlet property="titleLabel" destination="Vb1-6c-5Hx" id="9iW-B4-TkA"/>
+            </connections>
+            <point key="canvasLocation" x="140.57971014492756" y="109.48660714285714"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <image name="ic_cloud_done" width="24" height="24"/>
+        <namedColor name="STPlaceholder">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.15999999642372131" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPrimary">
+            <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

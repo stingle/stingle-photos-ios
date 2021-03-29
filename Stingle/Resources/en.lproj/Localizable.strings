@@ -44,8 +44,13 @@
 "backup_my_keys" = "Backup my keys";
 "info" = "Info";
 "gallery" = "Gallery";
-
 "forgot_password?" = "Forgot  password?";
+
+//MARK: - Sync
+
+"sync_backup_complete" = "Backup/Sync complete";
+"sync_uploading_file_of_out" = "Uploading file %@ of out %@";
+"sync_refreshing" = "Refreshing";
 
 //MARK: - Error
 
