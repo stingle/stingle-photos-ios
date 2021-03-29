@@ -16,16 +16,34 @@
                 <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uxX-i2-5Vu" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dkn-Fh-O5a" customClass="STView" customModule="Stingle" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
-                    </imageView>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uxX-i2-5Vu" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.16" colorSpace="calibratedRGB"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="uxX-i2-5Vu" secondAttribute="bottom" id="7cF-rf-vp5"/>
+                            <constraint firstItem="uxX-i2-5Vu" firstAttribute="leading" secondItem="Dkn-Fh-O5a" secondAttribute="leading" id="ExH-T1-gIP"/>
+                            <constraint firstAttribute="trailing" secondItem="uxX-i2-5Vu" secondAttribute="trailing" id="aGi-UQ-bZi"/>
+                            <constraint firstItem="uxX-i2-5Vu" firstAttribute="top" secondItem="Dkn-Fh-O5a" secondAttribute="top" id="mT6-6j-Xej"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="uxX-i2-5Vu" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="X05-9g-tMv"/>
-                <constraint firstAttribute="bottom" secondItem="uxX-i2-5Vu" secondAttribute="bottom" id="dQN-Ci-Ism"/>
-                <constraint firstAttribute="trailing" secondItem="uxX-i2-5Vu" secondAttribute="trailing" id="gLD-Qr-wBF"/>
-                <constraint firstItem="uxX-i2-5Vu" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="lmz-ft-6wB"/>
+                <constraint firstAttribute="bottom" secondItem="Dkn-Fh-O5a" secondAttribute="bottom" id="3wQ-Ju-INp"/>
+                <constraint firstAttribute="trailing" secondItem="Dkn-Fh-O5a" secondAttribute="trailing" id="wfC-E2-MoV"/>
+                <constraint firstItem="Dkn-Fh-O5a" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="xhZ-W0-6y8"/>
+                <constraint firstItem="Dkn-Fh-O5a" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="zru-cP-toy"/>
             </constraints>
             <size key="customSize" width="263" height="158"/>
             <connections>

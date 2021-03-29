@@ -190,10 +190,10 @@ private class STGradientLayer: CALayer {
         self.layer.removeAllAnimations()
     }
     
-    func addFadeAnimation() {
-        let fromValue: CGFloat = 0.5
-        let toValue: CGFloat = 1
-        let byValue: CGFloat = Bool.random() ? fromValue : toValue
+    func addFadeAnimation(fromValue: CGFloat = 0.5, toValue: CGFloat = 1, byValue: CGFloat? = nil) {
+        let fromValue: CGFloat = fromValue
+        let toValue: CGFloat = toValue
+        let byValue: CGFloat = byValue ?? (Bool.random() ? fromValue : toValue)
         self.addAlphaAnimation(fromValue: fromValue, byValue: byValue, toValue: toValue, duration: 1)
     }
     
@@ -205,10 +205,9 @@ private class STGradientLayer: CALayer {
     
     private func drawGradient(context: CGContext, rect: CGRect)  {
         let colors = self.cgColor()
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
         let colorLocations = self.gradientColorLocations()
         let cfArrayColors = (colors as CFArray)
-        let gradient = CGGradient(colorsSpace: colorSpace, colors: cfArrayColors, locations: colorLocations)
+        let gradient = CGGradient(colorsSpace: nil, colors: cfArrayColors, locations: colorLocations)
         
         if let gradient = gradient {
             let points = self.getDrawOptionsLocations(in: rect)

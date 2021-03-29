@@ -18,10 +18,10 @@ class STGalleryVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureLocalize()
         self.configureCollectionView()
         self.viewModel.reloadData()
         self.configureRefreshControl()
-//        self.perform(#selector(ff), with: nil, afterDelay: 5)
     }
     
     private func configureCollectionView() {
@@ -30,6 +30,11 @@ class STGalleryVC: UIViewController {
         self.configureLayout()
         self.createDataBaseDataSounrs()
         self.createDataSourceReference()
+    }
+    
+    private func configureLocalize() {
+        self.navigationItem.title = "gallery".localized
+        self.navigationController?.tabBarItem.title = "gallery".localized
     }
     
     private func configureRefreshControl() {
@@ -100,7 +105,7 @@ class STGalleryVC: UIViewController {
     private func createDataSourceReference()  {
         self.dataSourceReference = UICollectionViewDiffableDataSourceReference(collectionView: self.collectionView, cellProvider: { [weak self] (collectionView, indexPath, data) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "STGalleryCollectionViewCellID", for: indexPath)
-            let item = self?.viewModel.item(at: indexPath)
+            let item = self?.viewModel.item(at: indexPath) 
             (cell as? STGalleryCollectionViewCell)?.configure(viewItem: item)
             return cell
         })
@@ -111,7 +116,6 @@ class STGalleryVC: UIViewController {
             (header as? STGaleryHeaderView)?.configure(title: sectionName)
             return header
         }
-        
     }
     
 }
@@ -119,7 +123,16 @@ class STGalleryVC: UIViewController {
 extension STGalleryVC: IProviderDelegate {
     
     func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
+        self.viewModel.removeCache()
         self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true)
+    }
+    
+    func didEndSync(dataSource: IProviderDataSource) {
+        
+    }
+    
+    func didStartSync(dataSource: IProviderDataSource) {
+        
     }
     
 }

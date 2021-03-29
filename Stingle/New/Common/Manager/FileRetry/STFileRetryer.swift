@@ -7,20 +7,33 @@
 
 import UIKit
 
+
 extension STFileRetryerManager {
     
     class Retryer<T: IDiskCacheObject> {
         
         typealias Operation = RetryOperation<T>
         
-        private var listeners = [Operation: Set<Result<T>>]()
-        private let operationManager = STOperationManager.shared
-        private let dispatchQueue = DispatchQueue.main
+        private var myListeners = [Operation: Set<Result<T>>]()
+        private var listeners: [Operation: Set<Result<T>>] {
+            get {
+                return self.mutableState.around {
+                    return self.myListeners
+                }
+            } set {
+                self.mutableState.around {
+                    self.myListeners = newValue
+                }
+            }
+        }
         
-//        (label: "Retryer.queue.\(T.self)", attributes: .concurrent)
+        
+        private let operationManager = STOperationManager.shared
+        private let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)
+        fileprivate var mutableState = UnfairLock()
         
         lazy var operationQueue: ATOperationQueue = {
-            let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 30, queue: self.dispatchQueue)
+            let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 50, queue: self.dispatchQueue)
             return queue
         }()
         
@@ -32,8 +45,10 @@ extension STFileRetryerManager {
         }
         
         func cancel(operation identifier: String, forceCancel: Bool = false) {
-            self.dispatchQueue.async { [weak self] in
-                self?.cancelQueue(operation: identifier, forceCancel: forceCancel)
+            self.mutableState.around { [weak self] in
+                self?.dispatchQueue.async { [weak self] in
+                    self?.cancelQueue(operation: identifier, forceCancel: forceCancel)
+                }
             }
         }
         
@@ -86,7 +101,7 @@ extension STFileRetryerManager {
             }
         }
         
-        internal func didProgressFileQueue(source: IRetrySource, progress: Progress, operation: Operation) {
+        private func didProgressFileQueue(source: IRetrySource, progress: Progress, operation: Operation) {
             guard let operation = self.listeners.keys.first(where: { $0.identifier == source.identifier }) else {
                 return
             }
@@ -107,7 +122,7 @@ extension STFileRetryerManager {
 //            [operation] = nil
         }
         
-        internal func didFailureFileQueue(source: IRetrySource, error: IError, operation: Operation) {
+        private func didFailureFileQueue(source: IRetrySource, error: IError, operation: Operation) {
             self.listeners[operation]?.forEach({ (result) in
                 result.failure(error: error)
             })
@@ -142,7 +157,47 @@ extension STFileRetryerManager {
     
 }
 
+private protocol Lock {
+    func lock()
+    func unlock()
+}
+
+extension Lock {
+    
+    func around<T>(_ closure: () -> T) -> T {
+        lock(); defer { unlock() }
+        return closure()
+    }
+    
+    func around(_ closure: () -> Void) {
+        lock(); defer { unlock() }
+        closure()
+    }
+}
+
 extension STFileRetryerManager {
+    
+    final class UnfairLock: Lock {
+        private let unfairLock: os_unfair_lock_t
+
+        init() {
+            unfairLock = .allocate(capacity: 1)
+            unfairLock.initialize(to: os_unfair_lock())
+        }
+
+        deinit {
+            unfairLock.deinitialize(count: 1)
+            unfairLock.deallocate()
+        }
+
+        fileprivate func lock() {
+            os_unfair_lock_lock(unfairLock)
+        }
+
+        fileprivate func unlock() {
+            os_unfair_lock_unlock(unfairLock)
+        }
+    }
     
     class ImageRetryer: Retryer<UIImage> {
         

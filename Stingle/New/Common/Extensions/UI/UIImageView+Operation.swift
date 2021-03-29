@@ -17,7 +17,6 @@ protocol IImageViewDownloadAnimator {
 extension UIImageView {
     
     private static var retryerIdentifier: String = "retryerIdentifier"
-    private static var sourceIdentifier: String = "sourceIdentifier"
     
     typealias ISuccess = (_ result: UIImage) -> Void
     typealias IProgress = (_ progress: Progress) -> Void
@@ -30,14 +29,6 @@ extension UIImageView {
             objc_setAssociatedObject(self, &Self.retryerIdentifier, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         }
     }
-    
-    private(set) var source: IRetrySource? {
-        get {
-            return (objc_getAssociatedObject(self, &Self.sourceIdentifier) as? IRetrySource)
-        } set {
-            objc_setAssociatedObject(self, &Self.sourceIdentifier, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
-        }
-    }
         
     func setImage(source: IRetrySource?, placeholder: UIImage? = nil, animator: IImageViewDownloadAnimator? = nil, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
         
@@ -46,17 +37,14 @@ extension UIImageView {
         }
                 
         if let source = source {
-            self.source = source
             self.image = placeholder
             animator?.imageView(startAnimation: self)
             self.retryerIdentifier = STApplication.shared.fileRetryer.imageRetryer.retry(source: source) { [weak self] (image) in
-                self?.source = nil
                 self?.retrySuccess(image: image, animator: animator, success: success)
             } progress: { [weak self] (progress) in
                 self?.retryProgress(progressRetry: progress, animator: animator)
             } failure: { [weak self] (error) in
                 self?.retryFailure(error: error, animator: animator)
-                self?.source = nil
             }
         } else {
             self.image = placeholder
@@ -71,7 +59,6 @@ extension UIImageView {
             animator?.imageView(endAnimation: self)
             self.image = image
         }
-
     }
     
     private func retryProgress(progressRetry: Progress, animator: IImageViewDownloadAnimator?, progress: IProgress? = nil) {
@@ -117,16 +104,16 @@ class STImageDownloadPlainAnimator: IImageViewDownloadAnimator {
     
     private func addAnimation(view: UIView) {
         if let gradientView = view.viewWithTag(Self.animationViewTag) as? STGradientView {
-            gradientView.addFadeAnimation()
+            gradientView.addFadeAnimation(fromValue: 1, toValue: 0.5, byValue: 0.5)
             gradientView.isHidden = false
         } else {
             let gradientView = STGradientView(frame: view.bounds)
-            let color = UIColor.appPrimary.withAlphaComponent(0.3)
+            let color = UIColor.appPlaceholder
             gradientView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            gradientView.backgroundColor = color
-            gradientView.colors.removeAll()
+            gradientView.backgroundColor = .clear
+            gradientView.colors = [color]
             gradientView.tag = Self.animationViewTag
-            gradientView.addFadeAnimation()
+            gradientView.addFadeAnimation(fromValue: 1, toValue: 0.5, byValue: 0.5)
             view.addSubview(gradientView)
         }
     }

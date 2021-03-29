@@ -31,6 +31,7 @@ class STDataBase {
     }
     
     func sync(_ sync: STSync, finish: @escaping (IError?) -> Void) {
+        self.didStartSync()
         let context = self.container.newBackgroundContext()
         context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
         context.performAndWait {
@@ -56,6 +57,14 @@ class STDataBase {
         self.albumsProvider.finishSync()
         self.trashProvider.finishSync()
         self.contactProvider.finishSync()
+    }
+    
+    private func didStartSync() {
+        self.galleryProvider.didStartSync()
+        self.albumFilesProvider.didStartSync()
+        self.albumsProvider.didStartSync()
+        self.trashProvider.didStartSync()
+        self.contactProvider.didStartSync()
     }
     
     private func syncImportFiles(sync: STSync, in context: NSManagedObjectContext, dbInfo: STDBInfo) throws -> STDBInfo {

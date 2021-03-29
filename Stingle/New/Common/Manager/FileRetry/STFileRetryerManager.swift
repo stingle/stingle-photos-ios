@@ -28,13 +28,7 @@ extension IRetrySource {
     }
     
     var fileTmpUrl: URL {
-        guard let url = STApplication.shared.fileSystem.tmpURL else {
-            fatalError("tmpURL not found")
-        }
-        
-        var result = url.appendingPathComponent(self.filePath)
-        result = result.appendingPathComponent(self.fileName)
-        return result
+        return self.fileSaveUrl
     }
     
     var fileSaveUrl: URL {

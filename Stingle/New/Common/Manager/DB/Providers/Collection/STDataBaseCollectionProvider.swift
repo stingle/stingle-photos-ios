@@ -61,9 +61,16 @@ extension STDataBase {
             throw STDataBase.DataBaseError.dateNotFound
         }
         
+        func didStartSync() {
+            self.dataSources.forEach { (controller) in
+                controller.didStartSync()
+            }
+        }
+        
         func finishSync() {
             self.dataSources.forEach { (controller) in
                 controller.reloadData()
+                controller.didEndSync()
             }
         }
         
@@ -81,7 +88,9 @@ extension STDataBase {
 
 protocol IProviderDelegate: class {
     
+    func didStartSync(dataSource: IProviderDataSource)
     func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference)
+    func didEndSync(dataSource: IProviderDataSource)
     
 }
 
@@ -126,6 +135,14 @@ extension STDataBase {
             let resultsController = NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: self.viewContext, sectionNameKeyPath: self.sectionNameKeyPath, cacheName: Model.ManagedModel.entityName)
             resultsController.delegate = self
             return resultsController
+        }
+        
+        func didStartSync() {
+            self.delegate?.didStartSync(dataSource: self)
+        }
+        
+        func didEndSync() {
+            self.delegate?.didEndSync(dataSource: self)
         }
         
         //MARK: - NSFetchedResultsControllerDelegate

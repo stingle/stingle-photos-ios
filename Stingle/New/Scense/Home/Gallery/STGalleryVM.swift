@@ -12,10 +12,11 @@ class STGalleryVM {
     private(set) var dataBaseDataSource: STDataBase.DataSource<STLibrary.File>
     private let syncWorker = STSyncWorker()
     private let crypto = STApplication.shared.crypto
+    private let cache = NSCache<NSIndexPath, STLibrary.File>()
     
     init() {
         self.dataBaseDataSource = STApplication.shared.dataBase.galleryProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: #keyPath(STCDFile.day))
-        
+        self.cache.countLimit = 400
         self.sync()
     }
     
@@ -23,8 +24,13 @@ class STGalleryVM {
         self.dataBaseDataSource.reloadData()
     }
     
+    func removeCache() {
+        self.cache.removeAllObjects()
+    }
+    
     func sync(end: ((_ isSuccess: Bool) -> Void)? = nil) {
-        self.syncWorker.getUpdates { (_) in
+        self.syncWorker.getUpdates { [weak self] (_) in
+            self?.cache.removeAllObjects()
             end?(true)
         } failure: { (error) in
             end?(false)
@@ -40,7 +46,11 @@ extension STGalleryVM {
     }
     
     func object(at indexPath: IndexPath) -> STLibrary.File? {
+        if let file = self.cache.object(forKey: indexPath as NSIndexPath) {
+            return file
+        }
         if let file = self.dataBaseDataSource.object(at: indexPath) {
+            self.cache.setObject(file, forKey: indexPath as NSIndexPath)
             return file
         }
         return nil

@@ -25,4 +25,8 @@ extension UIColor {
         return UIColor(named: "STText") ?? UIColor.black
     }
     
+    class var appPlaceholder: UIColor {
+        return UIColor(named: "STPlaceholder") ?? UIColor.black
+    }
+    
 }

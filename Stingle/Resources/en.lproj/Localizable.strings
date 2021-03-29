@@ -33,8 +33,6 @@
 
 "backup_my_keys_description" = "When you create an account keys will be generated locally which are the main secret of your account.\n\nIf you choose to backup them they will be strongly encrypted before backup and you will be able to login from another device effortlessly.\n\nHowever you can choose not backup keys, in that case you will absolutely need to write down your backup phrase, otherwise you will NOT be able to login again in the future.";
 
-
-
 //MARK: - Common
 
 "email" = "Email";
@@ -45,6 +43,7 @@
 "advanced" = "Advanced";
 "backup_my_keys" = "Backup my keys";
 "info" = "Info";
+"gallery" = "Gallery";
 
 "forgot_password?" = "Forgot  password?";
 

@@ -22,7 +22,9 @@ extension STFileRetryerManager {
         func didDownload(source: IRetrySource) throws {
             let fromUrl = source.fileTmpUrl
             let toUrl = source.fileSaveUrl
-            try STApplication.shared.fileSystem.move(file: fromUrl, to: toUrl)
+            if toUrl != fromUrl {
+                try STApplication.shared.fileSystem.move(file: fromUrl, to: toUrl)
+            }
         }
                 
     }

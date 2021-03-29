@@ -98,11 +98,9 @@ extension STFileRetryerManager {
             self.diskCache.retryFile(source: self.retrySource) { [weak self] (image) in
                 self?.responseSucces(image: image)
             } failure: { [weak self] (error) in
-                
                 if !sendRequest {
                     return
                 }
-                
                 if let error = error as? RetryerError {
                     switch error {
                     case .fileNotFound:
@@ -142,7 +140,6 @@ extension STFileRetryerManager {
                     self?.responseFailed(error: error)
                 }
             }
-
         }
         
         private func memoryCacheDataNotFound() {

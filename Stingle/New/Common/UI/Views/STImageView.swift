@@ -14,10 +14,6 @@ class STImageView: UIImageView {
         let animator = STImageDownloadPlainAnimator()
         self.setImage(source: image, placeholder: placeholder, animator: animator)
     }
-    
-    deinit {
-        print("deinit")
-    }
 
 }
 
