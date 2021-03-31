@@ -15,5 +15,13 @@ class STTabBarVC: UITabBarController {
 
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+    
+    deinit {
+        print("deinit")
+    }
+    
 
 }

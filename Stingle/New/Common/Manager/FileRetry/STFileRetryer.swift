@@ -27,10 +27,9 @@ extension STFileRetryerManager {
             }
         }
         
-        
         private let operationManager = STOperationManager.shared
         private let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)
-        fileprivate var mutableState = UnfairLock()
+        fileprivate var mutableState = STUnfairLock()
         
         lazy var operationQueue: ATOperationQueue = {
             let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 50, queue: self.dispatchQueue)
@@ -45,10 +44,8 @@ extension STFileRetryerManager {
         }
         
         func cancel(operation identifier: String, forceCancel: Bool = false) {
-            self.mutableState.around { [weak self] in
-                self?.dispatchQueue.async { [weak self] in
-                    self?.cancelQueue(operation: identifier, forceCancel: forceCancel)
-                }
+            self.dispatchQueue.async { [weak self] in
+                self?.cancelQueue(operation: identifier, forceCancel: forceCancel)
             }
         }
         
@@ -68,6 +65,7 @@ extension STFileRetryerManager {
                 return
             }
             self.listeners[resultID.operation]?.remove(resultID.result)
+           
             if (self.listeners[resultID.operation] ?? []).isEmpty {
                 var progress: Float = 0
                 if let downloadProgress = resultID.operation.downloadProgress {
@@ -80,6 +78,7 @@ extension STFileRetryerManager {
                     resultID.operation.cancel()
                 }
             }
+            
         }
         
         private func downloadWithQueue(source: IRetrySource, result: Result<T>) {
@@ -89,7 +88,7 @@ extension STFileRetryerManager {
         }
         
         private func download(source: IRetrySource, result: Result<T>) {
-            if let operation = self.listeners.keys.first(where: { $0.identifier == source.identifier }) {
+            if let operation = self.listeners.keys.first(where: { $0.identifier == source.identifier }), !operation.isExpired {
                 self.listeners[operation]?.insert(result)
             } else {
                 let newOperation = self.createOperation(for: source)
@@ -117,9 +116,7 @@ extension STFileRetryerManager {
             self.listeners[operation]?.forEach({ (result) in
                 result.success(value: obj)
             })
-            self.listeners.removeValue(forKey: operation)
-            
-//            [operation] = nil
+            self.listeners[operation] = nil
         }
         
         private func didFailureFileQueue(source: IRetrySource, error: IError, operation: Operation) {
@@ -157,48 +154,8 @@ extension STFileRetryerManager {
     
 }
 
-private protocol Lock {
-    func lock()
-    func unlock()
-}
-
-extension Lock {
-    
-    func around<T>(_ closure: () -> T) -> T {
-        lock(); defer { unlock() }
-        return closure()
-    }
-    
-    func around(_ closure: () -> Void) {
-        lock(); defer { unlock() }
-        closure()
-    }
-}
-
 extension STFileRetryerManager {
-    
-    final class UnfairLock: Lock {
-        private let unfairLock: os_unfair_lock_t
-
-        init() {
-            unfairLock = .allocate(capacity: 1)
-            unfairLock.initialize(to: os_unfair_lock())
-        }
-
-        deinit {
-            unfairLock.deinitialize(count: 1)
-            unfairLock.deallocate()
-        }
-
-        fileprivate func lock() {
-            os_unfair_lock_lock(unfairLock)
-        }
-
-        fileprivate func unlock() {
-            os_unfair_lock_unlock(unfairLock)
-        }
-    }
-    
+        
     class ImageRetryer: Retryer<UIImage> {
         
         private let diskCache = DiskImageCache()

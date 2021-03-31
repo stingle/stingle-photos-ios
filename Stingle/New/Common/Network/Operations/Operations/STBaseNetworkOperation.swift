@@ -197,7 +197,9 @@ class STBaseNetworkOperation<T>: Operation, INetworkOperation {
     
     private func cancelDataRequest() {
         if let dataRequest = self.dataRequest {
+            
             dataRequest.cancel()
+                        
             self.dataRequest = nil
         } else {
             self.responseGetError(error: STNetworkDispatcher.NetworkError.cancelled)

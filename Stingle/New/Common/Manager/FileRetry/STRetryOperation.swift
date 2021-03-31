@@ -76,7 +76,6 @@ extension STFileRetryerManager {
             do {
                 try self.memoryCache.didDownload(source: self.retrySource)
                 try self.diskCache.didAddedMemry(source: self.retrySource)
-                
                 self.diskCache.retryFile(source: self.retrySource) { [weak self] (result) in
                     self?.responseSucces(image: result)
                 } failure: { [weak self] (error) in
@@ -86,6 +85,9 @@ extension STFileRetryerManager {
             } catch {
                 let error = RetryerError.error(error: error)
                 self.responseFailed(error: error)
+            }
+            do {
+                self.memoryCache.resetCache(source: self.retrySource)
             }
         }
         

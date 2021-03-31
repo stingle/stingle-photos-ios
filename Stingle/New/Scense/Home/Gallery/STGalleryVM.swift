@@ -10,7 +10,7 @@ import Foundation
 class STGalleryVM {
     
     private(set) var dataBaseDataSource: STDataBase.DataSource<STLibrary.File>
-    private let syncWorker = STSyncWorker()
+    private let syncManager = STApplication.shared.syncManager
     private let crypto = STApplication.shared.crypto
     private let cache = NSCache<NSIndexPath, STLibrary.File>()
     
@@ -29,7 +29,7 @@ class STGalleryVM {
     }
     
     func sync(end: ((_ isSuccess: Bool) -> Void)? = nil) {
-        self.syncWorker.getUpdates { [weak self] (_) in
+        self.syncManager.sync { [weak self] in
             self?.cache.removeAllObjects()
             end?(true)
         } failure: { (error) in

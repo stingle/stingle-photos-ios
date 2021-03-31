@@ -12,9 +12,10 @@ class STFileSystem {
     private let fileManager = FileManager.default
     private var myStoragePath: URL?
     private var myCachePath: URL?
-    
     lazy var tmpURL = self.createTmpPath()
     lazy var privateURL = self.createPrivatePath()
+    
+    private var cacheFolderDataSize: STBytesUnits? = nil
 
     var storageURl: URL? {
         if let myStoragePath = self.myStoragePath {
@@ -46,6 +47,46 @@ class STFileSystem {
         toPath = toPath.deletingLastPathComponent()
         try self.fileManager.createDirectory(at: toPath, withIntermediateDirectories: true, attributes: nil)
         try self.fileManager.moveItem(at: from, to: to)
+    }
+    
+    func updateUrlDataSize(url: URL, size megabytes: Double) {
+        guard let cacheURL = self.cacheURL, url.path.contains(cacheURL.path) else {
+            return
+        }
+        
+        var cacheFolderDataSize: STBytesUnits
+        if let size = self.cacheFolderDataSize {
+            let newSize = self.fileManager.scanFolder(url.path).size
+            cacheFolderDataSize = size + newSize
+            self.cacheFolderDataSize = cacheFolderDataSize
+        } else {
+            cacheFolderDataSize = self.fileManager.scanFolder(cacheURL.path).size
+        }
+        
+        guard cacheFolderDataSize.megabytes > megabytes else {
+            return
+        }
+        
+        let scanFolder = self.fileManager.scanFolder(cacheURL.path)
+        if scanFolder.size.megabytes > megabytes {
+            let maxSize = megabytes / 2
+            var currentSize = scanFolder.size.megabytes
+            let oldDate = Date(timeIntervalSince1970: 0)
+            let files = scanFolder.files.sorted { (f1, f2) -> Bool in
+                return f1.dateModification ?? oldDate < f2.dateModification ?? oldDate
+            }
+            for file in files {
+                do {
+                    try self.fileManager.removeItem(atPath: file.path)
+                    currentSize = currentSize - file.size.megabytes
+                    if currentSize < maxSize {
+                        break
+                    }
+                } catch {
+                }
+            }
+            self.cacheFolderDataSize = nil
+        }
     }
     
     func contents(in url: URL) -> Data? {
@@ -169,6 +210,13 @@ extension STFileSystem {
 
 extension FileManager {
     
+    struct File {
+        let path: String
+        let size: STBytesUnits
+        let dateCreation: Date?
+        let dateModification: Date?
+    }
+    
     func existence(atUrl url: URL) -> FileExistence {
         
         var isDirectory: ObjCBool = false
@@ -210,4 +258,48 @@ extension FileManager {
         return subDirs
     }
     
+    func scanFolder(_ folderPath: String) -> (size: STBytesUnits, files: [File]) {
+        var folderSize: Int64 = 0
+        guard let fileAttributes = try? self.attributesOfItem(atPath: folderPath), let type = fileAttributes[FileAttributeKey.type] as? FileAttributeType else {
+            return (.zero, [File]())
+        }
+        let isHidden: Bool = (fileAttributes[FileAttributeKey.extensionHidden] as? Bool) ?? false
+        if isHidden {
+            return (.zero, [File]())
+        }
+        
+        if type == .typeDirectory {
+            var files = [File]()
+            let subpaths = self.subpaths(atPath: folderPath) ?? []
+            for path in subpaths {
+                let currentPath = folderPath + "/" + path
+                guard let currentFileAttributes = try? self.attributesOfItem(atPath: currentPath), let type = currentFileAttributes[FileAttributeKey.type] as? FileAttributeType else {
+                    continue
+                }
+                let isHidden: Bool = (currentFileAttributes[FileAttributeKey.extensionHidden] as? Bool) ?? false
+                guard !isHidden, type != .typeDirectory else {
+                    continue
+                }
+                
+                let currentSize = currentFileAttributes[FileAttributeKey.size] as? Int64 ?? 0
+                folderSize += currentSize
+                
+                let dateCreation = currentFileAttributes[FileAttributeKey.creationDate] as? Date
+                let dateModification = currentFileAttributes[FileAttributeKey.modificationDate] as? Date
+                let file = File(path: currentPath, size: STBytesUnits(bytes: currentSize), dateCreation: dateCreation, dateModification: dateModification)
+                files.append(file)
+            }
+            return (STBytesUnits(bytes: folderSize), files)
+        } else {
+            folderSize = fileAttributes[FileAttributeKey.size] as? Int64 ?? 0
+            let dateCreation = fileAttributes[FileAttributeKey.creationDate] as? Date
+            let dateModification = fileAttributes[FileAttributeKey.modificationDate] as? Date
+            let file = File(path: folderPath, size: STBytesUnits(bytes: folderSize), dateCreation: dateCreation, dateModification: dateModification)
+            return (STBytesUnits(bytes: folderSize), [file])
+        }
+        
+    }
+    
 }
+
+

@@ -20,14 +20,7 @@ class STSyncWorker: STWorker {
                                                lastContactsSeenTime: dbInfo.lastContactsSeenTimeSeccounds)
         
         self.request(request: request) { (response: STSync) in
-            STApplication.shared.dataBase.sync(response, finish: { error in
-                if let error = error {
-                    failure?(error)
-                } else {
-                    success?(response)
-                }
-            })
-
+            success?(response)
         } failure: { (error) in
             failure?(error)
         }

@@ -27,6 +27,10 @@ class STApplication {
         return STFileRetryerManager()
     }()
     
+    private(set) lazy var syncManager: STSyncManager = {
+        return STSyncManager()
+    }()
+        
     
     private init() { }
     

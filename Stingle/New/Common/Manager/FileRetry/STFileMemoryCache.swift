@@ -26,7 +26,11 @@ extension STFileRetryerManager {
                 try STApplication.shared.fileSystem.move(file: fromUrl, to: toUrl)
             }
         }
-                
+        
+        func resetCache(source: IRetrySource) {
+            STApplication.shared.fileSystem.updateUrlDataSize(url: source.fileSaveUrl, size: 2000)
+        }
+                        
     }
         
 }

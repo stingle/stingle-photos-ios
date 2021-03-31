@@ -16,7 +16,6 @@ class STGalleryVC: UIViewController {
     private weak var syncHeaderView: STHomeSyncCollectionReusableView?
     private var dataSourceReference: UICollectionViewDiffableDataSourceReference!
     private let globalHeaderViewKind = "globalHeaderViewKind"
-    
     private let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
@@ -144,6 +143,12 @@ extension STGalleryVC: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let alpha: CGFloat = scrollView.contentOffset.y > 200 ? 0 : 1
         self.syncHeaderView?.update(alpha: alpha)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? STGalleryCollectionViewCell
+        let item = self.viewModel.item(at: indexPath)
+        cell?.configure(viewItem: item)
     }
     
 }
