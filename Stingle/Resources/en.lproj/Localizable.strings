@@ -46,6 +46,8 @@
 "gallery" = "Gallery";
 "forgot_password?" = "Forgot  password?";
 
+"service_busy?" = "Service busy";
+
 //MARK: - Sync
 
 "sync_backup_complete" = "Backup/Sync complete";
