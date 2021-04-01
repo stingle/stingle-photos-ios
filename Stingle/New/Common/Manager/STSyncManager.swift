@@ -61,7 +61,6 @@ class STSyncManager {
         }
     }
     
-    
 }
 
 extension STSyncManager {
