@@ -88,6 +88,7 @@ extension STFileRetryerManager {
         private var success: RetryerSuccess<T>?
         private var progress: RetryerProgress?
         private var failure: RetryerFailure?
+        var isResponsive = true
         
         init(success: RetryerSuccess<T>?, progress: RetryerProgress?, failure: RetryerFailure?) {
             self.identifier = UUID().uuidString

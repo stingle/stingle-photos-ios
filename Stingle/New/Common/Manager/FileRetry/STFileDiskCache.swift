@@ -27,8 +27,9 @@ extension STFileRetryerManager {
         
         private let storage = NSCache<NSString, T>()
         
-        init(countLimit: Int = 400) {
+        init(countLimit: Int = 400, totalCostLimit: Int = (10 * 1024 * 1024)) {
             self.storage.countLimit = countLimit
+            self.storage.totalCostLimit = totalCostLimit
         }
         
         func retryFile(source: IRetrySource, success: @escaping RetryerSuccess<T>, failure: @escaping RetryerFailure) {
