@@ -11,7 +11,7 @@ import UIKit
 extension UIView {
 	
 	@discardableResult
-	func addSubviewFullContent(view: UIView, inserIndex: Int? = nil, top: CGFloat? = 0, right: CGFloat? = 0, left: CGFloat? = 0, bottom: CGFloat? = 0) -> (NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?, NSLayoutConstraint?) {
+    func addSubviewFullContent(view: UIView, inserIndex: Int? = nil, top: CGFloat? = 0, right: CGFloat? = 0, left: CGFloat? = 0, bottom: CGFloat? = 0) -> (top: NSLayoutConstraint?, right: NSLayoutConstraint?, bottom: NSLayoutConstraint?, left: NSLayoutConstraint?) {
 		
 		if let inserIndex = inserIndex {
 			self.insertSubview(view, at: inserIndex)

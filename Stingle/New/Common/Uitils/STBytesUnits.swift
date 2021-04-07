@@ -7,31 +7,43 @@
 
 import Foundation
 
-public struct STBytesUnits: Equatable {
+struct STBytesUnits: Equatable {
     
     public let bytes: Int64
     
-    public var kilobytes: Double {
+    init(bytes: Int64) {
+        self.bytes = bytes
+    }
+    
+    init(kb: Int64) {
+        self.bytes = kb * 1_024
+    }
+    
+    init(mb: Int64) {
+        self.init(kb: mb * 1_024)
+    }
+    
+    init(gb: Int64) {
+        self.init(mb: gb * 1_024)
+    }
+    
+    var kilobytes: Double {
         return Double(bytes) / 1_024
     }
     
-    public var megabytes: Double {
+    var megabytes: Double {
         return kilobytes / 1_024
     }
     
-    public var gigabytes: Double {
+    var gigabytes: Double {
         return megabytes / 1_024
-    }
-    
-    public init(bytes: Int64) {
-        self.bytes = bytes
     }
     
     static var zero: STBytesUnits {
         return STBytesUnits(bytes: .zero)
     }
         
-    public func getReadableUnit() -> String {
+    func getReadableUnit() -> String {
         switch bytes {
         case 0..<1_024:
             return "\(bytes) bytes"

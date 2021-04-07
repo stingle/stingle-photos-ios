@@ -90,6 +90,7 @@ class STAuthWorker: STWorker {
 		let isKeyBackedUp = login.isKeyBackedUp == 1 ? true : false
 		
         let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId)
+        
         self.userProvider.update(model: user)
         
 		if KeyManagement.key == nil {

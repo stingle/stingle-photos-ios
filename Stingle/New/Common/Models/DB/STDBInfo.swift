@@ -24,8 +24,11 @@ class STDBInfo: ICDConvertable {
     var lastAlbumFilesSeenTime: Date
     var lastDelSeenTime: Date
     var lastContactsSeenTime: Date
+    
+    var spaceUsed: String?
+    var spaceQuota: String?
        
-    init(lastSeenTime: Date? = nil, lastTrashSeenTime: Date? = nil, lastAlbumsSeenTime: Date? = nil, lastAlbumFilesSeenTime: Date? = nil, lastDelSeenTime: Date? = nil, lastContactsSeenTime: Date? = nil) {
+    init(lastSeenTime: Date? = nil, lastTrashSeenTime: Date? = nil, lastAlbumsSeenTime: Date? = nil, lastAlbumFilesSeenTime: Date? = nil, lastDelSeenTime: Date? = nil, lastContactsSeenTime: Date? = nil, spaceUsed: String? = nil, spaceQuota: String? = nil) {
         let defaultDate = Date.defaultDate
         self.lastSeenTime = lastSeenTime ?? defaultDate
         self.lastTrashSeenTime = lastTrashSeenTime ?? defaultDate
@@ -33,6 +36,8 @@ class STDBInfo: ICDConvertable {
         self.lastAlbumFilesSeenTime = lastAlbumFilesSeenTime ?? defaultDate
         self.lastDelSeenTime = lastDelSeenTime ?? defaultDate
         self.lastContactsSeenTime = lastContactsSeenTime ?? defaultDate
+        self.spaceUsed = spaceUsed
+        self.spaceQuota = spaceQuota
     }
     
     required convenience init(model: STCDDBInfo) throws {
@@ -41,7 +46,9 @@ class STDBInfo: ICDConvertable {
                   lastAlbumsSeenTime: model.lastAlbumsSeenTime,
                   lastAlbumFilesSeenTime: model.lastAlbumFilesSeenTime,
                   lastDelSeenTime: model.lastDelSeenTime,
-                  lastContactsSeenTime: model.lastContactsSeenTime)
+                  lastContactsSeenTime: model.lastContactsSeenTime,
+                  spaceUsed: model.spaceUsed,
+                  spaceQuota: model.spaceQuota)
     }
 
 }

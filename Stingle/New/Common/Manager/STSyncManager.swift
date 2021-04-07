@@ -30,6 +30,7 @@ class STSyncManager {
             failure?(SyncError.busy)
             return
         }
+        self.didStartSync()
         self.syncWorker.getUpdates(success: { [weak self] (sync) in
             self?.startDBSync(sync: sync, success: success, failure: failure)
         }, failure: failure)
@@ -41,8 +42,10 @@ class STSyncManager {
         self.dataBase.sync(sync, finish: { error in
             if let error = error {
                 failure?(error)
+                self.didEndSync(error: error)
             } else {
                 success?()
+                self.didEndSync(error: nil)
             }
         })
     }

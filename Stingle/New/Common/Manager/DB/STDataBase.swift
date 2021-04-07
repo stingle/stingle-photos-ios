@@ -79,7 +79,9 @@ class STDataBase {
                              lastAlbumsSeenTime: lastAlbumsSeenTime,
                              lastAlbumFilesSeenTime: lastAlbumFilesSeenTime,
                              lastDelSeenTime: nil,
-                             lastContactsSeenTime: lastContactsSeenTime)
+                             lastContactsSeenTime: lastContactsSeenTime,
+                             spaceUsed: sync.spaceUsed,
+                             spaceQuota: sync.spaceQuota)
         return infon
     }
     

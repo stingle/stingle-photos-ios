@@ -52,6 +52,8 @@
         <attribute name="lastDelSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lastSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lastTrashSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="spaceQuota" optional="YES" attributeType="String"/>
+        <attribute name="spaceUsed" optional="YES" attributeType="String"/>
     </entity>
     <entity name="STCDFile" representedClassName="STCDFile" syncable="YES" codeGenerationType="category">
         <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -93,7 +95,7 @@
         <element name="STCDAlbum" positionX="-101.93017578125" positionY="146.1443786621093" width="128" height="224"/>
         <element name="STCDAlbumFile" positionX="-308.7486572265625" positionY="273.6133728027344" width="128" height="133"/>
         <element name="STCDContact" positionX="-101.5047607421876" positionY="-16.00975036621097" width="128" height="118"/>
-        <element name="STCDDBInfo" positionX="-301.2178955078125" positionY="-20.24960327148438" width="128" height="119"/>
+        <element name="STCDDBInfo" positionX="-301.2178955078125" positionY="-20.24960327148438" width="128" height="163"/>
         <element name="STCDFile" positionX="-304.4004516601564" positionY="139.3107604980468" width="128" height="103"/>
         <element name="STCDTrashFile" positionX="-309.067626953125" positionY="436.0562438964844" width="128" height="118"/>
         <element name="STCDUser" positionX="94.68914794921875" positionY="-14.22694396972656" width="128" height="118"/>
