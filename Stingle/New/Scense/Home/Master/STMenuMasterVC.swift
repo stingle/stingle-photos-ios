@@ -31,6 +31,10 @@ class STMenuMasterVC: UIViewController {
     private func reloadData() {
         self.menu = Menu.current()
         self.tableView.reloadData()
+        self.selectCurrentRow()
+    }
+    
+    private func selectCurrentRow() {
         self.tableView.selectRow(at: IndexPath(row: self.currentControllerType.rawValue, section: 0), animated: true, scrollPosition: .none)
     }
     
@@ -49,11 +53,33 @@ class STMenuMasterVC: UIViewController {
 
 extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
 
+    //MARK: UITableViewDelegate
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: self.headerViewReuseIdentifier) as? STMenuMasterHeaderView
         header?.configure(model: self.menu?.header)
         return header
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let item = self.menu?.cells[indexPath.row] else {
+            return
+        }
+        switch item.controllerType {
+        case .officialWebsite:
+            if let url = URL(string: STEnvironment.current.appWebUrl), UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+            self.selectCurrentRow()
+        case .signOut:
+            STApplication.shared.logout()
+            self.selectCurrentRow()
+        default:
+            self.set(controllerType: item.controllerType)
+        }
+    }
+    
+    //MARK: UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.menu?.cells.count ?? 0
@@ -65,12 +91,6 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let item = self.menu?.cells[indexPath.row] else {
-            return
-        }
-        self.set(controllerType: item.controllerType)
-    }
 
 }
  

@@ -53,4 +53,8 @@ extension STApplication {
         return nil
     }
     
+    func logout() {
+        
+    }
+        
 }

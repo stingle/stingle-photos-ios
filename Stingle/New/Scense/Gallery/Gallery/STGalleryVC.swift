@@ -17,7 +17,9 @@ class STGalleryVC: UIViewController {
     private var dataSourceReference: UICollectionViewDiffableDataSourceReference!
     private let globalHeaderViewKind = "globalHeaderViewKind"
     private let refreshControl = UIRefreshControl()
-
+    private var lastOffSet: CGPoint?
+    
+    private var transitionLayout: UICollectionViewTransitionLayout?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +27,30 @@ class STGalleryVC: UIViewController {
         self.configureCollectionView()
         self.viewModel.reloadData()
         self.configureRefreshControl()
+    }
+    
+    //MARK: private
+    
+    private func updateCollectionSplitAnimation(progress: CGFloat, isFrameUpdate: Bool) {
+        guard let split = self.splitMenuViewController, let lastOffSet = self.lastOffSet else {
+            return
+        }
+        let newWidth = split.detailViewWidth(progress: progress)
+        let oldWidth = split.startDetailViewWidth()
+        var offSet = lastOffSet
+        offSet.y = offSet.y * newWidth / oldWidth
+        var frame = self.collectionView.frame
+        frame.size.width = newWidth
+        frame.origin = .zero
+        if isFrameUpdate {
+            self.collectionView.frame = frame
+        }
+        let bottomOffset = self.collectionView.contentSize.height - self.collectionView.bounds.height + self.collectionView.contentInset.bottom
+        
+        offSet.y = min(bottomOffset, offSet.y)
+
+        self.collectionView.contentOffset = offSet
+        self.collectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func configureLocalize() {
@@ -47,7 +73,7 @@ class STGalleryVC: UIViewController {
         }
     }
     
-    @objc func refreshControl(didRefresh refreshControl: UIRefreshControl) {
+    @objc private func refreshControl(didRefresh refreshControl: UIRefreshControl) {
         self.syncHeaderView?.configure(state: .refreshing)
         self.viewModel.sync { [weak self] (_) in
             self?.refreshControl.endRefreshing()

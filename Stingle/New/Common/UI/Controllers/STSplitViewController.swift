@@ -259,10 +259,10 @@ class STSplitViewController: UIViewController {
             }
             self.updateFrames(isMasterViewOpened: isMasterViewOpened, didUpdateProgress: false, isTouch: isTouch)
             self.view.setNeedsLayout()
-            UIView.animate(withDuration: 0.3, delay: 0.0, options: [.curveLinear], animations: {
-                self.view.layoutIfNeeded()
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: [.beginFromCurrentState], animations: {
                 self.updateBackgroundView(progress: progress)
                 self.didUpdateProgress(progress: progress, isTouch: isTouch)
+                self.view.layoutIfNeeded()
             }, completion: { (_) in
                 self.isMasterViewOpened = isMasterViewOpened
                 self.didEndOpenedMode(progress: progress, isTouch: isTouch)
@@ -313,7 +313,6 @@ class STSplitViewController: UIViewController {
         viewController.didMove(toParent: self)
     }
     
-    
 }
 
 extension STSplitViewController {
@@ -342,6 +341,14 @@ extension STSplitViewController {
         return self.view.bounds.width - detailViewLeft
     }
     
+    func startDetailViewWidth() -> CGFloat {
+        let progress = self.progress(for: self.isMasterViewOpened)
+        return self.detailViewWidth(progress: progress)
+    }
+    
+    func progress( for isOpened:  Bool) -> CGFloat {
+        return isOpened ? 1 : 0
+    }
     
 }
 

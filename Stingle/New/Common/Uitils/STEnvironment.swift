@@ -18,7 +18,8 @@ struct STEnvironment {
 	let buildType: BuildType
 	let baseUrl: String
     let appName: String
-	
+    let appWebUrl: String = "https://stingle.org"
+	    
 	static let current: STEnvironment = STEnvironment()
 	
 	private init() {
