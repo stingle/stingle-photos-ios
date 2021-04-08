@@ -33,8 +33,6 @@
 
 "backup_my_keys_description" = "When you create an account keys will be generated locally which are the main secret of your account.\n\nIf you choose to backup them they will be strongly encrypted before backup and you will be able to login from another device effortlessly.\n\nHowever you can choose not backup keys, in that case you will absolutely need to write down your backup phrase, otherwise you will NOT be able to login again in the future.";
 
-
-
 //MARK: - Common
 
 "email" = "Email";
@@ -45,8 +43,28 @@
 "advanced" = "Advanced";
 "backup_my_keys" = "Backup my keys";
 "info" = "Info";
-
+"gallery" = "Gallery";
 "forgot_password?" = "Forgot  password?";
+
+"service_busy?" = "Service busy";
+
+"storage_space_used_info" = "%@ MB of %@ GB (%@%%) used";
+
+//MARK: - Menu
+
+"menu_gallery" = "Gallery";
+"menu_trash" = "Trash";
+"menu_storage" = "Storage";
+"menu_backup_phrase" = "Backup phrase";
+"menu_settings" = "Settings";
+"menu_official_website" = "Official website";
+"menu_sign_out" = "Sign Out";
+
+//MARK: - Sync
+
+"sync_backup_complete" = "Backup/Sync complete";
+"sync_uploading_file_of_out" = "Uploading file %@ of out %@";
+"sync_refreshing" = "Refreshing";
 
 //MARK: - Error
 
@@ -59,8 +77,10 @@
 "error_empty_password" = "Password cannot be empty";
 "error_incorrect_email" = "Email not valid";
 "error_incorrect_password" = "Password must have at least 6 characters";
-"nework_error_unknown_error" = "Something went wrong, please try again later";
+"error_unknown_error" = "Something went wrong, please try again later";
 "error_incorrect_confirm_password" = "Confirm  passwordnot valid";
+
+"error_data_not_found" = "Data not found";
 
 //MARK: - NETWORK
 
@@ -68,3 +88,4 @@
 "nework_error_request_not_valed" = "Request not valed";
 "nework_error_bad_request" = "Bad request to server";
 "nework_error_data_not_found" = "Data not found";
+"nework_error_request_cancelled" = "Request Cancelled";

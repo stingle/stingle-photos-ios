@@ -48,6 +48,10 @@ extension UICollectionView {
         }
     }
     
+    func registerHeader(nibName: String, kind: String) {
+        self.register(UINib(nibName: nibName, bundle: Bundle.main), forSupplementaryViewOfKind: kind, withReuseIdentifier: kind)
+    }
+    
     func registerHeader(nibName: String, identifier: String) {
         self.register(UINib(nibName: nibName, bundle: Bundle.main), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: identifier)
     }

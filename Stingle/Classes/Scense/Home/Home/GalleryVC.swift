@@ -35,7 +35,6 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 	}
 	
 	@objc func cancelEditing(_ sender: Any) {
-		print("Cancel!")
 		DispatchQueue.main.async {
 			self.viewModel.cancelEditing()
 			self.mode = .Preview
@@ -73,7 +72,6 @@ class GalleryVC : BaseVC, GalleryDelegate, UIGestureRecognizerDelegate {
 		
 		let p:CGPoint = gestureRecognizer.location(in: self.collectionView)
 		if let indexPath : IndexPath = self.collectionView?.indexPathForItem(at: p) {
-			print(indexPath)
 			mode = .Editing
 			let cell = collectionView.cellForItem(at: indexPath) as! SPCollectionViewCell
 			viewModel.select(item: cell, at: indexPath)

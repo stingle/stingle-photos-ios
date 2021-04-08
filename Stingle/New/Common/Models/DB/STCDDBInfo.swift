@@ -19,6 +19,8 @@ public class STCDDBInfo: NSManagedObject, IManagedObject {
         self.lastAlbumFilesSeenTime = model.lastAlbumFilesSeenTime
         self.lastDelSeenTime = model.lastDelSeenTime
         self.lastContactsSeenTime = model.lastContactsSeenTime
+        self.spaceUsed = model.spaceUsed
+        self.spaceQuota = model.spaceQuota
     }
 
 }

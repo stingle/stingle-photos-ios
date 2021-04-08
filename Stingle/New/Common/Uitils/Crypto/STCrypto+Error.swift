@@ -41,5 +41,6 @@ enum CryptoError: Error {
     enum General : Error {
         case incorrectKeySize
         case incorrectParameterSize
+        case unknown
     }
 }

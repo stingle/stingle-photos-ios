@@ -5,12 +5,12 @@ class Utils {
 	
 	public static func getNewEncFilename() -> String? {
         let crypto = STApplication.shared.crypto
-		guard let randData = crypto.getRandomBytes(lenght: Constants.FileNameLen) else {
+		guard let randData = crypto.getRandomBytes(lenght: STCrypto.Constants.FileNameLen) else {
 			return nil
 		}
 		
 		let base64Str = crypto.bytesToBase64(data: randData)
-		return base64Str?.appending(Constants.FileExtension)
+		return base64Str?.appending(STCrypto.Constants.FileExtension)
 	}
 	
 	public func createAndSaveThumb(file:SPFile) -> Bool {

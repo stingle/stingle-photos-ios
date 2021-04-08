@@ -23,5 +23,6 @@ extension SecretBox {
         var publicKey = Bytes(repeating: 0, count: crypto_box_publickeybytes())
         crypto_scalarmult_base(&publicKey, secretKey)
         return publicKey
-    }    
+    }
+    
 }

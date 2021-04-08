@@ -95,7 +95,6 @@ extension STCrypto {
         return headerBytes
     }
     
-    
     public func encryptCryptoBox(message: Bytes, publicKey: Bytes, privateKey: Bytes) throws  -> Bytes? {
         guard let nonce = self.getRandomBytes(lenght: self.sodium.box.NonceBytes) else {
             throw CryptoError.Internal.randomBytesGenerationFailure

@@ -6,7 +6,7 @@
 //  Copyright © 2021 Stingle. All rights reserved.
 //
 
-import Foundation
+import Alamofire
 
 enum STRequestMethod : String {
 	case POST
@@ -27,6 +27,47 @@ protocol IRequest {
 	var encoding: STNetworkDispatcher.Encoding { get }
 }
 
+extension IRequest {
+    
+    var afHeaders: Alamofire.HTTPHeaders? {
+        if let header = self.headers {
+            return Alamofire.HTTPHeaders(header)
+        }
+        return nil
+    }
+    
+    var asDataRequest: DataRequest {
+        let url = self.url
+        guard let components = URLComponents(string: url) else {
+            fatalError()
+        }
+        return AF.request(components, method: self.AFMethod, parameters: self.parameters, encoding: self.encoding, headers: self.afHeaders, interceptor: nil).validate(statusCode: 200..<300)
+    }
+    
+    var asURLRequest: URLRequest {
+        guard let request = try? self.asDataRequest.convertible.asURLRequest() else {
+            fatalError()
+        }
+        return request
+    }
+    
+    var AFMethod: Alamofire.HTTPMethod {
+        switch self.method {
+        case .get:
+            return .get
+        case .post:
+            return .post
+        case .put:
+            return .put
+        case .patch:
+            return .patch
+        case .delete:
+            return .delete
+        }
+    }
+    
+}
+
 protocol STRequest: IRequest {
 	var path: String { get }
 }
@@ -39,6 +80,22 @@ extension STRequest {
     
     var token: String? {
         return STApplication.shared.user()?.token
+    }
+    
+}
+
+protocol IDownloadRequest: IRequest {
+    var fileDownloadTmpUrl: URL? { get }
+}
+
+protocol STDownloadRequest: IDownloadRequest, STRequest {
+    var fileName: String { get }
+}
+
+extension STDownloadRequest {
+    
+    var fileDownloadTmpUrl: URL? {
+        return STApplication.shared.fileSystem.tmpURL?.appendingPathComponent(self.fileName)
     }
     
 }

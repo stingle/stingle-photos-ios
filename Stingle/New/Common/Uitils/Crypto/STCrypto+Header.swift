@@ -13,7 +13,7 @@ struct STHeaders {
     let thumb: STHeader?
 }
 
-struct STHeader {
+struct STHeader: Equatable {
     
     public var fileVersion: UInt8 = 0
     public var fileId: Bytes = []
@@ -39,6 +39,10 @@ struct STHeader {
         print("fileName : \(fileName ?? "noname")")
         print("videoDuration : \(videoDuration)")
         print("overallHeaderSize : \(overallHeaderSize ?? 0)")
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.fileVersion == rhs.fileVersion && lhs.fileId == rhs.fileId && lhs.headerSize == rhs.headerSize && lhs.headerVersion == rhs.headerVersion && lhs.chunkSize == rhs.chunkSize && lhs.dataSize == rhs.dataSize && lhs.symmetricKey == rhs.symmetricKey && lhs.fileType == rhs.fileType && lhs.fileName == rhs.fileName && lhs.videoDuration == rhs.videoDuration && lhs.overallHeaderSize == rhs.overallHeaderSize
     }
 }
 
@@ -85,27 +89,42 @@ extension STCrypto {
     }
     
     @discardableResult
-    func decryptData(input:InputStream, header:STHeader?, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
-        guard let header = header, (1...self.bufSize).contains(Int(header.chunkSize)) else {
+    func decryptData(input: InputStream, header: STHeader, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
+
+        
+        
+        guard header.chunkSize >= 1 && header.chunkSize < Constants.MAX_BUFFER_LENGTH else {
             throw CryptoError.Header.incorrectChunkSize
         }
         var chunkNumber:UInt64 = 1
         let dataReadSize:Int = Int(header.chunkSize) + self.sodium.aead.xchacha20poly1305ietf.ABytes + self.sodium.aead.xchacha20poly1305ietf.NonceBytes
+        
         var buf:Bytes = Bytes(repeating: 0, count: dataReadSize)
         var numRead = 0
         var diff:Int = 0
+        
         repeat {
             numRead = input.read(&buf, maxLength: buf.count)
             diff = dataReadSize - numRead
             if diff > 0 {
-                buf = buf.dropLast(diff)
+                buf = copyMemoryStartingAtIndex(from: buf, startIndexAtPointer: numRead)
             }
             let  decryptedData = try self.decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header)
             assert(header.chunkSize == decryptedData.count || (diff != 0))
             completionHandler(decryptedData)
             chunkNumber += UInt64(1)
         } while (diff == 0)
+        
         return true
+    }
+    
+    func copyMemoryStartingAtIndex<T>(from array: [T], startIndexAtPointer toIndex: Int) -> [T] {
+        let arrayPointer = array.withUnsafeBufferPointer({ $0.baseAddress })//UnsafePointer<T>.init(array)
+        let resultMemry = UnsafeMutablePointer<T>.allocate(capacity: toIndex)
+        memcpy(resultMemry, arrayPointer, toIndex)
+        let arrary = Array(UnsafeBufferPointer(start: resultMemry, count: toIndex))
+        resultMemry.deallocate()
+        return arrary
     }
     
     private func decryptChunk(chunkData: Bytes, chunkNumber: UInt64, header: STHeader) throws -> Bytes {
@@ -228,15 +247,22 @@ extension STCrypto {
         return header
     }
     
-    func writeHeader(output: OutputStream, header: STHeader, publicKey: Bytes?) throws  {
+    @discardableResult
+    func writeHeader(output: OutputStream, header: STHeader, publicKey: Bytes?) throws -> Bytes {
         // File beggining - 2 bytes
+        
+        var result = Bytes()
+        
         var numWritten = output.write(Constants.FileBeggining.bytes, maxLength: Constants.FileBegginingLen)
+        result.append(contentsOf: Constants.FileBeggining.bytes)
         
         // File version number - 1 byte
         numWritten += output.write([UInt8(Constants.CurrentFileVersion)], maxLength: Constants.FileFileVersionLen)
+        result.append(UInt8(Constants.CurrentFileVersion))
         
         // File ID - 32 bytes
         numWritten += output.write(header.fileId, maxLength: Constants.FileFileIdLen)
+        result.append(contentsOf: header.fileId)
         
         guard let publicKey = publicKey else {
             throw CryptoError.General.incorrectParameterSize
@@ -249,13 +275,20 @@ extension STCrypto {
         }
         
         // Write header size - 4 bytes
-        numWritten += output.write(STCrypto.toBytes(value: Int32(encHeader.count)), maxLength: Constants.FileHeaderSizeLen)
+        
+        let write = STCrypto.toBytes(value: Int32(encHeader.count))
+        numWritten += output.write(write, maxLength: Constants.FileHeaderSizeLen)
+        result.append(contentsOf: write)
         
         // Write header3
         numWritten += output.write(encHeader, maxLength: encHeader.count)
+        result.append(contentsOf: encHeader)
+        
         guard numWritten ==  (Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Constants.FileHeaderSizeLen + encHeader.count) else {
             throw CryptoError.IO.writeFailure
         }
+        
+        return result
     }
         
     func getFileHeader(input: InputStream) throws -> STHeader {

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="R1P-5n-IQm">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="qj7-jx-s0x">
+            <objects>
+                <navigationController storyboardIdentifier="TrashID" id="Bpg-Te-50b" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Lez-zF-1Je">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="a0W-jo-T2n" kind="relationship" relationship="rootViewController" id="2M1-DY-3ci"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6sX-YB-AHZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2362" y="-1037"/>
+        </scene>
+        <!--Trash-->
+        <scene sceneID="aJG-fW-sqf">
+            <objects>
+                <viewController id="a0W-jo-T2n" customClass="STTrashVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="M9M-9P-E0C">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="2dT-SX-m2V"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Trash" id="dyd-OB-pcz"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CSd-uK-hpf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1445" y="-1037"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="0D9-fD-gXV">
+            <objects>
+                <navigationController storyboardIdentifier="GalleryID" navigationBarHidden="YES" id="R1P-5n-IQm" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Y8r-9H-kmB"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="52f-ie-Qys">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="VDz-m3-mHb" kind="relationship" relationship="rootViewController" id="Ev3-zw-2Cy"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="agj-Tf-Qmy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2361" y="-135"/>
+        </scene>
+        <!--Tab BarVC-->
+        <scene sceneID="oyc-oW-uLu">
+            <objects>
+                <tabBarController id="VDz-m3-mHb" customClass="STTabBarVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="ikP-ct-0fL">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="MCA-pf-bFA"/>
+                    </navigationItem>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="cpe-Rb-wIL" customClass="STTabBar" customModule="Stingle" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="iconColor">
+                                <color key="value" systemColor="systemGrayColor"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="seperatorColor">
+                                <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="selectedTextColor">
+                                <color key="value" name="STPrimary"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="selectedIconColor">
+                                <color key="value" name="STPrimary"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="textColor">
+                                <color key="value" systemColor="systemGrayColor"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </tabBar>
+                    <connections>
+                        <segue destination="dnZ-yy-kva" kind="relationship" relationship="viewControllers" id="7HR-sg-GDw"/>
+                        <segue destination="UtM-t9-Os5" kind="relationship" relationship="viewControllers" id="buA-hM-mAj"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5v2-ni-K08" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1444" y="-135"/>
+        </scene>
+        <!--Album-->
+        <scene sceneID="q7q-7p-gOM">
+            <objects>
+                <navigationController id="UtM-t9-Os5" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Album" image="ic_album_min" id="F5a-1i-nFa"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cRA-Mk-YDO">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="93n-gp-CHJ" kind="relationship" relationship="rootViewController" id="dbo-Hp-LQ3"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZTZ-dg-84e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1445" y="639"/>
+        </scene>
+        <!--Gallery-->
+        <scene sceneID="K92-ZK-yOp">
+            <objects>
+                <navigationController id="dnZ-yy-kva" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Gallery" image="ic_gallery_min" id="4xE-uT-DxU"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Gy8-mL-8SB">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="4gb-r9-Gut" kind="relationship" relationship="rootViewController" id="Ftm-KE-R11"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6zN-RT-Ghu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2362" y="639"/>
+        </scene>
+        <!--GalleryVC-->
+        <scene sceneID="cJD-Mp-uek">
+            <objects>
+                <viewController id="4gb-r9-Gut" customClass="STGalleryVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MnP-Jg-WJp">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="s9v-YZ-AUH" customClass="STCollectionView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="2CS-fd-O9c">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="delegate" destination="4gb-r9-Gut" id="Zog-Dy-aGa"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="VNU-0I-8gN"/>
+                        <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstItem="VNU-0I-8gN" firstAttribute="bottom" secondItem="s9v-YZ-AUH" secondAttribute="bottom" id="Wrx-Hn-EFD"/>
+                            <constraint firstItem="s9v-YZ-AUH" firstAttribute="top" secondItem="VNU-0I-8gN" secondAttribute="top" id="mbA-8X-2aV"/>
+                            <constraint firstItem="s9v-YZ-AUH" firstAttribute="leading" secondItem="VNU-0I-8gN" secondAttribute="leading" id="sEO-Eq-QSo"/>
+                            <constraint firstItem="VNU-0I-8gN" firstAttribute="trailing" secondItem="s9v-YZ-AUH" secondAttribute="trailing" id="sYl-My-MmB"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Mjv-SV-HNE">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="ic_nav_menu" id="w3O-xO-g7W">
+                            <color key="tintColor" name="STText"/>
+                            <connections>
+                                <action selector="didSelectMenuBarItem:" destination="4gb-r9-Gut" id="9yS-Sh-2PF"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="s9v-YZ-AUH" id="URi-FU-ey0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Ew-aZ-3Qw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2362" y="1383"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="GW4-RR-AiF">
+            <objects>
+                <viewController id="93n-gp-CHJ" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EeL-KA-GNA">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="5RG-oc-qrF"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="adm-J1-7cN"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EHN-5h-6bu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1445" y="1383"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_album_min" width="20" height="20"/>
+        <image name="ic_gallery_min" width="24" height="24"/>
+        <image name="ic_nav_menu" width="18" height="12"/>
+        <namedColor name="STBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPrimary">
+            <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

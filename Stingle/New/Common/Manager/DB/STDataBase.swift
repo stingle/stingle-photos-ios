@@ -31,6 +31,7 @@ class STDataBase {
     }
     
     func sync(_ sync: STSync, finish: @escaping (IError?) -> Void) {
+        self.didStartSync()
         let context = self.container.newBackgroundContext()
         context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
         context.performAndWait {
@@ -58,6 +59,14 @@ class STDataBase {
         self.contactProvider.finishSync()
     }
     
+    private func didStartSync() {
+        self.galleryProvider.didStartSync()
+        self.albumFilesProvider.didStartSync()
+        self.albumsProvider.didStartSync()
+        self.trashProvider.didStartSync()
+        self.contactProvider.didStartSync()
+    }
+    
     private func syncImportFiles(sync: STSync, in context: NSManagedObjectContext, dbInfo: STDBInfo) throws -> STDBInfo {
         let lastSeenTime = try self.galleryProvider.sync(db: sync.files ?? [], context: context, lastDate: dbInfo.lastSeenTime)
         let lastAlbumsSeenTime = try self.albumsProvider.sync(db: sync.albums ?? [], context: context, lastDate: dbInfo.lastAlbumsSeenTime)
@@ -70,7 +79,9 @@ class STDataBase {
                              lastAlbumsSeenTime: lastAlbumsSeenTime,
                              lastAlbumFilesSeenTime: lastAlbumFilesSeenTime,
                              lastDelSeenTime: nil,
-                             lastContactsSeenTime: lastContactsSeenTime)
+                             lastContactsSeenTime: lastContactsSeenTime,
+                             spaceUsed: sync.spaceUsed,
+                             spaceQuota: sync.spaceQuota)
         return infon
     }
     
@@ -98,9 +109,9 @@ extension STDataBase {
         var message: String {
             switch self {
             case .parsError:
-                return "nework_error_unknown_error".localized
+                return "error_unknown_error".localized
             case .dateNotFound:
-                return "nework_error_unknown_error".localized
+                return "error_unknown_error".localized
             case .error(let error):
                 if let iError = error as? IError {
                     return iError.message

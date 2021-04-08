@@ -21,6 +21,21 @@ class STNavigationController: UINavigationController {
 			self.updateNavigationBar(for: first, animated: false)
 		}
 	}
+    
+    override var viewControllers: [UIViewController] {
+        didSet {
+            if let first = self.viewControllers.first {
+                self.updateNavigationBar(for: first)
+            }
+            self.updateSplitViewController()
+        }
+    }
+    
+    override var splitMenuViewController: STSplitViewController? {
+        didSet {
+            self.updateSplitViewController()
+        }
+    }
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -38,15 +53,7 @@ class STNavigationController: UINavigationController {
 	override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
 		return self.topViewController?.preferredInterfaceOrientationForPresentation ?? super.preferredInterfaceOrientationForPresentation
 	}
-	
-	override var viewControllers: [UIViewController] {
-		didSet {
-			if let first = self.viewControllers.first {
-				self.updateNavigationBar(for: first)
-			}
-		}
-	}
-	
+		
 	override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
 		super.setViewControllers(viewControllers, animated: animated)
 		if let first = viewControllers.first {
@@ -77,6 +84,8 @@ class STNavigationController: UINavigationController {
 		}
 		return super.popToRootViewController(animated: animated)
 	}
+        
+    //MARK: - private
 	
 	private func updateNavigationBar(for viewController: UIViewController, animated: Bool = true) {
 		let isNavigationBarHidden = viewController.isNavigationBarHidden()
@@ -84,6 +93,14 @@ class STNavigationController: UINavigationController {
 			self.setNavigationBarHidden(isNavigationBarHidden, animated: animated)
 		}
 	}
+    
+    private func updateSplitViewController() {
+        self.viewControllers.forEach { (vc) in
+            if vc.splitMenuViewController != self.splitMenuViewController {
+                vc.splitMenuViewController = self.splitMenuViewController
+            }
+        }
+    }
 }
 
 extension STNavigationController: UIGestureRecognizerDelegate {

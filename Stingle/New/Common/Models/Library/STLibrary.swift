@@ -19,7 +19,7 @@ extension STLibrary {
         var message: String {
             switch self {
             case .parsError:
-                return "nework_error_unknown_error".localized
+                return "error_unknown_error".localized
             }
         }
     }

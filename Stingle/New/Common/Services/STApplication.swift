@@ -11,10 +11,28 @@ class STApplication {
     
     static let shared = STApplication()
     
-    let dataBase = STDataBase()
-    let crypto = STCrypto()
+    private(set) lazy var dataBase: STDataBase = {
+        return STDataBase()
+    }()
     
-    private init() {}
+    private(set) lazy var crypto: STCrypto = {
+        return STCrypto()
+    }()
+    
+    private(set) lazy var fileSystem: STFileSystem = {
+        return STFileSystem()
+    }()
+    
+    private(set) lazy var fileRetryer: STFileRetryerManager = {
+        return STFileRetryerManager()
+    }()
+    
+    private(set) lazy var syncManager: STSyncManager = {
+        return STSyncManager()
+    }()
+        
+    
+    private init() { }
     
 }
 
@@ -35,4 +53,8 @@ extension STApplication {
         return nil
     }
     
+    func logout() {
+        
+    }
+        
 }

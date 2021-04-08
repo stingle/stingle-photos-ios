@@ -41,7 +41,7 @@ class STNetworkDispatcher {
 	@discardableResult
 	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
         let decoder = decoder ?? self.decoder
-		let request = self.create(request: request)
+		let request = request.asDataRequest
 		request.responseDecodable(decoder: decoder) { (response: AFDataResponse<T>) in
 			switch response.result {
 			case .success(let value):
@@ -56,7 +56,7 @@ class STNetworkDispatcher {
     
     @discardableResult
     func requestJSON(request: IRequest, completion: @escaping (Result<Any>) -> Swift.Void) -> NetworkTask? {
-        let request = self.create(request: request)
+        let request = request.asDataRequest
         request.responseJSON(completionHandler: { (response: AFDataResponse<Any>) in
             switch response.result {
             case .success(let value):
@@ -66,13 +66,12 @@ class STNetworkDispatcher {
                 completion(.failure(error: error))
             }
         })
-            
         return Task(request: request)
     }
     
     @discardableResult
     func requestData(request: IRequest, completion: @escaping (Result<Data>) -> Swift.Void) -> NetworkTask? {
-        let request = self.create(request: request)
+        let request = request.asDataRequest
         request.responseData { (response) in
             switch response.result {
             case .success(let value):
@@ -84,17 +83,31 @@ class STNetworkDispatcher {
         }
         return Task(request: request)
     }
-	
-	//MARK: - Private func
-	
-	private func create(request: IRequest) -> DataRequest {
-		let url = request.url
-		guard let components = URLComponents(string: url) else {
-			fatalError()
-		}
-		return AF.request(components, method: request.method.AFMethod, parameters: request.parameters, encoding: request.encoding, headers: request.afHeaders, interceptor: nil).validate(statusCode: 200..<300)
-	}
-	
+    
+    func download(request: IDownloadRequest, completion: @escaping (Result<URL>) -> Swift.Void, progress: @escaping (Progress) -> Swift.Void) -> NetworkTask? {
+        guard let fileUrl = request.fileDownloadTmpUrl else {
+            completion(.failure(error: NetworkError.badRequest))
+            return nil
+        }
+        let destination: DownloadRequest.Destination = { _, _ in
+            return (fileUrl, [.removePreviousFile, .createIntermediateDirectories])
+        }
+                
+        let downloadRequest = AF.download(request.url, method: request.AFMethod, parameters: request.parameters, headers: request.afHeaders, to: destination).response { response in
+            if let error = response.error {
+                let networkError = NetworkError.error(error: error)
+                completion(.failure(error: networkError))
+            } else if let fileUrl = response.fileURL {
+                completion(.success(result: fileUrl))
+            } else {
+                completion(.failure(error: NetworkError.dataNotFound))
+            }
+        }.downloadProgress { (process) in
+            progress(process)
+        }
+        return Task(request: downloadRequest)
+    }
+        		
 }
 
 extension STNetworkDispatcher {
@@ -108,6 +121,7 @@ extension STNetworkDispatcher {
 		
 		case badRequest
 		case dataNotFound
+        case cancelled
 		case error(error: Error)
 		
 		var message: String {
@@ -116,6 +130,8 @@ extension STNetworkDispatcher {
 				return "nework_error_bad_request".localized
 			case .dataNotFound:
 				return "nework_error_data_not_found".localized
+            case .cancelled:
+                return "nework_error_request_cancelled".localized
 			case .error(let error):
 				if let error = error as? IError {
 					return error.localizedDescription
@@ -123,8 +139,22 @@ extension STNetworkDispatcher {
 				return error.localizedDescription
 			}
 		}
+        
+        var isCancelled: Bool {
+            switch self {
+            case .cancelled:
+                return true
+            case .error(let error):
+                if let asAFError = error.asAFError {
+                    return asAFError.isCancelled || asAFError.isExplicitlyCancelledError
+                }
+                return false
+            default:
+                return false
+            }
+        }
 	}
-	
+    
 	enum Encoding {
 		case queryString
 		case body
@@ -191,36 +221,6 @@ extension STNetworkDispatcher.Encoding: IRequestEncoding {
 		}
 	}
 
-}
-
-private extension STNetworkDispatcher.Method {
-	
-	var AFMethod: Alamofire.HTTPMethod {
-		switch self {
-		case .get:
-			return .get
-		case .post:
-			return .post
-		case .put:
-			return .put
-		case .patch:
-			return .patch
-		case .delete:
-			return .delete
-		}
-	}
-	
-}
-
-extension IRequest {
-	
-	var afHeaders: Alamofire.HTTPHeaders? {
-		if let header = self.headers {
-			return Alamofire.HTTPHeaders(header)
-		}
-		return nil
-	}
-	
 }
 
 protocol IRequestEncoding: ParameterEncoding {

@@ -4,7 +4,6 @@ protocol IResponse: Decodable {
 }
 
 struct SPDefaultResponse: IResponse {
-	
 	var status:String
 	var parts:[String]
 	var infos:[String]
@@ -12,7 +11,6 @@ struct SPDefaultResponse: IResponse {
 }
 
 struct SPTrashResponse: IResponse {
-	
 	var status:String
 	var parts:[[String:String]]
 	var infos:[String]
@@ -26,6 +24,7 @@ class SPSignUpResponse: STResponse<SPSignUpResponse.SignUpPart> {
 		var token: String
 		var userId: String
 	}
+    
 }
 
 
@@ -39,6 +38,7 @@ struct SPPreSignInResponse: IResponse {
 	struct PreSignInPart : Codable {
 		var salt:String
 	}
+    
 }
 
 struct SPSignInResponse: IResponse {
@@ -56,6 +56,7 @@ struct SPSignInResponse: IResponse {
 		var token:String
 		var userId:String
 	}
+    
 }
 
 struct SPSignOutResponse: IResponse {
@@ -81,6 +82,7 @@ struct SPUpdateInfo: IResponse {
 		var deletes:[SPDeletedFile]
 		var files:[SPFile]
 		var trash:[SPTrashFile]
+        
 	}
 }
 

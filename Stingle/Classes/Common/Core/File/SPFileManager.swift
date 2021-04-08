@@ -31,38 +31,9 @@ public func ==(lhs: FileExistence, rhs: FileExistence) -> Bool {
 	}
 }
 
-extension FileManager {
-	public func existence(atUrl url: URL) -> FileExistence {
-		
-		var isDirectory: ObjCBool = false
-		let exists = self.fileExists(atPath: url.path, isDirectory: &isDirectory)
-		
-		switch (exists, isDirectory.boolValue) {
-		case (false, _): return .none
-		case (true, false): return .file
-		case (true, true): return .directory
-		}
-	}
-	
-	public func subDirectories (atPath:String) -> [String]? {
-		guard let subpaths = self.subpaths(atPath: atPath) else {
-			return nil
-		}
-		var subDirs:[String] = [String]()
-		for item in subpaths {
-			var isDirectory: ObjCBool = false
-			self.fileExists(atPath: "\(atPath)/\(item)", isDirectory: &isDirectory)
-			if isDirectory.boolValue {
-				subDirs.append("\(atPath)/\(item)")
-			}
-		}
-		return subDirs
-	}
-}
-
 class SPFileManager : FileManager {
 		
-	private static var storagePath:URL? {
+	private static var storagePath: URL? {
 		get {
 			guard let path = self.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
 				return nil
@@ -85,7 +56,7 @@ class SPFileManager : FileManager {
 		}
 	}
 	
-	private static var privatePath:URL? {
+	private static var privatePath: URL? {
 		get {
 			guard let path = self.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
 				return nil
@@ -104,13 +75,8 @@ class SPFileManager : FileManager {
 			return privatePathUrl
 		}
 	}
-
 	
-	public static func homeFolder() -> URL? {
-		return self.storagePath
-	}
-	
-	public static func folder(for folder:SPFolder) -> URL? {
+	public static func folder(for folder: SPFolder) -> URL? {
 		if folder == .Private {
 			return privatePath
 		}
@@ -127,11 +93,11 @@ class SPFileManager : FileManager {
 		return dest
 	}
 	
-	public static func deleteFile(path:URL) throws {
+	public static func deleteFile(path: URL) throws {
 		try self.default.removeItem(at: path)
 	}
 
-	public static func deleteFile(file:SPFileInfo) throws {
+	public static func deleteFile(file: SPFileInfo) throws {
 		guard let thumb = folder(for: .StorageThumbs)?.appendingPathComponent(file.name) else {
 			throw SPFileManagerError.pathIsEmpty
 		}
@@ -164,7 +130,7 @@ class SPFileManager : FileManager {
 		return true
 	}
 	
-	public static func tempFolder(name:String) -> URL {
+	public static func tempFolder(name: String) -> URL {
 		let dest = URL(fileURLWithPath: NSTemporaryDirectory() + name)
 		do {
 			try self.default.createDirectory(at: dest, withIntermediateDirectories: true, attributes: nil)

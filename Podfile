@@ -9,5 +9,8 @@ target 'Stingle' do
   pod 'Sodium'
   pod 'MobileVLCKit'
   pod 'Alamofire'
+  pod 'Kingfisher'
+  
+  pod 'netfox'
 
 end

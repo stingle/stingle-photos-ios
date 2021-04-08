@@ -17,7 +17,9 @@ struct STEnvironment {
 	
 	let buildType: BuildType
 	let baseUrl: String
-	
+    let appName: String
+    let appWebUrl: String = "https://stingle.org"
+	    
 	static let current: STEnvironment = STEnvironment()
 	
 	private init() {
@@ -28,6 +30,7 @@ struct STEnvironment {
 		
 		self.baseUrl = baseUrl as! String
 		self.buildType = buildType
+        self.appName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as! String
 	}
 	
 	static private func variable(named name: String) -> Any? {

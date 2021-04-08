@@ -14,24 +14,17 @@ class STWorker {
 	typealias Success<T> = (_ result: T) -> Void
 	typealias Failure = (_ error: IError) -> Void
 	
-	let networkManager = NetworkManager.self
-	let network = STNetworkDispatcher.sheared
+	let operationManager = STOperationManager.shared
 			
 	//MARK: New request
 	
 	func request<T: IResponse>(request: IRequest, success: Success<T>? = nil, failure: Failure? = nil) {
-		self.network.request(request: request) { (resultNetwork: Result<T>) in
-			switch resultNetwork {
-			case .success(let result):
-				DispatchQueue.main.async {
-					success?(result)
-				}
-			case .failure(let error):
-				DispatchQueue.main.async {
-					failure?(WorkerError.error(error: error))
-				}
-			}
-		}
+        let operation = STNetworkOperationDecodable<T>(request: request, success: { (result) in
+            success?(result)
+        }) { (error) in
+            failure?(error)
+        }
+        self.operationManager.run(operation: operation)
 	}
 	
 	func request<T: Decodable>(request: IRequest, success: Success<T>?, failure: Failure? = nil) {
@@ -53,33 +46,21 @@ class STWorker {
 	}
     
     func requestJSON(request: IRequest, success: Success<Any>?, failure: Failure? = nil) {
-        self.network.requestJSON(request: request) { (result) in
-            switch result {
-            case .success(let result):
-                DispatchQueue.main.async {
-                    success?(result)
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    failure?(WorkerError.error(error: error))
-                }
-            }
+        let operation = STJSONNetworkOperation(request: request) { (json) in
+            success?(json)
+        } failure: { (error) in
+            failure?(error)
         }
+        self.operationManager.run(operation: operation)
     }
     
     func requestData(request: IRequest, success: Success<Data>?, failure: Failure? = nil) {
-        self.network.requestData(request: request) { (result) in
-            switch result {
-            case .success(let result):
-                DispatchQueue.main.async {
-                    success?(result)
-                }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    failure?(WorkerError.error(error: error))
-                }
-            }
+        let operation = STDataNetworkOperation(request: request) { (data) in
+            success?(data)
+        } failure: { (error) in
+            failure?(error)
         }
+        self.operationManager.run(operation: operation)
     }
     
 }
