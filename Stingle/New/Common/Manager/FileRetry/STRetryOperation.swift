@@ -13,7 +13,7 @@ extension STFileRetryerManager {
         
         let memoryCache: MemoryCache
         let diskCache: DiskCache<T>
-        
+                
         private(set) var results = Set<Result<T>>()
         private(set) var canEditResults = true
         

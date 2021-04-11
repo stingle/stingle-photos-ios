@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Kingfisher
+import Photos
 
 class STGalleryVC: UIViewController {
     
@@ -15,11 +15,14 @@ class STGalleryVC: UIViewController {
     private var viewModel = STGalleryVM()
     private weak var syncHeaderView: STHomeSyncCollectionReusableView?
     private var dataSourceReference: UICollectionViewDiffableDataSourceReference!
-    private let globalHeaderViewKind = "globalHeaderViewKind"
     private let refreshControl = UIRefreshControl()
     private var lastOffSet: CGPoint?
-    
+    private let globalHeaderViewKind = "globalHeaderViewKind"
     private var transitionLayout: UICollectionViewTransitionLayout?
+    
+    private lazy var pickerHelper: STImagePickerHelper = {
+        return STImagePickerHelper(controller: self)
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +68,11 @@ class STGalleryVC: UIViewController {
     
     //MARK: - User action
     
-    @IBAction func didSelectMenuBarItem(_ sender: Any) {
+    @IBAction private func didSelectOpenImagePicker(_ sender: Any) {
+        self.pickerHelper.openPicker()
+    }
+    
+    @IBAction private func didSelectMenuBarItem(_ sender: Any) {
         if self.splitMenuViewController?.isMasterViewOpened ?? false {
             self.splitMenuViewController?.hide(master: true)
         } else {
@@ -205,6 +212,14 @@ extension STGalleryVC: IProviderDelegate {
     
     func didStartSync(dataSource: IProviderDataSource) {
         self.syncHeaderView?.configure(state: .refreshing)
+    }
+    
+}
+
+extension STGalleryVC: STImagePickerHelperDelegate {
+    
+    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
+        self.viewModel.upload(assets: assets)
     }
     
 }

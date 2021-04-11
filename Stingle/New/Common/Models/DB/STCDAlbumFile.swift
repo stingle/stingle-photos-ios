@@ -19,6 +19,7 @@ public class STCDAlbumFile: NSManagedObject, IManagedObject {
         self.dateCreated = model.dateCreated
         self.dateModified = model.dateModified
         self.albumId = model.albumId
+        self.isRemote = model.isRemote
     }
     
 }

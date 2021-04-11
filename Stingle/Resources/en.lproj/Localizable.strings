@@ -50,6 +50,14 @@
 
 "storage_space_used_info" = "%@ MB of %@ GB (%@%%) used";
 
+"storage_space_used_info" = "%@ MB of %@ GB (%@%%) used";
+
+"alert_error_permission_photos_title" = "Not authorized";
+"alert_error_permission_photos_message" = "Stingle haven't permission your photos. Please check your settings";
+
+"cancel" = "Cancel";
+"ok" = "Ok";
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";

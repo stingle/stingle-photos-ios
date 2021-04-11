@@ -24,6 +24,7 @@ extension STLibrary {
         let headers: String
         let dateCreated: Date
         let dateModified: Date
+        let isRemote: Bool
         
         lazy var encryptsHeaders: STHeaders = {
             let result = STApplication.shared.crypto.getHeaders(file: self)
@@ -42,9 +43,10 @@ extension STLibrary {
             }
             self.dateCreated = Date(milliseconds: dateCreated)
             self.dateModified = Date(milliseconds: dateModified)
+            self.isRemote = true
         }
         
-        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?) throws {
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool) throws {
             guard let file = file,
                   let version = version,
                   let headers = headers,
@@ -59,6 +61,7 @@ extension STLibrary {
             self.headers = headers
             self.dateCreated = dateCreated
             self.dateModified = dateModified
+            self.isRemote = isRemote
         }
         
         required convenience init(model: STCDFile) throws {
@@ -66,11 +69,12 @@ extension STLibrary {
                            version: model.version,
                            headers: model.headers,
                            dateCreated: model.dateCreated,
-                           dateModified: model.dateModified)
+                           dateModified: model.dateModified,
+                           isRemote: model.isRemote)
         }
         
         func toManagedModelJson() throws -> [String : Any] {
-            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified]
+            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote]
         }
         
     }

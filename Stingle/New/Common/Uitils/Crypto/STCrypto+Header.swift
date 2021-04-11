@@ -46,6 +46,19 @@ struct STHeader: Equatable {
     }
 }
 
+extension STHeader {
+    
+    enum FileType: Int {
+        case image = 2//STCrypto.Constants.FileTypeGeneral
+        case video = 3//STCrypto.Constants.FileTypeGeneral
+    }
+    
+    var fileOreginalType: FileType? {
+        return FileType(rawValue: Int(self.fileType))
+    }
+    
+}
+
 extension STCrypto {
     
     func fromBytes(data: Bytes) -> STHeader {
@@ -90,8 +103,6 @@ extension STCrypto {
     
     @discardableResult
     func decryptData(input: InputStream, header: STHeader, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
-
-        
         
         guard header.chunkSize >= 1 && header.chunkSize < Constants.MAX_BUFFER_LENGTH else {
             throw CryptoError.Header.incorrectChunkSize
@@ -126,25 +137,17 @@ extension STCrypto {
         resultMemry.deallocate()
         return arrary
     }
-    
-    private func decryptChunk(chunkData: Bytes, chunkNumber: UInt64, header: STHeader) throws -> Bytes {
-        let keyBytesLength = self.sodium.aead.xchacha20poly1305ietf.KeyBytes
-        guard let chunkKey = self.sodium.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
-            throw CryptoError.Internal.keyDerivationFailure
-        }
-        assert(keyBytesLength == chunkKey.count)
-        guard let  decryptedData = self.sodium.aead.xchacha20poly1305ietf.decrypt(nonceAndAuthenticatedCipherText: chunkData, secretKey: chunkKey) else {
-            throw CryptoError.Internal.decryptFailure
-        }
-        return decryptedData
+        
+    func getHeaders(file: STLibrary.File) -> STHeaders  {
+        return self.getHeaders(headersStrs: file.headers)
     }
     
-    func getHeaders(file: STLibrary.File) -> STHeaders  {
+    func getHeaders(headersStrs: String) -> STHeaders  {
         
         var fileHeader: STHeader?
         var thumbHeader: STHeader?
         
-        let headers = file.headers
+        let headers = headersStrs
         let hdrs = headers.split(separator: "*")
         let crypto = STApplication.shared.crypto
         
@@ -180,7 +183,6 @@ extension STCrypto {
         guard let thumbBytes = try self.getFileHeaderBytes(path: thumbPath) else {
             return nil
         }
-
         return self.bytesToBase64(data: originBytes)! + "*" + self.bytesToBase64(data: thumbBytes)!
     }
     
@@ -253,8 +255,9 @@ extension STCrypto {
         
         var result = Bytes()
         
-        var numWritten = output.write(Constants.FileBeggining.bytes, maxLength: Constants.FileBegginingLen)
-        result.append(contentsOf: Constants.FileBeggining.bytes)
+        let beggining = Constants.FileBeggining.bytes
+        var numWritten = output.write(beggining, maxLength: beggining.count)
+        result.append(contentsOf: beggining)
         
         // File version number - 1 byte
         numWritten += output.write([UInt8(Constants.CurrentFileVersion)], maxLength: Constants.FileFileVersionLen)
@@ -284,9 +287,9 @@ extension STCrypto {
         numWritten += output.write(encHeader, maxLength: encHeader.count)
         result.append(contentsOf: encHeader)
         
-        guard numWritten ==  (Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Constants.FileHeaderSizeLen + encHeader.count) else {
+        guard numWritten == (Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Constants.FileHeaderSizeLen + encHeader.count) else {
             throw CryptoError.IO.writeFailure
-        }
+        }       
         
         return result
     }
@@ -359,10 +362,21 @@ extension STCrypto {
         let fileNameSize:Int = STCrypto.fromBytes(b:Bytes(headerBytes[offset..<offset + Constants.FileNameSizeLen]))
         offset += Constants.FileNameSizeLen
         header.fileName = String(bytes: Bytes(headerBytes[offset..<offset + fileNameSize]), encoding: String.Encoding.utf8) ?? ""
-        
         offset += fileNameSize
         header.videoDuration = STCrypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileVideoDurationlen]))
         return header
+    }
+    
+    private func decryptChunk(chunkData: Bytes, chunkNumber: UInt64, header: STHeader) throws -> Bytes {
+        let keyBytesLength = self.sodium.aead.xchacha20poly1305ietf.KeyBytes
+        guard let chunkKey = self.sodium.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
+            throw CryptoError.Internal.keyDerivationFailure
+        }
+        assert(keyBytesLength == chunkKey.count)
+        guard let  decryptedData = self.sodium.aead.xchacha20poly1305ietf.decrypt(nonceAndAuthenticatedCipherText: chunkData, secretKey: chunkKey) else {
+            throw CryptoError.Internal.decryptFailure
+        }
+        return decryptedData
     }
     
 }

@@ -74,12 +74,29 @@ extension STDataBase {
             }
         }
         
+        func reloadData() {
+            self.dataSources.forEach { (controller) in
+                controller.reloadData()
+            }
+        }
+        
         //MARK: - DataSource
         
         func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?) -> DataSource<Model> {
             let dataSource = STDataBase.DataSource<Model>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, sectionNameKeyPath: sectionNameKeyPath)
             self.dataSources.addObject(dataSource)
             return dataSource
+        }
+        
+        func add(model: ManagedModel.Model) {
+            let context = self.container.newBackgroundContext()
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            context.undoManager = nil
+            context.performAndWait {
+                _ = ManagedModel(model: model, context: context)
+                self.container.saveContext(context)
+                context.reset()
+            }
         }
         
     }

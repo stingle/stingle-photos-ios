@@ -26,6 +26,7 @@ extension STImageView {
         let imageType: ImageType
         let version: String
         let isThumb: Bool
+        let isRemote: Bool
         
         let imageParameters: [String : Any]?
         let header: STHeader
@@ -41,6 +42,7 @@ extension STImageView {
             let isThumbStr = self.isThumb ? "1" : "0"
             self.header = header
             self.imageParameters = ["file": self.fileName, "set": "\(self.imageType.rawValue)", "is_thumb": isThumbStr]
+            self.isRemote = file.isRemote           
         }
                 
     }
@@ -56,8 +58,10 @@ extension STImageView {
 
 extension STImageView.Image: IRetrySource {
     
-    var filePath: String {
-        return self.isThumb ? "Thumb" : "Oreginal"
+    var filePath: STFileSystem.FilesFolderType {
+        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
+        let folder: STFileSystem.FilesFolderType = self.isThumb ? .thumbs(type: type) : .oreginals(type: type)
+        return folder
     }
 }
 

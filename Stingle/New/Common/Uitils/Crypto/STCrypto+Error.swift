@@ -3,32 +3,33 @@ import Foundation
 
 enum CryptoError: Error {
     
-    enum PrivateFile : Error {
+    enum PrivateFile: Error {
         case invalidPath
         case invalidData
     }
     
-    enum IO : Error {
+    enum IO: Error {
         case writeFailure
         case readFailure
     }
 
-    enum Header : Error {
+    enum Header: Error {
         case incorrectFileIdSize
         case incorrectHeaderSize
         case incorrectFileVersion
         case incorrectFileBeggining
         case incorrectChunkSize
+        case incorrectHeader
     }
 	
-	enum Bundle : Error {
+	enum Bundle: Error {
 		case incorrectKeyFileBeginning
 		case incorrectKeyFileVersion
 		case incorrectKeyFileType
 		case pivateKeyIsEmpty
 	}
 
-    enum Internal : Error {
+    enum Internal: Error {
         case keyPairGenerationFailure
         case keyDerivationFailure
         case decryptFailure
@@ -38,9 +39,11 @@ enum CryptoError: Error {
         case openFailure
     }
     
-    enum General : Error {
+    enum General: Error {
         case incorrectKeySize
         case incorrectParameterSize
         case unknown
+        case creationFailure
     }
+    
 }

@@ -11,25 +11,29 @@ protocol INetworkOperationQueue: class {
     func operation(didStarted operation: INetworkOperation)
     func operation(didFinish operation: INetworkOperation, result: Any)
     func operation(didFinish operation: INetworkOperation, error: IError)
+    
+    var underlyingQueue: DispatchQueue? { get }
 }
 
-class ATOperationQueue: INetworkOperationQueue {
+class STOperationQueue: INetworkOperationQueue {
     
     let maxConcurrentOperationCount: Int
     let qualityOfService: QualityOfService
-    let queue: DispatchQueue?
+    
+    weak var underlyingQueue: DispatchQueue?
     
     private lazy var operationsQueue: OperationQueue = {
         let operationQueue = OperationQueue()
         operationQueue.maxConcurrentOperationCount = self.maxConcurrentOperationCount
         operationQueue.qualityOfService = self.qualityOfService
+        operationQueue.underlyingQueue = self.underlyingQueue
         return operationQueue
     }()
     
-    init(maxConcurrentOperationCount: Int = 5, qualityOfService: QualityOfService = .userInitiated, queue: DispatchQueue? = nil) {
+    init(maxConcurrentOperationCount: Int = 5, qualityOfService: QualityOfService = .userInitiated, underlyingQueue: DispatchQueue? = nil) {
         self.maxConcurrentOperationCount = maxConcurrentOperationCount
         self.qualityOfService = qualityOfService
-        self.queue = queue
+        self.underlyingQueue = underlyingQueue
     }
     
     //MARK: - Public methods
@@ -56,7 +60,7 @@ class ATOperationQueue: INetworkOperationQueue {
         operation.responseSucces(result: result)
     }
     
-    func operation(didFinish operation: INetworkOperation,  error: IError) {
+    func operation(didFinish operation: INetworkOperation, error: IError) {
         operation.responseFailed(error: error)
     }
     

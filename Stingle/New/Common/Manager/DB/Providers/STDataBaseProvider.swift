@@ -16,7 +16,7 @@ extension STDataBase {
         init(container: STDataBaseContainer) {
             self.container = container
         }
-        
+                
         func getAllObjects() -> [Model.ManagedModel] {
             let context = self.container.viewContext
             let fetchRequest = NSFetchRequest<Model.ManagedModel>(entityName: Model.ManagedModel.entityName)

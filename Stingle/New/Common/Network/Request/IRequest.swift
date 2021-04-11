@@ -88,8 +88,15 @@ protocol IDownloadRequest: IRequest {
     var fileDownloadTmpUrl: URL? { get }
 }
 
+protocol IUploadRequest: IRequest {
+    var fileUrl: URL { get }
+}
+
 protocol STDownloadRequest: IDownloadRequest, STRequest {
     var fileName: String { get }
+}
+
+protocol STUploadRequest: IUploadRequest, STRequest {
 }
 
 extension STDownloadRequest {

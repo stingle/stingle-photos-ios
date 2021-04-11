@@ -152,11 +152,20 @@
                                     <outlet property="delegate" destination="4gb-r9-Gut" id="Zog-Dy-aGa"/>
                                 </connections>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zlm-Ar-TLW">
+                                <rect key="frame" x="324" y="719" width="74" height="74"/>
+                                <state key="normal" image="ic_open_image_picker"/>
+                                <connections>
+                                    <action selector="didSelectOpenImagePicker:" destination="4gb-r9-Gut" eventType="touchUpInside" id="XnR-ML-m2H"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="VNU-0I-8gN"/>
                         <color key="backgroundColor" name="STBackground"/>
                         <constraints>
+                            <constraint firstItem="VNU-0I-8gN" firstAttribute="bottom" secondItem="zlm-Ar-TLW" secondAttribute="bottom" constant="20" id="CeP-3v-BaV"/>
                             <constraint firstItem="VNU-0I-8gN" firstAttribute="bottom" secondItem="s9v-YZ-AUH" secondAttribute="bottom" id="Wrx-Hn-EFD"/>
+                            <constraint firstItem="VNU-0I-8gN" firstAttribute="trailing" secondItem="zlm-Ar-TLW" secondAttribute="trailing" constant="16" id="dcQ-Up-XV0"/>
                             <constraint firstItem="s9v-YZ-AUH" firstAttribute="top" secondItem="VNU-0I-8gN" secondAttribute="top" id="mbA-8X-2aV"/>
                             <constraint firstItem="s9v-YZ-AUH" firstAttribute="leading" secondItem="VNU-0I-8gN" secondAttribute="leading" id="sEO-Eq-QSo"/>
                             <constraint firstItem="VNU-0I-8gN" firstAttribute="trailing" secondItem="s9v-YZ-AUH" secondAttribute="trailing" id="sYl-My-MmB"/>
@@ -199,6 +208,7 @@
         <image name="ic_album_min" width="20" height="20"/>
         <image name="ic_gallery_min" width="24" height="24"/>
         <image name="ic_nav_menu" width="18" height="12"/>
+        <image name="ic_open_image_picker" width="74" height="74"/>
         <namedColor name="STBackground">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

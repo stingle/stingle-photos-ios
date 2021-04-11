@@ -18,7 +18,8 @@ extension STLibrary {
                            version: model.version,
                            headers: model.headers,
                            dateCreated: model.dateCreated,
-                           dateModified: model.dateModified)
+                           dateModified: model.dateModified,
+                           isRemote: model.isRemote)
         }
         
         required init(model: STCDFile) throws {

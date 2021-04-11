@@ -23,11 +23,18 @@ extension STCrypto {
     }
     
     public static func toBytes<T: FixedWidthInteger>(value: T) -> Bytes {
+//        var result = [UInt8](repeating: 0, count: 4)
+//        result[3] = UInt8((value & 0xFF))
+//        result[2] = UInt8((value >> 8) & 0xFF)
+//        result[1] = UInt8(((value >> 16) & 0xFF))
+//        result[0] = UInt8((value >> 24) & 0xFF)
+//        return result
+        
         let array = withUnsafeBytes(of: value.bigEndian, Array.init)
         return array
     }
     
-    public static func fromBytes<T: FixedWidthInteger>(b:Bytes) -> T  {
+    public static func fromBytes<T: FixedWidthInteger>(b: Bytes) -> T  {
         assert(0 != b.count)
         if b.count == 1 {
             return T(b[0] & 255)
@@ -40,6 +47,7 @@ extension STCrypto {
             result |= T(b[index] & 255) << shift
         }
         return result
+        
     }
     
     //ENCODE
@@ -74,7 +82,7 @@ extension STCrypto {
         headerBytes += STCrypto.toBytes(value: header.chunkSize)
         
         // Data size - 8 bytes
-        headerBytes += STCrypto.toBytes(value:header.dataSize)
+        headerBytes += STCrypto.toBytes(value: header.dataSize)
         
         // Symmentric key - 32 bytes
         headerBytes += header.symmetricKey
@@ -84,7 +92,7 @@ extension STCrypto {
         
         let name = header.fileName ?? ""
         if name != "" {
-            let bytes:Bytes = name.bytes
+            let bytes: Bytes = name.bytes
             headerBytes += STCrypto.toBytes(value: UInt32(bytes.count))
             headerBytes += bytes
         } else {

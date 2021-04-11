@@ -11,7 +11,7 @@ protocol IRetrySource: STDownloadRequest {
     var fileName: String { get }
     var version: String { get }
     var header: STHeader { get }
-    var filePath: String { get }
+    var filePath: STFileSystem.FilesFolderType { get }
     
     var fileTmpUrl: URL { get }
     var fileSaveUrl: URL { get }
@@ -20,7 +20,7 @@ protocol IRetrySource: STDownloadRequest {
 extension IRetrySource {
     
     var identifier: String {
-        return "\(self.version)_\(self.filePath)_\(self.fileName)"
+        return "\(self.version)_\(self.filePath.folderName)_\(self.fileName)"
     }
     
     var fileDownloadTmpUrl: URL? {
@@ -32,20 +32,17 @@ extension IRetrySource {
     }
     
     var fileSaveUrl: URL {
-        guard let url = STApplication.shared.fileSystem.cacheURL else {
+        guard let url = STApplication.shared.fileSystem.direction(for: self.filePath, create: true) else {
             fatalError("cacheURL not found")
         }
-        var result = url.appendingPathComponent(self.filePath)
-        result = result.appendingPathComponent(self.fileName)
+        let result = url.appendingPathComponent(self.fileName)
         return result
     }
     
 }
 
 class STFileRetryerManager {
-    
     let imageRetryer = ImageRetryer()
-    
 }
 
 extension STFileRetryerManager {

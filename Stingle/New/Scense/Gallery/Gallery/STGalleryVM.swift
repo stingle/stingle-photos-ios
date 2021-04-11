@@ -5,12 +5,13 @@
 //  Created by Khoren Asatryan on 3/16/21.
 //
 
-import Foundation
+import Photos
 
 class STGalleryVM {
     
     private(set) var dataBaseDataSource: STDataBase.DataSource<STLibrary.File>
     private let syncManager = STApplication.shared.syncManager
+    private let uploader = STApplication.shared.uploader
     private let crypto = STApplication.shared.crypto
     private let cache = NSCache<NSIndexPath, STLibrary.File>()
     
@@ -35,6 +36,12 @@ class STGalleryVM {
         } failure: { (error) in
             end?(false)
         }
+    }
+    
+    func upload(assets: [PHAsset]) {
+        
+        self.uploader.upload(files: assets)
+                
     }
     
 }

@@ -107,6 +107,41 @@ class STNetworkDispatcher {
         }
         return Task(request: downloadRequest)
     }
+    
+    func upload(request: IUploadRequest) {
+        
+        AF.upload(multipartFormData: { (data) in
+            
+            
+            
+        }, with: request.asURLRequest)
+        
+        AF.upload(request.fileUrl, with: request.asURLRequest).uploadProgress { (progress) in
+            
+        }.response { (response) in
+            
+            switch response.result {
+            case .success(let value):
+                guard let data = value else {
+                    return
+                }
+                
+                let resp = try? JSONSerialization.jsonObject(with:data, options:[])
+                
+//                completion(.success(result: value))
+            case .failure(let networkError):
+                
+                print(networkError)
+                
+//                let error = NetworkError.error(error: networkError)
+//                completion(.failure(error: error))
+            }
+            
+        }
+        
+       
+        
+    }
         		
 }
 
