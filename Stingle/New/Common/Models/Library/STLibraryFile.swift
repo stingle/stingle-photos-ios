@@ -24,7 +24,7 @@ extension STLibrary {
         let headers: String
         let dateCreated: Date
         let dateModified: Date
-        let isRemote: Bool
+        var isRemote: Bool
         
         lazy var encryptsHeaders: STHeaders = {
             let result = STApplication.shared.crypto.getHeaders(file: self)
@@ -77,6 +77,30 @@ extension STLibrary {
             return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote]
         }
         
+    }
+    
+}
+
+extension STLibrary.File {
+    
+    var fileThumbUrl: URL? {
+        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
+        let folder: STFileSystem.FilesFolderType = .thumbs(type: type)
+        guard let url = STApplication.shared.fileSystem.direction(for: folder, create: true) else {
+            fatalError("cacheURL not found")
+        }
+        let result = url.appendingPathComponent(self.file)
+        return result
+    }
+    
+    var fileoreginalUrl: URL? {
+        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
+        let folder: STFileSystem.FilesFolderType = .oreginals(type: type)
+        guard let url = STApplication.shared.fileSystem.direction(for: folder, create: true) else {
+            fatalError("cacheURL not found")
+        }
+        let result = url.appendingPathComponent(self.file)
+        return result
     }
     
 }

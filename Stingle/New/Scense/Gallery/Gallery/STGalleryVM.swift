@@ -70,7 +70,7 @@ extension STGalleryVM {
             if let duration = obj.encryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).toString()
             }
-            return STGalleryVC.ViewItem(image: image, name: obj.file, videoDuration: videoDurationStr)
+            return STGalleryVC.ViewItem(image: image, name: obj.file, videoDuration: videoDurationStr, isRemote: obj.isRemote)
         }
         return nil
     }
@@ -83,6 +83,7 @@ extension STGalleryVC {
         let image: STImageView.Image?
         let name: String?
         let videoDuration: String?
+        let isRemote: Bool
     }
     
 }

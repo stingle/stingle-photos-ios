@@ -19,9 +19,6 @@ class STDownloadNetworkOperation: STBaseNetworkOperation<URL> {
         }
         
         self.dataRequest = self.networkDispatcher.download(request: request, completion: { [weak self] (result) in
-            
-            
-            
             switch result {
             case .success(let result):
                 self?.responseSucces(result: result)

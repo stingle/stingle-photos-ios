@@ -61,6 +61,14 @@ extension STDataBase {
             throw STDataBase.DataBaseError.dateNotFound
         }
         
+        func getObjects(by models: [Model], in context: NSManagedObjectContext) throws -> [ManagedModel] {
+            throw STDataBase.DataBaseError.dateNotFound
+        }
+        
+        func updateObjects(by models: [Model], managedModels: [ManagedModel], in context: NSManagedObjectContext) throws {
+            throw STDataBase.DataBaseError.dateNotFound
+        }
+                
         func didStartSync() {
             self.dataSources.forEach { (controller) in
                 controller.didStartSync()
@@ -88,15 +96,51 @@ extension STDataBase {
             return dataSource
         }
         
-        func add(model: ManagedModel.Model) {
+        func add(models: [Model]) {
             let context = self.container.newBackgroundContext()
-            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-            context.undoManager = nil
+            context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
             context.performAndWait {
-                _ = ManagedModel(model: model, context: context)
-                self.container.saveContext(context)
-                context.reset()
+                do {
+                    if let inserts = try? self.getInsertObjects(with: models) {
+                        let insertRequest = NSBatchInsertRequest(entityName: ManagedModel.entityName, objects: inserts.json)
+                        insertRequest.resultType = .objectIDs
+                        let _ = try context.execute(insertRequest)
+                    }
+                    let objects = try self.getObjects(by: models, in: context)
+                    try self.updateObjects(by: models, managedModels: objects, in: context)
+                    
+                    if context.hasChanges {
+                        try context.save()
+                    }
+                    
+                } catch {
+                    print(error)
+                }
+                self.reloadData()
             }
+            
+            
+        }
+        
+        func update(model: Model) {
+            let context = self.container.backgroundContext
+//            context.perform {
+                do {
+                    if let inserts = try? self.getInsertObjects(with: [model]).json.first {
+                        var batchRequest = NSBatchUpdateRequest.init(entityName: ManagedModel.entityName)
+                        batchRequest.propertiesToUpdate = inserts
+//                        batchRequest.resultType = .updatedObjectsCountResultType
+                        let _ = try context.execute(batchRequest)
+                    }
+                } catch {
+                    print(error)
+                }
+//            }
+            
+//            context.mergePolicy = NSMergePolicyType.mergeByPropertyStoreTrumpMergePolicyType
+//            context.performAndWait {
+                
+//            }
         }
         
     }

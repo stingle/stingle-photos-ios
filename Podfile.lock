@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.4.1)
+  - Alamofire (5.4.2)
   - Kingfisher (6.2.1)
   - MobileVLCKit (3.3.16.3)
   - netfox (1.19.0)
@@ -24,7 +24,7 @@ SPEC REPOS:
     - Tatsi
 
 SPEC CHECKSUMS:
-  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
+  Alamofire: bfbc4c2fe5909b1d94fb4ef2277c6b3727ef5dae
   Kingfisher: e71c6fac2aebb1262888cabc2cb13d313362a48f
   MobileVLCKit: 2b408a9c5cc327353afab418fafbc942780b248a
   netfox: efeec1d23406df6cd605212f09a40957bb5654eb

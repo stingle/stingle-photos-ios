@@ -18,6 +18,7 @@ public class STCDFile: NSManagedObject, IManagedObject {
         self.headers = model.headers
         self.dateCreated = model.dateCreated
         self.dateModified = model.dateModified
+        self.isRemote = model.isRemote
     }
 
 }

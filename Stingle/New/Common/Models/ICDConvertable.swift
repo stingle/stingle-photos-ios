@@ -24,6 +24,10 @@ extension ICDConvertable {
         return json
     }
     
+    func createManagedModel(context: NSManagedObjectContext) -> ManagedModel {
+        return ManagedModel(model: self as! Self.ManagedModel.Model, context: context)
+    }
+    
 }
 
 

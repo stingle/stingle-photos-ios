@@ -25,6 +25,9 @@
                                 <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.16" colorSpace="calibratedRGB"/>
                             </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_isRemote" translatesAutoresizingMaskIntoConstraints="NO" id="KBb-3i-f54">
+                                <rect key="frame" x="8" y="8" width="24" height="24"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x4X-kl-gQ6">
                                 <rect key="frame" x="220" y="8" width="35" height="15.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -40,9 +43,11 @@
                             <constraint firstAttribute="bottom" secondItem="uxX-i2-5Vu" secondAttribute="bottom" id="7cF-rf-vp5"/>
                             <constraint firstItem="uxX-i2-5Vu" firstAttribute="leading" secondItem="Dkn-Fh-O5a" secondAttribute="leading" id="ExH-T1-gIP"/>
                             <constraint firstItem="x4X-kl-gQ6" firstAttribute="top" secondItem="Dkn-Fh-O5a" secondAttribute="top" constant="8" id="KOT-I9-2Ml"/>
+                            <constraint firstItem="KBb-3i-f54" firstAttribute="top" secondItem="Dkn-Fh-O5a" secondAttribute="top" constant="8" id="PAD-jd-FHV"/>
                             <constraint firstAttribute="trailing" secondItem="uxX-i2-5Vu" secondAttribute="trailing" id="aGi-UQ-bZi"/>
                             <constraint firstItem="uxX-i2-5Vu" firstAttribute="top" secondItem="Dkn-Fh-O5a" secondAttribute="top" id="mT6-6j-Xej"/>
                             <constraint firstAttribute="trailing" secondItem="x4X-kl-gQ6" secondAttribute="trailing" constant="8" id="ohT-Ys-JPB"/>
+                            <constraint firstItem="KBb-3i-f54" firstAttribute="leading" secondItem="Dkn-Fh-O5a" secondAttribute="leading" constant="8" id="wVs-xq-M4s"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -60,6 +65,7 @@
             </constraints>
             <size key="customSize" width="263" height="158"/>
             <connections>
+                <outlet property="icRemoteImageView" destination="KBb-3i-f54" id="LQd-o6-Ktp"/>
                 <outlet property="imageView" destination="uxX-i2-5Vu" id="Ndr-62-pSd"/>
                 <outlet property="videoDurationLabel" destination="x4X-kl-gQ6" id="MjW-hs-AXi"/>
             </connections>
@@ -67,6 +73,7 @@
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="ic_isRemote" width="24" height="24"/>
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

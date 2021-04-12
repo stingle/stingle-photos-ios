@@ -88,8 +88,15 @@ protocol IDownloadRequest: IRequest {
     var fileDownloadTmpUrl: URL? { get }
 }
 
+struct STUploadRequestFileInfo {
+    let type = "application/stinglephoto"
+    let name: String
+    let fileName: String
+    let fileUrl: URL
+}
+
 protocol IUploadRequest: IRequest {
-    var fileUrl: URL { get }
+    var files: [STUploadRequestFileInfo] { get }
 }
 
 protocol STDownloadRequest: IDownloadRequest, STRequest {

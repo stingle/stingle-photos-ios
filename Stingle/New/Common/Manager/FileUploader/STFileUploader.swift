@@ -9,9 +9,7 @@ import Photos
 import UIKit
 
 protocol IUploadFile {
-    
     func requestData(success: @escaping (_ uploadInfo: STFileUploader.UploadFileInfo) -> Void, failure: @escaping (_ failure: IError ) -> Void)
-    
 }
 
 class STFileUploader {
@@ -20,7 +18,7 @@ class STFileUploader {
     private let operationManager = STOperationManager.shared
     
     lazy var operationQueue: STOperationQueue = {
-        let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 1, underlyingQueue: dispatchQueue)
+        let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 10, underlyingQueue: dispatchQueue)
         return queue
     }()
     
@@ -45,8 +43,7 @@ extension STFileUploader: STFileUploaderOperationDelegate {
     }
     
     func fileUploaderOperation(didStartUploading operation: STFileUploader.Operation, file: STLibrary.File) {
-        STApplication.shared.dataBase.galleryProvider.add(model: file)
-        STApplication.shared.dataBase.galleryProvider.reloadData()
+        STApplication.shared.dataBase.galleryProvider.add(models: [file])
     }
     
     func fileUploaderOperation(didProgress operation: STFileUploader.Operation, progress: Progress, file: STLibrary.File) {
@@ -57,10 +54,13 @@ extension STFileUploader: STFileUploaderOperationDelegate {
         
     }
     
-    func fileUploaderOperation(didEndSucces operation: STFileUploader.Operation, file: STLibrary.File) {
-        
+    func fileUploaderOperation(didEndSucces operation: Operation, file: STLibrary.File, spaceUsed: STDBUsed) {
+        let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
+        dbInfo.update(with: spaceUsed)
+        STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
+        STApplication.shared.dataBase.galleryProvider.add(models: [file])
     }
-
+    
 }
 
 extension STFileUploader {
@@ -223,9 +223,11 @@ private extension PHAsset {
             }
             let responseURL: URL = fullSizeImageURL
             let videoDuration: TimeInterval = .zero
-            let fileSize: Int32 = contentEditingInput.fullSizeImageOrientation
             let creationDate: Date? = creationDate
             let modificationDate: Date? = modificationDate
+            
+            let attr = try? FileManager.default.attributesOfItem(atPath: responseURL.path)
+            let fileSize = (attr?[FileAttributeKey.size] as? Int32) ?? 0
             
             let result = PHAssetDataInfo(url: responseURL,
                             videoDuration: videoDuration,

@@ -50,6 +50,11 @@ class STDBInfo: ICDConvertable {
                   spaceUsed: model.spaceUsed,
                   spaceQuota: model.spaceQuota)
     }
+    
+    func update(with used: STDBUsed) {
+        self.spaceUsed = "\(used.spaceUsed)"
+        self.spaceQuota = used.spaceQuota
+    }
 
 }
 

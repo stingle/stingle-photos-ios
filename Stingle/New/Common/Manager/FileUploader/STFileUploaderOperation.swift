@@ -14,7 +14,7 @@ protocol STFileUploaderOperationDelegate: class {
     func fileUploaderOperation(didStartUploading operation: STFileUploader.Operation, file: STLibrary.File)
     func fileUploaderOperation(didProgress operation: STFileUploader.Operation, progress: Progress, file: STLibrary.File)
     func fileUploaderOperation(didEndFailed operation: STFileUploader.Operation, error: IError, file: STLibrary.File?)
-    func fileUploaderOperation(didEndSucces operation: STFileUploader.Operation, file: STLibrary.File)
+    func fileUploaderOperation(didEndSucces operation: STFileUploader.Operation, file: STLibrary.File, spaceUsed: STDBUsed)
     
 }
 
@@ -23,6 +23,8 @@ extension STFileUploader {
     class Operation: STOperation<STLibrary.File> {
         
         private weak var delegate: STFileUploaderOperationDelegate?
+        private let uploadWorker = STUploadWorker()
+        private weak var networkOperation: STUploadNetworkOperation<STResponse<STDBUsed>>?
         
         let file: IUploadFile
         
@@ -40,6 +42,11 @@ extension STFileUploader {
             } failure: { [weak self] (error) in
                 self?.responseFailed(error: error)
             }
+        }
+        
+        override func cancel() {
+            super.cancel()
+            self.networkOperation?.cancel()
         }
                 
         //MARK: - Private
@@ -80,19 +87,52 @@ extension STFileUploader {
             } catch {
                 self.responseFailed(error: UploaderError.error(error: error), file: nil)
             }
-            
         }
         
         private func continueOperation(with file: STLibrary.File) {
             self.delegate?.fileUploaderOperation(didStartUploading: self, file: file)
-            
-            
-            
+            self.networkOperation = self.uploadWorker.upload(file: file) { [weak self] (result) in
+                self?.continueOperation(didUpload: file, spaceUsed: result)
+            } progress: { [weak self] (progress) in
+                self?.responseProgress(result: progress, file: file)
+            } failure: { [weak self] (error) in
+                self?.responseFailed(error: error, file: file)
+            }
         }
         
-        private func responseSucces(result: STLibrary.File) {
+        private func continueOperation(didUpload file: STLibrary.File, spaceUsed: STDBUsed) {
+            
+            let oldFileThumbUrl = file.fileThumbUrl
+            let oldFileOreginalUrl = file.fileoreginalUrl
+            file.isRemote = true
+            
+            let newFileThumbUrl = file.fileThumbUrl
+            let newFileOreginalUrl = file.fileoreginalUrl
+            
+            if let old = oldFileThumbUrl, let new = newFileThumbUrl {
+                do {
+                    try STApplication.shared.fileSystem.move(file: old, to: new)
+                } catch  {
+                    self.responseFailed(error: UploaderError.error(error: error), file: file)
+                    return
+                }
+            }
+            
+            if let old = oldFileOreginalUrl, let new = newFileOreginalUrl {
+                do {
+                    try STApplication.shared.fileSystem.move(file: old, to: new)
+                } catch  {
+                    self.responseFailed(error: UploaderError.error(error: error), file: file)
+                    return
+                }
+            }
+            
+            self.responseSucces(result: file, spaceUsed: spaceUsed)
+        }
+        
+        private func responseSucces(result: STLibrary.File, spaceUsed: STDBUsed) {
             super.responseSucces(result: result)
-            self.delegate?.fileUploaderOperation(didEndSucces: self, file: result)
+            self.delegate?.fileUploaderOperation(didEndSucces: self, file: result, spaceUsed: spaceUsed)
         }
 
         private func responseProgress(result: Progress, file: STLibrary.File) {
@@ -106,6 +146,5 @@ extension STFileUploader {
         }
 
     }
-    
     
 }

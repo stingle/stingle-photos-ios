@@ -35,7 +35,6 @@ extension STDataBase {
                 throw STDataBase.DataBaseError.dateNotFound
             }
             
-            let context = self.container.newBackgroundContext()
             let fileNames = deleteFiles.compactMap { (deleteFile) -> String in
                 return deleteFile.file
             }
@@ -57,6 +56,34 @@ extension STDataBase {
                 }
             }
             return (deleteItems, lastDate)
+        }
+        
+        override func getObjects(by models: [STLibrary.File], in context: NSManagedObjectContext) throws -> [STCDFile] {
+            guard !models.isEmpty else {
+                return []
+            }
+            let fileNames = models.compactMap { (deleteFile) -> String in
+                return deleteFile.file
+            }
+            let fetchRequest = NSFetchRequest<STCDFile>(entityName: STCDFile.entityName)
+            fetchRequest.includesSubentities = false
+            fetchRequest.predicate = NSPredicate(format: "file IN %@", fileNames)
+            let deleteingCDItems = try context.fetch(fetchRequest)
+            return deleteingCDItems
+        }
+        
+        override func updateObjects(by models: [STLibrary.File], managedModels: [STCDFile], in context: NSManagedObjectContext) {
+            
+            let modelsGroup = Dictionary(grouping: models, by: { $0.file })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.file })
+            
+            managedGroup.forEach { (keyValue) in
+                if let key = keyValue.key, let model = modelsGroup[key]?.first {
+                    let cdModel = keyValue.value.first
+                    cdModel?.update(model: model, context: context)
+                }
+            }
+            
         }
 
     }
