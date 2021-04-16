@@ -2,7 +2,7 @@
 //  STLibraryTrashFile.swift
 //  Stingle
 //
-//  Created by Khoren Asatryan on 3/11/21.
+//  Created by Khoren Asatryan on 3/11/21.O
 //
 
 import Foundation

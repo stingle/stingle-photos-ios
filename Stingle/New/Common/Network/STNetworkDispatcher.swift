@@ -31,8 +31,16 @@ class STNetworkDispatcher {
     static let sheared: STNetworkDispatcher = STNetworkDispatcher()
 
     private lazy var session: Alamofire.Session = {
-        let sesion = Alamofire.Session(session: AF.session, delegate: AF.delegate, rootQueue: AF.rootQueue, startRequestsImmediately: AF.startRequestsImmediately, requestQueue: AF.requestQueue, serializationQueue: AF.serializationQueue, interceptor: AF.interceptor, serverTrustManager: AF.serverTrustManager, redirectHandler: AF.redirectHandler, cachedResponseHandler: AF.cachedResponseHandler, eventMonitors: [])
-        return sesion
+        return AF
+    }()
+    
+    private lazy var backgroundSession: Alamofire.Session = {
+        #if targetEnvironment(simulator)
+        return self.session
+        #else
+        let backgroundSessionManager = Alamofire.Session(configuration: URLSessionConfiguration.background(withIdentifier: "Alamofire.backgroundSessio"))
+        return backgroundSessionManager
+        #endif
     }()
 		
     lazy var decoder: JSONDecoder = {
@@ -40,8 +48,10 @@ class STNetworkDispatcher {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
+    
 	
 	private init() {}
+     
 		
 	@discardableResult
 	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
@@ -114,6 +124,7 @@ class STNetworkDispatcher {
     }
     
     func upload<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> NetworkTask? {
+        
         let uploadRequest = self.session.upload(multipartFormData: { (data) in
             request.files.forEach { (file) in
                 data.append(file.fileUrl, withName: file.name, fileName: file.fileName, mimeType: file.type)

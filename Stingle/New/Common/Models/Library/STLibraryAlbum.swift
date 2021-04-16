@@ -42,6 +42,10 @@ extension STLibrary {
         let dateModified: Date
         let isRemote: Bool
         
+        lazy var albumMetadata: AlbumMetadata? = {
+            return try? STApplication.shared.crypto.decryptAlbum(albumPKStr: self.publicKey, encAlbumSKStr: self.encPrivateKey, metadataStr: self.metadata)
+        }()
+                
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             

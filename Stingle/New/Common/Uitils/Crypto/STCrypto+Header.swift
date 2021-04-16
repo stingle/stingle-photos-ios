@@ -138,11 +138,11 @@ extension STCrypto {
         return arrary
     }
         
-    func getHeaders(file: STLibrary.File) -> STHeaders  {
-        return self.getHeaders(headersStrs: file.headers)
+    func getHeaders(file: STLibrary.File, publicKey: Bytes? = nil, privateKey: Bytes? = nil) -> STHeaders  {
+        return self.getHeaders(headersStrs: file.headers, publicKey: publicKey, privateKey: privateKey)
     }
     
-    func getHeaders(headersStrs: String) -> STHeaders  {
+    func getHeaders(headersStrs: String, publicKey: Bytes? = nil, privateKey: Bytes? = nil) -> STHeaders  {
         
         var fileHeader: STHeader?
         var thumbHeader: STHeader?
@@ -157,7 +157,7 @@ extension STCrypto {
                 let input = InputStream(data: Data(data))
                 input.open()
                 do {
-                    let header = try crypto.getFileHeader(input: input)
+                    let header = try crypto.getFileHeader(input: input, publicKey: publicKey, privateKey: privateKey)
                     input.close()
                     switch index {
                     case 0:
@@ -294,7 +294,7 @@ extension STCrypto {
         return result
     }
         
-    func getFileHeader(input: InputStream) throws -> STHeader {
+    func getFileHeader(input: InputStream, publicKey: Bytes? = nil, privateKey: Bytes? = nil) throws -> STHeader {
         var buf:Bytes = Bytes(repeating: 0, count: Constants.FileHeaderBeginningLen)
         guard Constants.FileHeaderBeginningLen == input.read(&buf, maxLength: Constants.FileHeaderBeginningLen) else {
             throw CryptoError.IO.readFailure
@@ -334,12 +334,23 @@ extension STCrypto {
             throw CryptoError.IO.readFailure
         }
         encHeaderBytes = encHeaderBytes.dropLast(Int(headerSize) - numRead)
-        let publicKey = try readPrivateFile(filename: Constants.PublicKeyFilename)
         
-        guard let privateKey:Bytes = KeyManagement.key else {
-            throw CryptoError.Bundle.pivateKeyIsEmpty
+        var publicKey = publicKey
+        
+        if publicKey == nil {
+            publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
         }
-        guard let headerBytes = sodium.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
+        
+        var privateKey = privateKey
+        
+        if privateKey == nil {
+            privateKey = KeyManagement.key
+            if privateKey == nil {
+                throw CryptoError.Bundle.pivateKeyIsEmpty
+            }
+        }
+                
+        guard let headerBytes = self.sodium.box.open(anonymousCipherText: encHeaderBytes, recipientPublicKey: publicKey!, recipientSecretKey: privateKey!) else {
             throw CryptoError.Internal.openFailure
         }
         

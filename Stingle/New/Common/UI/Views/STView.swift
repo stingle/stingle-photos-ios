@@ -7,6 +7,7 @@
 
 import UIKit
 
+@IBDesignable
 class STView: UIView {
     
     @IBInspectable var cornerTopLeft: Bool = true {

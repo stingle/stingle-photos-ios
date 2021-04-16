@@ -13,7 +13,7 @@
         <!--Navigation Controller-->
         <scene sceneID="qj7-jx-s0x">
             <objects>
-                <navigationController storyboardIdentifier="TrashID" id="Bpg-Te-50b" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="TrashID" id="Bpg-Te-50b" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Lez-zF-1Je">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -24,7 +24,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6sX-YB-AHZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2362" y="-1037"/>
+            <point key="canvasLocation" x="-4739" y="1803"/>
         </scene>
         <!--Trash-->
         <scene sceneID="aJG-fW-sqf">
@@ -33,14 +33,43 @@
                     <view key="view" contentMode="scaleToFill" id="M9M-9P-E0C">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="LHV-or-sq4">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="aNf-q5-zNi">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="2dT-SX-m2V"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="LHV-or-sq4" firstAttribute="leading" secondItem="2dT-SX-m2V" secondAttribute="leading" id="6lF-rV-rFv"/>
+                            <constraint firstItem="2dT-SX-m2V" firstAttribute="bottom" secondItem="LHV-or-sq4" secondAttribute="bottom" id="Ihj-eN-Uqw"/>
+                            <constraint firstItem="LHV-or-sq4" firstAttribute="top" secondItem="2dT-SX-m2V" secondAttribute="top" id="Sbb-WS-D8x"/>
+                            <constraint firstItem="2dT-SX-m2V" firstAttribute="trailing" secondItem="LHV-or-sq4" secondAttribute="trailing" id="o1a-UW-U8g"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Trash" id="dyd-OB-pcz"/>
+                    <navigationItem key="navigationItem" title="Trash" id="dyd-OB-pcz">
+                        <barButtonItem key="leftBarButtonItem" image="ic_nav_menu" id="khb-Gn-1di">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="didSelectMenuBarItem:" destination="a0W-jo-T2n" id="pEu-fI-QFP"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="LHV-or-sq4" id="SuH-J0-NIb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CSd-uK-hpf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1445" y="-1037"/>
+            <point key="canvasLocation" x="-3823" y="1803"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0D9-fD-gXV">
@@ -56,7 +85,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="agj-Tf-Qmy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2361" y="-135"/>
+            <point key="canvasLocation" x="-4738" y="1024"/>
         </scene>
         <!--Tab BarVC-->
         <scene sceneID="oyc-oW-uLu">
@@ -94,24 +123,24 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5v2-ni-K08" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1444" y="-135"/>
+            <point key="canvasLocation" x="-3555" y="1024"/>
         </scene>
         <!--Album-->
         <scene sceneID="q7q-7p-gOM">
             <objects>
-                <navigationController id="UtM-t9-Os5" sceneMemberID="viewController">
+                <navigationController id="UtM-t9-Os5" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Album" image="ic_album_min" id="F5a-1i-nFa"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cRA-Mk-YDO">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="93n-gp-CHJ" kind="relationship" relationship="rootViewController" id="dbo-Hp-LQ3"/>
+                        <segue destination="8nd-bs-WGs" kind="relationship" relationship="rootViewController" id="cAg-Ag-3fY"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZTZ-dg-84e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1445" y="639"/>
+            <point key="canvasLocation" x="-2362" y="1383"/>
         </scene>
         <!--Gallery-->
         <scene sceneID="K92-ZK-yOp">
@@ -139,7 +168,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="s9v-YZ-AUH" customClass="STCollectionView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="2CS-fd-O9c">
                                     <size key="itemSize" width="128" height="128"/>
@@ -164,11 +193,11 @@
                         <color key="backgroundColor" name="STBackground"/>
                         <constraints>
                             <constraint firstItem="VNU-0I-8gN" firstAttribute="bottom" secondItem="zlm-Ar-TLW" secondAttribute="bottom" constant="20" id="CeP-3v-BaV"/>
-                            <constraint firstItem="VNU-0I-8gN" firstAttribute="bottom" secondItem="s9v-YZ-AUH" secondAttribute="bottom" id="Wrx-Hn-EFD"/>
+                            <constraint firstItem="s9v-YZ-AUH" firstAttribute="top" secondItem="MnP-Jg-WJp" secondAttribute="top" id="ENi-s2-fgk"/>
                             <constraint firstItem="VNU-0I-8gN" firstAttribute="trailing" secondItem="zlm-Ar-TLW" secondAttribute="trailing" constant="16" id="dcQ-Up-XV0"/>
-                            <constraint firstItem="s9v-YZ-AUH" firstAttribute="top" secondItem="VNU-0I-8gN" secondAttribute="top" id="mbA-8X-2aV"/>
                             <constraint firstItem="s9v-YZ-AUH" firstAttribute="leading" secondItem="VNU-0I-8gN" secondAttribute="leading" id="sEO-Eq-QSo"/>
                             <constraint firstItem="VNU-0I-8gN" firstAttribute="trailing" secondItem="s9v-YZ-AUH" secondAttribute="trailing" id="sYl-My-MmB"/>
+                            <constraint firstAttribute="bottom" secondItem="s9v-YZ-AUH" secondAttribute="bottom" id="taN-u6-hsd"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Mjv-SV-HNE">
@@ -185,23 +214,52 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ew-aZ-3Qw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2362" y="1383"/>
+            <point key="canvasLocation" x="-1381" y="639"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="GW4-RR-AiF">
+        <!--Albums-->
+        <scene sceneID="XuP-yU-fZW">
             <objects>
-                <viewController id="93n-gp-CHJ" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="EeL-KA-GNA">
+                <viewController id="8nd-bs-WGs" customClass="STAlbumsVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ES9-Gw-MFt">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="5RG-oc-qrF"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="i9L-75-PfS">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ddg-vR-wge">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Rqu-ka-gRB"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Rqu-ka-gRB" firstAttribute="bottom" secondItem="i9L-75-PfS" secondAttribute="bottom" id="Age-2h-TtG"/>
+                            <constraint firstItem="i9L-75-PfS" firstAttribute="top" secondItem="Rqu-ka-gRB" secondAttribute="top" id="oIj-7o-WQK"/>
+                            <constraint firstItem="i9L-75-PfS" firstAttribute="leading" secondItem="Rqu-ka-gRB" secondAttribute="leading" id="v2H-DB-JMM"/>
+                            <constraint firstItem="Rqu-ka-gRB" firstAttribute="trailing" secondItem="i9L-75-PfS" secondAttribute="trailing" id="xaS-My-ug8"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="adm-J1-7cN"/>
+                    <navigationItem key="navigationItem" title="Albums" id="XBD-EI-Oik">
+                        <barButtonItem key="leftBarButtonItem" image="ic_nav_menu" id="FZq-5P-Eju">
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="didSelectMenuBarItem:" destination="8nd-bs-WGs" id="wcL-xe-hbv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="i9L-75-PfS" id="tSu-VW-xJR"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="EHN-5h-6bu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nce-rQ-KrG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1445" y="1383"/>
+            <point key="canvasLocation" x="-1381" y="1383"/>
         </scene>
     </scenes>
     <resources>

@@ -12,7 +12,7 @@ extension STDataBase {
     
     class DataBaseCollectionProvider<Model: ICDConvertable, ManagedModel: IManagedObject, DeleteFile: ILibraryDeleteFile>: DataBaseProvider<Model> {
         
-        let dataSources = STObserverEvents<STDataBase.DataSource<Model>>()
+        let dataSources = STObserverEvents<STDataBase.DataSource<ManagedModel>>()
                 
         override init(container: STDataBaseContainer) {
             super.init(container: container)
@@ -90,13 +90,13 @@ extension STDataBase {
         
         //MARK: - DataSource
         
-        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?) -> DataSource<Model> {
-            let dataSource = STDataBase.DataSource<Model>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, sectionNameKeyPath: sectionNameKeyPath)
+        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?) -> DataSource<ManagedModel> {
+            let dataSource = STDataBase.DataSource<ManagedModel>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, sectionNameKeyPath: sectionNameKeyPath)
             self.dataSources.addObject(dataSource)
             return dataSource
         }
         
-        func add(models: [Model]) {
+        func add(models: [Model], reloadData: Bool) {
             let context = self.container.newBackgroundContext()
             context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
             context.performAndWait {
@@ -108,130 +108,68 @@ extension STDataBase {
                     }
                     let objects = try self.getObjects(by: models, in: context)
                     try self.updateObjects(by: models, managedModels: objects, in: context)
-                    
                     if context.hasChanges {
-                        try context.save()
+                        try? context.save()
                     }
                     
                 } catch {
                     print(error)
                 }
+            }
+            if reloadData {
                 self.reloadData()
             }
-            
-            
         }
         
-        func update(model: Model) {
-            let context = self.container.backgroundContext
-//            context.perform {
-                do {
-                    if let inserts = try? self.getInsertObjects(with: [model]).json.first {
-                        var batchRequest = NSBatchUpdateRequest.init(entityName: ManagedModel.entityName)
-                        batchRequest.propertiesToUpdate = inserts
-//                        batchRequest.resultType = .updatedObjectsCountResultType
-                        let _ = try context.execute(batchRequest)
-                    }
-                } catch {
-                    print(error)
+        func fetch(format predicateFormat: String, arguments argList: CVaListPointer) -> [Model] {
+            let predicate = NSPredicate(format: predicateFormat, arguments: argList)
+            let cdModels: [ManagedModel] = self.fetch(predicate: predicate)
+            var results = [Model]()
+            for cdModel in cdModels {
+                if let model = try? cdModel.createModel() as? Model  {
+                    results.append(model)
                 }
-//            }
-            
-//            context.mergePolicy = NSMergePolicyType.mergeByPropertyStoreTrumpMergePolicyType
-//            context.performAndWait {
-                
-//            }
-        }
-        
-    }
-
-}
-
-protocol IProviderDelegate: class {
-    
-    func didStartSync(dataSource: IProviderDataSource)
-    func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference)
-    func didEndSync(dataSource: IProviderDataSource)
-    
-}
-
-protocol IProviderDataSource: class {
-    
-    func reloadData()
-    func object(for indexPath: IndexPath) -> Any?
-    
-}
-
-extension STDataBase {
-    
-    class DataSource<Model: ICDConvertable>: NSObject, NSFetchedResultsControllerDelegate, IProviderDataSource {
-        
-        let sortDescriptorsKeys: [String]
-        let sectionNameKeyPath: String?
-        let ascending: Bool
-        
-        private(set) var snapshotReference: NSDiffableDataSourceSnapshotReference?
-        private let viewContext: NSManagedObjectContext
-        private var controller: NSFetchedResultsController<Model.ManagedModel>!
-        
-        weak var delegate: IProviderDelegate?
-        
-        init(sortDescriptorsKeys: [String], viewContext: NSManagedObjectContext, sectionNameKeyPath: String?, ascending: Bool = false) {
-            self.ascending = ascending
-            self.sortDescriptorsKeys = sortDescriptorsKeys
-            self.viewContext = viewContext
-            self.sectionNameKeyPath = sectionNameKeyPath
-            super.init()
-            self.controller = self.createResultsController()
-        }
-        
-        //MARK: - private
-        
-        private func createResultsController() -> NSFetchedResultsController<Model.ManagedModel> {
-            let filesFetchRequest = NSFetchRequest<Model.ManagedModel>(entityName: Model.ManagedModel.entityName)
-            let sortDescriptors = self.sortDescriptorsKeys.compactMap { (key) -> NSSortDescriptor in
-                return NSSortDescriptor(key: key, ascending: self.ascending)
             }
-            filesFetchRequest.sortDescriptors = sortDescriptors
-            let resultsController = NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: self.viewContext, sectionNameKeyPath: self.sectionNameKeyPath, cacheName: Model.ManagedModel.entityName)
-            resultsController.delegate = self
-            return resultsController
+            return results
         }
         
-        func didStartSync() {
-            self.delegate?.didStartSync(dataSource: self)
+        func fetch(format predicateFormat: String, _ args: CVarArg...) -> [Model] {
+            let predicate = NSPredicate(format: predicateFormat, args)
+            let cdModels: [ManagedModel] = self.fetch(predicate: predicate)
+            var results = [Model]()
+            for cdModel in cdModels {
+                if let model = try? cdModel.createModel() as? Model  {
+                    results.append(model)
+                }
+            }
+            return results
         }
         
-        func didEndSync() {
-            self.delegate?.didEndSync(dataSource: self)
+        func fetchAll() -> [Model] {
+            let cdModels: [ManagedModel] = self.fetch(predicate: nil)
+            var results = [Model]()
+            for cdModel in cdModels {
+                if let model = try? cdModel.createModel() as? Model  {
+                    results.append(model)
+                }
+        
+            }
+            return results
         }
         
-        //MARK: - NSFetchedResultsControllerDelegate
-        
-        func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-            self.snapshotReference = snapshot
-            self.delegate?.dataSource(self, didChangeContentWith: snapshot)
+        func fetch(predicate: NSPredicate?) -> [ManagedModel] {
+            let context = self.container.newBackgroundContext()
+            context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
+            return context.performAndWait { () -> [ManagedModel] in
+                let fetchRequest = NSFetchRequest<ManagedModel>(entityName: ManagedModel.entityName)
+                fetchRequest.includesSubentities = false
+                fetchRequest.predicate = predicate
+                let cdModels = try? context.fetch(fetchRequest)
+                return cdModels ?? []
+            }
         }
         
-        func object(at indexPath: IndexPath) -> Model? {
-            let obj = self.controller.object(at: indexPath)
-            let result = try? Model(model: obj)
-            return result
-        }
         
-        func sectionTitle(at secction: Int) -> String? {
-            return self.snapshotReference?.sectionIdentifiers[secction] as? String
-        }
-        
-        //MARK: - IProviderDataSource
-        
-        func reloadData() {
-            try? self.controller.performFetch()
-        }
-        
-        func object(for indexPath: IndexPath) -> Any? {
-            return self.object(at: indexPath)
-        }
     }
-        
+
 }

@@ -42,7 +42,7 @@ extension STLibrary {
         required init(model: STCDFile) throws {
             fatalError("init(model:) has not been implemented")
         }
- 
+        
         override func toManagedModelJson() throws -> [String : Any] {
             var json = try super.toManagedModelJson()
             json["albumId"] = self.albumId

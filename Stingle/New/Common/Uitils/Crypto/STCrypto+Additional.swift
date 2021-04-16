@@ -49,8 +49,7 @@ extension STCrypto {
     }
     
     func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: Int32) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
-        var fileName = try self.createEncFileName()
-        fileName = fileName.replacingOccurrences(of: "/", with: "a")
+        let fileName = try self.createEncFileName()
         let fileId = try self.createNewFileId()
         let inputThumb = InputStream(data: thumbImage)
         inputThumb.open()
@@ -78,12 +77,11 @@ extension STCrypto {
             outputOrigin.close()
         }
         
-
-        let thumbHeader = try self.encryptFile(input: inputThumb, output: outputThumb, filename: fileName, fileType: STHeader.FileType.image.rawValue, dataLength: UInt(thumbImage.count), fileId: fileId, videoDuration: 0)
+        let thumbHeader = try self.encryptFile(input: inputThumb, output: outputThumb, filename: fileName, fileType: fileType.rawValue, dataLength: UInt(thumbImage.count), fileId: fileId, videoDuration: UInt32(duration))
         
         let origineader = try self.encryptFile(input: inputOrigin, output: outputOrigin, filename: fileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration))
-
-        guard let base64Original = self.bytesToBase64(data: origineader.encriptedHeader), let base64Thumb = self.bytesToBase64(data: thumbHeader.encriptedHeader) else {
+                
+        guard let base64Original = self.bytesToBase64Url(data: origineader.encriptedHeader), let base64Thumb = self.bytesToBase64Url(data: thumbHeader.encriptedHeader) else {
             throw CryptoError.Header.incorrectHeader
         }
         let headers = base64Original + "*" + base64Thumb
@@ -92,7 +90,7 @@ extension STCrypto {
     
     func createEncFileName() throws -> String {
         let crypto = STApplication.shared.crypto
-        guard let randData = crypto.getRandomBytes(lenght: STCrypto.Constants.FileNameLen), let base64Str = crypto.bytesToBase64(data: randData) else {
+        guard let randData = crypto.getRandomBytes(lenght: STCrypto.Constants.FileNameLen), let base64Str = crypto.bytesToBase64Url(data: randData) else {
             throw CryptoError.General.creationFailure
         }
         

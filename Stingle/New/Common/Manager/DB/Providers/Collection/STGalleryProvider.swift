@@ -73,10 +73,8 @@ extension STDataBase {
         }
         
         override func updateObjects(by models: [STLibrary.File], managedModels: [STCDFile], in context: NSManagedObjectContext) {
-            
             let modelsGroup = Dictionary(grouping: models, by: { $0.file })
             let managedGroup = Dictionary(grouping: managedModels, by: { $0.file })
-            
             managedGroup.forEach { (keyValue) in
                 if let key = keyValue.key, let model = modelsGroup[key]?.first {
                     let cdModel = keyValue.value.first

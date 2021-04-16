@@ -95,10 +95,12 @@ class STImagePickerHelper: NSObject {
 extension STImagePickerHelper: TatsiPickerViewControllerDelegate {
     
     func pickerViewController(_ pickerViewController: TatsiPickerViewController, didPickAssets assets: [PHAsset]) {
+        pickerViewController.dismiss(animated: true, completion: nil)
         self.viewController?.pickerViewController(self, didPickAssets: assets)
     }
     
     func pickerViewControllerDidCancel(_ pickerViewController: TatsiPickerViewController) {
+        pickerViewController.dismiss(animated: true, completion: nil)
         self.viewController?.pickerViewControllerDidCancel(self)
     }
     

@@ -46,6 +46,7 @@ class STSyncManager {
             } else {
                 success?()
                 self.didEndSync(error: nil)
+                STApplication.shared.uploader.uploadAllLocalFiles()
             }
         })
     }

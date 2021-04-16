@@ -57,6 +57,9 @@
 
 "cancel" = "Cancel";
 "ok" = "Ok";
+"trash" = "Trash";
+"albums" = "Albums";
+"items_count" = "%@ items";
 
 //MARK: - Menu
 
@@ -79,6 +82,8 @@
 "warning" = "Warning";
 "empty_data" = "Empty data";
 "incorrect_password" = "Incorrect password";
+"storage_size_isover" = "Storage size isover";
+
 
 "error_empty_text" = "Text cannot be empty";
 "error_empty_email" = "Email cannot be empty";

@@ -26,21 +26,30 @@ extension STFileUploader {
         private let uploadWorker = STUploadWorker()
         private weak var networkOperation: STUploadNetworkOperation<STResponse<STDBUsed>>?
         
-        let file: IUploadFile
+        var uploadFile: IUploadFile!
+        var libraryFile: STLibrary.File?
         
         init(file: IUploadFile, delegate: STFileUploaderOperationDelegate) {
-            self.file = file
+            self.uploadFile = file
             self.delegate = delegate
+            super.init(success: nil, failure: nil, progress: nil)
+        }
+        
+        init(file: STLibrary.File, delegate: STFileUploaderOperationDelegate) {
+            self.delegate = delegate
+            self.libraryFile = file
             super.init(success: nil, failure: nil, progress: nil)
         }
         
         override func resume() {
             super.resume()
             self.delegate?.fileUploaderOperation(didStart: self)
-            self.file.requestData { [weak self] (info) in
-                self?.continueOperation(with: info)
-            } failure: { [weak self] (error) in
-                self?.responseFailed(error: error)
+            if let file = self.libraryFile {
+                self.upload(file: file)
+            } else if let file = self.uploadFile {
+                self.upload(file: file)
+            } else {
+                self.responseFailed(error: UploaderError.fileNotFound, file: nil)
             }
         }
         
@@ -50,6 +59,18 @@ extension STFileUploader {
         }
                 
         //MARK: - Private
+        
+        private func upload(file: IUploadFile) {
+            file.requestData { [weak self] (info) in
+                self?.continueOperation(with: info)
+            } failure: { [weak self] (error) in
+                self?.responseFailed(error: error)
+            }
+        }
+        
+        private func upload(file: STLibrary.File) {
+            self.continueOperation(with: file)
+        }
         
         private func continueOperation(with info: UploadFileInfo) {
             var fileType: STHeader.FileType!
@@ -75,9 +96,7 @@ extension STFileUploader {
         }
                 
         private func continueOperation(with encryptedFileInfo: (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String), info: UploadFileInfo) {
-            
             let version = "\(STCrypto.Constants.CurrentFileVersion)"
-                        
             let dateCreated = info.creationDate ?? Date()
             let dateModified = info.modificationDate ?? Date()
             
@@ -91,6 +110,11 @@ extension STFileUploader {
         
         private func continueOperation(with file: STLibrary.File) {
             self.delegate?.fileUploaderOperation(didStartUploading: self, file: file)
+            let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
+            guard let spaceQuota = dbInfo.spaceQuota, let spaceUsed = dbInfo.spaceUsed, Double(spaceUsed) ?? 0 < Double(spaceQuota) ?? 0 else {
+                self.responseFailed(error: UploaderError.wrongStorageSize, file: file)
+                return
+            }
             self.networkOperation = self.uploadWorker.upload(file: file) { [weak self] (result) in
                 self?.continueOperation(didUpload: file, spaceUsed: result)
             } progress: { [weak self] (progress) in

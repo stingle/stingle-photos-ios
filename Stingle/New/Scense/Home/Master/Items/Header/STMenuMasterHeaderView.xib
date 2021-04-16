@@ -38,27 +38,27 @@
                     <color key="textColor" name="STPrimary"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="verdyan86@mail.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="TOt-nX-VaA">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="verdyan86@mail.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="TOt-nX-VaA">
                     <rect key="frame" x="16" y="106" width="157" height="19.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <color key="textColor" name="STText"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="670 MB of 10.0 GB (6%) used" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="89f-ma-Jyc">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="670 MB of 10.0 GB (6%) used" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="89f-ma-Jyc">
                     <rect key="frame" x="16" y="130.5" width="191.5" height="17"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" name="STSecondaryText"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="h32-c3-AeG">
-                    <rect key="frame" x="16" y="167.5" width="359" height="4"/>
+                    <rect key="frame" x="16" y="179" width="359" height="4"/>
                     <color key="progressTintColor" name="STPrimary"/>
                     <color key="trackTintColor" name="STPrimaryTransparent"/>
                 </progressView>
             </subviews>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="2Bm-kS-Yvl" secondAttribute="trailing" id="0wL-6s-Y5y"/>
-                <constraint firstItem="2Bm-kS-Yvl" firstAttribute="top" secondItem="h32-c3-AeG" secondAttribute="bottom" priority="250" constant="36" id="3uQ-kU-FUp"/>
+                <constraint firstItem="2Bm-kS-Yvl" firstAttribute="top" secondItem="h32-c3-AeG" secondAttribute="bottom" constant="36" id="3uQ-kU-FUp"/>
                 <constraint firstItem="e7p-nq-9gr" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="6Op-e5-UcK"/>
                 <constraint firstItem="h32-c3-AeG" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="BLr-6n-LP9"/>
                 <constraint firstItem="e7p-nq-9gr" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="D5v-zc-nRy"/>

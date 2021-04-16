@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="AHQ-4M-n2S" customClass="STTrashCollectionViewCell" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OBQ-I7-bLm" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sB9-Gz-ALS" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.16" colorSpace="calibratedRGB"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_isRemote" translatesAutoresizingMaskIntoConstraints="NO" id="7v5-td-zXe">
+                                <rect key="frame" x="8" y="8" width="24" height="24"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Mp-aY-Rvs">
+                                <rect key="frame" x="220" y="8" width="35" height="15.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" systemColor="secondarySystemBackgroundColor"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" name="STText"/>
+                                <size key="shadowOffset" width="1" height="-1"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="sB9-Gz-ALS" secondAttribute="bottom" id="1rS-Nr-uHv"/>
+                            <constraint firstItem="7v5-td-zXe" firstAttribute="leading" secondItem="OBQ-I7-bLm" secondAttribute="leading" constant="8" id="3ok-de-AMe"/>
+                            <constraint firstAttribute="trailing" secondItem="sB9-Gz-ALS" secondAttribute="trailing" id="3pZ-kq-0oX"/>
+                            <constraint firstItem="8Mp-aY-Rvs" firstAttribute="top" secondItem="OBQ-I7-bLm" secondAttribute="top" constant="8" id="CZv-hP-MeU"/>
+                            <constraint firstItem="7v5-td-zXe" firstAttribute="top" secondItem="OBQ-I7-bLm" secondAttribute="top" constant="8" id="FpK-M4-GBB"/>
+                            <constraint firstItem="8Mp-aY-Rvs" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="OBQ-I7-bLm" secondAttribute="leading" constant="8" id="HLx-px-MdX"/>
+                            <constraint firstItem="sB9-Gz-ALS" firstAttribute="top" secondItem="OBQ-I7-bLm" secondAttribute="top" id="cgj-fN-wnQ"/>
+                            <constraint firstItem="sB9-Gz-ALS" firstAttribute="leading" secondItem="OBQ-I7-bLm" secondAttribute="leading" id="nCx-vL-Re0"/>
+                            <constraint firstAttribute="trailing" secondItem="8Mp-aY-Rvs" secondAttribute="trailing" constant="8" id="tWX-o9-GQ0"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="OBQ-I7-bLm" firstAttribute="top" secondItem="AHQ-4M-n2S" secondAttribute="top" id="8pp-mR-EqW"/>
+                <constraint firstAttribute="bottom" secondItem="OBQ-I7-bLm" secondAttribute="bottom" id="IfA-gd-hrI"/>
+                <constraint firstItem="OBQ-I7-bLm" firstAttribute="leading" secondItem="AHQ-4M-n2S" secondAttribute="leading" id="Je2-o2-5hU"/>
+                <constraint firstAttribute="trailing" secondItem="OBQ-I7-bLm" secondAttribute="trailing" id="iaf-Ma-gOW"/>
+            </constraints>
+            <size key="customSize" width="263" height="158"/>
+            <connections>
+                <outlet property="icRemoteImageView" destination="7v5-td-zXe" id="bfP-SY-Iqi"/>
+                <outlet property="imageView" destination="sB9-Gz-ALS" id="5MT-gb-dAp"/>
+                <outlet property="videoDurationLabel" destination="8Mp-aY-Rvs" id="eFv-yc-Yqr"/>
+            </connections>
+            <point key="canvasLocation" x="-130" y="-45"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="ic_isRemote" width="24" height="24"/>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

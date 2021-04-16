@@ -37,6 +37,8 @@ protocol IManagedObject: NSManagedObject {
     associatedtype Model: ICDConvertable
     init(model: Model, context: NSManagedObjectContext)
     func update(model: Model, context: NSManagedObjectContext)
+    
+    func createModel() throws -> Model
 }
 
 extension IManagedObject {

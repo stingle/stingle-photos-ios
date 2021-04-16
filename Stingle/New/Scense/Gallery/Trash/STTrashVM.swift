@@ -1,23 +1,26 @@
 //
-//  STGalleryVM.swift
+//  STTrashVM.swift
 //  Stingle
 //
-//  Created by Khoren Asatryan on 3/16/21.
+//  Created by Khoren Asatryan on 4/13/21.
 //
 
-import Photos
+import Foundation
 
-class STGalleryVM {
+class STTrashVM {
     
-    private(set) var dataBaseDataSource: STDataBase.DataSource<STCDFile>
+    private(set) var dataBaseDataSource: STDataBase.DataSource<STCDTrashFile>
     private let syncManager = STApplication.shared.syncManager
     private let uploader = STApplication.shared.uploader
-    private let cache = NSCache<NSIndexPath, STLibrary.File>()
+    private let cache = NSCache<NSIndexPath, STLibrary.TrashFile>()
     
     init() {
-        self.dataBaseDataSource = STApplication.shared.dataBase.galleryProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: #keyPath(STCDFile.day))
+        self.dataBaseDataSource = STApplication.shared.dataBase.trashProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: #keyPath(STCDTrashFile.day))
         self.cache.countLimit = 400
-        self.sync()
+    }
+    
+    func sync() {
+        self.syncManager.sync()
     }
     
     func reloadData() {
@@ -28,53 +31,40 @@ class STGalleryVM {
         self.cache.removeAllObjects()
     }
     
-    func sync(end: ((_ isSuccess: Bool) -> Void)? = nil) {
-        self.syncManager.sync { [weak self] in
-            self?.cache.removeAllObjects()
-            end?(true)
-        } failure: { (error) in
-            end?(false)
-        }
-    }
-    
-    func upload(assets: [PHAsset]) {
-        self.uploader.upload(files: assets)
-    }
-    
 }
 
-extension STGalleryVM {
+extension STTrashVM {
     
     func sectionTitle(at secction: Int) -> String? {
         return self.dataBaseDataSource.sectionTitle(at: secction)
     }
     
-    func object(at indexPath: IndexPath) -> STLibrary.File? {
+    func object(at indexPath: IndexPath) -> STLibrary.TrashFile? {
         if let file = self.cache.object(forKey: indexPath as NSIndexPath) {
             return file
         }
-        if let file = self.dataBaseDataSource.object(at: indexPath) {
+        if let cdFile = self.dataBaseDataSource.managedModel(at: indexPath), let file = try? STLibrary.TrashFile(model: cdFile) {
             self.cache.setObject(file, forKey: indexPath as NSIndexPath)
             return file
         }
         return nil
     }
     
-    func item(at indexPath: IndexPath) -> STGalleryVC.ViewItem? {
+    func item(at indexPath: IndexPath) -> STTrashVC.ViewItem? {
         if let obj = self.object(at: indexPath) {
             let image = STImageView.Image(file: obj, isThumb: true)
             var videoDurationStr: String? = nil
             if let duration = obj.decryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).toString()
             }
-            return STGalleryVC.ViewItem(image: image, name: obj.file, videoDuration: videoDurationStr, isRemote: obj.isRemote)
+            return STTrashVC.ViewItem(image: image, name: obj.file, videoDuration: videoDurationStr, isRemote: obj.isRemote)
         }
         return nil
     }
     
 }
 
-extension STGalleryVC {
+extension STTrashVC {
     
     struct ViewItem {
         let image: STImageView.Image?
@@ -85,8 +75,7 @@ extension STGalleryVC {
     
 }
 
-
-extension STCDFile {
+extension STCDTrashFile {
     
     @objc var day: String {
         let str = STDateManager.shared.dateToString(date: self.dateCreated, withFormate: .mmm_dd_yyyy)

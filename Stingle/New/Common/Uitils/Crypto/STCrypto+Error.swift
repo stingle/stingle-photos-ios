@@ -21,6 +21,10 @@ enum CryptoError: Error {
         case incorrectChunkSize
         case incorrectHeader
     }
+    
+    enum Album: Error {
+        case incorrectFileVersion
+    }
 	
 	enum Bundle: Error {
 		case incorrectKeyFileBeginning

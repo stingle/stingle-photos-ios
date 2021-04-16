@@ -1,0 +1,181 @@
+//
+//  STCollectionViewDataSource.swift
+//  Stingle
+//
+//  Created by Khoren Asatryan on 4/16/21.
+//
+
+import UIKit
+
+//MARK: - Items
+
+protocol IViewDataSourceItemIdentifier: CaseIterable {
+    var nibName: String { get }
+    var identifier: String { get }
+}
+
+protocol IViewDataSourceItemModel {
+    associatedtype Identifier: IViewDataSourceItemIdentifier
+    var identifier: Identifier { get }
+}
+
+protocol IViewDataSourceHeaderModel: IViewDataSourceItemModel {}
+
+protocol IViewDataSourceHeader {
+    
+    associatedtype Model: IViewDataSourceHeaderModel
+    
+    func configure(model: Model?)
+}
+
+protocol IViewDataSourceCellModel: IViewDataSourceItemModel {}
+
+protocol IViewDataSourceCell {
+    
+    associatedtype Model: IViewDataSourceCellModel
+    
+    func configure(model: Model?)
+}
+
+//MARK: - ViewModel
+
+protocol ICollectionDataSourceViewModel where Model == Model.ManagedModel.Model  {
+
+    associatedtype Header: IViewDataSourceHeader, UICollectionReusableView
+    associatedtype Cell: IViewDataSourceCell, UICollectionViewCell
+    associatedtype Model: ICDConvertable
+    
+    func cellModel(for indexPath: IndexPath, data: Model) -> Cell.Model
+    func headerModel(for indexPath: IndexPath, section: String) -> Header.Model
+    
+}
+
+protocol ICollectionDataSourceNoHeaderViewModel: ICollectionDataSourceViewModel where Header == STDataSourceDefaultHeader {}
+
+extension ICollectionDataSourceNoHeaderViewModel {
+    
+    func headerModel(for indexPath: IndexPath, section: String) -> Header.Model {
+        fatalError("NoHeaderViewModel no support headerView")
+    }
+    
+}
+
+class STDataSourceDefaultHeader: UICollectionReusableView, IViewDataSourceHeader {
+
+    enum Identifier: CaseIterable, IViewDataSourceItemIdentifier {
+                
+        var nibName: String {
+            return ""
+        }
+        
+        var identifier: String {
+            return ""
+        }
+        
+    }
+    
+    struct HeaderModel: IViewDataSourceHeaderModel {
+        typealias Identifier = STDataSourceDefaultHeader.Identifier
+        var identifier: STDataSourceDefaultHeader.Identifier
+    }
+    
+    func configure(model: HeaderModel?) {}
+    
+}
+
+//MARK: - DataSource
+
+protocol STCollectionViewDataSourceDelegate: class {
+    func dataSource(layoutSection dataSource: IViewDataSource, sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?
+}
+
+class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STViewDataSource<ViewModel.Model> {
+    
+    typealias Model = ViewModel.Model
+    typealias Cell = ViewModel.Cell
+    typealias Header = ViewModel.Header
+    
+    private(set) var dataSourceReference: UICollectionViewDiffableDataSourceReference!
+    
+    let viewModel: ViewModel
+    weak var delegate: STCollectionViewDataSourceDelegate?
+    
+    init(dbDataSource: STDataBase.DataSource<Model.ManagedModel>, collectionView: UICollectionView, viewModel: ViewModel) {
+        self.viewModel = viewModel
+        super.init(dbDataSource: dbDataSource)
+        self.configure(collectionView: collectionView)
+        self.configureLayout()
+        self.createDataSourceReference(collectionView: collectionView)
+    }
+    
+    //MARK: - Override
+    
+    override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
+        super.didChangeContent(with: snapshot)
+        self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true)
+    }
+    
+    //MARK: - Public
+    
+    func cellFor(collectionView: UICollectionView, indexPath: IndexPath, data: Any) -> Cell? {
+        guard let object = self.object(at: indexPath) else {
+            return nil
+        }
+        let cellModel = self.viewModel.cellModel(for: indexPath, data: object)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellModel.identifier.identifier, for: indexPath) as! Cell
+        cell.configure(model: cellModel)
+        return cell
+    }
+    
+    func headerFor(collectionView: UICollectionView, indexPath: IndexPath, kind: String) -> Header? {
+        guard let text = self.dbDataSource.sectionTitle(at: indexPath.section) else {
+            return nil
+        }
+        let headerModel = self.viewModel.headerModel(for: indexPath, section: text)
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerModel.identifier.identifier, for: indexPath) as!Header
+        headerView.configure(model: headerModel)
+        return headerView
+    }
+        
+    func configure(collectionView: UICollectionView) {
+        ViewModel.Cell.Model.Identifier.allCases.forEach { (identifier) in
+            collectionView.registrCell(nibName: identifier.nibName, identifier: identifier.identifier)
+        }
+        ViewModel.Header.Model.Identifier.allCases.forEach { (identifier) in
+            collectionView.registerHeader(nibName: identifier.nibName, identifier: identifier.identifier)
+        }
+    }
+    
+    @discardableResult
+    func configureLayout() -> UICollectionViewCompositionalLayout {
+        let configuration = UICollectionViewCompositionalLayoutConfiguration()
+        let layout = UICollectionViewCompositionalLayout(sectionProvider: { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+            return self?.layoutSection(sectionIndex: sectionIndex, layoutEnvironment: layoutEnvironment)
+        }, configuration: configuration)
+        return layout
+    }
+    
+    func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+        return self.delegate?.dataSource(layoutSection: self, sectionIndex: sectionIndex, layoutEnvironment: layoutEnvironment)
+    }
+    
+    @discardableResult
+    func createDataSourceReference(collectionView: UICollectionView) -> UICollectionViewDiffableDataSourceReference {
+        self.dataSourceReference = UICollectionViewDiffableDataSourceReference(collectionView: collectionView, cellProvider: { [weak self] (collectionView, indexPath, data) -> UICollectionViewCell? in
+            let cell = self?.cellFor(collectionView: collectionView, indexPath: indexPath, data: data)
+            return cell
+        })
+        self.dataSourceReference.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+            return self?.headerFor(collectionView: collectionView, indexPath: indexPath, kind: kind)
+        }
+        return self.dataSourceReference
+    }
+    
+    func generateCollectionLayoutItem() -> NSCollectionLayoutItem {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1))
+        let resutl = NSCollectionLayoutItem(layoutSize: itemSize)
+        resutl.contentInsets = .zero
+        return resutl
+    }
+        
+}

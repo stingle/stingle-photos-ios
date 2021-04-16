@@ -20,5 +20,9 @@ public class STCDFile: NSManagedObject, IManagedObject {
         self.dateModified = model.dateModified
         self.isRemote = model.isRemote
     }
+    
+    func createModel() throws -> STLibrary.File {
+        return try STLibrary.File(model: self)
+    }
 
 }

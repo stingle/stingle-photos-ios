@@ -51,6 +51,9 @@ extension STCrypto {
         public static let KdfDifficultyHard = 2
         public static let KdfDifficultyUltra = 3
         public static let PWHASH_LEN = 64
+        
+        public static let CurrentAlbumMedadataVersion = 1
+        
     }
     
 }

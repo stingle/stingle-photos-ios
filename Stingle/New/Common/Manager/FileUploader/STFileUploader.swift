@@ -12,26 +12,116 @@ protocol IUploadFile {
     func requestData(success: @escaping (_ uploadInfo: STFileUploader.UploadFileInfo) -> Void, failure: @escaping (_ failure: IError ) -> Void)
 }
 
+protocol STFileUploaderbserver: class {
+    
+    func fileUploader(didStartUloading uploader: STFileUploader, uploadFile: IUploadFile)
+    
+}
+
 class STFileUploader {
         
     private let dispatchQueue = DispatchQueue(label: "Uploader.queue", attributes: .concurrent)
     private let operationManager = STOperationManager.shared
+    private var progresses = [String: Progress]()
+    
+    private var countAllFiles: Int64 = 0
+    private var totalCompletedUnitCount: Int64 = 0
+    private var observer = STObserverEvents<STFileUploaderbserver>()
+    
+    private var uploadFiles = [STLibrary.File]()
     
     lazy var operationQueue: STOperationQueue = {
-        let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 10, underlyingQueue: dispatchQueue)
+        let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 10, qualityOfService: .userInitiated, underlyingQueue: dispatchQueue)
         return queue
     }()
     
     func upload(files: [IUploadFile]) {
-        for f in files {
-            self.upload(file: f)
+        for file in files {
+            self.upload(file: file)
         }
+        self.countAllFiles = self.countAllFiles + Int64(files.count)
+        self.updateProgress()
     }
-    
     
     func upload(file: IUploadFile) {
         let operation = Operation(file: file, delegate: self)
         self.operationManager.run(operation: operation, in: self.operationQueue)
+    }
+    
+    func uploadAllLocalFiles() {
+        DispatchQueue.main.async { [weak self] in
+            let localFiles = STApplication.shared.dataBase.galleryProvider.fetch(format: "isRemote == false")
+            self?.dispatchQueue.sync {
+                self?.uploadAllLocalFilesInQueue(files: localFiles)
+            }
+        }
+    }
+    
+    // MARK: - private
+    
+    private func uploadAllLocalFilesInQueue(files: [STLibrary.File]) {
+        guard self.checkCanUploadFiles() else {
+            return
+        }
+        files.forEach { (file) in
+            if !self.uploadFiles.contains(where: { file.file == $0.file }) {
+                let operation = Operation(file: file, delegate: self)
+                self.operationManager.run(operation: operation, in: self.operationQueue)
+            }
+        }
+        self.countAllFiles = self.countAllFiles + Int64(files.count)
+        self.updateProgress()
+    }
+    
+    private func culculateProgress() -> UploaderProgress {
+        var total: Int64 = 0
+        var current: Int64 = 0
+        var totalFractionCompleted: Double = 0
+        
+        let proccessTotalCompletedUnitCount = self.totalCompletedUnitCount
+        let oldTotalUnitCount = self.totalCompletedUnitCount + self.countAllFiles
+        self.totalCompletedUnitCount = self.countAllFiles == .zero ? 0 : self.totalCompletedUnitCount
+        let totalUnitCount = proccessTotalCompletedUnitCount + self.countAllFiles
+        
+        self.progresses.forEach({
+            total = total + ($0.value.totalUnitCount)
+            current = current + ($0.value.completedUnitCount)
+            let fractionCompleted = total > 0 ? Double(current) / Double(total) : 1
+            totalFractionCompleted = totalFractionCompleted + fractionCompleted
+        })
+        totalFractionCompleted = totalFractionCompleted + Double(proccessTotalCompletedUnitCount)
+        
+        let fractionCompleted: Double = totalUnitCount == .zero ? 1: totalFractionCompleted / Double(totalUnitCount)
+        let progress = UploaderProgress(totalUnitCount: total, completedUnitCount: current, fractionCompleted: fractionCompleted, totalCompleted: proccessTotalCompletedUnitCount, count: oldTotalUnitCount)
+        
+        return progress
+    }
+    
+    private func checkCanUploadFiles() -> Bool {
+        let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
+        guard let spaceQuota = dbInfo.spaceQuota, let spaceUsed = dbInfo.spaceUsed, Double(spaceUsed) ?? 0 < Double(spaceQuota) ?? 0 else {
+            return false
+        }
+        return true
+    }
+    
+    private func updateProgress() {
+        let up = self.culculateProgress()
+        
+        print("Progress", up.fractionCompleted, up.count, up.totalCompleted)
+    }
+    
+    private func updateDB(file: STLibrary.File) {
+        if !self.uploadFiles.contains(where: { $0.file == file.file }) {
+            self.uploadFiles.append(file)
+        }
+        if self.uploadFiles.count > 10 || self.countAllFiles == 0 {
+            self.uploadFiles.removeAll()
+        }
+        STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: file.isRemote || self.uploadFiles.isEmpty)
+    }
+    
+    private func didEeceiveError(error: IError, for file: STLibrary.File?, operation: Operation) {
     }
     
 }
@@ -43,24 +133,74 @@ extension STFileUploader: STFileUploaderOperationDelegate {
     }
     
     func fileUploaderOperation(didStartUploading operation: STFileUploader.Operation, file: STLibrary.File) {
-        STApplication.shared.dataBase.galleryProvider.add(models: [file])
+        self.dispatchQueue.async { [weak self] in
+            self?.updateDB(file: file)
+        }
+        
     }
     
     func fileUploaderOperation(didProgress operation: STFileUploader.Operation, progress: Progress, file: STLibrary.File) {
+        self.dispatchQueue.sync { [weak self] in
+            self?.progresses[file.file] = progress
+            self?.updateProgress()
+        }
         
     }
     
     func fileUploaderOperation(didEndFailed operation: STFileUploader.Operation, error: IError, file: STLibrary.File?) {
         
+        self.dispatchQueue.sync { [weak self] in
+            
+            guard let weakSelf = self else {
+                return
+            }
+            
+            weakSelf.didEeceiveError(error: error, for: file, operation: operation)
+            weakSelf.totalCompletedUnitCount = weakSelf.totalCompletedUnitCount + 1
+            weakSelf.countAllFiles = weakSelf.countAllFiles - 1
+           
+            guard let file = file else {
+                return
+            }
+           
+            weakSelf.progresses.removeValue(forKey: file.file)
+            weakSelf.updateDB(file: file)
+            weakSelf.updateProgress()
+        }
+        
+        
     }
     
     func fileUploaderOperation(didEndSucces operation: Operation, file: STLibrary.File, spaceUsed: STDBUsed) {
-        let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
-        dbInfo.update(with: spaceUsed)
-        STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
-        STApplication.shared.dataBase.galleryProvider.add(models: [file])
+        
+        self.dispatchQueue.sync { [weak self] in
+            
+            guard let weakSelf = self else {
+                return
+            }
+            
+            weakSelf.totalCompletedUnitCount = weakSelf.totalCompletedUnitCount + 1
+            weakSelf.countAllFiles = weakSelf.countAllFiles - 1
+            weakSelf.progresses.removeValue(forKey: file.file)
+            
+            let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
+            dbInfo.update(with: spaceUsed)
+            STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
+            
+            weakSelf.updateDB(file: file)
+            weakSelf.updateProgress()
+        }
+        
     }
     
+}
+
+extension STFileUploader {
+    
+    var isProgress: Bool {
+        return self.countAllFiles != 0
+    }
+
 }
 
 extension STFileUploader {
@@ -75,6 +215,8 @@ extension STFileUploader {
     enum UploaderError: IError {
         case phAssetNotValid
         case fileSystemNotValid
+        case wrongStorageSize
+        case fileNotFound
         case error(error: Error)
         
         var message: String {
@@ -83,6 +225,10 @@ extension STFileUploader {
                 return "empty_data".localized
             case .fileSystemNotValid:
                 return "nework_error_request_not_valed".localized
+            case .wrongStorageSize:
+                return "storage_size_isover".localized
+            case .fileNotFound:
+                return "error_data_not_found".localized
             case .error(let error):
                 if let iError = error as? IError {
                     return iError.message
@@ -100,6 +246,15 @@ extension STFileUploader {
         var fileSize: Int32
         var creationDate: Date?
         var modificationDate: Date?
+    }
+    
+    struct UploaderProgress {
+        let totalUnitCount: Int64
+        let completedUnitCount: Int64
+        let fractionCompleted: Double
+        
+        let totalCompleted: Int64
+        let count: Int64
     }
             
 }

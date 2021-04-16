@@ -55,6 +55,18 @@ extension STCrypto {
          return Data(data).base64EncodedString()
     }
     
+    public func bytesToBase64Url(data: Bytes) -> String? {
+        var str = self.bytesToBase64(data: data)
+        str = str?.replacingOccurrences(of: "+", with: "-").replacingOccurrences(of: "/", with: "_")
+        guard var base64 = str else {
+            return nil
+        }
+        if base64.count % 4 != 0 {
+            base64.append(String(repeating: "=", count: 4 - base64.count % 4))
+        }
+        return base64
+    }
+    
     //DECODE
     public func base64ToByte(encodedStr: String) -> Bytes? {
         guard let decodedData = Data(base64Encoded: encodedStr, options: .ignoreUnknownCharacters) else {

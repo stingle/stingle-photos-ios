@@ -22,5 +22,9 @@ public class STCDDBInfo: NSManagedObject, IManagedObject {
         self.spaceUsed = model.spaceUsed
         self.spaceQuota = model.spaceQuota
     }
+    
+    func createModel() throws -> STDBInfo {
+        return STDBInfo(lastSeenTime: self.lastSeenTime, lastTrashSeenTime: self.lastTrashSeenTime, lastAlbumsSeenTime: self.lastAlbumsSeenTime, lastAlbumFilesSeenTime: self.lastAlbumFilesSeenTime, lastDelSeenTime: self.lastDelSeenTime, lastContactsSeenTime: self.lastContactsSeenTime, spaceUsed: self.spaceUsed, spaceQuota: self.spaceQuota)
+    }
 
 }

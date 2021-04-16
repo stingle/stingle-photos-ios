@@ -19,5 +19,9 @@ public class STCDTrashFile: NSManagedObject, IManagedObject {
         self.dateModified = model.dateModified
         self.isRemote = model.isRemote
     }
+    
+    func createModel() throws -> STLibrary.TrashFile {
+        return try STLibrary.TrashFile(model: self)
+    }
         
 }

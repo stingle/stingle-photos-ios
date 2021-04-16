@@ -22,4 +22,8 @@ public class STCDAlbumFile: NSManagedObject, IManagedObject {
         self.isRemote = model.isRemote
     }
     
+    func createModel() throws -> STLibrary.AlbumFile {
+        return try STLibrary.AlbumFile(model: self)
+    }
+    
 }

@@ -10,7 +10,7 @@ import Kingfisher
 
 class STImageView: UIImageView {
     
-    func setImage(_ image: Image?, placeholder: UIImage?) {
+    func setImage(_ image: IRetrySource?, placeholder: UIImage?) {
         let animator = STImageDownloadPlainAnimator()
         self.setImage(source: image, placeholder: placeholder, animator: animator)
     }
@@ -32,7 +32,7 @@ extension STImageView {
         let header: STHeader
         
         init?(file: STLibrary.File, isThumb: Bool) {
-            guard let header = isThumb ? file.encryptsHeaders.thumb : file.encryptsHeaders.file else {
+            guard let header = isThumb ? file.decryptsHeaders.thumb : file.decryptsHeaders.file else {
                 return nil
             }
             self.fileName = file.file
@@ -43,6 +43,28 @@ extension STImageView {
             self.header = header
             self.imageParameters = ["file": self.fileName, "set": "\(self.imageType.rawValue)", "is_thumb": isThumbStr]
             self.isRemote = file.isRemote           
+        }
+        
+        init?(album: STLibrary.Album, albumFile: STLibrary.AlbumFile, isThumb: Bool) {
+            
+            guard let publicKey = album.albumMetadata?.publicKey, let privateKey = album.albumMetadata?.privateKey else {
+                return nil
+            }
+            
+            let headers = STApplication.shared.crypto.getHeaders(file: albumFile, publicKey: publicKey, privateKey: privateKey)
+                        
+            guard let header = isThumb ? headers.thumb : headers.file else {
+                return nil
+            }
+            
+            self.fileName = albumFile.file
+            self.imageType = .file
+            self.version = albumFile.version
+            self.isThumb = isThumb
+            let isThumbStr = self.isThumb ? "1" : "0"
+            self.header = header
+            self.imageParameters = ["file": self.fileName, "set": "\(self.imageType.rawValue)", "is_thumb": isThumbStr]
+            self.isRemote = albumFile.isRemote
         }
                 
     }

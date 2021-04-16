@@ -26,7 +26,7 @@ extension STLibrary {
         let dateModified: Date
         var isRemote: Bool
         
-        lazy var encryptsHeaders: STHeaders = {
+        lazy var decryptsHeaders: STHeaders = {
             let result = STApplication.shared.crypto.getHeaders(file: self)
             return result
         }()
@@ -65,6 +65,10 @@ extension STLibrary {
         }
         
         required convenience init(model: STCDFile) throws {
+            
+            let mm = model.file
+            
+            
             try self.init(file: model.file,
                            version: model.version,
                            headers: model.headers,
