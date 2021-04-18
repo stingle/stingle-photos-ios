@@ -6,12 +6,20 @@
 //
 
 import UIKit
+import CoreData
+
+protocol STAlbumsDataSourceViewModelDelegate: class {
+    
+    func viewModel(viewModel: STAlbumsDataSource.ViewModel, albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?)
+    
+}
 
 extension STAlbumsDataSource {
     
     struct ViewModel: ICollectionDataSourceNoHeaderViewModel {
         
         static let imageBlankImageName = "__b__"
+        weak var delegate: STAlbumsDataSourceViewModelDelegate?
         
         enum Identifier: CaseIterable, IViewDataSourceItemIdentifier {
             case album
@@ -45,30 +53,22 @@ extension STAlbumsDataSource {
         
         typealias Cell = STAlbumsCollectionViewCell
         typealias Model = STLibrary.Album
-    
         
         func cellModel(for indexPath: IndexPath, data: STLibrary.Album) -> CellModel {
-            return CellModel(image: nil, placeholder: nil, title: nil, subTille: nil)
-        }
-        
-        func cellModel(for album: STLibrary.Album, file: STLibrary.AlbumFile?, countFiles: Int) -> CellModel {
-            
-            let placeholder = UIImage(named: "timer")
+            let metadata = self.delegate?.viewModel(viewModel: self, albumMedadataFor: data)
+            let placeholder = UIImage(named: "ic_album")
             var image: STImageView.Image?
-                       
-            switch album.cover {
+            
+            switch data.cover {
             case ViewModel.imageBlankImageName:
                 break
-            case nil:
-                if let file = file {
-                    image = STImageView.Image(album: album, albumFile: file, isThumb: true)
-                }
             default:
-                break
+                if let file = metadata?.file {
+                    image = STImageView.Image(album: data, albumFile: file, isThumb: true)
+                }
             }
-            
-            let title = album.albumMetadata?.name
-            let subTille = String(format: "items_count".localized, "\(countFiles)")
+            let title = data.albumMetadata?.name
+            let subTille = String(format: "items_count".localized, "\(metadata?.countFiles ?? 0)")
             return CellModel(image: image, placeholder: placeholder, title: title, subTille: subTille)
         }
         
@@ -79,51 +79,47 @@ extension STAlbumsDataSource {
 class STAlbumsDataSource: STCollectionViewDataSource<STAlbumsDataSource.ViewModel> {
     
     lazy var albumFilesDataSource: STDataBase.DataSource<STCDAlbumFile> = {
-        return STApplication.shared.dataBase.albumFilesProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: #keyPath(STCDAlbumFile.albumId))
+        let dataSource = STApplication.shared.dataBase.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.albumId), #keyPath(STCDAlbumFile.dateCreated)], sectionNameKeyPath: #keyPath(STCDAlbumFile.albumId))
+        return dataSource
     }()
     
     init(collectionView: UICollectionView) {
         let viewModel = ViewModel()
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
-        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: nil)
+        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil)
         super.init(dbDataSource: dbDataSource, collectionView: collectionView, viewModel: viewModel)
+        self.viewModel.delegate = self
+        self.albumFilesDataSource.delegate = self
         self.albumFilesDataSource.reloadData()
     }
-    
-    
-    override func cellFor(collectionView: UICollectionView, indexPath: IndexPath, data: Any) -> STCollectionViewDataSource<ViewModel>.Cell? {
         
-        guard let object = self.object(at: indexPath) else {
-            let cell = super.cellFor(collectionView: collectionView, indexPath: indexPath, data: data)
-            return cell
-        }
-        
-        var countFiles = 0
-        var file: STLibrary.AlbumFile?
-        
-        if let filesSnapshotReference = self.albumFilesDataSource.snapshotReference, let fileSectionIndex = filesSnapshotReference.sectionIdentifiers.firstIndex(where: {object.albumId == $0 as? String}) {
-            file = self.albumFilesDataSource.object(at: IndexPath(item: 0, section: fileSectionIndex))
-            countFiles = filesSnapshotReference.numberOfItems(inSection: object.albumId)
-        }
-        
-        let cellModel = self.viewModel.cellModel(for: object, file: file, countFiles: countFiles)
-
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellModel.identifier.identifier, for: indexPath) as! Cell
-        cell.configure(model: cellModel)
-        return cell
-    }
-    
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
-       
-        
-        if snapshot == self.snapshotReference {
+        if snapshot == self.snapshotReference, self.albumFilesDataSource.snapshotReference != nil {
             super.didChangeContent(with: snapshot)
+        } else if snapshot == self.albumFilesDataSource.snapshotReference {
+            self.reloadVisibleItems()
         }
-
-        
     }
     
 }
+
+extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
+    
+    func viewModel(viewModel: ViewModel, albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?) {
+        var countFiles: Int = 0
+        var file: STLibrary.AlbumFile?
+        if let filesSnapshotReference = self.albumFilesDataSource.snapshotReference, let fileSectionIndex = filesSnapshotReference.sectionIdentifiers.firstIndex(where: {$0 as? String == album.albumId}) {
+            countFiles = filesSnapshotReference.numberOfItems(inSection: album.albumId)
+            file = self.albumFilesDataSource.object(at: IndexPath(row: 0, section: fileSectionIndex))
+        }
+        return (countFiles, file)
+        
+    }
+    
+    
+}
+
+
 
 
 

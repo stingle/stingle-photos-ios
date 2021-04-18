@@ -19,6 +19,12 @@ extension STLibrary {
         
         let albumId: String
         
+        override var dbSet: DBSet {
+            return .album
+        }
+        
+        private(set) var albumMetadata: Album.AlbumMetadata?
+        
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.albumId = try container.decode(String.self, forKey: .albumId)
@@ -48,6 +54,21 @@ extension STLibrary {
             json["albumId"] = self.albumId
             return json
         }
+        
+        func updateIfNeeded(albumMetadata: Album.AlbumMetadata?) {
+            guard albumMetadata != self.albumMetadata else {
+                return
+            }
+            if let albumMetadata = albumMetadata {
+                self.albumMetadata = albumMetadata
+                self.decryptsHeaders = STApplication.shared.crypto.getHeaders(file: self, publicKey: albumMetadata.publicKey, privateKey: albumMetadata.privateKey)
+            } else {
+                self.decryptsHeaders.thumb = nil
+                self.decryptsHeaders.file = nil
+            }
+            
+        }
+        
     }
     
 }

@@ -59,7 +59,6 @@ extension STCrypto {
         }
         outputThumb.open()
         
-        
         guard let inputOrigin = InputStream(fileAtPath: oreginalUrl.path) else {
             throw CryptoError.General.creationFailure
         }

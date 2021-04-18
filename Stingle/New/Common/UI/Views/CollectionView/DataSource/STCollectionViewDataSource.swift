@@ -96,15 +96,17 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     typealias Header = ViewModel.Header
     
     private(set) var dataSourceReference: UICollectionViewDiffableDataSourceReference!
+    private(set) weak var collectionView: UICollectionView!
     
-    let viewModel: ViewModel
+    var viewModel: ViewModel
     weak var delegate: STCollectionViewDataSourceDelegate?
     
     init(dbDataSource: STDataBase.DataSource<Model.ManagedModel>, collectionView: UICollectionView, viewModel: ViewModel) {
         self.viewModel = viewModel
+        self.collectionView = collectionView
         super.init(dbDataSource: dbDataSource)
         self.configure(collectionView: collectionView)
-        self.configureLayout()
+        self.configureLayout(collectionView: collectionView)
         self.createDataSourceReference(collectionView: collectionView)
     }
     
@@ -116,6 +118,16 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     }
     
     //MARK: - Public
+    
+    func reloadVisibleItems() {
+        self.collectionView.indexPathsForVisibleItems.forEach { (indexPath) in
+            if let object = self.object(at: indexPath)  {
+                let cellModel = self.viewModel.cellModel(for: indexPath, data: object)
+                let cell = self.collectionView.cellForItem(at: indexPath) as! Cell
+                cell.configure(model: cellModel)
+            }
+        }
+    }
     
     func cellFor(collectionView: UICollectionView, indexPath: IndexPath, data: Any) -> Cell? {
         guard let object = self.object(at: indexPath) else {
@@ -147,11 +159,12 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     }
     
     @discardableResult
-    func configureLayout() -> UICollectionViewCompositionalLayout {
+    func configureLayout(collectionView: UICollectionView) -> UICollectionViewCompositionalLayout {
         let configuration = UICollectionViewCompositionalLayoutConfiguration()
         let layout = UICollectionViewCompositionalLayout(sectionProvider: { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             return self?.layoutSection(sectionIndex: sectionIndex, layoutEnvironment: layoutEnvironment)
         }, configuration: configuration)
+        collectionView.collectionViewLayout = layout
         return layout
     }
     

@@ -19,33 +19,16 @@ extension STCrypto {
             throw CryptoError.Bundle.pivateKeyIsEmpty
         }
         let publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+        
+        
         guard let albumSK = self.sodium.box.open(anonymousCipherText: encAlbumSK, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
             throw CryptoError.Internal.openFailure
         }
         
         let name = try self.parseAlbumMetadata(metadataStr: metadataStr, albumSK: albumSK, albumPK: albumPK)
-        let result = STLibrary.Album.AlbumMetadata(name: name, publicKey: publicKey, privateKey: privateKey)
-        
-        
-//        let albumSK = self.sodium.box.SecretKeyBytes
-//
-//
-//               byte[] albumPK = new byte[Box.PUBLICKEYBYTES];
-//
-//               so.crypto_box_keypair(albumPK, albumSK);
-//
-//               byte[] encryptedMetadata = encryptAlbumMetadata(metadata, albumPK);
-//
-//               // Encrypt albumSK
-//               byte[] encryptedSK = encryptAlbumSK(albumSK, userPK);
-//
-//        encData.encPrivateKey = byteArrayToBase64(encryptedSK);
-//               encData.publicKey = byteArrayToBase64(albumPK);
-//
-        
+        let result = STLibrary.Album.AlbumMetadata(name: name, publicKey: albumPK, privateKey: albumSK)
         return result
     }
-    
     
     private func parseAlbumMetadata(metadataStr: String, albumSK: Bytes, albumPK: Bytes) throws -> String {
         
@@ -91,10 +74,14 @@ extension STCrypto {
 
 extension STLibrary.Album {
     
-    struct AlbumMetadata {
+    struct AlbumMetadata: Equatable {
         let name: String
-        let publicKey: Bytes?
-        let privateKey: Bytes?
+        let publicKey: Bytes
+        let privateKey: Bytes
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            return lhs.name == rhs.name
+        }
     }
     
 }

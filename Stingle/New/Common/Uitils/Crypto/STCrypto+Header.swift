@@ -9,8 +9,8 @@ import Sodium
 import Clibsodium
 
 struct STHeaders {
-    let file: STHeader?
-    let thumb: STHeader?
+    var file: STHeader?
+    var thumb: STHeader?
 }
 
 struct STHeader: Equatable {

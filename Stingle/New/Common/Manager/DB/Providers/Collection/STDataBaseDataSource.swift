@@ -42,7 +42,7 @@ extension STDataBase {
         let ascending: Bool
         
         private(set) var snapshotReference: NSDiffableDataSourceSnapshotReference?
-        private let viewContext: NSManagedObjectContext
+        let viewContext: NSManagedObjectContext
         private var controller: NSFetchedResultsController<ManagedModel>!
         
         var identifier: String {
@@ -101,6 +101,10 @@ extension STDataBase {
         
         func sectionTitle(at secction: Int) -> String? {
             return self.snapshotReference?.sectionIdentifiers[secction] as? String
+        }
+        
+        func indexPath(forObject object: ManagedModel) -> IndexPath? {
+            return self.controller.indexPath(forObject: object)
         }
         
         //MARK: - IProviderDataSource

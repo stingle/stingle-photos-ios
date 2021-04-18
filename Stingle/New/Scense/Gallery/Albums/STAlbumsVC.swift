@@ -43,7 +43,6 @@ class STAlbumsVC: UIViewController {
 
 extension STAlbumsVC: STCollectionViewDataSourceDelegate {
     
-    
     func dataSource(layoutSection dataSource: IViewDataSource, sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let inset: CGFloat = 4
         let lineCount = layoutEnvironment.traitCollection.isIpad() ? 3 : 2

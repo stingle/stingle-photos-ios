@@ -26,6 +26,10 @@ extension STLibrary {
         let dateModified: Date
         var isRemote: Bool
         
+        var dbSet: DBSet {
+            return .file
+        }
+        
         lazy var decryptsHeaders: STHeaders = {
             let result = STApplication.shared.crypto.getHeaders(file: self)
             return result
@@ -65,10 +69,6 @@ extension STLibrary {
         }
         
         required convenience init(model: STCDFile) throws {
-            
-            let mm = model.file
-            
-            
             try self.init(file: model.file,
                            version: model.version,
                            headers: model.headers,
@@ -86,6 +86,12 @@ extension STLibrary {
 }
 
 extension STLibrary.File {
+    
+    enum DBSet: Int {
+        case file = 0
+        case trash = 1
+        case album = 2
+    }
     
     var fileThumbUrl: URL? {
         let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
@@ -106,5 +112,5 @@ extension STLibrary.File {
         let result = url.appendingPathComponent(self.file)
         return result
     }
-    
+        
 }

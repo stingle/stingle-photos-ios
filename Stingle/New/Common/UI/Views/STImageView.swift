@@ -17,7 +17,6 @@ class STImageView: UIImageView {
 
 }
 
-
 extension STImageView {
     
     struct Image {
@@ -28,15 +27,15 @@ extension STImageView {
         let isThumb: Bool
         let isRemote: Bool
         
-        let imageParameters: [String : Any]?
+        private(set) var imageParameters: [String : Any]?
         let header: STHeader
         
         init?(file: STLibrary.File, isThumb: Bool) {
-            guard let header = isThumb ? file.decryptsHeaders.thumb : file.decryptsHeaders.file else {
+            guard let header = isThumb ? file.decryptsHeaders.thumb : file.decryptsHeaders.file, let imageType = ImageType(rawValue: file.dbSet.rawValue) else {
                 return nil
             }
             self.fileName = file.file
-            self.imageType = .file
+            self.imageType = imageType
             self.version = file.version
             self.isThumb = isThumb
             let isThumbStr = self.isThumb ? "1" : "0"
@@ -46,25 +45,12 @@ extension STImageView {
         }
         
         init?(album: STLibrary.Album, albumFile: STLibrary.AlbumFile, isThumb: Bool) {
-            
-            guard let publicKey = album.albumMetadata?.publicKey, let privateKey = album.albumMetadata?.privateKey else {
+            guard album.albumId == albumFile.albumId else {
                 return nil
             }
-            
-            let headers = STApplication.shared.crypto.getHeaders(file: albumFile, publicKey: publicKey, privateKey: privateKey)
-                        
-            guard let header = isThumb ? headers.thumb : headers.file else {
-                return nil
-            }
-            
-            self.fileName = albumFile.file
-            self.imageType = .file
-            self.version = albumFile.version
-            self.isThumb = isThumb
-            let isThumbStr = self.isThumb ? "1" : "0"
-            self.header = header
-            self.imageParameters = ["file": self.fileName, "set": "\(self.imageType.rawValue)", "is_thumb": isThumbStr]
-            self.isRemote = albumFile.isRemote
+            albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)
+            self.init(file: albumFile, isThumb: isThumb)
+            self.imageParameters?["albumId"] = "\(album.albumId)"
         }
                 
     }

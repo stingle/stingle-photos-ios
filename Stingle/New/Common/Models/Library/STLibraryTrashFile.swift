@@ -13,6 +13,10 @@ extension STLibrary {
         
         typealias ManagedModel = STCDTrashFile
         
+        override var dbSet: DBSet {
+            return .trash
+        }
+        
         required init(model: STCDTrashFile) throws {
             try super.init(file: model.file,
                            version: model.version,

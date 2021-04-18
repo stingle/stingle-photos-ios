@@ -69,7 +69,7 @@ extension STCrypto {
     
     //DECODE
     public func base64ToByte(encodedStr: String) -> Bytes? {
-        guard let decodedData = Data(base64Encoded: encodedStr, options: .ignoreUnknownCharacters) else {
+        guard let decodedData = Data(base64Encoded: encodedStr) else {
             return nil
         }
         return Bytes(decodedData)

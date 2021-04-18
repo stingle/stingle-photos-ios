@@ -35,8 +35,7 @@ extension UIImageView {
         if let retryerIdentifier = self.retryerIdentifier {
             STApplication.shared.fileRetryer.imageRetryer.cancel(operation: retryerIdentifier)
         }
-        self.image = placeholder
-        
+        self.image = nil
         if let source = source {
             animator?.imageView(startAnimation: self)
             self.retryerIdentifier = STApplication.shared.fileRetryer.imageRetryer.retry(source: source) { [weak self] (image) in
