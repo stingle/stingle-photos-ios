@@ -53,26 +53,26 @@ extension STDataBase {
         
         weak var delegate: IProviderDelegate?
         
-        init(sortDescriptorsKeys: [String], viewContext: NSManagedObjectContext, predicate: NSPredicate? = nil, sectionNameKeyPath: String?, ascending: Bool = false) {
+        init(sortDescriptorsKeys: [String], viewContext: NSManagedObjectContext, predicate: NSPredicate? = nil, sectionNameKeyPath: String?, ascending: Bool = false, cacheName: String? = ManagedModel.entityName) {
             self.ascending = ascending
             self.sortDescriptorsKeys = sortDescriptorsKeys
             self.viewContext = viewContext
             self.sectionNameKeyPath = sectionNameKeyPath
             self.predicate = predicate
             super.init()
-            self.controller = self.createResultsController()
+            self.controller = self.createResultsController(cacheName: cacheName)
         }
         
         //MARK: - Private
         
-        private func createResultsController() -> NSFetchedResultsController<ManagedModel> {
+        private func createResultsController(cacheName: String?) -> NSFetchedResultsController<ManagedModel> {
             let filesFetchRequest = NSFetchRequest<ManagedModel>(entityName: ManagedModel.entityName)
             let sortDescriptors = self.sortDescriptorsKeys.compactMap { (key) -> NSSortDescriptor in
                 return NSSortDescriptor(key: key, ascending: self.ascending)
             }
             filesFetchRequest.predicate = self.predicate
             filesFetchRequest.sortDescriptors = sortDescriptors
-            let resultsController = NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: self.viewContext, sectionNameKeyPath: self.sectionNameKeyPath, cacheName:ManagedModel.entityName)
+            let resultsController = NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: self.viewContext, sectionNameKeyPath: self.sectionNameKeyPath, cacheName: cacheName)
             resultsController.delegate = self
             return resultsController
         }

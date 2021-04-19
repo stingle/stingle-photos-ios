@@ -99,8 +99,8 @@ extension STDataBase {
         
         //MARK: - DataSource
         
-        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?, predicate: NSPredicate? = nil) -> DataSource<ManagedModel> {
-            let dataSource = STDataBase.DataSource<ManagedModel>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, predicate: predicate, sectionNameKeyPath: sectionNameKeyPath)
+        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?, predicate: NSPredicate? = nil, cacheName: String? = ManagedModel.entityName) -> DataSource<ManagedModel> {
+            let dataSource = STDataBase.DataSource<ManagedModel>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, predicate: predicate, sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
             self.dataSources.addObject(dataSource)
             return dataSource
         }

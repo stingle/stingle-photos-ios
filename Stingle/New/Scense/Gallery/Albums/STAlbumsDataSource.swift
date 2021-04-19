@@ -71,7 +71,6 @@ extension STAlbumsDataSource {
             let subTille = String(format: "items_count".localized, "\(metadata?.countFiles ?? 0)")
             return CellModel(image: image, placeholder: placeholder, title: title, subTille: subTille)
         }
-        
     }
     
 }
@@ -86,8 +85,14 @@ class STAlbumsDataSource: STCollectionViewDataSource<STAlbumsDataSource.ViewMode
     init(collectionView: UICollectionView, predicate: NSPredicate?) {
         let viewModel = ViewModel()
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
-                
-        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil, predicate: predicate)
+        
+        var cacheName = STCDAlbumFile.entityName
+        
+        if let predicate = predicate {
+            cacheName = cacheName + predicate.predicateFormat
+        }
+        
+        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil, predicate: predicate, cacheName: cacheName)
         super.init(dbDataSource: dbDataSource, collectionView: collectionView, viewModel: viewModel)
         self.viewModel.delegate = self
         self.albumFilesDataSource.delegate = self
