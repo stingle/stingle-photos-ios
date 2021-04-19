@@ -39,11 +39,13 @@ protocol IViewDataSourceCell {
 
 //MARK: - ViewModel
 
-protocol ICollectionDataSourceViewModel where Model == Model.ManagedModel.Model  {
+protocol ICollectionDataSourceViewModel {
 
     associatedtype Header: IViewDataSourceHeader, UICollectionReusableView
     associatedtype Cell: IViewDataSourceCell, UICollectionViewCell
-    associatedtype Model: ICDConvertable
+    associatedtype CDModel: IManagedObject
+    
+    typealias Model = CDModel.Model
     
     func cellModel(for indexPath: IndexPath, data: Model) -> Cell.Model
     func headerModel(for indexPath: IndexPath, section: String) -> Header.Model
@@ -87,11 +89,21 @@ class STDataSourceDefaultHeader: UICollectionReusableView, IViewDataSourceHeader
 
 protocol STCollectionViewDataSourceDelegate: class {
     func dataSource(layoutSection dataSource: IViewDataSource, sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?
+    
+    func dataSource(didStartSync dataSource: IViewDataSource)
+    func dataSource(didEndSync dataSource: IViewDataSource)
+    
 }
 
-class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STViewDataSource<ViewModel.Model> {
+extension STCollectionViewDataSourceDelegate {
+    func dataSource(didStartSync dataSource: IViewDataSource) {}
+    func dataSource(didEndSync dataSource: IViewDataSource) {}
+}
+
+class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STViewDataSource<ViewModel.CDModel> {
     
     typealias Model = ViewModel.Model
+    typealias CDModel = ViewModel.CDModel
     typealias Cell = ViewModel.Cell
     typealias Header = ViewModel.Header
     
@@ -101,7 +113,7 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     var viewModel: ViewModel
     weak var delegate: STCollectionViewDataSourceDelegate?
     
-    init(dbDataSource: STDataBase.DataSource<Model.ManagedModel>, collectionView: UICollectionView, viewModel: ViewModel) {
+    init(dbDataSource: STDataBase.DataSource<CDModel>, collectionView: UICollectionView, viewModel: ViewModel) {
         self.viewModel = viewModel
         self.collectionView = collectionView
         super.init(dbDataSource: dbDataSource)
@@ -111,6 +123,19 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     }
     
     //MARK: - Override
+    
+    override func didEndSync(dataSource: IProviderDataSource) {
+        if dataSource as? NSObject == self.dbDataSource {
+            self.delegate?.dataSource(didEndSync: self)
+        }
+    }
+    
+    override func didStartSync(dataSource: IProviderDataSource) {
+        if dataSource as? NSObject == self.dbDataSource {
+            self.delegate?.dataSource(didEndSync: self)
+        }
+        
+    }
     
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
         super.didChangeContent(with: snapshot)

@@ -23,6 +23,9 @@ class STContact: Codable, ICDConvertable {
     var dateUsed: Date
     var dateModified: Date
     
+    var identifier: String {
+        return self.userId
+    }
    
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

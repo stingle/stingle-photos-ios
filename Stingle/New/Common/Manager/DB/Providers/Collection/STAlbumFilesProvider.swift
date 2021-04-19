@@ -11,12 +11,14 @@ extension STDataBase {
     
     class AlbumFilesProvider: DataBaseCollectionProvider<STLibrary.AlbumFile, STCDAlbumFile, STLibrary.DeleteFile.AlbumFile> {
         
-        override func getInsertObjects(with albumFiles: [STLibrary.AlbumFile]) throws -> (json: [[String : Any]], lastDate: Date) {
+        override func getInsertObjects(with albumFiles: [STLibrary.AlbumFile]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.AlbumFile], lastDate: Date) {
             var lastDate: Date? = nil
             var jsons = [[String : Any]]()
+            var ids = [String: STLibrary.AlbumFile]()
             try albumFiles.forEach { (albumFile) in
                 let json = try albumFile.toManagedModelJson()
                 jsons.append(json)
+                ids[albumFile.file] = albumFile
                 let currentLastDate = lastDate ?? albumFile.dateModified
                 if currentLastDate <= albumFile.dateModified {
                     lastDate = albumFile.dateModified
@@ -25,7 +27,20 @@ extension STDataBase {
             guard let myLastDate = lastDate else {
                 throw STDataBase.DataBaseError.dateNotFound
             }
-            return (jsons, myLastDate)
+            return (jsons, ids, myLastDate)
+        }
+        
+        override func syncUpdateModels(objIds: [String : STLibrary.AlbumFile], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
+            let fetchRequest = NSFetchRequest<STCDAlbumFile>(entityName: STCDAlbumFile.entityName)
+            let keys: [String] = Array(objIds.keys)
+            fetchRequest.predicate = NSPredicate(format: "file IN %@", keys)
+            let items = try context.fetch(fetchRequest)
+            items.forEach { (item) in
+                if let file = item.file, let model = objIds[file] {
+                    item.update(model: model, context: context)
+                }
+            }
+
         }
         
         override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.AlbumFile], in context: NSManagedObjectContext) throws -> (models: [STCDAlbumFile], date: Date) {

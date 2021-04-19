@@ -10,23 +10,9 @@ import Foundation
 class STAlbumsVM {
     
     private let syncManager = STApplication.shared.syncManager
-    private let uploader = STApplication.shared.uploader
-    
-    
 
     func sync() {
         self.syncManager.sync()
     }
         
-}
-
-
-extension STAlbumsVC {
-    
-    struct ViewItem {
-        let image: STImageView.Image?
-        let title: String?
-        let subTille: String?
-    }
-    
 }

@@ -26,6 +26,10 @@ extension STLibrary {
         let dateModified: Date
         var isRemote: Bool
         
+        var identifier: String {
+            return self.file
+        }
+        
         var dbSet: DBSet {
             return .file
         }

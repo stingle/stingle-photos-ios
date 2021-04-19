@@ -33,7 +33,10 @@ class STDataBase {
     func sync(_ sync: STSync, finish: @escaping (IError?) -> Void) {
         self.didStartSync()
         let context = self.container.newBackgroundContext()
+        
+        context.automaticallyMergesChangesFromParent = true
         context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
+        
         context.performAndWait {
             do {
                 let oldInfo = self.dbInfoProvider.dbInfo
@@ -46,6 +49,13 @@ class STDataBase {
                 finish(DataBaseError.error(error: error))
             }
         }
+        
+        if context.hasChanges {
+            try? context.save()
+        }
+        
+        self.container.viewContext.reset()
+        
         self.endSync()
     }
     

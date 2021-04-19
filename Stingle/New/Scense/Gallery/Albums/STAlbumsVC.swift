@@ -7,43 +7,26 @@
 
 import UIKit
 
-class STAlbumsVC: UIViewController {
-    
-    @IBOutlet weak private(set) var collectionView: UICollectionView!
-    
+class STAlbumsVC: STFilesViewController<STAlbumsDataSource.ViewModel> {
+        
     private let viewModel = STAlbumsVM()
-    private var dataSource: STAlbumsDataSource!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.configureLocalize()
-        self.dataSource = STAlbumsDataSource(collectionView: self.collectionView)
-        self.dataSource.delegate = self
-        self.dataSource.reloadData()
-    }
     
-    func configureLocalize() {
+    override func configureLocalize() {
         self.navigationItem.title = "albums".localized
         self.navigationController?.tabBarItem.title = "albums".localized
     }
-
-    @objc func refreshControl(didRefresh refreshControl: UIRefreshControl) {
+    
+    override func createDataSource() -> STCollectionViewDataSource<STAlbumsDataSource.ViewModel> {
+        let dataSource = STAlbumsDataSource(collectionView: self.collectionView, isShared: false)
+        return dataSource
+    }
+    
+    override func refreshControlDidRefresh() {
         self.viewModel.sync()
     }
-    
-    @IBAction private func didSelectMenuBarItem(_ sender: Any) {
-        if self.splitMenuViewController?.isMasterViewOpened ?? false {
-            self.splitMenuViewController?.hide(master: true)
-        } else {
-            self.splitMenuViewController?.show(master: true)
-        }
-    }
-    
-}
-
-extension STAlbumsVC: STCollectionViewDataSourceDelegate {
-    
-    func dataSource(layoutSection dataSource: IViewDataSource, sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+ 
+    override func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
+        
         let inset: CGFloat = 4
         let lineCount = layoutEnvironment.traitCollection.isIpad() ? 3 : 2
         let item = self.dataSource.generateCollectionLayoutItem()
@@ -59,9 +42,8 @@ extension STAlbumsVC: STCollectionViewDataSourceDelegate {
         section.interGroupSpacing = inset
         section.removeContentInsetsReference(safeAreaInsets: self.collectionView.window?.safeAreaInsets)
         return section
+        
     }
     
-    
 }
-
 

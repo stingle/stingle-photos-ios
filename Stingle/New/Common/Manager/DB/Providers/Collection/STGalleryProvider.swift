@@ -12,12 +12,15 @@ extension STDataBase {
     
     class GalleryProvider: DataBaseCollectionProvider<STLibrary.File, STCDFile, STLibrary.DeleteFile.Gallery> {
         
-        override func getInsertObjects(with files: [STLibrary.File]) throws -> (json: [[String : Any]], lastDate: Date) {
+        override func getInsertObjects(with files: [STLibrary.File]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.File], lastDate: Date)  {
             var lastDate: Date? = nil
             var jsons = [[String : Any]]()
+            var objIds = [String: STLibrary.File]()
+            
             try files.forEach { (file) in
                 let json = try file.toManagedModelJson()
                 jsons.append(json)
+                objIds[file.file] = file
                 let currentLastDate = lastDate ?? file.dateModified
                 if currentLastDate <= file.dateModified {
                     lastDate = file.dateModified
@@ -26,7 +29,23 @@ extension STDataBase {
             guard let myLastDate = lastDate else {
                 throw STDataBase.DataBaseError.dateNotFound
             }
-            return (jsons, myLastDate)
+            return (jsons, objIds, myLastDate)
+        }
+        
+        override func syncUpdateModels(objIds: [String : STLibrary.File], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
+           
+            let fetchRequest = NSFetchRequest<STCDFile>(entityName: STCDFile.entityName)
+            fetchRequest.includesSubentities = false
+            let keys: [String] = Array(objIds.keys)
+            fetchRequest.predicate = NSPredicate(format: "file IN %@", keys)
+            let items = try context.fetch(fetchRequest)
+            
+            items.forEach { (item) in
+                if let file = item.file, let model = objIds[file] {
+                    item.update(model: model, context: context)
+                }
+            }
+
         }
                 
         override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Gallery], in context: NSManagedObjectContext) throws -> (models: [STCDFile], date: Date) {

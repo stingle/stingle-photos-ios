@@ -11,6 +11,10 @@ import CoreData
 
 @objc(STCDDBInfo)
 public class STCDDBInfo: NSManagedObject, IManagedObject {
+    
+    var identifier: String {
+        return "STCDDBInfo"
+    }
         
     func update(model: STDBInfo, context: NSManagedObjectContext) {
         self.lastSeenTime = model.lastSeenTime

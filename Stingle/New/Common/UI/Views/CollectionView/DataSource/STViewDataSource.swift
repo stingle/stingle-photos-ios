@@ -11,15 +11,15 @@ protocol IViewDataSource: class {
     func reloadData()
 }
 
-class STViewDataSource<Model: ICDConvertable>: IViewDataSource, IProviderDelegate where Model == Model.ManagedModel.Model {
+class STViewDataSource<Model: IManagedObject>: IViewDataSource, IProviderDelegate {
     
     var snapshotReference: NSDiffableDataSourceSnapshotReference? {
         return self.dbDataSource.snapshotReference
     }
     
-    let dbDataSource: STDataBase.DataSource<Model.ManagedModel>
+    let dbDataSource: STDataBase.DataSource<Model>
     
-    init(dbDataSource: STDataBase.DataSource<Model.ManagedModel>) {
+    init(dbDataSource: STDataBase.DataSource<Model>) {
         self.dbDataSource = dbDataSource
         dbDataSource.delegate = self
     }
@@ -30,34 +30,18 @@ class STViewDataSource<Model: ICDConvertable>: IViewDataSource, IProviderDelegat
         self.dbDataSource.reloadData()
     }
     
-    func object(at indexPath: IndexPath) -> Model? {
+    func object(at indexPath: IndexPath) -> Model.Model? {
         return self.dbDataSource.object(at: indexPath)
     }
     
     //MARK: Internal
     
-    func didStartSync() {
+    func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {}
+    func didStartSync(dataSource: IProviderDataSource) {}
+    func didEndSync(dataSource: IProviderDataSource) {}
         
-    }
-    
-    func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
-        
-    }
-    
-    func didEndSync() {
-        
-    }
-    
-    func didStartSync(dataSource: IProviderDataSource) {
-        self.didStartSync()
-    }
-    
     func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
         self.didChangeContent(with: snapshot)
     }
-    
-    func didEndSync(dataSource: IProviderDataSource) {
-        self.didEndSync()
-    }
-    
+
 }

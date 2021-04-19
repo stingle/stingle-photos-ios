@@ -29,11 +29,20 @@ extension STDataBase {
                 return max(lastDate, inserts.lastDate)
             }
             let insertRequest = NSBatchInsertRequest(entityName: ManagedModel.entityName, objects: inserts.json)
-            let _ = try context.execute(insertRequest)
+            insertRequest.resultType = .objectIDs
+            let resultInset = try context.execute(insertRequest)
+            let objectIDs = (resultInset as! NSBatchInsertResult).result as! [NSManagedObjectID]
+            try self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, context: context)
+                        
             return inserts.lastDate
         }
+        
+        func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
+            
+            
+        }
                
-        func getInsertObjects(with files: [Model]) throws -> (json: [[String : Any]], lastDate: Date) {
+        func getInsertObjects(with files: [Model]) throws -> (json: [[String : Any]], objIds: [String: Model], lastDate: Date) {
             //Implement in chid classes
             throw STDataBase.DataBaseError.dateNotFound
         }
@@ -90,8 +99,8 @@ extension STDataBase {
         
         //MARK: - DataSource
         
-        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?) -> DataSource<ManagedModel> {
-            let dataSource = STDataBase.DataSource<ManagedModel>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, sectionNameKeyPath: sectionNameKeyPath)
+        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?, predicate: NSPredicate? = nil) -> DataSource<ManagedModel> {
+            let dataSource = STDataBase.DataSource<ManagedModel>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, predicate: predicate, sectionNameKeyPath: sectionNameKeyPath)
             self.dataSources.addObject(dataSource)
             return dataSource
         }

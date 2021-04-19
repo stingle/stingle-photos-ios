@@ -7,12 +7,13 @@
 
 import UIKit
 
-class STTrashHeaderView: UICollectionReusableView {
+class STTrashHeaderView: UICollectionReusableView, IViewDataSourceHeader {
 
     @IBOutlet weak private var titleLabel: UILabel!
     
-    func configure(title: String?) {
-        self.titleLabel.text = title
+    func configure(model: STTrashVC.HeaderModel?) {
+        self.titleLabel.text = model?.text
     }
+
     
 }

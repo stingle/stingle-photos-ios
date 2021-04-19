@@ -7,12 +7,12 @@
 
 import UIKit
 
-class STGaleryHeaderView: UICollectionReusableView {
+class STGaleryHeaderView: UICollectionReusableView, IViewDataSourceHeader {
 
     @IBOutlet weak private var titleLabel: UILabel!
     
-    func configure(title: String?) {
-        self.titleLabel.text = title
+    func configure(model: STGalleryVC.HeaderModel?) {
+        self.titleLabel.text = model?.text
     }
     
 }

@@ -8,7 +8,71 @@
 import UIKit
 import Photos
 
-class STGalleryVC: STFilesViewController {
+extension STGalleryVC {
+    
+    struct ViewModel: ICollectionDataSourceViewModel {
+                              
+        typealias Header = STGaleryHeaderView
+        typealias Cell = STGalleryCollectionViewCell
+        typealias CDModel = STCDFile
+        
+        func cellModel(for indexPath: IndexPath, data: STLibrary.File) -> CellModel {
+            let image = STImageView.Image(file: data, isThumb: true)
+            var videoDurationStr: String? = nil
+            if let duration = data.decryptsHeaders.file?.videoDuration, duration > 0 {
+                videoDurationStr = TimeInterval(duration).toString()
+            }
+            return CellModel(image: image,
+                             name: data.file,
+                             videoDuration: videoDurationStr,
+                             isRemote: data.isRemote)
+        }
+        
+        func headerModel(for indexPath: IndexPath, section: String) -> HeaderModel {
+            return HeaderModel(text: section)
+        }
+        
+    }
+    
+    struct CellModel: IViewDataSourceCellModel {
+        let identifier: Identifier = .cell
+        let image: STImageView.Image?
+        let name: String?
+        let videoDuration: String?
+        let isRemote: Bool
+    }
+    
+    struct HeaderModel: IViewDataSourceHeaderModel {
+        let identifier: Identifier = .header
+        let text: String?
+    }
+    
+    enum Identifier: CaseIterable, IViewDataSourceItemIdentifier {
+        case cell
+        case header
+        
+        var nibName: String {
+            switch self {
+            case .cell:
+                return "STGalleryCollectionViewCell"
+            case .header:
+                return "STGaleryHeaderView"
+            }
+        }
+        
+        var identifier: String {
+            switch self {
+            case .cell:
+                return "STGalleryCollectionViewCellID"
+            case .header:
+                return "STGaleryHeaderViewID"
+            }
+        }
+    }
+        
+}
+
+class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
    
     private var viewModel = STGalleryVM()
     
@@ -20,8 +84,15 @@ class STGalleryVC: STFilesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.viewModel.dataBaseDataSource.delegate = self
-        self.viewModel.reloadData()
+        self.viewModel.sync()
+    }
+    
+    override func createDataSource() -> STCollectionViewDataSource<ViewModel> {
+        let dbDataSource = self.viewModel.createDBDataSource()
+        let viewModel = ViewModel()
+        return STCollectionViewDataSource<ViewModel>(dbDataSource: dbDataSource,
+                                                     collectionView: self.collectionView,
+                                                     viewModel: viewModel)
     }
         
     override func configureLocalize() {
@@ -30,24 +101,8 @@ class STGalleryVC: STFilesViewController {
         self.navigationController?.tabBarItem.title = "gallery".localized
     }
     
-    override func registrCollectionView() {
-        super.registrCollectionView()
-        self.collectionView.registrCell(nibName: "STGalleryCollectionViewCell", identifier: "STGalleryCollectionViewCellID")
-        self.collectionView.registerHeader(nibName: "STGaleryHeaderView", identifier: "STGaleryHeaderViewID")
-    }
-    
-    override func cellFor(collectionView: UICollectionView, indexPath: IndexPath, data: Any) -> UICollectionViewCell? {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "STGalleryCollectionViewCellID", for: indexPath)
-        let item = self.viewModel.item(at: indexPath)
-        (cell as? STGalleryCollectionViewCell)?.configure(viewItem: item)
-        return cell
-    }
-    
-    override func headerFor(collectionView: UICollectionView, indexPath: IndexPath, kind: String) -> UICollectionReusableView? {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "STGaleryHeaderViewID", for: indexPath)
-        let sectionName = self.viewModel.sectionTitle(at: indexPath.section)
-        (header as? STGaleryHeaderView)?.configure(title: sectionName)
-        return header
+    override func refreshControlDidRefresh() {
+        self.viewModel.sync()
     }
     
     //MARK: - User action
@@ -55,25 +110,13 @@ class STGalleryVC: STFilesViewController {
     @IBAction private func didSelectOpenImagePicker(_ sender: Any) {
         self.pickerHelper.openPicker()
     }
-    
-    @IBAction private func didSelectMenuBarItem(_ sender: Any) {
-        if self.splitMenuViewController?.isMasterViewOpened ?? false {
-            self.splitMenuViewController?.hide(master: true)
-        } else {
-            self.splitMenuViewController?.show(master: true)
-        }
-    }
-    
-    @objc override func refreshControl(didRefresh refreshControl: UIRefreshControl) {
-        self.viewModel.sync { (_) in }
-    }
-    
+
     //MARK: - Layout
 
     override func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let inset: CGFloat = 4
         let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : 3
-        let item = self.generateCollectionLayoutItem()
+        let item = self.dataSource.generateCollectionLayoutItem()
         let itemSizeWidth = (layoutEnvironment.container.contentSize.width - 2 * inset) / CGFloat(lineCount)
         let itemSizeHeight = itemSizeWidth
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(itemSizeHeight))
@@ -97,26 +140,8 @@ class STGalleryVC: STFilesViewController {
 extension STGalleryVC: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as? STGalleryCollectionViewCell
-        let item = self.viewModel.item(at: indexPath)
-        cell?.configure(viewItem: item)
-    }
-    
-}
-
-extension STGalleryVC: IProviderDelegate {
-    
-    func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        self.viewModel.removeCache()
-        self.applySnapshot(snapshot, animatingDifferences: true)
-    }
-    
-    func didEndSync(dataSource: IProviderDataSource) {
-        self.refreshControl.endRefreshing()
-    }
-    
-    func didStartSync(dataSource: IProviderDataSource) {
-        self.refreshControl.beginRefreshing()
+//        let cell = collectionView.cellForItem(at: indexPath) as? STGalleryCollectionViewCell
+//        let item = self.viewModel.item(at: indexPath)
     }
     
 }

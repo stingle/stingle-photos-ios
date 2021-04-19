@@ -7,50 +7,96 @@
 
 import UIKit
 
-class STTrashVC: STFilesViewController {
+extension STTrashVC {
+    
+    struct ViewModel: ICollectionDataSourceViewModel {
+                              
+        typealias Header = STTrashHeaderView
+        typealias Cell = STTrashCollectionViewCell
+        typealias CDModel = STCDTrashFile
+        
+        func cellModel(for indexPath: IndexPath, data: STLibrary.TrashFile) -> STTrashVC.CellModel {
+            let image = STImageView.Image(file: data, isThumb: true)
+            var videoDurationStr: String? = nil
+            if let duration = data.decryptsHeaders.file?.videoDuration, duration > 0 {
+                videoDurationStr = TimeInterval(duration).toString()
+            }
+            return CellModel(image: image,
+                             name: data.file,
+                             videoDuration: videoDurationStr,
+                             isRemote: data.isRemote)
+        }
+        
+        func headerModel(for indexPath: IndexPath, section: String) -> STTrashVC.HeaderModel {
+            return STTrashVC.HeaderModel(text: section)
+        }
+        
+    }
+    
+    struct CellModel: IViewDataSourceCellModel {
+        let identifier: Identifier = .cell
+        let image: STImageView.Image?
+        let name: String?
+        let videoDuration: String?
+        let isRemote: Bool
+    }
+    
+    struct HeaderModel: IViewDataSourceHeaderModel {
+        let identifier: Identifier = .header
+        let text: String?
+    }
+    
+    enum Identifier: CaseIterable, IViewDataSourceItemIdentifier {
+        case cell
+        case header
+        
+        var nibName: String {
+            switch self {
+            case .cell:
+                return "STTrashCollectionViewCell"
+            case .header:
+                return "STTrashHeaderView"
+            }
+        }
+        
+        var identifier: String {
+            switch self {
+            case .cell:
+                return "STTrashCollectionViewCellID"
+            case .header:
+                return "STTrashHeaderViewID"
+            }
+        }
+    }
+        
+}
+
+class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
     
     private let viewModel = STTrashVM()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.viewModel.dataBaseDataSource.delegate = self
-        self.viewModel.reloadData()
-    }
-    
     override func configureLocalize() {
         super.configureLocalize()
         self.navigationItem.title = "trash".localized
         self.navigationController?.tabBarItem.title = "trash".localized
     }
     
-    override func registrCollectionView() {
-        super.registrCollectionView()
-        self.collectionView.registrCell(nibName: "STTrashCollectionViewCell", identifier: "STTrashCollectionViewCellID")
-        self.collectionView.registerHeader(nibName: "STTrashHeaderView", identifier: "STTrashHeaderViewID")
+    override func createDataSource() -> STCollectionViewDataSource<ViewModel> {
+        let dbDataSource = self.viewModel.createDBDataSource()
+        let viewModel = ViewModel()
+        return STCollectionViewDataSource<ViewModel>(dbDataSource: dbDataSource,
+                                                     collectionView: self.collectionView,
+                                                     viewModel: viewModel)
     }
     
-    @objc override func refreshControl(didRefresh refreshControl: UIRefreshControl) {
+    override func refreshControlDidRefresh() {
         self.viewModel.sync()
-    }
-    
-    override func cellFor(collectionView: UICollectionView, indexPath: IndexPath, data: Any) -> UICollectionViewCell? {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "STTrashCollectionViewCellID", for: indexPath)
-        let item = self.viewModel.item(at: indexPath)
-        (cell as? STTrashCollectionViewCell)?.configure(viewItem: item)
-        return cell
-    }
-    
-    override func headerFor(collectionView: UICollectionView, indexPath: IndexPath, kind: String) -> UICollectionReusableView? {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "STTrashHeaderViewID", for: indexPath)
-        let sectionName = self.viewModel.sectionTitle(at: indexPath.section)
-        (header as? STTrashHeaderView)?.configure(title: sectionName)
-        return header
     }
     
     override func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let inset: CGFloat = 4
         let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : 3
-        let item = self.generateCollectionLayoutItem()
+        let item = self.dataSource.generateCollectionLayoutItem()
         let itemSizeWidth = (layoutEnvironment.container.contentSize.width - 2 * inset) / CGFloat(lineCount)
         let itemSizeHeight = itemSizeWidth
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(itemSizeHeight))
@@ -68,31 +114,5 @@ class STTrashVC: STFilesViewController {
         section.removeContentInsetsReference(safeAreaInsets: self.collectionView.window?.safeAreaInsets)
         return section
     }
-    
-    @IBAction private func didSelectMenuBarItem(_ sender: Any) {
-        if self.splitMenuViewController?.isMasterViewOpened ?? false {
-            self.splitMenuViewController?.hide(master: true)
-        } else {
-            self.splitMenuViewController?.show(master: true)
-        }
-    }
-    
 
-}
-
-extension STTrashVC: IProviderDelegate {
-    
-    func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        self.viewModel.removeCache()
-        self.applySnapshot(snapshot, animatingDifferences: true)
-    }
-    
-    func didEndSync(dataSource: IProviderDataSource) {
-        self.refreshControl.endRefreshing()
-    }
-    
-    func didStartSync(dataSource: IProviderDataSource) {
-        self.refreshControl.beginRefreshing()
-    }
-    
 }

@@ -18,6 +18,9 @@ extension STAlbumsDataSource {
     
     struct ViewModel: ICollectionDataSourceNoHeaderViewModel {
         
+        typealias Cell = STAlbumsCollectionViewCell
+        typealias CDModel = STCDAlbum
+        
         static let imageBlankImageName = "__b__"
         weak var delegate: STAlbumsDataSourceViewModelDelegate?
         
@@ -50,10 +53,7 @@ extension STAlbumsDataSource {
             let title: String?
             let subTille: String?
         }
-        
-        typealias Cell = STAlbumsCollectionViewCell
-        typealias Model = STLibrary.Album
-        
+                
         func cellModel(for indexPath: IndexPath, data: STLibrary.Album) -> CellModel {
             let metadata = self.delegate?.viewModel(viewModel: self, albumMedadataFor: data)
             let placeholder = UIImage(named: "ic_album")
@@ -83,14 +83,20 @@ class STAlbumsDataSource: STCollectionViewDataSource<STAlbumsDataSource.ViewMode
         return dataSource
     }()
     
-    init(collectionView: UICollectionView) {
+    init(collectionView: UICollectionView, predicate: NSPredicate?) {
         let viewModel = ViewModel()
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
-        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil)
+                
+        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil, predicate: predicate)
         super.init(dbDataSource: dbDataSource, collectionView: collectionView, viewModel: viewModel)
         self.viewModel.delegate = self
         self.albumFilesDataSource.delegate = self
         self.albumFilesDataSource.reloadData()
+    }
+    
+    convenience init(collectionView: UICollectionView, isShared: Bool) {
+        let predicate = NSPredicate(format: "isShared == %i", isShared)
+        self.init(collectionView: collectionView, predicate: predicate)
     }
         
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
