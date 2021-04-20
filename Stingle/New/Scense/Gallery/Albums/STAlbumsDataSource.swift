@@ -91,7 +91,6 @@ class STAlbumsDataSource: STCollectionViewDataSource<STAlbumsDataSource.ViewMode
         if let predicate = predicate {
             cacheName = cacheName + predicate.predicateFormat
         }
-        
         let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil, predicate: predicate, cacheName: cacheName)
         super.init(dbDataSource: dbDataSource, collectionView: collectionView, viewModel: viewModel)
         self.viewModel.delegate = self

@@ -10,6 +10,7 @@ import UIKit
 class STAlbumsVC: STFilesViewController<STAlbumsDataSource.ViewModel> {
         
     private let viewModel = STAlbumsVM()
+    private let segueIdentifierAlbumFiles = "AlbumFiles"
     
     @IBInspectable var isSharedAlbums: Bool = true
     
@@ -44,8 +45,23 @@ class STAlbumsVC: STFilesViewController<STAlbumsDataSource.ViewModel> {
         section.interGroupSpacing = inset
         section.removeContentInsetsReference(safeAreaInsets: self.collectionView.window?.safeAreaInsets)
         return section
-        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == self.segueIdentifierAlbumFiles, let albumFilesVC = segue.destination as? STAlbumFilesVC, let album = sender as? STLibrary.Album {
+            albumFilesVC.album = album
+        }
     }
     
 }
 
+extension STAlbumsVC: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let album = self.dataSource.object(at: indexPath) else {
+            return
+        }
+        self.performSegue(withIdentifier: self.segueIdentifierAlbumFiles, sender: album)
+    }
+    
+}

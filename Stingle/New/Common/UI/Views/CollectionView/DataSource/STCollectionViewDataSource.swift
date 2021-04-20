@@ -134,7 +134,6 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         if dataSource as? NSObject == self.dbDataSource {
             self.delegate?.dataSource(didEndSync: self)
         }
-        
     }
     
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
@@ -169,7 +168,7 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
             return nil
         }
         let headerModel = self.viewModel.headerModel(for: indexPath, section: text)
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerModel.identifier.identifier, for: indexPath) as!Header
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerModel.identifier.identifier, for: indexPath) as! Header
         headerView.configure(model: headerModel)
         return headerView
     }
@@ -215,5 +214,6 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         resutl.contentInsets = .zero
         return resutl
     }
+    
         
 }

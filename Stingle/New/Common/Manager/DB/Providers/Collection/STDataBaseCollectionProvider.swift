@@ -33,7 +33,6 @@ extension STDataBase {
             let resultInset = try context.execute(insertRequest)
             let objectIDs = (resultInset as! NSBatchInsertResult).result as! [NSManagedObjectID]
             try self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, context: context)
-                        
             return inserts.lastDate
         }
         

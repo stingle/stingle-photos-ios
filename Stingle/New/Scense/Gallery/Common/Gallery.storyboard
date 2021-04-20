@@ -69,7 +69,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CSd-uK-hpf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3823" y="1803"/>
+            <point key="canvasLocation" x="-3555" y="1775"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="0D9-fD-gXV">
@@ -226,7 +226,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="i9L-75-PfS">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ddg-vR-wge">
                                     <size key="itemSize" width="128" height="128"/>
@@ -235,13 +235,16 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells/>
+                                <connections>
+                                    <outlet property="delegate" destination="8nd-bs-WGs" id="60R-Qn-nM9"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Rqu-ka-gRB"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Rqu-ka-gRB" firstAttribute="bottom" secondItem="i9L-75-PfS" secondAttribute="bottom" id="Age-2h-TtG"/>
-                            <constraint firstItem="i9L-75-PfS" firstAttribute="top" secondItem="Rqu-ka-gRB" secondAttribute="top" id="oIj-7o-WQK"/>
+                            <constraint firstAttribute="bottom" secondItem="i9L-75-PfS" secondAttribute="bottom" id="0D2-2A-OdA"/>
+                            <constraint firstItem="i9L-75-PfS" firstAttribute="top" secondItem="ES9-Gw-MFt" secondAttribute="top" id="OaC-Kf-iHD"/>
                             <constraint firstItem="i9L-75-PfS" firstAttribute="leading" secondItem="Rqu-ka-gRB" secondAttribute="leading" id="v2H-DB-JMM"/>
                             <constraint firstItem="Rqu-ka-gRB" firstAttribute="trailing" secondItem="i9L-75-PfS" secondAttribute="trailing" id="xaS-My-ug8"/>
                         </constraints>
@@ -259,11 +262,12 @@
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="collectionView" destination="i9L-75-PfS" id="tSu-VW-xJR"/>
+                        <segue destination="wit-9s-oEN" kind="show" identifier="AlbumFiles" id="Dtb-DJ-8L1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nce-rQ-KrG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1332" y="1018"/>
+            <point key="canvasLocation" x="-1333.3333333333335" y="1017.8571428571428"/>
         </scene>
         <!--Album-->
         <scene sceneID="b5p-8i-ua2">
@@ -291,7 +295,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="6h6-Hq-3RF">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="m4x-uV-abJ">
                                     <size key="itemSize" width="128" height="128"/>
@@ -300,15 +304,18 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells/>
+                                <connections>
+                                    <outlet property="delegate" destination="eLB-hC-PTo" id="N8W-65-9UJ"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="FnY-Nn-kBC"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="FnY-Nn-kBC" firstAttribute="bottom" secondItem="6h6-Hq-3RF" secondAttribute="bottom" id="W4u-tQ-rdu"/>
-                            <constraint firstItem="6h6-Hq-3RF" firstAttribute="top" secondItem="FnY-Nn-kBC" secondAttribute="top" id="cF9-fg-tz0"/>
                             <constraint firstItem="FnY-Nn-kBC" firstAttribute="trailing" secondItem="6h6-Hq-3RF" secondAttribute="trailing" id="j1l-CF-EQM"/>
                             <constraint firstItem="6h6-Hq-3RF" firstAttribute="leading" secondItem="FnY-Nn-kBC" secondAttribute="leading" id="sZf-1g-IkW"/>
+                            <constraint firstAttribute="bottom" secondItem="6h6-Hq-3RF" secondAttribute="bottom" id="t9Z-fb-1ET"/>
+                            <constraint firstItem="6h6-Hq-3RF" firstAttribute="top" secondItem="Rai-bK-ZRN" secondAttribute="top" id="zwu-5z-pdp"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Albums" id="6tR-rx-QfI">
@@ -324,13 +331,55 @@
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="collectionView" destination="6h6-Hq-3RF" id="gxB-ib-fsp"/>
+                        <segue destination="wit-9s-oEN" kind="show" identifier="AlbumFiles" id="qDI-8n-l2A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ElR-D0-2Oe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1332" y="1775"/>
+            <point key="canvasLocation" x="-1333.3333333333335" y="1774.5535714285713"/>
+        </scene>
+        <!--Album FilesVC-->
+        <scene sceneID="ihH-6X-1bY">
+            <objects>
+                <viewController id="wit-9s-oEN" customClass="STAlbumFilesVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1TV-8a-GCO">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="WCb-Fx-StB">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="2hz-NL-x4s">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="DZ1-GB-pRi"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="DZ1-GB-pRi" firstAttribute="trailing" secondItem="WCb-Fx-StB" secondAttribute="trailing" id="6cS-Yw-Ull"/>
+                            <constraint firstItem="WCb-Fx-StB" firstAttribute="leading" secondItem="DZ1-GB-pRi" secondAttribute="leading" id="ajs-b5-LcA"/>
+                            <constraint firstItem="WCb-Fx-StB" firstAttribute="top" secondItem="1TV-8a-GCO" secondAttribute="top" id="sYw-fo-wmr"/>
+                            <constraint firstAttribute="bottom" secondItem="WCb-Fx-StB" secondAttribute="bottom" id="zCI-Os-rtd"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="NlU-om-b9f"/>
+                    <connections>
+                        <outlet property="collectionView" destination="WCb-Fx-StB" id="6eZ-UQ-4jp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ouz-fj-qGc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-284" y="1018"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="qDI-8n-l2A"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="ic_album_min" width="20" height="20"/>
         <image name="ic_gallery_min" width="24" height="24"/>
