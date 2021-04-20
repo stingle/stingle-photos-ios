@@ -19,6 +19,11 @@ public class STCDAlbumFile: NSManagedObject, IManagedObject {
         self.dateCreated = model.dateCreated
         self.dateModified = model.dateModified
         self.albumId = model.albumId
+        self.isRemote = model.isRemote
+    }
+    
+    func createModel() throws -> STLibrary.AlbumFile {
+        return try STLibrary.AlbumFile(model: self)
     }
     
 }

@@ -11,11 +11,13 @@ class STFileSystem {
     
     private let fileManager = FileManager.default
     private var myStoragePath: URL?
-    private var myCachePath: URL?
+
     lazy var tmpURL = self.createTmpPath()
     lazy var privateURL = self.createPrivatePath()
     
     private var cacheFolderDataSize: STBytesUnits? = nil
+    
+    private var existFilesFolderType = [FilesFolderType: URL]()
 
     var storageURl: URL? {
         if let myStoragePath = self.myStoragePath {
@@ -24,19 +26,69 @@ class STFileSystem {
         self.myStoragePath = self.createStoragePath()
         return self.myStoragePath
     }
-    
-    var cacheURL: URL? {
-        if let myCachePath = self.myCachePath {
+
+    var cacheOreginalsURL: URL? {
+        let folder: FilesFolderType = .oreginals(type: .cache)
+        if let myCachePath = self.existFilesFolderType[folder] {
             return myCachePath
         }
-        self.myCachePath = self.createCachePath()
-        return self.myCachePath
-    }
-            
-    func subDirectories(atPath: String) -> [URL]? {
-        return self.fileManager.subUrls(atPath: atPath)
+        if let url = self.createPath(for: folder) {
+            self.existFilesFolderType[folder] = url
+            return url
+        }
+        return nil
     }
     
+    var cacheThumbsURL: URL? {
+        let folder: FilesFolderType = .thumbs(type: .cache)
+        if let myCachePath = self.existFilesFolderType[folder] {
+            return myCachePath
+        }
+        if let url = self.createPath(for: folder) {
+            self.existFilesFolderType[folder] = url
+            return url
+        }
+        return nil
+    }
+    
+    var localOreginalsURL: URL? {
+        let folder: FilesFolderType = .oreginals(type: .local)
+        if let myCachePath = self.existFilesFolderType[folder] {
+            return myCachePath
+        }
+        if let url = self.createPath(for: folder) {
+            self.existFilesFolderType[folder] = url
+            return url
+        }
+        return nil
+    }
+    
+    var localThumbsURL: URL? {
+        let folder: FilesFolderType = .thumbs(type: .local)
+        if let myCachePath = self.existFilesFolderType[folder] {
+            return myCachePath
+        }
+        if let url = self.createPath(for: folder) {
+            self.existFilesFolderType[folder] = url
+            return url
+        }
+        return nil
+    }
+    
+    func direction(for files: FilesFolderType.FolderType, create: Bool) -> URL? {
+        if create {
+            return self.createPath(for: files)
+        }
+        return self.storageURl?.appendingPathComponent(files.rawValue)
+    }
+    
+    func direction(for files: FilesFolderType, create: Bool) -> URL? {
+        if create {
+            return self.createPath(for: files)
+        }
+        return self.storageURl?.appendingPathComponent(files.folderName)
+    }
+            
     func remove(file url: URL) {
         try? self.fileManager.removeItem(at: url)
     }
@@ -50,7 +102,7 @@ class STFileSystem {
     }
     
     func updateUrlDataSize(url: URL, size megabytes: Double) {
-        guard let cacheURL = self.cacheURL, url.path.contains(cacheURL.path) else {
+        guard let cacheURL = self.direction(for: .cache, create: false), url.path.contains(cacheURL.path) else {
             return
         }
         
@@ -168,6 +220,51 @@ private extension STFileSystem {
         }
         return pathUrl
     }
+    
+    func createLoalCachePath() -> URL? {
+        guard let url = self.storageURl else {
+            return nil
+        }
+        let pathUrl = url.appendingPathComponent(FolderType.localCache.rawValue)
+        if self.fileManager.existence(atUrl: pathUrl) != .directory {
+            do {
+                try self.fileManager.createDirectory(at: pathUrl, withIntermediateDirectories: false, attributes: nil)
+            } catch {
+                return nil
+            }
+        }
+        return pathUrl
+    }
+    
+    func createPath(for filesType: FilesFolderType) -> URL? {
+        guard let url = self.storageURl else {
+            return nil
+        }
+        let pathUrl = url.appendingPathComponent(filesType.folderName)
+        if self.fileManager.existence(atUrl: pathUrl) != .directory {
+            do {
+                try self.fileManager.createDirectory(at: pathUrl, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                return nil
+            }
+        }
+        return pathUrl
+    }
+    
+    func createPath(for type: FilesFolderType.FolderType) -> URL? {
+        guard let url = self.storageURl else {
+            return nil
+        }
+        let pathUrl = url.appendingPathComponent(type.rawValue)
+        if self.fileManager.existence(atUrl: pathUrl) != .directory {
+            do {
+                try self.fileManager.createDirectory(at: pathUrl, withIntermediateDirectories: false, attributes: nil)
+            } catch {
+                return nil
+            }
+        }
+        return pathUrl
+    }
         
 }
 
@@ -178,6 +275,36 @@ extension STFileSystem {
         case `private` = "private"
         case tmp = "tmp"
         case cache = "Cache"
+        case localCache = "LocalCache"
+    }
+    
+    enum FilesFolderType: Equatable, Hashable {
+        
+        enum FolderType: String {
+            case cache = "Cache"
+            case local = "Local"
+        }
+        
+        case thumbs(type: FolderType)
+        case oreginals(type: FolderType)
+        
+        var folderName: String {
+            switch self {
+            case .thumbs(type: let type):
+                return type.rawValue + "/Thumbs"
+            case .oreginals(type: let type):
+                return type.rawValue + "/Oreginals"
+            }
+        }
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            return lhs.folderName == rhs.folderName
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            self.folderName.hash(into: &hasher)
+        }
+
     }
     
     func fullPath(type: FolderType, isDirectory: Bool = false) -> URL? {

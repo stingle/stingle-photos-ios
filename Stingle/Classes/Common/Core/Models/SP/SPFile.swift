@@ -187,9 +187,11 @@ class SPFileInfo : Codable {
 }
 
 class SPFile: SPFileInfo {
+    
 	override class func mo() -> String {
 		return "Files"
 	}
+    
 }
 
 class SPTrashFile : SPFileInfo {

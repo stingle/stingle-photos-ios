@@ -11,13 +11,15 @@ extension STDataBase {
     
     class AlbumsProvider: DataBaseCollectionProvider<STLibrary.Album, STCDAlbum, STLibrary.DeleteFile.Album> {
         
-        override func getInsertObjects(with albums: [STLibrary.Album]) throws -> (json: [[String : Any]], lastDate: Date) {
+        override func getInsertObjects(with albums: [STLibrary.Album]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.Album], lastDate: Date) {
             var lastDate: Date? = nil
             var jsons = [[String : Any]]()
+            var objIds = [String: STLibrary.Album]()
             
             try albums.forEach { (album) in
                 let json = try album.toManagedModelJson()
                 jsons.append(json)
+                objIds[album.albumId] = album
                 let currentLastDate = lastDate ?? album.dateModified
                 if currentLastDate <= album.dateModified {
                     lastDate = album.dateModified
@@ -28,9 +30,25 @@ extension STDataBase {
                 throw STDataBase.DataBaseError.dateNotFound
             }
             
-            return (jsons, myLastDate)
+            return (jsons, objIds, myLastDate)
         }
         
+        override func syncUpdateModels(objIds: [String : STLibrary.Album], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
+           
+            let fetchRequest = NSFetchRequest<STCDAlbum>(entityName: STCDAlbum.entityName)
+            let keys: [String] = Array(objIds.keys)
+            fetchRequest.predicate = NSPredicate(format: "albumId IN %@", keys)
+            let items = try context.fetch(fetchRequest)
+            
+            items.forEach { (item) in
+                if let albumId = item.albumId, let model = objIds[albumId] {
+                    item.update(model: model, context: context)
+                }
+                
+            }
+            
+        }
+       
         override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Album], in context: NSManagedObjectContext) throws -> (models: [STCDAlbum], date: Date) {
             guard !deleteFiles.isEmpty else {
                 throw STDataBase.DataBaseError.dateNotFound

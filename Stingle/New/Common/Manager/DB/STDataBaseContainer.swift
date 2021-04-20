@@ -29,6 +29,8 @@ class STDataBaseContainer {
         return self.container.viewContext
     }
     
+    lazy var backgroundContext = self.newBackgroundContext()
+    
     init(modelName: String) {
         self.modelName = modelName
     }
@@ -42,11 +44,13 @@ class STDataBaseContainer {
     
     func saveContext(_ context: NSManagedObjectContext) {
         if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            context.performAndWait {
+                do {
+                    try context.save()
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
             }
         }
     }

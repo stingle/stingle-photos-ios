@@ -9,13 +9,12 @@ import Foundation
 
 class STDownloadNetworkOperation: STBaseNetworkOperation<URL> {
     
-    
     init(request: IDownloadRequest, success: STOperationSuccess?, progress: STOperationProgress?, failure: STOperationFailure?) {
         super.init(request: request, success: success, failure: failure, progress: progress)
     }
     
     func startRequest() {
-        guard let request = self.request as? IDownloadRequest, let url = request.fileDownloadTmpUrl else {
+        guard let request = self.request as? IDownloadRequest else {
             fatalError("request must be DownloadRequest")
         }
         
@@ -25,7 +24,6 @@ class STDownloadNetworkOperation: STBaseNetworkOperation<URL> {
                 self?.responseSucces(result: result)
             case .failure(let error):
                 self?.responseGetError(error: error)
-                STApplication.shared.fileSystem.remove(file: url)
             }
         }, progress: { [weak self] progress in
             self?.responseProgress(result: progress)

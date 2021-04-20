@@ -15,6 +15,10 @@ class STUser: ICDConvertable {
     let token: String
     let userId: String
     
+    var identifier: String {
+        return self.userId
+    }
+    
     init(email: String, homeFolder: String, isKeyBackedUp: Bool, token: String, userId: String) {
         self.email = email
         self.homeFolder = homeFolder

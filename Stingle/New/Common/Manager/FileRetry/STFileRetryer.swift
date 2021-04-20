@@ -17,10 +17,9 @@ extension STFileRetryerManager {
         private let operationManager = STOperationManager.shared
         private let operations = STObserverEvents<Operation>()
         private let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)
-        fileprivate var mutableState = STUnfairLock()
         
-        lazy var operationQueue: ATOperationQueue = {
-            let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 80, queue: self.dispatchQueue)
+        lazy var operationQueue: STOperationQueue = {
+            let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 20, underlyingQueue: dispatchQueue)
             return queue
         }()
         
@@ -86,7 +85,6 @@ extension STFileRetryerManager {
             } else {
                 let newOperation = self.createOperation(for: source)
                 newOperation.insert(result: result)
-                newOperation.localWork()
                 if !newOperation.isExpired {
                     self.operationManager.run(operation: newOperation, in: self.operationQueue)
                 }

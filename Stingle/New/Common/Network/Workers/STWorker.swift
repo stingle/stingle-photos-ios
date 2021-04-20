@@ -12,6 +12,7 @@ class STWorker {
 	
 	typealias Result<T> = STNetworkDispatcher.Result<T>
 	typealias Success<T> = (_ result: T) -> Void
+    typealias ProgressTask = (_ progress: Progress) -> Void
 	typealias Failure = (_ error: IError) -> Void
 	
 	let operationManager = STOperationManager.shared
@@ -61,6 +62,43 @@ class STWorker {
             failure?(error)
         }
         self.operationManager.run(operation: operation)
+    }
+    
+}
+
+//MARK: - Upload
+
+extension STWorker {
+    
+    @discardableResult
+    func upload<T: IResponse>(request: IUploadRequest, success: Success<T>?, progress: ProgressTask? = nil, failure: Failure? = nil) -> STUploadNetworkOperation<T> {
+        let operation = STUploadNetworkOperation<T>(request: request, success: { (result) in
+            success?(result)
+        }, failure: failure, progress: progress)
+        self.operationManager.run(operation: operation)
+        return operation
+    }
+    
+    @discardableResult
+    func upload<T: Decodable>(request: IUploadRequest, success: Success<T>?, progress: ProgressTask? = nil, failure: Failure? = nil) -> STUploadNetworkOperation<STResponse<T>> {
+        
+        let operation = self.upload(request: request, success: { (response: STResponse<T>) in
+            guard response.errors.isEmpty else {
+                failure?(WorkerError.errors(errors: response.errors))
+                return
+            }
+            guard response.status == "ok" else {
+                failure?(WorkerError.status(status: response.status))
+                return
+            }
+            guard let parts = response.parts else {
+                failure?(WorkerError.emptyData)
+                return
+            }
+            success?(parts)
+        }, progress: progress, failure: failure)
+        
+        return operation
     }
     
 }

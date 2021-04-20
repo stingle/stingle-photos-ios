@@ -24,8 +24,17 @@ extension STLibrary {
         let headers: String
         let dateCreated: Date
         let dateModified: Date
+        var isRemote: Bool
         
-        lazy var encryptsHeaders: STHeaders = {
+        var identifier: String {
+            return self.file
+        }
+        
+        var dbSet: DBSet {
+            return .file
+        }
+        
+        lazy var decryptsHeaders: STHeaders = {
             let result = STApplication.shared.crypto.getHeaders(file: self)
             return result
         }()
@@ -42,9 +51,10 @@ extension STLibrary {
             }
             self.dateCreated = Date(milliseconds: dateCreated)
             self.dateModified = Date(milliseconds: dateModified)
+            self.isRemote = true
         }
         
-        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?) throws {
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool) throws {
             guard let file = file,
                   let version = version,
                   let headers = headers,
@@ -59,6 +69,7 @@ extension STLibrary {
             self.headers = headers
             self.dateCreated = dateCreated
             self.dateModified = dateModified
+            self.isRemote = isRemote
         }
         
         required convenience init(model: STCDFile) throws {
@@ -66,13 +77,44 @@ extension STLibrary {
                            version: model.version,
                            headers: model.headers,
                            dateCreated: model.dateCreated,
-                           dateModified: model.dateModified)
+                           dateModified: model.dateModified,
+                           isRemote: model.isRemote)
         }
         
         func toManagedModelJson() throws -> [String : Any] {
-            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified]
+            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote]
         }
         
     }
     
+}
+
+extension STLibrary.File {
+    
+    enum DBSet: Int {
+        case file = 0
+        case trash = 1
+        case album = 2
+    }
+    
+    var fileThumbUrl: URL? {
+        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
+        let folder: STFileSystem.FilesFolderType = .thumbs(type: type)
+        guard let url = STApplication.shared.fileSystem.direction(for: folder, create: true) else {
+            fatalError("cacheURL not found")
+        }
+        let result = url.appendingPathComponent(self.file)
+        return result
+    }
+    
+    var fileoreginalUrl: URL? {
+        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
+        let folder: STFileSystem.FilesFolderType = .oreginals(type: type)
+        guard let url = STApplication.shared.fileSystem.direction(for: folder, create: true) else {
+            fatalError("cacheURL not found")
+        }
+        let result = url.appendingPathComponent(self.file)
+        return result
+    }
+        
 }

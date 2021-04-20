@@ -40,7 +40,16 @@ extension STLibrary {
         let cover: String?
         let dateCreated: Date
         let dateModified: Date
+        let isRemote: Bool
         
+        var identifier: String {
+            return self.albumId
+        }
+        
+        lazy var albumMetadata: AlbumMetadata? = {
+            return try? STApplication.shared.crypto.decryptAlbum(albumPKStr: self.publicKey, encAlbumSKStr: self.encPrivateKey, metadataStr: self.metadata)
+        }()
+                
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             
@@ -56,6 +65,7 @@ extension STLibrary {
             self.isHidden = (try container.decode(Int.self, forKey: .isHidden) == 1) ? true : false
             self.isOwner = (try container.decode(Int.self, forKey: .isOwner) == 1) ? true : false
             self.isLocked = (try container.decode(Int.self, forKey: .isLocked) == 1) ? true : false
+            self.isRemote = true
             
             let dateCreatedStr = try container.decode(String.self, forKey: .dateCreated)
             let dateModifiedStr = try container.decode(String.self, forKey: .dateModified)
@@ -64,7 +74,6 @@ extension STLibrary {
             }
             self.dateCreated = Date(milliseconds: dateCreated)
             self.dateModified = Date(milliseconds: dateModified)
-            
         }
         
         required init(model: STCDAlbum) throws {
@@ -90,6 +99,7 @@ extension STLibrary {
             self.members = model.members
             self.isLocked = model.isLocked
             self.cover = model.cover
+            self.isRemote = model.isRemote
             
             self.dateCreated = dateCreated
             self.dateModified = dateModified
@@ -110,6 +120,7 @@ extension STLibrary {
             json.addIfNeeded(key: "cover", value: self.cover)
             json.addIfNeeded(key: "dateCreated", value: self.dateCreated)
             json.addIfNeeded(key: "dateModified", value: self.dateModified)
+            json.addIfNeeded(key: "isRemote", value: self.isRemote)
             return json
         }
    

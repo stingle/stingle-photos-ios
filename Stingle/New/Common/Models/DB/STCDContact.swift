@@ -24,4 +24,8 @@ extension STCDContact: IManagedObject {
         self.dateModified = model.dateModified
     }
 
+    func createModel() throws -> STContact {
+        return try STContact(model: self)
+    }
+    
 }

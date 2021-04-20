@@ -19,5 +19,9 @@ public class STCDUser: NSManagedObject, IManagedObject {
         self.token = model.token
         self.userId = model.userId
     }
+    
+    func createModel() throws -> STUser {
+        return try STUser(model: self)
+    }
 
 }

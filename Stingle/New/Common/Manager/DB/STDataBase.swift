@@ -33,7 +33,10 @@ class STDataBase {
     func sync(_ sync: STSync, finish: @escaping (IError?) -> Void) {
         self.didStartSync()
         let context = self.container.newBackgroundContext()
+        
+        context.automaticallyMergesChangesFromParent = true
         context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
+        
         context.performAndWait {
             do {
                 let oldInfo = self.dbInfoProvider.dbInfo
@@ -46,6 +49,13 @@ class STDataBase {
                 finish(DataBaseError.error(error: error))
             }
         }
+        
+        if context.hasChanges {
+            try? context.save()
+        }
+        
+        self.container.viewContext.reset()
+        
         self.endSync()
     }
     
@@ -70,8 +80,8 @@ class STDataBase {
     private func syncImportFiles(sync: STSync, in context: NSManagedObjectContext, dbInfo: STDBInfo) throws -> STDBInfo {
         let lastSeenTime = try self.galleryProvider.sync(db: sync.files ?? [], context: context, lastDate: dbInfo.lastSeenTime)
         let lastAlbumsSeenTime = try self.albumsProvider.sync(db: sync.albums ?? [], context: context, lastDate: dbInfo.lastAlbumsSeenTime)
-        let lastAlbumFilesSeenTime = try self.albumFilesProvider.sync(db: sync.albumFiles ?? [], context: context, lastDate: dbInfo.lastAlbumFilesSeenTime)
         let lastTrashSeenTime = try self.trashProvider.sync(db: sync.trash ?? [], context: context, lastDate: dbInfo.lastTrashSeenTime)
+        let lastAlbumFilesSeenTime = try self.albumFilesProvider.sync(db: sync.albumFiles ?? [], context: context, lastDate: dbInfo.lastAlbumFilesSeenTime)
         let lastContactsSeenTime = try self.contactProvider.sync(db: sync.contacts ?? [], context: context, lastDate: dbInfo.lastContactsSeenTime)
                 
         let infon = STDBInfo(lastSeenTime: lastSeenTime,

@@ -22,7 +22,11 @@ class STContact: Codable, ICDConvertable {
     var userId: String
     var dateUsed: Date
     var dateModified: Date
-
+    
+    var identifier: String {
+        return self.userId
+    }
+   
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.email = try container.decode(String.self, forKey: .email)

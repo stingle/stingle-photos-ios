@@ -27,5 +27,9 @@ public class STCDAlbum: NSManagedObject, IManagedObject {
         self.dateCreated = model.dateCreated
         self.dateModified = model.dateModified
     }
+    
+    func createModel() throws -> STLibrary.Album {
+        return try STLibrary.Album(model: self)
+    }
 
 }

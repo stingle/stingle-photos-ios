@@ -50,6 +50,17 @@
 
 "storage_space_used_info" = "%@ MB of %@ GB (%@%%) used";
 
+"storage_space_used_info" = "%@ MB of %@ GB (%@%%) used";
+
+"alert_error_permission_photos_title" = "Not authorized";
+"alert_error_permission_photos_message" = "Stingle haven't permission your photos. Please check your settings";
+
+"cancel" = "Cancel";
+"ok" = "Ok";
+"trash" = "Trash";
+"albums" = "Albums";
+"items_count" = "%@ items";
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";
@@ -71,6 +82,8 @@
 "warning" = "Warning";
 "empty_data" = "Empty data";
 "incorrect_password" = "Incorrect password";
+"storage_size_isover" = "Storage size isover";
+
 
 "error_empty_text" = "Text cannot be empty";
 "error_empty_email" = "Email cannot be empty";

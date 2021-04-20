@@ -29,7 +29,6 @@ extension STFileRetryerManager {
         
         init(countLimit: Int = 400, totalCostLimit: Int = (10 * 1024 * 1024)) {
             self.storage.countLimit = countLimit
-            self.storage.totalCostLimit = totalCostLimit
         }
         
         func retryFile(source: IRetrySource, success: @escaping RetryerSuccess<T>, failure: @escaping RetryerFailure) {

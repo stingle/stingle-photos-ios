@@ -10,13 +10,12 @@ import Kingfisher
 
 class STImageView: UIImageView {
     
-    func setImage(_ image: Image?, placeholder: UIImage?) {
+    func setImage(_ image: IRetrySource?, placeholder: UIImage?) {
         let animator = STImageDownloadPlainAnimator()
         self.setImage(source: image, placeholder: placeholder, animator: animator)
     }
 
 }
-
 
 extension STImageView {
     
@@ -26,21 +25,32 @@ extension STImageView {
         let imageType: ImageType
         let version: String
         let isThumb: Bool
+        let isRemote: Bool
         
-        let imageParameters: [String : Any]?
+        private(set) var imageParameters: [String : Any]?
         let header: STHeader
         
         init?(file: STLibrary.File, isThumb: Bool) {
-            guard let header = isThumb ? file.encryptsHeaders.thumb : file.encryptsHeaders.file else {
+            guard let header = isThumb ? file.decryptsHeaders.thumb : file.decryptsHeaders.file, let imageType = ImageType(rawValue: file.dbSet.rawValue) else {
                 return nil
             }
             self.fileName = file.file
-            self.imageType = .file
+            self.imageType = imageType
             self.version = file.version
             self.isThumb = isThumb
             let isThumbStr = self.isThumb ? "1" : "0"
             self.header = header
             self.imageParameters = ["file": self.fileName, "set": "\(self.imageType.rawValue)", "is_thumb": isThumbStr]
+            self.isRemote = file.isRemote           
+        }
+        
+        init?(album: STLibrary.Album, albumFile: STLibrary.AlbumFile, isThumb: Bool) {
+            guard album.albumId == albumFile.albumId else {
+                return nil
+            }
+            albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)
+            self.init(file: albumFile, isThumb: isThumb)
+            self.imageParameters?["albumId"] = "\(album.albumId)"
         }
                 
     }
@@ -56,8 +66,10 @@ extension STImageView {
 
 extension STImageView.Image: IRetrySource {
     
-    var filePath: String {
-        return self.isThumb ? "Thumb" : "Oreginal"
+    var filePath: STFileSystem.FilesFolderType {
+        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
+        let folder: STFileSystem.FilesFolderType = self.isThumb ? .thumbs(type: type) : .oreginals(type: type)
+        return folder
     }
 }
 

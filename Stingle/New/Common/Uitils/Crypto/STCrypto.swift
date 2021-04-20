@@ -51,6 +51,9 @@ extension STCrypto {
         public static let KdfDifficultyHard = 2
         public static let KdfDifficultyUltra = 3
         public static let PWHASH_LEN = 64
+        
+        public static let CurrentAlbumMedadataVersion = 1
+        
     }
     
 }
@@ -233,12 +236,15 @@ class STCrypto {
 		return plainText
 	}
 	
-	public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32) throws {
+    @discardableResult
+    public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32) throws -> (header: STHeader, encriptedHeader: Bytes) {
 		let publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
 		let symmetricKey = self.sodium.keyDerivation.key()
 		let header = try getNewHeader(symmetricKey: symmetricKey, dataSize: dataLength, filename: filename, fileType: fileType, fileId: fileId, videoDuration: videoDuration)
-		try self.writeHeader(output: output, header: header, publicKey: publicKey)
-		try self.encryptData(input: input, output: output, header: header)
+        let encriptedHeader = try self.writeHeader(output: output, header: header, publicKey: publicKey)
+        try self.encryptData(input: input, output: output, header: header)
+    
+        return (header, encriptedHeader)
 	}
 	
 	@discardableResult
@@ -253,7 +259,8 @@ class STCrypto {
         var result: Bytes = []
 		var numRead = 0
 		var diff: Int = 0
-		
+        
+        let context = Constants.XCHACHA20POLY1305_IETF_CONTEXT
 		var numWrite: Int = 0
 		repeat {
 			buf = Bytes(repeating: 0, count: Int(header.chunkSize))
@@ -265,24 +272,23 @@ class STCrypto {
 				buf = Bytes(buf[..<numRead])
 			}
 			let keyBytesLength = self.sodium.aead.xchacha20poly1305ietf.KeyBytes
-			guard let chunkKey = self.sodium.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
+			guard let chunkKey = self.sodium.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: context) else {
 				throw CryptoError.Internal.keyDerivationFailure
 			}
 			guard chunkKey.count == self.sodium.aead.xchacha20poly1305ietf.KeyBytes else {
 				throw CryptoError.General.incorrectKeySize
 			}
-			guard let (authenticatedCipherText, chunkNonce) : (Bytes, Bytes)  = sodium.aead.xchacha20poly1305ietf.encrypt(message: buf, secretKey: chunkKey) else {
+            guard let (authenticatedCipherText, chunkNonce) : (Bytes, Bytes)  = self.sodium.aead.xchacha20poly1305ietf.encrypt(message: buf, secretKey: chunkKey) else {
 				throw CryptoError.General.incorrectKeySize
 			}
 			numWrite = output.write(chunkNonce, maxLength: chunkNonce.count)
 			assert(numWrite == chunkNonce.count)
-			numWrite = output.write(authenticatedCipherText, maxLength:authenticatedCipherText.count)
+			numWrite = output.write(authenticatedCipherText, maxLength: authenticatedCipherText.count)
 			assert(numWrite == authenticatedCipherText.count)
 			chunkNumber += UInt64(1)
             
             result.append(contentsOf: chunkNonce)
             result.append(contentsOf: authenticatedCipherText)
-            print("maxLength", (authenticatedCipherText.count + chunkNonce.count))
             
 		} while (diff == 0)
 		
@@ -346,12 +352,12 @@ class STCrypto {
     }
 	
     @discardableResult
-    public func decryptFile(input: InputStream, output: OutputStream, header: STHeader? = nil, completionHandler:  ((Bytes?) -> Swift.Void)? = nil) throws -> Bool {
+    public func decryptFile(input: InputStream, output: OutputStream, header: STHeader? = nil, validateHeader: Bool = true, completionHandler:  ((Bytes?) -> Swift.Void)? = nil) throws -> Bool {
                 
         var header = header
         if header == nil {
             header = try getFileHeader(input: input)
-        } else {
+        } else if validateHeader {
             try self.validateHeaderData(input: input)
         }
 

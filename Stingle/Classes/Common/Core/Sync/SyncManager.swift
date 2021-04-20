@@ -409,6 +409,9 @@ class SyncManager {
 			return
 		}
 		outputThumb.open()
+        
+        
+        
 		let inputOrigin = InputStream(data: data)
 		inputOrigin.open()
 		guard let originalPath = SPFileManager.folder(for: .StorageOriginals)?.appendingPathComponent(fileName) else {
@@ -425,6 +428,7 @@ class SyncManager {
 			try crypto.encryptFile(input: inputThumb, output: outputThumb, filename: file.name, fileType: type, dataLength: UInt(thumbData.count), fileId: fileId, videoDuration: duration)
 			inputThumb.close()
 			outputThumb.close()
+            
 			try crypto.encryptFile(input: inputOrigin, output: outputOrigin, filename: file.name, fileType: type, dataLength: UInt(data.count), fileId: fileId, videoDuration: duration)
             guard let headers = try STApplication.shared.crypto.getFileHeaders(originalPath: originalPath.path, thumbPath: thumbPath.path) else {
 				//TODO : throw right exception

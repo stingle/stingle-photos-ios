@@ -44,7 +44,7 @@ class SPMediaFileManager {
 		processMediia(asset: asset, fileUrl: fileUrl, type:type, duration:duration)
 	}
 	
-	func processMediia(asset:PHAsset, fileUrl:URL, type:Int, duration:UInt32) {
+	func processMediia(asset:PHAsset, fileUrl:URL, type: Int, duration:UInt32) {
 		let option = PHImageRequestOptions()
 		option.isSynchronous = true
 		//TODO : Handle error case
@@ -57,7 +57,7 @@ class SPMediaFileManager {
 			options.isNetworkAccessAllowed = true
 			let size = STConstants.thumbSize(for: CGSize(width: asset.pixelWidth, height: asset.pixelHeight))
 
-			phManager.requestImage(for: asset, targetSize:size, contentMode: .aspectFit, options: options) { thumb,info  in
+			phManager.requestImage(for: asset, targetSize:size, contentMode: .aspectFit, options: options) { thumb, info  in
 				if let thumb = thumb {
 					SyncManager.importImage(file:file, thumb:thumb, type:type, duration:duration)
 				}

@@ -11,13 +11,15 @@ extension STDataBase {
     
     class ContactProvider: DataBaseCollectionProvider<STContact, STCDContact, STLibrary.DeleteFile.Contact> {
         
-        override func getInsertObjects(with contacts: [STContact]) throws -> (json: [[String : Any]], lastDate: Date) {
+        override func getInsertObjects(with contacts: [STContact]) throws -> (json: [[String : Any]], objIds: [String: STContact], lastDate: Date) {
             var lastDate: Date? = nil
             var jsons = [[String : Any]]()
+            var objIds = [String: STContact]()
             
             try contacts.forEach { (contact) in
                 let json = try contact.toManagedModelJson()
                 jsons.append(json)
+                objIds[contact.userId] = contact
                 let currentLastDate = lastDate ?? contact.dateModified
                 if currentLastDate <= contact.dateModified {
                     lastDate = contact.dateModified
@@ -28,7 +30,23 @@ extension STDataBase {
                 throw STDataBase.DataBaseError.dateNotFound
             }
             
-            return (jsons, myLastDate)
+            return (jsons, objIds, myLastDate)
+        }
+        
+        override func syncUpdateModels(objIds: [String : STContact], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
+           
+            let fetchRequest = NSFetchRequest<STCDContact>(entityName: STCDContact.entityName)
+            fetchRequest.includesSubentities = false
+            let keys: [String] = Array(objIds.keys)
+            fetchRequest.predicate = NSPredicate(format: "userId IN %@", keys)
+            let items = try context.fetch(fetchRequest)
+            
+            items.forEach { (item) in
+                if let userId = item.userId, let model = objIds[userId] {
+                    item.update(model: model, context: context)
+                }
+            }
+
         }
         
         override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Contact], in context: NSManagedObjectContext) throws -> (models: [STCDContact], date: Date) {

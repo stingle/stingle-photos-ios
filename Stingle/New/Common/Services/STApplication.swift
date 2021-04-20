@@ -30,8 +30,11 @@ class STApplication {
     private(set) lazy var syncManager: STSyncManager = {
         return STSyncManager()
     }()
-        
     
+    private(set) lazy var uploader: STFileUploader = {
+        return STFileUploader()
+    }()
+            
     private init() { }
     
 }
