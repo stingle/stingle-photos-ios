@@ -45,3 +45,13 @@ class STViewDataSource<Model: IManagedObject>: IViewDataSource, IProviderDelegat
     }
 
 }
+
+extension STViewDataSource {
+    
+    var isEmptyData: Bool {
+        return (self.snapshotReference?.numberOfItems ?? .zero) == .zero
+    }
+    
+}
+
+

@@ -10,7 +10,7 @@ import Foundation
 class STOperationManager {
     
     static let shared: STOperationManager = STOperationManager()
-    let defaultQueue = STOperationQueue()
+    let defaultQueue = STOperationQueue(qualityOfService: .userInteractive)
     private var othersQueue = [STOperationQueue]()
     
     private init() {}

@@ -73,13 +73,28 @@ extension STGalleryVC {
 }
 
 class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
-   
+        
+    @IBOutlet weak var syncBarButtonItem: UIBarButtonItem!
+    @IBOutlet weak var syncView: STGallerySyncView!
     private var viewModel = STGalleryVM()
     
     private lazy var pickerHelper: STImagePickerHelper = {
         return STImagePickerHelper(controller: self)
     }()
     
+    @IBAction func didSelectSyncButton(_ sender: Any) {
+        
+        let controller = self.storyboard!.instantiateViewController(identifier: "Popover")
+        controller.modalPresentationStyle = .popover
+        
+        let popController = controller.popoverPresentationController
+        popController?.permittedArrowDirections = .any
+        popController?.barButtonItem = self.syncBarButtonItem
+        popController?.delegate = self
+        
+        self.showDetailViewController(controller, sender: nil)
+    }
+        
     //MARK: - Override
     
     override func viewDidLoad() {
@@ -150,6 +165,14 @@ extension STGalleryVC: STImagePickerHelperDelegate {
     
     func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
         self.viewModel.upload(assets: assets)
+    }
+    
+}
+
+extension STGalleryVC: UIPopoverPresentationControllerDelegate {
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
     
 }

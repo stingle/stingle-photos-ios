@@ -92,6 +92,7 @@ protocol STCollectionViewDataSourceDelegate: class {
     
     func dataSource(didStartSync dataSource: IViewDataSource)
     func dataSource(didEndSync dataSource: IViewDataSource)
+    func dataSource(didApplySnapshot dataSource: IViewDataSource)
     
 }
 
@@ -132,13 +133,14 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     
     override func didStartSync(dataSource: IProviderDataSource) {
         if dataSource as? NSObject == self.dbDataSource {
-            self.delegate?.dataSource(didEndSync: self)
+            self.delegate?.dataSource(didStartSync: self)
         }
     }
     
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
         super.didChangeContent(with: snapshot)
         self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true)
+        self.delegate?.dataSource(didApplySnapshot: self)
     }
     
     //MARK: - Public
@@ -215,5 +217,4 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         return resutl
     }
     
-        
 }

@@ -61,10 +61,10 @@ extension STLibrary {
             self.members = try container.decodeIfPresent(String.self, forKey: .members)
             self.cover = try container.decodeIfPresent(String.self, forKey: .cover)
                         
-            self.isShared = (try container.decode(Int.self, forKey: .isShared) == 1) ? true : false
-            self.isHidden = (try container.decode(Int.self, forKey: .isHidden) == 1) ? true : false
-            self.isOwner = (try container.decode(Int.self, forKey: .isOwner) == 1) ? true : false
-            self.isLocked = (try container.decode(Int.self, forKey: .isLocked) == 1) ? true : false
+            self.isShared = (try container.decode(String.self, forKey: .isShared) == "1") ? true : false
+            self.isHidden = (try container.decode(String.self, forKey: .isHidden) == "1") ? true : false
+            self.isOwner = (try container.decode(String.self, forKey: .isOwner) == "1") ? true : false
+            self.isLocked = (try container.decode(String.self, forKey: .isLocked) == "1") ? true : false
             self.isRemote = true
             
             let dateCreatedStr = try container.decode(String.self, forKey: .dateCreated)

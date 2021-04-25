@@ -12,15 +12,13 @@ class STAlbumsVC: STFilesViewController<STAlbumsDataSource.ViewModel> {
     private let viewModel = STAlbumsVM()
     private let segueIdentifierAlbumFiles = "AlbumFiles"
     
-    @IBInspectable var isSharedAlbums: Bool = true
-    
     override func configureLocalize() {
         self.navigationItem.title = "albums".localized
         self.navigationController?.tabBarItem.title = "albums".localized
     }
     
     override func createDataSource() -> STCollectionViewDataSource<STAlbumsDataSource.ViewModel> {
-        let dataSource = STAlbumsDataSource(collectionView: self.collectionView, isShared: self.isSharedAlbums)
+        let dataSource = STAlbumsDataSource(collectionView: self.collectionView, isShared: false)
         return dataSource
     }
     

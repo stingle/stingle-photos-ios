@@ -31,9 +31,13 @@ class STSyncManager {
             return
         }
         self.didStartSync()
-        self.syncWorker.getUpdates(success: { [weak self] (sync) in
+        
+        self.syncWorker.getUpdates { [weak self] (sync) in
             self?.startDBSync(sync: sync, success: success, failure: failure)
-        }, failure: failure)
+        } failure: { [weak self] (error) in
+            self?.didEndSync(error: error)
+        }
+
     }
 
     //MARK: - private

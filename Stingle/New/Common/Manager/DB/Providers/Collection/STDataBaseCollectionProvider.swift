@@ -91,9 +91,11 @@ extension STDataBase {
         }
         
         func reloadData() {
-            self.dataSources.forEach { (controller) in
-                controller.reloadData()
-            }
+            DispatchQueue.main.async { [weak self] in
+                self?.dataSources.forEach { (controller) in
+                    controller.reloadData()
+                }
+            }           
         }
         
         //MARK: - DataSource
@@ -166,11 +168,12 @@ extension STDataBase {
         }
         
         func fetch(predicate: NSPredicate?) -> [ManagedModel] {
-            let context = self.container.newBackgroundContext()
-            context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
+            let context = self.container.viewContext
+//            context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
             return context.performAndWait { () -> [ManagedModel] in
                 let fetchRequest = NSFetchRequest<ManagedModel>(entityName: ManagedModel.entityName)
-                fetchRequest.includesSubentities = false
+                fetchRequest.includesSubentities = true
+                fetchRequest.includesPropertyValues = true
                 fetchRequest.predicate = predicate
                 let cdModels = try? context.fetch(fetchRequest)
                 return cdModels ?? []
