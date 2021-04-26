@@ -295,7 +295,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hmu-Cc-yaC"/>
-                        <color key="backgroundColor" name="STBackground"/>
+                        <color key="backgroundColor" name="STMenuBackground"/>
                         <constraints>
                             <constraint firstItem="hmu-Cc-yaC" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="h5S-W4-pyi" secondAttribute="trailing" constant="20" id="38O-r1-a04"/>
                             <constraint firstItem="hmu-Cc-yaC" firstAttribute="trailing" secondItem="sgT-Is-HMp" secondAttribute="trailing" id="T1n-p6-GEC"/>
@@ -391,7 +391,7 @@
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Rqu-ka-gRB"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="i9L-75-PfS" secondAttribute="bottom" id="0D2-2A-OdA"/>
                             <constraint firstItem="bP3-Lw-AeF" firstAttribute="centerX" secondItem="Rqu-ka-gRB" secondAttribute="centerX" id="2bI-0X-AR1"/>
@@ -407,7 +407,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Albums" id="XBD-EI-Oik">
                         <barButtonItem key="leftBarButtonItem" image="ic_nav_menu" id="FZq-5P-Eju">
-                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" name="STText"/>
                             <connections>
                                 <action selector="didSelectMenuBarItem:" destination="8nd-bs-WGs" id="wcL-xe-hbv"/>
                             </connections>
@@ -440,66 +440,12 @@
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="eLB-hC-PTo" kind="relationship" relationship="rootViewController" id="p4d-4Z-sXj"/>
+                        <segue destination="prX-JI-4JC" kind="relationship" relationship="rootViewController" id="P1h-ey-31Z"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GCo-qr-czA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2313" y="1775"/>
-        </scene>
-        <!--Albums-->
-        <scene sceneID="JLY-B0-crH">
-            <objects>
-                <viewController id="eLB-hC-PTo" customClass="STAlbumsVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Rai-bK-ZRN">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="6h6-Hq-3RF">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="m4x-uV-abJ">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells/>
-                                <connections>
-                                    <outlet property="delegate" destination="eLB-hC-PTo" id="N8W-65-9UJ"/>
-                                </connections>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="FnY-Nn-kBC"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="FnY-Nn-kBC" firstAttribute="trailing" secondItem="6h6-Hq-3RF" secondAttribute="trailing" id="j1l-CF-EQM"/>
-                            <constraint firstItem="6h6-Hq-3RF" firstAttribute="leading" secondItem="FnY-Nn-kBC" secondAttribute="leading" id="sZf-1g-IkW"/>
-                            <constraint firstAttribute="bottom" secondItem="6h6-Hq-3RF" secondAttribute="bottom" id="t9Z-fb-1ET"/>
-                            <constraint firstItem="6h6-Hq-3RF" firstAttribute="top" secondItem="Rai-bK-ZRN" secondAttribute="top" id="zwu-5z-pdp"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="6h6-Hq-3RF"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <navigationItem key="navigationItem" title="Albums" id="6tR-rx-QfI">
-                        <barButtonItem key="leftBarButtonItem" image="ic_nav_menu" id="0vu-hC-ReK">
-                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="didSelectMenuBarItem:" destination="eLB-hC-PTo" id="aip-8R-wX4"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="collectionView" destination="6h6-Hq-3RF" id="gxB-ib-fsp"/>
-                        <segue destination="wit-9s-oEN" kind="show" identifier="AlbumFiles" id="qDI-8n-l2A"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ElR-D0-2Oe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1333.3333333333335" y="1774.5535714285713"/>
         </scene>
         <!--Album FilesVC-->
         <scene sceneID="ihH-6X-1bY">
@@ -571,7 +517,7 @@
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="DZ1-GB-pRi"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                         <constraints>
                             <constraint firstItem="DZ1-GB-pRi" firstAttribute="trailing" secondItem="WCb-Fx-StB" secondAttribute="trailing" id="6cS-Yw-Ull"/>
                             <constraint firstItem="Q8N-dK-Rp8" firstAttribute="centerX" secondItem="DZ1-GB-pRi" secondAttribute="centerX" id="9Ge-iB-7Vu"/>
@@ -596,7 +542,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ouz-fj-qGc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-284" y="1018"/>
+            <point key="canvasLocation" x="-132" y="1394"/>
         </scene>
         <!--TrashVC-->
         <scene sceneID="3AU-Ql-68w">
@@ -709,6 +655,114 @@
             </objects>
             <point key="canvasLocation" x="-3555" y="1775"/>
         </scene>
+        <!--Albums-->
+        <scene sceneID="ZBo-qz-lTN">
+            <objects>
+                <viewController id="prX-JI-4JC" customClass="STAlbumsSharedVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wXE-Gd-yH0">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TNi-Rs-RIF">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="74n-GC-aLB">
+                                        <rect key="frame" x="8" y="223.5" width="398" height="278"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_empty_shared_albums" translatesAutoresizingMaskIntoConstraints="NO" id="uv5-HA-oyH">
+                                                <rect key="frame" x="0.0" y="0.0" width="398" height="197"/>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have any shared albums" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofw-Ck-DFN">
+                                                <rect key="frame" x="46" y="217" width="306.5" height="24"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                <color key="textColor" name="STText"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shared photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="maA-tj-5m1">
+                                                <rect key="frame" x="97" y="261" width="204" height="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" name="STSecondaryText"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="maA-tj-5m1" secondAttribute="trailing" id="EF1-zJ-pM4"/>
+                                            <constraint firstItem="maA-tj-5m1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="74n-GC-aLB" secondAttribute="leading" id="KLr-VE-A3H"/>
+                                            <constraint firstAttribute="trailing" secondItem="uv5-HA-oyH" secondAttribute="trailing" id="NA7-xP-T2C"/>
+                                            <constraint firstItem="maA-tj-5m1" firstAttribute="centerX" secondItem="74n-GC-aLB" secondAttribute="centerX" id="Twz-nc-RJ2"/>
+                                            <constraint firstItem="uv5-HA-oyH" firstAttribute="leading" secondItem="74n-GC-aLB" secondAttribute="leading" id="XO0-GN-qHm"/>
+                                            <constraint firstItem="ofw-Ck-DFN" firstAttribute="centerX" secondItem="74n-GC-aLB" secondAttribute="centerX" id="Xw8-cG-tby"/>
+                                            <constraint firstItem="ofw-Ck-DFN" firstAttribute="top" secondItem="uv5-HA-oyH" secondAttribute="bottom" constant="20" id="gc4-2V-Uqs"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ofw-Ck-DFN" secondAttribute="trailing" id="hGl-ua-R2h"/>
+                                            <constraint firstItem="uv5-HA-oyH" firstAttribute="top" secondItem="74n-GC-aLB" secondAttribute="top" id="hM9-zd-wRW"/>
+                                            <constraint firstItem="ofw-Ck-DFN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="74n-GC-aLB" secondAttribute="leading" id="k67-jF-3ES"/>
+                                            <constraint firstAttribute="bottom" secondItem="maA-tj-5m1" secondAttribute="bottom" id="py6-0q-sGE"/>
+                                            <constraint firstItem="maA-tj-5m1" firstAttribute="top" secondItem="ofw-Ck-DFN" secondAttribute="bottom" constant="20" id="yzh-XN-cRO"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailingMargin" secondItem="74n-GC-aLB" secondAttribute="trailing" id="A7G-vi-AgX"/>
+                                    <constraint firstItem="74n-GC-aLB" firstAttribute="centerY" secondItem="TNi-Rs-RIF" secondAttribute="centerY" id="OSC-ps-Oo7"/>
+                                    <constraint firstItem="74n-GC-aLB" firstAttribute="leading" secondItem="TNi-Rs-RIF" secondAttribute="leadingMargin" id="aI5-D6-42I"/>
+                                </constraints>
+                            </view>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="qzy-vu-lpc">
+                                <rect key="frame" x="188.5" y="432" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="xCt-b2-aZh">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IEs-3H-pOM">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="delegate" destination="prX-JI-4JC" id="2iQ-n2-5Bf"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="dle-De-TTm"/>
+                        <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstItem="dle-De-TTm" firstAttribute="bottom" secondItem="TNi-Rs-RIF" secondAttribute="bottom" id="2q5-Xi-qdT"/>
+                            <constraint firstItem="xCt-b2-aZh" firstAttribute="top" secondItem="wXE-Gd-yH0" secondAttribute="top" id="3lK-Pf-ekB"/>
+                            <constraint firstItem="TNi-Rs-RIF" firstAttribute="trailing" secondItem="dle-De-TTm" secondAttribute="trailing" id="Srj-Gz-zuM"/>
+                            <constraint firstItem="TNi-Rs-RIF" firstAttribute="top" secondItem="dle-De-TTm" secondAttribute="top" id="dcn-Qt-Nxa"/>
+                            <constraint firstItem="dle-De-TTm" firstAttribute="trailing" secondItem="xCt-b2-aZh" secondAttribute="trailing" id="fJQ-kc-8AB"/>
+                            <constraint firstItem="qzy-vu-lpc" firstAttribute="centerX" secondItem="dle-De-TTm" secondAttribute="centerX" id="fLc-ty-pCK"/>
+                            <constraint firstItem="qzy-vu-lpc" firstAttribute="centerY" secondItem="dle-De-TTm" secondAttribute="centerY" id="kf3-KV-Ff5"/>
+                            <constraint firstAttribute="bottom" secondItem="xCt-b2-aZh" secondAttribute="bottom" id="mxa-1o-KPA"/>
+                            <constraint firstItem="TNi-Rs-RIF" firstAttribute="leading" secondItem="dle-De-TTm" secondAttribute="leading" id="o83-ab-aha"/>
+                            <constraint firstItem="xCt-b2-aZh" firstAttribute="leading" secondItem="dle-De-TTm" secondAttribute="leading" id="wI3-ZF-m4U"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Albums" id="Nd2-h3-Qpy">
+                        <barButtonItem key="leftBarButtonItem" image="ic_nav_menu" id="9ZT-bD-MBF">
+                            <color key="tintColor" name="STText"/>
+                            <connections>
+                                <action selector="didSelectMenuBarItem:" destination="prX-JI-4JC" id="xQE-ze-cR1"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="activityIndicatorView" destination="qzy-vu-lpc" id="im4-1P-3Nj"/>
+                        <outlet property="collectionView" destination="xCt-b2-aZh" id="t6u-KS-fnK"/>
+                        <outlet property="emptyDataSubTitleLabel" destination="maA-tj-5m1" id="cbw-wb-nyO"/>
+                        <outlet property="emptyDataTitleLabel" destination="ofw-Ck-DFN" id="xow-ma-3my"/>
+                        <outlet property="emptyDataView" destination="TNi-Rs-RIF" id="9iM-vu-AIP"/>
+                        <segue destination="wit-9s-oEN" kind="show" identifier="AlbumFiles" id="AIi-GL-vll"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8EB-Wa-d5c" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1333" y="1775"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="Dtb-DJ-8L1"/>
@@ -717,11 +771,15 @@
         <image name="ic_album_min" width="20" height="20"/>
         <image name="ic_empty_albums" width="190" height="201"/>
         <image name="ic_empty_files" width="204.5" height="200"/>
+        <image name="ic_empty_shared_albums" width="198" height="197"/>
         <image name="ic_gallery_min" width="24" height="24"/>
         <image name="ic_nav_menu" width="18" height="12"/>
         <image name="ic_open_image_picker" width="74" height="74"/>
         <image name="ic_shared_album_min" width="24" height="24"/>
         <namedColor name="STBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STMenuBackground">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STPrimary">
@@ -733,9 +791,6 @@
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

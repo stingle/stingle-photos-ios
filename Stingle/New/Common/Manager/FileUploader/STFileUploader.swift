@@ -225,7 +225,7 @@ extension STFileUploader: STFileUploaderOperationDelegate {
     }
     
     func fileUploaderOperation(didEndFailed operation: STFileUploader.Operation, error: IError, file: STLibrary.File?) {
-        self.dispatchQueue.sync { [weak self] in
+        self.dispatchQueue.async { [weak self] in
             guard let weakSelf = self else {
                 return
             }

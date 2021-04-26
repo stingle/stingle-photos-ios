@@ -172,6 +172,10 @@
 		A099F4B726302386000D4F86 /* STPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4B626302386000D4F86 /* STPopoverViewController.swift */; };
 		A099F4BC26302B28000D4F86 /* STGallerySyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */; };
 		A099F4C026302F4A000D4F86 /* STCircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4BF26302F4A000D4F86 /* STCircleProgressView.swift */; };
+		A09D94462636FD7600268A84 /* STAlbumsSharedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D94452636FD7600268A84 /* STAlbumsSharedVC.swift */; };
+		A09D94492636FD8200268A84 /* STAlbumsSharedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D94482636FD8200268A84 /* STAlbumsSharedVM.swift */; };
+		A09D944E2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D944C2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift */; };
+		A09D944F2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A09D944D2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib */; };
 		A09DF8882628DA6E00CDDA8E /* STDataBaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09DF8872628DA6E00CDDA8E /* STDataBaseDataSource.swift */; };
 		A0A9F34A261C79BE000252F2 /* STTrashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A9F349261C79BE000252F2 /* STTrashVC.swift */; };
 		A0AAA938261C7C1B009E9F51 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0AAA937261C7C1B009E9F51 /* Settings.storyboard */; };
@@ -394,6 +398,10 @@
 		A099F4B626302386000D4F86 /* STPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPopoverViewController.swift; sourceTree = "<group>"; };
 		A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGallerySyncView.swift; sourceTree = "<group>"; };
 		A099F4BF26302F4A000D4F86 /* STCircleProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCircleProgressView.swift; sourceTree = "<group>"; };
+		A09D94452636FD7600268A84 /* STAlbumsSharedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedVC.swift; sourceTree = "<group>"; };
+		A09D94482636FD8200268A84 /* STAlbumsSharedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedVM.swift; sourceTree = "<group>"; };
+		A09D944C2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedCollectionViewCell.swift; sourceTree = "<group>"; };
+		A09D944D2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STAlbumsSharedCollectionViewCell.xib; sourceTree = "<group>"; };
 		A09DF8872628DA6E00CDDA8E /* STDataBaseDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDataBaseDataSource.swift; sourceTree = "<group>"; };
 		A0A9F33A261C76CC000252F2 /* Gallery.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Gallery.storyboard; sourceTree = "<group>"; };
 		A0A9F349261C79BE000252F2 /* STTrashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashVC.swift; sourceTree = "<group>"; };
@@ -1290,6 +1298,15 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		A09D944B2636FDAB00268A84 /* Items */ = {
+			isa = PBXGroup;
+			children = (
+				A09D944C2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift */,
+				A09D944D2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib */,
+			);
+			path = Items;
+			sourceTree = "<group>";
+		};
 		A0A9F338261C7678000252F2 /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
@@ -1369,6 +1386,9 @@
 		A0B152DE2636F8EB00D36619 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				A09D944B2636FDAB00268A84 /* Items */,
+				A09D94452636FD7600268A84 /* STAlbumsSharedVC.swift */,
+				A09D94482636FD8200268A84 /* STAlbumsSharedVM.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -1582,6 +1602,7 @@
 				A02203CA25EED86800D07C98 /* Assets.xcassets in Resources */,
 				A02204A625EEDC0400D07C98 /* Welcome.storyboard in Resources */,
 				A02204F225EEE12000D07C98 /* Localizable.strings in Resources */,
+				A09D944F2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib in Resources */,
 				A02204AE25EEDC0400D07C98 /* SPCollectionViewCell.xib in Resources */,
 				A0B2678B2624E0FC0090E4ED /* STTrashCollectionViewCell.xib in Resources */,
 				A02204B425EEDC0400D07C98 /* SPCollectionHeader.xib in Resources */,
@@ -1681,6 +1702,7 @@
 				A06942D1260CDE3E009CFD3A /* UIColor+Operation.swift in Sources */,
 				A0F467E425F9776600BF00AA /* STAlbumFilesProvider.swift in Sources */,
 				A022047725EEDC0400D07C98 /* STCrypto+Extensions.swift in Sources */,
+				A09D94462636FD7600268A84 /* STAlbumsSharedVC.swift in Sources */,
 				A022046C25EEDC0400D07C98 /* STNavigationController.swift in Sources */,
 				A022049825EEDC0400D07C98 /* UITextField+Extensions.swift in Sources */,
 				A0301DE025FD6C6A005281EF /* ICDConvertable.swift in Sources */,
@@ -1714,6 +1736,7 @@
 				A02204A325EEDC0400D07C98 /* CurrentPageVC.swift in Sources */,
 				A02204A925EEDC0400D07C98 /* STMainVC.swift in Sources */,
 				A022047025EEDC0400D07C98 /* STStatusBar.swift in Sources */,
+				A09D94492636FD8200268A84 /* STAlbumsSharedVM.swift in Sources */,
 				A086FD8E25F5AA4300A8BC9C /* STDataBase.swift in Sources */,
 				A022049D25EEDC0400D07C98 /* Localize.swift in Sources */,
 				A0028650260B8121004C0934 /* STRetryOperation.swift in Sources */,
@@ -1805,6 +1828,7 @@
 				A0D1A3CA262E10E0002E326F /* STAlbumFilesHeaderView.swift in Sources */,
 				A0301DED25FD6DD4005281EF /* STDataBaseCollectionProvider.swift in Sources */,
 				A0195E132628392F00C8CEA6 /* STAlbumsDataSource.swift in Sources */,
+				A09D944E2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift in Sources */,
 				A04945C92611F77C008D5E48 /* STTabBar.swift in Sources */,
 				A0CFBD8F25F171ED003095BE /* STTabBarVC.swift in Sources */,
 				A02204AD25EEDC0400D07C98 /* SPImagePageVC.swift in Sources */,

@@ -15,6 +15,12 @@ class SPCollectionViewCell: UICollectionViewCell {
 	@IBOutlet weak var bottom: NSLayoutConstraint!
 	
 	private var checked = false
+    
+    override var isHighlighted: Bool {
+        didSet {
+            self.alpha = self.isHighlighted ? 0.7 : 1
+        }
+    }
 	
 	func updateSpaces(constant:CGFloat) {
 		top.constant = constant

@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 protocol STAlbumsDataSourceViewModelDelegate: class {
-    func viewModel(viewModel: STAlbumsVC.ViewModel, albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?)
+    func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)
 }
 
 protocol IAlbumsViewModel: ICollectionDataSourceViewModel where CDModel == STCDAlbum {
@@ -17,6 +17,8 @@ protocol IAlbumsViewModel: ICollectionDataSourceViewModel where CDModel == STCDA
 }
 
 class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSource<ViewModel> {
+    
+    private var contacts: [STContact]?
     
     lazy var albumFilesDataSource: STDataBase.DataSource<STCDAlbumFile> = {
         let dataSource = STApplication.shared.dataBase.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.albumId), #keyPath(STCDAlbumFile.dateCreated)], sectionNameKeyPath: #keyPath(STCDAlbumFile.albumId))
@@ -30,9 +32,7 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
             cacheName = cacheName + predicate.predicateFormat
         }
         let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil, predicate: predicate, cacheName: cacheName)
-        
         super.init(dbDataSource: dbDataSource, collectionView: collectionView, viewModel: viewModel)
-        
         self.viewModel.delegate = self
         self.albumFilesDataSource.delegate = self
         self.albumFilesDataSource.reloadData()
@@ -45,6 +45,7 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
         
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
         if snapshot == self.snapshotReference, self.albumFilesDataSource.snapshotReference != nil {
+            self.contacts = nil
             super.didChangeContent(with: snapshot)
         } else if snapshot == self.albumFilesDataSource.snapshotReference {
             self.reloadVisibleItems()
@@ -55,14 +56,19 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
 
 extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
     
-    func viewModel(viewModel: STAlbumsVC.ViewModel, albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?) {
+    func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?) {
         var countFiles: Int = 0
         var file: STLibrary.AlbumFile?
         if let filesSnapshotReference = self.albumFilesDataSource.snapshotReference, let fileSectionIndex = filesSnapshotReference.sectionIdentifiers.firstIndex(where: {$0 as? String == album.albumId}) {
             countFiles = filesSnapshotReference.numberOfItems(inSection: album.albumId)
             file = self.albumFilesDataSource.object(at: IndexPath(row: 0, section: fileSectionIndex))
         }
-        return (countFiles, file)
+        if self.contacts == nil {
+            self.contacts = STApplication.shared.dataBase.contactProvider.fetchAll()
+        }
+        let members = album.members?.components(separatedBy: ",")
+        let contacts = self.contacts?.filter({ members?.contains($0.userId) ?? false })
+        return (countFiles, file, contacts)
         
     }
     

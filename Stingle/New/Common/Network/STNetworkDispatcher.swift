@@ -36,8 +36,8 @@ class STNetworkDispatcher {
     
     private lazy var uploadSession: Alamofire.Session = {
         let config = URLSessionConfiguration.default
-        let queue = DispatchQueue(label: "Uploader.queue.", attributes: .concurrent)
-        return Alamofire.Session(configuration: config, rootQueue: queue, requestQueue: queue)
+//        let queue = DispatchQueue(label: "Uploader.queue.", attributes: .concurrent)
+        return Alamofire.Session(configuration: config)
     }()
         
     private lazy var backgroundSession: Alamofire.Session = {

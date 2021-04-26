@@ -59,6 +59,8 @@
 "ok" = "Ok";
 "trash" = "Trash";
 "albums" = "Albums";
+"sharing" = "Sharing";
+
 "items_count" = "%@ items";
 
 
@@ -77,6 +79,9 @@
 
 "empy_trash_title" = "Trash is empty";
 "empy_trash_message" = "Deleted photos and videos will appear here";
+
+"album_more_members" = "and %@ other";
+
 
 //MARK: - Menu
 
