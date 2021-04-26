@@ -7,6 +7,8 @@
 
 import UIKit
 
+//MARK: - STTrashVC VM
+
 extension STTrashVC {
     
     struct ViewModel: ICollectionDataSourceViewModel {
@@ -71,6 +73,7 @@ extension STTrashVC {
         
 }
 
+
 class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
     
     private let viewModel = STTrashVM()
@@ -79,6 +82,9 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
         super.configureLocalize()
         self.navigationItem.title = "trash".localized
         self.navigationController?.tabBarItem.title = "trash".localized
+        
+        self.emptyDataTitleLabel?.text = "empy_trash_title".localized
+        self.emptyDataSubTitleLabel?.text = "empy_trash_message".localized
     }
     
     override func createDataSource() -> STCollectionViewDataSource<ViewModel> {

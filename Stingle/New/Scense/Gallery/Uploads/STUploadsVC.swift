@@ -10,6 +10,7 @@ import UIKit
 class STUploadsVC: STPopoverViewController {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var emptyMessageLabel: UILabel!
     
     private var viewModel: STUploadsVM!
     
@@ -21,6 +22,7 @@ class STUploadsVC: STPopoverViewController {
         self.viewModel = STUploadsVM()
         self.reloadSnapshot()
         self.viewModel.delegate = self
+        self.emptyMessageLabel.text = "have_not_any_uploading_item".localized
     }
     
     override func calculatePreferredContentSize() -> CGSize {
@@ -44,6 +46,7 @@ class STUploadsVC: STPopoverViewController {
             let cellModel = self.cellModel(for: file, progress: progresses[file.file])
             return cellModel
         }
+        self.emptyMessageLabel.isHidden = !files.isEmpty
         self.tableView.reloadData()
         self.updatePreferredContentSize()
     }

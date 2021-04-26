@@ -61,6 +61,23 @@
 "albums" = "Albums";
 "items_count" = "%@ items";
 
+
+"have_not_any_uploading_item" = "You have not any uploading item";
+
+//MARK: - Gallery
+
+"empy_gallery_title" = "You don't have photos yet";
+"empy_gallery_message" = "Imported photos will  appear here";
+
+"empy_albums_title" = "You don't have any albums yet";
+"empy_albums_message" = "Create album to organize and share your photos";
+
+"empy_shared_albums_title" = "You don't have any shared albums";
+"empy_shared_albums_message" = "Shared photos will  appear here";
+
+"empy_trash_title" = "Trash is empty";
+"empy_trash_message" = "Deleted photos and videos will appear here";
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";

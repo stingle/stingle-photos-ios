@@ -54,10 +54,8 @@ class STNetworkDispatcher {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
-    
 	
 	private init() {}
-     
 		
 	@discardableResult
 	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {

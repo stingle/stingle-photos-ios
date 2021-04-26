@@ -38,11 +38,11 @@ class STFileUploader {
     private(set) var progresses = [String: Progress]()
     private(set) var uploadedFiles = [STLibrary.File]()
     private(set) var uploadingFiles = [STLibrary.File]()
-    let maxCountUploads = 3
+    let maxCountUploads = 10
     let maxCountYpdateDB = 5
     
     var isUploading: Bool {
-        return self.countAllFiles > .zero
+        return !self.uploadingFiles.isEmpty
     }
     
     lazy private var operationQueue: STOperationQueue = {

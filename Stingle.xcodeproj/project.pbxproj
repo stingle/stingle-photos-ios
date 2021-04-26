@@ -173,12 +173,12 @@
 		A099F4BC26302B28000D4F86 /* STGallerySyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */; };
 		A099F4C026302F4A000D4F86 /* STCircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4BF26302F4A000D4F86 /* STCircleProgressView.swift */; };
 		A09DF8882628DA6E00CDDA8E /* STDataBaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09DF8872628DA6E00CDDA8E /* STDataBaseDataSource.swift */; };
-		A0A9F33B261C76CC000252F2 /* Gallery.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0A9F33A261C76CC000252F2 /* Gallery.storyboard */; };
 		A0A9F34A261C79BE000252F2 /* STTrashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A9F349261C79BE000252F2 /* STTrashVC.swift */; };
 		A0AAA938261C7C1B009E9F51 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0AAA937261C7C1B009E9F51 /* Settings.storyboard */; };
 		A0AAA93B261C7C33009E9F51 /* STSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AAA93A261C7C33009E9F51 /* STSettingsVC.swift */; };
 		A0AAA93F261C7CF7009E9F51 /* STStorageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AAA93E261C7CF7009E9F51 /* STStorageVC.swift */; };
 		A0AAA944261C7D6E009E9F51 /* STBackupPhraseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AAA943261C7D6E009E9F51 /* STBackupPhraseVC.swift */; };
+		A0B152D42636DB0700D36619 /* Gallery.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0A9F33A261C76CC000252F2 /* Gallery.storyboard */; };
 		A0B267742624D7B30090E4ED /* STFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B267732624D7B30090E4ED /* STFilesViewController.swift */; };
 		A0B267782624DFA10090E4ED /* STTrashVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B267772624DFA10090E4ED /* STTrashVM.swift */; };
 		A0B267852624E0650090E4ED /* STTrashHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B267832624E0650090E4ED /* STTrashHeaderView.swift */; };
@@ -1293,12 +1293,12 @@
 		A0A9F338261C7678000252F2 /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
-				A04BCFFF2634791C00C5F29F /* Uploads */,
 				A06AF3BF25F0295400B44A87 /* TabBar */,
 				A0301DDA25FD603D005281EF /* Gallery */,
 				A0D1A3B6262E0CE2002E326F /* AlbumFiles */,
 				A0A9F347261C7992000252F2 /* Trash */,
 				A0B267762624DF3A0090E4ED /* Albums */,
+				A04BCFFF2634791C00C5F29F /* Uploads */,
 				A0A9F339261C76B0000252F2 /* Common */,
 			);
 			path = Gallery;
@@ -1366,13 +1366,29 @@
 			path = BackupPhrase;
 			sourceTree = "<group>";
 		};
+		A0B152DE2636F8EB00D36619 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		A0B152E02636F97D00D36619 /* Plain */ = {
+			isa = PBXGroup;
+			children = (
+				A0B2678D2624FBB60090E4ED /* STAlbumsVC.swift */,
+				A0B267902624FD4A0090E4ED /* STAlbumsVM.swift */,
+				A06E4234262722DA00F43826 /* Items */,
+			);
+			path = Plain;
+			sourceTree = "<group>";
+		};
 		A0B267762624DF3A0090E4ED /* Albums */ = {
 			isa = PBXGroup;
 			children = (
-				A06E4234262722DA00F43826 /* Items */,
-				A0B2678D2624FBB60090E4ED /* STAlbumsVC.swift */,
-				A0B267902624FD4A0090E4ED /* STAlbumsVM.swift */,
 				A0195E122628392F00C8CEA6 /* STAlbumsDataSource.swift */,
+				A0B152E02636F97D00D36619 /* Plain */,
+				A0B152DE2636F8EB00D36619 /* Shared */,
 			);
 			path = Albums;
 			sourceTree = "<group>";
@@ -1550,6 +1566,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0D1A3CB262E10E0002E326F /* STAlbumFilesHeaderView.xib in Resources */,
+				A0B152D42636DB0700D36619 /* Gallery.storyboard in Resources */,
 				A06E423E2627230E00F43826 /* STAlbumsCollectionViewCell.xib in Resources */,
 				A005FB0325FF4F5D00E7D8B0 /* STGaleryHeaderView.xib in Resources */,
 				A005FAF625FF4CBB00E7D8B0 /* STGalleryCollectionViewCell.xib in Resources */,
@@ -1560,7 +1577,6 @@
 				A02204A025EEDC0400D07C98 /* Home.storyboard in Resources */,
 				A04BD00B26347A8500C5F29F /* STUploadsTableViewCell.xib in Resources */,
 				A05D2691261B48A6008E9CF8 /* STMenuMasterHeaderView.xib in Resources */,
-				A0A9F33B261C76CC000252F2 /* Gallery.storyboard in Resources */,
 				A022046F25EEDC0400D07C98 /* STLoadingView.xib in Resources */,
 				A0AAA938261C7C1B009E9F51 /* Settings.storyboard in Resources */,
 				A02203CA25EED86800D07C98 /* Assets.xcassets in Resources */,
@@ -2050,6 +2066,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -2132,6 +2149,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

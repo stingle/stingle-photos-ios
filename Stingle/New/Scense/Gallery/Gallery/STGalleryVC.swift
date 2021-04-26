@@ -83,15 +83,12 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     }()
     
     @IBAction func didSelectSyncButton(_ sender: Any) {
-        
         let controller = self.storyboard!.instantiateViewController(identifier: "Popover")
         controller.modalPresentationStyle = .popover
-        
         let popController = controller.popoverPresentationController
         popController?.permittedArrowDirections = .any
         popController?.barButtonItem = self.syncBarButtonItem
         popController?.delegate = self
-        
         self.showDetailViewController(controller, sender: nil)
     }
         
@@ -114,6 +111,9 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         super.configureLocalize()
         self.navigationItem.title = "gallery".localized
         self.navigationController?.tabBarItem.title = "gallery".localized
+        
+        self.emptyDataTitleLabel?.text = "empy_gallery_title".localized
+        self.emptyDataSubTitleLabel?.text = "empy_gallery_message".localized  
     }
     
     override func refreshControlDidRefresh() {
