@@ -75,7 +75,7 @@ extension STWorker {
         let operation = STUploadNetworkOperation<T>(request: request, success: { (result) in
             success?(result)
         }, failure: failure, progress: progress)
-        self.operationManager.run(operation: operation)
+        self.operationManager.runUpload(operation: operation)
         return operation
     }
     

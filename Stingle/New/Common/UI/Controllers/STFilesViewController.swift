@@ -13,6 +13,10 @@ class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewCo
     let refreshControl = UIRefreshControl()
     
     @IBOutlet weak private(set) var collectionView: UICollectionView!
+    @IBOutlet weak var emptyDataView: UIView?
+    @IBOutlet weak var emptyDataTitleLabel: UILabel?
+    @IBOutlet weak var emptyDataSubTitleLabel: UILabel?
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +25,8 @@ class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewCo
         self.dataSource = self.createDataSource()
         self.dataSource.delegate = self
         self.dataSource.reloadData()
+        self.updateEmptyView()
+        STApplication.shared.syncManager.addListener(self)
     }
     
     func configureLocalize() {}
@@ -40,13 +46,35 @@ class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewCo
     
     func didStartSync() {
         self.refreshControl.beginRefreshing()
+        self.updateEmptyView()
     }
     
     func didEndSync() {
         self.refreshControl.endRefreshing()
+        self.updateEmptyView()
     }
     
     func refreshControlDidRefresh() {}
+    
+    func updateEmptyView() {
+        if self.isSyncing {
+            self.updateEmptyViewSyncing()
+        } else {
+            self.updateEmptyViewWithOutSyncing()
+        }
+    }
+    
+    func updateEmptyViewSyncing() {
+        if self.dataSource.isEmptyData {
+            self.activityIndicatorView?.startAnimating()
+        }
+        self.emptyDataView?.isHidden = true
+    }
+    
+    func updateEmptyViewWithOutSyncing() {
+        self.activityIndicatorView?.stopAnimating()
+        self.emptyDataView?.isHidden = !self.dataSource.isEmptyData
+    }
     
     //MARK: - Urer Acction
     
@@ -70,11 +98,26 @@ extension STFilesViewController: STCollectionViewDataSourceDelegate {
         return self.layoutSection(sectionIndex: sectionIndex, layoutEnvironment: layoutEnvironment)
     }
     
-    func dataSource(didStartSync dataSource: IViewDataSource) {
+    func dataSource(didStartSync dataSource: IViewDataSource) {}
+    func dataSource(didEndSync dataSource: IViewDataSource) {}
+    
+    func dataSource(didApplySnapshot dataSource: IViewDataSource) {
+        self.updateEmptyView()
+    }
+    
+}
+
+extension STFilesViewController: ISyncManagerObserver {
+    
+    var isSyncing: Bool {
+        return STApplication.shared.syncManager.isSyncing
+    }
+    
+    func syncManager(didStartSync syncManager: STSyncManager) {
         self.didStartSync()
     }
     
-    func dataSource(didEndSync dataSource: IViewDataSource) {
+    func syncManager(didEndSync syncManager: STSyncManager, with error: IError?) {
         self.didEndSync()
     }
     

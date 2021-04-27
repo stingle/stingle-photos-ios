@@ -34,6 +34,11 @@ class STNetworkDispatcher {
         return AF
     }()
     
+    private lazy var uploadSession: Alamofire.Session = {
+        let config = URLSessionConfiguration.default
+        return Alamofire.Session(configuration: config)
+    }()
+        
     private lazy var backgroundSession: Alamofire.Session = {
         #if targetEnvironment(simulator)
         return self.session
@@ -48,10 +53,8 @@ class STNetworkDispatcher {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
-    
 	
 	private init() {}
-     
 		
 	@discardableResult
 	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
@@ -125,7 +128,7 @@ class STNetworkDispatcher {
     
     func upload<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> NetworkTask? {
         
-        let uploadRequest = self.session.upload(multipartFormData: { (data) in
+        let uploadRequest = self.uploadSession.upload(multipartFormData: { (data) in
             request.files.forEach { (file) in
                 data.append(file.fileUrl, withName: file.name, fileName: file.fileName, mimeType: file.type)
             }
@@ -147,7 +150,7 @@ class STNetworkDispatcher {
         } ).uploadProgress { (uploadProgress) in
             progress?(uploadProgress)
         }
-
+        
         return Task(request: uploadRequest)
     }
         		

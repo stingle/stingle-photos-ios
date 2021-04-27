@@ -36,7 +36,6 @@ extension STAlbumFilesVC {
         func headerModel(for indexPath: IndexPath, section: String) -> HeaderModel {
             return HeaderModel(text: section)
         }
-        
     }
     
     struct CellModel: IViewDataSourceCellModel {
@@ -77,6 +76,7 @@ extension STAlbumFilesVC {
         
 }
 
+
 class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     private let viewModel = STAlbumFilesVM()
@@ -89,6 +89,8 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     override func configureLocalize() {
         self.navigationItem.title = self.album.albumMetadata?.name
+        self.emptyDataTitleLabel?.text = "empy_gallery_title".localized
+        self.emptyDataSubTitleLabel?.text = "empy_gallery_message".localized
     }
     
     override func createDataSource() -> STCollectionViewDataSource<ViewModel> {

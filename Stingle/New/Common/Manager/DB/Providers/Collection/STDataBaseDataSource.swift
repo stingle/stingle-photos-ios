@@ -47,6 +47,10 @@ extension STDataBase {
         private var controller: NSFetchedResultsController<ManagedModel>!
         private let cache = NSCache<NSIndexPath, Model>()
         
+        var isSyncing: Bool {
+            return STApplication.shared.syncManager.isSyncing
+        }
+        
         var identifier: String {
             return UUID().uuidString
         }

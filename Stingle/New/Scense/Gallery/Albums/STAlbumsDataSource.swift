@@ -9,85 +9,25 @@ import UIKit
 import CoreData
 
 protocol STAlbumsDataSourceViewModelDelegate: class {
-    
-    func viewModel(viewModel: STAlbumsDataSource.ViewModel, albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?)
-    
+    func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)
 }
 
-extension STAlbumsDataSource {
-    
-    struct ViewModel: ICollectionDataSourceNoHeaderViewModel {
-        
-        typealias Cell = STAlbumsCollectionViewCell
-        typealias CDModel = STCDAlbum
-        
-        static let imageBlankImageName = "__b__"
-        weak var delegate: STAlbumsDataSourceViewModelDelegate?
-        
-        enum Identifier: CaseIterable, IViewDataSourceItemIdentifier {
-            case album
-            
-            var nibName: String {
-                switch self {
-                case .album:
-                    return "STAlbumsCollectionViewCell"
-                }
-            }
-            
-            var identifier: String {
-                switch self {
-                case .album:
-                    return "STAlbumsCollectionViewCellID"
-                }
-            }
-        }
-        
-        struct HeaderModel {
-            let text: String?
-        }
-        
-        struct CellModel: IViewDataSourceCellModel {
-            let identifier: Identifier = .album
-            let image: STImageView.Image?
-            let placeholder: UIImage?
-            let title: String?
-            let subTille: String?
-        }
-                
-        func cellModel(for indexPath: IndexPath, data: STLibrary.Album) -> CellModel {
-            let metadata = self.delegate?.viewModel(viewModel: self, albumMedadataFor: data)
-            let placeholder = UIImage(named: "ic_album")
-            var image: STImageView.Image?
-            
-            switch data.cover {
-            case ViewModel.imageBlankImageName:
-                break
-            default:
-                if let file = metadata?.file {
-                    image = STImageView.Image(album: data, albumFile: file, isThumb: true)
-                }
-            }
-            let title = data.albumMetadata?.name
-            let subTille = String(format: "items_count".localized, "\(metadata?.countFiles ?? 0)")
-            return CellModel(image: image, placeholder: placeholder, title: title, subTille: subTille)
-        }
-    }
-    
+protocol IAlbumsViewModel: ICollectionDataSourceViewModel where CDModel == STCDAlbum {
+    var delegate: STAlbumsDataSourceViewModelDelegate? { get set }
 }
 
-class STAlbumsDataSource: STCollectionViewDataSource<STAlbumsDataSource.ViewModel> {
+class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSource<ViewModel> {
+    
+    private var contacts: [STContact]?
     
     lazy var albumFilesDataSource: STDataBase.DataSource<STCDAlbumFile> = {
         let dataSource = STApplication.shared.dataBase.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.albumId), #keyPath(STCDAlbumFile.dateCreated)], sectionNameKeyPath: #keyPath(STCDAlbumFile.albumId))
         return dataSource
     }()
     
-    init(collectionView: UICollectionView, predicate: NSPredicate?) {
-        let viewModel = ViewModel()
+    init(collectionView: UICollectionView, predicate: NSPredicate?, viewModel: ViewModel) {
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
-        
         var cacheName = STCDAlbumFile.entityName
-        
         if let predicate = predicate {
             cacheName = cacheName + predicate.predicateFormat
         }
@@ -98,13 +38,14 @@ class STAlbumsDataSource: STCollectionViewDataSource<STAlbumsDataSource.ViewMode
         self.albumFilesDataSource.reloadData()
     }
     
-    convenience init(collectionView: UICollectionView, isShared: Bool) {
+    convenience init(collectionView: UICollectionView, isShared: Bool, viewModel: ViewModel) {
         let predicate = NSPredicate(format: "isShared == %i", isShared)
-        self.init(collectionView: collectionView, predicate: predicate)
+        self.init(collectionView: collectionView, predicate: predicate, viewModel: viewModel)
     }
         
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
         if snapshot == self.snapshotReference, self.albumFilesDataSource.snapshotReference != nil {
+            self.contacts = nil
             super.didChangeContent(with: snapshot)
         } else if snapshot == self.albumFilesDataSource.snapshotReference {
             self.reloadVisibleItems()
@@ -115,21 +56,20 @@ class STAlbumsDataSource: STCollectionViewDataSource<STAlbumsDataSource.ViewMode
 
 extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
     
-    func viewModel(viewModel: ViewModel, albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?) {
+    func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?) {
         var countFiles: Int = 0
         var file: STLibrary.AlbumFile?
         if let filesSnapshotReference = self.albumFilesDataSource.snapshotReference, let fileSectionIndex = filesSnapshotReference.sectionIdentifiers.firstIndex(where: {$0 as? String == album.albumId}) {
             countFiles = filesSnapshotReference.numberOfItems(inSection: album.albumId)
             file = self.albumFilesDataSource.object(at: IndexPath(row: 0, section: fileSectionIndex))
         }
-        return (countFiles, file)
+        if self.contacts == nil {
+            self.contacts = STApplication.shared.dataBase.contactProvider.fetchAll()
+        }
+        let members = album.members?.components(separatedBy: ",")
+        let contacts = self.contacts?.filter({ members?.contains($0.userId) ?? false })
+        return (countFiles, file, contacts)
         
     }
     
-    
 }
-
-
-
-
-

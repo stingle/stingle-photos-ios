@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="STAlbumsSharedCollectionViewCell" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="540" height="153"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="540" height="153"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="era-kw-26I" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                        <rect key="frame" x="18" y="18" width="117" height="117"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dB2-LY-KUI" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="117" height="117"/>
+                                <color key="tintColor" name="STSecondaryText"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" name="STPlaceholder"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="dB2-LY-KUI" secondAttribute="trailing" id="3Q5-Sf-mqc"/>
+                            <constraint firstAttribute="bottom" secondItem="dB2-LY-KUI" secondAttribute="bottom" id="JTz-h5-uaf"/>
+                            <constraint firstAttribute="width" secondItem="era-kw-26I" secondAttribute="height" multiplier="1:1" id="KTx-40-AvJ"/>
+                            <constraint firstItem="dB2-LY-KUI" firstAttribute="leading" secondItem="era-kw-26I" secondAttribute="leading" id="oH7-fY-ifl"/>
+                            <constraint firstItem="dB2-LY-KUI" firstAttribute="top" secondItem="era-kw-26I" secondAttribute="top" id="ptO-sK-LjZ"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="20X-UA-e9b">
+                        <rect key="frame" x="153" y="40" width="330" height="73"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G2W-uR-S4w">
+                                <rect key="frame" x="0.0" y="0.0" width="330" height="19.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" name="STText"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pw7-Ti-Hgb">
+                                <rect key="frame" x="0.0" y="24.5" width="330" height="29"/>
+                                <string key="text">Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label abel Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label Label </string>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" name="STSecondaryText"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="More" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eKj-Rf-kFo">
+                                <rect key="frame" x="0.0" y="58.5" width="330" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" name="STSecondaryText"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="253" verticalHuggingPriority="251" image="ic_alnum_shared_no_owner" translatesAutoresizingMaskIntoConstraints="NO" id="joI-q9-Gmb">
+                        <rect key="frame" x="507" y="68" width="15" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="200" constant="20" id="RaU-qj-OVb"/>
+                            <constraint firstAttribute="width" priority="200" constant="20" id="Y68-6G-k59"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+            </view>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="joI-q9-Gmb" secondAttribute="trailing" constant="18" id="32D-cF-htZ"/>
+                <constraint firstItem="joI-q9-Gmb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="20X-UA-e9b" secondAttribute="trailing" constant="18" id="CY6-Qb-wAm"/>
+                <constraint firstItem="20X-UA-e9b" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="GJY-AS-cqb"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="20X-UA-e9b" secondAttribute="bottom" constant="18" id="H3l-xP-xvf"/>
+                <constraint firstAttribute="bottom" secondItem="era-kw-26I" secondAttribute="bottom" constant="18" id="T9q-zn-EOb"/>
+                <constraint firstItem="joI-q9-Gmb" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="efT-BI-COc"/>
+                <constraint firstItem="era-kw-26I" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="18" id="gOv-r7-Ej0"/>
+                <constraint firstItem="20X-UA-e9b" firstAttribute="leading" secondItem="era-kw-26I" secondAttribute="trailing" constant="18" id="gu9-Fa-V6D"/>
+                <constraint firstItem="20X-UA-e9b" firstAttribute="top" relation="greaterThanOrEqual" secondItem="gTV-IL-0wX" secondAttribute="top" constant="18" id="jht-Sg-PtZ"/>
+                <constraint firstItem="20X-UA-e9b" firstAttribute="leading" secondItem="era-kw-26I" secondAttribute="trailing" constant="18" id="kYe-9U-ixF"/>
+                <constraint firstItem="era-kw-26I" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="18" id="w23-bX-xMi"/>
+            </constraints>
+            <size key="customSize" width="540" height="153"/>
+            <connections>
+                <outlet property="albumImageView" destination="dB2-LY-KUI" id="3Qf-h2-8JW"/>
+                <outlet property="iconIsOwner" destination="joI-q9-Gmb" id="2Hd-Rk-zPy"/>
+                <outlet property="membersLabel" destination="Pw7-Ti-Hgb" id="b02-VH-Z26"/>
+                <outlet property="moreMembersLabel" destination="eKj-Rf-kFo" id="LEX-YU-KkP"/>
+                <outlet property="titleLabel" destination="G2W-uR-S4w" id="HYd-cu-mR3"/>
+            </connections>
+            <point key="canvasLocation" x="556.52173913043487" y="52.566964285714285"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="ic_alnum_shared_no_owner" width="15" height="17"/>
+        <namedColor name="STPlaceholder">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.15999999642372131" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STSecondaryText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

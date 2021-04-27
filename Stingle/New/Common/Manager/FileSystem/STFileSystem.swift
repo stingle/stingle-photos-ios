@@ -116,6 +116,7 @@ class STFileSystem {
         }
         
         guard cacheFolderDataSize.megabytes > megabytes else {
+            self.cacheFolderDataSize = cacheFolderDataSize
             return
         }
         

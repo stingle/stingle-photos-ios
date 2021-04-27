@@ -33,10 +33,8 @@ class STDataBase {
     func sync(_ sync: STSync, finish: @escaping (IError?) -> Void) {
         self.didStartSync()
         let context = self.container.newBackgroundContext()
-        
         context.automaticallyMergesChangesFromParent = true
         context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
-        
         context.performAndWait {
             do {
                 let oldInfo = self.dbInfoProvider.dbInfo
@@ -44,19 +42,18 @@ class STDataBase {
                 let deleteTime = try self.deleteFiles(deletes: sync.deletes, in: context, lastDelSeenTime: info.lastDelSeenTime)
                 info.lastDelSeenTime = deleteTime
                 self.dbInfoProvider.update(model: info)
-                finish(nil)
             } catch {
                 finish(DataBaseError.error(error: error))
+                return
             }
         }
-        
         if context.hasChanges {
             try? context.save()
         }
-        
         self.container.viewContext.reset()
-        
         self.endSync()
+        finish(nil)
+        
     }
     
     //MARK: - private func
