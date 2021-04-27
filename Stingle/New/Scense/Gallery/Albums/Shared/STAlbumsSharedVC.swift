@@ -63,10 +63,8 @@ extension STAlbumsSharedVC {
                 }
             }
             let title = data.albumMetadata?.name
-            
             let contacts = metadata?.members ?? []
             let maxShowedMembersCount = min(3, contacts.count)
-            
             var members = [String]()
                         
             for contact in contacts {
@@ -100,10 +98,11 @@ class STAlbumsSharedVC: STFilesViewController<STAlbumsSharedVC.ViewModel> {
     
     override func createDataSource() -> STCollectionViewDataSource<STAlbumsSharedVC.ViewModel> {
         let viewModel = ViewModel()
-        let dataSource = STAlbumsDataSource(collectionView: self.collectionView, isShared: true, viewModel: viewModel)
+        let predicate = NSPredicate(format: "isHidden == %i || isShared == %i", true, true)
+        let dataSource = STAlbumsDataSource(collectionView: self.collectionView, predicate: predicate, viewModel: viewModel)
         return dataSource
     }
-    
+
     override func refreshControlDidRefresh() {
         self.viewModel.sync()
     }

@@ -83,7 +83,8 @@ class STAlbumsVC: STFilesViewController<STAlbumsVC.ViewModel> {
     
     override func createDataSource() -> STCollectionViewDataSource<STAlbumsVC.ViewModel> {
         let viewModel = ViewModel()
-        let dataSource = STAlbumsDataSource(collectionView: self.collectionView, isShared: false, viewModel: viewModel)
+        let predicate = NSPredicate(format: "isHidden == %i", false)
+        let dataSource = STAlbumsDataSource(collectionView: self.collectionView, predicate: predicate, viewModel: viewModel)
         return dataSource
     }
     
