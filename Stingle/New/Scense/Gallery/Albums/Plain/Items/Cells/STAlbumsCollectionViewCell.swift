@@ -25,7 +25,7 @@ class STAlbumsCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
             self.alpha = self.isHighlighted ? 0.7 : 1
         }
     }
-    
+        
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard let button = self.deleteButton, !button.isHidden, button.bounds.contains(self.convert(point, to: button)) else {
             return self.bounds.contains(point) ? self : nil

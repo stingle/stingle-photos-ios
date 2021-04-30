@@ -92,10 +92,15 @@ class STAlbumsVC: STFilesViewController<STAlbumsVC.ViewModel> {
         return dataSource
     }
     
+    override func dataSource(didApplySnapshot dataSource: IViewDataSource) {
+        super.dataSource(didApplySnapshot: dataSource)
+        self.collectionView.reloadData()
+    }
+    
     override func refreshControlDidRefresh() {
         self.viewModel.sync()
     }
- 
+     
     override func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let inset: CGFloat = 14
         let lineCount = layoutEnvironment.traitCollection.isIpad() ? 3 : 2

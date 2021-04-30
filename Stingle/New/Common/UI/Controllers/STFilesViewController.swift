@@ -99,8 +99,9 @@ class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewCo
     func dataSource(didStartSync dataSource: IViewDataSource) {}
     func dataSource(didEndSync dataSource: IViewDataSource) {}
     func dataSource(didConfigureCell dataSource: IViewDataSource, cell: UICollectionViewCell) {}
+    func dataSource(didApplySnapshot dataSource: IViewDataSource) {}
     
-    func dataSource(didApplySnapshot dataSource: IViewDataSource) {
+    func dataSource(willApplySnapshot dataSource: IViewDataSource) {
         self.updateEmptyView()
     }
     

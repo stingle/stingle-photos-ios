@@ -92,6 +92,7 @@ protocol STCollectionViewDataSourceDelegate: AnyObject {
     
     func dataSource(didStartSync dataSource: IViewDataSource)
     func dataSource(didEndSync dataSource: IViewDataSource)
+    func dataSource(willApplySnapshot dataSource: IViewDataSource)
     func dataSource(didApplySnapshot dataSource: IViewDataSource)
     
     func dataSource(didConfigureCell dataSource: IViewDataSource, cell: UICollectionViewCell)
@@ -142,11 +143,17 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
         super.didChangeContent(with: snapshot)
-        self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true)
-        self.delegate?.dataSource(didApplySnapshot: self)
+        self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true) { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.delegate?.dataSource(didApplySnapshot: weakSelf)
+        }
+        self.delegate?.dataSource(willApplySnapshot: self)
     }
     
     //MARK: - Public
+    
     
     func reloadVisibleItems() {
         self.collectionView.indexPathsForVisibleItems.forEach { (indexPath) in
