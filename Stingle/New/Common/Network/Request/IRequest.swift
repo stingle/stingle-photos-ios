@@ -19,6 +19,8 @@ enum STRequestMethod : String {
 	}
 }
 
+//MARK: - IRequest
+
 protocol IRequest {
 	var url: String { get }
 	var method: STNetworkDispatcher.Method { get }
@@ -68,6 +70,8 @@ extension IRequest {
     
 }
 
+//MARK: - STRequest
+
 protocol STRequest: IRequest {
 	var path: String { get }
 }
@@ -84,26 +88,43 @@ extension STRequest {
     
 }
 
+protocol IEncryptedRequest: STRequest {
+    var bodyParams: [String: Any]? { get }
+    var setToken: Bool { get }
+}
+
+extension IEncryptedRequest {
+    
+    var setToken: Bool {
+        return true
+    }
+    
+    var parameters: [String : Any]? {
+        guard let bodyParams = self.bodyParams else {
+            return nil
+        }
+        guard let params = try? STApplication.shared.crypto.encryptParamsForServer(params: bodyParams) else {
+            return nil
+        }
+        
+        var result = ["params": params]
+        if self.setToken {
+            let token = self.token ?? ""
+            result["token"] = token
+        }
+        return result
+    }
+    
+}
+
+//MARK: - DownloadRequest
+
 protocol IDownloadRequest: IRequest {
     var fileDownloadTmpUrl: URL? { get }
 }
 
-struct STUploadRequestFileInfo {
-    let type = "application/stinglephoto"
-    let name: String
-    let fileName: String
-    let fileUrl: URL
-}
-
-protocol IUploadRequest: IRequest {
-    var files: [STUploadRequestFileInfo] { get }
-}
-
 protocol STDownloadRequest: IDownloadRequest, STRequest {
     var fileName: String { get }
-}
-
-protocol STUploadRequest: IUploadRequest, STRequest {
 }
 
 extension STDownloadRequest {
@@ -113,3 +134,21 @@ extension STDownloadRequest {
     }
     
 }
+
+//MARK: - UploadRequest
+
+protocol IUploadRequest: IRequest {
+    var files: [STUploadRequestFileInfo] { get }
+}
+
+struct STUploadRequestFileInfo {
+    let type = "application/stinglephoto"
+    let name: String
+    let fileName: String
+    let fileUrl: URL
+}
+
+protocol STUploadRequest: IUploadRequest, STRequest {
+}
+
+

@@ -34,6 +34,10 @@ extension STLibrary {
             try super.init(from: decoder)
         }
         
+        override init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool) throws {
+            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote)
+        }
+        
     }
     
 }

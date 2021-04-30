@@ -25,7 +25,6 @@ class STLoadingView: UIView {
             loadingView.alpha = 0
             view.addSubviewFullContent(view: loadingView)
         }
-        
 		loadingView.activityIndicatorView.startAnimating()
         UIView.animate(withDuration: 0.3) {
             loadingView.alpha = 1
@@ -36,7 +35,6 @@ class STLoadingView: UIView {
         guard let loadingView = view.viewWithTag(self.loadingViewTag) as? STLoadingView else {
             return
         }
-        
 		loadingView.activityIndicatorView.stopAnimating()
         UIView.animate(withDuration: 0.3, animations: {
             loadingView.alpha = 0

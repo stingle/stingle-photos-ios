@@ -52,8 +52,9 @@ extension STCrypto {
         public static let KdfDifficultyUltra = 3
         public static let PWHASH_LEN = 64
         
-        public static let CurrentAlbumMedadataVersion = 1
-        
+        static let CurrentAlbumMedadataVersionLen = 1
+        static let CurrentAlbumMedadataVersion = 1
+        static let AlbumIDLen = 32
     }
     
 }
@@ -400,6 +401,10 @@ class STCrypto {
 		out.close()
 		return true
 	}
+    
+    func readPublicKey() throws -> Bytes {
+        return try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+    }
 	
     func readPrivateFile(filename: String) throws -> Bytes {
         let path = STApplication.shared.fileSystem.folder(for: .private)

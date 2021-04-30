@@ -12,7 +12,7 @@ import CoreData
 @objc(STCDDBInfo)
 public class STCDDBInfo: NSManagedObject, IManagedObject {
     
-    var identifier: String {
+    var identifier: String? {
         return "STCDDBInfo"
     }
         

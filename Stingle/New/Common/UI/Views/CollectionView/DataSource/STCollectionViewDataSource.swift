@@ -87,18 +87,21 @@ class STDataSourceDefaultHeader: UICollectionReusableView, IViewDataSourceHeader
 
 //MARK: - DataSource
 
-protocol STCollectionViewDataSourceDelegate: class {
+protocol STCollectionViewDataSourceDelegate: AnyObject {
     func dataSource(layoutSection dataSource: IViewDataSource, sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?
     
     func dataSource(didStartSync dataSource: IViewDataSource)
     func dataSource(didEndSync dataSource: IViewDataSource)
     func dataSource(didApplySnapshot dataSource: IViewDataSource)
     
+    func dataSource(didConfigureCell dataSource: IViewDataSource, cell: UICollectionViewCell)
+    
 }
 
 extension STCollectionViewDataSourceDelegate {
     func dataSource(didStartSync dataSource: IViewDataSource) {}
     func dataSource(didEndSync dataSource: IViewDataSource) {}
+    func dataSource(didConfigureCell dataSource: IViewDataSource, cell: UICollectionViewCell) {}
 }
 
 class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STViewDataSource<ViewModel.CDModel> {
@@ -162,6 +165,7 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         let cellModel = self.viewModel.cellModel(for: indexPath, data: object)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellModel.identifier.identifier, for: indexPath) as! Cell
         cell.configure(model: cellModel)
+        self.delegate?.dataSource(didConfigureCell: self, cell: cell)
         return cell
     }
     

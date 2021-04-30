@@ -12,6 +12,10 @@ import CoreData
 @objc(STCDUser)
 public class STCDUser: NSManagedObject, IManagedObject {
     
+    var identifier: String? {
+        return self.userId
+    }
+    
     func update(model: STUser, context: NSManagedObjectContext) {
         self.email = model.email
         self.homeFolder = model.homeFolder

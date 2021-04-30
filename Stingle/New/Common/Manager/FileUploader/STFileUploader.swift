@@ -12,7 +12,7 @@ protocol IUploadFile {
     func requestData(success: @escaping (_ uploadInfo: STFileUploader.UploadFileInfo) -> Void, failure: @escaping (_ failure: IError ) -> Void)
 }
 
-protocol IFileUploaderObserver: class {
+protocol IFileUploaderObserver: AnyObject {
     func fileUploader(didUpdateProgress uploader: STFileUploader, uploadInfo: STFileUploader.UploadInfo, files: [STLibrary.File])
     func fileUploader(didEndSucces uploader: STFileUploader, file: STLibrary.File, uploadInfo: STFileUploader.UploadInfo)
     func fileUploader(didEndFailed uploader: STFileUploader, file: STLibrary.File?, error: IError, uploadInfo: STFileUploader.UploadInfo)
@@ -65,13 +65,25 @@ class STFileUploader {
     
     func uploadAllLocalFiles() {
         DispatchQueue.main.async { [weak self] in
-            let localFiles = STApplication.shared.dataBase.galleryProvider.fetch(format: "isRemote == false")
+            let localFiles = STApplication.shared.dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
             self?.dispatchQueue.sync {
                 self?.uploadAllLocalFilesInQueue(files: localFiles)
             }
         }
     }
     
+    func cancelUploadIng(for file: STLibrary.File) {
+     
+        for operation in self.operationQueue.allOperations() {
+            if let operation = operation as? Operation, operation.libraryFile?.identifier == file.identifier {
+                operation.cancel()
+                break
+            }
+            
+        }
+        
+    }
+        
     func addListener(_ listener: IFileUploaderObserver) {
         self.observer.addObject(listener)
     }

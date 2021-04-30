@@ -37,8 +37,8 @@ extension STDataBase {
         }
         
         func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
-            
-            
+            //Implement in chid classes
+            throw STDataBase.DataBaseError.dateNotFound
         }
                
         func getInsertObjects(with files: [Model]) throws -> (json: [[String : Any]], objIds: [String: Model], lastDate: Date) {
@@ -56,7 +56,6 @@ extension STDataBase {
             guard result.date >= lastDate, !result.models.isEmpty else {
                 return max(lastDate, result.date)
             }
-            
             let objectIDs = result.models.compactMap { (model) -> NSManagedObjectID? in
                 return model.objectID
             }
@@ -121,7 +120,6 @@ extension STDataBase {
                     if context.hasChanges {
                         try? context.save()
                     }
-                    
                 } catch {
                     print(error)
                 }
@@ -131,7 +129,28 @@ extension STDataBase {
             }
         }
         
-        func fetch(format predicateFormat: String, arguments argList: CVaListPointer) -> [Model] {
+        func delete(models: [Model], reloadData: Bool) {
+            let context = self.container.newBackgroundContext()
+            context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
+            context.performAndWait {
+                do {
+                    let cdModes = try self.getObjects(by: models, in: context)
+                    let objectIDs = cdModes.compactMap { (model) -> NSManagedObjectID? in
+                        return model.objectID
+                    }
+                    let deleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
+                    let _ = try? context.execute(deleteRequest)
+                } catch {
+                    print("error")
+                }
+                
+            }
+            if reloadData {
+                self.reloadData()
+            }
+        }
+        
+        func fetchObjects(format predicateFormat: String, arguments argList: CVaListPointer) -> [Model] {
             let predicate = NSPredicate(format: predicateFormat, arguments: argList)
             let cdModels: [ManagedModel] = self.fetch(predicate: predicate)
             var results = [Model]()
@@ -143,33 +162,37 @@ extension STDataBase {
             return results
         }
         
-        func fetch(format predicateFormat: String, _ args: CVarArg...) -> [Model] {
-            let predicate = NSPredicate(format: predicateFormat, args)
-            let cdModels: [ManagedModel] = self.fetch(predicate: predicate)
-            var results = [Model]()
-            for cdModel in cdModels {
-                if let model = try? cdModel.createModel() as? Model  {
-                    results.append(model)
-                }
-            }
-            return results
-        }
-        
-        func fetchAll() -> [Model] {
+        func fetchAllObjects() -> [Model] {
             let cdModels: [ManagedModel] = self.fetch(predicate: nil)
             var results = [Model]()
             for cdModel in cdModels {
                 if let model = try? cdModel.createModel() as? Model  {
                     results.append(model)
                 }
-        
             }
             return results
         }
         
+        func fetchObjects(predicate: NSPredicate?) -> [Model] {
+            let cdModels = self.fetch(predicate: predicate)
+            var results = [Model]()
+            for cdModel in cdModels {
+                if let model = try? cdModel.createModel() as? Model  {
+                    results.append(model)
+                }
+            }
+            return results
+        }
+        
+        func fetchObjects(format predicateFormat: String, _ args: CVarArg...) -> [Model] {
+            let predicate = NSPredicate(format: predicateFormat, args)
+            return self.fetchObjects(predicate: predicate)
+        }
+        
+        /////////////////////////////////////////////////
+        
         func fetch(predicate: NSPredicate?) -> [ManagedModel] {
             let context = self.container.viewContext
-//            context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
             return context.performAndWait { () -> [ManagedModel] in
                 let fetchRequest = NSFetchRequest<ManagedModel>(entityName: ManagedModel.entityName)
                 fetchRequest.includesSubentities = true
@@ -179,7 +202,6 @@ extension STDataBase {
                 return cdModels ?? []
             }
         }
-        
         
     }
 

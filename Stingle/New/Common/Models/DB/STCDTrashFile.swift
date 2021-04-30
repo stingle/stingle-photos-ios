@@ -10,6 +10,10 @@ import CoreData
 
 @objc(STCDTrashFile)
 public class STCDTrashFile: NSManagedObject, IManagedObject {
+    
+    var identifier: String? {
+        return self.file
+    }
 
     func update(model: STLibrary.TrashFile, context: NSManagedObjectContext) {
         self.file = model.file

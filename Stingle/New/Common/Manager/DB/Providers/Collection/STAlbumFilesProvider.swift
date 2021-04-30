@@ -73,6 +73,40 @@ extension STDataBase {
             return (deleteItems, lastDate)
         }
         
+        override func getObjects(by models: [STLibrary.AlbumFile], in context: NSManagedObjectContext) throws -> [STCDAlbumFile] {
+            guard !models.isEmpty else {
+                return []
+            }
+            let fileNames = models.compactMap { (deleteFile) -> String in
+                return deleteFile.file
+            }
+            let fetchRequest = NSFetchRequest<STCDAlbumFile>(entityName: STCDAlbumFile.entityName)
+            fetchRequest.includesSubentities = false
+            fetchRequest.predicate = NSPredicate(format: "file IN %@", fileNames)
+            let cdItems = try context.fetch(fetchRequest)
+            return cdItems
+        }
+        
+        override func updateObjects(by models: [STLibrary.AlbumFile], managedModels: [STCDAlbumFile], in context: NSManagedObjectContext) {
+            let modelsGroup = Dictionary(grouping: models, by: { $0.albumId })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.albumId })
+            managedGroup.forEach { (keyValue) in
+                if let key = keyValue.key, let model = modelsGroup[key]?.first {
+                    let cdModel = keyValue.value.first
+                    cdModel?.update(model: model, context: context)
+                }
+            }
+            
+        }
+        
+        //MARK: - public
+        
+        func fetchAll(for albumID: String) -> [STLibrary.AlbumFile] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", albumID)
+            let result = self.fetchObjects(predicate: predicate)
+            return result
+        }
+        
     }
 
 }

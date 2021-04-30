@@ -63,8 +63,10 @@
 
 "items_count" = "%@ items";
 
+"have_not_any_uploading_item" = "Backup and sync complete";
 
-"have_not_any_uploading_item" = "You have not any uploading item";
+"edit" = "Edit";
+"done" = "Done";
 
 //MARK: - Gallery
 
@@ -79,9 +81,13 @@
 
 "empy_trash_title" = "Trash is empty";
 "empy_trash_message" = "Deleted photos and videos will appear here";
-
 "album_more_members" = "and %@ other";
 
+"create_album_title" = "Please enter album name";
+"album_name" = "Album name";
+
+"delete_album_alert_title" = "Delete %@";
+"delete_album_alert_message" = "Are you sure you want to delete the album %@?";
 
 //MARK: - Menu
 

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol STFileUploaderOperationDelegate: class {
+protocol STFileUploaderOperationDelegate: AnyObject {
     
     func fileUploaderOperation(didStart operation: STFileUploader.Operation)
     func fileUploaderOperation(didStartUploading operation: STFileUploader.Operation, file: STLibrary.File)
@@ -26,8 +26,8 @@ extension STFileUploader {
         private let uploadWorker = STUploadWorker()
         private weak var networkOperation: STUploadNetworkOperation<STResponse<STDBUsed>>?
         
-        var uploadFile: IUploadFile!
-        var libraryFile: STLibrary.File?
+        private(set) var uploadFile: IUploadFile!
+        private(set) var libraryFile: STLibrary.File?
         
         init(file: IUploadFile, delegate: STFileUploaderOperationDelegate) {
             self.uploadFile = file

@@ -46,7 +46,6 @@ extension STDataBase {
                 }
                 
             }
-            
         }
        
         override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Album], in context: NSManagedObjectContext) throws -> (models: [STCDAlbum], date: Date) {
@@ -78,7 +77,32 @@ extension STDataBase {
             return (deleteItems, lastDate)
         }
         
+        override func getObjects(by models: [STLibrary.Album], in context: NSManagedObjectContext) throws -> [STCDAlbum] {
+            guard !models.isEmpty else {
+                return []
+            }
+            let albumIds = models.compactMap { (deleteFile) -> String in
+                return deleteFile.albumId
+            }
+            let fetchRequest = NSFetchRequest<STCDAlbum>(entityName: STCDAlbum.entityName)
+            fetchRequest.includesSubentities = false
+            fetchRequest.predicate = NSPredicate(format: "\(#keyPath(STCDAlbum.albumId)) IN %@", albumIds)
+            let cdItems = try context.fetch(fetchRequest)
+            return cdItems
+        }
         
+        override func updateObjects(by models: [STLibrary.Album], managedModels: [STCDAlbum], in context: NSManagedObjectContext) {
+            let modelsGroup = Dictionary(grouping: models, by: { $0.albumId })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.albumId })
+            managedGroup.forEach { (keyValue) in
+                if let key = keyValue.key, let model = modelsGroup[key]?.first {
+                    let cdModel = keyValue.value.first
+                    cdModel?.update(model: model, context: context)
+                }
+            }
+            
+        }
+                
     }
 
 }

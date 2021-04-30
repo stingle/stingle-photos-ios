@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol IViewDataSource: class {
+protocol IViewDataSource: AnyObject {
     func reloadData()
 }
 

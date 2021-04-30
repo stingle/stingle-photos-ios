@@ -112,4 +112,19 @@ extension STCrypto {
         }
     }
     
+    func encryptParamsForServer(params: [String: Any]) throws -> String {
+        let spbk  = try self.getServerPublicKey()
+        guard let pks = KeyManagement.key else {
+            throw CryptoError.Bundle.pivateKeyIsEmpty
+        }
+        let json = try JSONSerialization.data(withJSONObject: params)
+        let res = try self.encryptCryptoBox(message: (Bytes)(json), publicKey: spbk, privateKey: pks)
+        
+        guard let base64 = self.bytesToBase64(data: res) else {
+            throw CryptoError.General.creationFailure
+        }
+        
+        return base64
+    }
+    
 }

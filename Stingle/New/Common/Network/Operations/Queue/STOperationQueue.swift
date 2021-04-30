@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol INetworkOperationQueue: class {
+protocol INetworkOperationQueue: AnyObject {
     func operation(didStarted operation: INetworkOperation)
     func operation(didFinish operation: INetworkOperation, result: Any)
     func operation(didFinish operation: INetworkOperation, error: IError)

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="R1P-5n-IQm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="R1P-5n-IQm">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -412,10 +412,25 @@
                                 <action selector="didSelectMenuBarItem:" destination="8nd-bs-WGs" id="wcL-xe-hbv"/>
                             </connections>
                         </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Edit" style="done" id="KjA-bW-y1f">
+                                <color key="tintColor" name="STText"/>
+                                <connections>
+                                    <action selector="didSeleckEditButton:" destination="8nd-bs-WGs" id="IVt-B6-L2e"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="add" id="Sif-9T-aV5">
+                                <color key="tintColor" name="STText"/>
+                                <connections>
+                                    <action selector="didSelectAddAlbum:" destination="8nd-bs-WGs" id="Dtt-71-DMH"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicatorView" destination="bP3-Lw-AeF" id="SOn-a8-Pxn"/>
                         <outlet property="collectionView" destination="i9L-75-PfS" id="tSu-VW-xJR"/>
+                        <outlet property="editBarButtonItem" destination="KjA-bW-y1f" id="QN7-x5-xfu"/>
                         <outlet property="emptyDataSubTitleLabel" destination="GFn-Fe-XvY" id="MPa-CS-jxf"/>
                         <outlet property="emptyDataTitleLabel" destination="naL-Jg-4Zn" id="HCJ-oL-W0S"/>
                         <outlet property="emptyDataView" destination="8DH-3L-DED" id="1H4-F2-CGW"/>
@@ -515,6 +530,13 @@
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="Q8N-dK-Rp8">
                                 <rect key="frame" x="188.5" y="432" width="37" height="37"/>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Liy-mC-aza">
+                                <rect key="frame" x="320" y="719" width="74" height="74"/>
+                                <state key="normal" image="ic_open_image_picker"/>
+                                <connections>
+                                    <action selector="didSelectOpenImagePicker:" destination="4gb-r9-Gut" eventType="touchUpInside" id="r3e-pm-Dzm"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="DZ1-GB-pRi"/>
                         <color key="backgroundColor" name="STBackground"/>
@@ -522,11 +544,13 @@
                             <constraint firstItem="DZ1-GB-pRi" firstAttribute="trailing" secondItem="WCb-Fx-StB" secondAttribute="trailing" id="6cS-Yw-Ull"/>
                             <constraint firstItem="Q8N-dK-Rp8" firstAttribute="centerX" secondItem="DZ1-GB-pRi" secondAttribute="centerX" id="9Ge-iB-7Vu"/>
                             <constraint firstItem="gqO-as-RAE" firstAttribute="leading" secondItem="DZ1-GB-pRi" secondAttribute="leading" id="MN0-Kd-HAu"/>
+                            <constraint firstItem="DZ1-GB-pRi" firstAttribute="bottom" secondItem="Liy-mC-aza" secondAttribute="bottom" constant="20" id="Vpn-TG-jUG"/>
                             <constraint firstItem="WCb-Fx-StB" firstAttribute="leading" secondItem="DZ1-GB-pRi" secondAttribute="leading" id="ajs-b5-LcA"/>
                             <constraint firstItem="gqO-as-RAE" firstAttribute="top" secondItem="1TV-8a-GCO" secondAttribute="top" id="hI6-gY-Bs3"/>
                             <constraint firstItem="DZ1-GB-pRi" firstAttribute="bottom" secondItem="gqO-as-RAE" secondAttribute="bottom" id="j3n-LM-jV7"/>
                             <constraint firstItem="Q8N-dK-Rp8" firstAttribute="centerY" secondItem="DZ1-GB-pRi" secondAttribute="centerY" id="oQz-5z-8br"/>
                             <constraint firstItem="gqO-as-RAE" firstAttribute="trailing" secondItem="DZ1-GB-pRi" secondAttribute="trailing" id="qQw-Yi-E9f"/>
+                            <constraint firstItem="DZ1-GB-pRi" firstAttribute="trailing" secondItem="Liy-mC-aza" secondAttribute="trailing" constant="20" id="qlR-3b-HgM"/>
                             <constraint firstItem="WCb-Fx-StB" firstAttribute="top" secondItem="1TV-8a-GCO" secondAttribute="top" id="sYw-fo-wmr"/>
                             <constraint firstAttribute="bottom" secondItem="WCb-Fx-StB" secondAttribute="bottom" id="zCI-Os-rtd"/>
                         </constraints>
@@ -655,7 +679,7 @@
             </objects>
             <point key="canvasLocation" x="-3555" y="1775"/>
         </scene>
-        <!--Albums-->
+        <!--Shared Albums-->
         <scene sceneID="ZBo-qz-lTN">
             <objects>
                 <viewController id="prX-JI-4JC" customClass="STAlbumsSharedVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
@@ -742,7 +766,7 @@
                             <constraint firstItem="xCt-b2-aZh" firstAttribute="leading" secondItem="dle-De-TTm" secondAttribute="leading" id="wI3-ZF-m4U"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Albums" id="Nd2-h3-Qpy">
+                    <navigationItem key="navigationItem" title="Shared Albums" id="Nd2-h3-Qpy">
                         <barButtonItem key="leftBarButtonItem" image="ic_nav_menu" id="9ZT-bD-MBF">
                             <color key="tintColor" name="STText"/>
                             <connections>

@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-protocol STAlbumsDataSourceViewModelDelegate: class {
+protocol STAlbumsDataSourceViewModelDelegate: AnyObject {
     func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)
 }
 
@@ -64,7 +64,7 @@ extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
             file = self.albumFilesDataSource.object(at: IndexPath(row: 0, section: fileSectionIndex))
         }
         if self.contacts == nil {
-            self.contacts = STApplication.shared.dataBase.contactProvider.fetchAll()
+            self.contacts = STApplication.shared.dataBase.contactProvider.fetchAllObjects()
         }
         let members = album.members?.components(separatedBy: ",")
         let contacts = self.contacts?.filter({ members?.contains($0.userId) ?? false })

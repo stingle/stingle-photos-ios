@@ -59,7 +59,6 @@ extension STDataBase {
             let fileNames = deleteFiles.compactMap { (deleteFile) -> String in
                 return deleteFile.contactId
             }
-            
             let fetchRequest = NSFetchRequest<STCDContact>(entityName: STCDContact.entityName)
             fetchRequest.includesSubentities = false
             fetchRequest.predicate = NSPredicate(format: "userId IN %@", fileNames)
@@ -77,6 +76,18 @@ extension STDataBase {
                 }
             }
             return (deleteItems, lastDate)
+        }
+        
+        override func updateObjects(by models: [STContact], managedModels: [STCDContact], in context: NSManagedObjectContext) {
+            let modelsGroup = Dictionary(grouping: models, by: { $0.userId })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.userId })
+            managedGroup.forEach { (keyValue) in
+                if let key = keyValue.key, let model = modelsGroup[key]?.first {
+                    let cdModel = keyValue.value.first
+                    cdModel?.update(model: model, context: context)
+                }
+            }
+            
         }
         
     }

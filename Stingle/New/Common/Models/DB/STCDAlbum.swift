@@ -11,6 +11,10 @@ import CoreData
 
 @objc(STCDAlbum)
 public class STCDAlbum: NSManagedObject, IManagedObject {
+    
+    var identifier: String? {
+        return self.albumId
+    }
    
     func update(model: STLibrary.Album, context: NSManagedObjectContext) {
         self.albumId = model.albumId

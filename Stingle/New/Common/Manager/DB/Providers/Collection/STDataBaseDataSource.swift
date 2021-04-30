@@ -8,7 +8,7 @@
 import CoreData
 import UIKit
 
-protocol IProviderDelegate: class {
+protocol IProviderDelegate: AnyObject {
     
     func didStartSync(dataSource: IProviderDataSource)
     func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference)
@@ -16,7 +16,7 @@ protocol IProviderDelegate: class {
     
 }
 
-protocol IProviderDataSource: class {
+protocol IProviderDataSource: AnyObject {
     
     var identifier: String { get }
     func reloadData()

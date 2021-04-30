@@ -105,6 +105,24 @@ extension STLibrary {
             self.dateModified = dateModified
         }
         
+        init(albumId: String, encPrivateKey: String, publicKey: String, metadata: String, isShared: Bool, isHidden: Bool, isOwner: Bool, isLocked: Bool, isRemote: Bool, permissions: String?, members: String?, cover: String?, dateCreated: Date, dateModified: Date) {
+            
+            self.albumId = albumId
+            self.encPrivateKey = encPrivateKey
+            self.publicKey = publicKey
+            self.metadata = metadata
+            self.isShared = isShared
+            self.isHidden = isHidden
+            self.isOwner = isOwner
+            self.isLocked = isLocked
+            self.isRemote = isRemote
+            self.permissions = permissions
+            self.members = members
+            self.cover = cover
+            self.dateCreated = dateCreated
+            self.dateModified = dateModified
+        }
+        
         func toManagedModelJson() throws -> [String : Any] {
             var json = [String : Any]()
             json.addIfNeeded(key: "albumId", value: self.albumId)

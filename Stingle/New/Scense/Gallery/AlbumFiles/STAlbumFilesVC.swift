@@ -93,6 +93,11 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         self.emptyDataSubTitleLabel?.text = "empy_gallery_message".localized
     }
     
+    override func refreshControlDidRefresh() {
+        super.refreshControlDidRefresh()
+        self.viewModel.sync()
+    }
+    
     override func createDataSource() -> STCollectionViewDataSource<ViewModel> {
         let dbDataSource = self.viewModel.createDBDataSource(albumID: self.album.albumId)
         let viewModel = ViewModel(album: self.album)

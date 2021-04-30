@@ -15,6 +15,10 @@ public class STCDContact: NSManagedObject {
 }
 
 extension STCDContact: IManagedObject {
+    
+    var identifier: String? {
+        return self.userId
+    }
             
     func update(model: STContact, context: NSManagedObjectContext) {
         self.email = model.email

@@ -90,13 +90,7 @@ extension STLibrary {
 }
 
 extension STLibrary.File {
-    
-    enum DBSet: Int {
-        case file = 0
-        case trash = 1
-        case album = 2
-    }
-    
+        
     var fileThumbUrl: URL? {
         let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
         let folder: STFileSystem.FilesFolderType = .thumbs(type: type)

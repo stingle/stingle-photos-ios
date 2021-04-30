@@ -11,6 +11,10 @@ import CoreData
 
 @objc(STCDAlbumFile)
 public class STCDAlbumFile: NSManagedObject, IManagedObject {
+    
+    var identifier: String? {
+        return self.file
+    }
 
     func update(model: STLibrary.AlbumFile, context: NSManagedObjectContext) {
         self.file = model.file

@@ -78,6 +78,32 @@ extension STDataBase {
             return (deleteItems, lastDate)
         }
         
+        override func getObjects(by models: [STLibrary.TrashFile], in context: NSManagedObjectContext) throws -> [STCDTrashFile] {
+            guard !models.isEmpty else {
+                return []
+            }
+            let fileNames = models.compactMap { (deleteFile) -> String in
+                return deleteFile.file
+            }
+            let fetchRequest = NSFetchRequest<STCDTrashFile>(entityName: STCDTrashFile.entityName)
+            fetchRequest.includesSubentities = false
+            fetchRequest.predicate = NSPredicate(format: "file IN %@", fileNames)
+            let cdItems = try context.fetch(fetchRequest)
+            return cdItems
+        }
+        
+        override func updateObjects(by models: [STLibrary.TrashFile], managedModels: [STCDTrashFile], in context: NSManagedObjectContext) {
+            let modelsGroup = Dictionary(grouping: models, by: { $0.file })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.file })
+            managedGroup.forEach { (keyValue) in
+                if let key = keyValue.key, let model = modelsGroup[key]?.first {
+                    let cdModel = keyValue.value.first
+                    cdModel?.update(model: model, context: context)
+                }
+            }
+            
+        }
+        
     }
 
 }
