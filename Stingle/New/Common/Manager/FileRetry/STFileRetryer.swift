@@ -13,7 +13,6 @@ extension STFileRetryerManager {
     class Retryer<T: IDiskCacheObject> {
         
         typealias Operation = RetryOperation<T>
-        
         private let operationManager = STOperationManager.shared
         private let operations = STObserverEvents<Operation>()
         private let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)

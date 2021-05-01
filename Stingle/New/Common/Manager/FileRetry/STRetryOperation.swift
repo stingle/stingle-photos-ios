@@ -16,14 +16,11 @@ extension STFileRetryerManager {
                 
         private(set) var results = Set<Result<T>>()
         private(set) var canEditResults = true
-        
+        private(set) var downloadProgress: Progress? = nil
         private let retrySource: IRetrySource
-        
         private let retryerSuccess: RetryerSuccess<T>
         private let retryerProgress: RetryerProgress
         private let retryerFailure: RetryerFailure
-        private(set) var downloadProgress: Progress? = nil
-        
         private var isRequesting = false
         
         var identifier: String {

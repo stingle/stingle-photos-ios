@@ -49,6 +49,12 @@ extension STLibrary {
         lazy var albumMetadata: AlbumMetadata? = {
             return try? STApplication.shared.crypto.decryptAlbum(albumPKStr: self.publicKey, encAlbumSKStr: self.encPrivateKey, metadataStr: self.metadata)
         }()
+        
+        lazy var permission: Permission = {
+            let permissions = self.permissions
+            let result = Permission(permissions: permissions, isOwner: self.isOwner)
+            return result
+        }()
                 
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -106,7 +112,6 @@ extension STLibrary {
         }
         
         init(albumId: String, encPrivateKey: String, publicKey: String, metadata: String, isShared: Bool, isHidden: Bool, isOwner: Bool, isLocked: Bool, isRemote: Bool, permissions: String?, members: String?, cover: String?, dateCreated: Date, dateModified: Date) {
-            
             self.albumId = albumId
             self.encPrivateKey = encPrivateKey
             self.publicKey = publicKey
@@ -141,7 +146,48 @@ extension STLibrary {
             json.addIfNeeded(key: "isRemote", value: self.isRemote)
             return json
         }
-   
+    }
+    
+}
+
+extension STLibrary.Album {
+    
+    struct Permission {
+        
+        static let permissionVersion = 1;
+        static let permissionLenght = 4;
+        
+        let allowAdd: Bool
+        let allowShare: Bool
+        let allowCopy: Bool
+        
+        init(permissions: String?, isOwner: Bool) {
+            
+            if isOwner {
+                self.allowAdd = true
+                self.allowShare = true
+                self.allowCopy = true
+                return
+            }
+            
+            guard let permissions = permissions, permissions.count == Self.permissionLenght else {
+                self.allowAdd = false
+                self.allowShare = false
+                self.allowCopy = false
+                return
+            }
+                        
+            guard String(permissions[0]) == "\(Self.permissionVersion)" else {
+                self.allowAdd = false
+                self.allowShare = false
+                self.allowCopy = false
+                return
+            }
+            self.allowAdd = String(permissions[1]) == "1"
+            self.allowShare = String(permissions[2]) == "1"
+            self.allowCopy = String(permissions[3]) == "1"
+        }
+        
     }
     
 }

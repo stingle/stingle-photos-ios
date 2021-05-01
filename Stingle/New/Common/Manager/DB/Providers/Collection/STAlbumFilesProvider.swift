@@ -96,13 +96,18 @@ extension STDataBase {
                     cdModel?.update(model: model, context: context)
                 }
             }
-            
         }
         
         //MARK: - public
         
         func fetchAll(for albumID: String) -> [STLibrary.AlbumFile] {
             let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", albumID)
+            let result = self.fetchObjects(predicate: predicate)
+            return result
+        }
+        
+        func fetchAll(for albumID: String, fileNames: [String]) -> [STLibrary.AlbumFile] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && file IN %@", albumID, fileNames)
             let result = self.fetchObjects(predicate: predicate)
             return result
         }

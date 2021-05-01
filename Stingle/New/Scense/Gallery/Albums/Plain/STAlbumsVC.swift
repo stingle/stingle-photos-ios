@@ -76,7 +76,7 @@ class STAlbumsVC: STFilesViewController<STAlbumsVC.ViewModel> {
     private let segueIdentifierAlbumFiles = "AlbumFiles"
     
     @IBOutlet weak private var editBarButtonItem: UIBarButtonItem!
-    
+        
     override func configureLocalize() {
         self.navigationItem.title = "albums".localized
         self.navigationController?.tabBarItem.title = "albums".localized

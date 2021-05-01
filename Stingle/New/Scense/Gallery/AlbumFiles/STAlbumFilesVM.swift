@@ -10,6 +10,7 @@ import Foundation
 class STAlbumFilesVM {
     
     private let syncManager = STApplication.shared.syncManager
+    private let albumWorker = STAlbumWorker()
     
     func createDBDataSource(albumID: String) -> STDataBase.DataSource<STCDAlbumFile> {
         let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", albumID)
@@ -18,6 +19,15 @@ class STAlbumFilesVM {
     
     func sync() {
         self.syncManager.sync()
+    }
+    
+    func deleteSelectedFiles(album: STLibrary.Album, files: [String], result: @escaping ((IError?) -> Void)) {
+        let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: album.albumId, fileNames: files)
+        self.albumWorker.deleteAlbumFiles(album: album, files: files) { responce in
+            result(nil)
+        } failure: { error in
+            result(error)
+        }
     }
         
 }

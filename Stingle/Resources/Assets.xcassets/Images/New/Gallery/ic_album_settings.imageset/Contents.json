@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Icon material-share.png",
+      "filename" : "Icon material-settings.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Icon material-share@2x.png",
+      "filename" : "Icon material-settings@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Icon material-share@3x.png",
+      "filename" : "Icon material-settings@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

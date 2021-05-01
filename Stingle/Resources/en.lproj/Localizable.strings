@@ -67,6 +67,10 @@
 
 "edit" = "Edit";
 "done" = "Done";
+"select" = "Select";
+
+"selected_items_count" = "%@ items Selected";
+"select_items" = "Select items";
 
 //MARK: - Gallery
 
@@ -88,6 +92,9 @@
 
 "delete_album_alert_title" = "Delete %@";
 "delete_album_alert_message" = "Are you sure you want to delete the album %@?";
+
+"delete_album_files_alert_title" = "Delete items?";
+"delete_album_files_alert_message" = "Do you really want to move %@ file to trash";
 
 //MARK: - Menu
 

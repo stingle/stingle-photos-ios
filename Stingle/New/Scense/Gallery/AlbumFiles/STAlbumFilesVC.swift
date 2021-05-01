@@ -16,6 +16,8 @@ extension STAlbumFilesVC {
         typealias CDModel = STCDAlbumFile
         
         let album: STLibrary.Album
+        var isSelectedMode = false
+        var selectedFileNames = Set<String>()
         
         init(album: STLibrary.Album) {
             self.album = album
@@ -30,7 +32,9 @@ extension STAlbumFilesVC {
             return CellModel(image: image,
                              name: data.file,
                              videoDuration: videoDurationStr,
-                             isRemote: data.isRemote)
+                             isRemote: data.isRemote,
+                             selectedMode: self.isSelectedMode,
+                             isSelected: self.selectedFileNames.contains(data.file))
         }
         
         func headerModel(for indexPath: IndexPath, section: String) -> HeaderModel {
@@ -44,6 +48,8 @@ extension STAlbumFilesVC {
         let name: String?
         let videoDuration: String?
         let isRemote: Bool
+        let selectedMode: Bool
+        let isSelected: Bool
     }
     
     struct HeaderModel: IViewDataSourceHeaderModel {
@@ -76,21 +82,49 @@ extension STAlbumFilesVC {
         
 }
 
-
 class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
+    @IBOutlet weak private var addItemButton: UIButton!
+    @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
+    @IBOutlet weak private var albumSettingsButtonItem: UIBarButtonItem!
+    @IBOutlet weak private var moreBarButtonItem: UIBarButtonItem!
+    
     private let viewModel = STAlbumFilesVM()
+    
     var album: STLibrary.Album!
+    
+    lazy var accessoryView: STAlbumFilesTabBarAccessoryView = {
+        let resilt = STAlbumFilesTabBarAccessoryView.loadNib()
+        return resilt
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.refreshControl.isEnabled = false
+        self.configureAlbumActionView()
+        self.accessoryView.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = nil
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.updateTabBarAccessoryView()
     }
     
     override func configureLocalize() {
         self.navigationItem.title = self.album.albumMetadata?.name
         self.emptyDataTitleLabel?.text = "empy_gallery_title".localized
         self.emptyDataSubTitleLabel?.text = "empy_gallery_message".localized
+        self.selectButtonItem.title = "select".localized
+    }
+    
+    override func dataSource(didApplySnapshot dataSource: IViewDataSource) {
+        super.dataSource(didApplySnapshot: dataSource)
+        self.configureAlbumActionView()
     }
     
     override func refreshControlDidRefresh() {
@@ -127,5 +161,139 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         section.removeContentInsetsReference(safeAreaInsets: self.collectionView.window?.safeAreaInsets)
         return section
     }
+    
+    //MARK: - UserAction
+    
+    @IBAction func didSelectMoreButton(_ sender: UIBarButtonItem) {
+        
+    }
+    
+    @IBAction func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
+        
+    }
+    
+    @IBAction func didSelectAddButton(_ sender: Any) {
+        
+    }
+    
+    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
+        self.dataSource.viewModel.selectedFileNames.removeAll()
+        self.dataSource.viewModel.isSelectedMode = !self.dataSource.viewModel.isSelectedMode
+        self.updateTabBarAccessoryView()
+        self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
+        self.collectionView.reloadData()
+        self.updateSelectedItesmCount()
+    }
+    
+    //MARK: - Private
+    
+    private func updateSelectedItesmCount() {
+        let count = self.dataSource.viewModel.selectedFileNames.count
+        let title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
+        self.accessoryView.titleLabel.text = title
+        self.accessoryView.setEnabled(isEnabled: count != .zero)
+    }
+    
+    private func updateTabBarAccessoryView() {
+        if self.dataSource.viewModel.isSelectedMode {
+            (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
+        } else {
+            (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = nil
+        }
+    }
 
+    private func configureAlbumActionView() {
+        self.accessoryView.sharButton.isHidden = !self.album.permission.allowShare
+        self.accessoryView.copyButton.isHidden = !self.album.permission.allowCopy
+        self.accessoryView.downloadButton.isHidden = !self.album.permission.allowCopy
+        self.addItemButton.isHidden = !self.album.permission.allowAdd
+        self.accessoryView.trashButton.isHidden = !self.album.isOwner
+        var image: UIImage?
+        if !self.album.isShared {
+            image = UIImage(named: "ic_shared_album_min")
+        } else if self.album.isOwner {
+            image = UIImage(named: "ic_album_settings")
+        } else {
+            image = UIImage(named: "ic_album_info")
+        }
+        self.albumSettingsButtonItem.image = image
+    }
+    
+    private func showokCancelAlert(title: String?, message: String?, handler: @escaping (() -> Void)) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ok".localized, style: .default) {_ in
+            handler()
+        }
+        let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func deleteSelectedFiles() {
+        STLoadingView.show(in: self.view)
+        let files: [String] = [String](self.dataSource.viewModel.selectedFileNames)
+        self.viewModel.deleteSelectedFiles(album: self.album, files: files) { [weak self] error in
+            guard let weakSelf = self else{
+                return
+            }
+            STLoadingView.hide(in: weakSelf.view)
+            if let error = error {
+                weakSelf.showError(error: error)
+            } else {
+                weakSelf.dataSource.viewModel.selectedFileNames.removeAll()
+                weakSelf.updateSelectedItesmCount()
+            }
+        }
+    }
+    
+}
+
+extension STAlbumFilesVC: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if self.dataSource.viewModel.isSelectedMode {
+            guard let albumFile =  self.dataSource.object(at: indexPath) else {
+                return
+            }
+            var isSelected = false
+            if self.dataSource.viewModel.selectedFileNames.contains(albumFile.file) {
+                self.dataSource.viewModel.selectedFileNames.remove(albumFile.file)
+                isSelected = false
+            } else {
+                self.dataSource.viewModel.selectedFileNames.insert(albumFile.file)
+                isSelected = true
+            }
+            let cell = (collectionView.cellForItem(at: indexPath) as? STAlbumFilesCollectionViewCell)
+            cell?.setSelected(isSelected: isSelected)
+            self.updateSelectedItesmCount()
+        }
+        
+    }
+    
+}
+
+extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
+    
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+        
+    }
+    
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectCopyButton sendner: UIButton) {
+        
+    }
+    
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
+        
+    }
+    
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
+        let count = self.dataSource.viewModel.selectedFileNames.count
+        let title = "delete_album_files_alert_title".localized
+        let message = String(format: "delete_album_files_alert_message".localized, "\(count)")
+        self.showokCancelAlert(title: title, message: message) { [weak self] in
+            self?.deleteSelectedFiles()
+        }
+    }
+    
 }
