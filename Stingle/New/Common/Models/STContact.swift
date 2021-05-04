@@ -33,15 +33,15 @@ class STContact: Codable, ICDConvertable {
         self.publicKey = try container.decodeIfPresent(String.self, forKey: .publicKey)
         self.userId = try container.decode(String.self, forKey: .userId)
         
-        let dateUsedStr = try container.decode(String.self, forKey: .dateUsed)
-        let dateModifiedStr = try container.decode(String.self, forKey: .dateModified)
+        let defaultDate = "\(0)"
+        let dateUsedStr = try container.decodeIfPresent(String.self, forKey: .dateUsed) ?? defaultDate
+        let dateModifiedStr = try container.decodeIfPresent(String.self, forKey: .dateModified) ?? defaultDate
         
         guard let dateUsed = UInt64(dateUsedStr), let dateModified = UInt64(dateModifiedStr) else {
             throw STLibrary.LibraryError.parsError
         }
         self.dateUsed = Date(milliseconds: dateUsed)
         self.dateModified = Date(milliseconds: dateModified)
-        
     }
     
     required init(model: STCDContact) throws {

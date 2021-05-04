@@ -89,8 +89,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     @IBOutlet weak private var albumSettingsButtonItem: UIBarButtonItem!
     @IBOutlet weak private var moreBarButtonItem: UIBarButtonItem!
     
-    private let viewModel = STAlbumFilesVM()
-    
+    private var viewModel: STAlbumFilesVM!
     var album: STLibrary.Album!
     
     lazy var accessoryView: STAlbumFilesTabBarAccessoryView = {
@@ -99,8 +98,9 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     }()
     
     override func viewDidLoad() {
+        self.viewModel = STAlbumFilesVM(album: self.album)
+        self.viewModel.delegate = self
         super.viewDidLoad()
-        self.refreshControl.isEnabled = false
         self.configureAlbumActionView()
         self.accessoryView.delegate = self
     }
@@ -133,7 +133,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     }
     
     override func createDataSource() -> STCollectionViewDataSource<ViewModel> {
-        let dbDataSource = self.viewModel.createDBDataSource(albumID: self.album.albumId)
+        let dbDataSource = self.viewModel.createDBDataSource()
         let viewModel = ViewModel(album: self.album)
         return STCollectionViewDataSource<ViewModel>(dbDataSource: dbDataSource,
                                                      collectionView: self.collectionView,
@@ -170,6 +170,13 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     @IBAction func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
         
+        if !self.album.isShared {
+            let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+            let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersVCID") as! UINavigationController)
+            (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .album(album: self.album)
+            self.showDetailViewController(vc, sender: nil)
+        }
+                
     }
     
     @IBAction func didSelectAddButton(_ sender: Any) {
@@ -233,7 +240,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     private func deleteSelectedFiles() {
         STLoadingView.show(in: self.view)
         let files: [String] = [String](self.dataSource.viewModel.selectedFileNames)
-        self.viewModel.deleteSelectedFiles(album: self.album, files: files) { [weak self] error in
+        self.viewModel.deleteSelectedFiles(files: files) { [weak self] error in
             guard let weakSelf = self else{
                 return
             }
@@ -294,6 +301,20 @@ extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
         self.showokCancelAlert(title: title, message: message) { [weak self] in
             self?.deleteSelectedFiles()
         }
+    }
+    
+}
+
+extension STAlbumFilesVC: STAlbumFilesVMDelegate {
+    
+    func albumFilesVM(didDeletedAlbum albumFilesVM: STAlbumFilesVM) {
+        
+    }
+    
+    func albumFilesVM(didUpdatedAlbum albumFilesVM: STAlbumFilesVM, album: STLibrary.Album) {
+        self.album = album
+        self.configureAlbumActionView()
+        self.configureLocalize()
     }
     
 }

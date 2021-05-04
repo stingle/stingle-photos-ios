@@ -21,6 +21,18 @@ extension Encodable {
         return nil
     }
     
+    func toString() -> String? {
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(self)
+            let result = String(data: data, encoding: .utf8)
+            return result
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+    
 }
 
 extension Dictionary {

@@ -128,6 +128,26 @@ extension STLibrary {
             self.dateModified = dateModified
         }
         
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(self.albumId, forKey: .albumId)
+            try container.encode(self.encPrivateKey, forKey: .encPrivateKey)
+            try container.encode(self.publicKey, forKey: .publicKey)
+            try container.encode(self.metadata, forKey: .metadata)
+                                   
+            try container.encode(self.permissions, forKey: .permissions)
+            try container.encode(self.members, forKey: .members)
+            try container.encode(self.cover, forKey: .cover)
+            
+            try container.encode(self.isShared ? "1": "0", forKey: .isShared)
+            try container.encode(self.isHidden ? "1": "0", forKey: .isHidden)
+            try container.encode(self.isOwner ? "1": "0", forKey: .isOwner)
+            try container.encode(self.isLocked ? "1": "0", forKey: .isLocked)
+            
+            try container.encode("\(self.dateCreated.timeIntervalSince1970)", forKey: .dateCreated)
+            try container.encode("\(self.dateModified.timeIntervalSince1970)", forKey: .dateModified)
+        }
+        
         func toManagedModelJson() throws -> [String : Any] {
             var json = [String : Any]()
             json.addIfNeeded(key: "albumId", value: self.albumId)
@@ -186,6 +206,19 @@ extension STLibrary.Album {
             self.allowAdd = String(permissions[1]) == "1"
             self.allowShare = String(permissions[2]) == "1"
             self.allowCopy = String(permissions[3]) == "1"
+        }
+        
+        init(allowAdd: Bool, allowShare: Bool, allowCopy: Bool) {
+            self.allowAdd = allowAdd
+            self.allowShare = allowShare
+            self.allowCopy = allowCopy
+        }
+        
+        var stringValue: String {
+            let allowAdd = self.allowAdd ? "1" : "0"
+            let allowShare = self.allowShare ? "1" : "0"
+            let allowCopy = self.allowCopy ? "1" : "0"
+            return "\(Self.permissionVersion)" + allowAdd + allowShare + allowCopy
         }
         
     }

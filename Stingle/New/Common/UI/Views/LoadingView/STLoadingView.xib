@@ -4,6 +4,8 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -36,18 +38,38 @@
                         <blurEffect style="systemThickMaterialDark"/>
                     </vibrancyEffect>
                 </visualEffectView>
-                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="5jY-Yi-Ig8">
-                    <rect key="frame" x="212" y="210.5" width="37" height="37"/>
-                </activityIndicatorView>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kWj-XM-pGg" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                    <rect key="frame" x="192" y="190.5" width="77" height="77"/>
+                    <subviews>
+                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="5jY-Yi-Ig8">
+                            <rect key="frame" x="20" y="20" width="37" height="37"/>
+                            <color key="color" name="STText"/>
+                        </activityIndicatorView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="5jY-Yi-Ig8" firstAttribute="leading" secondItem="kWj-XM-pGg" secondAttribute="leading" constant="20" id="6Mk-kD-H8Q"/>
+                        <constraint firstAttribute="trailing" secondItem="5jY-Yi-Ig8" secondAttribute="trailing" constant="20" id="Dto-cx-ezY"/>
+                        <constraint firstItem="5jY-Yi-Ig8" firstAttribute="centerX" secondItem="kWj-XM-pGg" secondAttribute="centerX" id="KVV-sv-qV1"/>
+                        <constraint firstItem="5jY-Yi-Ig8" firstAttribute="top" secondItem="kWj-XM-pGg" secondAttribute="top" constant="20" id="a2M-hu-tw8"/>
+                        <constraint firstAttribute="bottom" secondItem="5jY-Yi-Ig8" secondAttribute="bottom" constant="20" id="cSF-vm-cZg"/>
+                        <constraint firstItem="5jY-Yi-Ig8" firstAttribute="centerY" secondItem="kWj-XM-pGg" secondAttribute="centerY" id="u77-Rn-JnM"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                            <real key="value" value="0.29999999999999999"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="5jY-Yi-Ig8" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="DVg-Vb-aR7"/>
+                <constraint firstItem="kWj-XM-pGg" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="4hC-He-2CF"/>
                 <constraint firstAttribute="trailing" secondItem="hxY-u9-0t7" secondAttribute="trailing" id="Djo-dL-HSO"/>
-                <constraint firstItem="5jY-Yi-Ig8" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="ELf-CX-0RN"/>
                 <constraint firstItem="hxY-u9-0t7" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="FFS-Hb-mpt"/>
                 <constraint firstItem="hxY-u9-0t7" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Lon-1b-MPP"/>
                 <constraint firstAttribute="bottom" secondItem="hxY-u9-0t7" secondAttribute="bottom" id="ebu-GP-gHJ"/>
+                <constraint firstItem="kWj-XM-pGg" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="mbH-4C-n8n"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
@@ -57,4 +79,12 @@
             <point key="canvasLocation" x="171.73913043478262" y="-28.125"/>
         </view>
     </objects>
+    <resources>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

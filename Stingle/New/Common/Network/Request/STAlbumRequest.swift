@@ -11,6 +11,9 @@ enum STAlbumRequest {
     case create(album: STLibrary.Album)
     case moveFile(fromSet: STLibrary.DBSet, toSet: STLibrary.DBSet, albumIdFrom: String, albumIdTo: String?, isMoving: Bool, headers: [String: String], files: [STLibrary.File])
     case deleteAlbum(albumID: String)
+    
+    case sharedAlbum(album: STLibrary.Album, sharingKeys: [String: String])
+    
 }
 
 extension STAlbumRequest: IEncryptedRequest {
@@ -46,6 +49,10 @@ extension STAlbumRequest: IEncryptedRequest {
             return params
         case .deleteAlbum(let albumID):
             return ["albumId": albumID]
+        case .sharedAlbum(let album, let sharingKeys):
+            let albumData = album.toString() ?? ""
+            let sharingKeys = sharingKeys.toString() ?? ""
+            return ["album": albumData, "sharingKeys": sharingKeys]
         }
     }
     
@@ -57,6 +64,8 @@ extension STAlbumRequest: IEncryptedRequest {
             return "sync/moveFile"
         case .deleteAlbum:
             return "sync/deleteAlbum"
+        case .sharedAlbum:
+            return "sync/share"
         }
     }
     
@@ -67,6 +76,8 @@ extension STAlbumRequest: IEncryptedRequest {
         case .moveFile:
             return .post
         case .deleteAlbum:
+            return .post
+        case .sharedAlbum:
             return .post
         }
     }
@@ -79,6 +90,8 @@ extension STAlbumRequest: IEncryptedRequest {
             return nil
         case .deleteAlbum:
             return nil
+        case .sharedAlbum:
+            return nil
         }
     }
     
@@ -89,6 +102,8 @@ extension STAlbumRequest: IEncryptedRequest {
         case .moveFile:
             return STNetworkDispatcher.Encoding.body
         case .deleteAlbum:
+            return STNetworkDispatcher.Encoding.body
+        case .sharedAlbum:
             return STNetworkDispatcher.Encoding.body
         }
     }

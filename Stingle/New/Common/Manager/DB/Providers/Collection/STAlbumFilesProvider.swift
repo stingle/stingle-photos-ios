@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class AlbumFilesProvider: DataBaseCollectionProvider<STLibrary.AlbumFile, STCDAlbumFile, STLibrary.DeleteFile.AlbumFile> {
+    class AlbumFilesProvider: DataBaseCollectionProvider<STCDAlbumFile, STLibrary.DeleteFile.AlbumFile> {
         
         override func getInsertObjects(with albumFiles: [STLibrary.AlbumFile]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.AlbumFile], lastDate: Date) {
             var lastDate: Date? = nil
@@ -107,7 +107,13 @@ extension STDataBase {
         }
         
         func fetchAll(for albumID: String, fileNames: [String]) -> [STLibrary.AlbumFile] {
-            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && file IN %@", albumID, fileNames)
+            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.file)) IN %@", albumID, fileNames)
+            let result = self.fetchObjects(predicate: predicate)
+            return result
+        }
+        
+        func fetchAll(for albumID: String, isRemote: Bool) -> [STLibrary.AlbumFile] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.isRemote)) == %i", albumID, isRemote)
             let result = self.fetchObjects(predicate: predicate)
             return result
         }

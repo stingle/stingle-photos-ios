@@ -8,11 +8,31 @@
 import CoreData
 import UIKit
 
+protocol ICollectionProvider: AnyObject {
+    
+}
+
+protocol ICollectionProviderObserver {
+    func dataBaseCollectionProvider(didAdded provider: ICollectionProvider, models: [IDataBaseProviderModel])
+    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel])
+    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel])
+}
+
+extension ICollectionProviderObserver {
+    
+    func dataBaseCollectionProvider(didAdded provider: ICollectionProvider, models: [IDataBaseProviderModel]) {}
+    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel]) {}
+    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel]) {}
+    
+}
+
 extension STDataBase {
     
-    class DataBaseCollectionProvider<Model: ICDConvertable, ManagedModel: IManagedObject, DeleteFile: ILibraryDeleteFile>: DataBaseProvider<Model> {
-        
-        let dataSources = STObserverEvents<STDataBase.DataSource<ManagedModel>>()
+    class DataBaseCollectionProvider<ManagedModel: IManagedObject, DeleteFile: ILibraryDeleteFile>: DataBaseProvider<ManagedModel.Model>, ICollectionProvider  {
+
+        typealias Model = ManagedModel.Model
+        private let dataSources = STObserverEvents<STDataBase.DataSource<ManagedModel>>()
+        private let observerProvider = STObserverEvents<ICollectionProviderObserver>()
                 
         override init(container: STDataBaseContainer) {
             super.init(container: container)
@@ -75,7 +95,7 @@ extension STDataBase {
         func updateObjects(by models: [Model], managedModels: [ManagedModel], in context: NSManagedObjectContext) throws {
             throw STDataBase.DataBaseError.dateNotFound
         }
-                
+                        
         func didStartSync() {
             self.dataSources.forEach { (controller) in
                 controller.didStartSync()
@@ -105,6 +125,8 @@ extension STDataBase {
             return dataSource
         }
         
+        //MARK: - Methods
+        
         func add(models: [Model], reloadData: Bool) {
             let context = self.container.newBackgroundContext()
             context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
@@ -126,6 +148,9 @@ extension STDataBase {
             }
             if reloadData {
                 self.reloadData()
+                self.observerProvider.forEach { observer in
+                    observer.dataBaseCollectionProvider(didAdded: self, models: models)
+                }
             }
         }
         
@@ -147,15 +172,47 @@ extension STDataBase {
             }
             if reloadData {
                 self.reloadData()
+                self.observerProvider.forEach { observer in
+                    observer.dataBaseCollectionProvider(didDeleted: self, models: models)
+                }
             }
         }
+        
+        func update(models: [Model], reloadData: Bool) {
+            let context = self.container.newBackgroundContext()
+            var resultError: Error?
+            context.performAndWait {
+                do {
+                    let cdModel = try self.getObjects(by: models, in: context)
+                    try self.updateObjects(by: models, managedModels: cdModel, in: context)
+                    if context.hasChanges {
+                        try context.save()
+                    }
+                } catch {
+                    resultError = error
+                }
+            }
+            
+            if resultError != nil {
+                return
+            }
+            
+            if reloadData {
+                self.reloadData()
+                self.observerProvider.forEach { observer in
+                    observer.dataBaseCollectionProvider(didDeleted: self, models: models)
+                }
+            }
+        }
+        
+        //MARK: - Fetch
         
         func fetchObjects(format predicateFormat: String, arguments argList: CVaListPointer) -> [Model] {
             let predicate = NSPredicate(format: predicateFormat, arguments: argList)
             let cdModels: [ManagedModel] = self.fetch(predicate: predicate)
             var results = [Model]()
             for cdModel in cdModels {
-                if let model = try? cdModel.createModel() as? Model  {
+                if let model = try? cdModel.createModel()  {
                     results.append(model)
                 }
             }
@@ -166,7 +223,7 @@ extension STDataBase {
             let cdModels: [ManagedModel] = self.fetch(predicate: nil)
             var results = [Model]()
             for cdModel in cdModels {
-                if let model = try? cdModel.createModel() as? Model  {
+                if let model = try? cdModel.createModel()  {
                     results.append(model)
                 }
             }
@@ -177,7 +234,7 @@ extension STDataBase {
             let cdModels = self.fetch(predicate: predicate)
             var results = [Model]()
             for cdModel in cdModels {
-                if let model = try? cdModel.createModel() as? Model  {
+                if let model = try? cdModel.createModel() {
                     results.append(model)
                 }
             }
@@ -188,9 +245,7 @@ extension STDataBase {
             let predicate = NSPredicate(format: predicateFormat, args)
             return self.fetchObjects(predicate: predicate)
         }
-        
-        /////////////////////////////////////////////////
-        
+                
         func fetch(predicate: NSPredicate?) -> [ManagedModel] {
             let context = self.container.viewContext
             return context.performAndWait { () -> [ManagedModel] in
@@ -201,6 +256,16 @@ extension STDataBase {
                 let cdModels = try? context.fetch(fetchRequest)
                 return cdModels ?? []
             }
+        }
+        
+        //MARK: - Additionl
+        
+        func add(_ observer: ICollectionProviderObserver) {
+            self.observerProvider.addObject(observer)
+        }
+        
+        func remove(_ observer: ICollectionProviderObserver) {
+            self.observerProvider.removeObject(observer)
         }
         
     }

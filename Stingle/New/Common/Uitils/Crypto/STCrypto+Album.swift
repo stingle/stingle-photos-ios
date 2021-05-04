@@ -98,7 +98,7 @@ extension STCrypto {
         return (encPrivateKey, publicKey, metadata)
     }
     
-    private func encryptAlbumSK(albumSK: Bytes, userPK: Bytes) throws -> Bytes {
+    func encryptAlbumSK(albumSK: Bytes, userPK: Bytes) throws -> Bytes {
         guard let enc = self.sodium.box.seal(message: albumSK, recipientPublicKey: userPK) else {
             throw CryptoError.Internal.sealFailure
         }

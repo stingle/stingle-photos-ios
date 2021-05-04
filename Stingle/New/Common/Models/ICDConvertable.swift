@@ -9,12 +9,14 @@ import CoreData
 
 //MARK: - Model
 
-protocol ICDConvertable: AnyObject, Encodable {
+protocol IDataBaseProviderModel: AnyObject {
+    var identifier: String { get }
+}
+
+protocol ICDConvertable: IDataBaseProviderModel, Encodable {
     associatedtype ManagedModel: IManagedObject
     init(model: ManagedModel) throws
     func toManagedModelJson() throws -> [String: Any]
-    
-    var identifier: String { get }
 }
 
 extension ICDConvertable {

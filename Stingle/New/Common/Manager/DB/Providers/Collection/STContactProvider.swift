@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class ContactProvider: DataBaseCollectionProvider<STContact, STCDContact, STLibrary.DeleteFile.Contact> {
+    class ContactProvider: DataBaseCollectionProvider<STCDContact, STLibrary.DeleteFile.Contact> {
         
         override func getInsertObjects(with contacts: [STContact]) throws -> (json: [[String : Any]], objIds: [String: STContact], lastDate: Date) {
             var lastDate: Date? = nil
@@ -87,6 +87,20 @@ extension STDataBase {
                     cdModel?.update(model: model, context: context)
                 }
             }
+        }
+        
+        override func getObjects(by models: [STContact], in context: NSManagedObjectContext) throws -> [STCDContact] {
+            guard !models.isEmpty else {
+                return []
+            }
+            let userIds = models.compactMap { (deleteFile) -> String in
+                return deleteFile.userId
+            }
+            let fetchRequest = NSFetchRequest<STCDContact>(entityName: STCDContact.entityName)
+            fetchRequest.includesSubentities = false
+            fetchRequest.predicate = NSPredicate(format: "userId IN %@", userIds)
+            let deleteingCDItems = try context.fetch(fetchRequest)
+            return deleteingCDItems
             
         }
         

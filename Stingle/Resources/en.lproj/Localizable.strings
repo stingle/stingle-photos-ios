@@ -71,6 +71,29 @@
 
 "selected_items_count" = "%@ items Selected";
 "select_items" = "Select items";
+"next" = "Next";
+"share" = "Share";
+
+//MARK: - Share
+
+"share_via_stingle_photos" = "Share";
+"sharch_contact_text_feild_placeholder" = "Type an email address";
+"sorry_you_cant_add_yourself" = "Sorry you can't add yourself";
+"share_empty_recipient_list" = "Please select at least one recipient";
+
+"permition_add_new_photos" = "Add new photos";
+"permition_add_new_photos_description" = "Members can add photos to this shared album";
+
+"permition_sharing" = "Sharing";
+"permition_sharing_description" = "Members can invite other users to this shared album";
+
+"permition_copying" = "Copying";
+"permition_copying_description" = "Members can copy photos and videos to their own library and take screenshots";
+
+"permissions" = "Permissions";
+"shared_album_name" = "Shared album name";
+"please_wait_for_backup_to_finish_before_you_can_proceed" = "Please wait for backup to finish before you can proceed";
+
 
 //MARK: - Gallery
 

@@ -10,7 +10,7 @@ import UIKit
 
 extension STDataBase {
     
-    class GalleryProvider: DataBaseCollectionProvider<STLibrary.File, STCDFile, STLibrary.DeleteFile.Gallery> {
+    class GalleryProvider: DataBaseCollectionProvider<STCDFile, STLibrary.DeleteFile.Gallery> {
         
         override func getInsertObjects(with files: [STLibrary.File]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.File], lastDate: Date)  {
             var lastDate: Date? = nil

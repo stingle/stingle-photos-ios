@@ -78,6 +78,58 @@ class STAlbumWorker: STWorker {
         }
     }
     
+    func shareAlbum(album: STLibrary.Album, contacts: [STContact], permitions: STLibrary.Album.Permission, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
+        let now = Date()
+        guard let albumMetadata = album.albumMetadata else {
+            failure?(WorkerError.emptyData)
+            return
+        }
+        var sharingKeys = [String: String]()
+        var members = [String]()
+        
+        if let userId = STApplication.shared.dataBase.userProvider.myUser?.userId {
+            members.append(userId)
+        }
+        let crypto = STApplication.shared.crypto
+        do {
+            try contacts.forEach { contact in
+                if let publicKey = contact.publicKey, let userPK = crypto.base64ToByte(encodedStr: publicKey) {
+                   let albumSKForRecp = try crypto.encryptAlbumSK(albumSK: albumMetadata.privateKey, userPK: userPK)
+                    if let albumSKForRecpToBase64 = crypto.bytesToBase64(data: albumSKForRecp) {
+                        sharingKeys[contact.userId] = albumSKForRecpToBase64
+                        members.append(contact.userId)
+                    }
+                }
+            }
+        } catch {
+            failure?(WorkerError.error(error: error))
+        }
+       
+        let membersStr = members.joined(separator: ",")
+        let sharedAlbum = STLibrary.Album(albumId: album.albumId,
+                                          encPrivateKey: album.encPrivateKey,
+                                          publicKey: album.publicKey,
+                                          metadata: album.metadata,
+                                          isShared: true,
+                                          isHidden: album.isHidden,
+                                          isOwner: album.isOwner,
+                                          isLocked: album.isLocked, isRemote: true,
+                                          permissions: permitions.stringValue,
+                                          members: membersStr,
+                                          cover: album.cover,
+                                          dateCreated: album.dateCreated,
+                                          dateModified: now)
+                
+        let request = STAlbumRequest.sharedAlbum(album: sharedAlbum, sharingKeys: sharingKeys)
+        
+        self.request(request: request, success: { (response: STEmptyResponse) in
+            let albumFilesProvider = STApplication.shared.dataBase.albumsProvider
+            albumFilesProvider.update(models: [sharedAlbum], reloadData: true)
+            success(response)
+        }, failure: failure)
+  
+    }
+    
    //MARK: - Private
     
     private func createAlbum(encryptedAlbumData: (encPrivateKey: String, publicKey: String, metadata: String, albumID: String), success: Success<STLibrary.Album>? = nil, failure: Failure?) {

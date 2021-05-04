@@ -48,25 +48,3 @@ extension NSMutableAttributedString {
     }
 	
 }
-
-//extension CharacterSet {
-//	static let urlQueryValueAllowed: CharacterSet = {
-//		let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
-//		let subDelimitersToEncode = "!$&'()*+,;="
-//		var allowed = CharacterSet.urlQueryAllowed
-//		allowed.remove(charactersIn: "\(generalDelimitersToEncode)\(subDelimitersToEncode)")
-//		return allowed
-//	}()
-//}
-
-//extension Sequence where Element == Character {  // Same as String
-//
-//	var byteArray: [UInt8] {
-//		return String(self).utf8.map{UInt8($0)}
-//	}
-//
-//	var shortArray: [UInt16] {
-//		return String(self).utf16.map{UInt16($0)}
-//	}
-//
-//}
