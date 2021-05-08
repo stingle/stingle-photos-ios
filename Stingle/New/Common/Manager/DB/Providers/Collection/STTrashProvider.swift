@@ -19,7 +19,7 @@ extension STDataBase {
             try trashFiles.forEach { (file) in
                 let json = try file.toManagedModelJson()
                 jsons.append(json)
-                objIds[file.file] = file
+                objIds[file.identifier] = file
                 let currentLastDate = lastDate ?? file.dateModified
                 if currentLastDate <= file.dateModified {
                     lastDate = file.dateModified
@@ -37,7 +37,7 @@ extension STDataBase {
             let fetchRequest = NSFetchRequest<STCDTrashFile>(entityName: STCDTrashFile.entityName)
             fetchRequest.includesSubentities = false
             let keys: [String] = Array(objIds.keys)
-            fetchRequest.predicate = NSPredicate(format: "file IN %@", keys)
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", keys)
             let items = try context.fetch(fetchRequest)
             
             items.forEach { (item) in
@@ -87,14 +87,14 @@ extension STDataBase {
             }
             let fetchRequest = NSFetchRequest<STCDTrashFile>(entityName: STCDTrashFile.entityName)
             fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "file IN %@", fileNames)
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", fileNames)
             let cdItems = try context.fetch(fetchRequest)
             return cdItems
         }
         
         override func updateObjects(by models: [STLibrary.TrashFile], managedModels: [STCDTrashFile], in context: NSManagedObjectContext) {
-            let modelsGroup = Dictionary(grouping: models, by: { $0.file })
-            let managedGroup = Dictionary(grouping: managedModels, by: { $0.file })
+            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
             managedGroup.forEach { (keyValue) in
                 if let key = keyValue.key, let model = modelsGroup[key]?.first {
                     let cdModel = keyValue.value.first

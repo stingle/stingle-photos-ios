@@ -27,10 +27,21 @@ class STAlbumsCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
     }
         
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        guard let button = self.deleteButton, !button.isHidden, button.bounds.contains(self.convert(point, to: button)) else {
-            return self.bounds.contains(point) ? self : nil
+        let view = super.hitTest(point, with: event)
+        if view != nil, let button = self.deleteButton, !button.isHidden, button.bounds.contains(self.convert(point, to: button)) {
+            return button
         }
-        return button
+        return view
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        if super.point(inside: point, with: event) {
+            return true
+        }
+        guard let button = self.deleteButton, !button.isHidden, button.bounds.contains(self.convert(point, to: button)) else {
+            return false
+        }
+        return true
     }
    
     func configure(model: STAlbumsVC.ViewModel.CellModel?) {

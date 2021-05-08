@@ -108,6 +108,7 @@ extension STWorker {
 	enum WorkerError: IError {
 		
 		case emptyData
+        case unknown
 		case error(error: Error)
 		case errors(errors: [String])
 		case status(status: String)
@@ -116,6 +117,8 @@ extension STWorker {
 			switch self {
 			case .emptyData:
 				return "empty_data".localized
+            case .unknown:
+                return "error_unknown_error".localized
 			case .error(let error):
                 if let error = error as? IError {
                     return error.message

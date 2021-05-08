@@ -12,16 +12,13 @@ import CoreData
 @objc(STCDUser)
 public class STCDUser: NSManagedObject, IManagedObject {
     
-    var identifier: String? {
-        return self.userId
-    }
-    
     func update(model: STUser, context: NSManagedObjectContext) {
         self.email = model.email
         self.homeFolder = model.homeFolder
         self.isKeyBackedUp = model.isKeyBackedUp
         self.token = model.token
         self.userId = model.userId
+        self.identifier = model.identifier
     }
     
     func createModel() throws -> STUser {

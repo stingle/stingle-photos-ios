@@ -16,9 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let key = try STApplication.shared.crypto.getPrivateKey(password: password)
             KeyManagement.key = key
         }
-        
         print("storagePath = ", STApplication.shared.fileSystem.storageURl ?? "")
-        
         
     }
 

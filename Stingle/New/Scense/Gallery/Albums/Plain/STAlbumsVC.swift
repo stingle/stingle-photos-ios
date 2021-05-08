@@ -76,7 +76,7 @@ class STAlbumsVC: STFilesViewController<STAlbumsVC.ViewModel> {
     private let segueIdentifierAlbumFiles = "AlbumFiles"
     
     @IBOutlet weak private var editBarButtonItem: UIBarButtonItem!
-        
+    
     override func configureLocalize() {
         self.navigationItem.title = "albums".localized
         self.navigationController?.tabBarItem.title = "albums".localized
@@ -90,11 +90,6 @@ class STAlbumsVC: STFilesViewController<STAlbumsVC.ViewModel> {
         let predicate = NSPredicate(format: "isHidden == %i", false)
         let dataSource = STAlbumsDataSource(collectionView: self.collectionView, predicate: predicate, viewModel: viewModel)
         return dataSource
-    }
-    
-    override func dataSource(didApplySnapshot dataSource: IViewDataSource) {
-        super.dataSource(didApplySnapshot: dataSource)
-        self.collectionView.reloadData()
     }
     
     override func refreshControlDidRefresh() {

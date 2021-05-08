@@ -34,23 +34,32 @@ class STDataBase {
         self.didStartSync()
         let context = self.container.newBackgroundContext()
         context.automaticallyMergesChangesFromParent = true
-        context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
+        context.mergePolicy = NSMergePolicyType.mergeByPropertyStoreTrumpMergePolicyType
         context.performAndWait {
             do {
                 let oldInfo = self.dbInfoProvider.dbInfo
                 let info = try self.syncImportFiles(sync: sync, in: context, dbInfo: oldInfo)
+                
+                if context.hasChanges {
+                    try context.save()
+                }
+                
                 let deleteTime = try self.deleteFiles(deletes: sync.deletes, in: context, lastDelSeenTime: info.lastDelSeenTime)
                 info.lastDelSeenTime = deleteTime
                 self.dbInfoProvider.update(model: info)
+                
+                if context.hasChanges {
+                    try context.save()
+                }
+                self.container.viewContext.reset()
+                
             } catch {
                 finish(DataBaseError.error(error: error))
                 return
             }
+            
         }
-        if context.hasChanges {
-            try? context.save()
-        }
-        self.container.viewContext.reset()
+        
         self.endSync()
         finish(nil)
         
@@ -101,6 +110,23 @@ class STDataBase {
         let lastContactsSeenTimeDelete = try self.contactProvider.deleteObjects(deletes?.contacts, in: context, lastDate: lastDelSeenTime)
         let timeDeletes = max(lastSeenTimeDelete, lastAlbumsSeenTimeDelete, lastAlbumFilesSeenTimeDelete, lastTrashRecovorsSeenTimeDelete, lastTrashhDeletesSeenTimeDelete, lastContactsSeenTimeDelete)
         return timeDeletes
+    }
+    
+    func deleteAll() {
+        self.galleryProvider.deleteAll()
+        self.albumsProvider.deleteAll()
+        self.albumFilesProvider.deleteAll()
+        self.trashProvider.deleteAll()
+        self.contactProvider.deleteAll()
+        self.dbInfoProvider.deleteAll()
+    }
+    
+    func reloadData() {
+        self.galleryProvider.reloadData()
+        self.albumsProvider.reloadData()
+        self.albumFilesProvider.reloadData()
+        self.trashProvider.reloadData()
+        self.contactProvider.reloadData()
     }
     
 }

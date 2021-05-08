@@ -596,6 +596,108 @@
             </objects>
             <point key="canvasLocation" x="-284" y="1394"/>
         </scene>
+        <!--Move Album FilesVC-->
+        <scene sceneID="V3b-ss-rAT">
+            <objects>
+                <viewController id="dDk-OY-QQq" customClass="STMoveAlbumFilesVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rcU-IS-1Pd">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UdC-5E-Ktq">
+                                <rect key="frame" x="0.0" y="88" width="414" height="60.5"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1ti-iT-HHI">
+                                        <rect key="frame" x="43.5" y="0.0" width="327.5" height="60.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete original items after adding" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="iIT-ZT-fqd">
+                                                <rect key="frame" x="0.0" y="20" width="258.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                <color key="textColor" name="STText"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="67e-1A-hKu">
+                                                <rect key="frame" x="278.5" y="15" width="51" height="31"/>
+                                                <color key="onTintColor" name="STPrimary"/>
+                                            </switch>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="67e-1A-hKu" secondAttribute="trailing" id="2kz-gU-L52"/>
+                                            <constraint firstItem="67e-1A-hKu" firstAttribute="leading" secondItem="iIT-ZT-fqd" secondAttribute="trailing" constant="20" id="4ho-m9-jVU"/>
+                                            <constraint firstItem="iIT-ZT-fqd" firstAttribute="top" secondItem="1ti-iT-HHI" secondAttribute="top" constant="20" id="JkI-om-XPO"/>
+                                            <constraint firstItem="iIT-ZT-fqd" firstAttribute="leading" secondItem="1ti-iT-HHI" secondAttribute="leading" id="KXA-xD-Nws"/>
+                                            <constraint firstItem="67e-1A-hKu" firstAttribute="centerY" secondItem="1ti-iT-HHI" secondAttribute="centerY" id="hcH-X3-J1G"/>
+                                            <constraint firstAttribute="bottom" secondItem="iIT-ZT-fqd" secondAttribute="bottom" constant="20" id="x8h-OE-SO6"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="1ti-iT-HHI" secondAttribute="bottom" id="WNT-yw-lHs"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1ti-iT-HHI" secondAttribute="trailing" id="YMS-O8-Erc"/>
+                                    <constraint firstItem="1ti-iT-HHI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="UdC-5E-Ktq" secondAttribute="leading" id="cHC-Af-DhG"/>
+                                    <constraint firstItem="1ti-iT-HHI" firstAttribute="top" secondItem="UdC-5E-Ktq" secondAttribute="top" id="iUP-qh-4Z0"/>
+                                    <constraint firstItem="1ti-iT-HHI" firstAttribute="centerX" secondItem="UdC-5E-Ktq" secondAttribute="centerX" id="zEm-E8-Mld"/>
+                                </constraints>
+                            </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XKL-Ly-Idj">
+                                <rect key="frame" x="0.0" y="148.5" width="414" height="713.5"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SPk-Jk-1IL">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="j3P-oF-xR2"/>
+                        <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstItem="UdC-5E-Ktq" firstAttribute="top" secondItem="j3P-oF-xR2" secondAttribute="top" id="3cs-gR-yzV"/>
+                            <constraint firstItem="XKL-Ly-Idj" firstAttribute="leading" secondItem="j3P-oF-xR2" secondAttribute="leading" id="72w-5b-R3t"/>
+                            <constraint firstItem="j3P-oF-xR2" firstAttribute="bottom" secondItem="XKL-Ly-Idj" secondAttribute="bottom" id="Fu4-XL-2r0"/>
+                            <constraint firstItem="UdC-5E-Ktq" firstAttribute="leading" secondItem="j3P-oF-xR2" secondAttribute="leading" id="JzJ-cG-0vO"/>
+                            <constraint firstItem="j3P-oF-xR2" firstAttribute="trailing" secondItem="UdC-5E-Ktq" secondAttribute="trailing" id="OYA-qg-2aA"/>
+                            <constraint firstItem="XKL-Ly-Idj" firstAttribute="top" secondItem="UdC-5E-Ktq" secondAttribute="bottom" id="eg2-bU-ADG"/>
+                            <constraint firstItem="j3P-oF-xR2" firstAttribute="trailing" secondItem="XKL-Ly-Idj" secondAttribute="trailing" id="mUM-Pn-8ix"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="S6t-H9-7k0">
+                        <barButtonItem key="leftBarButtonItem" image="xmark.circle.fill" catalog="system" id="7cn-EW-fUE">
+                            <color key="tintColor" name="STText"/>
+                            <connections>
+                                <action selector="didSelectCloseButton:" destination="dDk-OY-QQq" id="NQ4-HC-uhT"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="XKL-Ly-Idj" id="8cc-c2-rHK"/>
+                        <outlet property="deleeFileLabel" destination="iIT-ZT-fqd" id="ayl-gX-nRq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9yS-nq-ma3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1466.6666666666667" y="1393.5267857142856"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Mwj-W6-8p0">
+            <objects>
+                <navigationController id="IGO-CV-sc4" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="RXf-uH-Wc4">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="dDk-OY-QQq" kind="relationship" relationship="rootViewController" id="0zc-UZ-5Eg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mbb-up-ahu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="625" y="1394"/>
+        </scene>
         <!--TrashVC-->
         <scene sceneID="3AU-Ql-68w">
             <objects>
@@ -829,6 +931,7 @@
         <image name="ic_nav_menu" width="18" height="12"/>
         <image name="ic_open_image_picker" width="74" height="74"/>
         <image name="ic_shared_album_min" width="18" height="20"/>
+        <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
         <namedColor name="STBackground">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -844,6 +947,9 @@
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

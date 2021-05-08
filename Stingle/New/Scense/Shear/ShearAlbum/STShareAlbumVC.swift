@@ -60,15 +60,36 @@ class STShareAlbumVC: UITableViewController {
             self.shareAlbumNameTextField.isEnabled = false
         case .files:
             self.shareAlbumNameTextField.text = STDateManager.shared.dateToString(date: Date(), withFormate: .mmm_dd_yyyy)
-            self.shareAlbumNameTextField.isEnabled = false
+            self.shareAlbumNameTextField.isEnabled = true
+        case .albumFiles:
+            self.shareAlbumNameTextField.isEnabled = true
+            self.shareAlbumNameTextField.text = STDateManager.shared.dateToString(date: Date(), withFormate: .mmm_dd_yyyy)
         }
     }
     
     private func shareAlbum(album: STLibrary.Album) {
         let permitions = (self.addPhotoSwicher.isOn, self.sharingSwicher.isOn, self.copyingSwicher.isOn)
-        let loadingView: UIView = (self.view.superview ?? self.view)
+        let loadingView: UIView = (self.navigationController?.view ?? self.view)
         STLoadingView.show(in: loadingView)
         self.viewModel.shareAlbum(album: album, contact: self.shareAlbumData.contact, permitions: permitions) { [weak self] error in
+            guard let weakSelf = self else {
+                return
+            }
+            STLoadingView.hide(in: loadingView)
+            if let error = error {
+                weakSelf.showError(error: error)
+            } else {
+                weakSelf.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+    
+    private func shareAlbumFiles(album: STLibrary.Album, files: [STLibrary.AlbumFile]) {
+        let loadingView: UIView = (self.navigationController?.view ?? self.view)
+        STLoadingView.show(in: loadingView)
+        let name = self.shareAlbumNameTextField.text ?? ""
+        let permitions = (self.addPhotoSwicher.isOn, self.sharingSwicher.isOn, self.copyingSwicher.isOn)
+        self.viewModel.shareAlbumFiles(name: name, album: album, files: files, contact: self.shareAlbumData.contact, permitions: permitions) { [weak self] error in
             guard let weakSelf = self else {
                 return
             }
@@ -88,14 +109,15 @@ class STShareAlbumVC: UITableViewController {
     //MARK: - UserAction
     
     @IBAction private func didSelectShareButton(_ sender: Any) {
-        
+        _ = self.shareAlbumNameTextField.resignFirstResponder()
         switch self.shareAlbumData.shareType {
         case .album(let album):
             self.shareAlbum(album: album)
         case .files(let files):
             self.shareFiles(files: files)
+        case .albumFiles(let album, let files):
+            self.shareAlbumFiles(album: album, files: files)
         }
-
     }
     
 }

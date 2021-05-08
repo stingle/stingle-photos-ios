@@ -19,7 +19,7 @@ extension STDataBase {
             try contacts.forEach { (contact) in
                 let json = try contact.toManagedModelJson()
                 jsons.append(json)
-                objIds[contact.userId] = contact
+                objIds[contact.identifier] = contact
                 let currentLastDate = lastDate ?? contact.dateModified
                 if currentLastDate <= contact.dateModified {
                     lastDate = contact.dateModified
@@ -38,11 +38,11 @@ extension STDataBase {
             let fetchRequest = NSFetchRequest<STCDContact>(entityName: STCDContact.entityName)
             fetchRequest.includesSubentities = false
             let keys: [String] = Array(objIds.keys)
-            fetchRequest.predicate = NSPredicate(format: "userId IN %@", keys)
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", keys)
             let items = try context.fetch(fetchRequest)
             
             items.forEach { (item) in
-                if let userId = item.userId, let model = objIds[userId] {
+                if let userId = item.identifier, let model = objIds[userId] {
                     item.update(model: model, context: context)
                 }
             }
@@ -56,12 +56,12 @@ extension STDataBase {
             }
             
             let context = self.container.newBackgroundContext()
-            let fileNames = deleteFiles.compactMap { (deleteFile) -> String in
+            let contactIds = deleteFiles.compactMap { (deleteFile) -> String in
                 return deleteFile.contactId
             }
             let fetchRequest = NSFetchRequest<STCDContact>(entityName: STCDContact.entityName)
             fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "userId IN %@", fileNames)
+            fetchRequest.predicate = NSPredicate(format: "contactId IN %@", contactIds)
             let deleteingCDItems = try context.fetch(fetchRequest)
             var deleteItems = [STCDContact]()
             let groupCDItems = Dictionary(grouping: deleteingCDItems, by: { $0.userId })
@@ -79,8 +79,8 @@ extension STDataBase {
         }
         
         override func updateObjects(by models: [STContact], managedModels: [STCDContact], in context: NSManagedObjectContext) {
-            let modelsGroup = Dictionary(grouping: models, by: { $0.userId })
-            let managedGroup = Dictionary(grouping: managedModels, by: { $0.userId })
+            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
             managedGroup.forEach { (keyValue) in
                 if let key = keyValue.key, let model = modelsGroup[key]?.first {
                     let cdModel = keyValue.value.first
@@ -94,11 +94,11 @@ extension STDataBase {
                 return []
             }
             let userIds = models.compactMap { (deleteFile) -> String in
-                return deleteFile.userId
+                return deleteFile.identifier
             }
             let fetchRequest = NSFetchRequest<STCDContact>(entityName: STCDContact.entityName)
             fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "userId IN %@", userIds)
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", userIds)
             let deleteingCDItems = try context.fetch(fetchRequest)
             return deleteingCDItems
             

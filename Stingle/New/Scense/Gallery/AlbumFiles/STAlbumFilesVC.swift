@@ -240,7 +240,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     private func deleteSelectedFiles() {
         STLoadingView.show(in: self.view)
         let files: [String] = [String](self.dataSource.viewModel.selectedFileNames)
-        self.viewModel.deleteSelectedFiles(files: files) { [weak self] error in
+        self.viewModel.deleteFiles(files: files) { [weak self] error in
             guard let weakSelf = self else{
                 return
             }
@@ -283,7 +283,15 @@ extension STAlbumFilesVC: UICollectionViewDelegate {
 extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
-        
+        let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
+        guard !selectedFileNames.isEmpty else {
+            return
+        }
+        let files = self.viewModel.getFiles(fileNames: selectedFileNames)
+        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+        let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersVCID") as! UINavigationController)
+        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .albumFiles(album: self.album, files: files)
+        self.showDetailViewController(vc, sender: nil)
     }
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectCopyButton sendner: UIButton) {

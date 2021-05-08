@@ -18,7 +18,7 @@ extension STDataBase {
             try albumFiles.forEach { (albumFile) in
                 let json = try albumFile.toManagedModelJson()
                 jsons.append(json)
-                ids[albumFile.file] = albumFile
+                ids[albumFile.identifier] = albumFile
                 let currentLastDate = lastDate ?? albumFile.dateModified
                 if currentLastDate <= albumFile.dateModified {
                     lastDate = albumFile.dateModified
@@ -33,10 +33,10 @@ extension STDataBase {
         override func syncUpdateModels(objIds: [String : STLibrary.AlbumFile], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
             let fetchRequest = NSFetchRequest<STCDAlbumFile>(entityName: STCDAlbumFile.entityName)
             let keys: [String] = Array(objIds.keys)
-            fetchRequest.predicate = NSPredicate(format: "file IN %@", keys)
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", keys)
             let items = try context.fetch(fetchRequest)
             items.forEach { (item) in
-                if let file = item.file, let model = objIds[file] {
+                if let identifier = item.identifier, let model = objIds[identifier] {
                     item.update(model: model, context: context)
                 }
             }
@@ -50,13 +50,14 @@ extension STDataBase {
             }
             
             let context = self.container.newBackgroundContext()
-            let fileNames = deleteFiles.compactMap { (deleteFile) -> String in
-                return deleteFile.file
+            let identifiers = deleteFiles.compactMap { (deleteFile) -> String in
+                return STLibrary.AlbumFile.createIdentifier(albumId: deleteFile.albumId, fileName: deleteFile.file)
             }
             
             let fetchRequest = NSFetchRequest<STCDAlbumFile>(entityName: STCDAlbumFile.entityName)
             fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "file IN %@", fileNames)
+                        
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", identifiers)
             let deleteingCDItems = try context.fetch(fetchRequest)
             var deleteItems = [STCDAlbumFile]()
             let groupCDItems = Dictionary(grouping: deleteingCDItems, by: { $0.file })
@@ -77,19 +78,16 @@ extension STDataBase {
             guard !models.isEmpty else {
                 return []
             }
-            let fileNames = models.compactMap { (deleteFile) -> String in
-                return deleteFile.file
-            }
+            let identifiers = models.compactMap({return $0.identifier})
             let fetchRequest = NSFetchRequest<STCDAlbumFile>(entityName: STCDAlbumFile.entityName)
-            fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "file IN %@", fileNames)
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", identifiers)
             let cdItems = try context.fetch(fetchRequest)
             return cdItems
         }
         
         override func updateObjects(by models: [STLibrary.AlbumFile], managedModels: [STCDAlbumFile], in context: NSManagedObjectContext) {
-            let modelsGroup = Dictionary(grouping: models, by: { $0.albumId })
-            let managedGroup = Dictionary(grouping: managedModels, by: { $0.albumId })
+            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
             managedGroup.forEach { (keyValue) in
                 if let key = keyValue.key, let model = modelsGroup[key]?.first {
                     let cdModel = keyValue.value.first

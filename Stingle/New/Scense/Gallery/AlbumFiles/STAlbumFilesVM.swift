@@ -29,22 +29,27 @@ class STAlbumFilesVM {
     
     func createDBDataSource() -> STDataBase.DataSource<STCDAlbumFile> {
         let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", self.album.albumId)
-        return self.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.albumId), #keyPath(STCDAlbumFile.dateCreated)], sectionNameKeyPath: #keyPath(STCDAlbumFile.day), predicate: predicate, cacheName: nil)
+        return self.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated)], sectionNameKeyPath: #keyPath(STCDAlbumFile.day), predicate: predicate, cacheName: nil)
     }
     
     func sync() {
         self.syncManager.sync()
     }
     
-    func deleteSelectedFiles(files: [String], result: @escaping ((IError?) -> Void)) {
-        let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: self.album.albumId, fileNames: files)
+    func deleteFiles(files: [String], result: @escaping ((IError?) -> Void)) {
+        let files = self.getFiles(fileNames: files)
         self.albumWorker.deleteAlbumFiles(album: album, files: files) { responce in
             result(nil)
         } failure: { error in
             result(error)
         }
     }
-        
+    
+    func getFiles(fileNames: [String]) -> [STLibrary.AlbumFile] {
+        let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: self.album.albumId, fileNames: fileNames)
+        return files
+    }
+    
 }
 
 extension STAlbumFilesVM: ICollectionProviderObserver {
@@ -67,6 +72,25 @@ extension STAlbumFilesVM: ICollectionProviderObserver {
     }
     
 }
+
+extension STAlbumFilesVM {
+    
+    enum AlbumFilesError: IError {
+        case hasIsRemoteItems
+        case emptyData
+        
+        var message: String {
+            switch self {
+            case .hasIsRemoteItems:
+                return "please_wait_for_backup_to_finish_before_you_can_proceed".localized
+            case .emptyData:
+                return "empty_data".localized
+            }
+        }
+    }
+    
+}
+
 
 extension STCDAlbumFile {
     

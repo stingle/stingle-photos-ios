@@ -164,6 +164,7 @@ extension STLibrary {
             json.addIfNeeded(key: "dateCreated", value: self.dateCreated)
             json.addIfNeeded(key: "dateModified", value: self.dateModified)
             json.addIfNeeded(key: "isRemote", value: self.isRemote)
+            json.addIfNeeded(key: "identifier", value: self.identifier)
             return json
         }
     }

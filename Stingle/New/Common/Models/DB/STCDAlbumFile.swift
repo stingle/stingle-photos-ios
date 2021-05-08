@@ -11,10 +11,6 @@ import CoreData
 
 @objc(STCDAlbumFile)
 public class STCDAlbumFile: NSManagedObject, IManagedObject {
-    
-    var identifier: String? {
-        return self.file
-    }
 
     func update(model: STLibrary.AlbumFile, context: NSManagedObjectContext) {
         self.file = model.file
@@ -24,6 +20,7 @@ public class STCDAlbumFile: NSManagedObject, IManagedObject {
         self.dateModified = model.dateModified
         self.albumId = model.albumId
         self.isRemote = model.isRemote
+        self.identifier = model.identifier
     }
     
     func createModel() throws -> STLibrary.AlbumFile {

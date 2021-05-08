@@ -11,10 +11,6 @@ import CoreData
 
 @objc(STCDFile)
 public class STCDFile: NSManagedObject, IManagedObject {
-    
-    var identifier: String? {
-        return self.file
-    }
    
     func update(model: STLibrary.File, context: NSManagedObjectContext) {
         self.file = model.file
@@ -23,6 +19,7 @@ public class STCDFile: NSManagedObject, IManagedObject {
         self.dateCreated = model.dateCreated
         self.dateModified = model.dateModified
         self.isRemote = model.isRemote
+        self.identifier = model.identifier
     }
     
     func createModel() throws -> STLibrary.File {

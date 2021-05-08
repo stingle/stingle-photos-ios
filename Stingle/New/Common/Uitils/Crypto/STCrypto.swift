@@ -349,7 +349,6 @@ class STCrypto {
         guard numRead > 0  else {
             throw CryptoError.IO.readFailure
         }
-               
     }
 	
     @discardableResult

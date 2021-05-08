@@ -21,17 +21,13 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
     private var contacts: [STContact]?
     
     lazy var albumFilesDataSource: STDataBase.DataSource<STCDAlbumFile> = {
-        let dataSource = STApplication.shared.dataBase.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.albumId), #keyPath(STCDAlbumFile.dateCreated)], sectionNameKeyPath: #keyPath(STCDAlbumFile.albumId))
+        let dataSource = STApplication.shared.dataBase.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.albumId), #keyPath(STCDAlbumFile.dateCreated)], sectionNameKeyPath: #keyPath(STCDAlbumFile.albumId), predicate: nil, cacheName: nil)
         return dataSource
     }()
     
     init(collectionView: UICollectionView, predicate: NSPredicate?, viewModel: ViewModel) {
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
-        var cacheName = STCDAlbumFile.entityName
-        if let predicate = predicate {
-            cacheName = cacheName + predicate.predicateFormat
-        }
-        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil, predicate: predicate, cacheName: cacheName)
+        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil, predicate: predicate, cacheName: nil)
         super.init(dbDataSource: dbDataSource, collectionView: collectionView, viewModel: viewModel)
         self.viewModel.delegate = self
         self.albumFilesDataSource.delegate = self
@@ -47,9 +43,7 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
         if snapshot == self.snapshotReference, self.albumFilesDataSource.snapshotReference != nil {
             self.contacts = nil
             super.didChangeContent(with: snapshot)
-        } else if snapshot == self.albumFilesDataSource.snapshotReference {
-            self.reloadVisibleItems()
-        }
+        } 
     }
     
 }

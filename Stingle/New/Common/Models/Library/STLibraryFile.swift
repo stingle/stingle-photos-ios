@@ -82,7 +82,7 @@ extension STLibrary {
         }
         
         func toManagedModelJson() throws -> [String : Any] {
-            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote]
+            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote, "identifier": self.identifier]
         }
         
     }

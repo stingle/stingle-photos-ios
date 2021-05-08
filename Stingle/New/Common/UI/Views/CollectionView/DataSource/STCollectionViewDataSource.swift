@@ -154,20 +154,13 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     
     //MARK: - Public
     
-    
     func reloadVisibleItems() {
-        self.collectionView.indexPathsForVisibleItems.forEach { (indexPath) in
-            if let object = self.object(at: indexPath)  {
-                let cellModel = self.viewModel.cellModel(for: indexPath, data: object)
-                let cell = self.collectionView.cellForItem(at: indexPath) as! Cell
-                cell.configure(model: cellModel)
-            }
-        }
+        self.collectionView.reloadData()
     }
     
     func cellFor(collectionView: UICollectionView, indexPath: IndexPath, data: Any) -> Cell? {
         guard let object = self.object(at: indexPath) else {
-            return nil
+            fatalError()
         }
         let cellModel = self.viewModel.cellModel(for: indexPath, data: object)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellModel.identifier.identifier, for: indexPath) as! Cell

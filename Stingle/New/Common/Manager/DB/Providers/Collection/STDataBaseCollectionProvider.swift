@@ -137,15 +137,11 @@ extension STDataBase {
                         insertRequest.resultType = .objectIDs
                         let _ = try context.execute(insertRequest)
                     }
-                    let objects = try self.getObjects(by: models, in: context)
-                    try self.updateObjects(by: models, managedModels: objects, in: context)
-                    if context.hasChanges {
-                        try? context.save()
-                    }
                 } catch {
                     print(error)
                 }
             }
+            
             if reloadData {
                 self.reloadData()
                 self.observerProvider.forEach { observer in
@@ -170,6 +166,7 @@ extension STDataBase {
                 }
                 
             }
+            
             if reloadData {
                 self.reloadData()
                 self.observerProvider.forEach { observer in
@@ -191,18 +188,18 @@ extension STDataBase {
                 } catch {
                     resultError = error
                 }
-            }
-            
-            if resultError != nil {
-                return
-            }
-            
-            if reloadData {
-                self.reloadData()
-                self.observerProvider.forEach { observer in
-                    observer.dataBaseCollectionProvider(didDeleted: self, models: models)
+                
+                if resultError != nil {
+                    return
                 }
-            }
+                
+                if reloadData {
+                    self.reloadData()
+                    self.observerProvider.forEach { observer in
+                        observer.dataBaseCollectionProvider(didDeleted: self, models: models)
+                    }
+                }
+            }            
         }
         
         //MARK: - Fetch

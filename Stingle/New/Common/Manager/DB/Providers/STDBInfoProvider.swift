@@ -17,7 +17,7 @@ extension STDataBase {
             context.undoManager = nil
             context.performAndWait {
                 guard let cdInfo = self.getInfo(context: context) else {
-                    STCDDBInfo.init(model: info, context: context)
+                    STCDDBInfo(model: info, context: context)
                     self.container.saveContext(context)
                     return
                 }

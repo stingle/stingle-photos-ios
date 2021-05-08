@@ -59,11 +59,14 @@ class STSharedMembersVC: UIViewController {
     private func updateLocalizes() {
         self.navigationItem.title = "share_via_stingle_photos".localized
         self.searchController.searchBar.placeholder = "sharch_contact_text_feild_placeholder".localized
+       
         switch self.shearedType {
         case .album(let album):
             let title = album.isShared ? "share".localized : "next".localized
             self.doneButtonItem.title = title
         case .files:
+            self.doneButtonItem.title = "next".localized
+        case .albumFiles:
             self.doneButtonItem.title = "next".localized
         case .none:
             break
@@ -222,6 +225,7 @@ extension STSharedMembersVC {
     enum ShearedType {
         case album(album: STLibrary.Album)
         case files(files: [STLibrary.File])
+        case albumFiles(album: STLibrary.Album, files: [STLibrary.AlbumFile])
     }
     
 }

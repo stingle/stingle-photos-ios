@@ -16,7 +16,7 @@ class STShareAlbumVM {
     
     func shareAlbum(album: STLibrary.Album, contact: [STContact], permitions: Permitions, result: @escaping (_ result: IError?) -> Void) {
         guard self.albumFilesProvider.fetchAll(for: album.albumId, isRemote: false).isEmpty else {
-            result(ShareAlbumError.emptyData)
+            result(ShareAlbumError.hasIsRemoteItems)
             return
         }
         let permitions = STLibrary.Album.Permission(allowAdd: permitions.addPhoto, allowShare: permitions.sharing, allowCopy: permitions.copying)
@@ -27,9 +27,24 @@ class STShareAlbumVM {
         }
     }
     
+    func shareAlbumFiles(name: String, album: STLibrary.Album, files: [STLibrary.AlbumFile], contact: [STContact], permitions: Permitions, result: @escaping (_ result: IError?) -> Void) {
         
-}
+        guard files.first(where: {$0.isRemote == false}) == nil else {
+            result(ShareAlbumError.hasIsRemoteItems)
+            return
+        }
+    
+        let permitions = STLibrary.Album.Permission(allowAdd: permitions.addPhoto, allowShare: permitions.sharing, allowCopy: permitions.copying)
+        
+        self.albumWorker.createSharedAlbum(name: name, fromAlbum: album, files: files, contacts: contact, permitions: permitions) { _ in
+            result(nil)
+        } failure: { error in
+            result(error)
+        }
 
+    }
+    
+}
 
 extension STShareAlbumVM {
     
@@ -45,8 +60,6 @@ extension STShareAlbumVM {
                 return "empty_data".localized
             }
         }
-        
     }
     
 }
-

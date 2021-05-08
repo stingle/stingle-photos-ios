@@ -17,10 +17,14 @@ extension STLibrary {
             case albumId = "albumId"
         }
         
-        let albumId: String
+        var albumId: String
         
         override var dbSet: DBSet {
             return .album
+        }
+        
+        override var identifier: String {
+            return Self.createIdentifier(albumId: self.albumId, fileName: self.file)
         }
         
         private(set) var albumMetadata: Album.AlbumMetadata?
@@ -49,6 +53,11 @@ extension STLibrary {
             fatalError("init(model:) has not been implemented")
         }
         
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool, albumId: String) throws {
+            self.albumId = albumId
+            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote)
+        }
+        
         override func toManagedModelJson() throws -> [String : Any] {
             var json = try super.toManagedModelJson()
             json["albumId"] = self.albumId
@@ -69,6 +78,15 @@ extension STLibrary {
             
         }
         
+    }
+    
+}
+
+
+extension STLibrary.AlbumFile {
+    
+    class func createIdentifier(albumId: String, fileName: String) -> String {
+        return fileName + "_" + albumId
     }
     
 }

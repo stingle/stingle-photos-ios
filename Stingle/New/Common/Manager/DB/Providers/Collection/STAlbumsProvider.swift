@@ -19,7 +19,7 @@ extension STDataBase {
             try albums.forEach { (album) in
                 let json = try album.toManagedModelJson()
                 jsons.append(json)
-                objIds[album.albumId] = album
+                objIds[album.identifier] = album
                 let currentLastDate = lastDate ?? album.dateModified
                 if currentLastDate <= album.dateModified {
                     lastDate = album.dateModified
@@ -37,11 +37,11 @@ extension STDataBase {
            
             let fetchRequest = NSFetchRequest<STCDAlbum>(entityName: STCDAlbum.entityName)
             let keys: [String] = Array(objIds.keys)
-            fetchRequest.predicate = NSPredicate(format: "albumId IN %@", keys)
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", keys)
             let items = try context.fetch(fetchRequest)
             
             items.forEach { (item) in
-                if let albumId = item.albumId, let model = objIds[albumId] {
+                if let identifier = item.identifier, let model = objIds[identifier] {
                     item.update(model: model, context: context)
                 }
                 
@@ -81,19 +81,19 @@ extension STDataBase {
             guard !models.isEmpty else {
                 return []
             }
-            let albumIds = models.compactMap { (deleteFile) -> String in
-                return deleteFile.albumId
+            let identifiers = models.compactMap { (deleteFile) -> String in
+                return deleteFile.identifier
             }
             let fetchRequest = NSFetchRequest<STCDAlbum>(entityName: STCDAlbum.entityName)
             fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "\(#keyPath(STCDAlbum.albumId)) IN %@", albumIds)
+            fetchRequest.predicate = NSPredicate(format: "\(#keyPath(STCDAlbum.identifier)) IN %@", identifiers)
             let cdItems = try context.fetch(fetchRequest)
             return cdItems
         }
         
         override func updateObjects(by models: [STLibrary.Album], managedModels: [STCDAlbum], in context: NSManagedObjectContext) {
-            let modelsGroup = Dictionary(grouping: models, by: { $0.albumId })
-            let managedGroup = Dictionary(grouping: managedModels, by: { $0.albumId })
+            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
             managedGroup.forEach { (keyValue) in
                 if let key = keyValue.key, let model = modelsGroup[key]?.first {
                     let cdModel = keyValue.value.first

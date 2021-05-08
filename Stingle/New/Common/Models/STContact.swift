@@ -67,6 +67,7 @@ class STContact: Codable, ICDConvertable {
         json.addIfNeeded(key: "userId", value: self.userId)
         json.addIfNeeded(key: "dateUsed", value: self.dateUsed)
         json.addIfNeeded(key: "dateModified", value: self.dateModified)
+        json.addIfNeeded(key: "identifier", value: self.identifier)
         return json
     }
     

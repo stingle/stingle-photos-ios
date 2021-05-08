@@ -19,6 +19,8 @@ class STSharedMembersVM {
             self.membersIDS = album.members?.components(separatedBy: ",") ?? [String]()
         case .files(_):
             self.membersIDS = [String]()
+        case .albumFiles:
+            self.membersIDS = [String]()
         }
     }
     
