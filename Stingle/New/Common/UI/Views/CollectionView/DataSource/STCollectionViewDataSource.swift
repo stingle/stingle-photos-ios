@@ -234,14 +234,11 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         return resutl
     }
     
-    //MARk: -
-    
+    //MARK: - Private
     
     @objc private func endReloadCollectionVisibleCells() {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(endReloadCollectionVisibleCells), object: nil)
         if let snapshotReference = self.snapshotReference {
-            let itemIdentifiers = snapshotReference.itemIdentifiers
-            self.snapshotReference?.reloadItems(withIdentifiers: itemIdentifiers)
             self.dataSourceReference.applySnapshot(snapshotReference, animatingDifferences: false)
         }
         

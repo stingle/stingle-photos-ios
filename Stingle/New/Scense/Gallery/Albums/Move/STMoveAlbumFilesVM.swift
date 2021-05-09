@@ -29,4 +29,25 @@ class STMoveAlbumFilesVM {
             result(error)
         }
     }
+    
+    func moveFilesToGallery(fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
+        self.isDeleteFilesLastValue = isDeleteFiles
+        let isMoving = self.isDeleteFilesLastValue && fromAlbum.isOwner
+        self.albumWorker.moveFilesToGallery(fromAlbum: fromAlbum, files: files, isMoving: isMoving) { _ in
+            result(nil)
+        } failure: { error in
+            result(error)
+        }
+    }
+    
+    func createAlbum(name: String, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
+        self.isDeleteFilesLastValue = isDeleteFiles
+        let isMoving = self.isDeleteFilesLastValue && fromAlbum.isOwner
+        self.albumWorker.createAlbum(name: name, fromAlbum: fromAlbum, files: files, isMoving: isMoving) { _ in
+            result(nil)
+        } failure: { error in
+            result(error)
+        }
+    }
+    
 }

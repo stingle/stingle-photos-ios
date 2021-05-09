@@ -172,40 +172,97 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     
     //MARK: - Private
     
-    private func moveToAlbum(album: STLibrary.Album) {
-        
-        switch self.moveInfo {
-       
-        case .files(let files):
-            
-            break
-            
-        case .albumFiles(let fromAlbum, let files):
-            let view: UIView = (self.navigationController?.view ?? self.view)
-            STLoadingView.show(in: view)
-            self.viewModel.moveToAlbum(fromAlbum: fromAlbum, toAlbum: album, files: files, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
-                STLoadingView.hide(in: view)
-                if let error = error {
-                    self?.showError(error: error)
-                } else {
-                    self?.dismiss(animated: true, completion: nil)
-                }
+    private func moveFilesToAlbum(toAlbum: STLibrary.Album, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile]) {
+        let view: UIView = (self.navigationController?.view ?? self.view)
+        STLoadingView.show(in: view)
+        self.viewModel.moveToAlbum(fromAlbum: fromAlbum, toAlbum: toAlbum, files: files, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
+            STLoadingView.hide(in: view)
+            if let error = error {
+                self?.showError(error: error)
+            } else {
+                self?.dismiss(animated: true, completion: nil)
             }
+        }
+    }
+    
+    private func moveFilesToAlbum(toAlbum: STLibrary.Album, files: [STLibrary.File]) {
+        
+    }
+    
+    private func moveFilesToAlbum(album: STLibrary.Album) {
+        switch self.moveInfo {
+        case .files(let files):
+            self.moveFilesToAlbum(toAlbum: album, files: files)
+            break
+        case .albumFiles(let fromAlbum, let files):
+            self.moveFilesToAlbum(toAlbum: album, fromAlbum: fromAlbum, files: files)
         default:
             break
         }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////
+    
+    private func moveFilesToNewAlbum(albumName: String, files: [STLibrary.File]) {
         
     }
     
-    private func moveToNewAlbum() {
-        
-        
+    private func moveFilesToNewAlbum(albumName: String, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile]) {
+        let view: UIView = (self.navigationController?.view ?? self.view)
+        STLoadingView.show(in: view)
+        self.viewModel.createAlbum(name: albumName, fromAlbum: fromAlbum, files: files, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
+            STLoadingView.hide(in: view)
+            if let error = error {
+                self?.showError(error: error)
+            } else {
+                self?.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
-    private func moveToGallery() {
-        
-        
+    private func moveFilesToNewAlbum(albumName: String) {
+        switch self.moveInfo {
+        case .albumFiles(let album, let files):
+            self.moveFilesToNewAlbum(albumName: albumName, fromAlbum: album, files: files)
+        case .files(let files):
+            self.moveFilesToNewAlbum(albumName: albumName, files: files)
+           break
+        default:
+            break
+        }
     }
+    
+    private func moveFilesToNewAlbum() {
+        self.showAddAlbumAlert { [weak self] name in
+            self?.moveFilesToNewAlbum(albumName: name)
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////
+    
+    private func moveFilesToGallery(fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile]) {
+        let view: UIView = (self.navigationController?.view ?? self.view)
+        STLoadingView.show(in: view)
+        self.viewModel.moveFilesToGallery(fromAlbum: fromAlbum, files: files, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
+            STLoadingView.hide(in: view)
+            if let error = error {
+                self?.showError(error: error)
+            } else {
+                self?.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+    
+    private func moveFilesToGallery() {
+        switch self.moveInfo {
+        case .albumFiles(let album, let files):
+            self.moveFilesToGallery(fromAlbum: album, files: files)
+        default:
+            break
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////
         
     private func configureViews() {
         switch self.moveInfo {
@@ -221,14 +278,29 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
         self.deleteFilesSwitcher.isOn = self.viewModel.isDeleteFilesLastValue
     }
     
+    private func showAddAlbumAlert(okAction: @escaping ((String) -> Void)) {
+        let title = "create_album_title".localized
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "album_name".localized
+        }
+        let ok = UIAlertAction(title: "ok".localized, style: .default) { (_) in
+            okAction(alert.textFields?.first?.text ?? "")
+        }
+        let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     //MARK: - User action
     
     @IBAction private func didCreateNewAlbumButton(_ sender: Any) {
-        self.moveToNewAlbum()
+        self.moveFilesToNewAlbum()
     }
     
     @IBAction private func didSelecctMainGalleryButton(_ sender: Any) {
-        self.moveToGallery()
+        self.moveFilesToGallery()
     }
     
     @IBAction private func didSelectCloseButton(_ sender: Any) {
@@ -243,7 +315,7 @@ extension STMoveAlbumFilesVC: UICollectionViewDelegate {
         guard let album = self.dataSource.object(at: indexPath) else {
             return
         }
-        self.moveToAlbum(album: album)
+        self.moveFilesToAlbum(album: album)
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

@@ -8,16 +8,7 @@
 import Foundation
 
 class STAlbumWorker: STWorker {
-    
-    func createAlbum(name: String, reloadDBData: Bool = true, success: Success<STLibrary.Album>? = nil, failure: Failure?) {
-        do {
-            let encryptedAlbumData = try STApplication.shared.crypto.generateEncryptedAlbumDataAndID(albumName: name)
-            self.createAlbum(encryptedAlbumData: encryptedAlbumData, reloadDBData: reloadDBData, success: success, failure: failure)
-        } catch {
-            failure?(WorkerError.error(error: error))
-        }
-    }
-    
+        
     func deleteAlbumWithFiles(album: STLibrary.Album, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
         let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: album.albumId)
         
@@ -68,71 +59,7 @@ class STAlbumWorker: STWorker {
             failure?(WorkerError.error(error: error))
         }
     }
-    
-    func moveFiles(fromAlbum: STLibrary.Album, toAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isMoving: Bool, reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         
-        let crypto = STApplication.shared.crypto
-        let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
-        let albumsProvider = STApplication.shared.dataBase.albumsProvider
-        var newHeaders = [String: String]()
-        
-        do {
-            let fromAlbumData = try crypto.decryptAlbum(albumPKStr: fromAlbum.publicKey, encAlbumSKStr: fromAlbum.encPrivateKey, metadataStr: fromAlbum.metadata)
-            var newAlbumFiles = [STLibrary.AlbumFile]()
-            for file in files {
-                guard let publicKey = crypto.base64ToByte(encodedStr: toAlbum.publicKey) else {
-                    failure?(WorkerError.emptyData)
-                    return
-                }
-                let newHeader = try crypto.reencryptFileHeaders(headersStr: file.headers, publicKeyTo: publicKey, privateKeyFrom: fromAlbumData.privateKey, publicKeyFrom: fromAlbumData.publicKey)
-                newHeaders[file.file] = newHeader
-                
-                let newAlbumFile = try STLibrary.AlbumFile(file: file.file,
-                                                       version: file.version,
-                                                       headers: newHeader,
-                                                       dateCreated: file.dateCreated,
-                                                       dateModified: Date(),
-                                                       isRemote: file.isRemote,
-                                                       albumId: toAlbum.albumId)
-                newAlbumFiles.append(newAlbumFile)
-            }
-            
-            let request = STAlbumRequest.moveFile(fromSet: .album, toSet: .album, albumIdFrom: fromAlbum.albumId, albumIdTo: toAlbum.albumId, isMoving: isMoving, headers: newHeaders, files: files)
-            
-            self.request(request: request, success: { (response: STEmptyResponse) in
-                
-                if isMoving {
-                    albumFilesProvider.delete(models: files, reloadData: reloadDBData)
-                }
-                
-                let updatedAlbum = STLibrary.Album(albumId: toAlbum.albumId,
-                                                   encPrivateKey: toAlbum.encPrivateKey,
-                                                   publicKey: toAlbum.publicKey,
-                                                   metadata: toAlbum.metadata,
-                                                   isShared: toAlbum.isShared,
-                                                   isHidden: toAlbum.isHidden,
-                                                   isOwner: toAlbum.isOwner,
-                                                   isLocked: toAlbum.isLocked,
-                                                   isRemote: toAlbum.isRemote,
-                                                   permissions: toAlbum.permissions,
-                                                   members: toAlbum.members,
-                                                   cover: toAlbum.cover,
-                                                   dateCreated: toAlbum.dateCreated,
-                                                   dateModified: Date())
-                
-                albumsProvider.update(models: [updatedAlbum], reloadData: reloadDBData)
-                albumFilesProvider.add(models: newAlbumFiles, reloadData: reloadDBData)
-                
-                success?(response)
-            }, failure: failure)
-     
-        } catch {
-            failure?(WorkerError.error(error: error))
-        }
-        
-        
-    }
-    
    //MARK: - Private
     
     private func deleteAlbum(album: STLibrary.Album, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
@@ -144,32 +71,4 @@ class STAlbumWorker: STWorker {
        }, failure: failure)
    }
     
-    private func createAlbum(encryptedAlbumData: (encPrivateKey: String, publicKey: String, metadata: String, albumID: String), reloadDBData: Bool, success: Success<STLibrary.Album>? = nil, failure: Failure?) {
-        let now = Date()
-        let album = STLibrary.Album(albumId: encryptedAlbumData.albumID,
-                                    encPrivateKey: encryptedAlbumData.encPrivateKey,
-                                    publicKey: encryptedAlbumData.publicKey,
-                                    metadata: encryptedAlbumData.metadata,
-                                    isShared: false,
-                                    isHidden: false,
-                                    isOwner: true,
-                                    isLocked: false,
-                                    isRemote: true,
-                                    permissions: nil,
-                                    members: nil,
-                                    cover: nil,
-                                    dateCreated: now,
-                                    dateModified: now)
-                
-        let request = STAlbumRequest.create(album: album)
-        self.request(request: request) { (response: STEmptyResponse) in
-            STApplication.shared.dataBase.albumsProvider.add(models: [album], reloadData: reloadDBData)
-            success?(album)
-        } failure: { (error) in
-            failure?(error)
-        }
-    }
-    
-    
 }
-

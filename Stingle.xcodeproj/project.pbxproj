@@ -21,6 +21,8 @@
 		A00982F82623747C00559C41 /* STDBUsed.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00982F72623747C00559C41 /* STDBUsed.swift */; };
 		A00B4C20263D74270085C55E /* STSharedMembersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00B4C1F263D74270085C55E /* STSharedMembersVC.swift */; };
 		A00B4C24263D75220085C55E /* Shear.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A00B4C23263D75220085C55E /* Shear.storyboard */; };
+		A00C6E5C264865410001662E /* STAlbumWorker+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00C6E5B264865410001662E /* STAlbumWorker+Create.swift */; };
+		A00C6E5E26486ED20001662E /* STAlbumWorker+Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00C6E5D26486ED20001662E /* STAlbumWorker+Move.swift */; };
 		A00E8C932629D38F0066ED9B /* STViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00E8C922629D38F0066ED9B /* STViewDataSource.swift */; };
 		A00E8C972629D3B70066ED9B /* STCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00E8C962629D3B70066ED9B /* STCollectionViewDataSource.swift */; };
 		A01747EF260A9C60000D98F0 /* STFileDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01747EE260A9C60000D98F0 /* STFileDiskCache.swift */; };
@@ -265,6 +267,8 @@
 		A00982F72623747C00559C41 /* STDBUsed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDBUsed.swift; sourceTree = "<group>"; };
 		A00B4C1F263D74270085C55E /* STSharedMembersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSharedMembersVC.swift; sourceTree = "<group>"; };
 		A00B4C23263D75220085C55E /* Shear.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Shear.storyboard; sourceTree = "<group>"; };
+		A00C6E5B264865410001662E /* STAlbumWorker+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAlbumWorker+Create.swift"; sourceTree = "<group>"; };
+		A00C6E5D26486ED20001662E /* STAlbumWorker+Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAlbumWorker+Move.swift"; sourceTree = "<group>"; };
 		A00E8C922629D38F0066ED9B /* STViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STViewDataSource.swift; sourceTree = "<group>"; };
 		A00E8C962629D3B70066ED9B /* STCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A01747EE260A9C60000D98F0 /* STFileDiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileDiskCache.swift; sourceTree = "<group>"; };
@@ -1333,18 +1337,12 @@
 		A074AE38264595C5004C9E9E /* Album */ = {
 			isa = PBXGroup;
 			children = (
-				A074AE39264595DE004C9E9E /* Share */,
 				A04512B72638B0FD00BE0B06 /* STAlbumWorker.swift */,
 				A074AE3A26459602004C9E9E /* STAlbumWorker+Share.swift */,
+				A00C6E5B264865410001662E /* STAlbumWorker+Create.swift */,
+				A00C6E5D26486ED20001662E /* STAlbumWorker+Move.swift */,
 			);
 			path = Album;
-			sourceTree = "<group>";
-		};
-		A074AE39264595DE004C9E9E /* Share */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Share;
 			sourceTree = "<group>";
 		};
 		A074AE3C264601DE004C9E9E /* Move */ = {
@@ -1874,6 +1872,7 @@
 				A0D1A3C3262E0F9F002E326F /* STAlbumFilesCollectionViewCell.swift in Sources */,
 				A005FAEF25FF48A500E7D8B0 /* UITraitCollection+Operation.swift in Sources */,
 				A02204B025EEDC0400D07C98 /* SPImagePreviewVC.swift in Sources */,
+				A00C6E5E26486ED20001662E /* STAlbumWorker+Move.swift in Sources */,
 				A099F4C026302F4A000D4F86 /* STCircleProgressView.swift in Sources */,
 				A049459C2611CDF4008D5E48 /* STView.swift in Sources */,
 				A022047825EEDC0400D07C98 /* SPMediaFileManager.swift in Sources */,
@@ -1982,6 +1981,7 @@
 				A00E8C932629D38F0066ED9B /* STViewDataSource.swift in Sources */,
 				A022049725EEDC0400D07C98 /* Image+Extension.swift in Sources */,
 				A0B2678E2624FBB60090E4ED /* STAlbumsVC.swift in Sources */,
+				A00C6E5C264865410001662E /* STAlbumWorker+Create.swift in Sources */,
 				A022047C25EEDC0400D07C98 /* NetworkManager.swift in Sources */,
 				A02204B825EEDC0400D07C98 /* TrashVC.swift in Sources */,
 				A022047625EEDC0400D07C98 /* STCrypto+Error.swift in Sources */,
