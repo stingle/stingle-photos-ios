@@ -113,6 +113,7 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     typealias Header = ViewModel.Header
     
     private(set) var dataSourceReference: UICollectionViewDiffableDataSourceReference!
+    private(set) var isReloadingCollectionView = false
     private(set) weak var collectionView: UICollectionView!
     
     var viewModel: ViewModel
@@ -142,25 +143,37 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     }
     
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
+        self.isReloadingCollectionView = true
         super.didChangeContent(with: snapshot)
         self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true) { [weak self] in
             guard let weakSelf = self else {
+                self?.isReloadingCollectionView = false
                 return
             }
             weakSelf.delegate?.dataSource(didApplySnapshot: weakSelf)
+            self?.isReloadingCollectionView = false
         }
         self.delegate?.dataSource(willApplySnapshot: self)
     }
     
     //MARK: - Public
     
-    func reloadVisibleItems() {
+    func reloadCollection() {
         self.collectionView.reloadData()
+    }
+    
+    func reloadCollectionVisibleCells() {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(endReloadCollectionVisibleCells), object: nil)
+        guard !self.isReloadingCollectionView else {
+            self.perform(#selector(endReloadCollectionVisibleCells), with: nil, afterDelay: 0.2)
+            return
+        }
+        self.endReloadCollectionVisibleCells()
     }
     
     func cellFor(collectionView: UICollectionView, indexPath: IndexPath, data: Any) -> Cell? {
         guard let object = self.object(at: indexPath) else {
-            fatalError()
+            fatalError("object not found")
         }
         let cellModel = self.viewModel.cellModel(for: indexPath, data: object)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellModel.identifier.identifier, for: indexPath) as! Cell
@@ -219,6 +232,19 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         let resutl = NSCollectionLayoutItem(layoutSize: itemSize)
         resutl.contentInsets = .zero
         return resutl
+    }
+    
+    //MARk: -
+    
+    
+    @objc private func endReloadCollectionVisibleCells() {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(endReloadCollectionVisibleCells), object: nil)
+        if let snapshotReference = self.snapshotReference {
+            let itemIdentifiers = snapshotReference.itemIdentifiers
+            self.snapshotReference?.reloadItems(withIdentifiers: itemIdentifiers)
+            self.dataSourceReference.applySnapshot(snapshotReference, animatingDifferences: false)
+        }
+        
     }
     
 }

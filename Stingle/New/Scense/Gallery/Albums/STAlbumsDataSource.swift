@@ -43,7 +43,9 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
         if snapshot == self.snapshotReference, self.albumFilesDataSource.snapshotReference != nil {
             self.contacts = nil
             super.didChangeContent(with: snapshot)
-        } 
+        }  else {
+            self.reloadCollectionVisibleCells()
+        }
     }
     
 }

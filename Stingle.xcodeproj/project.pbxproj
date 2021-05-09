@@ -127,6 +127,7 @@
 		A049459C2611CDF4008D5E48 /* STView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A049459B2611CDF4008D5E48 /* STView.swift */; };
 		A04945C92611F77C008D5E48 /* STTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04945C82611F77C008D5E48 /* STTabBar.swift */; };
 		A04A20CF2606AE6400AFE2A2 /* Data+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A20CE2606AE6400AFE2A2 /* Data+Operation.swift */; };
+		A04A8ED326473CE200A3DF57 /* STAppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A8ED226473CE200A3DF57 /* STAppSettings.swift */; };
 		A04BD0012634794600C5F29F /* STUploadsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04BD0002634794600C5F29F /* STUploadsVC.swift */; };
 		A04BD005263479A900C5F29F /* STUploadsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04BD004263479A900C5F29F /* STUploadsVM.swift */; };
 		A04BD00A26347A8500C5F29F /* STUploadsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04BD00826347A8400C5F29F /* STUploadsTableViewCell.swift */; };
@@ -156,8 +157,6 @@
 		A074AE40264605AE004C9E9E /* STMoveAlbumFilesVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074AE3F264605AE004C9E9E /* STMoveAlbumFilesVM.swift */; };
 		A074AE4626460A70004C9E9E /* STMoveAlbumFilesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074AE4426460A70004C9E9E /* STMoveAlbumFilesCell.swift */; };
 		A074AE4726460A70004C9E9E /* STMoveAlbumFilesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A074AE4526460A70004C9E9E /* STMoveAlbumFilesCell.xib */; };
-		A074AE4926460A9D004C9E9E /* STMoveAlbumFilesHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074AE4826460A9D004C9E9E /* STMoveAlbumFilesHeader.swift */; };
-		A074AE4B26460AAA004C9E9E /* STMoveAlbumFilesHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = A074AE4A26460AAA004C9E9E /* STMoveAlbumFilesHeader.xib */; };
 		A077780125FFF81100BA2BDF /* STGalleryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A077780025FFF81100BA2BDF /* STGalleryVM.swift */; };
 		A077780925FFFEBB00BA2BDF /* STCrypto+Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = A077780825FFFEBB00BA2BDF /* STCrypto+Header.swift */; };
 		A077780D260000CC00BA2BDF /* STCrypto+PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A077780C260000CC00BA2BDF /* STCrypto+PrivateKey.swift */; };
@@ -381,6 +380,7 @@
 		A049459B2611CDF4008D5E48 /* STView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STView.swift; sourceTree = "<group>"; };
 		A04945C82611F77C008D5E48 /* STTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTabBar.swift; sourceTree = "<group>"; };
 		A04A20CE2606AE6400AFE2A2 /* Data+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Operation.swift"; sourceTree = "<group>"; wrapsLines = 0; };
+		A04A8ED226473CE200A3DF57 /* STAppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAppSettings.swift; sourceTree = "<group>"; };
 		A04BD0002634794600C5F29F /* STUploadsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUploadsVC.swift; sourceTree = "<group>"; };
 		A04BD004263479A900C5F29F /* STUploadsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUploadsVM.swift; sourceTree = "<group>"; };
 		A04BD00826347A8400C5F29F /* STUploadsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUploadsTableViewCell.swift; sourceTree = "<group>"; };
@@ -410,8 +410,6 @@
 		A074AE3F264605AE004C9E9E /* STMoveAlbumFilesVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMoveAlbumFilesVM.swift; sourceTree = "<group>"; };
 		A074AE4426460A70004C9E9E /* STMoveAlbumFilesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMoveAlbumFilesCell.swift; sourceTree = "<group>"; };
 		A074AE4526460A70004C9E9E /* STMoveAlbumFilesCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STMoveAlbumFilesCell.xib; sourceTree = "<group>"; };
-		A074AE4826460A9D004C9E9E /* STMoveAlbumFilesHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMoveAlbumFilesHeader.swift; sourceTree = "<group>"; };
-		A074AE4A26460AAA004C9E9E /* STMoveAlbumFilesHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STMoveAlbumFilesHeader.xib; sourceTree = "<group>"; };
 		A077780025FFF81100BA2BDF /* STGalleryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryVM.swift; sourceTree = "<group>"; };
 		A077780825FFFEBB00BA2BDF /* STCrypto+Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STCrypto+Header.swift"; sourceTree = "<group>"; };
 		A077780C260000CC00BA2BDF /* STCrypto+PrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STCrypto+PrivateKey.swift"; sourceTree = "<group>"; };
@@ -1171,6 +1169,7 @@
 		A033D6F626014B7C00E6AA83 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				A04A8ED226473CE200A3DF57 /* STAppSettings.swift */,
 				A087C46C2614A5B8006775D2 /* STSyncManager.swift */,
 				A005FAEA25FEC1D600E7D8B0 /* STDateManager.swift */,
 				A030DB4226015AAC00721EA7 /* FileSystem */,
@@ -1361,7 +1360,6 @@
 		A074AE4126460A07004C9E9E /* Items */ = {
 			isa = PBXGroup;
 			children = (
-				A074AE4326460A14004C9E9E /* Header */,
 				A074AE4226460A0E004C9E9E /* Cell */,
 			);
 			path = Items;
@@ -1374,15 +1372,6 @@
 				A074AE4526460A70004C9E9E /* STMoveAlbumFilesCell.xib */,
 			);
 			path = Cell;
-			sourceTree = "<group>";
-		};
-		A074AE4326460A14004C9E9E /* Header */ = {
-			isa = PBXGroup;
-			children = (
-				A074AE4826460A9D004C9E9E /* STMoveAlbumFilesHeader.swift */,
-				A074AE4A26460AAA004C9E9E /* STMoveAlbumFilesHeader.xib */,
-			);
-			path = Header;
 			sourceTree = "<group>";
 		};
 		A078F78E2608A915005F40E4 /* FileRetry */ = {
@@ -1806,7 +1795,6 @@
 				A02204AE25EEDC0400D07C98 /* SPCollectionViewCell.xib in Resources */,
 				A0B2678B2624E0FC0090E4ED /* STTrashCollectionViewCell.xib in Resources */,
 				A0E999A1263F2E46002FDCC9 /* STTokenCell.xib in Resources */,
-				A074AE4B26460AAA004C9E9E /* STMoveAlbumFilesHeader.xib in Resources */,
 				A02204B425EEDC0400D07C98 /* SPCollectionHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2032,8 +2020,8 @@
 				A022048925EEDC0400D07C98 /* STAuthWorker.swift in Sources */,
 				A02204AA25EEDC0400D07C98 /* STMainVM.swift in Sources */,
 				A0E999A3263F54A5002FDCC9 /* STContactWorker.swift in Sources */,
-				A074AE4926460A9D004C9E9E /* STMoveAlbumFilesHeader.swift in Sources */,
 				A022048125EEDC0400D07C98 /* STNetworkDispatcher.swift in Sources */,
+				A04A8ED326473CE200A3DF57 /* STAppSettings.swift in Sources */,
 				A05D268D261B489C008E9CF8 /* STMenuMasterHeaderView.swift in Sources */,
 				A0F1437925FAC67B004C0E87 /* STContactProvider.swift in Sources */,
 				A06E423D2627230E00F43826 /* STAlbumsCollectionViewCell.swift in Sources */,

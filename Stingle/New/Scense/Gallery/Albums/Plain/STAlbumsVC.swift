@@ -131,7 +131,7 @@ class STAlbumsVC: STFilesViewController<STAlbumsVC.ViewModel> {
         self.dataSource.viewModel.isEditMode = !self.dataSource.viewModel.isEditMode
         let title = self.dataSource.viewModel.isEditMode ? "done".localized : "edit".localized
         self.editBarButtonItem.title = title
-        self.dataSource.reloadVisibleItems()
+        self.dataSource.reloadCollection()
     }
     
     @IBAction private func didSelectAddAlbum(_ sender: Any) {

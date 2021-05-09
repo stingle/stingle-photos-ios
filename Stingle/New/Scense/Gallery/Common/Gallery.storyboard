@@ -604,46 +604,104 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UdC-5E-Ktq">
-                                <rect key="frame" x="0.0" y="88" width="414" height="60.5"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="K6y-m8-pRG">
+                                <rect key="frame" x="0.0" y="88" width="414" height="120.5"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1ti-iT-HHI">
-                                        <rect key="frame" x="43.5" y="0.0" width="327.5" height="60.5"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UdC-5E-Ktq">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="60.5"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete original items after adding" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="iIT-ZT-fqd">
-                                                <rect key="frame" x="0.0" y="20" width="258.5" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                <color key="textColor" name="STText"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="67e-1A-hKu">
-                                                <rect key="frame" x="278.5" y="15" width="51" height="31"/>
-                                                <color key="onTintColor" name="STPrimary"/>
-                                            </switch>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1ti-iT-HHI">
+                                                <rect key="frame" x="43.5" y="0.0" width="327.5" height="60.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete original items after adding" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="iIT-ZT-fqd">
+                                                        <rect key="frame" x="0.0" y="20" width="258.5" height="20.5"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                                        <color key="textColor" name="STText"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="67e-1A-hKu">
+                                                        <rect key="frame" x="278.5" y="15" width="51" height="31"/>
+                                                        <color key="onTintColor" name="STPrimary"/>
+                                                    </switch>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="67e-1A-hKu" secondAttribute="trailing" id="2kz-gU-L52"/>
+                                                    <constraint firstItem="67e-1A-hKu" firstAttribute="leading" secondItem="iIT-ZT-fqd" secondAttribute="trailing" constant="20" id="4ho-m9-jVU"/>
+                                                    <constraint firstItem="iIT-ZT-fqd" firstAttribute="top" secondItem="1ti-iT-HHI" secondAttribute="top" constant="20" id="JkI-om-XPO"/>
+                                                    <constraint firstItem="iIT-ZT-fqd" firstAttribute="leading" secondItem="1ti-iT-HHI" secondAttribute="leading" id="KXA-xD-Nws"/>
+                                                    <constraint firstItem="67e-1A-hKu" firstAttribute="centerY" secondItem="1ti-iT-HHI" secondAttribute="centerY" id="hcH-X3-J1G"/>
+                                                    <constraint firstAttribute="bottom" secondItem="iIT-ZT-fqd" secondAttribute="bottom" constant="20" id="x8h-OE-SO6"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="67e-1A-hKu" secondAttribute="trailing" id="2kz-gU-L52"/>
-                                            <constraint firstItem="67e-1A-hKu" firstAttribute="leading" secondItem="iIT-ZT-fqd" secondAttribute="trailing" constant="20" id="4ho-m9-jVU"/>
-                                            <constraint firstItem="iIT-ZT-fqd" firstAttribute="top" secondItem="1ti-iT-HHI" secondAttribute="top" constant="20" id="JkI-om-XPO"/>
-                                            <constraint firstItem="iIT-ZT-fqd" firstAttribute="leading" secondItem="1ti-iT-HHI" secondAttribute="leading" id="KXA-xD-Nws"/>
-                                            <constraint firstItem="67e-1A-hKu" firstAttribute="centerY" secondItem="1ti-iT-HHI" secondAttribute="centerY" id="hcH-X3-J1G"/>
-                                            <constraint firstAttribute="bottom" secondItem="iIT-ZT-fqd" secondAttribute="bottom" constant="20" id="x8h-OE-SO6"/>
+                                            <constraint firstAttribute="bottom" secondItem="1ti-iT-HHI" secondAttribute="bottom" id="WNT-yw-lHs"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1ti-iT-HHI" secondAttribute="trailing" id="YMS-O8-Erc"/>
+                                            <constraint firstItem="1ti-iT-HHI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="UdC-5E-Ktq" secondAttribute="leading" id="cHC-Af-DhG"/>
+                                            <constraint firstItem="1ti-iT-HHI" firstAttribute="top" secondItem="UdC-5E-Ktq" secondAttribute="top" id="iUP-qh-4Z0"/>
+                                            <constraint firstItem="1ti-iT-HHI" firstAttribute="centerX" secondItem="UdC-5E-Ktq" secondAttribute="centerX" id="zEm-E8-Mld"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HE2-p5-IqI">
+                                        <rect key="frame" x="0.0" y="60.5" width="414" height="60"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="h4O-7Q-Sfz">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tka-DQ-BYQ" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="207" height="60"/>
+                                                        <color key="tintColor" name="STPrimary"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="18" maxX="0.0" maxY="18"/>
+                                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
+                                                        <state key="normal" title="Main gallery" image="ic_gallery_min">
+                                                            <color key="titleColor" name="STText"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="titleMinimumScaleFactor">
+                                                                <real key="value" value="0.69999999999999996"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="didSelecctMainGalleryButton:" destination="dDk-OY-QQq" eventType="touchUpInside" id="Mi8-ep-iKK"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvn-d7-faO" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                                        <rect key="frame" x="207" y="0.0" width="207" height="60"/>
+                                                        <color key="tintColor" name="STPrimary"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="18" maxX="0.0" maxY="18"/>
+                                                        <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
+                                                        <state key="normal" title="Create new album" image="ic_create_album">
+                                                            <color key="titleColor" name="STText"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="titleMinimumScaleFactor">
+                                                                <real key="value" value="0.69999999999999996"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="didCreateNewAlbumButton:" destination="dDk-OY-QQq" eventType="touchUpInside" id="VfE-R8-Le1"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="h4O-7Q-Sfz" secondAttribute="bottom" id="5du-R6-cCe"/>
+                                            <constraint firstAttribute="trailing" secondItem="h4O-7Q-Sfz" secondAttribute="trailing" id="6Q3-te-8hC"/>
+                                            <constraint firstItem="h4O-7Q-Sfz" firstAttribute="leading" secondItem="HE2-p5-IqI" secondAttribute="leading" id="GtT-Kl-7cq"/>
+                                            <constraint firstItem="h4O-7Q-Sfz" firstAttribute="top" secondItem="HE2-p5-IqI" secondAttribute="top" id="LFh-DU-2iz"/>
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="1ti-iT-HHI" secondAttribute="bottom" id="WNT-yw-lHs"/>
-                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1ti-iT-HHI" secondAttribute="trailing" id="YMS-O8-Erc"/>
-                                    <constraint firstItem="1ti-iT-HHI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="UdC-5E-Ktq" secondAttribute="leading" id="cHC-Af-DhG"/>
-                                    <constraint firstItem="1ti-iT-HHI" firstAttribute="top" secondItem="UdC-5E-Ktq" secondAttribute="top" id="iUP-qh-4Z0"/>
-                                    <constraint firstItem="1ti-iT-HHI" firstAttribute="centerX" secondItem="UdC-5E-Ktq" secondAttribute="centerX" id="zEm-E8-Mld"/>
-                                </constraints>
-                            </view>
+                            </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XKL-Ly-Idj">
-                                <rect key="frame" x="0.0" y="148.5" width="414" height="713.5"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <rect key="frame" x="0.0" y="208.5" width="414" height="653.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SPk-Jk-1IL">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -651,17 +709,20 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells/>
+                                <connections>
+                                    <outlet property="delegate" destination="dDk-OY-QQq" id="6QR-YO-zVu"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="j3P-oF-xR2"/>
                         <color key="backgroundColor" name="STBackground"/>
                         <constraints>
-                            <constraint firstItem="UdC-5E-Ktq" firstAttribute="top" secondItem="j3P-oF-xR2" secondAttribute="top" id="3cs-gR-yzV"/>
                             <constraint firstItem="XKL-Ly-Idj" firstAttribute="leading" secondItem="j3P-oF-xR2" secondAttribute="leading" id="72w-5b-R3t"/>
                             <constraint firstItem="j3P-oF-xR2" firstAttribute="bottom" secondItem="XKL-Ly-Idj" secondAttribute="bottom" id="Fu4-XL-2r0"/>
-                            <constraint firstItem="UdC-5E-Ktq" firstAttribute="leading" secondItem="j3P-oF-xR2" secondAttribute="leading" id="JzJ-cG-0vO"/>
-                            <constraint firstItem="j3P-oF-xR2" firstAttribute="trailing" secondItem="UdC-5E-Ktq" secondAttribute="trailing" id="OYA-qg-2aA"/>
-                            <constraint firstItem="XKL-Ly-Idj" firstAttribute="top" secondItem="UdC-5E-Ktq" secondAttribute="bottom" id="eg2-bU-ADG"/>
+                            <constraint firstItem="XKL-Ly-Idj" firstAttribute="top" secondItem="K6y-m8-pRG" secondAttribute="bottom" id="JrI-qH-LLP"/>
+                            <constraint firstItem="K6y-m8-pRG" firstAttribute="top" secondItem="j3P-oF-xR2" secondAttribute="top" id="Wmj-Hl-4oU"/>
+                            <constraint firstItem="K6y-m8-pRG" firstAttribute="trailing" secondItem="j3P-oF-xR2" secondAttribute="trailing" id="XiK-3r-teH"/>
+                            <constraint firstItem="K6y-m8-pRG" firstAttribute="leading" secondItem="j3P-oF-xR2" secondAttribute="leading" id="flZ-70-zre"/>
                             <constraint firstItem="j3P-oF-xR2" firstAttribute="trailing" secondItem="XKL-Ly-Idj" secondAttribute="trailing" id="mUM-Pn-8ix"/>
                         </constraints>
                     </view>
@@ -675,7 +736,11 @@
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="XKL-Ly-Idj" id="8cc-c2-rHK"/>
-                        <outlet property="deleeFileLabel" destination="iIT-ZT-fqd" id="ayl-gX-nRq"/>
+                        <outlet property="createNewAlbum" destination="Cvn-d7-faO" id="UZM-Wl-Gj9"/>
+                        <outlet property="deleteFileLabel" destination="iIT-ZT-fqd" id="ayl-gX-nRq"/>
+                        <outlet property="deleteFilesBgView" destination="UdC-5E-Ktq" id="Mxc-ib-xs3"/>
+                        <outlet property="deleteFilesSwitcher" destination="67e-1A-hKu" id="wB9-YS-Kh4"/>
+                        <outlet property="mainGalleryButton" destination="Tka-DQ-BYQ" id="M9q-16-PCu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9yS-nq-ma3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -685,7 +750,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Mwj-W6-8p0">
             <objects>
-                <navigationController id="IGO-CV-sc4" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="goToMoveAlbumFiles" id="IGO-CV-sc4" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="RXf-uH-Wc4">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -918,11 +983,20 @@
             <point key="canvasLocation" x="-1333" y="1775"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="Cvn-d7-faO">
+            <size key="intrinsicContentSize" width="170" height="60"/>
+        </designable>
+        <designable name="Tka-DQ-BYQ">
+            <size key="intrinsicContentSize" width="121" height="60"/>
+        </designable>
+    </designables>
     <inferredMetricsTieBreakers>
         <segue reference="Dtb-DJ-8L1"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ic_album_min" width="20" height="20"/>
+        <image name="ic_create_album" width="24" height="24"/>
         <image name="ic_empty_albums" width="190" height="201"/>
         <image name="ic_empty_files" width="204.5" height="200"/>
         <image name="ic_empty_shared_albums" width="198" height="197"/>
@@ -947,9 +1021,6 @@
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

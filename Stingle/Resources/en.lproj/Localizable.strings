@@ -74,6 +74,9 @@
 "next" = "Next";
 "share" = "Share";
 
+"create_new_album" = "Create new album";
+"main_gallry" = "Main gallry";
+
 //MARK: - Share
 
 "share_via_stingle_photos" = "Share";
@@ -118,6 +121,9 @@
 
 "delete_album_files_alert_title" = "Delete items?";
 "delete_album_files_alert_message" = "Do you really want to move %@ file to trash";
+
+"add_or_move_album" = "Add or move album";
+"delete_original_items_after_adding" = "Delete original items after adding";
 
 //MARK: - Menu
 

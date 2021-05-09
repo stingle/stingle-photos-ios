@@ -32,8 +32,15 @@ class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewCo
     func configureLocalize() {}
     
     func configureRefreshControl() {
+        guard self.shouldAddRefreshControl() else {
+            return
+        }
         self.refreshControl.addTarget(self, action: #selector(self.refreshControl(didRefresh:)), for: .valueChanged)
         self.collectionView.addSubview(self.refreshControl)
+    }
+    
+    func shouldAddRefreshControl() -> Bool {
+        return true
     }
     
     func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {

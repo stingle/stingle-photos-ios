@@ -11,7 +11,7 @@ protocol IViewDataSource: AnyObject {
     func reloadData()
 }
 
-class STViewDataSource<Model: IManagedObject>: IViewDataSource, IProviderDelegate {
+class STViewDataSource<Model: IManagedObject>: NSObject, IViewDataSource, IProviderDelegate {
     
     var snapshotReference: NSDiffableDataSourceSnapshotReference? {
         return self.dbDataSource.snapshotReference
@@ -21,6 +21,7 @@ class STViewDataSource<Model: IManagedObject>: IViewDataSource, IProviderDelegat
     
     init(dbDataSource: STDataBase.DataSource<Model>) {
         self.dbDataSource = dbDataSource
+        super.init()
         dbDataSource.delegate = self
     }
     

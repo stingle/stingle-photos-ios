@@ -69,8 +69,7 @@ class STAlbumWorker: STWorker {
         }
     }
     
-    
-    func moveFiles(fromAlbum: STLibrary.Album, toAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isMoving: Bool, reloadDBData: Bool, success: Success<STEmptyResponse>?, failure: Failure?) {
+    func moveFiles(fromAlbum: STLibrary.Album, toAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isMoving: Bool, reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         
         let crypto = STApplication.shared.crypto
         let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
@@ -99,10 +98,11 @@ class STAlbumWorker: STWorker {
             }
             
             let request = STAlbumRequest.moveFile(fromSet: .album, toSet: .album, albumIdFrom: fromAlbum.albumId, albumIdTo: toAlbum.albumId, isMoving: isMoving, headers: newHeaders, files: files)
+            
             self.request(request: request, success: { (response: STEmptyResponse) in
                 
                 if isMoving {
-                    albumFilesProvider.delete(models: files, reloadData: false)
+                    albumFilesProvider.delete(models: files, reloadData: reloadDBData)
                 }
                 
                 let updatedAlbum = STLibrary.Album(albumId: toAlbum.albumId,

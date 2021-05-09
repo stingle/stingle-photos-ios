@@ -295,7 +295,10 @@ extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
     }
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectCopyButton sendner: UIButton) {
-        
+        let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
+        let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
+        (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .albumFiles(album: self.album, files: self.viewModel.getFiles(fileNames: selectedFileNames))
+        self.showDetailViewController(navVC, sender: nil)
     }
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
