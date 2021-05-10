@@ -125,6 +125,15 @@
 "add_or_move_album" = "Add or move album";
 "delete_original_items_after_adding" = "Delete original items after adding";
 
+"rename_album" = "Renamne album";
+"set_blank_album_cover" = "Set a blank album cover";
+"reset_album_cover" = "Reset album cover";
+"set_album_cover" = "Set as album cover";
+"delate_album" = "Delete album";
+"leave_album" = "Leave album";
+"download_selection" = "Download selection";
+"please_select_items" = "Please select items";
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";

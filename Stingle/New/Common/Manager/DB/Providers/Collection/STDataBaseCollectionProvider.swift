@@ -196,7 +196,7 @@ extension STDataBase {
                 if reloadData {
                     self.reloadData()
                     self.observerProvider.forEach { observer in
-                        observer.dataBaseCollectionProvider(didDeleted: self, models: models)
+                        observer.dataBaseCollectionProvider(didUpdated: self, models: models)
                     }
                 }
             }            

@@ -14,7 +14,7 @@ extension STAlbumsVC {
         typealias Cell = STAlbumsCollectionViewCell
         typealias CDModel = STCDAlbum
         
-        static let imageBlankImageName = "__b__"
+        static let imageBlankImageName = STLibrary.Album.imageBlankImageName
         weak var delegate: STAlbumsDataSourceViewModelDelegate?
         var isEditMode = false
         
@@ -76,6 +76,11 @@ class STAlbumsVC: STFilesViewController<STAlbumsVC.ViewModel> {
     private let segueIdentifierAlbumFiles = "AlbumFiles"
     
     @IBOutlet weak private var editBarButtonItem: UIBarButtonItem!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.collectionView.reloadData()
+    }
     
     override func configureLocalize() {
         self.navigationItem.title = "albums".localized

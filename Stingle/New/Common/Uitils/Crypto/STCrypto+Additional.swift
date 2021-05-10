@@ -112,7 +112,7 @@ extension STCrypto {
         }
     }
     
-    func encryptParamsForServer(params: [String: Any]) throws -> String {
+    func encryptParamsForServer(params: [String: Any?]) throws -> String {
         let spbk  = try self.getServerPublicKey()
         guard let pks = KeyManagement.key else {
             throw CryptoError.Bundle.pivateKeyIsEmpty

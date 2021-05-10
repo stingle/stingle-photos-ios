@@ -19,53 +19,86 @@ protocol IAlbumsViewModel: ICollectionDataSourceViewModel where CDModel == STCDA
 class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSource<ViewModel> {
     
     private var contacts: [STContact]?
-    
-    lazy var albumFilesDataSource: STDataBase.DataSource<STCDAlbumFile> = {
-        let dataSource = STApplication.shared.dataBase.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.albumId), #keyPath(STCDAlbumFile.dateCreated)], sectionNameKeyPath: #keyPath(STCDAlbumFile.albumId), predicate: nil, cacheName: nil)
-        return dataSource
-    }()
+    private var albumInfoFiles = [String: AlbumInfo]()
     
     init(collectionView: UICollectionView, predicate: NSPredicate?, viewModel: ViewModel) {
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
         let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil, predicate: predicate, cacheName: nil)
         super.init(dbDataSource: dbDataSource, collectionView: collectionView, viewModel: viewModel)
         self.viewModel.delegate = self
-        self.albumFilesDataSource.delegate = self
-        self.albumFilesDataSource.reloadData()
-    }
-    
-    convenience init(collectionView: UICollectionView, isShared: Bool, viewModel: ViewModel) {
-        let predicate = NSPredicate(format: "isShared == %i", isShared)
-        self.init(collectionView: collectionView, predicate: predicate, viewModel: viewModel)
-    }
-        
-    override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
-        if snapshot == self.snapshotReference, self.albumFilesDataSource.snapshotReference != nil {
-            self.contacts = nil
-            super.didChangeContent(with: snapshot)
-        }  else {
-            self.reloadCollectionVisibleCells()
-        }
+        STApplication.shared.dataBase.albumFilesProvider.add(self)
     }
     
 }
 
 extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
     
+    struct AlbumInfo {
+        let albumFile: STLibrary.AlbumFile?
+        let countFiles: Int
+    }
+    
     func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?) {
-        var countFiles: Int = 0
-        var file: STLibrary.AlbumFile?
-        if let filesSnapshotReference = self.albumFilesDataSource.snapshotReference, let fileSectionIndex = filesSnapshotReference.sectionIdentifiers.firstIndex(where: {$0 as? String == album.albumId}) {
-            countFiles = filesSnapshotReference.numberOfItems(inSection: album.albumId)
-            file = self.albumFilesDataSource.object(at: IndexPath(row: 0, section: fileSectionIndex))
+        var albumInfo: AlbumInfo!
+        let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
+        if let info = self.albumInfoFiles[album.albumId] {
+            albumInfo = info
+        } else {
+            let albumFiles = albumFilesProvider.fetch(for: album.albumId, sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated)], ascending: false)
+            if album.cover == STLibrary.Album.imageBlankImageName {
+                albumInfo = AlbumInfo(albumFile: nil, countFiles: albumFiles.count)
+            } else if let cover = album.cover {
+                if  let first = albumFiles.first(where: { $0.file == cover }) {
+                    let albumFile = try? STLibrary.AlbumFile(model: first)
+                    albumInfo = AlbumInfo(albumFile: albumFile, countFiles: albumFiles.count)
+                } else {
+                    albumInfo = AlbumInfo(albumFile: nil, countFiles: albumFiles.count)
+                }
+            } else {
+                if let first = albumFiles.first {
+                    let albumFile = try? STLibrary.AlbumFile(model: first)
+                    albumInfo = AlbumInfo(albumFile: albumFile, countFiles: albumFiles.count)
+                } else {
+                    albumInfo = AlbumInfo(albumFile: nil, countFiles: albumFiles.count)
+                }
+            }
         }
+        
         if self.contacts == nil {
             self.contacts = STApplication.shared.dataBase.contactProvider.fetchAllObjects()
         }
+        
         let members = album.members?.components(separatedBy: ",")
         let contacts = self.contacts?.filter({ members?.contains($0.userId) ?? false })
-        return (countFiles, file, contacts)
-        
+        return (albumInfo.countFiles, albumInfo.albumFile, contacts)
+    }
+    
+}
+
+extension STAlbumsDataSource: ICollectionProviderObserver {
+    
+    func dataBaseCollectionProvider(didAdded provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+        if provider === STApplication.shared.dataBase.contactProvider {
+            self.contacts = nil
+        } else if provider === STApplication.shared.dataBase.albumFilesProvider {
+            self.albumInfoFiles.removeAll()
+        }
+    }
+    
+    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+        if provider === STApplication.shared.dataBase.contactProvider {
+            self.contacts = nil
+        } else if provider === STApplication.shared.dataBase.albumFilesProvider {
+            self.albumInfoFiles.removeAll()
+        }
+    }
+    
+    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+        if provider === STApplication.shared.dataBase.contactProvider {
+            self.contacts = nil
+        } else if provider === STApplication.shared.dataBase.albumFilesProvider {
+            self.albumInfoFiles.removeAll()
+        }
     }
     
 }

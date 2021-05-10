@@ -8,6 +8,76 @@
 import Foundation
 
 class STAlbumWorker: STWorker {
+    
+    func setCover(album: STLibrary.Album, caver: String?, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
+        
+        let request = STAlbumRequest.setCover(album: album, caver: caver)
+        
+        self.request(request: request, success: { (response: STEmptyResponse) in
+            let albumFilesProvider = STApplication.shared.dataBase.albumsProvider
+            
+            let album = STLibrary.Album(albumId: album.albumId,
+                                        encPrivateKey: album.encPrivateKey,
+                                        publicKey: album.publicKey,
+                                        metadata: album.metadata,
+                                        isShared: album.isShared,
+                                        isHidden: album.isHidden,
+                                        isOwner: album.isOwner,
+                                        isLocked: album.isLocked,
+                                        isRemote: album.isRemote,
+                                        permissions: album.permissions,
+                                        members: album.members,
+                                        cover: caver,
+                                        dateCreated: album.dateCreated,
+                                        dateModified: Date())
+            
+            albumFilesProvider.update(models: [album], reloadData: true)
+            success(response)
+        }, failure: failure)
+        
+    }
+    
+    func rename(album: STLibrary.Album, name: String?, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
+        
+        let name = name ?? ""
+        
+        let crypto = STApplication.shared.crypto
+        do {
+            
+            let metadata = try STApplication.shared.crypto.decryptAlbum(albumPKStr: album.publicKey, encAlbumSKStr: album.encPrivateKey, metadataStr: album.metadata)
+            let metadataBytes = try crypto.encryptAlbumMetadata(albumPK: metadata.publicKey, albumName: name)
+            guard let metadata = crypto.bytesToBase64(data: metadataBytes) else {
+                failure?(WorkerError.unknown)
+                return
+            }
+            let request = STAlbumRequest.rename(album: album, metadata: metadata)
+            
+            self.request(request: request, success: { (response: STEmptyResponse) in
+                let albumFilesProvider = STApplication.shared.dataBase.albumsProvider
+                let album = STLibrary.Album(albumId: album.albumId,
+                                            encPrivateKey: album.encPrivateKey,
+                                            publicKey: album.publicKey,
+                                            metadata: metadata,
+                                            isShared: album.isShared,
+                                            isHidden: album.isHidden,
+                                            isOwner: album.isOwner,
+                                            isLocked: album.isLocked,
+                                            isRemote: album.isRemote,
+                                            permissions: album.permissions,
+                                            members: album.members,
+                                            cover: album.cover,
+                                            dateCreated: album.dateCreated,
+                                            dateModified: Date())
+                
+                albumFilesProvider.update(models: [album], reloadData: true)
+                success(response)
+            }, failure: failure)
+            
+        } catch {
+            failure?(WorkerError.error(error: error))
+        }
+        
+    }
         
     func deleteAlbumWithFiles(album: STLibrary.Album, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
         let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: album.albumId)

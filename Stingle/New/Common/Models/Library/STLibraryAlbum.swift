@@ -173,6 +173,8 @@ extension STLibrary {
 
 extension STLibrary.Album {
     
+    static let imageBlankImageName = "__b__"
+    
     struct Permission {
         
         static let permissionVersion = 1;

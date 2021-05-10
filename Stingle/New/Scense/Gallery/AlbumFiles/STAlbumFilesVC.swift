@@ -165,18 +165,40 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     //MARK: - UserAction
     
     @IBAction func didSelectMoreButton(_ sender: UIBarButtonItem) {
+        let fileNames = self.dataSource.viewModel.isSelectedMode ? [String](self.dataSource.viewModel.selectedFileNames) : nil
+        var actions = [STAlbumFilesVC.AlbumAction]()
+        do {
+            actions = try self.viewModel.getAlbumAction(fileNames: fileNames)
+        } catch {
+            if let error = error as? IError {
+                self.showError(error: error)
+            }
+            return
+        }
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actions.forEach { action in
+            let action = UIAlertAction(title: action.localized, style: .default) { [weak self] _ in
+                self?.didSelectShitAction(action: action)
+            }
+            alert.addAction(action)
+        }
         
+        let cancelAction = UIAlertAction(title: "cancel".localized, style: .cancel)
+        alert.addAction(cancelAction)
+        
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.barButtonItem = sender
+        }
+        self.showDetailViewController(alert, sender: nil)
     }
     
     @IBAction func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
-        
         if !self.album.isShared {
             let storyboard = UIStoryboard(name: "Shear", bundle: .main)
             let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersVCID") as! UINavigationController)
             (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .album(album: self.album)
             self.showDetailViewController(vc, sender: nil)
         }
-                
     }
     
     @IBAction func didSelectAddButton(_ sender: Any) {
@@ -193,6 +215,63 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     }
     
     //MARK: - Private
+    
+    private func didSelectShitAction(action: AlbumAction) {
+        
+        let loadingView: UIView =  self.navigationController?.view ?? self.view
+        
+        func didResiveResult(error: IError?) {
+            STLoadingView.hide(in: loadingView)
+            if let error = error {
+                self.showError(error: error)
+            }
+        }
+        
+        switch action {
+        case .rename:
+            let placeholder = "album_name".localized
+            let title = "rename_album".localized
+            self.showOkCancelAlert(title: title, message: nil, textFieldText: self.album.albumMetadata?.name, textFieldPlaceholder: placeholder) { [weak self] newName in
+                STLoadingView.show(in: loadingView)
+                self?.viewModel.renameAlbum(newName: newName, result: { error in
+                    didResiveResult(error: error)
+                })
+            }
+        case .setBlankCover:
+            STLoadingView.show(in: loadingView)
+            self.viewModel.setBlankCover { error in
+                didResiveResult(error: error)
+            }
+        case .resetBlankCover:
+            STLoadingView.show(in: loadingView)
+            self.viewModel.resetBlankCover { error in
+                didResiveResult(error: error)
+            }
+        case .delete:
+            let title = String(format: "delete_album_alert_title".localized, album.albumMetadata?.name ?? "")
+            let message = String(format: "delete_album_alert_message".localized, album.albumMetadata?.name ?? "")
+            self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+                STLoadingView.show(in: loadingView)
+                self?.viewModel.delete { error in
+                    didResiveResult(error: error)
+                }
+            }
+        case .leave:
+            STLoadingView.show(in: loadingView)
+            self.viewModel.leave { error in
+                didResiveResult(error: error)
+            }
+        case .setCover:
+            STLoadingView.show(in: loadingView)
+            let fileName = self.dataSource.viewModel.selectedFileNames.first ?? ""
+            self.viewModel.setCover(fileName: fileName) { error in
+                didResiveResult(error: error)
+            }
+        case .downloadSelection:
+            break
+        }
+        
+    }
     
     private func updateSelectedItesmCount() {
         let count = self.dataSource.viewModel.selectedFileNames.count
@@ -226,14 +305,22 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         self.albumSettingsButtonItem.image = image
     }
     
-    private func showokCancelAlert(title: String?, message: String?, handler: @escaping (() -> Void)) {
+    private func showOkCancelAlert(title: String?, message: String?, textFieldText: String? = nil, textFieldPlaceholder: String? = nil, handler: @escaping ((String?) -> Void)) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "ok".localized, style: .default) {_ in
-            handler()
+            handler(alert.textFields?.first?.text)
         }
         let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
         alert.addAction(ok)
         alert.addAction(cancel)
+        
+        if let textFieldPlaceholder = textFieldPlaceholder {
+            alert.addTextField { (textField) in
+                textField.text = textFieldText
+                textField.placeholder = textFieldPlaceholder
+            }
+        }
+        
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -253,6 +340,8 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
             }
         }
     }
+    
+    
     
 }
 
@@ -309,7 +398,8 @@ extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
         let count = self.dataSource.viewModel.selectedFileNames.count
         let title = "delete_album_files_alert_title".localized
         let message = String(format: "delete_album_files_alert_message".localized, "\(count)")
-        self.showokCancelAlert(title: title, message: message) { [weak self] in
+        
+        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
             self?.deleteSelectedFiles()
         }
     }
@@ -319,13 +409,51 @@ extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
 extension STAlbumFilesVC: STAlbumFilesVMDelegate {
     
     func albumFilesVM(didDeletedAlbum albumFilesVM: STAlbumFilesVM) {
-        
+        self.navigationController?.popViewController(animated: true)
     }
     
     func albumFilesVM(didUpdatedAlbum albumFilesVM: STAlbumFilesVM, album: STLibrary.Album) {
         self.album = album
         self.configureAlbumActionView()
         self.configureLocalize()
+    }
+    
+}
+
+
+extension STAlbumFilesVC {
+    
+    enum AlbumAction {
+        
+        case rename
+        case setBlankCover
+        case resetBlankCover
+        case delete
+        case leave
+        case setCover
+        case downloadSelection
+        
+        var localized: String {
+
+            switch self {
+            case .rename:
+                return "rename_album".localized
+            case .setBlankCover:
+                return "set_blank_album_cover".localized
+            case .resetBlankCover:
+                return "reset_album_cover".localized
+            case .delete:
+                return "delate_album".localized
+            case .leave:
+                return "leave_album".localized
+            case .setCover:
+                return "set_album_cover".localized
+            case .downloadSelection:
+                return "download_selection".localized
+            }
+
+        }
+        
     }
     
 }

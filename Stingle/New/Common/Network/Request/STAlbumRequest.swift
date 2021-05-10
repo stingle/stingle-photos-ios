@@ -8,11 +8,13 @@
 import Foundation
 
 enum STAlbumRequest {
+    
     case create(album: STLibrary.Album)
     case moveFile(fromSet: STLibrary.DBSet, toSet: STLibrary.DBSet, albumIdFrom: String, albumIdTo: String?, isMoving: Bool, headers: [String: String], files: [STLibrary.File])
     case deleteAlbum(albumID: String)
-    
     case sharedAlbum(album: STLibrary.Album, sharingKeys: [String: String])
+    case setCover(album: STLibrary.Album, caver: String?)
+    case rename(album: STLibrary.Album, metadata: String)
     
 }
 
@@ -53,6 +55,13 @@ extension STAlbumRequest: IEncryptedRequest {
             let albumData = album.toString() ?? ""
             let sharingKeys = sharingKeys.toString() ?? ""
             return ["album": albumData, "sharingKeys": sharingKeys]
+        case .setCover(let album, let caver):
+            if let caver = caver {
+                return ["albumId": album.albumId, "cover": caver]
+            }
+            return ["albumId": album.albumId]
+        case .rename(let album, let metadata):
+            return ["albumId": album.albumId, "metadata": metadata]
         }
     }
     
@@ -66,6 +75,10 @@ extension STAlbumRequest: IEncryptedRequest {
             return "sync/deleteAlbum"
         case .sharedAlbum:
             return "sync/share"
+        case .setCover:
+            return "sync/changeAlbumCover"
+        case .rename:
+            return "sync/renameAlbum"
         }
     }
     
@@ -78,6 +91,10 @@ extension STAlbumRequest: IEncryptedRequest {
         case .deleteAlbum:
             return .post
         case .sharedAlbum:
+            return .post
+        case .setCover:
+            return .post
+        case .rename:
             return .post
         }
     }
@@ -92,6 +109,10 @@ extension STAlbumRequest: IEncryptedRequest {
             return nil
         case .sharedAlbum:
             return nil
+        case .setCover:
+            return nil
+        case .rename:
+            return nil
         }
     }
     
@@ -104,6 +125,10 @@ extension STAlbumRequest: IEncryptedRequest {
         case .deleteAlbum:
             return STNetworkDispatcher.Encoding.body
         case .sharedAlbum:
+            return STNetworkDispatcher.Encoding.body
+        case .setCover:
+            return STNetworkDispatcher.Encoding.body
+        case .rename:
             return STNetworkDispatcher.Encoding.body
         }
     }

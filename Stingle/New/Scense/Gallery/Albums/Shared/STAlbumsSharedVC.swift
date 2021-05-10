@@ -14,7 +14,7 @@ extension STAlbumsSharedVC {
         typealias Cell = STAlbumsSharedCollectionViewCell
         typealias CDModel = STCDAlbum
         
-        static let imageBlankImageName = "__b__"
+        static let imageBlankImageName = STLibrary.Album.imageBlankImageName
         weak var delegate: STAlbumsDataSourceViewModelDelegate?
         
         enum Identifier: CaseIterable, IViewDataSourceItemIdentifier {
@@ -87,6 +87,11 @@ class STAlbumsSharedVC: STFilesViewController<STAlbumsSharedVC.ViewModel> {
         
     private let viewModel = STAlbumsSharedVM()
     private let segueIdentifierAlbumFiles = "AlbumFiles"
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.collectionView.reloadData()
+    }
     
     override func configureLocalize() {
         self.navigationItem.title = "sharing".localized
