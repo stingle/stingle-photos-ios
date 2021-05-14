@@ -7,19 +7,19 @@
 
 import Foundation
 
-extension STFileRetryerManager {
+extension SDownloaderManager {
         
     class MemoryCache {
         
-        func retryFile(source: IRetrySource, success: @escaping RetryerSuccess<Data>, failure: @escaping RetryerFailure) {
-            guard let fileData = STApplication.shared.fileSystem.contents(in: source.fileSaveUrl) else {
+        func retryFile(source: IDownloaderSource, success: @escaping RetryerSuccess<Bool>, failure: @escaping RetryerFailure) {
+            guard STApplication.shared.fileSystem.fileExists(atPath: source.fileSaveUrl.path) else {
                 failure(RetryerError.fileNotFound)
                 return
             }
-            success(fileData)
+            success(true)
         }
         
-        func didDownload(source: IRetrySource) throws {
+        func didDownload(source: IDownloaderSource) throws {
             let fromUrl = source.fileTmpUrl
             let toUrl = source.fileSaveUrl
             if toUrl != fromUrl {
@@ -27,7 +27,7 @@ extension STFileRetryerManager {
             }
         }
         
-        func resetCache(source: IRetrySource) {
+        func resetCache(source: IDownloaderSource) {
             STApplication.shared.fileSystem.updateUrlDataSize(url: source.fileSaveUrl, size: 2000)
         }
                         

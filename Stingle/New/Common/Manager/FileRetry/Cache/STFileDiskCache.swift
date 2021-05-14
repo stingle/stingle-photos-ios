@@ -17,11 +17,7 @@ extension IDiskCacheObject {
     }
 }
 
-//protocol IDiskCacheObject: AnyObject {
-//    var diskCacheCost: Int? { get }
-//}
-
-extension STFileRetryerManager {
+extension SDownloaderManager {
     
     class DiskCache<T: IDiskCacheObject> {
         
@@ -31,7 +27,7 @@ extension STFileRetryerManager {
             self.storage.countLimit = countLimit
         }
         
-        func retryFile(source: IRetrySource, success: @escaping RetryerSuccess<T>, failure: @escaping RetryerFailure) {
+        func retryFile(source: IDownloaderSource, success: @escaping RetryerSuccess<T>, failure: @escaping RetryerFailure) {
             if let obj = self.object(for: source.identifier) {
                 success(obj)
             } else {
@@ -39,7 +35,7 @@ extension STFileRetryerManager {
             }
         }
         
-        func didAddedMemry(source: IRetrySource) throws {
+        func didAddedMemry(source: IDownloaderSource) throws {
             guard let data = STApplication.shared.fileSystem.contents(in: source.fileSaveUrl) else {
                 throw RetryerError.fileNotFound
             }
@@ -57,38 +53,10 @@ extension STFileRetryerManager {
             return result
         }
         
-        func createObject(from data: Data, source: IRetrySource) throws -> T {
+        func createObject(from data: Data, source: IDownloaderSource) throws -> T {
             fatalError("method not implemented")
         }
         
     }
-    
-    class DiskImageCache: DiskCache<UIImage> {
-        
-        private let storage = NSCache<NSString, UIImage>()
-        
-        override func createObject(from data: Data, source: IRetrySource) throws -> UIImage {            
-            let decryptData = try STApplication.shared.crypto.decryptData(data: data, header: source.header)
-            guard let image = UIImage(data: decryptData) else {
-                throw RetryerError.invalidData
-            }
-            return image
-        }
-
-    }
-        
+            
 }
-
-extension UIImage: IDiskCacheObject {
-
-    var diskCacheCost: Int? {
-        let pixel = Int(self.size.width * self.size.height * self.scale * self.scale)
-        guard let cgImage = self.cgImage else {
-            return pixel * 4
-        }
-        return pixel * cgImage.bitsPerPixel / 8
-    }
-
-
-}
-

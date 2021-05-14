@@ -7,45 +7,14 @@
 
 import Foundation
 
-protocol IRetrySource: STDownloadRequest {
-    var fileName: String { get }
-    var version: String { get }
-    var header: STHeader { get }
-    var filePath: STFileSystem.FilesFolderType { get }
+class SDownloaderManager {
     
-    var fileTmpUrl: URL { get }
-    var fileSaveUrl: URL { get }
-}
-
-extension IRetrySource {
-    
-    var identifier: String {
-        return "\(self.version)_\(self.filePath.folderName)_\(self.fileName)"
-    }
-    
-    var fileDownloadTmpUrl: URL? {
-        return self.fileTmpUrl
-    }
-    
-    var fileTmpUrl: URL {
-        return self.fileSaveUrl
-    }
-    
-    var fileSaveUrl: URL {
-        guard let url = STApplication.shared.fileSystem.direction(for: self.filePath, create: true) else {
-            fatalError("cacheURL not found")
-        }
-        let result = url.appendingPathComponent(self.fileName)
-        return result
-    }
-    
-}
-
-class STFileRetryerManager {
     let imageRetryer = ImageRetryer()
+    let fileDownloader = FileDownloader()
+    
 }
 
-extension STFileRetryerManager {
+extension SDownloaderManager {
     
     typealias RetryerSuccess<T> = (_ result: T) -> Void
     typealias RetryerProgress = (_ progress: Progress) -> Void

@@ -109,7 +109,11 @@ class STAlbumFilesVM {
     }
     
     func leave(result: @escaping ((IError?) -> Void)) {
-        
+        self.albumWorker.leaveAlbum(album: self.album) { _ in
+            result(nil)
+        } failure: { error in
+            result(error)
+        }
     }
     
     func setCover(fileName: String, result: @escaping ((IError?) -> Void)) {
@@ -121,9 +125,9 @@ class STAlbumFilesVM {
     }
     
     func downloadSelection(fileNames: [String]) {
-        
+        let files = self.getFiles(fileNames: fileNames)
+        STApplication.shared.downloaderManager.fileDownloader.download(files: files)
     }
-    
     
 }
 

@@ -133,6 +133,8 @@
 "leave_album" = "Leave album";
 "download_selection" = "Download selection";
 "please_select_items" = "Please select items";
+"leave" = "Leave";
+"leave_album_alert_message" = "Are you sure you want to leave this shared album";
 
 //MARK: - Menu
 

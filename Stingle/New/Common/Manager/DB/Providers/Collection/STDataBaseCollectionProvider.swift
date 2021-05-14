@@ -151,6 +151,11 @@ extension STDataBase {
         }
         
         func delete(models: [Model], reloadData: Bool) {
+            
+            guard !models.isEmpty else {
+                return
+            }
+            
             let context = self.container.newBackgroundContext()
             context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
             context.performAndWait {
@@ -255,6 +260,19 @@ extension STDataBase {
             }
         }
         
+        func fetch(identifiers: [String]) -> [ManagedModel] {
+            let predicate = NSPredicate(format: "identifier IN %@", identifiers)
+            return self.fetch(predicate: predicate)
+        }
+        
+        func fetch(identifiers: [String], context: NSManagedObjectContext) -> [ManagedModel] {
+            let predicate = NSPredicate(format: "identifier IN %@", identifiers)
+            let fetchRequest = NSFetchRequest<ManagedModel>(entityName: ManagedModel.entityName)
+            fetchRequest.predicate = predicate
+            let cdModels = try? context.fetch(fetchRequest)
+            return cdModels ?? []
+        }
+                
         //MARK: - Additionl
         
         func add(_ observer: ICollectionProviderObserver) {

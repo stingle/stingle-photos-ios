@@ -16,7 +16,6 @@ class STFileSystem {
     lazy var privateURL = self.createPrivatePath()
     
     private var cacheFolderDataSize: STBytesUnits? = nil
-    
     private var existFilesFolderType = [FilesFolderType: URL]()
 
     var storageURl: URL? {
@@ -146,6 +145,10 @@ class STFileSystem {
         return self.fileManager.contents(atPath: url.path)
     }
     
+    open func fileExists(atPath path: String) -> Bool {
+        return self.fileManager.fileExists(atPath: path)
+    }
+    
 }
 
 private extension STFileSystem {
@@ -266,7 +269,7 @@ private extension STFileSystem {
         }
         return pathUrl
     }
-        
+            
 }
 
 extension STFileSystem {
@@ -332,6 +335,19 @@ extension STFileSystem {
             }
         }
         return dest
+    }
+    
+    func deleteFiles(files: [STLibrary.File]) {
+        for file in files {
+            if let oldFileThumbPath = file.fileOreginalUrl?.path {
+                try? self.fileManager.removeItem(atPath: oldFileThumbPath)
+            }
+            
+            if let fileThumbPath = file.fileThumbUrl?.path {
+                try? self.fileManager.removeItem(atPath: fileThumbPath)
+            }
+            
+        }
     }
     
 }

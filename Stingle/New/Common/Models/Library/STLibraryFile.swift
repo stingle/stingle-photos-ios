@@ -101,7 +101,7 @@ extension STLibrary.File {
         return result
     }
     
-    var fileoreginalUrl: URL? {
+    var fileOreginalUrl: URL? {
         let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
         let folder: STFileSystem.FilesFolderType = .oreginals(type: type)
         guard let url = STApplication.shared.fileSystem.direction(for: folder, create: true) else {

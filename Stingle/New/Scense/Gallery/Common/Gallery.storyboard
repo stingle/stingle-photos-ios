@@ -92,7 +92,7 @@
         <!--Album-->
         <scene sceneID="q7q-7p-gOM">
             <objects>
-                <navigationController id="UtM-t9-Os5" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="UtM-t9-Os5" customClass="STGalleryNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Album" image="ic_album_min" id="F5a-1i-nFa"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cRA-Mk-YDO">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -113,7 +113,7 @@
         <!--Gallery-->
         <scene sceneID="K92-ZK-yOp">
             <objects>
-                <navigationController id="dnZ-yy-kva" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="dnZ-yy-kva" customClass="STGalleryNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Gallery" image="ic_gallery_min" id="4xE-uT-DxU"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Gy8-mL-8SB">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -444,7 +444,7 @@
         <!--Album-->
         <scene sceneID="b5p-8i-ua2">
             <objects>
-                <navigationController id="Vpp-rC-Cqb" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="Vpp-rC-Cqb" customClass="STGalleryNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Album" image="ic_shared_album_min" id="Y4F-U0-qDU"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pN7-zR-3cc">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>

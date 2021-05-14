@@ -127,11 +127,11 @@ extension STFileUploader {
         private func continueOperation(didUpload file: STLibrary.File, spaceUsed: STDBUsed) {
             
             let oldFileThumbUrl = file.fileThumbUrl
-            let oldFileOreginalUrl = file.fileoreginalUrl
+            let oldFileOreginalUrl = file.fileOreginalUrl
             file.isRemote = true
             
             let newFileThumbUrl = file.fileThumbUrl
-            let newFileOreginalUrl = file.fileoreginalUrl
+            let newFileOreginalUrl = file.fileOreginalUrl
             
             if let old = oldFileThumbUrl, let new = newFileThumbUrl {
                 do {

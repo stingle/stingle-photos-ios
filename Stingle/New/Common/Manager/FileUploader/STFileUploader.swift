@@ -39,7 +39,7 @@ class STFileUploader {
     private(set) var uploadedFiles = [STLibrary.File]()
     private(set) var uploadingFiles = [STLibrary.File]()
     let maxCountUploads = 10
-    let maxCountYpdateDB = 5
+    let maxCountUpdateDB = 5
     
     var isUploading: Bool {
         return !self.uploadingFiles.isEmpty
@@ -73,15 +73,12 @@ class STFileUploader {
     }
     
     func cancelUploadIng(for file: STLibrary.File) {
-     
         for operation in self.operationQueue.allOperations() {
             if let operation = operation as? Operation, operation.libraryFile?.identifier == file.identifier {
                 operation.cancel()
                 break
             }
-            
         }
-        
     }
         
     func addListener(_ listener: IFileUploaderObserver) {
@@ -146,11 +143,16 @@ class STFileUploader {
         if !uploadFiles.contains(where: { $0.file == file.file }) {
             uploadFiles.append(file)
         }
-        if uploadFiles.count > self.maxCountYpdateDB || self.countAllFiles == 0 {
+        if uploadFiles.count > self.maxCountUpdateDB || self.countAllFiles == 0 {
             uploadFiles.removeAll()
         }
         self.uploadedFiles = uploadFiles
-        STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: file.isRemote || self.uploadedFiles.isEmpty)
+        if file.isRemote {
+            STApplication.shared.dataBase.galleryProvider.update(models: [file], reloadData: true)
+        } else {
+            STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: self.uploadedFiles.isEmpty)
+        }
+        
     }
     
 }

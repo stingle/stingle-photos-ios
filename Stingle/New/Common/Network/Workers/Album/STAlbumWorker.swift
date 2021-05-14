@@ -53,7 +53,7 @@ class STAlbumWorker: STWorker {
             let request = STAlbumRequest.rename(album: album, metadata: metadata)
             
             self.request(request: request, success: { (response: STEmptyResponse) in
-                let albumFilesProvider = STApplication.shared.dataBase.albumsProvider
+                let albumProvider = STApplication.shared.dataBase.albumsProvider
                 let album = STLibrary.Album(albumId: album.albumId,
                                             encPrivateKey: album.encPrivateKey,
                                             publicKey: album.publicKey,
@@ -69,7 +69,7 @@ class STAlbumWorker: STWorker {
                                             dateCreated: album.dateCreated,
                                             dateModified: Date())
                 
-                albumFilesProvider.update(models: [album], reloadData: true)
+                albumProvider.update(models: [album], reloadData: true)
                 success(response)
             }, failure: failure)
             
@@ -78,10 +78,28 @@ class STAlbumWorker: STWorker {
         }
         
     }
+    
+    func leaveAlbum(album: STLibrary.Album, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
         
+        let request = STAlbumRequest.leaveAlbum(album: album)
+        
+        self.request(request: request, success: { (response: STEmptyResponse) in
+           
+            let dataBase = STApplication.shared.dataBase
+            let albumProvider = dataBase.albumsProvider
+            let albumFilesProvider = dataBase.albumFilesProvider
+            let files = albumFilesProvider.fetchAll(for: album.albumId)
+            
+            albumFilesProvider.delete(models: files, reloadData: true)
+            albumProvider.delete(models: [album], reloadData: true)
+            dataBase.deleteFilesIfNeeded(files: files)
+            success(response)
+        }, failure: failure)
+        
+    }
+            
     func deleteAlbumWithFiles(album: STLibrary.Album, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
         let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: album.albumId)
-        
         self.deleteAlbumFiles(album: album, files: files, success: { [weak self] responce in
             self?.deleteAlbum(album: album, success: success, failure: failure)
         }, failure: failure)

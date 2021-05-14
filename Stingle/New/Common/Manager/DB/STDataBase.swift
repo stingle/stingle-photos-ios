@@ -65,6 +65,58 @@ class STDataBase {
         
     }
     
+    func deleteAll() {
+        self.galleryProvider.deleteAll()
+        self.albumsProvider.deleteAll()
+        self.albumFilesProvider.deleteAll()
+        self.trashProvider.deleteAll()
+        self.contactProvider.deleteAll()
+        self.dbInfoProvider.deleteAll()
+    }
+    
+    func reloadData() {
+        self.galleryProvider.reloadData()
+        self.albumsProvider.reloadData()
+        self.albumFilesProvider.reloadData()
+        self.trashProvider.reloadData()
+        self.contactProvider.reloadData()
+    }
+    
+    func deleteFilesIfNeeded(files: [STLibrary.File]) {
+        let context = self.container.newBackgroundContext()
+        var fileNames = [String]()
+        
+        files.forEach { file in
+            fileNames.append(file.file)
+        }
+        
+        context.performAndWait {
+                        
+            let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
+            let albumFiles = self.albumFilesProvider.fetch(fileNames: fileNames, context: context)
+            let trashFile = self.trashProvider.fetch(fileNames: fileNames, context: context)
+           
+            let deleteFiles = files.filter { file in
+                let galleryContains = galleryFiles.contains(where: { $0.file == file.file })
+                if galleryContains {
+                    return false
+                }
+                let albumContains = albumFiles.contains(where: { $0.file == file.file })
+                if albumContains {
+                    return false
+                }
+                let trashContains = trashFile.contains(where: { $0.file == file.file })
+                if trashContains {
+                    return false
+                }
+                return true
+            }
+            
+            STApplication.shared.fileSystem.deleteFiles(files: deleteFiles)
+        }
+        
+    }
+    
     //MARK: - private func
     
     private func endSync() {
@@ -111,24 +163,7 @@ class STDataBase {
         let timeDeletes = max(lastSeenTimeDelete, lastAlbumsSeenTimeDelete, lastAlbumFilesSeenTimeDelete, lastTrashRecovorsSeenTimeDelete, lastTrashhDeletesSeenTimeDelete, lastContactsSeenTimeDelete)
         return timeDeletes
     }
-    
-    func deleteAll() {
-        self.galleryProvider.deleteAll()
-        self.albumsProvider.deleteAll()
-        self.albumFilesProvider.deleteAll()
-        self.trashProvider.deleteAll()
-        self.contactProvider.deleteAll()
-        self.dbInfoProvider.deleteAll()
-    }
-    
-    func reloadData() {
-        self.galleryProvider.reloadData()
-        self.albumsProvider.reloadData()
-        self.albumFilesProvider.reloadData()
-        self.trashProvider.reloadData()
-        self.contactProvider.reloadData()
-    }
-    
+        
 }
 
 extension STDataBase {

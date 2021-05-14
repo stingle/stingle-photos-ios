@@ -258,8 +258,10 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
             }
         case .leave:
             STLoadingView.show(in: loadingView)
-            self.viewModel.leave { error in
-                didResiveResult(error: error)
+            self.showOkCancelAlert(title: "leave".localized, message: "leave_album_alert_message".localized) { [weak self] _ in
+                self?.viewModel.leave { error in
+                    didResiveResult(error: error)
+                }
             }
         case .setCover:
             STLoadingView.show(in: loadingView)
@@ -268,7 +270,8 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
                 didResiveResult(error: error)
             }
         case .downloadSelection:
-            break
+            let fileName = [String](self.dataSource.viewModel.selectedFileNames)
+            self.viewModel.downloadSelection(fileNames: fileName)
         }
         
     }

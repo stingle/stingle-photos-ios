@@ -7,12 +7,17 @@
 
 import UIKit
 
+protocol IDownloaderSource: STDownloadRequest {
+    var identifier: String { get }
+    var fileTmpUrl: URL { get }
+    var fileSaveUrl: URL { get }
+}
 
-extension STFileRetryerManager {
+extension SDownloaderManager {
     
-    class Retryer<T: IDiskCacheObject> {
-        
-        typealias Operation = RetryOperation<T>
+    class Downloader<T: IDiskCacheObject> {
+                 
+        typealias Operation = DownloaderOperation<T>
         private let operationManager = STOperationManager.shared
         private let operations = STObserverEvents<Operation>()
         private let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)
@@ -23,7 +28,7 @@ extension STFileRetryerManager {
         }()
         
         @discardableResult
-        func retry(source: IRetrySource, success: RetryerSuccess<T>?, progress: RetryerProgress?, failure: RetryerFailure?) -> String {
+        func download(source: IDownloaderSource, success: RetryerSuccess<T>?, progress: RetryerProgress?, failure: RetryerFailure?) -> String {
             let result = Result<T>(success: success, progress: progress, failure: failure)
             self.downloadWithQueue(source: source, result: result)
             return result.identifier
@@ -72,13 +77,13 @@ extension STFileRetryerManager {
             }
         }
         
-        private func downloadWithQueue(source: IRetrySource, result: Result<T>) {
+        private func downloadWithQueue(source: IDownloaderSource, result: Result<T>) {
             self.dispatchQueue.sync { [weak self] in
                 self?.download(source: source, result: result)
             }
         }
         
-        private func download(source: IRetrySource, result: Result<T>) {
+        private func download(source: IDownloaderSource, result: Result<T>) {
             if let operation = self.operation(identifier: source.identifier), operation.insert(result: result) {
                 return
             } else {
@@ -92,7 +97,7 @@ extension STFileRetryerManager {
         
         //MARK: - Internal methods
         
-        internal func createOperation(for source: IRetrySource) -> RetryOperation<T> {
+        func createOperation(for source: IDownloaderSource) -> DownloaderOperation<T> {
             fatalError("method not implemented")
         }
                 
@@ -100,22 +105,4 @@ extension STFileRetryerManager {
     
 }
 
-extension STFileRetryerManager {
-        
-    class ImageRetryer: Retryer<UIImage> {
-        
-        private let diskCache = DiskImageCache()
-        private let memoryCache = MemoryCache()
-        
-        override func createOperation(for source: IRetrySource) -> Operation {
-            var operation: RetryOperation<UIImage>!
-            operation = RetryOperation(request: source, memoryCache: self.memoryCache, diskCache: self.diskCache) { (obj) in
-            } progress: { (progress) in
-            } failure: { (error) in
-            }
-            return operation
-        }
-        
-    }
-    
-}
+

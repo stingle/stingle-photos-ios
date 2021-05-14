@@ -7,9 +7,9 @@
 
 import UIKit
 
-extension STFileRetryerManager {
+extension SDownloaderManager {
         
-    class RetryOperation<T: IDiskCacheObject>: STDownloadNetworkOperation {
+    class DownloaderOperation<T: IDiskCacheObject>: STDownloadNetworkOperation {
         
         let memoryCache: MemoryCache
         let diskCache: DiskCache<T>
@@ -17,14 +17,14 @@ extension STFileRetryerManager {
         private(set) var results = Set<Result<T>>()
         private(set) var canEditResults = true
         private(set) var downloadProgress: Progress? = nil
-        private let retrySource: IRetrySource
+        private let retrySource: IDownloaderSource
         private let retryerSuccess: RetryerSuccess<T>
         private let retryerProgress: RetryerProgress
         private let retryerFailure: RetryerFailure
         private var isRequesting = false
         
         var identifier: String {
-            return (self.request as? IRetrySource)?.identifier ?? request.url
+            return (self.request as? IDownloaderSource)?.identifier ?? request.url
         }
         
         var progressValue: Float {
@@ -37,7 +37,7 @@ extension STFileRetryerManager {
             return progress
         }
 
-        init(request: IRetrySource, memoryCache: MemoryCache, diskCache: DiskCache<T>, success: @escaping RetryerSuccess<T>, progress: @escaping RetryerProgress, failure: @escaping RetryerFailure) {
+        init(request: IDownloaderSource, memoryCache: MemoryCache, diskCache: DiskCache<T>, success: @escaping RetryerSuccess<T>, progress: @escaping RetryerProgress, failure: @escaping RetryerFailure) {
             
             self.retryerSuccess = success
             self.retryerProgress = progress
@@ -167,7 +167,7 @@ extension STFileRetryerManager {
         }
         
         private func diskCacheDataNotFound() {
-            self.memoryCache.retryFile(source: self.retrySource) { [weak self] (data) in
+            self.memoryCache.retryFile(source: self.retrySource) { [weak self] (_) in
                 if let weakSelf = self {
                     do {
                         try weakSelf.diskCache.didAddedMemry(source: weakSelf.retrySource)

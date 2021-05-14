@@ -145,6 +145,14 @@ extension STDataBase {
             return result
         }
         
+        func fetch(fileNames: [String], context: NSManagedObjectContext) -> [STCDAlbumFile] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.file)) IN %@", fileNames)
+            let fetchRequest = NSFetchRequest<STCDAlbumFile>(entityName: STCDAlbumFile.entityName)
+            fetchRequest.predicate = predicate
+            let cdModels = try? context.fetch(fetchRequest)
+            return cdModels ?? []
+        }
+        
     }
 
 }

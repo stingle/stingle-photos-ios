@@ -18,7 +18,7 @@ extension STUploadFileRequest: STUploadRequest {
     var files: [STUploadRequestFileInfo] {        
         switch self {
         case .file(let file):
-            if let fileThumbUrl = file.fileThumbUrl, let fileOreginalUrl = file.fileoreginalUrl  {
+            if let fileThumbUrl = file.fileThumbUrl, let fileOreginalUrl = file.fileOreginalUrl  {
                 let thumb = STUploadRequestFileInfo(name: "thumb", fileName: file.file, fileUrl: fileThumbUrl)
                 let file = STUploadRequestFileInfo(name: "file", fileName: file.file, fileUrl: fileOreginalUrl)
                 return [file, thumb]

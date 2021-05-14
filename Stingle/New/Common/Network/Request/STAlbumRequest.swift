@@ -15,7 +15,8 @@ enum STAlbumRequest {
     case sharedAlbum(album: STLibrary.Album, sharingKeys: [String: String])
     case setCover(album: STLibrary.Album, caver: String?)
     case rename(album: STLibrary.Album, metadata: String)
-    
+    case leaveAlbum(album: STLibrary.Album)
+
 }
 
 extension STAlbumRequest: IEncryptedRequest {
@@ -62,6 +63,8 @@ extension STAlbumRequest: IEncryptedRequest {
             return ["albumId": album.albumId]
         case .rename(let album, let metadata):
             return ["albumId": album.albumId, "metadata": metadata]
+        case .leaveAlbum(let album):
+            return ["albumId": album.albumId]
         }
     }
     
@@ -79,6 +82,8 @@ extension STAlbumRequest: IEncryptedRequest {
             return "sync/changeAlbumCover"
         case .rename:
             return "sync/renameAlbum"
+        case .leaveAlbum:
+            return "sync/leaveAlbum"
         }
     }
     
@@ -95,6 +100,8 @@ extension STAlbumRequest: IEncryptedRequest {
         case .setCover:
             return .post
         case .rename:
+            return .post
+        case .leaveAlbum:
             return .post
         }
     }
@@ -113,6 +120,8 @@ extension STAlbumRequest: IEncryptedRequest {
             return nil
         case .rename:
             return nil
+        case .leaveAlbum:
+            return nil
         }
     }
     
@@ -129,6 +138,8 @@ extension STAlbumRequest: IEncryptedRequest {
         case .setCover:
             return STNetworkDispatcher.Encoding.body
         case .rename:
+            return STNetworkDispatcher.Encoding.body
+        case .leaveAlbum:
             return STNetworkDispatcher.Encoding.body
         }
     }
