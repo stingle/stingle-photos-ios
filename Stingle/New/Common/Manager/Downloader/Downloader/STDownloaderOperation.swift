@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension SDownloaderManager {
+extension STDownloaderManager {
         
     class DownloaderOperation<T: IDiskCacheObject>: STDownloadNetworkOperation {
         

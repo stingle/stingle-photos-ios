@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension SDownloaderManager {
+extension STDownloaderManager {
         
     class MemoryCache {
         

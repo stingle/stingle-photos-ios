@@ -136,6 +136,10 @@ class STAlbumFilesVM {
         self.uploader.upload(files: files)
     }
     
+    func removeFileSystemFolder(url: URL) {
+        STApplication.shared.fileSystem.remove(file: url)
+    }
+    
 }
 
 extension STAlbumFilesVM: ICollectionProviderObserver {

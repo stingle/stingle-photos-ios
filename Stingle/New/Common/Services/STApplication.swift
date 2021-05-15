@@ -23,8 +23,8 @@ class STApplication {
         return STFileSystem()
     }()
     
-    private(set) lazy var downloaderManager: SDownloaderManager = {
-        return SDownloaderManager()
+    private(set) lazy var downloaderManager: STDownloaderManager = {
+        return STDownloaderManager()
     }()
     
     private(set) lazy var syncManager: STSyncManager = {

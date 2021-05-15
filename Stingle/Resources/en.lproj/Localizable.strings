@@ -76,6 +76,7 @@
 
 "create_new_album" = "Create new album";
 "main_gallry" = "Main gallry";
+"preparing" = "Prepering";
 
 //MARK: - Share
 
@@ -96,6 +97,9 @@
 "permissions" = "Permissions";
 "shared_album_name" = "Shared album name";
 "please_wait_for_backup_to_finish_before_you_can_proceed" = "Please wait for backup to finish before you can proceed";
+
+"share_via_stingle_photos" = "Share via Stingle photos";
+"share_to_other_apps" = "Share to other apps";
 
 
 //MARK: - Gallery

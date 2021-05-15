@@ -37,7 +37,7 @@ extension IFileRetrySource {
     
 }
 
-extension SDownloaderManager {
+extension STDownloaderManager {
         
     class ImageRetryer: Downloader<UIImage> {
         

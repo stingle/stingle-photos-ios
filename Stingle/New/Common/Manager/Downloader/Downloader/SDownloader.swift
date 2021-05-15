@@ -13,14 +13,14 @@ protocol IDownloaderSource: STDownloadRequest {
     var fileSaveUrl: URL { get }
 }
 
-extension SDownloaderManager {
+extension STDownloaderManager {
     
     class Downloader<T: IDiskCacheObject> {
                  
         typealias Operation = DownloaderOperation<T>
         private let operationManager = STOperationManager.shared
-        private let operations = STObserverEvents<Operation>()
-        private let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)
+        let operations = STObserverEvents<Operation>()
+        let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)
         
         lazy var operationQueue: STOperationQueue = {
             let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 20, underlyingQueue: dispatchQueue)
@@ -32,6 +32,10 @@ extension SDownloaderManager {
             let result = Result<T>(success: success, progress: progress, failure: failure)
             self.downloadWithQueue(source: source, result: result)
             return result.identifier
+        }
+        
+        func cancelAllOperation() {
+            self.operationQueue.cancelAllOperations()
         }
         
         func cancel(operation identifier: String, forceCancel: Bool = false) {

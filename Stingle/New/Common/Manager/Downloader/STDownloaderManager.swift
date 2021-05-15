@@ -7,14 +7,14 @@
 
 import Foundation
 
-class SDownloaderManager {
+class STDownloaderManager {
     
     let imageRetryer = ImageRetryer()
     let fileDownloader = FileDownloader()
     
 }
 
-extension SDownloaderManager {
+extension STDownloaderManager {
     
     typealias RetryerSuccess<T> = (_ result: T) -> Void
     typealias RetryerProgress = (_ progress: Progress) -> Void

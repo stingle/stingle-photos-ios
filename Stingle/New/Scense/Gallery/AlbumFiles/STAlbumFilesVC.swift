@@ -350,6 +350,48 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         }
     }
     
+    private func showShareFilesActionSheet(sender: UIView) {
+        let alert = UIAlertController(title: "share".localized, message: nil, preferredStyle: .actionSheet)
+        let stinglePhotos = UIAlertAction(title: "share_via_stingle_photos".localized, style: .default) { [weak self] _ in
+            self?.didSelectShareViaStinglePhotos()
+        }
+        alert.addAction(stinglePhotos)
+        
+        let shareOtherApps = UIAlertAction(title: "share_to_other_apps".localized, style: .default) { [weak self] _ in
+            self?.didSelectShareShareOtherApps()
+        }
+        alert.addAction(shareOtherApps)
+        let cancelAction = UIAlertAction(title: "cancel".localized, style: .cancel)
+        alert.addAction(cancelAction)
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = sender
+        }
+        self.showDetailViewController(alert, sender: nil)
+    }
+    
+    private func didSelectShareViaStinglePhotos() {
+        let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
+        guard !selectedFileNames.isEmpty else {
+            return
+        }
+        let files = self.viewModel.getFiles(fileNames: selectedFileNames)
+        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+        let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersVCID") as! UINavigationController)
+        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .albumFiles(album: self.album, files: files)
+        self.showDetailViewController(vc, sender: nil)
+    }
+    
+    private func didSelectShareShareOtherApps() {
+        let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
+        guard !selectedFileNames.isEmpty else {
+            return
+        }
+        let files = self.viewModel.getFiles(fileNames: selectedFileNames)
+        
+        let shearing = STFilesDownloaderActivityVC.DownloadFiles.albumFiles(album: self.album, files: files)
+        STFilesDownloaderActivityVC.showActivity(downloadingFiles: shearing, controller: self.tabBarController ?? self, delegate: self)
+    }
+    
 }
 
 extension STAlbumFilesVC: STImagePickerHelperDelegate {
@@ -357,6 +399,24 @@ extension STAlbumFilesVC: STImagePickerHelperDelegate {
     func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
         self.viewModel.upload(assets: assets)
     }
+    
+}
+
+extension STAlbumFilesVC: STFilesDownloaderActivityVCDelegate {
+    
+    
+    func filesDownloaderActivity(didEndDownload activity: STFilesDownloaderActivityVC, downloadedurls: [URL], folderUrl: URL?) {
+        
+        let vc = UIActivityViewController(activityItems: downloadedurls, applicationActivities: [])
+        vc.popoverPresentationController?.sourceView = self.accessoryView.sharButton
+        vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
+            if let folderUrl = folderUrl {
+                self?.viewModel.removeFileSystemFolder(url: folderUrl)
+            }
+        }
+        self.present(vc, animated: true)
+    }
+    
     
 }
 
@@ -387,15 +447,7 @@ extension STAlbumFilesVC: UICollectionViewDelegate {
 extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
-        let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
-        guard !selectedFileNames.isEmpty else {
-            return
-        }
-        let files = self.viewModel.getFiles(fileNames: selectedFileNames)
-        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
-        let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersVCID") as! UINavigationController)
-        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .albumFiles(album: self.album, files: files)
-        self.showDetailViewController(vc, sender: nil)
+        self.showShareFilesActionSheet(sender: sendner)
     }
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectCopyButton sendner: UIButton) {

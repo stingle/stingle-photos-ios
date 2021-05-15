@@ -143,9 +143,8 @@ class STFileUploader {
         if uploadFiles.count > self.maxCountUpdateDB || self.countAllFiles == 0 {
             uploadFiles.removeAll()
         }
-        self.uploadedFiles = uploadFiles
         
-
+        self.uploadedFiles = uploadFiles
         if let albumFile = file as? STLibrary.AlbumFile {
             if file.isRemote {
                 STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: true)
@@ -160,9 +159,6 @@ class STFileUploader {
                 STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: self.uploadedFiles.isEmpty)
             }
         }
-        
-        
-        
     }
     
 }

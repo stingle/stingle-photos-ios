@@ -17,7 +17,7 @@ extension IDiskCacheObject {
     }
 }
 
-extension SDownloaderManager {
+extension STDownloaderManager {
     
     class DiskCache<T: IDiskCacheObject> {
         

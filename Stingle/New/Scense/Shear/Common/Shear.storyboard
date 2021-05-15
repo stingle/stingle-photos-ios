@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -343,6 +343,109 @@
             </objects>
             <point key="canvasLocation" x="2253.6231884057975" y="1220.7589285714284"/>
         </scene>
+        <!--Files Downloader ActivityVC-->
+        <scene sceneID="rK1-Hs-OcR">
+            <objects>
+                <viewController storyboardIdentifier="STShareActivityVCID" modalPresentationStyle="overFullScreen" id="Yzd-B8-DSl" customClass="STFilesDownloaderActivityVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="H2Q-hq-5SC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <visualEffectView opaque="NO" alpha="0.34999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NlD-XL-5v0">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="h5X-bO-Ipu">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" name="STText"/>
+                                </view>
+                                <blurEffect style="dark"/>
+                            </visualEffectView>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GJu-FF-RqF" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="109.5" y="374" width="195" height="158"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Prepering" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="642-O7-hrw">
+                                        <rect key="frame" x="60.5" y="8" width="74" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" name="STText"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M9d-TA-Efm" customClass="STCircleProgressView" customModule="Stingle" customModuleProvider="target">
+                                        <rect key="frame" x="60" y="37" width="75" height="75"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="75" id="6VJ-6p-Adx"/>
+                                            <constraint firstAttribute="width" constant="75" id="ObW-8L-j8G"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="progressColor">
+                                                <color key="value" name="STPrimary"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="drawStyleIntValue">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="progress">
+                                                <real key="value" value="0.40000000000000002"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EX3-L2-oOf">
+                                        <rect key="frame" x="62" y="120" width="71" height="30"/>
+                                        <state key="normal" title=" Prepering">
+                                            <color key="titleColor" name="STText"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didSelectCancelButton:" destination="Yzd-B8-DSl" eventType="touchUpInside" id="2MM-BD-Slb"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" name="STBackground"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="642-O7-hrw" secondAttribute="trailing" constant="20" id="2n7-1M-ON2"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="EX3-L2-oOf" secondAttribute="trailing" constant="20" id="Aff-4C-IJu"/>
+                                    <constraint firstItem="M9d-TA-Efm" firstAttribute="centerX" secondItem="GJu-FF-RqF" secondAttribute="centerX" id="EdX-Ec-EUx"/>
+                                    <constraint firstItem="EX3-L2-oOf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GJu-FF-RqF" secondAttribute="leading" constant="20" id="Ijk-Gl-jQ3"/>
+                                    <constraint firstItem="642-O7-hrw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GJu-FF-RqF" secondAttribute="leading" constant="20" id="OJA-jc-HgF"/>
+                                    <constraint firstItem="M9d-TA-Efm" firstAttribute="top" secondItem="642-O7-hrw" secondAttribute="bottom" constant="8" id="bjS-7G-eha"/>
+                                    <constraint firstAttribute="bottom" secondItem="EX3-L2-oOf" secondAttribute="bottom" constant="8" id="eUk-pX-Hln"/>
+                                    <constraint firstItem="642-O7-hrw" firstAttribute="centerX" secondItem="GJu-FF-RqF" secondAttribute="centerX" id="hWU-Qy-EQE"/>
+                                    <constraint firstItem="EX3-L2-oOf" firstAttribute="top" secondItem="M9d-TA-Efm" secondAttribute="bottom" constant="8" id="lvg-CV-CVc"/>
+                                    <constraint firstAttribute="trailing" secondItem="M9d-TA-Efm" secondAttribute="trailing" priority="250" constant="60" id="mXy-1x-SQd"/>
+                                    <constraint firstItem="642-O7-hrw" firstAttribute="top" secondItem="GJu-FF-RqF" secondAttribute="top" constant="8" id="qCi-Xu-Q7P"/>
+                                    <constraint firstItem="EX3-L2-oOf" firstAttribute="centerX" secondItem="GJu-FF-RqF" secondAttribute="centerX" id="rjr-py-uJJ"/>
+                                    <constraint firstItem="M9d-TA-Efm" firstAttribute="leading" secondItem="GJu-FF-RqF" secondAttribute="leading" priority="250" constant="60" id="s4h-KH-Vhr"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                                        <real key="value" value="0.20000000000000001"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="F4y-fe-RPZ"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="GJu-FF-RqF" firstAttribute="centerY" secondItem="F4y-fe-RPZ" secondAttribute="centerY" id="2BP-5t-oXv"/>
+                            <constraint firstItem="F4y-fe-RPZ" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="GJu-FF-RqF" secondAttribute="trailing" constant="20" id="4gl-3x-K56"/>
+                            <constraint firstItem="GJu-FF-RqF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="F4y-fe-RPZ" secondAttribute="leading" constant="20" id="7gt-VE-tFI"/>
+                            <constraint firstItem="NlD-XL-5v0" firstAttribute="top" secondItem="H2Q-hq-5SC" secondAttribute="top" id="Bmk-bX-QhM"/>
+                            <constraint firstItem="NlD-XL-5v0" firstAttribute="leading" secondItem="H2Q-hq-5SC" secondAttribute="leading" id="IS3-ke-aN0"/>
+                            <constraint firstAttribute="bottom" secondItem="NlD-XL-5v0" secondAttribute="bottom" id="VMh-an-Q7U"/>
+                            <constraint firstItem="GJu-FF-RqF" firstAttribute="centerX" secondItem="F4y-fe-RPZ" secondAttribute="centerX" id="XFw-3q-cAD"/>
+                            <constraint firstAttribute="trailing" secondItem="NlD-XL-5v0" secondAttribute="trailing" id="xDm-U5-bgw"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="bgView" destination="NlD-XL-5v0" id="dtX-sC-zLb"/>
+                        <outlet property="cancelButton" destination="EX3-L2-oOf" id="Hqn-av-HAc"/>
+                        <outlet property="preparingLabel" destination="642-O7-hrw" id="tIW-KK-dSZ"/>
+                        <outlet property="progressBgView" destination="GJu-FF-RqF" id="5cX-ze-8GN"/>
+                        <outlet property="progressView" destination="M9d-TA-Efm" id="nnX-Az-huV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rit-p3-B71" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="324.63768115942031" y="1921.875"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="19K-9h-rk8">
             <objects>
@@ -362,6 +465,9 @@
         </scene>
     </scenes>
     <designables>
+        <designable name="M9d-TA-Efm">
+            <size key="intrinsicContentSize" width="55" height="55"/>
+        </designable>
         <designable name="sHw-lS-Q1w">
             <size key="intrinsicContentSize" width="4" height="18.5"/>
         </designable>
