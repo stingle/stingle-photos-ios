@@ -10,7 +10,7 @@ import UIKit
 protocol STAlbumFilesTabBarAccessoryViewDelegate: AnyObject {
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton)
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectCopyButton sendner: UIButton)
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectMoveButton sendner: UIButton)
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton)
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectTrashButton sendner: UIButton)
     
@@ -32,7 +32,7 @@ class STAlbumFilesTabBarAccessoryView: UIView {
     }
     
     @IBAction func didSelectCopyButton(_ sender: UIButton) {
-        self.delegate?.albumFilesTabBarAccessory(view: self, didSelectCopyButton: sender)
+        self.delegate?.albumFilesTabBarAccessory(view: self, didSelectMoveButton: sender)
     }
     
     @IBAction func didSelectDownloadButton(_ sender: UIButton) {

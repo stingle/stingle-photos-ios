@@ -101,6 +101,9 @@
 "share_via_stingle_photos" = "Share via Stingle photos";
 "share_to_other_apps" = "Share to other apps";
 
+"alert_save_to_device_library_title" = "Decrypt?";
+"alert_save_to_device_library_message" = "Are you sure you want to decrypt selection files? They will become accessible to other applications on this device";
+
 
 //MARK: - Gallery
 

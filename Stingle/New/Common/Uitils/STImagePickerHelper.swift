@@ -37,6 +37,22 @@ class STImagePickerHelper: NSObject {
                 break
             }
         }
+    }
+    
+    func save(items: [(url: URL, itemType: ItemType)], completionHandler: @escaping (() -> Void) ) {
+        let library = PHPhotoLibrary.shared()
+        var count = items.count
+        
+        for item in items {
+            library.performChanges {
+                let _ = item.itemType == .photo ? PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: item.url) :  PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: item.url)
+            } completionHandler: { _, error in
+                count = count - 1
+                if count == .zero {
+                    completionHandler()
+                }
+            }
+        }
         
     }
     
@@ -102,6 +118,15 @@ extension STImagePickerHelper: TatsiPickerViewControllerDelegate {
     func pickerViewControllerDidCancel(_ pickerViewController: TatsiPickerViewController) {
         pickerViewController.dismiss(animated: true, completion: nil)
         self.viewController?.pickerViewControllerDidCancel(self)
+    }
+    
+}
+
+extension STImagePickerHelper {
+    
+    enum ItemType {
+        case photo
+        case video
     }
     
 }

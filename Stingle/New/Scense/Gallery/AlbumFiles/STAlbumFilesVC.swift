@@ -358,7 +358,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         alert.addAction(stinglePhotos)
         
         let shareOtherApps = UIAlertAction(title: "share_to_other_apps".localized, style: .default) { [weak self] _ in
-            self?.didSelectShareShareOtherApps()
+            self?.openDownloadController(action: .share)
         }
         alert.addAction(shareOtherApps)
         let cancelAction = UIAlertAction(title: "cancel".localized, style: .cancel)
@@ -381,15 +381,39 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         self.showDetailViewController(vc, sender: nil)
     }
     
-    private func didSelectShareShareOtherApps() {
+    private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
+        let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: [])
+        vc.popoverPresentationController?.sourceView = self.accessoryView.sharButton
+        vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
+            if let folderUrl = folderUrl {
+                self?.viewModel.removeFileSystemFolder(url: folderUrl)
+            }
+        }
+        self.present(vc, animated: true)
+    }
+    
+    private func saveItemsToDevice(downloadeds: [STFilesDownloaderActivityVM.DecryptDownloadFile], folderUrl: URL?) {
+        var filesSave = [(url: URL, itemType: STImagePickerHelper.ItemType)]()
+        downloadeds.forEach { file in
+            let type: STImagePickerHelper.ItemType = file.header.fileOreginalType == .image ? .photo : .video
+            let url = file.url
+            filesSave.append((url, type))
+        }
+        self.pickerHelper.save(items: filesSave) { [weak self] in
+            if let folderUrl = folderUrl {
+                self?.viewModel.removeFileSystemFolder(url: folderUrl)
+            }
+        }
+    }
+    
+    private func openDownloadController(action: FilesDownloadDecryptAction) {
         let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
         guard !selectedFileNames.isEmpty else {
             return
         }
         let files = self.viewModel.getFiles(fileNames: selectedFileNames)
-        
         let shearing = STFilesDownloaderActivityVC.DownloadFiles.albumFiles(album: self.album, files: files)
-        STFilesDownloaderActivityVC.showActivity(downloadingFiles: shearing, controller: self.tabBarController ?? self, delegate: self)
+        STFilesDownloaderActivityVC.showActivity(downloadingFiles: shearing, controller: self.tabBarController ?? self, delegate: self, userInfo: action)
     }
     
 }
@@ -404,20 +428,21 @@ extension STAlbumFilesVC: STImagePickerHelperDelegate {
 
 extension STAlbumFilesVC: STFilesDownloaderActivityVCDelegate {
     
-    
-    func filesDownloaderActivity(didEndDownload activity: STFilesDownloaderActivityVC, downloadedurls: [URL], folderUrl: URL?) {
-        
-        let vc = UIActivityViewController(activityItems: downloadedurls, applicationActivities: [])
-        vc.popoverPresentationController?.sourceView = self.accessoryView.sharButton
-        vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
+    func filesDownloaderActivity(didEndDownload activity: STFilesDownloaderActivityVC, decryptDownloadFiles: [STFilesDownloaderActivityVM.DecryptDownloadFile], folderUrl: URL?) {
+        guard let decryptAction = activity.userInfo as? FilesDownloadDecryptAction else {
             if let folderUrl = folderUrl {
-                self?.viewModel.removeFileSystemFolder(url: folderUrl)
+                self.viewModel.removeFileSystemFolder(url: folderUrl)
             }
+            return
         }
-        self.present(vc, animated: true)
+        switch decryptAction {
+        case .share:
+            let urls = decryptDownloadFiles.compactMap({return $0.url})
+            self.openActivityViewController(downloadedUrls: urls, folderUrl: folderUrl)
+        case .saveDevicePhotos:
+            self.saveItemsToDevice(downloadeds: decryptDownloadFiles, folderUrl: folderUrl)
+        }
     }
-    
-    
 }
 
 extension STAlbumFilesVC: UICollectionViewDelegate {
@@ -439,7 +464,6 @@ extension STAlbumFilesVC: UICollectionViewDelegate {
             cell?.setSelected(isSelected: isSelected)
             self.updateSelectedItesmCount()
         }
-        
     }
     
 }
@@ -450,7 +474,7 @@ extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
         self.showShareFilesActionSheet(sender: sendner)
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectCopyButton sendner: UIButton) {
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
         let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
         let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
         (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .albumFiles(album: self.album, files: self.viewModel.getFiles(fileNames: selectedFileNames))
@@ -458,14 +482,17 @@ extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
     }
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
-        
+        let title = "alert_save_to_device_library_title".localized
+        let message = "alert_save_to_device_library_message".localized
+        self.showInfoAlert(title: title, message: message) { [weak self] in
+            self?.openDownloadController(action: .saveDevicePhotos)
+        }
     }
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
         let count = self.dataSource.viewModel.selectedFileNames.count
         let title = "delete_album_files_alert_title".localized
         let message = String(format: "delete_album_files_alert_message".localized, "\(count)")
-        
         self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
             self?.deleteSelectedFiles()
         }
@@ -489,6 +516,11 @@ extension STAlbumFilesVC: STAlbumFilesVMDelegate {
 
 
 extension STAlbumFilesVC {
+    
+    enum FilesDownloadDecryptAction {
+        case share
+        case saveDevicePhotos
+    }
     
     enum AlbumAction {
         

@@ -9,13 +9,14 @@ import Foundation
 
 protocol STShareActivityVMDelegate: AnyObject {
     func shareActivityVM(didUpdedProgress vm: STFilesDownloaderActivityVM, progress: Double)
-    func shareActivityVM(didFinished vm: STFilesDownloaderActivityVM, decryptFileURLs: [URL])
+    func shareActivityVM(didFinished vm: STFilesDownloaderActivityVM, decryptFiles: [STFilesDownloaderActivityVM.DecryptDownloadFile])
 }
 
 class STFilesDownloaderActivityVM {
         
     private let downloadingFiles: STFilesDownloaderActivityVC.DownloadFiles!
     private let fileSystem = STApplication.shared.fileSystem
+    private var decryptFileURLs = [DecryptDownloadFile]()
     
     weak var delegate: STShareActivityVMDelegate?
     
@@ -46,9 +47,7 @@ class STFilesDownloaderActivityVM {
             return nil
         }
     }()
-    
-    private var decryptFileURLs = [URL]()
-    
+        
     var folderUrl: URL? {
         return self.tmpURL
     }
@@ -124,7 +123,8 @@ extension STFilesDownloaderActivityVM: STFileDownloaderObserver {
         }
         do {
             try STApplication.shared.crypto.decrypt(fromUrl: source.fileSaveUrl, toUrl: decryptURL, header: decryptHeader)
-            self.decryptFileURLs.append(decryptURL)
+            let file = DecryptDownloadFile(header: decryptHeader, url: decryptURL)
+            self.decryptFileURLs.append(file)
         } catch {
             print(error)
         }
@@ -135,7 +135,19 @@ extension STFilesDownloaderActivityVM: STFileDownloaderObserver {
     }
     
     func downloader(didFinished downloader: STDownloaderManager.FileDownloader) {
-        self.delegate?.shareActivityVM(didFinished: self, decryptFileURLs: self.decryptFileURLs)
+        self.delegate?.shareActivityVM(didFinished: self, decryptFiles: self.decryptFileURLs)
     }
     
 }
+
+extension STFilesDownloaderActivityVM {
+    
+    struct DecryptDownloadFile {
+        let header: STHeader
+        let url: URL
+    }
+    
+}
+
+
+
