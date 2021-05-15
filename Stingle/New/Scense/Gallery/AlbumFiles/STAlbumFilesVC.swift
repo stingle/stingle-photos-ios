@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Photos
 
 extension STAlbumFilesVC {
     
@@ -18,7 +19,7 @@ extension STAlbumFilesVC {
         let album: STLibrary.Album
         var isSelectedMode = false
         var selectedFileNames = Set<String>()
-        
+                
         init(album: STLibrary.Album) {
             self.album = album
         }
@@ -89,10 +90,15 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     @IBOutlet weak private var albumSettingsButtonItem: UIBarButtonItem!
     @IBOutlet weak private var moreBarButtonItem: UIBarButtonItem!
     
-    private var viewModel: STAlbumFilesVM!
     var album: STLibrary.Album!
     
-    lazy var accessoryView: STAlbumFilesTabBarAccessoryView = {
+    private var viewModel: STAlbumFilesVM!
+    
+    private lazy var pickerHelper: STImagePickerHelper = {
+        return STImagePickerHelper(controller: self)
+    }()
+    
+    lazy private var accessoryView: STAlbumFilesTabBarAccessoryView = {
         let resilt = STAlbumFilesTabBarAccessoryView.loadNib()
         return resilt
     }()
@@ -202,7 +208,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     }
     
     @IBAction func didSelectAddButton(_ sender: Any) {
-        
+        self.pickerHelper.openPicker()
     }
     
     @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
@@ -344,7 +350,13 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         }
     }
     
+}
+
+extension STAlbumFilesVC: STImagePickerHelperDelegate {
     
+    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
+        self.viewModel.upload(assets: assets)
+    }
     
 }
 

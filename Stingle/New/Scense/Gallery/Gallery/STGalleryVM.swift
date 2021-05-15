@@ -14,8 +14,9 @@ class STGalleryVM {
     private let uploader = STApplication.shared.uploader
     
     func createDBDataSource() -> STDataBase.DataSource<STCDFile> {
-        return STApplication.shared.dataBase.galleryProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"],
-                                                                              sectionNameKeyPath: #keyPath(STCDFile.day))
+        let galleryProvider = STApplication.shared.dataBase.galleryProvider
+        return galleryProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"],
+                                                sectionNameKeyPath: #keyPath(STCDFile.day))
     }
     
     func sync() {
@@ -23,7 +24,8 @@ class STGalleryVM {
     }
     
     func upload(assets: [PHAsset]) {
-        self.uploader.upload(files: assets)
+        let files = assets.compactMap({ return STFileUploader.FileUploadable(asset: $0) })
+        self.uploader.upload(files: files)
     }
     
 }

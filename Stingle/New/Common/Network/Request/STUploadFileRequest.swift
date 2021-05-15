@@ -10,6 +10,7 @@ import Foundation
 enum STUploadFileRequest {
 
     case file(file: STLibrary.File)
+    case albumFile(file: STLibrary.AlbumFile)
     
 }
 
@@ -18,6 +19,13 @@ extension STUploadFileRequest: STUploadRequest {
     var files: [STUploadRequestFileInfo] {        
         switch self {
         case .file(let file):
+            if let fileThumbUrl = file.fileThumbUrl, let fileOreginalUrl = file.fileOreginalUrl  {
+                let thumb = STUploadRequestFileInfo(name: "thumb", fileName: file.file, fileUrl: fileThumbUrl)
+                let file = STUploadRequestFileInfo(name: "file", fileName: file.file, fileUrl: fileOreginalUrl)
+                return [file, thumb]
+            }
+            return []
+        case .albumFile(let file):
             if let fileThumbUrl = file.fileThumbUrl, let fileOreginalUrl = file.fileOreginalUrl  {
                 let thumb = STUploadRequestFileInfo(name: "thumb", fileName: file.file, fileUrl: fileThumbUrl)
                 let file = STUploadRequestFileInfo(name: "file", fileName: file.file, fileUrl: fileOreginalUrl)
@@ -42,18 +50,25 @@ extension STUploadFileRequest: STUploadRequest {
     var parameters: [String : Any]? {
         switch self {
         case .file(let file):
-            let folder = "0"
+            let folder = "\(file.dbSet.rawValue)"
             let token = self.token ?? ""
             let dateCreated = "\(file.dateCreated.millisecondsSince1970)"
             let dateModified = "\(file.dateModified.millisecondsSince1970)"
             let headers = file.headers
-            return ["folder": folder, "token": token, "dateCreated": dateCreated, "dateModified": dateModified, "headers": headers, "version": file.version]
+            return ["set": folder, "token": token, "dateCreated": dateCreated, "dateModified": dateModified, "headers": headers, "version": file.version]
+        case .albumFile(let file):
+            let folder = "\(file.dbSet.rawValue)"
+            let token = self.token ?? ""
+            let dateCreated = "\(file.dateCreated.millisecondsSince1970)"
+            let dateModified = "\(file.dateModified.millisecondsSince1970)"
+            let headers = file.headers
+            return ["set": folder, "token": token, "dateCreated": dateCreated, "dateModified": dateModified, "headers": headers, "version": file.version, "albumId": file.albumId]
         }
     }
 
     var encoding: STNetworkDispatcher.Encoding {
         switch self {
-        case .file:
+        case .file, .albumFile:
             return .body
         }
     }

@@ -48,7 +48,8 @@ extension STCrypto {
         return Data(bytes)
     }
     
-    func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: Int32) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
+    func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: Int32, publicKey: Bytes? = nil) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
+        
         let fileName = try self.createEncFileName()
         let fileId = try self.createNewFileId()
         let inputThumb = InputStream(data: thumbImage)
@@ -76,11 +77,11 @@ extension STCrypto {
             outputOrigin.close()
         }
         
-        let thumbHeader = try self.encryptFile(input: inputThumb, output: outputThumb, filename: fileName, fileType: fileType.rawValue, dataLength: UInt(thumbImage.count), fileId: fileId, videoDuration: UInt32(duration))
+        let thumbHeader = try self.encryptFile(input: inputThumb, output: outputThumb, filename: fileName, fileType: fileType.rawValue, dataLength: UInt(thumbImage.count), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey)
         
-        let origineader = try self.encryptFile(input: inputOrigin, output: outputOrigin, filename: fileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration))
+        let originHeader = try self.encryptFile(input: inputOrigin, output: outputOrigin, filename: fileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey)
                 
-        guard let base64Original = self.bytesToBase64Url(data: origineader.encriptedHeader), let base64Thumb = self.bytesToBase64Url(data: thumbHeader.encriptedHeader) else {
+        guard let base64Original = self.bytesToBase64Url(data: originHeader.encriptedHeader), let base64Thumb = self.bytesToBase64Url(data: thumbHeader.encriptedHeader) else {
             throw CryptoError.Header.incorrectHeader
         }
         let headers = base64Original + "*" + base64Thumb

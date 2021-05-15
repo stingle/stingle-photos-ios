@@ -5,12 +5,7 @@
 //  Created by Khoren Asatryan on 4/9/21.
 //
 
-import Photos
-import UIKit
-
-protocol IUploadFile {
-    func requestData(success: @escaping (_ uploadInfo: STFileUploader.UploadFileInfo) -> Void, failure: @escaping (_ failure: IError ) -> Void)
-}
+import Foundation
 
 protocol IFileUploaderObserver: AnyObject {
     func fileUploader(didUpdateProgress uploader: STFileUploader, uploadInfo: STFileUploader.UploadInfo, files: [STLibrary.File])
@@ -65,7 +60,12 @@ class STFileUploader {
     
     func uploadAllLocalFiles() {
         DispatchQueue.main.async { [weak self] in
-            let localFiles = STApplication.shared.dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
+            
+            var localFiles = STApplication.shared.dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
+            let localAlbumFiles = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")
+            
+            localFiles.append(contentsOf: localAlbumFiles)
+            
             self?.dispatchQueue.sync {
                 self?.uploadAllLocalFilesInQueue(files: localFiles)
             }
@@ -147,11 +147,23 @@ class STFileUploader {
             uploadFiles.removeAll()
         }
         self.uploadedFiles = uploadFiles
-        if file.isRemote {
-            STApplication.shared.dataBase.galleryProvider.update(models: [file], reloadData: true)
+        
+
+        if let albumFile = file as? STLibrary.AlbumFile {
+            if file.isRemote {
+                STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: true)
+            } else {
+                STApplication.shared.dataBase.albumFilesProvider.add(models: [albumFile], reloadData: self.uploadedFiles.isEmpty)
+            }
         } else {
-            STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: self.uploadedFiles.isEmpty)
+            if file.isRemote {
+                STApplication.shared.dataBase.galleryProvider.update(models: [file], reloadData: true)
+            } else {
+                STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: self.uploadedFiles.isEmpty)
+            }
         }
+        
+        
         
     }
     
@@ -349,150 +361,4 @@ extension STFileUploader {
         let count: Int64
     }
             
-}
-
-extension PHAsset: IUploadFile {
-    
-    func requestData(success: @escaping (_ uploadInfo: STFileUploader.UploadFileInfo) -> Void, failure: @escaping (IError) -> Void) {
-        guard let fileType = STFileUploader.FileType(rawValue: self.mediaType.rawValue) else {
-            failure(STFileUploader.UploaderError.phAssetNotValid)
-            return
-        }
-        self.requestGetThumb { [weak self] (thumb) in
-            guard let thumb = thumb, let thumbData = thumb.pngData() else {
-                failure(STFileUploader.UploaderError.phAssetNotValid)
-                return
-            }
-            self?.requestGetURL(completion: { (info) in
-                guard let info = info else {
-                    failure(STFileUploader.UploaderError.phAssetNotValid)
-                    return
-                }
-                let uploadInfo = STFileUploader.UploadFileInfo(oreginalUrl: info.url,
-                                                               thumbImage: thumbData,
-                                                               fileType: fileType,
-                                                               duration: info.videoDuration,
-                                                               fileSize: info.fileSize,
-                                                               creationDate: info.creationDate,
-                                                               modificationDate: info.modificationDate)
-                success(uploadInfo)
-            })
-        }
-        
-    }
-    
-}
-
-private extension PHAsset {
-        
-    private static let phManager = PHImageManager.default()
-    
-    struct PHAssetDataInfo {
-        var url: URL
-        var videoDuration: TimeInterval
-        var fileSize: Int32
-        var creationDate: Date?
-        var modificationDate: Date?
-    }
-
-    func requestGetURL(completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
-        if self.mediaType == .image {
-            self.requestGetImageAssetDataInfo(completion: completion)
-        } else if self.mediaType == .video {
-            self.requestGetVideoAssetDataInfo(completion: completion)
-        }
-    }
-    
-    func requestGetThumb(completion : @escaping ((_ image: UIImage?) -> Void)) {
-        let options = PHImageRequestOptions()
-        options.version = .original
-        options.isSynchronous = false
-        options.resizeMode = .exact
-        options.deliveryMode = .highQualityFormat
-        options.isNetworkAccessAllowed = true
-        let size = STConstants.thumbSize(for: CGSize(width: self.pixelWidth, height: self.pixelHeight))
-        Self.phManager.requestImage(for: self, targetSize: size, contentMode: .aspectFit, options: options) { thumb, info  in
-            completion(thumb)
-        }
-    }
-    
-    //MARK: - Private
-    
-    private func requestGetVideoAssetDataInfo(completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
-        guard self.mediaType == .video else {
-            completion(nil)
-            return
-        }
-        
-        let options: PHVideoRequestOptions = PHVideoRequestOptions()
-        options.version = .original
-        options.deliveryMode = .highQualityFormat
-        
-        let modificationDate = self.modificationDate
-        let creationDate = self.creationDate
-        
-        Self.phManager.requestAVAsset(forVideo: self, options: options, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) -> Void in
-            if let urlAsset = asset as? AVURLAsset, let fileSize = urlAsset.fileSize {
-                let localVideoUrl: URL = urlAsset.url as URL
-                let responseURL: URL = localVideoUrl
-                let videoDuration: TimeInterval = urlAsset.duration.seconds
-                let fileSize: Int32 = Int32(fileSize)
-                let result = PHAssetDataInfo(url: responseURL,
-                                videoDuration: videoDuration,
-                                fileSize: fileSize,
-                                creationDate: creationDate,
-                                modificationDate: modificationDate)
-                
-                completion(result)
-            } else {
-                completion(nil)
-            }
-        })
-    }
-    
-    private func requestGetImageAssetDataInfo(completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
-        guard self.mediaType == .image else {
-            completion(nil)
-            return
-        }
-        let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
-        options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData) -> Bool in
-            return true
-        }
-        
-        let modificationDate = self.modificationDate
-        let creationDate = self.creationDate
-        
-        self.requestContentEditingInput(with: options, completionHandler: {(contentEditingInput: PHContentEditingInput?, info: [AnyHashable : Any]) -> Void in
-            guard let contentEditingInput = contentEditingInput, let fullSizeImageURL = contentEditingInput.fullSizeImageURL else {
-                completion(nil)
-                return
-            }
-            let responseURL: URL = fullSizeImageURL
-            let videoDuration: TimeInterval = .zero
-            let creationDate: Date? = creationDate
-            let modificationDate: Date? = modificationDate
-            
-            let attr = try? FileManager.default.attributesOfItem(atPath: responseURL.path)
-            let fileSize = (attr?[FileAttributeKey.size] as? Int32) ?? 0
-            
-            let result = PHAssetDataInfo(url: responseURL,
-                            videoDuration: videoDuration,
-                            fileSize: fileSize,
-                            creationDate: creationDate,
-                            modificationDate: modificationDate)
-            completion(result)
-        })
-        
-    }
-    
-}
-
-extension AVURLAsset {
-    
-    var fileSize: Int? {
-        let keys: Set<URLResourceKey> = [.totalFileSizeKey, .fileSizeKey]
-        let resourceValues = try? url.resourceValues(forKeys: keys)
-        return resourceValues?.fileSize ?? resourceValues?.totalFileSize
-    }
 }

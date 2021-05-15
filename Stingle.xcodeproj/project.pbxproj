@@ -30,6 +30,7 @@
 		A0195E132628392F00C8CEA6 /* STAlbumsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0195E122628392F00C8CEA6 /* STAlbumsDataSource.swift */; };
 		A021A17B264F325900394713 /* UINavigationBar+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17A264F325900394713 /* UINavigationBar+Progress.swift */; };
 		A021A17E264F361E00394713 /* STGalleryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17D264F361E00394713 /* STGalleryNavigationController.swift */; };
+		A021A180264F409600394713 /* IUploadFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17F264F409600394713 /* IUploadFile.swift */; };
 		A02203C125EED86800D07C98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203C025EED86800D07C98 /* AppDelegate.swift */; };
 		A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203C225EED86800D07C98 /* SceneDelegate.swift */; };
 		A02203CA25EED86800D07C98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A02203C925EED86800D07C98 /* Assets.xcassets */; };
@@ -280,6 +281,7 @@
 		A0195E122628392F00C8CEA6 /* STAlbumsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsDataSource.swift; sourceTree = "<group>"; };
 		A021A17A264F325900394713 /* UINavigationBar+Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Progress.swift"; sourceTree = "<group>"; };
 		A021A17D264F361E00394713 /* STGalleryNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryNavigationController.swift; sourceTree = "<group>"; };
+		A021A17F264F409600394713 /* IUploadFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUploadFile.swift; sourceTree = "<group>"; };
 		A02203BD25EED86800D07C98 /* Stingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A02203C025EED86800D07C98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A02203C225EED86800D07C98 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -1707,6 +1709,7 @@
 			children = (
 				A0D29CD6262051460083967D /* STFileUploader.swift */,
 				A0D29CDE262081130083967D /* STFileUploaderOperation.swift */,
+				A021A17F264F409600394713 /* IUploadFile.swift */,
 			);
 			path = FileUploader;
 			sourceTree = "<group>";
@@ -2062,6 +2065,7 @@
 				A022048125EEDC0400D07C98 /* STNetworkDispatcher.swift in Sources */,
 				A04A8ED326473CE200A3DF57 /* STAppSettings.swift in Sources */,
 				A05D268D261B489C008E9CF8 /* STMenuMasterHeaderView.swift in Sources */,
+				A021A180264F409600394713 /* IUploadFile.swift in Sources */,
 				A0F1437925FAC67B004C0E87 /* STContactProvider.swift in Sources */,
 				A06E423D2627230E00F43826 /* STAlbumsCollectionViewCell.swift in Sources */,
 				A08B77F92608D56300EEEC93 /* STDownloadNetworkOperation.swift in Sources */,

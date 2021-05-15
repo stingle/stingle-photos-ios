@@ -238,8 +238,9 @@ class STCrypto {
 	}
 	
     @discardableResult
-    public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32) throws -> (header: STHeader, encriptedHeader: Bytes) {
-		let publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+    public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
+        
+		let publicKey = try (publicKey ?? self.readPrivateFile(filename: Constants.PublicKeyFilename))
 		let symmetricKey = self.sodium.keyDerivation.key()
 		let header = try getNewHeader(symmetricKey: symmetricKey, dataSize: dataLength, filename: filename, fileType: fileType, fileId: fileId, videoDuration: videoDuration)
         let encriptedHeader = try self.writeHeader(output: output, header: header, publicKey: publicKey)

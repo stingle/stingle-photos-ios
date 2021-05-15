@@ -61,51 +61,15 @@ extension STFileUploader {
         //MARK: - Private
         
         private func upload(file: IUploadFile) {
-            file.requestData { [weak self] (info) in
-                self?.continueOperation(with: info)
-            } failure: { [weak self] (error) in
+            file.requestFile { [weak self] file in
+                self?.continueOperation(with: file)
+            } failure: { [weak self] error in
                 self?.responseFailed(error: error)
             }
         }
         
         private func upload(file: STLibrary.File) {
             self.continueOperation(with: file)
-        }
-        
-        private func continueOperation(with info: UploadFileInfo) {
-            var fileType: STHeader.FileType!
-            switch info.fileType {
-            case .image:
-                fileType = .image
-            case .video:
-                fileType = .video
-            default:
-                self.responseFailed(error: UploaderError.phAssetNotValid)
-                return
-            }
-            guard let localThumbsURL = STApplication.shared.fileSystem.localThumbsURL, let localOreginalsURL = STApplication.shared.fileSystem.localOreginalsURL else {
-                self.responseFailed(error: UploaderError.fileSystemNotValid)
-                return
-            }
-            do {
-                let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(oreginalUrl: info.oreginalUrl, thumbImage: info.thumbImage, fileType: fileType, duration: info.duration, toUrl: localOreginalsURL, toThumbUrl: localThumbsURL, fileSize: info.fileSize)
-                self.continueOperation(with: encryptedFileInfo, info: info)
-            } catch {
-                self.responseFailed(error: UploaderError.error(error: error))
-            }
-        }
-                
-        private func continueOperation(with encryptedFileInfo: (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String), info: UploadFileInfo) {
-            let version = "\(STCrypto.Constants.CurrentFileVersion)"
-            let dateCreated = info.creationDate ?? Date()
-            let dateModified = info.modificationDate ?? Date()
-            
-            do {
-                let file = try STLibrary.File(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false)
-                self.continueOperation(with: file)
-            } catch {
-                self.responseFailed(error: UploaderError.error(error: error), file: nil)
-            }
         }
         
         private func continueOperation(with file: STLibrary.File) {

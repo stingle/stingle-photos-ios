@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Photos
 
 protocol STAlbumFilesVMDelegate: AnyObject {
     func albumFilesVM(didDeletedAlbum albumFilesVM: STAlbumFilesVM)
@@ -19,6 +20,7 @@ class STAlbumFilesVM {
     private let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
     private let albumProvider = STApplication.shared.dataBase.albumsProvider
     private var album: STLibrary.Album
+    private let uploader = STApplication.shared.uploader
     
     weak var delegate: STAlbumFilesVMDelegate?
     
@@ -127,6 +129,11 @@ class STAlbumFilesVM {
     func downloadSelection(fileNames: [String]) {
         let files = self.getFiles(fileNames: fileNames)
         STApplication.shared.downloaderManager.fileDownloader.download(files: files)
+    }
+    
+    func upload(assets: [PHAsset]) {
+        let files = assets.compactMap({ return STFileUploader.AlbumFileUploadable(asset: $0, album: self.album) })
+        self.uploader.upload(files: files)
     }
     
 }

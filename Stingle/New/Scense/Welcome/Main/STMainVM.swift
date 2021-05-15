@@ -13,7 +13,7 @@ import Kingfisher
 class STMainVM {
 	
 	func setupApp(end: ((_ result: Bool) -> Void)) {
-        NFX.sharedInstance().start()
+//        NFX.sharedInstance().start()
 		end(true)
 	}
 	
