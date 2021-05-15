@@ -42,7 +42,6 @@ class STImagePickerHelper: NSObject {
     func save(items: [(url: URL, itemType: ItemType)], completionHandler: @escaping (() -> Void) ) {
         let library = PHPhotoLibrary.shared()
         var count = items.count
-        
         for item in items {
             library.performChanges {
                 let _ = item.itemType == .photo ? PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: item.url) :  PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: item.url)

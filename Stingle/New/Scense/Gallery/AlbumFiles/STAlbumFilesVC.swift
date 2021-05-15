@@ -484,7 +484,7 @@ extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
         let title = "alert_save_to_device_library_title".localized
         let message = "alert_save_to_device_library_message".localized
-        self.showInfoAlert(title: title, message: message) { [weak self] in
+        self.showInfoAlert(title: title, message: message, cancel: true) { [weak self] in
             self?.openDownloadController(action: .saveDevicePhotos)
         }
     }
