@@ -60,12 +60,9 @@ class STFileUploader {
     
     func uploadAllLocalFiles() {
         DispatchQueue.main.async { [weak self] in
-            
             var localFiles = STApplication.shared.dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
             let localAlbumFiles = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")
-            
             localFiles.append(contentsOf: localAlbumFiles)
-            
             self?.dispatchQueue.sync {
                 self?.uploadAllLocalFilesInQueue(files: localFiles)
             }
@@ -153,8 +150,9 @@ class STFileUploader {
             if file.isRemote {
                 STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: true)
             } else {
-                STApplication.shared.dataBase.albumFilesProvider.add(models: [albumFile], reloadData: self.uploadedFiles.isEmpty)
+                STApplication.shared.dataBase.addAlbumFile(albumFile: albumFile, reloadData: true)
             }
+            
         } else {
             if file.isRemote {
                 STApplication.shared.dataBase.galleryProvider.update(models: [file], reloadData: true)

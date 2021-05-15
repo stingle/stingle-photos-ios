@@ -127,8 +127,8 @@ extension STDataBase {
         
         //MARK: - Methods
         
-        func add(models: [Model], reloadData: Bool) {
-            let context = self.container.newBackgroundContext()
+        func add(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
+            let context = context ?? self.container.newBackgroundContext()
             context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
             context.performAndWait {
                 do {
@@ -150,13 +150,11 @@ extension STDataBase {
             }
         }
         
-        func delete(models: [Model], reloadData: Bool) {
-            
+        func delete(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
             guard !models.isEmpty else {
                 return
             }
-            
-            let context = self.container.newBackgroundContext()
+            let context = context ?? self.container.newBackgroundContext()
             context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
             context.performAndWait {
                 do {
@@ -180,8 +178,8 @@ extension STDataBase {
             }
         }
         
-        func update(models: [Model], reloadData: Bool) {
-            let context = self.container.newBackgroundContext()
+        func update(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
+            let context = context ?? self.container.newBackgroundContext()
             var resultError: Error?
             context.performAndWait {
                 do {
@@ -209,9 +207,9 @@ extension STDataBase {
         
         //MARK: - Fetch
         
-        func fetchObjects(format predicateFormat: String, arguments argList: CVaListPointer) -> [Model] {
+        func fetchObjects(format predicateFormat: String, arguments argList: CVaListPointer, context: NSManagedObjectContext? = nil) -> [Model] {
             let predicate = NSPredicate(format: predicateFormat, arguments: argList)
-            let cdModels: [ManagedModel] = self.fetch(predicate: predicate)
+            let cdModels: [ManagedModel] = self.fetch(predicate: predicate, context: context)
             var results = [Model]()
             for cdModel in cdModels {
                 if let model = try? cdModel.createModel()  {
@@ -221,8 +219,8 @@ extension STDataBase {
             return results
         }
         
-        func fetchAllObjects() -> [Model] {
-            let cdModels: [ManagedModel] = self.fetch(predicate: nil)
+        func fetchAllObjects(context: NSManagedObjectContext? = nil) -> [Model] {
+            let cdModels: [ManagedModel] = self.fetch(predicate: nil, context: context)
             var results = [Model]()
             for cdModel in cdModels {
                 if let model = try? cdModel.createModel()  {
@@ -232,8 +230,9 @@ extension STDataBase {
             return results
         }
         
-        func fetchObjects(predicate: NSPredicate?) -> [Model] {
-            let cdModels = self.fetch(predicate: predicate)
+        func fetch(identifiers: [String], context: NSManagedObjectContext? = nil) -> [Model] {
+            let predicate = NSPredicate(format: "identifier IN %@", identifiers)
+            let cdModels = self.fetch(predicate: predicate, context: context)
             var results = [Model]()
             for cdModel in cdModels {
                 if let model = try? cdModel.createModel() {
@@ -243,13 +242,24 @@ extension STDataBase {
             return results
         }
         
-        func fetchObjects(format predicateFormat: String, _ args: CVarArg...) -> [Model] {
+        func fetchObjects(predicate: NSPredicate?, context: NSManagedObjectContext? = nil) -> [Model] {
+            let cdModels = self.fetch(predicate: predicate, context: context)
+            var results = [Model]()
+            for cdModel in cdModels {
+                if let model = try? cdModel.createModel() {
+                    results.append(model)
+                }
+            }
+            return results
+        }
+        
+        func fetchObjects(format predicateFormat: String, _ args: CVarArg..., context: NSManagedObjectContext? = nil) -> [Model] {
             let predicate = NSPredicate(format: predicateFormat, args)
-            return self.fetchObjects(predicate: predicate)
+            return self.fetchObjects(predicate: predicate, context: context)
         }
                 
-        func fetch(predicate: NSPredicate?) -> [ManagedModel] {
-            let context = self.container.viewContext
+        func fetch(predicate: NSPredicate?, context: NSManagedObjectContext? = nil) -> [ManagedModel] {
+            let context = context ?? self.container.viewContext
             return context.performAndWait { () -> [ManagedModel] in
                 let fetchRequest = NSFetchRequest<ManagedModel>(entityName: ManagedModel.entityName)
                 fetchRequest.includesSubentities = true
@@ -260,9 +270,9 @@ extension STDataBase {
             }
         }
         
-        func fetch(identifiers: [String]) -> [ManagedModel] {
+        func fetch(identifiers: [String], context: NSManagedObjectContext? = nil) -> [ManagedModel] {
             let predicate = NSPredicate(format: "identifier IN %@", identifiers)
-            return self.fetch(predicate: predicate)
+            return self.fetch(predicate: predicate, context: context)
         }
         
         func fetch(identifiers: [String], context: NSManagedObjectContext) -> [ManagedModel] {
