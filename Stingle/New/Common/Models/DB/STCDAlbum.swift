@@ -11,7 +11,7 @@ import CoreData
 
 @objc(STCDAlbum)
 public class STCDAlbum: NSManagedObject, IManagedObject {
-   
+
     func update(model: STLibrary.Album, context: NSManagedObjectContext) {
         self.albumId = model.albumId
         self.encPrivateKey = model.encPrivateKey
@@ -26,6 +26,7 @@ public class STCDAlbum: NSManagedObject, IManagedObject {
         self.cover = model.cover
         self.dateCreated = model.dateCreated
         self.dateModified = model.dateModified
+        self.identifier = model.identifier
     }
     
     func createModel() throws -> STLibrary.Album {

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="n3g-D8-Efh" customClass="STAlbumSettingsPermissionCell" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="86"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="n3g-D8-Efh" id="Nho-ll-BGE">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="86"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PH4-3e-S4c">
+                        <rect key="frame" x="16" y="8" width="249.5" height="70"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new photos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S2j-tG-Kmc">
+                                <rect key="frame" x="0.0" y="0.0" width="249.5" height="28.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" name="STText"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label LabelLabelLabelLabelLabel LabelLabelLabelLabelLabel LabelLabel" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nzy-2n-e9w">
+                                <rect key="frame" x="0.0" y="36.5" width="249.5" height="33.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" name="STText"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="nzy-2n-e9w" secondAttribute="bottom" id="0zR-2b-ZcX"/>
+                            <constraint firstAttribute="trailing" secondItem="S2j-tG-Kmc" secondAttribute="trailing" id="80f-5K-lxS"/>
+                            <constraint firstItem="S2j-tG-Kmc" firstAttribute="top" secondItem="PH4-3e-S4c" secondAttribute="top" id="8L9-Xg-5db"/>
+                            <constraint firstItem="nzy-2n-e9w" firstAttribute="leading" secondItem="PH4-3e-S4c" secondAttribute="leading" id="It9-Yg-8Iy"/>
+                            <constraint firstItem="S2j-tG-Kmc" firstAttribute="leading" secondItem="PH4-3e-S4c" secondAttribute="leading" id="WNb-6G-gVl"/>
+                            <constraint firstItem="nzy-2n-e9w" firstAttribute="top" secondItem="S2j-tG-Kmc" secondAttribute="bottom" constant="8" id="Xu4-zZ-0a2"/>
+                            <constraint firstItem="nzy-2n-e9w" firstAttribute="height" secondItem="S2j-tG-Kmc" secondAttribute="height" priority="250" id="hp9-3y-BmY"/>
+                            <constraint firstAttribute="trailing" secondItem="nzy-2n-e9w" secondAttribute="trailing" id="rTQ-Rw-iR4"/>
+                        </constraints>
+                    </view>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rbm-f0-kMo">
+                        <rect key="frame" x="349" y="27.5" width="51" height="31"/>
+                        <color key="onTintColor" name="STPrimary"/>
+                        <connections>
+                            <action selector="didSelectSwich:" destination="n3g-D8-Efh" eventType="valueChanged" id="9Tb-0j-0o2"/>
+                        </connections>
+                    </switch>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="PH4-3e-S4c" secondAttribute="bottom" constant="8" id="2e9-9h-Qtx"/>
+                    <constraint firstItem="rbm-f0-kMo" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="PH4-3e-S4c" secondAttribute="trailing" constant="12" id="9y7-2h-dLu"/>
+                    <constraint firstAttribute="trailing" secondItem="rbm-f0-kMo" secondAttribute="trailing" constant="16" id="L8j-RK-aSw"/>
+                    <constraint firstItem="PH4-3e-S4c" firstAttribute="top" secondItem="Nho-ll-BGE" secondAttribute="top" constant="8" id="YJj-iu-Kqh"/>
+                    <constraint firstItem="rbm-f0-kMo" firstAttribute="centerY" secondItem="Nho-ll-BGE" secondAttribute="centerY" id="ebU-U4-QDw"/>
+                    <constraint firstItem="PH4-3e-S4c" firstAttribute="leading" secondItem="Nho-ll-BGE" secondAttribute="leading" constant="16" id="wqa-GF-2Jb"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="subTitleLabel" destination="nzy-2n-e9w" id="01d-RH-XVQ"/>
+                <outlet property="switch" destination="rbm-f0-kMo" id="nu3-Zu-rUk"/>
+                <outlet property="titleLabel" destination="S2j-tG-Kmc" id="RJ7-hn-N6L"/>
+            </connections>
+            <point key="canvasLocation" x="206" y="209"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="STPrimary">
+            <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

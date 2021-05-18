@@ -23,8 +23,8 @@ class STApplication {
         return STFileSystem()
     }()
     
-    private(set) lazy var fileRetryer: STFileRetryerManager = {
-        return STFileRetryerManager()
+    private(set) lazy var downloaderManager: STDownloaderManager = {
+        return STDownloaderManager()
     }()
     
     private(set) lazy var syncManager: STSyncManager = {
@@ -40,7 +40,7 @@ class STApplication {
 }
 
 extension STApplication {
-    
+            
     func isLogedIn() -> Bool {
         do {
             return try  STValidator().validate(user: self.dataBase.userProvider.user)

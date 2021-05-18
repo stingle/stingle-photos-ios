@@ -18,6 +18,7 @@ public class STCDUser: NSManagedObject, IManagedObject {
         self.isKeyBackedUp = model.isKeyBackedUp
         self.token = model.token
         self.userId = model.userId
+        self.identifier = model.identifier
     }
     
     func createModel() throws -> STUser {

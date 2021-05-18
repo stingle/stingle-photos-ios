@@ -7,7 +7,7 @@
 
 import UIKit
 
-class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewController {
+class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewController, STCollectionViewDataSourceDelegate {
     
     private(set) var dataSource: STCollectionViewDataSource<ViewModel>!
     let refreshControl = UIRefreshControl()
@@ -32,8 +32,15 @@ class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewCo
     func configureLocalize() {}
     
     func configureRefreshControl() {
+        guard self.shouldAddRefreshControl() else {
+            return
+        }
         self.refreshControl.addTarget(self, action: #selector(self.refreshControl(didRefresh:)), for: .valueChanged)
         self.collectionView.addSubview(self.refreshControl)
+    }
+    
+    func shouldAddRefreshControl() -> Bool {
+        return true
     }
     
     func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
@@ -90,9 +97,7 @@ class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewCo
         self.refreshControlDidRefresh()
     }
     
-}
-
-extension STFilesViewController: STCollectionViewDataSourceDelegate {
+    //MARK: - STCollectionViewDataSourceDelegate
     
     func dataSource(layoutSection dataSource: IViewDataSource, sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         return self.layoutSection(sectionIndex: sectionIndex, layoutEnvironment: layoutEnvironment)
@@ -100,8 +105,10 @@ extension STFilesViewController: STCollectionViewDataSourceDelegate {
     
     func dataSource(didStartSync dataSource: IViewDataSource) {}
     func dataSource(didEndSync dataSource: IViewDataSource) {}
+    func dataSource(didConfigureCell dataSource: IViewDataSource, cell: UICollectionViewCell) {}
+    func dataSource(didApplySnapshot dataSource: IViewDataSource) {}
     
-    func dataSource(didApplySnapshot dataSource: IViewDataSource) {
+    func dataSource(willApplySnapshot dataSource: IViewDataSource) {
         self.updateEmptyView()
     }
     

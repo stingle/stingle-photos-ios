@@ -16,7 +16,6 @@ class STFileSystem {
     lazy var privateURL = self.createPrivatePath()
     
     private var cacheFolderDataSize: STBytesUnits? = nil
-    
     private var existFilesFolderType = [FilesFolderType: URL]()
 
     var storageURl: URL? {
@@ -93,6 +92,10 @@ class STFileSystem {
         try? self.fileManager.removeItem(at: url)
     }
     
+    func createDirectory(url: URL) throws {
+        try self.fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+    }
+        
     func move(file from: URL, to: URL) throws {
         var toPath = to
         toPath = toPath.deletingPathExtension()
@@ -146,11 +149,15 @@ class STFileSystem {
         return self.fileManager.contents(atPath: url.path)
     }
     
+    open func fileExists(atPath path: String) -> Bool {
+        return self.fileManager.fileExists(atPath: path)
+    }
+    
 }
 
 private extension STFileSystem {
     
-    func createStoragePath() -> URL? {
+    private func createStoragePath() -> URL? {
         guard let path = self.fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
             return nil
         }
@@ -171,7 +178,7 @@ private extension STFileSystem {
         return homePathUrl
     }
     
-    func createPrivatePath() -> URL? {
+    private func createPrivatePath() -> URL? {
         guard let path = self.fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
             return nil
         }
@@ -189,7 +196,7 @@ private extension STFileSystem {
         return privatePathUrl
     }
     
-    func createTmpPath() -> URL? {
+    private func createTmpPath() -> URL? {
         guard let path = self.fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
             return nil
         }
@@ -207,7 +214,7 @@ private extension STFileSystem {
         return tmpUrl
     }
     
-    func createCachePath() -> URL? {
+    private func createCachePath() -> URL? {
         guard let url = self.storageURl else {
             return nil
         }
@@ -222,7 +229,7 @@ private extension STFileSystem {
         return pathUrl
     }
     
-    func createLoalCachePath() -> URL? {
+    private func createLoalCachePath() -> URL? {
         guard let url = self.storageURl else {
             return nil
         }
@@ -237,7 +244,7 @@ private extension STFileSystem {
         return pathUrl
     }
     
-    func createPath(for filesType: FilesFolderType) -> URL? {
+    private func createPath(for filesType: FilesFolderType) -> URL? {
         guard let url = self.storageURl else {
             return nil
         }
@@ -252,7 +259,7 @@ private extension STFileSystem {
         return pathUrl
     }
     
-    func createPath(for type: FilesFolderType.FolderType) -> URL? {
+    private func createPath(for type: FilesFolderType.FolderType) -> URL? {
         guard let url = self.storageURl else {
             return nil
         }
@@ -266,7 +273,7 @@ private extension STFileSystem {
         }
         return pathUrl
     }
-        
+            
 }
 
 extension STFileSystem {
@@ -332,6 +339,26 @@ extension STFileSystem {
             }
         }
         return dest
+    }
+    
+    func deleteFiles(files: [STLibrary.File]) {
+        for file in files {
+            if let oldFileThumbPath = file.fileOreginalUrl?.path {
+                try? self.fileManager.removeItem(atPath: oldFileThumbPath)
+            }
+            
+            if let fileThumbPath = file.fileThumbUrl?.path {
+                try? self.fileManager.removeItem(atPath: fileThumbPath)
+            }
+            
+        }
+    }
+    
+    func isExistFileile(file: STLibrary.File, isThumb: Bool) -> Bool {
+        guard let url = isThumb ? file.fileThumbUrl : file.fileOreginalUrl else {
+            return false
+        }
+        return self.fileExists(atPath: url.path)
     }
     
 }

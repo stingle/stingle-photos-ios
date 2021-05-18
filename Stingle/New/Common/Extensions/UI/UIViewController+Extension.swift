@@ -10,12 +10,18 @@ import UIKit
 
 extension UIViewController {
 	
-	func showInfoAlert(title: String?, message: String?, handler: (() -> Void)? = nil) {
+    func showInfoAlert(title: String?, message: String?, cancel: Bool = false, handler: (() -> Void)? = nil) {
 		let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 		let okAction = UIAlertAction(title:  "ok".localized, style: .default) { (_) in
 			handler?()
 		}
 		alert.addAction(okAction)
+        
+        if cancel {
+            let cancel = UIAlertAction(title:  "cancel".localized, style: .cancel)
+            alert.addAction(cancel)
+        }
+        
 		self.present(alert, animated: true)
 	}
 	

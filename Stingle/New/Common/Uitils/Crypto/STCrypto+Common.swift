@@ -115,29 +115,14 @@ extension STCrypto {
         return headerBytes
     }
     
-    public func encryptCryptoBox(message: Bytes, publicKey: Bytes, privateKey: Bytes) throws  -> Bytes? {
+    public func encryptCryptoBox(message: Bytes, publicKey: Bytes, privateKey: Bytes) throws  -> Bytes {
         guard let nonce = self.getRandomBytes(lenght: self.sodium.box.NonceBytes) else {
             throw CryptoError.Internal.randomBytesGenerationFailure
         }
-        guard let result:Bytes = self.sodium.box.seal(message: message, recipientPublicKey: publicKey, senderSecretKey: privateKey, nonce: nonce) else {
-            return nil
+        guard let result: Bytes = self.sodium.box.seal(message: message, recipientPublicKey: publicKey, senderSecretKey: privateKey, nonce: nonce) else {
+            throw CryptoError.General.creationFailure
         }
         return nonce + result
     }
 
-    func encryptParamsForServer(params: [String:String]) -> String? {
-        do {
-            let spbk  = try self.getServerPublicKey()
-            guard let pks = KeyManagement.key else {
-                throw CryptoError.Bundle.pivateKeyIsEmpty
-            }
-            let json = try JSONSerialization.data(withJSONObject: params)
-            guard let res  = try self.encryptCryptoBox(message: (Bytes)(json), publicKey: spbk, privateKey: pks) else {
-                return nil
-            }
-            return self.bytesToBase64(data: res)
-        } catch {
-            return nil
-        }
-    }
 }

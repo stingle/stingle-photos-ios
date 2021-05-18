@@ -10,7 +10,7 @@ import Kingfisher
 
 class STImageView: UIImageView {
     
-    func setImage(_ image: IRetrySource?, placeholder: UIImage?) {
+    func setImage(_ image: IDownloaderSource?, placeholder: UIImage?) {
         let animator = STImageDownloadPlainAnimator()
         self.setImage(source: image, placeholder: placeholder, animator: animator)
     }
@@ -64,7 +64,7 @@ extension STImageView {
 }
 
 
-extension STImageView.Image: IRetrySource {
+extension STImageView.Image: IFileRetrySource {
     
     var filePath: STFileSystem.FilesFolderType {
         let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache

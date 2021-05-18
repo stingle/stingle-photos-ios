@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="STAlbumsCollectionViewCell" customModule="Stingle" customModuleProvider="target">
+        <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="STAlbumsCollectionViewCell" customModule="Stingle" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="256" height="178"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -75,16 +75,30 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KEF-6J-kgW" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                        <rect key="frame" x="-25" y="-25" width="50" height="50"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="50" id="gTq-BK-dU3"/>
+                            <constraint firstAttribute="width" constant="50" id="xXE-SO-gMs"/>
+                        </constraints>
+                        <state key="normal" image="ic_minus"/>
+                        <connections>
+                            <action selector="didSelectDeleteButton:" destination="gTV-IL-0wX" eventType="touchUpInside" id="Ekg-uq-HyM"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="sbb-MN-cMN" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="bmY-KA-Tjd"/>
+                <constraint firstItem="KEF-6J-kgW" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="leading" id="eYG-fC-vaR"/>
+                <constraint firstItem="KEF-6J-kgW" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="top" id="hLM-IQ-bTQ"/>
                 <constraint firstItem="sbb-MN-cMN" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="mAN-in-jXg"/>
                 <constraint firstAttribute="bottom" secondItem="sbb-MN-cMN" secondAttribute="bottom" id="vkU-15-vTU"/>
                 <constraint firstAttribute="trailing" secondItem="sbb-MN-cMN" secondAttribute="trailing" id="zKf-JG-IcZ"/>
             </constraints>
             <size key="customSize" width="256" height="178"/>
             <connections>
+                <outlet property="deleteButton" destination="KEF-6J-kgW" id="uVD-mj-ohR"/>
                 <outlet property="imageView" destination="nYj-TY-IPX" id="tdM-NQ-EWF"/>
                 <outlet property="itemsCountLabel" destination="yh9-OH-zXj" id="Sf9-Kt-4ng"/>
                 <outlet property="nameLabel" destination="OPF-T8-aQo" id="MCz-51-o6P"/>
@@ -92,7 +106,13 @@
             <point key="canvasLocation" x="286.95652173913044" y="117.85714285714285"/>
         </collectionViewCell>
     </objects>
+    <designables>
+        <designable name="KEF-6J-kgW">
+            <size key="intrinsicContentSize" width="38" height="38"/>
+        </designable>
+    </designables>
     <resources>
+        <image name="ic_minus" width="38" height="38"/>
         <namedColor name="STBackground">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

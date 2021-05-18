@@ -52,8 +52,9 @@ extension STCrypto {
         public static let KdfDifficultyUltra = 3
         public static let PWHASH_LEN = 64
         
-        public static let CurrentAlbumMedadataVersion = 1
-        
+        static let CurrentAlbumMedadataVersionLen = 1
+        static let CurrentAlbumMedadataVersion = 1
+        static let AlbumIDLen = 32
     }
     
 }
@@ -237,8 +238,9 @@ class STCrypto {
 	}
 	
     @discardableResult
-    public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32) throws -> (header: STHeader, encriptedHeader: Bytes) {
-		let publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+    public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
+        
+		let publicKey = try (publicKey ?? self.readPrivateFile(filename: Constants.PublicKeyFilename))
 		let symmetricKey = self.sodium.keyDerivation.key()
 		let header = try getNewHeader(symmetricKey: symmetricKey, dataSize: dataLength, filename: filename, fileType: fileType, fileId: fileId, videoDuration: videoDuration)
         let encriptedHeader = try self.writeHeader(output: output, header: header, publicKey: publicKey)
@@ -348,7 +350,6 @@ class STCrypto {
         guard numRead > 0  else {
             throw CryptoError.IO.readFailure
         }
-               
     }
 	
     @discardableResult
@@ -400,6 +401,10 @@ class STCrypto {
 		out.close()
 		return true
 	}
+    
+    func readPublicKey() throws -> Bytes {
+        return try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+    }
 	
     func readPrivateFile(filename: String) throws -> Bytes {
         let path = STApplication.shared.fileSystem.folder(for: .private)

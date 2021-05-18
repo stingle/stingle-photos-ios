@@ -145,7 +145,6 @@ class STTabBar: UITabBar {
         self.standardAppearance = appearance
     }
     
-    
     private func updateFrame() {
         var itemFrame = self.frameForTabAtIndex()
         itemFrame.origin.y = 0
@@ -168,5 +167,23 @@ class STTabBar: UITabBar {
         }
         return frames.last ?? CGRect.zero
     }
+    
+    var accessoryView: UIView? {
+        willSet {
+            self.accessoryView?.removeFromSuperview()
+        }
+        didSet {
+            self.subviews.forEach { view in
+                view.isHidden = self.accessoryView != nil
+            }
+            if let accessoryView = self.accessoryView {
+                accessoryView.frame = self.bounds
+                self.addSubview(accessoryView)
+                accessoryView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                accessoryView.isHidden = false
+            }
+        }
+    }
+    
 
 }

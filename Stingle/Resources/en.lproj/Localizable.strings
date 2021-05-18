@@ -63,8 +63,57 @@
 
 "items_count" = "%@ items";
 
+"have_not_any_uploading_item" = "Backup and sync complete";
 
-"have_not_any_uploading_item" = "You have not any uploading item";
+"edit" = "Edit";
+"done" = "Done";
+"select" = "Select";
+
+"selected_items_count" = "%@ items Selected";
+"select_items" = "Select items";
+"next" = "Next";
+"share" = "Share";
+
+"create_new_album" = "Create new album";
+"main_gallry" = "Main gallry";
+"preparing" = "Prepering";
+"remove" = "Remove";
+"add_member" = "Add member";
+"members" = "Members";
+"save" = "Save";
+
+//MARK: - Share
+
+"share_via_stingle_photos" = "Share";
+"sharch_contact_text_feild_placeholder" = "Type an email address";
+"sorry_you_cant_add_yourself" = "Sorry you can't add yourself";
+"share_empty_recipient_list" = "Please select at least one recipient";
+
+"permition_add_new_photos" = "Add new photos";
+"permition_add_new_photos_description" = "Members can add photos to this shared album";
+
+"permition_sharing" = "Sharing";
+"permition_sharing_description" = "Members can invite other users to this shared album";
+
+"permition_copying" = "Copying";
+"permition_copying_description" = "Members can copy photos and videos to their own library and take screenshots";
+
+"permissions" = "Permissions";
+"shared_album" = "Shared album";
+"please_wait_for_backup_to_finish_before_you_can_proceed" = "Please wait for backup to finish before you can proceed";
+
+"share_via_stingle_photos" = "Share via Stingle photos";
+"share_to_other_apps" = "Share to other apps";
+
+"alert_save_to_device_library_title" = "Decrypt?";
+"alert_save_to_device_library_message" = "Are you sure you want to decrypt selection files? They will become accessible to other applications on this device";
+"album_info" = "Album info";
+"album_settings" = "Album settings";
+"unshare" = "Unshare";
+
+"alert_remove_album_member_title" = "Remove member";
+"alert_remove_album_member_message" = "Are you sure you want to remove %@";
+
 
 //MARK: - Gallery
 
@@ -79,9 +128,33 @@
 
 "empy_trash_title" = "Trash is empty";
 "empy_trash_message" = "Deleted photos and videos will appear here";
-
 "album_more_members" = "and %@ other";
 
+"create_album_title" = "Please enter album name";
+"album_name" = "Album name";
+
+"delete_album_alert_title" = "Delete %@";
+"delete_album_alert_message" = "Are you sure you want to delete the album %@?";
+
+"delete_album_files_alert_title" = "Delete items?";
+"delete_album_files_alert_message" = "Do you really want to move %@ file to trash";
+
+"add_or_move_album" = "Add or move album";
+"delete_original_items_after_adding" = "Delete original items after adding";
+
+"rename_album" = "Renamne album";
+"set_blank_album_cover" = "Set a blank album cover";
+"reset_album_cover" = "Reset album cover";
+"set_album_cover" = "Set as album cover";
+"delate_album" = "Delete album";
+"leave_album" = "Leave album";
+"download_selection" = "Download selection";
+"please_select_items" = "Please select items";
+"leave" = "Leave";
+"leave_album_alert_message" = "Are you sure you want to leave this shared album";
+
+"stop_sharing" = "Stop sharing";
+"alert_stop_sharing_message" = "Are you sure you want to stop sharing album %@ with everyone";
 
 //MARK: - Menu
 

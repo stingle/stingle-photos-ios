@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ISyncManagerObserver: class {
+protocol ISyncManagerObserver: AnyObject {
     func syncManager(didStartSync syncManager: STSyncManager)
     func syncManager(didEndSync syncManager: STSyncManager, with error: IError?)
 }

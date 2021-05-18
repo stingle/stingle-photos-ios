@@ -30,3 +30,7 @@ class STResponse<T: Decodable>: IResponse {
 		self.errors = try container.decode([String].self, forKey: .errors)
 	}
 }
+
+struct STEmptyResponse: Codable {
+    
+}

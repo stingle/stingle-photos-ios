@@ -8,10 +8,16 @@
 import Foundation
 
 class STLibrary {
-  
+      
 }
 
 extension STLibrary {
+    
+    enum DBSet: Int {
+        case file = 0
+        case trash = 1
+        case album = 2
+    }
     
     enum LibraryError: IError {
         case parsError

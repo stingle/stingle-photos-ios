@@ -82,7 +82,7 @@ extension STLibrary {
         }
         
         func toManagedModelJson() throws -> [String : Any] {
-            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote]
+            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote, "identifier": self.identifier]
         }
         
     }
@@ -90,13 +90,7 @@ extension STLibrary {
 }
 
 extension STLibrary.File {
-    
-    enum DBSet: Int {
-        case file = 0
-        case trash = 1
-        case album = 2
-    }
-    
+        
     var fileThumbUrl: URL? {
         let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
         let folder: STFileSystem.FilesFolderType = .thumbs(type: type)
@@ -107,7 +101,7 @@ extension STLibrary.File {
         return result
     }
     
-    var fileoreginalUrl: URL? {
+    var fileOreginalUrl: URL? {
         let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
         let folder: STFileSystem.FilesFolderType = .oreginals(type: type)
         guard let url = STApplication.shared.fileSystem.direction(for: folder, create: true) else {

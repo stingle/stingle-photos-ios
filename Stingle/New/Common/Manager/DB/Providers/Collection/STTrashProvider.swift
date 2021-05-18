@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class TrashProvider: DataBaseCollectionProvider<STLibrary.TrashFile, STCDTrashFile, STLibrary.DeleteFile.Trash> {
+    class TrashProvider: DataBaseCollectionProvider<STCDTrashFile, STLibrary.DeleteFile.Trash> {
         
         override func getInsertObjects(with trashFiles: [STLibrary.TrashFile]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.TrashFile], lastDate: Date) {
             var lastDate: Date? = nil
@@ -19,7 +19,7 @@ extension STDataBase {
             try trashFiles.forEach { (file) in
                 let json = try file.toManagedModelJson()
                 jsons.append(json)
-                objIds[file.file] = file
+                objIds[file.identifier] = file
                 let currentLastDate = lastDate ?? file.dateModified
                 if currentLastDate <= file.dateModified {
                     lastDate = file.dateModified
@@ -37,7 +37,7 @@ extension STDataBase {
             let fetchRequest = NSFetchRequest<STCDTrashFile>(entityName: STCDTrashFile.entityName)
             fetchRequest.includesSubentities = false
             let keys: [String] = Array(objIds.keys)
-            fetchRequest.predicate = NSPredicate(format: "file IN %@", keys)
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", keys)
             let items = try context.fetch(fetchRequest)
             
             items.forEach { (item) in
@@ -76,6 +76,40 @@ extension STDataBase {
                 }
             }
             return (deleteItems, lastDate)
+        }
+        
+        override func getObjects(by models: [STLibrary.TrashFile], in context: NSManagedObjectContext) throws -> [STCDTrashFile] {
+            guard !models.isEmpty else {
+                return []
+            }
+            let fileNames = models.compactMap { (deleteFile) -> String in
+                return deleteFile.file
+            }
+            let fetchRequest = NSFetchRequest<STCDTrashFile>(entityName: STCDTrashFile.entityName)
+            fetchRequest.includesSubentities = false
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", fileNames)
+            let cdItems = try context.fetch(fetchRequest)
+            return cdItems
+        }
+        
+        override func updateObjects(by models: [STLibrary.TrashFile], managedModels: [STCDTrashFile], in context: NSManagedObjectContext) {
+            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
+            managedGroup.forEach { (keyValue) in
+                if let key = keyValue.key, let model = modelsGroup[key]?.first {
+                    let cdModel = keyValue.value.first
+                    cdModel?.update(model: model, context: context)
+                }
+            }
+            
+        }
+        
+        func fetch(fileNames: [String], context: NSManagedObjectContext) -> [STCDTrashFile] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDTrashFile.file)) IN %@", fileNames)
+            let fetchRequest = NSFetchRequest<STCDTrashFile>(entityName: STCDTrashFile.entityName)
+            fetchRequest.predicate = predicate
+            let cdModels = try? context.fetch(fetchRequest)
+            return cdModels ?? []
         }
         
     }

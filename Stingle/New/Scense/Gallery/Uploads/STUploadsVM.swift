@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol STUploadsVMDelegate: class {
+protocol STUploadsVMDelegate: AnyObject {
     func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [STLibrary.File], progresses: [String: Progress])
     func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [STLibrary.File])
 }

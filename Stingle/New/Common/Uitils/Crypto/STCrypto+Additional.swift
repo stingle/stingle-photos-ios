@@ -9,6 +9,19 @@ import Sodium
 import UIKit
 
 extension STCrypto {
+    
+    func decrypt(fromUrl: URL, toUrl: URL, header: STHeader?, validateHeader: Bool = true) throws {
+        guard let output = OutputStream(url: toUrl, append: true), let input = InputStream(url: fromUrl)  else {
+            throw CryptoError.General.creationFailure
+        }
+        defer {
+            input.close()
+            output.close()
+        }
+        input.open()
+        output.open()
+        try self.decryptFile(input: input, output: output, header: header, validateHeader: validateHeader)
+    }
             
     func decryptData(data: Data, header: STHeader?, validateHeader: Bool = true) throws -> Data {
                 
@@ -48,7 +61,8 @@ extension STCrypto {
         return Data(bytes)
     }
     
-    func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: Int32) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
+    func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: Int32, publicKey: Bytes? = nil) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
+                
         let fileName = try self.createEncFileName()
         let fileId = try self.createNewFileId()
         let inputThumb = InputStream(data: thumbImage)
@@ -76,11 +90,13 @@ extension STCrypto {
             outputOrigin.close()
         }
         
-        let thumbHeader = try self.encryptFile(input: inputThumb, output: outputThumb, filename: fileName, fileType: fileType.rawValue, dataLength: UInt(thumbImage.count), fileId: fileId, videoDuration: UInt32(duration))
+        let orgFileName = oreginalUrl.lastPathComponent
         
-        let origineader = try self.encryptFile(input: inputOrigin, output: outputOrigin, filename: fileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration))
+        let thumbHeader = try self.encryptFile(input: inputThumb, output: outputThumb, filename: orgFileName, fileType: fileType.rawValue, dataLength: UInt(thumbImage.count), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey)
+        
+        let originHeader = try self.encryptFile(input: inputOrigin, output: outputOrigin, filename: orgFileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey)
                 
-        guard let base64Original = self.bytesToBase64Url(data: origineader.encriptedHeader), let base64Thumb = self.bytesToBase64Url(data: thumbHeader.encriptedHeader) else {
+        guard let base64Original = self.bytesToBase64Url(data: originHeader.encriptedHeader), let base64Thumb = self.bytesToBase64Url(data: thumbHeader.encriptedHeader) else {
             throw CryptoError.Header.incorrectHeader
         }
         let headers = base64Original + "*" + base64Thumb
@@ -110,6 +126,21 @@ extension STCrypto {
         } catch {
             return nil
         }
+    }
+    
+    func encryptParamsForServer(params: [String: Any?]) throws -> String {
+        let spbk  = try self.getServerPublicKey()
+        guard let pks = KeyManagement.key else {
+            throw CryptoError.Bundle.pivateKeyIsEmpty
+        }
+        let json = try JSONSerialization.data(withJSONObject: params)
+        let res = try self.encryptCryptoBox(message: (Bytes)(json), publicKey: spbk, privateKey: pks)
+        
+        guard let base64 = self.bytesToBase64(data: res) else {
+            throw CryptoError.General.creationFailure
+        }
+        
+        return base64
     }
     
 }

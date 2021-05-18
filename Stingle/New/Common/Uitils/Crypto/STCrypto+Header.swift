@@ -137,6 +137,19 @@ extension STCrypto {
         resultMemry.deallocate()
         return arrary
     }
+    
+    func splitHeadersStrs(headersStrs: String) -> (file: String, thumb: String)? {
+        let hdrs = headersStrs.split(separator: "*")
+        guard hdrs.count > 1 else {
+            return nil
+        }
+        let file = hdrs[0]
+        let thumb = hdrs[1]
+        
+        let fileBase64 = self.base64urlToBase64(base64urlString: String(file))
+        let thumbBase64 = self.base64urlToBase64(base64urlString: String(thumb))
+        return (fileBase64, thumbBase64)
+    }
         
     func getHeaders(file: STLibrary.File, publicKey: Bytes? = nil, privateKey: Bytes? = nil) -> STHeaders  {
         return self.getHeaders(headersStrs: file.headers, publicKey: publicKey, privateKey: privateKey)
@@ -149,15 +162,14 @@ extension STCrypto {
         
         let headers = headersStrs
         let hdrs = headers.split(separator: "*")
-        let crypto = STApplication.shared.crypto
         
         hdrs.enumerated().forEach { (index, hdr) in
             let st = self.base64urlToBase64(base64urlString:String(hdr))
-            if let data = crypto.base64ToByte(encodedStr: st) {
+            if let data = self.base64ToByte(encodedStr: st) {
                 let input = InputStream(data: Data(data))
                 input.open()
                 do {
-                    let header = try crypto.getFileHeader(input: input, publicKey: publicKey, privateKey: privateKey)
+                    let header = try self.getFileHeader(input: input, publicKey: publicKey, privateKey: privateKey)
                     input.close()
                     switch index {
                     case 0:
@@ -249,6 +261,15 @@ extension STCrypto {
         return header
     }
     
+    func writeHeader(header: STHeader, publicKey: Bytes?) throws -> Bytes   {
+        let output = OutputStream(toMemory: ())
+        output.open()
+        defer {
+            output.close()
+        }
+        return try self.writeHeader(output: output, header: header, publicKey: publicKey)
+    }
+    
     @discardableResult
     func writeHeader(output: OutputStream, header: STHeader, publicKey: Bytes?) throws -> Bytes {
         // File beggining - 2 bytes
@@ -271,7 +292,7 @@ extension STCrypto {
             throw CryptoError.General.incorrectParameterSize
         }
         
-        let headerBytes = self.toBytes(header:header)
+        let headerBytes = self.toBytes(header: header)
         
         guard let encHeader = self.sodium.box.seal(message: headerBytes, recipientPublicKey: publicKey) else {
             throw CryptoError.Internal.sealFailure
@@ -376,6 +397,22 @@ extension STCrypto {
         offset += fileNameSize
         header.videoDuration = STCrypto.fromBytes(b: Bytes(headerBytes[offset..<offset + Constants.FileVideoDurationlen]))
         return header
+    }
+        
+    func reencryptFileHeaders(headersStr: String, publicKeyTo: Bytes, privateKeyFrom: Bytes, publicKeyFrom: Bytes) throws -> String {
+                
+        let headers = self.getHeaders(headersStrs: headersStr, publicKey: publicKeyFrom, privateKey: privateKeyFrom)
+        guard let file = headers.file, let thumb = headers.thumb else {
+            throw CryptoError.Header.incorrectHeader
+        }
+        
+        let fileNewHeader = try self.writeHeader(header: file, publicKey: publicKeyTo)
+        let thumbNewHeader = try self.writeHeader(header: thumb, publicKey: publicKeyTo)
+        
+        guard let fileNewHeaderStr = self.bytesToBase64Url(data: fileNewHeader), let thumbNewHeaderStr = self.bytesToBase64Url(data: thumbNewHeader) else {
+            throw CryptoError.Header.incorrectHeader
+        }
+        return fileNewHeaderStr + "*" + thumbNewHeaderStr
     }
     
     private func decryptChunk(chunkData: Bytes, chunkNumber: UInt64, header: STHeader) throws -> Bytes {

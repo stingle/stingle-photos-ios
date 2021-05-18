@@ -9,6 +9,8 @@ import Sodium
 
 extension STCrypto {
     
+    //MARK: - Decryption
+    
     func decryptAlbum(albumPKStr: String, encAlbumSKStr: String, metadataStr: String) throws -> STLibrary.Album.AlbumMetadata {
         guard let albumPK = self.base64ToByte(encodedStr: albumPKStr),
               let encAlbumSK = self.base64ToByte(encodedStr: encAlbumSKStr)
@@ -49,7 +51,7 @@ extension STCrypto {
         }
         
         var buf:Bytes = [0]
-        let metadataVersion = input.read(&buf, maxLength: 1)
+        let metadataVersion = input.read(&buf, maxLength: Constants.CurrentAlbumMedadataVersionLen)
         
         guard metadataVersion == Constants.CurrentAlbumMedadataVersion else {
             throw CryptoError.Album.incorrectFileVersion
@@ -69,6 +71,62 @@ extension STCrypto {
         return name
     }
     
+    
+    //MARK: - Encryption
+    
+    func generateEncryptedAlbumDataAndID(albumName: String) throws -> (encPrivateKey: String, publicKey: String, metadata: String, albumID: String) {
+        guard let bytesID =  self.getRandomBytes(lenght: Constants.AlbumIDLen), let albumID = self.bytesToBase64(data: bytesID) else {
+            throw CryptoError.Internal.randomBytesGenerationFailure
+        }
+        let metadata = try self.generateEncryptedAlbumData(albumName: albumName)
+        return (metadata.encPrivateKey, metadata.publicKey, metadata.metadata, albumID)
+    }
+    
+    func generateEncryptedAlbumData(albumName: String) throws -> (encPrivateKey: String, publicKey: String, metadata: String) {
+        let userPK = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+        let keyPair = self.sodium.box.keyPair()
+        guard let albumSK = keyPair?.secretKey, let albumPK = keyPair?.publicKey else {
+            throw CryptoError.Internal.keyPairGenerationFailure
+        }
+        let encryptedMetadata = try self.encryptAlbumMetadata(albumPK: albumPK, albumName: albumName)
+        let encryptedSK = try self.encryptAlbumSK(albumSK: albumSK, userPK: userPK)
+        
+        guard let encPrivateKey = self.bytesToBase64(data: encryptedSK), let publicKey = self.bytesToBase64(data: albumPK), let metadata = self.bytesToBase64(data: encryptedMetadata) else {
+            throw CryptoError.General.creationFailure
+        }
+                
+        return (encPrivateKey, publicKey, metadata)
+    }
+    
+    func encryptAlbumSK(albumSK: Bytes, userPK: Bytes) throws -> Bytes {
+        guard let enc = self.sodium.box.seal(message: albumSK, recipientPublicKey: userPK) else {
+            throw CryptoError.Internal.sealFailure
+        }
+        return enc
+    }
+    
+    func encryptAlbumMetadata(albumPK: Bytes, albumName: String) throws -> Bytes  {
+        let metadataByteStream = OutputStream(toMemory: ())
+        metadataByteStream.open()
+        defer {
+            metadataByteStream.close()
+        }
+        metadataByteStream.write([UInt8(Constants.CurrentFileVersion)],
+                                 maxLength: Constants.CurrentAlbumMedadataVersionLen)
+        let albumNameBytes = albumName.bytes
+        let count4: UInt32 = UInt32(albumName.count)
+        let count: Bytes = STCrypto.toBytes(value: count4)
+        metadataByteStream.write(count, maxLength: count.count)
+        metadataByteStream.write(albumNameBytes, maxLength: albumNameBytes.count)
+        guard let metadataData = metadataByteStream.property(forKey: .dataWrittenToMemoryStreamKey) as? Data else {
+            throw CryptoError.IO.writeFailure
+        }
+        let metadataBytes = Bytes(metadataData)
+        guard let enc = self.sodium.box.seal(message: metadataBytes, recipientPublicKey: albumPK) else {
+            throw CryptoError.Internal.sealFailure
+        }
+        return enc
+    }
 
 }
 

@@ -34,25 +34,86 @@ class STDataBase {
         self.didStartSync()
         let context = self.container.newBackgroundContext()
         context.automaticallyMergesChangesFromParent = true
-        context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
+        context.mergePolicy = NSMergePolicyType.mergeByPropertyStoreTrumpMergePolicyType
         context.performAndWait {
             do {
                 let oldInfo = self.dbInfoProvider.dbInfo
                 let info = try self.syncImportFiles(sync: sync, in: context, dbInfo: oldInfo)
+                
+                if context.hasChanges {
+                    try context.save()
+                }
+                
                 let deleteTime = try self.deleteFiles(deletes: sync.deletes, in: context, lastDelSeenTime: info.lastDelSeenTime)
                 info.lastDelSeenTime = deleteTime
                 self.dbInfoProvider.update(model: info)
+                
+                if context.hasChanges {
+                    try context.save()
+                }
+                self.container.viewContext.reset()
+                
             } catch {
                 finish(DataBaseError.error(error: error))
                 return
             }
+            
         }
-        if context.hasChanges {
-            try? context.save()
-        }
-        self.container.viewContext.reset()
+        
         self.endSync()
         finish(nil)
+        
+    }
+    
+    func deleteAll() {
+        self.galleryProvider.deleteAll()
+        self.albumsProvider.deleteAll()
+        self.albumFilesProvider.deleteAll()
+        self.trashProvider.deleteAll()
+        self.contactProvider.deleteAll()
+        self.dbInfoProvider.deleteAll()
+    }
+    
+    func reloadData() {
+        self.galleryProvider.reloadData()
+        self.albumsProvider.reloadData()
+        self.albumFilesProvider.reloadData()
+        self.trashProvider.reloadData()
+        self.contactProvider.reloadData()
+    }
+    
+    func deleteFilesIfNeeded(files: [STLibrary.File]) {
+        let context = self.container.newBackgroundContext()
+        var fileNames = [String]()
+        
+        files.forEach { file in
+            fileNames.append(file.file)
+        }
+        
+        context.performAndWait {
+                        
+            let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
+            let albumFiles = self.albumFilesProvider.fetch(fileNames: fileNames, context: context)
+            let trashFile = self.trashProvider.fetch(fileNames: fileNames, context: context)
+           
+            let deleteFiles = files.filter { file in
+                let galleryContains = galleryFiles.contains(where: { $0.file == file.file })
+                if galleryContains {
+                    return false
+                }
+                let albumContains = albumFiles.contains(where: { $0.file == file.file })
+                if albumContains {
+                    return false
+                }
+                let trashContains = trashFile.contains(where: { $0.file == file.file })
+                if trashContains {
+                    return false
+                }
+                return true
+            }
+            
+            STApplication.shared.fileSystem.deleteFiles(files: deleteFiles)
+        }
         
     }
     
@@ -101,6 +162,37 @@ class STDataBase {
         let lastContactsSeenTimeDelete = try self.contactProvider.deleteObjects(deletes?.contacts, in: context, lastDate: lastDelSeenTime)
         let timeDeletes = max(lastSeenTimeDelete, lastAlbumsSeenTimeDelete, lastAlbumFilesSeenTimeDelete, lastTrashRecovorsSeenTimeDelete, lastTrashhDeletesSeenTimeDelete, lastContactsSeenTimeDelete)
         return timeDeletes
+    }
+        
+}
+
+extension STDataBase {
+    
+    func addAlbumFile(albumFile: STLibrary.AlbumFile, reloadData: Bool) {
+        let context = self.container.viewContext
+        let albumsProvider = STApplication.shared.dataBase.albumsProvider
+        let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
+        guard let album: STLibrary.Album = albumsProvider.fetch(identifiers: [albumFile.albumId], context: context).first else {
+            return
+        }
+        let newAlbum = STLibrary.Album(albumId: album.albumId,
+                                       encPrivateKey: album.encPrivateKey,
+                                       publicKey: album.publicKey,
+                                       metadata: album.metadata,
+                                       isShared: album.isShared,
+                                       isHidden: album.isHidden,
+                                       isOwner: album.isOwner,
+                                       isLocked: album.isLocked,
+                                       isRemote: album.isRemote,
+                                       permissions: album.permissions,
+                                       members: album.members,
+                                       cover: album.cover,
+                                       dateCreated: album.dateCreated,
+                                       dateModified: Date())
+        
+        albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
+        albumFilesProvider.add(models: [albumFile], reloadData: reloadData, context: context)
+        
     }
     
 }

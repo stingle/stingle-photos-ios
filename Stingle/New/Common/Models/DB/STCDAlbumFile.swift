@@ -20,6 +20,7 @@ public class STCDAlbumFile: NSManagedObject, IManagedObject {
         self.dateModified = model.dateModified
         self.albumId = model.albumId
         self.isRemote = model.isRemote
+        self.identifier = model.identifier
     }
     
     func createModel() throws -> STLibrary.AlbumFile {

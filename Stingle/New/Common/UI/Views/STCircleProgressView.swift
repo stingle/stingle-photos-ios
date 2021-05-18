@@ -68,6 +68,21 @@ class STCircleProgressView: UIView {
         }
     }
     
+    @IBInspectable var drawStyleIntValue: Int {
+        set {
+            self.drawStyle = DrawStyle(rawValue: newValue) ?? self.drawStyle
+        } get {
+            return self.drawStyle.rawValue
+        }
+    }
+    
+    var drawStyle: DrawStyle = .stroke {
+        didSet {
+            self.layoutIfNeeded()
+        }
+    }
+    
+    
     override var tintColor: UIColor! {
         set {
             self.imageView.tintColor = newValue
@@ -189,13 +204,38 @@ class STCircleProgressView: UIView {
     
     private func drawCircle(_ rect: CGRect, context: CGContext, startAngel: CGFloat, endAngel: CGFloat, lineWidth: CGFloat, color: UIColor, clockwise: Bool) {
         let path = CGMutablePath()
-        let center = CGPoint(x: (rect.maxX - rect.minX) / 2, y: (rect.maxY - rect.minY) / 2)
-        let radius = min(rect.width, rect.height) / 2 - lineWidth / 2
-        path.addArc(center: center, radius: radius, startAngle: startAngel, endAngle: endAngel, clockwise: clockwise)
-        context.addPath(path)
-        context.setLineWidth(lineWidth)
-        context.setStrokeColor(color.cgColor)
-        context.strokePath()
+        let center = CGPoint(x: rect.width / 2, y: rect.height / 2)
+        
+        switch self.drawStyle {
+        case .stroke:
+            let radius = min(rect.width, rect.height) / 2 - lineWidth / 2
+            path.addArc(center: center, radius: radius, startAngle: startAngel, endAngle: endAngel, clockwise: clockwise)
+            context.addPath(path)
+            context.setLineWidth(lineWidth)
+            context.setStrokeColor(color.cgColor)
+            context.strokePath()
+        case .fill:
+            path.move(to: center)
+            let radius = min(rect.width, rect.height) / 2
+            path.addArc(center: center, radius: radius, startAngle: startAngel, endAngle: endAngel, clockwise: clockwise)
+            context.addPath(path)
+            context.setFillColor(color.cgColor)
+            context.fillPath()
+        }
+        
+        
     }
 
 }
+
+extension STCircleProgressView {
+    
+    enum DrawStyle: Int {
+        case stroke = 0
+        case fill = 1
+    }
+    
+}
+
+
+

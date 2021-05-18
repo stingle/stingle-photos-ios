@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="STAlbumFilesTabBarAccessoryView" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="826" height="260"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i5t-hJ-vpS">
+                    <rect key="frame" x="0.0" y="0.0" width="826" height="226"/>
+                    <items>
+                        <barButtonItem style="plain" id="1df-d4-v5V">
+                            <view key="customView" contentMode="scaleToFill" id="1gl-7z-eBK">
+                                <rect key="frame" x="20" y="91" width="786" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="bnE-SZ-hEF">
+                                        <rect key="frame" x="0.0" y="0.0" width="275.5" height="44"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rcd-tZ-QWS" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="34" height="44"/>
+                                                <color key="tintColor" name="STText"/>
+                                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                                <state key="normal" image="ic_shared_album_min"/>
+                                                <connections>
+                                                    <action selector="didSelectShareButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="w6B-1i-Y3v"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tN2-Qz-PUy" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                                <rect key="frame" x="42" y="0.0" width="40" height="44"/>
+                                                <color key="tintColor" name="STText"/>
+                                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                                <state key="normal" image="arrowshape.zigzag.forward" catalog="system"/>
+                                                <connections>
+                                                    <action selector="didSelectCopyButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="z96-TS-naX"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ATF-HM-AbB" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                                <rect key="frame" x="90" y="0.0" width="35" height="44"/>
+                                                <color key="tintColor" name="STText"/>
+                                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                                <state key="normal" image="square.and.arrow.down" catalog="system"/>
+                                                <connections>
+                                                    <action selector="didSelectDownloadButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="R3t-do-xqU"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lnp-sx-lz9" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                                <rect key="frame" x="133" y="0.0" width="28.5" height="44"/>
+                                                <color key="tintColor" name="STText"/>
+                                                <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                                <state key="normal" image="trash.fill"/>
+                                                <connections>
+                                                    <action selector="didSelectTrashButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="fca-Wg-IHU"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Selected items " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="1Bd-iU-3qI">
+                                                <rect key="frame" x="169.5" y="0.0" width="106" height="44"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" name="STText"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="1Bd-iU-3qI" firstAttribute="width" secondItem="rcd-tZ-QWS" secondAttribute="width" priority="200" id="JQe-w3-9nn"/>
+                                            <constraint firstItem="tN2-Qz-PUy" firstAttribute="width" secondItem="rcd-tZ-QWS" secondAttribute="width" priority="200" id="P3a-7h-SS8"/>
+                                            <constraint firstItem="ATF-HM-AbB" firstAttribute="width" secondItem="rcd-tZ-QWS" secondAttribute="width" priority="200" id="iyE-7S-h1C"/>
+                                            <constraint firstItem="lnp-sx-lz9" firstAttribute="width" secondItem="rcd-tZ-QWS" secondAttribute="width" priority="200" id="xd6-0R-Sqk"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="bnE-SZ-hEF" firstAttribute="leading" secondItem="1gl-7z-eBK" secondAttribute="leading" id="IuC-yX-mt1"/>
+                                    <constraint firstAttribute="bottom" secondItem="bnE-SZ-hEF" secondAttribute="bottom" id="PM6-G3-OAo"/>
+                                    <constraint firstItem="bnE-SZ-hEF" firstAttribute="top" secondItem="1gl-7z-eBK" secondAttribute="top" id="YuG-Se-YIE"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bnE-SZ-hEF" secondAttribute="trailing" id="ov0-Lh-UTm"/>
+                                </constraints>
+                            </view>
+                        </barButtonItem>
+                    </items>
+                </toolbar>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="i5t-hJ-vpS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3bB-Qs-w59"/>
+                <constraint firstAttribute="trailing" secondItem="i5t-hJ-vpS" secondAttribute="trailing" id="Lkt-Dl-Pn2"/>
+                <constraint firstItem="i5t-hJ-vpS" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="R4Q-CW-Gu7"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="i5t-hJ-vpS" secondAttribute="bottom" id="UaH-hR-fnJ"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="copyButton" destination="tN2-Qz-PUy" id="rAU-g5-zIO"/>
+                <outlet property="downloadButton" destination="ATF-HM-AbB" id="fp1-hd-53e"/>
+                <outlet property="sharButton" destination="rcd-tZ-QWS" id="i0I-RI-Xh7"/>
+                <outlet property="titleLabel" destination="1Bd-iU-3qI" id="kem-Ho-a3w"/>
+                <outlet property="trashButton" destination="lnp-sx-lz9" id="quT-bE-SdG"/>
+            </connections>
+            <point key="canvasLocation" x="420.28985507246381" y="-23.4375"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrowshape.zigzag.forward" catalog="system" width="128" height="93"/>
+        <image name="ic_shared_album_min" width="18" height="20"/>
+        <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
+        <image name="trash.fill" width="13" height="14"/>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

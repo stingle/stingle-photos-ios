@@ -21,15 +21,4 @@ class STMainVM {
         return STApplication.shared.isLogedIn()
 	}
 	
-    
-    //
-    
-    func setupImageCashe() {
-        
-//        MemoryStorage.Backend<KFCrossPlatformImage>(config: MemoryStorage.Config)
-//
-//        KingfisherManager.shared.cache = ImageCache(memoryStorage: MemoryStorage.Backend<KFCrossPlatformImage>, diskStorage: DiskStorage.Backend<Data>)
-        
-    }
-	
 }

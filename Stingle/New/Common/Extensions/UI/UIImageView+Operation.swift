@@ -30,15 +30,15 @@ extension UIImageView {
         }
     }
         
-    func setImage(source: IRetrySource?, placeholder: UIImage? = nil, animator: IImageViewDownloadAnimator? = nil, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
+    func setImage(source: IDownloaderSource?, placeholder: UIImage? = nil, animator: IImageViewDownloadAnimator? = nil, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
         
         if let retryerIdentifier = self.retryerIdentifier {
-            STApplication.shared.fileRetryer.imageRetryer.cancel(operation: retryerIdentifier)
+            STApplication.shared.downloaderManager.imageRetryer.cancel(operation: retryerIdentifier)
         }
         self.image = nil
         if let source = source {
             animator?.imageView(startAnimation: self)
-            self.retryerIdentifier = STApplication.shared.fileRetryer.imageRetryer.retry(source: source) { [weak self] (image) in
+            self.retryerIdentifier = STApplication.shared.downloaderManager.imageRetryer.download(source: source) { [weak self] (image) in
                 self?.retrySuccess(image: image, animator: animator, success: success)
             } progress: { [weak self] (progress) in
                 self?.retryProgress(progressRetry: progress, animator: animator)
