@@ -42,8 +42,7 @@ class STShareAlbumVC: UITableViewController {
     private func configurLocalizes() {
         self.navigationItem.title = "sharing".localized
         self.shareButtonItem.title = "share".localized
-        self.shareAlbumNameLabel.text = "shared_album_name".localized
-        self.shareAlbumNameTextField.placeholder = "shared_album_name".localized
+        self.shareAlbumNameTextField.placeholder = "shared_album".localized
         self.permitionsLabel.text = "permissions".localized
         self.addNewPhotosTitleLabel.text = "permition_add_new_photos".localized
         self.addNewPhotosDescriptionLabel.text = "permition_add_new_photos_description".localized
@@ -58,12 +57,15 @@ class STShareAlbumVC: UITableViewController {
         case .album(let album):
             self.shareAlbumNameTextField.text = album.albumMetadata?.name
             self.shareAlbumNameTextField.isEnabled = false
+            self.shareAlbumNameLabel.text = album.albumMetadata?.name
         case .files:
             self.shareAlbumNameTextField.text = STDateManager.shared.dateToString(date: Date(), withFormate: .mmm_dd_yyyy)
             self.shareAlbumNameTextField.isEnabled = true
+            self.shareAlbumNameLabel.text = nil
         case .albumFiles:
             self.shareAlbumNameTextField.isEnabled = true
             self.shareAlbumNameTextField.text = STDateManager.shared.dateToString(date: Date(), withFormate: .mmm_dd_yyyy)
+            self.shareAlbumNameLabel.text = nil
         }
     }
     

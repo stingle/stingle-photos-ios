@@ -13,14 +13,14 @@
         <!--Shared MembersVC-->
         <scene sceneID="QMH-Yt-SmS">
             <objects>
-                <viewController id="iER-OZ-qdC" customClass="STSharedMembersVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="STSharedMembersVCID" id="iER-OZ-qdC" customClass="STSharedMembersVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7U5-zj-AeI">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="eMe-bV-iSn">
                                 <rect key="frame" x="0.0" y="170" width="414" height="692"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="dataSource" destination="iER-OZ-qdC" id="Ptu-KV-LRr"/>
                                     <outlet property="delegate" destination="iER-OZ-qdC" id="dmf-dR-WOC"/>
@@ -61,6 +61,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="closeButton" destination="ERZ-mB-g4a" id="7xy-Bb-4Sg"/>
                         <outlet property="doneButtonItem" destination="zJm-La-vP5" id="0ty-Ux-8nE"/>
                         <outlet property="tableView" destination="eMe-bV-iSn" id="6gZ-vM-Rtw"/>
                         <outlet property="tokenView" destination="yZK-wK-Nyg" id="oFe-Yn-R7F"/>
@@ -177,7 +178,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="P5f-F2-hHW" secondAttribute="trailing" id="8jD-EY-LCN"/>
                                                         <constraint firstItem="P5f-F2-hHW" firstAttribute="leading" secondItem="Hlh-nY-ABm" secondAttribute="leading" id="OVz-qw-Nyb"/>
@@ -228,7 +229,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="tVp-1m-iXq" firstAttribute="leading" secondItem="R6r-Rg-SSz" secondAttribute="leading" id="1Du-YK-Lxn"/>
                                                         <constraint firstItem="tVp-1m-iXq" firstAttribute="height" secondItem="7G5-Hn-gCg" secondAttribute="height" priority="250" id="76Y-7L-vpX"/>
@@ -279,7 +280,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="wlq-WB-Hws" secondAttribute="trailing" id="3LE-qj-5ln"/>
                                                         <constraint firstAttribute="bottom" secondItem="9Mb-hg-iYh" secondAttribute="bottom" id="I96-bD-7wN"/>
@@ -342,6 +343,72 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WzI-tI-Wau" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2253.6231884057975" y="1220.7589285714284"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="3pN-hc-REI">
+            <objects>
+                <navigationController storyboardIdentifier="STSharedAlbumSettingsVCID" id="ZJX-Kx-RBg" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jCh-31-mNT">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="we3-0L-Vag" kind="relationship" relationship="rootViewController" id="7aI-6O-ijI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="c6K-qJ-hPb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3175" y="1221"/>
+        </scene>
+        <!--Shared Album SettingsVC-->
+        <scene sceneID="lgF-fi-EZ2">
+            <objects>
+                <viewController id="we3-0L-Vag" customClass="STSharedAlbumSettingsVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Hqg-NF-We8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6Ye-iF-psG">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="we3-0L-Vag" id="tCn-Oc-dEI"/>
+                                    <outlet property="delegate" destination="we3-0L-Vag" id="vez-La-ATx"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Xme-IV-aa2"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Xme-IV-aa2" firstAttribute="bottom" secondItem="6Ye-iF-psG" secondAttribute="bottom" id="JJM-Ah-nZh"/>
+                            <constraint firstItem="6Ye-iF-psG" firstAttribute="top" secondItem="Xme-IV-aa2" secondAttribute="top" id="Lbh-Cs-P2b"/>
+                            <constraint firstItem="Xme-IV-aa2" firstAttribute="trailing" secondItem="6Ye-iF-psG" secondAttribute="trailing" id="Lqw-Hs-Zi6"/>
+                            <constraint firstItem="6Ye-iF-psG" firstAttribute="leading" secondItem="Xme-IV-aa2" secondAttribute="leading" id="SMf-eO-IM6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="0HZ-0o-1Fj">
+                        <barButtonItem key="leftBarButtonItem" image="xmark.circle.fill" catalog="system" id="Okh-Cq-iqA">
+                            <color key="tintColor" name="STText"/>
+                            <connections>
+                                <action selector="didSelectCloseButton:" destination="we3-0L-Vag" id="PnY-YZ-AKE"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="byh-P7-M6T">
+                            <color key="tintColor" name="STText"/>
+                            <connections>
+                                <action selector="didSelectSaveButton:" destination="we3-0L-Vag" id="0H7-Fb-g30"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="saveBarButtonItem" destination="byh-P7-M6T" id="B6Q-q6-US8"/>
+                        <outlet property="tableView" destination="6Ye-iF-psG" id="bRJ-o0-oBG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DVS-BD-wGa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4036" y="1221"/>
         </scene>
         <!--Files Downloader ActivityVC-->
         <scene sceneID="rK1-Hs-OcR">
@@ -449,7 +516,7 @@
         <!--Navigation Controller-->
         <scene sceneID="19K-9h-rk8">
             <objects>
-                <navigationController storyboardIdentifier="STSharedMembersVCID" id="1pQ-Jz-wCE" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="STSharedMembersNavVCID" id="1pQ-Jz-wCE" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="T9L-1F-Yq0">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>

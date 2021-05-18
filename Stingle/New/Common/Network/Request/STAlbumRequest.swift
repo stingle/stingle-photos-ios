@@ -16,6 +16,8 @@ enum STAlbumRequest {
     case setCover(album: STLibrary.Album, caver: String?)
     case rename(album: STLibrary.Album, metadata: String)
     case leaveAlbum(album: STLibrary.Album)
+    case unshareAlbum(album: STLibrary.Album)
+    case editPermsAlbum(album: STLibrary.Album)
 
 }
 
@@ -65,6 +67,11 @@ extension STAlbumRequest: IEncryptedRequest {
             return ["albumId": album.albumId, "metadata": metadata]
         case .leaveAlbum(let album):
             return ["albumId": album.albumId]
+        case .unshareAlbum(let album):
+            return ["albumId": album.albumId]
+        case .editPermsAlbum(let album):
+            let albumData = album.toString() ?? ""
+            return ["album": albumData]
         }
     }
     
@@ -84,6 +91,10 @@ extension STAlbumRequest: IEncryptedRequest {
             return "sync/renameAlbum"
         case .leaveAlbum:
             return "sync/leaveAlbum"
+        case .unshareAlbum:
+            return "sync/unshareAlbum"
+        case .editPermsAlbum:
+            return "sync/editPerms"
         }
     }
     
@@ -102,6 +113,10 @@ extension STAlbumRequest: IEncryptedRequest {
         case .rename:
             return .post
         case .leaveAlbum:
+            return .post
+        case .unshareAlbum:
+            return .post
+        case .editPermsAlbum:
             return .post
         }
     }
@@ -122,6 +137,10 @@ extension STAlbumRequest: IEncryptedRequest {
             return nil
         case .leaveAlbum:
             return nil
+        case .unshareAlbum:
+            return nil
+        case .editPermsAlbum:
+            return nil
         }
     }
     
@@ -140,6 +159,10 @@ extension STAlbumRequest: IEncryptedRequest {
         case .rename:
             return STNetworkDispatcher.Encoding.body
         case .leaveAlbum:
+            return STNetworkDispatcher.Encoding.body
+        case .unshareAlbum:
+            return STNetworkDispatcher.Encoding.body
+        case .editPermsAlbum:
             return STNetworkDispatcher.Encoding.body
         }
     }

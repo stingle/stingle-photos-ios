@@ -78,26 +78,7 @@ class STAlbumWorker: STWorker {
         }
         
     }
-    
-    func leaveAlbum(album: STLibrary.Album, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
-        
-        let request = STAlbumRequest.leaveAlbum(album: album)
-        
-        self.request(request: request, success: { (response: STEmptyResponse) in
-           
-            let dataBase = STApplication.shared.dataBase
-            let albumProvider = dataBase.albumsProvider
-            let albumFilesProvider = dataBase.albumFilesProvider
-            let files = albumFilesProvider.fetchAll(for: album.albumId)
-            
-            albumFilesProvider.delete(models: files, reloadData: true)
-            albumProvider.delete(models: [album], reloadData: true)
-            dataBase.deleteFilesIfNeeded(files: files)
-            success(response)
-        }, failure: failure)
-        
-    }
-            
+                
     func deleteAlbumWithFiles(album: STLibrary.Album, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
         let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: album.albumId)
         self.deleteAlbumFiles(album: album, files: files, success: { [weak self] responce in

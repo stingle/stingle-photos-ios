@@ -12,6 +12,7 @@ class STSharedMembersVC: UIViewController {
     @IBOutlet weak private var doneButtonItem: UIBarButtonItem!
     @IBOutlet weak private var tableView: UITableView!
     @IBOutlet weak private var tokenView: STTokenView!
+    @IBOutlet weak private var closeButton: UIBarButtonItem!
     
     private let cellID = "STSharedMembersTableViewCell"
     private var contacts = [STContact]()
@@ -26,10 +27,7 @@ class STSharedMembersVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupSearchBar()
-        self.updateLocalizes()
-        self.configuewTabelView()
-        self.tokenView.delegate = self
+        self.configureUI()
         self.viewModel = STSharedMembersVM(shearedType: self.shearedType)
     }
     
@@ -40,10 +38,6 @@ class STSharedMembersVC: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? STShareAlbumVC, segue.identifier == "goToShare" {
-            guard !self.selectedContactsIDS.isEmpty else {
-                self.showError(error: STSharedMembersVM.SharedMembersError.contactListIsEmpty)
-                return
-            }
             let contacsList = self.contacts.filter({self.selectedContactsIDS.contains($0.userId)})
             let shareAlbumData = STShareAlbumVC.ShareAlbumData(shareType: self.shearedType, contact: contacsList)
             vc.shareAlbumData = shareAlbumData
@@ -51,6 +45,14 @@ class STSharedMembersVC: UIViewController {
     }
         
     //MARK: - private
+    
+    private func configureUI() {
+        self.closeButton.image = self.navigationController?.viewControllers.first == self ? UIImage(named: "ic_close") : UIImage(named: "ic_back")
+        self.setupSearchBar()
+        self.updateLocalizes()
+        self.configuewTabelView()
+        self.tokenView.delegate = self
+    }
     
     private func configuewTabelView() {
         self.tableView.register(UINib.init(nibName: "STSharedMembersTableViewCell", bundle: .main), forCellReuseIdentifier: self.cellID)
@@ -62,7 +64,7 @@ class STSharedMembersVC: UIViewController {
        
         switch self.shearedType {
         case .album(let album):
-            let title = album.isShared ? "share".localized : "next".localized
+            let title = album.isShared ? "save".localized : "next".localized
             self.doneButtonItem.title = title
         case .files:
             self.doneButtonItem.title = "next".localized
@@ -150,14 +152,62 @@ class STSharedMembersVC: UIViewController {
         self.reloadContact(contact: contact)
     }
     
+    private func goToShare() {
+        guard !self.selectedContactsIDS.isEmpty else {
+            self.showError(error: STSharedMembersVM.SharedMembersError.contactListIsEmpty)
+            return
+        }
+        self.performSegue(withIdentifier: "goToShare", sender: nil)
+    }
+    
+    private func addAlbumMember(album: STLibrary.Album) {
+        
+        let contactsIDS = [String](self.selectedContactsIDS)
+        guard !contactsIDS.isEmpty else {
+            self.showError(error: STSharedMembersVM.SharedMembersError.contactListIsEmpty)
+            return
+        }
+        
+        self.searchController.searchBar.resignFirstResponder()
+        STLoadingView.show(in: self.view)
+        self.viewModel.addAlbumMember(album: album, membersIDS: contactsIDS) { [weak self] error in
+            guard let weakSelf = self else{
+                return
+            }
+            STLoadingView.hide(in: weakSelf.view)
+            if let error = error {
+                weakSelf.showError(error: error)
+            } else {
+                weakSelf.gotoBack()
+            }
+        }
+    }
+    
+    private func gotoBack() {
+        if self.navigationController?.viewControllers.first == self {
+            self.dismiss(animated: true, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
     //MARK: - User action
 
     @IBAction private func didSelectCloseButton(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        self.gotoBack()
     }
     
     @IBAction private func didSelectDoneButton(_ sender: Any) {
-        self.performSegue(withIdentifier: "goToShare", sender: nil)
+        switch self.shearedType {
+        case .album(let album):
+            if album.isShared {
+                self.addAlbumMember(album: album)
+            } else {
+                self.goToShare()
+            }
+        default:
+            self.goToShare()
+        }
     }
     
 }

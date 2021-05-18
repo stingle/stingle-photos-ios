@@ -175,7 +175,7 @@ extension STLibrary.Album {
     
     static let imageBlankImageName = "__b__"
     
-    struct Permission {
+    struct Permission: Equatable {
         
         static let permissionVersion = 1;
         static let permissionLenght = 4;
@@ -185,13 +185,6 @@ extension STLibrary.Album {
         let allowCopy: Bool
         
         init(permissions: String?, isOwner: Bool) {
-            
-            if isOwner {
-                self.allowAdd = true
-                self.allowShare = true
-                self.allowCopy = true
-                return
-            }
             
             guard let permissions = permissions, permissions.count == Self.permissionLenght else {
                 self.allowAdd = false
@@ -222,6 +215,10 @@ extension STLibrary.Album {
             let allowShare = self.allowShare ? "1" : "0"
             let allowCopy = self.allowCopy ? "1" : "0"
             return "\(Self.permissionVersion)" + allowAdd + allowShare + allowCopy
+        }
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.allowAdd == rhs.allowAdd && lhs.allowShare == rhs.allowShare && lhs.allowCopy == rhs.allowCopy
         }
         
     }

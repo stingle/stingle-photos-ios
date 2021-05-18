@@ -65,6 +65,7 @@
                     </stackView>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="253" verticalHuggingPriority="251" image="ic_alnum_shared_no_owner" translatesAutoresizingMaskIntoConstraints="NO" id="joI-q9-Gmb">
                         <rect key="frame" x="507" y="68" width="15" height="17"/>
+                        <color key="tintColor" name="STSecondaryText"/>
                         <constraints>
                             <constraint firstAttribute="height" priority="200" constant="20" id="RaU-qj-OVb"/>
                             <constraint firstAttribute="width" priority="200" constant="20" id="Y68-6G-k59"/>

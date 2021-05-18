@@ -201,9 +201,14 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     @IBAction func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
         if !self.album.isShared {
             let storyboard = UIStoryboard(name: "Shear", bundle: .main)
-            let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersVCID") as! UINavigationController)
+            let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
             (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .album(album: self.album)
             self.showDetailViewController(vc, sender: nil)
+        } else {
+            let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+            let vc = (storyboard.instantiateViewController(identifier: "STSharedAlbumSettingsVCID") as! UINavigationController)
+            (vc.viewControllers.first as? STSharedAlbumSettingsVC)?.album = self.album
+            self.show(vc, sender: nil)
         }
     }
     
@@ -298,11 +303,20 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     }
 
     private func configureAlbumActionView() {
-        self.accessoryView.sharButton.isHidden = !self.album.permission.allowShare
-        self.accessoryView.copyButton.isHidden = !self.album.permission.allowCopy
-        self.accessoryView.downloadButton.isHidden = !self.album.permission.allowCopy
-        self.addItemButton.isHidden = !self.album.permission.allowAdd
-        self.accessoryView.trashButton.isHidden = !self.album.isOwner
+        
+        if self.album.isOwner {
+            self.accessoryView.sharButton.isHidden = false
+            self.accessoryView.copyButton.isHidden = false
+            self.accessoryView.downloadButton.isHidden = false
+            self.accessoryView.trashButton.isHidden = false
+        } else {
+            self.accessoryView.copyButton.isHidden = !self.album.permission.allowCopy
+            self.accessoryView.downloadButton.isHidden = !self.album.permission.allowCopy
+            self.addItemButton.isHidden = !self.album.permission.allowAdd
+            self.accessoryView.trashButton.isHidden = true
+        }
+        
+        
         var image: UIImage?
         if !self.album.isShared {
             image = UIImage(named: "ic_shared_album_min")
@@ -376,7 +390,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         }
         let files = self.viewModel.getFiles(fileNames: selectedFileNames)
         let storyboard = UIStoryboard(name: "Shear", bundle: .main)
-        let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersVCID") as! UINavigationController)
+        let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
         (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .albumFiles(album: self.album, files: files)
         self.showDetailViewController(vc, sender: nil)
     }
