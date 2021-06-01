@@ -37,13 +37,13 @@ class STOperation<T>: Operation, INetworkOperation {
     private(set) var isStarted = false
     private(set) var isRequardCanceled = false
     
-    private(set) var uuid = UUID().uuidString
+    let uuid = UUID().uuidString
     
     var isExpired: Bool {
         return self.isCancelled || self.isRequardCanceled || self.isFinished
     }
 
-    private weak var delegate: INetworkOperationQueue?
+    private(set) weak var delegate: INetworkOperationQueue?
 
     init(success: STOperationSuccess?, failure: STOperationFailure?) {
         self.success = success

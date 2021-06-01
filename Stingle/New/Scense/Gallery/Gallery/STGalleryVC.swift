@@ -155,6 +155,12 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
 extension STGalleryVC: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let file = self.dataSource.object(at: indexPath)
+        
+        let vc = STVodeoViewerVC.create(file: file!)
+        self.showDetailViewController(vc, sender: nil)
+        
 //        let cell = collectionView.cellForItem(at: indexPath) as? STGalleryCollectionViewCell
 //        let item = self.viewModel.item(at: indexPath)
     }

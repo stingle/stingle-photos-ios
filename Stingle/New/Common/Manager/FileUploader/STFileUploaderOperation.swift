@@ -22,7 +22,7 @@ extension STFileUploader {
     
     class Operation: STOperation<STLibrary.File> {
         
-        private weak var delegate: STFileUploaderOperationDelegate?
+        private weak var uploaderOperationDelegate: STFileUploaderOperationDelegate?
         private let uploadWorker = STUploadWorker()
         private weak var networkOperation: STUploadNetworkOperation<STResponse<STDBUsed>>?
         
@@ -31,19 +31,19 @@ extension STFileUploader {
         
         init(file: IUploadFile, delegate: STFileUploaderOperationDelegate) {
             self.uploadFile = file
-            self.delegate = delegate
+            self.uploaderOperationDelegate = delegate
             super.init(success: nil, failure: nil, progress: nil)
         }
         
         init(file: STLibrary.File, delegate: STFileUploaderOperationDelegate) {
-            self.delegate = delegate
+            self.uploaderOperationDelegate = delegate
             self.libraryFile = file
             super.init(success: nil, failure: nil, progress: nil)
         }
         
         override func resume() {
             super.resume()
-            self.delegate?.fileUploaderOperation(didStart: self)
+            self.uploaderOperationDelegate?.fileUploaderOperation(didStart: self)
             if let file = self.libraryFile {
                 self.upload(file: file)
             } else if let file = self.uploadFile {
@@ -73,7 +73,7 @@ extension STFileUploader {
         }
         
         private func continueOperation(with file: STLibrary.File) {
-            self.delegate?.fileUploaderOperation(didStartUploading: self, file: file)
+            self.uploaderOperationDelegate?.fileUploaderOperation(didStartUploading: self, file: file)
             let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
             guard let spaceQuota = dbInfo.spaceQuota, let spaceUsed = dbInfo.spaceUsed, Double(spaceUsed) ?? 0 < Double(spaceQuota) ?? 0 else {
                 self.responseFailed(error: UploaderError.wrongStorageSize, file: file)
@@ -120,17 +120,17 @@ extension STFileUploader {
         
         private func responseSucces(result: STLibrary.File, spaceUsed: STDBUsed) {
             super.responseSucces(result: result)
-            self.delegate?.fileUploaderOperation(didEndSucces: self, file: result, spaceUsed: spaceUsed)
+            self.uploaderOperationDelegate?.fileUploaderOperation(didEndSucces: self, file: result, spaceUsed: spaceUsed)
         }
 
         private func responseProgress(result: Progress, file: STLibrary.File) {
             super.responseProgress(result: result)
-            self.delegate?.fileUploaderOperation(didProgress: self, progress: result, file: file)
+            self.uploaderOperationDelegate?.fileUploaderOperation(didProgress: self, progress: result, file: file)
         }
 
         private func responseFailed(error: IError, file: STLibrary.File?) {
             super.responseFailed(error: error)
-            self.delegate?.fileUploaderOperation(didEndFailed: self, error: error, file: file)
+            self.uploaderOperationDelegate?.fileUploaderOperation(didEndFailed: self, error: error, file: file)
         }
 
     }

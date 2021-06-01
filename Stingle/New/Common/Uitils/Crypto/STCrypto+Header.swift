@@ -100,7 +100,7 @@ extension STCrypto {
         } while (offset < data.count)
         return true
     }
-    
+        
     @discardableResult
     func decryptData(input: InputStream, header: STHeader, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
         
@@ -118,12 +118,13 @@ extension STCrypto {
             numRead = input.read(&buf, maxLength: buf.count)
             diff = dataReadSize - numRead
             if diff > 0 {
-                buf = copyMemoryStartingAtIndex(from: buf, startIndexAtPointer: numRead)
+                buf = self.copyMemoryStartingAtIndex(from: buf, startIndexAtPointer: numRead)
             }
             let  decryptedData = try self.decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header)
             assert(header.chunkSize == decryptedData.count || (diff != 0))
             completionHandler(decryptedData)
             chunkNumber += UInt64(1)
+        
         } while (diff == 0)
         
         return true
@@ -415,7 +416,7 @@ extension STCrypto {
         return fileNewHeaderStr + "*" + thumbNewHeaderStr
     }
     
-    private func decryptChunk(chunkData: Bytes, chunkNumber: UInt64, header: STHeader) throws -> Bytes {
+    func decryptChunk(chunkData: Bytes, chunkNumber: UInt64, header: STHeader) throws -> Bytes {
         let keyBytesLength = self.sodium.aead.xchacha20poly1305ietf.KeyBytes
         guard let chunkKey = self.sodium.keyDerivation.derive(secretKey: header.symmetricKey, index: chunkNumber, length: keyBytesLength, context: Constants.XCHACHA20POLY1305_IETF_CONTEXT) else {
             throw CryptoError.Internal.keyDerivationFailure
@@ -426,5 +427,7 @@ extension STCrypto {
         }
         return decryptedData
     }
+    
+    
     
 }
