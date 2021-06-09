@@ -89,7 +89,11 @@ class STFileSystem {
     }
             
     func remove(file url: URL) {
-        try? self.fileManager.removeItem(at: url)
+        do {
+            try self.fileManager.removeItem(at: url)
+        } catch {
+            print(error)
+        }
     }
     
     func createDirectory(url: URL) throws {

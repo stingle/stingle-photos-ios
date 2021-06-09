@@ -247,16 +247,16 @@ extension STCrypto {
         
     }
     
-    func chunkSizeForHeader(header: STHeader) -> off_t {
-        let dataReadSize: off_t = off_t(header.chunkSize) + off_t(self.sodium.aead.xchacha20poly1305ietf.ABytes + self.sodium.aead.xchacha20poly1305ietf.NonceBytes)
+    func chunkSizeForHeader(header: STHeader) -> UInt64 {
+        let dataReadSize: UInt64 = UInt64(header.chunkSize) + UInt64(self.sodium.aead.xchacha20poly1305ietf.ABytes + self.sodium.aead.xchacha20poly1305ietf.NonceBytes)
         return dataReadSize
     }
     
-    func startOffSet(header: STHeader) -> off_t {
+    func startOffSet(header: STHeader) -> UInt64 {
         guard self.isValid(header: header) else {
             return .zero
         }
-        let startOffSet = off_t(Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Int(header.headerSize ?? .zero) + Constants.FileHeaderSizeLen)
+        let startOffSet = UInt64(Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Int(header.headerSize ?? .zero) + Constants.FileHeaderSizeLen)
         return startOffSet
     }
     

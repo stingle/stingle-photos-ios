@@ -1044,7 +1044,20 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-Jq-gLv" customClass="STVideoView" customModule="Stingle" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Beg-hh-rpG">
+                                        <rect key="frame" x="18" y="816" width="378" height="31"/>
+                                        <connections>
+                                            <action selector="sliderDidChange:" destination="JWs-vX-jli" eventType="valueChanged" id="9EL-re-IJc"/>
+                                        </connections>
+                                    </slider>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Beg-hh-rpG" secondAttribute="bottom" constant="50" id="AaE-Zk-JME"/>
+                                    <constraint firstItem="Beg-hh-rpG" firstAttribute="leading" secondItem="Uqa-Jq-gLv" secondAttribute="leading" constant="20" id="QSh-Hx-Ae9"/>
+                                    <constraint firstAttribute="trailing" secondItem="Beg-hh-rpG" secondAttribute="trailing" constant="20" id="oO2-2f-oZm"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nTy-eq-deQ"/>
@@ -1057,6 +1070,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="slider" destination="Beg-hh-rpG" id="Atp-Gy-kJ8"/>
                         <outlet property="videoView" destination="Uqa-Jq-gLv" id="kVj-g9-uTO"/>
                     </connections>
                 </viewController>

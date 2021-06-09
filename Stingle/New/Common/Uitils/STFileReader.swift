@@ -57,10 +57,7 @@ final class STFileReader {
 
     func read(fromOffset: off_t, length: off_t, queue: DispatchQueue = .main, completionHandler: @escaping (DispatchData?) -> Void) {
         if let channel = self.channel {
-            
             let length = min(off_t(self.fullSize) - fromOffset, length)
-            
-            
             channel.read(offset: fromOffset, length: Int(length), queue: queue, ioHandler: { done, data, error in
                 completionHandler(data)
             })
@@ -72,28 +69,5 @@ final class STFileReader {
     
     deinit {
         self.close()
-    }
-}
-
-private extension CountableRange where Bound: SignedInteger {
-    
-    func contains(_ other: Self) -> Bool {
-        guard !other.isEmpty else {
-            return false
-        }
-        return contains(other.startIndex) && contains(other.endIndex - 1)
-    }
-    
-    var middleIndex: Bound {
-        guard !isEmpty else { return startIndex }
-        return (endIndex - 1 - startIndex) / 2
-    }
-    
-    func intersects(_ other: Self) -> Bool {
-        guard !isEmpty, !other.isEmpty else { return false }
-        if other.contains(startIndex) || other.contains(endIndex - 1) {
-            return true
-        }
-        return contains(other.startIndex) || contains(other.endIndex - 1)
     }
 }
