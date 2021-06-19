@@ -20,9 +20,9 @@ class STBaseNetworkOperation<T>: STOperation<T> {
         super.init(success: success, failure: failure, progress: nil)
     }
     
-    init(request: IRequest, success: STOperationSuccess?, failure: STOperationFailure?,  progress: STOperationProgress?) {
+    init(request: IRequest, success: STOperationSuccess?, failure: STOperationFailure?,  progress: STOperationProgress?, stream: STOperationStream?) {
         self.request = request
-        super.init(success: success, failure: failure, progress: progress)
+        super.init(success: success, failure: failure, progress: progress, stream: stream)
     }
     
     // MARK: - IBaseOperation
@@ -45,11 +45,7 @@ class STBaseNetworkOperation<T>: STOperation<T> {
         if let dataRequest = self.dataRequest {
             dataRequest.cancel()
         } else {
-//            self.dataRequest = nil
-            
             self.responseFailed(error: STNetworkDispatcher.NetworkError.cancelled)
-//
-//
         }
     }
     

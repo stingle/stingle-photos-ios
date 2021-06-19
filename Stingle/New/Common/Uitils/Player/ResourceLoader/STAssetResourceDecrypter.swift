@@ -14,7 +14,7 @@ extension STAssetResourceLoader {
         private let reader: IAssetResourceReader
         private let header: STHeader
         private let fileReader: STFileHandle!
-        
+                
         private let crypto = STApplication.shared.crypto
         private var decrypChankIndexes = Set<UInt64>()
         
@@ -39,9 +39,9 @@ extension STAssetResourceLoader {
             self.header = header
         }
         
-        func startDecrypter(requestedOffset: UInt64, handler: @escaping (_ data: Data, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void) {
+        func startDecrypter(requestedOffset: UInt64, requestedLength: UInt64, handler: @escaping (_ data: Data, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void) {
             var ended = false
-            self.readData(requestedOffset: requestedOffset) { readData, finish in
+            self.readData(requestedOffset: requestedOffset, requestedLength: requestedLength) { readData, finish in
                 ended = handler(readData, finish) || finish
                 return ended
             } error: { receiveError in
@@ -56,7 +56,7 @@ extension STAssetResourceLoader {
                 
         //MARK: - Private methods
         
-        private func readData(requestedOffset: UInt64, handler: @escaping (_ data: Data, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void) {
+        private func readData(requestedOffset: UInt64, requestedLength: UInt64, handler: @escaping (_ data: Data, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void) {
             
             let decrypDataChunkSize = self.decryptChankSize
             let startChankIndex = self.dataChankIndex(playerOffSet: requestedOffset)
@@ -81,38 +81,55 @@ extension STAssetResourceLoader {
 
             let chankSize = self.chankSize
             let requestedOffset = currentChankIndex * chankSize
-            self.readEncrypedData(requestedOffset: requestedOffset, handler: { readData, chankIndex, finish in
+            
+            self.readEncrypedData(requestedOffset: requestedOffset, requestedLength: requestedLength, handler: { readData, chankIndex, finish in
                 let finish = didReciveNewChank(data: readData, currentChankIndex: currentChankIndex)
                 currentChankIndex = currentChankIndex + 1
                 return finish
             }, errorHandler: error)
         }
         
-        private func readEncrypedData(requestedOffset: UInt64, handler: @escaping (_ data: Data, _ chankIndex: UInt64, _ finish: Bool) -> Bool, errorHandler: @escaping (Error) -> Void) {
+        private func readEncrypedData(requestedOffset: UInt64, requestedLength: UInt64, handler: @escaping (_ data: Data, _ chankIndex: UInt64, _ finish: Bool) -> Bool, errorHandler: @escaping (Error) -> Void) {
             
             var requestedOffset = self.dataOffset(playerOffSet: requestedOffset)
             let chankIndex = self.dataChankIndex(encriptOffSet: requestedOffset)
             let chankSize = self.chankSize
+            let decryptChankSize = self.decryptChankSize
             
             requestedOffset = chankSize * chankIndex + self.startOffSetHeader
-                        
-            self.reader.startRead(startOffset: requestedOffset, dataChunkSize: chankSize) { [weak self] readData, fromOffset, finish in
+            let lengthCount = UInt64(ceil(Double(requestedLength) / Double(decryptChankSize)))
+            let length = lengthCount * chankSize
+                       
+            (self.reader as? NetworkFileReader)?.header = self.header
+            
+            self.reader.startRead(startOffSet: self.startOffSetHeader, fromOffset: requestedOffset, length: length, dataChunkSize: chankSize) { [weak self] readData, fromOffset, finish in
                 guard let weakSelf = self else {
                     return false
                 }
-                let chankIndex = weakSelf.dataChankIndex(encriptOffSet: fromOffset)
-                do {
-                    let chunkBytes = Bytes(readData)
-                    let decryptBytes = try weakSelf.crypto.decryptChunk(chunkData: chunkBytes, chunkNumber: chankIndex + 1, header: weakSelf.header)
-                    let decryptData = Data(decryptBytes)
-                    return handler(decryptData, chankIndex, finish)
-                } catch {
-                    errorHandler(LoaderError.error(error: error))
-                    return true
-                }
+                return weakSelf.dedRead(readData: readData, fromOffset: fromOffset, finish: finish, handler: handler, errorHandler: errorHandler)
             } error: { receiveError in
                 errorHandler(receiveError)
             }
+        }
+                
+        private func dedRead(readData: Data, fromOffset: UInt64, finish: Bool, handler: @escaping (_ data: Data, _ chankIndex: UInt64, _ finish: Bool) -> Bool, errorHandler: @escaping (Error) -> Void) -> Bool {
+            
+            let chankIndex = self.dataChankIndex(encriptOffSet: fromOffset)
+            
+            guard readData.count > .zero else {
+                return handler(Data(), chankIndex, finish)
+            }
+            
+            let chunkBytes = Bytes(readData)
+            do {
+                let decryptBytes = try self.crypto.decryptChunk(chunkData: chunkBytes, chunkNumber: chankIndex + 1, header: self.header)
+                let decryptData = Data(decryptBytes)
+                return handler(decryptData, chankIndex, finish)
+            } catch {
+                errorHandler(LoaderError.error(error: error))
+                return true
+            }
+            
         }
         
         //MARK: - Deinit

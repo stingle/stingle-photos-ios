@@ -12,7 +12,7 @@ import CoreData
 @objc(STCDAlbum)
 public class STCDAlbum: NSManagedObject, IManagedObject {
 
-    func update(model: STLibrary.Album, context: NSManagedObjectContext) {
+    func update(model: STLibrary.Album, context: NSManagedObjectContext?) {
         self.albumId = model.albumId
         self.encPrivateKey = model.encPrivateKey
         self.publicKey = model.publicKey

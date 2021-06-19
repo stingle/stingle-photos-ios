@@ -27,6 +27,11 @@ final class STFileHandle {
         self.fileURL = fileURL
         self.fileHandle = FileHandle(forReadingAtPath: fileURL.path)
     }
+    
+    init(update fileURL: URL) {
+        self.fileURL = fileURL
+        self.fileHandle = FileHandle(forUpdatingAtPath: fileURL.path)
+    }
 
     // MARK: Managing I/O
     

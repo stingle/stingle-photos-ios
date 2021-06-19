@@ -41,7 +41,8 @@ extension STAlbumWorker {
                                     members: nil,
                                     cover: nil,
                                     dateCreated: now,
-                                    dateModified: now)
+                                    dateModified: now,
+                                    managedObjectID: nil)
                 
         let request = STAlbumRequest.create(album: album)
         self.request(request: request) { (response: STEmptyResponse) in

@@ -30,17 +30,16 @@ extension STAssetResourceLoader {
             self.loadData()
         }
         
-        override func cancel() {
-            super.cancel()
-            self.finish()
-        }
-        
-        override func responseSucces(result: Any) {
+        override func responseSucces(result: Data) {
             self.loadingRequest.finishLoading()
             super.responseSucces(result: result)
         }
         
         override func responseFailed(error: IError) {
+            guard !self.isExpired else {
+                super.responseFailed(error: error)
+                return
+            }
             self.loadingRequest.finishLoading(with: error)
             super.responseFailed(error: error)
         }
@@ -81,36 +80,34 @@ extension STAssetResourceLoader {
     class FileOperation: Operation {
         
         let decrypter: Decrypter
+        var data: Data?
         
         init(loadingRequest: AVAssetResourceLoadingRequest, decrypter: Decrypter, header: STHeader) {
             self.decrypter = decrypter
             super.init(loadingRequest: loadingRequest, header: header)
         }
         
-        var isEnd = false
-        
+        override func cancel() {
+            super.cancel()
+        }
+                
         override func loadData() {
             super.loadData()
-            
             guard let dataRequest = self.loadingRequest.dataRequest else {
                 return
             }
             let requestedOffset = UInt64(dataRequest.requestedOffset)
-            
+            let requestedLength = UInt64(dataRequest.requestedLength)
                         
-            self.decrypter.startDecrypter(requestedOffset: requestedOffset) { [weak self] data, finished in
-                guard let weakSelf = self, !weakSelf.isExpired, !weakSelf.isEnd else {
+            self.decrypter.startDecrypter(requestedOffset: requestedOffset, requestedLength: requestedLength) { [weak self] data, finished in
+                guard let weakSelf = self, !weakSelf.isExpired else {
                     return true
                 }
+                weakSelf.data = data
                 let isFinish = data.count >= dataRequest.requestedLength || finished
-                let end = min(data.count, dataRequest.requestedLength)
-                let start = dataRequest.currentOffset - dataRequest.requestedOffset
-                let range = Range(uncheckedBounds: (Int(start), Int(end)))
-                let requestedDataChank = data.subdata(in: range)
-                weakSelf.loadingRequest.dataRequest?.respond(with: requestedDataChank)
+                weakSelf.updateResponse()
                 if isFinish  {
                     weakSelf.responseSucces(result: data)
-                    weakSelf.isEnd = isFinish
                 }
                
                 return isFinish
@@ -118,9 +115,23 @@ extension STAssetResourceLoader {
             } error: { [weak self] error in
                 self?.responseFailed(error: LoaderError.error(error: error))
             }
-            
+        }
+        
+        func updateResponse() {
+            guard let dataRequest = self.loadingRequest.dataRequest, let data = self.data else {
+                return
+            }
+            let end = min(data.count, dataRequest.requestedLength)
+            let start = dataRequest.currentOffset - dataRequest.requestedOffset
+            guard end > start else {
+                return
+            }
+            let range = Range(uncheckedBounds: (Int(start), Int(end)))
+            let requestedDataChank = data.subdata(in: range)
+            dataRequest.respond(with: requestedDataChank)
         }
         
     }
+    
     
 }

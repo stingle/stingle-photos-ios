@@ -1,5 +1,5 @@
 import Foundation
-import MobileVLCKit
+//import MobileVLCKit
 
 enum SPFileSourceStatus : Int32 {
 	case unknown = -1

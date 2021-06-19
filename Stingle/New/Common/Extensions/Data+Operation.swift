@@ -42,21 +42,7 @@ extension Data {
 extension Data {
 
     init(copying dd: DispatchData) {
-        
-        let tt = Date().timeIntervalSinceNow
-        
-        
         self.init(dd)
-        print("Date()Date()", tt - Date().timeIntervalSinceNow)
-//        return Data(dd)
-        
-//        var result = Data(count: dd.count)
-//
-//        DispatchData
-//
-//        result.withUnsafeMutableBytes { buf in
-//            _ = dd.copyBytes(to: buf)
-//        }
-//        self = result
+
     }
 }

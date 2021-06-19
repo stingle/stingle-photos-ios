@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class TrashProvider: DataBaseCollectionProvider<STCDTrashFile, STLibrary.DeleteFile.Trash> {
+    class TrashProvider: SyncCollectionProvider<STCDTrashFile, STLibrary.DeleteFile.Trash> {
         
         override func getInsertObjects(with trashFiles: [STLibrary.TrashFile]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.TrashFile], lastDate: Date) {
             var lastDate: Date? = nil

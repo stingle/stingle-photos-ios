@@ -10,18 +10,11 @@ import Foundation
 import Alamofire
 
 protocol NetworkTask {
-	
+
 	func cancel()
 	func suspend()
 	func resume()
 	var taskState: STNetworkDispatcher.TaskState { get }
-	
-}
-
-extension URLSessionDataTask: NetworkTask {
-	var taskState: STNetworkDispatcher.TaskState {
-		return STNetworkDispatcher.TaskState(rawValue: self.state.rawValue) ?? .running
-	}
 }
 
 typealias IDecoder = DataDecoder
@@ -36,6 +29,12 @@ class STNetworkDispatcher {
     
     private lazy var uploadSession: Alamofire.Session = {
         let config = URLSessionConfiguration.default
+        return Alamofire.Session(configuration: config)
+    }()
+    
+    private lazy var streanSession: Alamofire.Session = {
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         return Alamofire.Session(configuration: config)
     }()
         
@@ -107,10 +106,11 @@ class STNetworkDispatcher {
             completion(.failure(error: NetworkError.badRequest))
             return nil
         }
+        
         let destination: DownloadRequest.Destination = { _, _ in
             return (fileUrl, [.removePreviousFile, .createIntermediateDirectories])
         }
-                
+        
         let downloadRequest = AF.download(request.url, method: request.AFMethod, parameters: request.parameters, headers: request.afHeaders, to: destination).response { response in
             if let error = response.error {
                 let networkError = NetworkError.error(error: error)
@@ -153,142 +153,65 @@ class STNetworkDispatcher {
         
         return Task(request: uploadRequest)
     }
-        		
-}
-
-extension STNetworkDispatcher {
-	
-	enum Result<T> {
-		case success(result: T)
-		case failure(error: NetworkError)
-	}
     
-    typealias ProgressTask = (_ progress: Progress) -> Void
-	
-	enum NetworkError: IError {
-		
-		case badRequest
-		case dataNotFound
-        case cancelled
-		case error(error: Error)
-		
-		var message: String {
-			switch self {
-			case .badRequest:
-				return "nework_error_bad_request".localized
-			case .dataNotFound:
-				return "nework_error_data_not_found".localized
-            case .cancelled:
-                return "nework_error_request_cancelled".localized
-			case .error(let error):
-				if let error = error as? IError {
-					return error.localizedDescription
-				}
-				return error.localizedDescription
-			}
-		}
+    func stream(request: IStreamRequest, queue: DispatchQueue, stream: @escaping (_ chank: Data) -> Swift.Void, completion: @escaping (Result<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)>) -> Swift.Void) -> NetworkTask? {
         
-        var isCancelled: Bool {
-            switch self {
-            case .cancelled:
-                return true
-            case .error(let error):
-                if let asAFError = error.asAFError {
-                    return asAFError.isCancelled || asAFError.isExplicitlyCancelledError
+        let streamRequest = self.streanSession.streamRequest(request.asURLRequest).responseStream(on: queue) { response in
+            
+            var errorIsResponseed = false
+            
+            if let error = response.error {
+                let networkError = NetworkError.error(error: error)
+                completion(.failure(error: networkError))
+                errorIsResponseed = true
+            } else if let value = response.value {
+                stream(value)
+            }
+            
+            if let responseCompletion = response.completion {
+                
+                if let error = responseCompletion.error {
+                    if !errorIsResponseed {
+                        let networkError = NetworkError.error(error: error)
+                        completion(.failure(error: networkError))
+                    }
+                } else if let allHeaderFields = responseCompletion.response?.allHeaderFields {
+                    let contentLengthStrFull = allHeaderFields["Content-Length"] as? String ?? ""
+                    let requestLength = UInt64(contentLengthStrFull) ?? .zero
+                    
+                    var contentRangeStr = allHeaderFields["Content-Range"] as? String
+                    contentRangeStr = contentRangeStr?.components(separatedBy: " ").last
+                    
+                    let components = contentRangeStr?.components(separatedBy: "/")
+                    
+                    let requestRangeStr = components?.first
+                    let contentLengthStr = components?.last ?? ""
+                    
+                    var lower: UInt64 = .zero
+                    var upper: UInt64 = .zero
+                    
+                    if let ranges = requestRangeStr?.components(separatedBy: "-"), ranges.count == 2 {
+                        lower = UInt64(ranges[0]) ?? .zero
+                        upper = UInt64(ranges[1]) ?? .zero
+                    }
+                    
+                    let contentLength = UInt64(contentLengthStr) ?? .zero
+                    let range = Range(uncheckedBounds: (lower, upper))
+                    let result = (requestLength: requestLength, contentLength: contentLength, range: range)
+                    completion(.success(result: result))
+                    
+                } else {
+                    if !errorIsResponseed {
+                        let networkError = NetworkError.badRequest
+                        completion(.failure(error: networkError))
+                    }
                 }
-                return false
-            default:
-                return false
             }
         }
-	}
-    
-	enum Encoding {
-		case queryString
-		case body
-		case coustom(encoer: IRequestEncoding)
-	}
-	
-	enum Method: String {
-		case get     = "GET"
-		case post    = "POST"
-		case put     = "PUT"
-		case patch   = "PATCH"
-		case delete  = "DELETE"
-	}
-	
-	enum TaskState: Int {
-		case running = 0
-		case suspended = 1
-		case canceling = 2
-		case completed = 3
-	}
-	
-	fileprivate struct Task: NetworkTask {
-		
-		let request: Request
-		
-		func cancel() {
-			self.request.cancel()
-		}
-		
-		func suspend() {
-			self.request.suspend()
-		}
-		
-		func resume() {
-			self.request.resume()
-		}
-		
-		var taskState: STNetworkDispatcher.TaskState {
-			switch self.request.state {
-			case .initialized, .resumed:
-				return .running
-			case .suspended:
-				return .suspended
-			case .cancelled:
-				return .canceling
-			case .finished:
-				return .completed
-			}
-		}
-	}
-}
-
-extension STNetworkDispatcher.Encoding: IRequestEncoding {
-
-	func encodeParameters(_ urlRequest: URLRequest, with parameters: [String : Any]?) throws -> URLRequest {
-		switch self {
-		case .queryString:
-			return try URLEncoding.queryString.encode(urlRequest, with: parameters)
-		case .body:
-			return try URLEncoding.default.encode(urlRequest, with: parameters)
-		case .coustom(let encoer):
-			return try encoer.encodeParameters(urlRequest, with: parameters)
-		}
-	}
-
-}
-
-protocol IRequestEncoding: ParameterEncoding {
-	func encodeParameters(_ urlRequest: URLRequest, with parameters: [String : Any]?) throws -> URLRequest
-}
-
-extension IRequestEncoding {
-	
-	func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
-		return try self.encodeParameters(urlRequest.asURLRequest(), with: parameters)
-	}
-	
-}
-
-extension AFError: IError {
-    
-    var message: String {
-        switch self {
-        default:
-            return "nework_error_bad_request".localized
-        }
+        
+        return Task(request: streamRequest)
     }
-
+    
+    
+        		
 }

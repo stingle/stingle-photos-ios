@@ -5,7 +5,7 @@
 //  Created by Khoren Asatryan on 3/7/21.
 //
 
-import Foundation
+import CoreData
 
 extension STLibrary {
     
@@ -45,7 +45,8 @@ extension STLibrary {
                            headers: model.headers,
                            dateCreated: model.dateCreated,
                            dateModified: model.dateModified,
-                           isRemote: model.isRemote)
+                           isRemote: model.isRemote,
+                           managedObjectID: model.objectID)
             
         }
         
@@ -53,9 +54,9 @@ extension STLibrary {
             fatalError("init(model:) has not been implemented")
         }
         
-        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool, albumId: String) throws {
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool, albumId: String, managedObjectID: NSManagedObjectID?) throws {
             self.albumId = albumId
-            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote)
+            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote, managedObjectID: managedObjectID)
         }
         
         override func toManagedModelJson() throws -> [String : Any] {

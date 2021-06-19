@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class AlbumFilesProvider: DataBaseCollectionProvider<STCDAlbumFile, STLibrary.DeleteFile.AlbumFile> {
+    class AlbumFilesProvider: SyncCollectionProvider<STCDAlbumFile, STLibrary.DeleteFile.AlbumFile> {
         
         override func getInsertObjects(with albumFiles: [STLibrary.AlbumFile]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.AlbumFile], lastDate: Date) {
             var lastDate: Date? = nil

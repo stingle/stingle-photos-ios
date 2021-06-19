@@ -59,7 +59,7 @@ extension STDownloaderManager {
             self.startOperation(sendRequest: true)
         }
         
-        override func responseSucces(result: Any) {
+        override func responseSucces(result: URL) {
             self.isRequesting = false
             self.canEditResults = false
             DispatchQueue.global().async { [weak self] in

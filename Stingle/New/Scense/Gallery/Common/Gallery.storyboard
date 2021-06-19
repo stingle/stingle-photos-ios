@@ -993,7 +993,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yxY-ya-53m">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <connections>
-                                    <segue destination="FdW-6b-xLM" kind="embed" id="n3A-wR-wV3"/>
+                                    <segue destination="FdW-6b-xLM" kind="embed" identifier="pageViewController" id="n3A-wR-wV3"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -1018,9 +1018,23 @@
                     <view key="view" contentMode="scaleToFill" id="py2-GF-Bzn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lN5-Ly-mEp" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Bkb-oM-nEh"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Bkb-oM-nEh" firstAttribute="trailing" secondItem="lN5-Ly-mEp" secondAttribute="trailing" id="HAy-DZ-Pju"/>
+                            <constraint firstItem="lN5-Ly-mEp" firstAttribute="leading" secondItem="Bkb-oM-nEh" secondAttribute="leading" id="Pj6-yc-BY5"/>
+                            <constraint firstItem="Bkb-oM-nEh" firstAttribute="bottom" secondItem="lN5-Ly-mEp" secondAttribute="bottom" id="Q3r-L4-Jhe"/>
+                            <constraint firstItem="lN5-Ly-mEp" firstAttribute="top" secondItem="Bkb-oM-nEh" secondAttribute="top" id="SJD-U5-Rbh"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="imageView" destination="lN5-Ly-mEp" id="Tgj-RK-ZkY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9AH-aS-u0M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1029,15 +1043,15 @@
         <!--Page View Controller-->
         <scene sceneID="8FB-pq-7Db">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="FdW-6b-xLM" sceneMemberID="viewController"/>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" pageSpacing="10" navigationOrientation="horizontal" spineLocation="none" id="FdW-6b-xLM" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A3J-PM-GZC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-3555" y="2555"/>
         </scene>
-        <!--Vodeo ViewerVC-->
+        <!--Video ViewerVC-->
         <scene sceneID="B3A-P6-s09">
             <objects>
-                <viewController storyboardIdentifier="STVodeoViewerVCID" id="JWs-vX-jli" customClass="STVodeoViewerVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="STVodeoViewerVCID" id="JWs-vX-jli" customClass="STVideoViewerVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zgX-xQ-N9b">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1052,7 +1066,7 @@
                                         </connections>
                                     </slider>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="Beg-hh-rpG" secondAttribute="bottom" constant="50" id="AaE-Zk-JME"/>
                                     <constraint firstItem="Beg-hh-rpG" firstAttribute="leading" secondItem="Uqa-Jq-gLv" secondAttribute="leading" constant="20" id="QSh-Hx-Ae9"/>
@@ -1061,7 +1075,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nTy-eq-deQ"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Uqa-Jq-gLv" firstAttribute="leading" secondItem="zgX-xQ-N9b" secondAttribute="leading" id="6Ao-Ps-5gQ"/>
                             <constraint firstAttribute="trailing" secondItem="Uqa-Jq-gLv" secondAttribute="trailing" id="84F-pW-1Ha"/>
@@ -1122,9 +1136,6 @@
         </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -14,10 +14,29 @@ class STImageView: UIImageView {
         let animator = STImageDownloadPlainAnimator()
         self.setImage(source: image, placeholder: placeholder, animator: animator)
     }
+    
+    func setImage(_ images: Images?) {
+        guard let images = images else {
+            self.setImage(source: images?.thumb, placeholder: nil)
+            return
+        }
+        if let thumb = images.thumb, STApplication.shared.downloaderManager.imageRetryer.isFileExists(source: thumb) {
+            self.setImage(source: images.thumb, placeholder: nil, animator: nil, success: { [weak self] _ in
+                self?.setImage(source: images.original, placeholder: nil, animator: nil, saveOldImage: true)
+            }, progress: nil, failure: nil)
+        } else {
+            self.setImage(source: images.original, placeholder: nil, animator: nil)
+        }
+    }
 
 }
 
 extension STImageView {
+    
+    struct Images {
+        let thumb: Image?
+        let original: Image?
+    }
     
     struct Image {
             

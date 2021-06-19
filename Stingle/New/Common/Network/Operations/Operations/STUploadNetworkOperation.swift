@@ -12,7 +12,7 @@ class STUploadNetworkOperation<T: Decodable>: STBaseNetworkOperation<T> {
     typealias Result<T> = STNetworkDispatcher.Result<T>
     
     init(request: IUploadRequest, success: STOperationSuccess?, failure: STOperationFailure?,  progress: STOperationProgress?) {
-        super.init(request: request, success: success, failure: failure, progress: progress)
+        super.init(request: request, success: success, failure: failure, progress: progress, stream: nil)
     }
     
     func startRequest() {
@@ -28,7 +28,7 @@ class STUploadNetworkOperation<T: Decodable>: STBaseNetworkOperation<T> {
             case .success(let result):
                 self?.responseSucces(result: result)
             case .failure(let error):
-                self?.responseGetError(error: error)
+                self?.responseFailed(error: error)
             }
         }
         

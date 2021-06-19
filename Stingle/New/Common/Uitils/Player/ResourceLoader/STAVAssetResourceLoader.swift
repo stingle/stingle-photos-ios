@@ -40,7 +40,6 @@ class STAssetResourceLoader: NSObject {
                 return name
             }
         }
-        
     }
     
     let asset: AVURLAsset
@@ -48,10 +47,10 @@ class STAssetResourceLoader: NSObject {
     
     private let cachingScheme = "STAssetScheme"
     private let scheme: Scheme
-    private let fileExtension: String?
     private let header: STHeader
     private let dispatchQueue = DispatchQueue(label: "Player.Queue", attributes: .concurrent)
     private let operationManager = STOperationManager.shared
+    private let file: STLibrary.File
     
     lazy private var operationQueue: STOperationQueue = {
         let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 1, underlyingQueue: self.dispatchQueue)
@@ -59,14 +58,22 @@ class STAssetResourceLoader: NSObject {
     }()
     
     lazy private var decrypter: Decrypter = {
-        let fileReader = LocalFileReader(url: self.url, queue: self.dispatchQueue)
-        let decrypter = Decrypter(header: self.header, reader: fileReader)
-        return decrypter!
+        
+        if STApplication.shared.fileSystem.fileExists(atPath: self.url.path) {
+            let fileReader = LocalFileReader(url: self.url, queue: self.dispatchQueue)
+            let decrypter = Decrypter(header: self.header, reader: fileReader)
+            return decrypter!
+        } else {
+            let fileReader = NetworkFileReader(filename: self.file.file, dbSet: self.file.dbSet, queue: self.dispatchQueue)
+            let decrypter = Decrypter(header: self.header, reader: fileReader)
+            return decrypter!
+        }
+        
     }()
     
-    
-    init(with url: URL, header: STHeader, fileExtension: String?) {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+    init(file: STLibrary.File, header: STHeader) {
+        guard let url = file.fileOreginalUrl,
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let scheme = components.scheme,
               var urlWithCustomScheme = url.withScheme(self.cachingScheme) else {
             fatalError("Urls without a scheme are not supported")
@@ -79,9 +86,13 @@ class STAssetResourceLoader: NSObject {
         self.asset = AVURLAsset(url: urlWithCustomScheme)
         self.url = url
         self.scheme = Scheme(identifier: scheme)
-        self.fileExtension = fileExtension
+        self.file = file
         super.init()
         self.asset.resourceLoader.setDelegate(self, queue: self.dispatchQueue)
+    }
+    
+    deinit {
+        self.operationQueue.cancelAllOperations()
     }
     
 }
@@ -99,12 +110,15 @@ extension STAssetResourceLoader: AVAssetResourceLoaderDelegate {
         return true
     }
     
+    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForRenewalOfRequestedResource renewalRequest: AVAssetResourceRenewalRequest) -> Bool {
+        return true
+    }
+    
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
         if let operation = self.operation(for: loadingRequest) {
             operation.cancel()
         }
     }
-    
     
     func operation(for loadingRequest: AVAssetResourceLoadingRequest) -> Operation? {
         for operation in self.operationQueue.allOperations() {

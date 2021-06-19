@@ -12,6 +12,7 @@ class STOperationManager {
     static let shared: STOperationManager = STOperationManager()
     let defaultQueue = STOperationQueue(qualityOfService: .userInteractive)
     let uploadQueue = STOperationQueue(qualityOfService: .background)
+    let downloadQueue = STOperationQueue(qualityOfService: .background)
    
     private var othersQueue = [STOperationQueue]()
     
@@ -29,6 +30,10 @@ class STOperationManager {
     
     func runUpload(operation: INetworkOperation) {
         operation.didStartRun(with: self.uploadQueue)
+    }
+    
+    func runDownload(operation: INetworkOperation) {
+        operation.didStartRun(with: self.downloadQueue)
     }
     
     func run(operation: INetworkOperation, in queue: STOperationQueue) {

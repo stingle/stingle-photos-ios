@@ -5,12 +5,12 @@
 //  Created by Khoren Asatryan on 3/6/21.
 //
 
-import Foundation
+import CoreData
 
 extension STLibrary {
     
     class Album: ICDConvertable, Codable {
-                
+                        
         private enum CodingKeys: String, CodingKey {
             case albumId = "albumId"
             case encPrivateKey = "encPrivateKey"
@@ -41,6 +41,7 @@ extension STLibrary {
         let dateCreated: Date
         let dateModified: Date
         let isRemote: Bool
+        let managedObjectID: NSManagedObjectID?
         
         var identifier: String {
             return self.albumId
@@ -80,6 +81,7 @@ extension STLibrary {
             }
             self.dateCreated = Date(milliseconds: dateCreated)
             self.dateModified = Date(milliseconds: dateModified)
+            self.managedObjectID = nil
         }
         
         required init(model: STCDAlbum) throws {
@@ -109,9 +111,10 @@ extension STLibrary {
             
             self.dateCreated = dateCreated
             self.dateModified = dateModified
+            self.managedObjectID = model.objectID
         }
         
-        init(albumId: String, encPrivateKey: String, publicKey: String, metadata: String, isShared: Bool, isHidden: Bool, isOwner: Bool, isLocked: Bool, isRemote: Bool, permissions: String?, members: String?, cover: String?, dateCreated: Date, dateModified: Date) {
+        init(albumId: String, encPrivateKey: String, publicKey: String, metadata: String, isShared: Bool, isHidden: Bool, isOwner: Bool, isLocked: Bool, isRemote: Bool, permissions: String?, members: String?, cover: String?, dateCreated: Date, dateModified: Date, managedObjectID: NSManagedObjectID? = nil) {
             self.albumId = albumId
             self.encPrivateKey = encPrivateKey
             self.publicKey = publicKey
@@ -126,6 +129,7 @@ extension STLibrary {
             self.cover = cover
             self.dateCreated = dateCreated
             self.dateModified = dateModified
+            self.managedObjectID = managedObjectID
         }
         
         func encode(to encoder: Encoder) throws {

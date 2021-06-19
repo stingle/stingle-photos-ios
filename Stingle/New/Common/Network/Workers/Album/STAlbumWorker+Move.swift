@@ -38,7 +38,8 @@ extension STAlbumWorker {
                                                        dateCreated: file.dateCreated,
                                                        dateModified: Date(),
                                                        isRemote: file.isRemote,
-                                                       albumId: toAlbum.albumId)
+                                                       albumId: toAlbum.albumId,
+                                                       managedObjectID: file.managedObjectID)
                 newAlbumFiles.append(newAlbumFile)
             }
             
@@ -93,7 +94,7 @@ extension STAlbumWorker {
             for file in files {
                 let newHeader = try crypto.reencryptFileHeaders(headersStr: file.headers, publicKeyTo: publicKey, privateKeyFrom: fromAlbumData.privateKey, publicKeyFrom: fromAlbumData.publicKey)
                 newHeaders[file.file] = newHeader
-                let file = try STLibrary.File(file: file.file, version: file.version, headers: newHeader, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: true)
+                let file = try STLibrary.File(file: file.file, version: file.version, headers: newHeader, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: true, managedObjectID: file.managedObjectID)
                 galeryFiles.append(file)
             }
             

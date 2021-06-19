@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import netfox
+//import netfox
 import Kingfisher
 
 class STMainVM {

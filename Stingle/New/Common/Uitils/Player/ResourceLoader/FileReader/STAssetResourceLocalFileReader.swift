@@ -9,7 +9,7 @@ import Sodium
 
 protocol IAssetResourceReader {
     
-    func startRead(startOffset: UInt64, dataChunkSize: UInt64, handler: @escaping (_ chunk: Data, _ fromOffset: UInt64, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void)
+    func startRead(startOffSet: UInt64, fromOffset: UInt64, length: UInt64, dataChunkSize: UInt64, handler: @escaping (_ chunk: Data, _ fromOffset: UInt64, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void)
     
 }
 
@@ -33,7 +33,7 @@ extension STAssetResourceLoader {
         
         //MARK: - Private methods
                 
-        private func read(startOffset: UInt64, offset: UInt64, dataChunkSize: UInt64, handler: @escaping (_ chunk: Data, _ fromOffset: UInt64, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void) {
+        private func read(fromOffset: UInt64, offset: UInt64, dataChunkSize: UInt64, handler: @escaping (_ chunk: Data, _ fromOffset: UInt64, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void) {
             
             let fullSize = UInt64(self.fileReader.fullSize)
             let offset = min(offset, fullSize)
@@ -55,7 +55,7 @@ extension STAssetResourceLoader {
                 if !finish && !end {
                     let nextOffset = offset + dataChunkSize
                     weakSelf.queue.async {
-                        weakSelf.read(startOffset: startOffset, offset: nextOffset, dataChunkSize: dataChunkSize, handler: handler, error: error)
+                        weakSelf.read(fromOffset: fromOffset, offset: nextOffset, dataChunkSize: dataChunkSize, handler: handler, error: error)
                     }
                 }
             }
@@ -67,8 +67,8 @@ extension STAssetResourceLoader {
 
 extension STAssetResourceLoader.LocalFileReader: IAssetResourceReader {
     
-    func startRead(startOffset: UInt64, dataChunkSize: UInt64, handler: @escaping (_ chunk: Data, _ fromOffset: UInt64, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void) {
-        self.read(startOffset: startOffset, offset: startOffset, dataChunkSize: dataChunkSize, handler: handler, error: error)
+    func startRead(startOffSet: UInt64, fromOffset: UInt64, length: UInt64, dataChunkSize: UInt64, handler: @escaping (_ chunk: Data, _ fromOffset: UInt64, _ finish: Bool) -> Bool, error: @escaping (Error) -> Void) {
+        self.read(fromOffset: fromOffset, offset: fromOffset, dataChunkSize: dataChunkSize, handler: handler, error: error)
     }
     
 }

@@ -16,7 +16,7 @@ public class STCDContact: NSManagedObject {
 
 extension STCDContact: IManagedObject {
            
-    func update(model: STContact, context: NSManagedObjectContext) {
+    func update(model: STContact, context: NSManagedObjectContext?) {
         self.email = model.email
         self.publicKey = model.publicKey
         self.userId = model.userId

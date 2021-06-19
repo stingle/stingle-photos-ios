@@ -51,7 +51,8 @@ extension STAlbumWorker {
                                           members: membersStr,
                                           cover: album.cover,
                                           dateCreated: album.dateCreated,
-                                          dateModified: now)
+                                          dateModified: now,
+                                          managedObjectID: album.managedObjectID)
                 
         let request = STAlbumRequest.sharedAlbum(album: sharedAlbum, sharingKeys: sharingKeys)
         

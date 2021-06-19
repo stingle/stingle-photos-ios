@@ -15,9 +15,10 @@ class STGalleryVM {
     
     func createDBDataSource() -> STDataBase.DataSource<STCDFile> {
         let galleryProvider = STApplication.shared.dataBase.galleryProvider
-        return galleryProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"],
+        return galleryProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated)],
                                                 sectionNameKeyPath: #keyPath(STCDFile.day))
     }
+    
     
     func sync() {
         self.syncManager.sync()

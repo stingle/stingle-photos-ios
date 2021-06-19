@@ -16,6 +16,7 @@ protocol IDataBaseProviderModel: AnyObject {
 protocol ICDConvertable: IDataBaseProviderModel, Encodable {
     associatedtype ManagedModel: IManagedObject
     init(model: ManagedModel) throws
+    var managedObjectID: NSManagedObjectID? { get }
     func toManagedModelJson() throws -> [String: Any]
 }
 
@@ -40,7 +41,7 @@ extension ICDConvertable {
 protocol IManagedObject: NSManagedObject {
     associatedtype Model: ICDConvertable
     init(model: Model, context: NSManagedObjectContext)
-    func update(model: Model, context: NSManagedObjectContext)
+    func update(model: Model, context: NSManagedObjectContext?)
     
     func createModel() throws -> Model
     
@@ -53,6 +54,11 @@ extension IManagedObject {
     init(model: Model, context: NSManagedObjectContext) {
         self.init(context: context)
         self.update(model: model, context: context)
+    }
+    
+    init(model: Model) {
+        self.init()
+        self.update(model: model, context: nil)
     }
     
     static var entityName: String {

@@ -7,13 +7,16 @@
 
 import UIKit
 
-class STVodeoViewerVC: UIViewController {
+class STVideoViewerVC: UIViewController {
 
     @IBOutlet weak var videoView: STVideoView!
+    @IBOutlet weak var slider: UISlider!
     
     private(set) var videoFile: STLibrary.File!
-    @IBOutlet weak var slider: UISlider!
+    private(set) var fileIndex: Int = .zero
+    
     private let player = STPlayer()
+    
     
     
     @IBAction func sliderDidChange(_ sender: Any) {
@@ -28,21 +31,20 @@ class STVodeoViewerVC: UIViewController {
         self.player.play()
     }
     
-
 }
 
-extension STVodeoViewerVC: IFileViewer {
-
-    static func create(file: STLibrary.File) -> IFileViewer {
+extension STVideoViewerVC: IFileViewer {
+   
+    static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
-        let vc: STVodeoViewerVC = storyboard.instantiateViewController(identifier: "STVodeoViewerVCID")
+        let vc: STVideoViewerVC = storyboard.instantiateViewController(identifier: "STVodeoViewerVCID")
         vc.videoFile = file
+        vc.fileIndex = fileIndex
         return vc
     }
-    
+
     var file: STLibrary.File {
         return self.videoFile
     }
 
-    
 }

@@ -23,10 +23,8 @@ class STPlayer {
         guard let file = file, let fileHeader = file.decryptsHeaders.file else {
             self.player.replaceCurrentItem(with: nil)
             return
-        }
-
-        let url = file.fileOreginalUrl
-        let resourceLoader = STAssetResourceLoader(with: url!, header: fileHeader, fileExtension: nil)
+        }        
+        let resourceLoader = STAssetResourceLoader(file: file, header: fileHeader)
         self.assetResourceLoader = resourceLoader
         let item = AVPlayerItem(asset: resourceLoader.asset, automaticallyLoadedAssetKeys: nil)
         self.player.replaceCurrentItem(with: item)

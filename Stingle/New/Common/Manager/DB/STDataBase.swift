@@ -188,7 +188,8 @@ extension STDataBase {
                                        members: album.members,
                                        cover: album.cover,
                                        dateCreated: album.dateCreated,
-                                       dateModified: Date())
+                                       dateModified: Date(),
+                                       managedObjectID: album.managedObjectID)
         
         albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
         albumFilesProvider.add(models: [albumFile], reloadData: reloadData, context: context)

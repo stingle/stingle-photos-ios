@@ -11,8 +11,6 @@ protocol INetworkOperation: Operation {
     func pause()
     func resume()
     func didStartRun(with delegate: INetworkOperationQueue)
-    func responseSucces(result: Any)
-    func responseFailed(error: IError)
 }
 
 class STOperation<T>: Operation, INetworkOperation {
@@ -28,19 +26,21 @@ class STOperation<T>: Operation, INetworkOperation {
     typealias STOperationSuccess = (_ result: T) -> Void
     typealias STOperationFailure = (_ error: IError) -> Void
     typealias STOperationProgress = (_ error: Progress) -> Void
+    typealias STOperationStream = (_ reciveData: Data) -> Void
 
     private var success: STOperationSuccess?
     private var failure: STOperationFailure?
     private var progress: STOperationProgress?
-
+    private var stream: STOperationStream?
+    
     private(set) var isRunning = false
     private(set) var isStarted = false
-    private(set) var isRequardCanceled = false
+    private(set) var isOperationCanceled = false
     
     let uuid = UUID().uuidString
     
     var isExpired: Bool {
-        return self.isCancelled || self.isRequardCanceled || self.isFinished
+        return self.isCancelled || self.isOperationCanceled || self.isFinished
     }
 
     private(set) weak var delegate: INetworkOperationQueue?
@@ -59,7 +59,16 @@ class STOperation<T>: Operation, INetworkOperation {
         self.status = .ready
         super.init()
     }
-
+    
+    init(success: STOperationSuccess?, failure: STOperationFailure?,  progress: STOperationProgress?, stream: STOperationStream?) {
+        self.success = success
+        self.progress = progress
+        self.failure = failure
+        self.stream = stream
+        self.status = .ready
+        super.init()
+    }
+    
     // MARK: - State
 
     private enum State: String {
@@ -80,6 +89,7 @@ class STOperation<T>: Operation, INetworkOperation {
     }
 
     private(set) var status: Status = .ready
+    
 
     // MARK: - IBaseOperation
 
@@ -94,35 +104,30 @@ class STOperation<T>: Operation, INetworkOperation {
     override var isFinished: Bool {
         return self.state == .finished
     }
+    
+    override var isCancelled: Bool {
+        return self.status == .canceled
+    }
 
     override func start() {
         super.start()
-        if self.status == .finished {
-            self.state = .executing
-            self.finish()
+        if self.isOperationCanceled {
+            self.setResume()
+            self.setFinished()
         } else {
             self.resume()
         }
+        
     }
 
     override func cancel() {
-        self.status = .canceled
-        super.cancel()
-        
+        self.setCancel()
     }
 
     //MARK: - Public methods
 
     func finish() {
-        self.success = nil
-        self.failure = nil
-        self.progress = nil
-        self.status = .finished
-        if !self.isExecuting {
-            self.state = .executing
-        } else {
-            self.state = .finished
-        }
+        self.setFinished()
     }
 
     func pause() {
@@ -130,8 +135,7 @@ class STOperation<T>: Operation, INetworkOperation {
     }
 
     func resume() {
-        self.status = .executing
-        self.state = .executing
+        self.setResume()
     }
 
     func didStartRun(with delegate: INetworkOperationQueue) {
@@ -142,33 +146,77 @@ class STOperation<T>: Operation, INetworkOperation {
         self.delegate = delegate
         delegate.operation(didStarted: self)
     }
-
-    func responseSucces(result: Any) {
-        if let result = result as? T {
-            self.success?(result)
-        } else {
-            self.responseFailed(error: STNetworkDispatcher.NetworkError.dataNotFound)
+    
+    func didStartRunnWaitUntil(with delegate: INetworkOperationQueue) {
+        guard !self.isRunning else {
+            return
         }
-        self.finish()
+        self.isRunning = true
+        self.delegate = delegate
+        delegate.operationWaitUntil(didStarted: self)
+    }
+
+    func responseSucces(result: T) {
+        self.success?(result)
+        self.delegate?.operation(didFinish: self, result: result)
+        self.setFinished()
     }
 
     func responseProgress(result: Progress) {
         self.progress?(result)
     }
+    
+    func responseStream(result: Data) {
+        self.stream?(result)
+    }
 
     func responseFailed(error: IError) {
         self.failure?(error)
-        self.finish()
-    }
-
-    // MARK: - Process
-
-    func responseGetData(result: T) {
-        self.delegate?.operation(didFinish: self, result: result)
-    }
-
-    func responseGetError(error: IError) {
         self.delegate?.operation(didFinish: self, error: error)
+        self.setFinished()
+    }
+    
+    //MARK: - Privite
+    
+    private func setFinished() {
+        self.success = nil
+        self.failure = nil
+        self.progress = nil
+        self.status = .finished
+        if self.isExecuting {
+            self.setState(state: .finished)
+        }
+    }
+    
+    private func setResume() {
+        self.status = .executing
+        self.setState(state: .executing)
+        if self.isOperationCanceled {
+            self.setFinished()
+        }
+    }
+    
+    private func setCancel() {
+        if self.isExecuting {
+            self.setFinished()
+        } else if self.isReady {
+            self.success = nil
+            self.failure = nil
+            self.progress = nil
+            self.status = .canceled
+            self.isOperationCanceled = true
+        }
+        
+    }
+    
+    private func setState(state: State) {
+        guard self.state != state else {
+            return
+        }
+        if state == .finished && !self.isExecuting {
+            return
+        }
+        self.state = state
     }
     
 
