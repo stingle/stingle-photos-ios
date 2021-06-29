@@ -36,6 +36,10 @@ class STNavigationController: UINavigationController {
             self.updateSplitViewController()
         }
     }
+    
+    override var prefersStatusBarHidden: Bool {
+        return self.topViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
+    }
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()

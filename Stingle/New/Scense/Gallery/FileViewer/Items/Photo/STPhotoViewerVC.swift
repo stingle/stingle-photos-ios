@@ -7,10 +7,17 @@
 
 import UIKit
 
+protocol STPhotoViewerVCDelegate: AnyObject {
+   
+    func photoViewer(startFullScreen viewer: STPhotoViewerVC)
+    
+}
+
 class STPhotoViewerVC: UIViewController {
     
-    @IBOutlet weak private var imageView: STImageView!
+    @IBOutlet weak private var zoomImageView: STImageZoomView!
     
+    weak var delegate: STPhotoViewerVCDelegate?
     private(set) var photoFile: STLibrary.File!
     private(set) var fileIndex: Int = .zero
     
@@ -23,7 +30,8 @@ class STPhotoViewerVC: UIViewController {
         let thumb = STImageView.Image(file: self.photoFile, isThumb: true)
         let original = STImageView.Image(file: self.photoFile, isThumb: false)
         let image = STImageView.Images(thumb: thumb, original: original)
-        self.imageView.setImage(image)
+        self.zoomImageView.delegate = self
+        self.zoomImageView.imageView.setImage(image)
     }
 
 }
@@ -42,5 +50,12 @@ extension STPhotoViewerVC: IFileViewer {
         return self.photoFile
     }
 
+}
+
+extension STPhotoViewerVC: STImageZoomViewDelegate {
     
+    func zoomViewDidZoom(_ zoomView: STImageZoomView) {
+        self.delegate?.photoViewer(startFullScreen: self)
+    }
+        
 }

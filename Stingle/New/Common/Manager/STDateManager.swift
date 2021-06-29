@@ -45,6 +45,7 @@ extension STDateManager {
     enum DateFormat: String {
         case dd_mm_yyyy_HH_mm = "dd-MM-yyyy HH:mm"
         case mmm_dd_yyyy = "MMM dd, yyyy"
+        case HH_mm = "HH:mm"
     }
 
 }

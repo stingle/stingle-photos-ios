@@ -103,7 +103,7 @@ extension STCrypto {
         
     @discardableResult
     func decryptData(input: InputStream, header: STHeader, completionHandler:  @escaping (Bytes?) -> Swift.Void) throws -> Bool {
-        
+            
         guard header.chunkSize >= 1 && header.chunkSize < Constants.MAX_BUFFER_LENGTH else {
             throw CryptoError.Header.incorrectChunkSize
         }

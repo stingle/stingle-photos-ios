@@ -32,6 +32,10 @@ class STTabBarVC: UITabBarController {
         return true
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return self.selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
+    }
+    
     override var shouldAutorotate: Bool {
         return self.selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
     }

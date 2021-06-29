@@ -12,6 +12,7 @@ protocol IFileViewerVM {
     var delegate: STFileViewerVMDelegate? { get set }
     func object(at index: Int) -> STLibrary.File?
     func index(at file: STLibrary.File) -> Int?
+    var countOfItems: Int { get }
     
 }
 

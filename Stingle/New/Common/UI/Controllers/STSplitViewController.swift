@@ -56,7 +56,6 @@ class STSplitViewController: UIViewController {
     private var gestureStartPoint = CGPoint.zero
     private var gestureMasterViewWidth = CGFloat.zero
     private var gestureStartProgress = CGFloat.zero
-    
     private(set) var isMasterViewOpened = false
     
     private let observer = STObserverEvents<UIViewController>()
@@ -67,6 +66,10 @@ class STSplitViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return self.detailViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
     }
             
     //MARK: override

@@ -259,6 +259,8 @@
 		A0D8A98A25F43EF8005C12F8 /* STContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D8A98925F43EF8005C12F8 /* STContact.swift */; };
 		A0D8A99125F44B2D005C12F8 /* StingleModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0D8A98F25F44B2D005C12F8 /* StingleModel.xcdatamodeld */; };
 		A0DC5E3A2639576300103DE1 /* STButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DC5E392639576300103DE1 /* STButton.swift */; };
+		A0E03C88268B4C6F00BB4F0C /* STFileViewerNavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E03C87268B4C6F00BB4F0C /* STFileViewerNavigationTitleView.swift */; };
+		A0E03C8A268B4CAB00BB4F0C /* STFileViewerNavigationTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0E03C89268B4CAB00BB4F0C /* STFileViewerNavigationTitleView.xib */; };
 		A0E1B503266BA7690063CB40 /* STAssetResourceLocalFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B502266BA7690063CB40 /* STAssetResourceLocalFileReader.swift */; };
 		A0E1B505266BAAE20063CB40 /* STFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B504266BAAE20063CB40 /* STFileHandle.swift */; };
 		A0E1B507266BAB3A0063CB40 /* CountableRange+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B506266BAB3A0063CB40 /* CountableRange+Operation.swift */; };
@@ -275,6 +277,8 @@
 		A0F467E425F9776600BF00AA /* STAlbumFilesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F467E325F9776600BF00AA /* STAlbumFilesProvider.swift */; };
 		A0F467E825F98FE900BF00AA /* STLibraryTrashFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F467E725F98FE900BF00AA /* STLibraryTrashFile.swift */; };
 		A0F467F625F992F400BF00AA /* STCDTrashFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F467F525F992F400BF00AA /* STCDTrashFile.swift */; };
+		A0F99DC82683662800B0F36F /* STZoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F99DC72683662800B0F36F /* STZoomView.swift */; };
+		A0F99DCA2683696100B0F36F /* STImageZoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F99DC92683696100B0F36F /* STImageZoomView.swift */; };
 		A0FD3F322670D8D00042EB8D /* STAssetResourceNetworkFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD3F312670D8D00042EB8D /* STAssetResourceNetworkFileReader.swift */; };
 		A0FD3F342670E1F30042EB8D /* STFileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD3F332670E1F30042EB8D /* STFileRequest.swift */; };
 		A0FD3F362670E34F0042EB8D /* STFileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD3F352670E34F0042EB8D /* STFileWorker.swift */; };
@@ -552,6 +556,8 @@
 		A0D8A98925F43EF8005C12F8 /* STContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STContact.swift; sourceTree = "<group>"; };
 		A0D8A99025F44B2D005C12F8 /* StingleModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StingleModel.xcdatamodel; sourceTree = "<group>"; };
 		A0DC5E392639576300103DE1 /* STButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STButton.swift; sourceTree = "<group>"; };
+		A0E03C87268B4C6F00BB4F0C /* STFileViewerNavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileViewerNavigationTitleView.swift; sourceTree = "<group>"; };
+		A0E03C89268B4CAB00BB4F0C /* STFileViewerNavigationTitleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFileViewerNavigationTitleView.xib; sourceTree = "<group>"; };
 		A0E1B502266BA7690063CB40 /* STAssetResourceLocalFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAssetResourceLocalFileReader.swift; sourceTree = "<group>"; };
 		A0E1B504266BAAE20063CB40 /* STFileHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileHandle.swift; sourceTree = "<group>"; };
 		A0E1B506266BAB3A0063CB40 /* CountableRange+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CountableRange+Operation.swift"; sourceTree = "<group>"; };
@@ -568,6 +574,8 @@
 		A0F467E325F9776600BF00AA /* STAlbumFilesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFilesProvider.swift; sourceTree = "<group>"; };
 		A0F467E725F98FE900BF00AA /* STLibraryTrashFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryTrashFile.swift; sourceTree = "<group>"; };
 		A0F467F525F992F400BF00AA /* STCDTrashFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDTrashFile.swift; sourceTree = "<group>"; };
+		A0F99DC72683662800B0F36F /* STZoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STZoomView.swift; sourceTree = "<group>"; };
+		A0F99DC92683696100B0F36F /* STImageZoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STImageZoomView.swift; sourceTree = "<group>"; };
 		A0FD3F312670D8D00042EB8D /* STAssetResourceNetworkFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAssetResourceNetworkFileReader.swift; sourceTree = "<group>"; };
 		A0FD3F332670E1F30042EB8D /* STFileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileRequest.swift; sourceTree = "<group>"; };
 		A0FD3F352670E34F0042EB8D /* STFileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileWorker.swift; sourceTree = "<group>"; };
@@ -803,6 +811,7 @@
 		A02203F925EEDC0300D07C98 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A0F99DC6268365FB00B0F36F /* ZooomView */,
 				A032096E26546275000C420B /* STVideoView.swift */,
 				A0DC5E392639576300103DE1 /* STButton.swift */,
 				A04BD0162634AA2700C5F29F /* STDynamicTableView.swift */,
@@ -1179,6 +1188,7 @@
 				A032096526545B73000C420B /* STFileViewerVC.swift */,
 				A001E6E7267CD8F100948E50 /* ViewModel */,
 				A032096726545B8A000C420B /* Items */,
+				A0E03C86268B4C3B00BB4F0C /* Views */,
 			);
 			path = FileViewer;
 			sourceTree = "<group>";
@@ -1945,6 +1955,15 @@
 			path = FileUploader;
 			sourceTree = "<group>";
 		};
+		A0E03C86268B4C3B00BB4F0C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A0E03C87268B4C6F00BB4F0C /* STFileViewerNavigationTitleView.swift */,
+				A0E03C89268B4CAB00BB4F0C /* STFileViewerNavigationTitleView.xib */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		A0E1B508266BB07B0063CB40 /* ResourceLoader */ = {
 			isa = PBXGroup;
 			children = (
@@ -1973,6 +1992,15 @@
 				A0E9999F263F2E46002FDCC9 /* STTokenCell.xib */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		A0F99DC6268365FB00B0F36F /* ZooomView */ = {
+			isa = PBXGroup;
+			children = (
+				A0F99DC72683662800B0F36F /* STZoomView.swift */,
+				A0F99DC92683696100B0F36F /* STImageZoomView.swift */,
+			);
+			path = ZooomView;
 			sourceTree = "<group>";
 		};
 		A0FD3F302670D8860042EB8D /* FileReader */ = {
@@ -2074,6 +2102,7 @@
 				A00B4C24263D75220085C55E /* Shear.storyboard in Resources */,
 				A005FAF625FF4CBB00E7D8B0 /* STGalleryCollectionViewCell.xib in Resources */,
 				A0D1A3C4262E0F9F002E326F /* STAlbumFilesCollectionViewCell.xib in Resources */,
+				A0E03C8A268B4CAB00BB4F0C /* STFileViewerNavigationTitleView.xib in Resources */,
 				A05D2698261B5751008E9CF8 /* STMenuMasterTableViewCell.xib in Resources */,
 				A02203EB25EEDB6300D07C98 /* LaunchScreen.storyboard in Resources */,
 				A0B267862624E0650090E4ED /* STTrashHeaderView.xib in Resources */,
@@ -2228,12 +2257,14 @@
 				A022048E25EEDC0400D07C98 /* KeyManagement.swift in Sources */,
 				A022049525EEDC0400D07C98 /* UIView+Extensions.swift in Sources */,
 				A08E3D4F26014C8700E841B8 /* User.swift in Sources */,
+				A0F99DC82683662800B0F36F /* STZoomView.swift in Sources */,
 				A04BD005263479A900C5F29F /* STUploadsVM.swift in Sources */,
 				A02ED2E82603EED800F10D58 /* UIImageView+Operation.swift in Sources */,
 				A022048325EEDC0400D07C98 /* AppInfo.swift in Sources */,
 				A022048825EEDC0400D07C98 /* STWorker.swift in Sources */,
 				A00982F82623747C00559C41 /* STDBUsed.swift in Sources */,
 				A0623F3825F41EBB0018D378 /* STLibraryDelete.swift in Sources */,
+				A0F99DCA2683696100B0F36F /* STImageZoomView.swift in Sources */,
 				A022048525EEDC0400D07C98 /* SPMediaFile.swift in Sources */,
 				A08E3D4D26014C8300E841B8 /* SyncManager.swift in Sources */,
 				A099F4BC26302B28000D4F86 /* STGallerySyncView.swift in Sources */,
@@ -2350,6 +2381,7 @@
 				A0D29CD7262051460083967D /* STFileUploader.swift in Sources */,
 				A0D1A3BC262E0D6E002E326F /* STAlbumFilesVM.swift in Sources */,
 				A022048925EEDC0400D07C98 /* STAuthWorker.swift in Sources */,
+				A0E03C88268B4C6F00BB4F0C /* STFileViewerNavigationTitleView.swift in Sources */,
 				A0E1B503266BA7690063CB40 /* STAssetResourceLocalFileReader.swift in Sources */,
 				A02204AA25EEDC0400D07C98 /* STMainVM.swift in Sources */,
 				A0E999A3263F54A5002FDCC9 /* STContactWorker.swift in Sources */,

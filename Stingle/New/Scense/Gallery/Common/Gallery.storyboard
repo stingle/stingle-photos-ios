@@ -998,7 +998,7 @@
                             </containerView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cea-1T-gjo"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="yxY-ya-53m" firstAttribute="top" secondItem="lIY-Yr-Y3M" secondAttribute="top" id="Fsl-ap-kPH"/>
                             <constraint firstItem="yxY-ya-53m" firstAttribute="leading" secondItem="lIY-Yr-Y3M" secondAttribute="leading" id="S02-oC-gQk"/>
@@ -1019,21 +1019,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lN5-Ly-mEp" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ixm-gA-og5" customClass="STImageZoomView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bkb-oM-nEh"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Bkb-oM-nEh" firstAttribute="trailing" secondItem="lN5-Ly-mEp" secondAttribute="trailing" id="HAy-DZ-Pju"/>
-                            <constraint firstItem="lN5-Ly-mEp" firstAttribute="leading" secondItem="Bkb-oM-nEh" secondAttribute="leading" id="Pj6-yc-BY5"/>
-                            <constraint firstItem="Bkb-oM-nEh" firstAttribute="bottom" secondItem="lN5-Ly-mEp" secondAttribute="bottom" id="Q3r-L4-Jhe"/>
-                            <constraint firstItem="lN5-Ly-mEp" firstAttribute="top" secondItem="Bkb-oM-nEh" secondAttribute="top" id="SJD-U5-Rbh"/>
+                            <constraint firstAttribute="trailing" secondItem="Ixm-gA-og5" secondAttribute="trailing" id="4C5-xp-cPd"/>
+                            <constraint firstItem="Ixm-gA-og5" firstAttribute="leading" secondItem="py2-GF-Bzn" secondAttribute="leading" id="Jmc-Dr-i9O"/>
+                            <constraint firstAttribute="bottom" secondItem="Ixm-gA-og5" secondAttribute="bottom" id="kiQ-XC-cd5"/>
+                            <constraint firstItem="Ixm-gA-og5" firstAttribute="top" secondItem="py2-GF-Bzn" secondAttribute="top" id="n2r-5J-AFO"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="lN5-Ly-mEp" id="Tgj-RK-ZkY"/>
+                        <outlet property="zoomImageView" destination="Ixm-gA-og5" id="hil-gJ-YC9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9AH-aS-u0M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1066,9 +1067,8 @@
                                         </connections>
                                     </slider>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="Beg-hh-rpG" secondAttribute="bottom" constant="50" id="AaE-Zk-JME"/>
                                     <constraint firstItem="Beg-hh-rpG" firstAttribute="leading" secondItem="Uqa-Jq-gLv" secondAttribute="leading" constant="20" id="QSh-Hx-Ae9"/>
                                     <constraint firstAttribute="trailing" secondItem="Beg-hh-rpG" secondAttribute="trailing" constant="20" id="oO2-2f-oZm"/>
                                 </constraints>
@@ -1080,6 +1080,7 @@
                             <constraint firstItem="Uqa-Jq-gLv" firstAttribute="leading" secondItem="zgX-xQ-N9b" secondAttribute="leading" id="6Ao-Ps-5gQ"/>
                             <constraint firstAttribute="trailing" secondItem="Uqa-Jq-gLv" secondAttribute="trailing" id="84F-pW-1Ha"/>
                             <constraint firstItem="Uqa-Jq-gLv" firstAttribute="top" secondItem="zgX-xQ-N9b" secondAttribute="top" id="Tac-x6-L1W"/>
+                            <constraint firstItem="nTy-eq-deQ" firstAttribute="bottom" secondItem="Beg-hh-rpG" secondAttribute="bottom" constant="16" id="V0E-d1-io4"/>
                             <constraint firstAttribute="bottom" secondItem="Uqa-Jq-gLv" secondAttribute="bottom" id="zN5-xn-xnJ"/>
                         </constraints>
                     </view>
@@ -1131,9 +1132,6 @@
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemGrayColor">
             <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

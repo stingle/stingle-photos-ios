@@ -18,7 +18,7 @@ extension UIImageView {
     
     private static var retryerIdentifier: String = "retryerIdentifier"
     
-    typealias ISuccess = (_ result: UIImage) -> Void
+    typealias ISuccess = (_ result: UIImage?) -> Void
     typealias IProgress = (_ progress: Progress) -> Void
     typealias IFailure = (_ error: IError) -> Void
     
@@ -52,6 +52,7 @@ extension UIImageView {
         } else {
             self.image = placeholder
             animator?.imageView(endAnimation: self)
+            success?(nil)
         }
     }
     

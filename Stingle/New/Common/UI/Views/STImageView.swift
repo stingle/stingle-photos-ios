@@ -10,22 +10,23 @@ import Kingfisher
 
 class STImageView: UIImageView {
     
-    func setImage(_ image: IDownloaderSource?, placeholder: UIImage?) {
+    func setImage(_ image: IDownloaderSource?, placeholder: UIImage?, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
         let animator = STImageDownloadPlainAnimator()
-        self.setImage(source: image, placeholder: placeholder, animator: animator)
+        self.setImage(source: image, placeholder: placeholder, animator: animator, success: success, progress: progress, failure: failure)
     }
     
-    func setImage(_ images: Images?) {
+    func setImage(_ images: Images?, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
         guard let images = images else {
-            self.setImage(source: images?.thumb, placeholder: nil)
+            self.setImage(source: images?.thumb, placeholder: nil, success: success, progress: progress, failure: failure)
             return
         }
+        
         if let thumb = images.thumb, STApplication.shared.downloaderManager.imageRetryer.isFileExists(source: thumb) {
             self.setImage(source: images.thumb, placeholder: nil, animator: nil, success: { [weak self] _ in
-                self?.setImage(source: images.original, placeholder: nil, animator: nil, saveOldImage: true)
-            }, progress: nil, failure: nil)
+                self?.setImage(source: images.original, placeholder: nil, animator: nil, success: success, progress: progress, failure: failure, saveOldImage: true)
+            }, progress: progress, failure: failure)
         } else {
-            self.setImage(source: images.original, placeholder: nil, animator: nil)
+            self.setImage(source: images.original, placeholder: nil, animator: nil, success: success, progress: progress, failure: failure)
         }
     }
 
