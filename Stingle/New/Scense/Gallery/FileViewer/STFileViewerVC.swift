@@ -83,7 +83,7 @@ class STFileViewerVC: UIViewController {
     //MARK: - User action
     
     @objc private func didSelectBackground(tap: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.1) {
             self.changeViewerStyle()
         }
     }

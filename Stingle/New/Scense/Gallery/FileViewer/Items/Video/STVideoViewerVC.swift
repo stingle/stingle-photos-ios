@@ -14,6 +14,12 @@ class STVideoViewerVC: UIViewController {
     @IBOutlet weak private var playerControllView: STGradientView!
     @IBOutlet weak private var playerControllBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak private var imageView: STImageView!
+   
+    @IBOutlet weak private var loadingView: UIActivityIndicatorView!
+    @IBOutlet weak private var playButton: UIButton!
+    
+    @IBOutlet weak private var timeLeftLabel: UILabel!
+    @IBOutlet weak private var timeRightLabel: UILabel!
     
     private(set) var videoFile: STLibrary.File!
     private(set) var fileIndex: Int = .zero
@@ -28,6 +34,7 @@ class STVideoViewerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setImage()
+        self.loadingView.color = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .white : .appText
         self.playerControllView.alpha = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .zero : 1
         self.playerControllBottomConstraint.constant = self.tabBarController?.tabBar.frame.height ?? .zero
         self.videoView.setPlayer(player: self.player)
@@ -40,7 +47,21 @@ class STVideoViewerVC: UIViewController {
         self.player.pause()
     }
     
-    //MARK: -
+    //MARK: - User action
+    
+    @IBAction func didSelectPlayButton(_ sender: Any) {
+        
+    }
+    
+    @IBAction func didSelectBackwardButton(_ sender: Any) {
+        
+    }
+    
+    @IBAction func didSelectForwardButton(_ sender: Any) {
+        
+    }
+    
+    //MARK: - Private methods
     
     private func setImage() {
         let thumb = STImageView.Image(file: self.videoFile, isThumb: true)
@@ -66,7 +87,7 @@ extension STVideoViewerVC: IFileViewer {
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool) {
         self.playerControllView.alpha = isFullScreen ? .zero : 1
         self.playerControllBottomConstraint.constant = self.tabBarController?.tabBar.frame.height ?? .zero
-        self.view.layoutIfNeeded()
+        self.loadingView.color = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .white : .appText
     }
 
 }
