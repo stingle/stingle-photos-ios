@@ -55,7 +55,6 @@ extension STImageZoomView {
     
     class ImageView: STImageView, IZoomContentView {
                 
-        private(set) var canZooming: Bool = false
         var zoomView: STZoomView?
                 
         var aspectRatio: CGFloat {
@@ -74,14 +73,6 @@ extension STImageZoomView {
             didSet {
                 self.zoomView?.zoomContent(didChange: self)
             }
-        }
-        
-        override func setImage(_ images: STImageView.Images?, success: STImageView.ISuccess? = nil, progress: STImageView.IProgress? = nil, failure: STImageView.IFailure? = nil) {
-            self.canZooming = false
-            super.setImage(images, success: { [weak self] image in
-                success?(image)
-                self?.canZooming = true
-            }, progress: progress, failure: failure)
         }
         
     }

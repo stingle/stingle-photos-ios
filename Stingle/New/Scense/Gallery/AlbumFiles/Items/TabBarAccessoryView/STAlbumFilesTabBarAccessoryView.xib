@@ -62,7 +62,7 @@
                                                     <action selector="didSelectTrashButton:" destination="iN0-l3-epB" eventType="touchUpInside" id="fca-Wg-IHU"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Selected items " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="1Bd-iU-3qI">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="1Bd-iU-3qI">
                                                 <rect key="frame" x="169.5" y="0.0" width="106" height="44"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" name="STText"/>
@@ -108,6 +108,20 @@
             <point key="canvasLocation" x="420.28985507246381" y="-23.4375"/>
         </view>
     </objects>
+    <designables>
+        <designable name="ATF-HM-AbB">
+            <size key="intrinsicContentSize" width="35" height="38"/>
+        </designable>
+        <designable name="lnp-sx-lz9">
+            <size key="intrinsicContentSize" width="28.5" height="38"/>
+        </designable>
+        <designable name="rcd-tZ-QWS">
+            <size key="intrinsicContentSize" width="34" height="38"/>
+        </designable>
+        <designable name="tN2-Qz-PUy">
+            <size key="intrinsicContentSize" width="40" height="38"/>
+        </designable>
+    </designables>
     <resources>
         <image name="arrowshape.zigzag.forward" catalog="system" width="128" height="93"/>
         <image name="ic_shared_album_min" width="18" height="20"/>

@@ -39,6 +39,10 @@ class STPlayer {
         self.player.play()
     }
     
+    func pause() {
+        self.player.pause()
+    }
+    
 }
 
 

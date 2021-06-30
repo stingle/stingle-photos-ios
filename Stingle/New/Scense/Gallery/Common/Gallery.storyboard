@@ -1023,17 +1023,24 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="J92-t8-aR1">
+                                <rect key="frame" x="188.5" y="434.5" width="37" height="37"/>
+                                <color key="color" name="STText"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bkb-oM-nEh"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Ixm-gA-og5" secondAttribute="trailing" id="4C5-xp-cPd"/>
+                            <constraint firstItem="J92-t8-aR1" firstAttribute="centerX" secondItem="Bkb-oM-nEh" secondAttribute="centerX" id="6ss-X0-HV7"/>
                             <constraint firstItem="Ixm-gA-og5" firstAttribute="leading" secondItem="py2-GF-Bzn" secondAttribute="leading" id="Jmc-Dr-i9O"/>
                             <constraint firstAttribute="bottom" secondItem="Ixm-gA-og5" secondAttribute="bottom" id="kiQ-XC-cd5"/>
                             <constraint firstItem="Ixm-gA-og5" firstAttribute="top" secondItem="py2-GF-Bzn" secondAttribute="top" id="n2r-5J-AFO"/>
+                            <constraint firstItem="J92-t8-aR1" firstAttribute="centerY" secondItem="Bkb-oM-nEh" secondAttribute="centerY" id="zPr-de-J0b"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="loadingView" destination="J92-t8-aR1" id="W5p-Wf-MkD"/>
                         <outlet property="zoomImageView" destination="Ixm-gA-og5" id="hil-gJ-YC9"/>
                     </connections>
                 </viewController>
@@ -1057,44 +1064,104 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fjh-RQ-9fF" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-Jq-gLv" customClass="STVideoView" customModule="Stingle" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vg7-ni-0TF" customClass="STGradientView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="797" width="414" height="34"/>
                                 <subviews>
-                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Beg-hh-rpG">
-                                        <rect key="frame" x="18" y="816" width="378" height="31"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="Rh3-gX-PCG">
+                                        <rect key="frame" x="8" y="10" width="56" height="14.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="56" id="Tac-Zf-luY"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Beg-hh-rpG" customClass="STSlider" customModule="Stingle" customModuleProvider="target">
+                                        <rect key="frame" x="70" y="2" width="274" height="31"/>
+                                        <color key="minimumTrackTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="trackHeight">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="thumbHeight">
+                                                <real key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="sliderDidChange:" destination="JWs-vX-jli" eventType="valueChanged" id="9EL-re-IJc"/>
                                         </connections>
                                     </slider>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="89G-xc-zoK">
+                                        <rect key="frame" x="350" y="10" width="56" height="14.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="56" id="gZk-j7-DmU"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="Beg-hh-rpG" firstAttribute="leading" secondItem="Uqa-Jq-gLv" secondAttribute="leading" constant="20" id="QSh-Hx-Ae9"/>
-                                    <constraint firstAttribute="trailing" secondItem="Beg-hh-rpG" secondAttribute="trailing" constant="20" id="oO2-2f-oZm"/>
+                                    <constraint firstItem="Beg-hh-rpG" firstAttribute="leading" secondItem="Rh3-gX-PCG" secondAttribute="trailing" constant="8" id="3Vg-mh-dBs"/>
+                                    <constraint firstItem="Rh3-gX-PCG" firstAttribute="centerY" secondItem="Beg-hh-rpG" secondAttribute="centerY" id="GQk-zz-Biz"/>
+                                    <constraint firstItem="89G-xc-zoK" firstAttribute="leading" secondItem="Beg-hh-rpG" secondAttribute="trailing" constant="8" id="I3H-md-8go"/>
+                                    <constraint firstAttribute="trailing" secondItem="89G-xc-zoK" secondAttribute="trailing" constant="8" id="R0S-CY-cN4"/>
+                                    <constraint firstItem="Rh3-gX-PCG" firstAttribute="leading" secondItem="Vg7-ni-0TF" secondAttribute="leading" constant="8" id="XzY-OT-tIh"/>
+                                    <constraint firstItem="Beg-hh-rpG" firstAttribute="top" secondItem="Vg7-ni-0TF" secondAttribute="top" constant="2" id="aby-LB-EY4"/>
+                                    <constraint firstItem="89G-xc-zoK" firstAttribute="centerY" secondItem="Beg-hh-rpG" secondAttribute="centerY" id="eG1-9y-F5f"/>
+                                    <constraint firstAttribute="bottom" secondItem="Beg-hh-rpG" secondAttribute="bottom" constant="2" id="vZK-ca-cgD"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="primaryColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="secondaryColor">
+                                        <color key="value" white="0.0" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nTy-eq-deQ"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="Fjh-RQ-9fF" firstAttribute="top" secondItem="zgX-xQ-N9b" secondAttribute="top" id="1bs-om-7Ax"/>
                             <constraint firstItem="Uqa-Jq-gLv" firstAttribute="leading" secondItem="zgX-xQ-N9b" secondAttribute="leading" id="6Ao-Ps-5gQ"/>
+                            <constraint firstAttribute="trailing" secondItem="Vg7-ni-0TF" secondAttribute="trailing" id="6nH-Wd-cb7"/>
                             <constraint firstAttribute="trailing" secondItem="Uqa-Jq-gLv" secondAttribute="trailing" id="84F-pW-1Ha"/>
                             <constraint firstItem="Uqa-Jq-gLv" firstAttribute="top" secondItem="zgX-xQ-N9b" secondAttribute="top" id="Tac-x6-L1W"/>
-                            <constraint firstItem="nTy-eq-deQ" firstAttribute="bottom" secondItem="Beg-hh-rpG" secondAttribute="bottom" constant="16" id="V0E-d1-io4"/>
+                            <constraint firstItem="Fjh-RQ-9fF" firstAttribute="leading" secondItem="zgX-xQ-N9b" secondAttribute="leading" id="i6K-ee-AL5"/>
+                            <constraint firstAttribute="bottom" secondItem="Fjh-RQ-9fF" secondAttribute="bottom" id="j2q-bB-OBB"/>
+                            <constraint firstItem="Vg7-ni-0TF" firstAttribute="leading" secondItem="zgX-xQ-N9b" secondAttribute="leading" id="utQ-eg-iRb"/>
+                            <constraint firstAttribute="bottom" secondItem="Vg7-ni-0TF" secondAttribute="bottom" constant="65" id="xuR-pP-Wze"/>
+                            <constraint firstAttribute="trailing" secondItem="Fjh-RQ-9fF" secondAttribute="trailing" id="ydw-av-cRk"/>
                             <constraint firstAttribute="bottom" secondItem="Uqa-Jq-gLv" secondAttribute="bottom" id="zN5-xn-xnJ"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="imageView" destination="Fjh-RQ-9fF" id="1Te-LK-T2z"/>
+                        <outlet property="playerControllBottomConstraint" destination="xuR-pP-Wze" id="u0w-Ul-wFU"/>
+                        <outlet property="playerControllView" destination="Vg7-ni-0TF" id="xqo-Ra-CGe"/>
                         <outlet property="slider" destination="Beg-hh-rpG" id="Atp-Gy-kJ8"/>
                         <outlet property="videoView" destination="Uqa-Jq-gLv" id="kVj-g9-uTO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ueY-RQ-PJt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3555" y="3273"/>
+            <point key="canvasLocation" x="-3555.072463768116" y="3272.5446428571427"/>
         </scene>
     </scenes>
     <designables>
+        <designable name="Beg-hh-rpG">
+            <size key="intrinsicContentSize" width="-1" height="30"/>
+        </designable>
         <designable name="Cvn-d7-faO">
             <size key="intrinsicContentSize" width="170" height="60"/>
         </designable>

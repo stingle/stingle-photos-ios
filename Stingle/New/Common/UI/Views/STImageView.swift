@@ -15,7 +15,7 @@ class STImageView: UIImageView {
         self.setImage(source: image, placeholder: placeholder, animator: animator, success: success, progress: progress, failure: failure)
     }
     
-    func setImage(_ images: Images?, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
+    func setImages(_ images: Images?, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
         guard let images = images else {
             self.setImage(source: images?.thumb, placeholder: nil, success: success, progress: progress, failure: failure)
             return

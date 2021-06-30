@@ -12,7 +12,15 @@ protocol IFileViewer: UIViewController {
     static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer
     var file: STLibrary.File { get }
     var fileIndex: Int { get }
+    var fileViewerDelegate: IFileViewerDelegate? { get set }
     
+    func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool)
+    
+}
+
+protocol IFileViewerDelegate: AnyObject {
+    var isFullScreenMode: Bool { get }
+    func photoViewer(startFullScreen viewer: STPhotoViewerVC)
 }
 
 class STFileViewerVC: UIViewController {
@@ -23,6 +31,11 @@ class STFileViewerVC: UIViewController {
     private var viewControllers = STObserverEvents<IFileViewer>()
     private var viewerStyle: ViewerStyle = .white
     private weak var titleView: STFileViewerNavigationTitleView?
+        
+    lazy private var accessoryView: STAlbumFilesTabBarAccessoryView = {
+        let resilt = STAlbumFilesTabBarAccessoryView.loadNib()
+        return resilt
+    }()
     
     override var prefersStatusBarHidden: Bool {
         return self.viewerStyle == .balck ? true : false
@@ -36,13 +49,20 @@ class STFileViewerVC: UIViewController {
         self.viewModel.delegate = self
         self.setupPageViewController()
         self.setupTapGesture()
+        self.accessoryView.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
+    }
+        
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if self.viewerStyle == .balck {
             self.changeViewerStyle()
         }
+        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = nil
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -97,11 +117,12 @@ class STFileViewerVC: UIViewController {
         switch fileType {
         case .video:
             let vc = STVideoViewerVC.create(file: file, fileIndex: index)
+            vc.fileViewerDelegate = self
             self.viewControllers.addObject(vc)
             return vc
         case .image:
             let vc = STPhotoViewerVC.create(file: file, fileIndex: index)
-            (vc as? STPhotoViewerVC)?.delegate = self
+            vc.fileViewerDelegate = self
             self.viewControllers.addObject(vc)
             return vc
         }
@@ -122,6 +143,7 @@ class STFileViewerVC: UIViewController {
         }
         
         self.splitMenuViewController?.setNeedsStatusBarAppearanceUpdate()
+        self.viewControllers.forEach({ $0.fileViewer(didChangeViewerStyle: self, isFullScreen: self.viewerStyle == .balck)})
     }
     
     private func didChangeFileViewer() {
@@ -182,18 +204,27 @@ extension STFileViewerVC: UIScrollViewDelegate {
     
 }
 
-extension STFileViewerVC: UIPageViewControllerDelegate {
+extension STFileViewerVC: STAlbumFilesTabBarAccessoryViewDelegate {
     
-//    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-//        guard let fileViewer = pageViewController.viewControllers?.first as? IFileViewer else {
-//            return
-//        }
-////        self.currentIndex = fileViewer.fileIndex
-//    }
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+        
+    }
+    
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
+        
+    }
+    
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
+        
+    }
+    
+    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
+        
+    }
     
 }
 
-extension STFileViewerVC: UIPageViewControllerDataSource {
+extension STFileViewerVC: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -223,13 +254,17 @@ extension STFileViewerVC: STFileViewerVMDelegate {
     
 }
 
-extension STFileViewerVC: STPhotoViewerVCDelegate {
+extension STFileViewerVC: IFileViewerDelegate {
    
     func photoViewer(startFullScreen viewer: STPhotoViewerVC) {
         guard self.viewerStyle == .white else {
             return
         }
         self.changeViewerStyle()
+    }
+    
+    var isFullScreenMode: Bool {
+        return self.viewerStyle == .balck
     }
     
 }

@@ -9,16 +9,17 @@ import UIKit
 
 class STVideoViewerVC: UIViewController {
 
-    @IBOutlet weak var videoView: STVideoView!
-    @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak private var videoView: STVideoView!
+    @IBOutlet weak private var slider: UISlider!
+    @IBOutlet weak private var playerControllView: STGradientView!
+    @IBOutlet weak private var playerControllBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var imageView: STImageView!
     
     private(set) var videoFile: STLibrary.File!
     private(set) var fileIndex: Int = .zero
-    
+    weak var fileViewerDelegate: IFileViewerDelegate?
     private let player = STPlayer()
-    
-    
-    
+        
     @IBAction func sliderDidChange(_ sender: Any) {
         let time = TimeInterval(self.slider.value) * self.player.duration
         self.player.seek(currentTime: time)
@@ -26,9 +27,24 @@ class STVideoViewerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setImage()
+        self.playerControllView.alpha = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .zero : 1
+        self.playerControllBottomConstraint.constant = self.tabBarController?.tabBar.frame.height ?? .zero
         self.videoView.setPlayer(player: self.player)
         self.player.play(file: self.file)
         self.player.play()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.player.pause()
+    }
+    
+    //MARK: -
+    
+    private func setImage() {
+        let thumb = STImageView.Image(file: self.videoFile, isThumb: true)
+        self.imageView.setImage(source: thumb)
     }
     
 }
@@ -45,6 +61,12 @@ extension STVideoViewerVC: IFileViewer {
 
     var file: STLibrary.File {
         return self.videoFile
+    }
+    
+    func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool) {
+        self.playerControllView.alpha = isFullScreen ? .zero : 1
+        self.playerControllBottomConstraint.constant = self.tabBarController?.tabBar.frame.height ?? .zero
+        self.view.layoutIfNeeded()
     }
 
 }

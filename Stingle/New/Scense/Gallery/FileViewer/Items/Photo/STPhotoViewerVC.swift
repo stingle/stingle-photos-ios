@@ -7,17 +7,13 @@
 
 import UIKit
 
-protocol STPhotoViewerVCDelegate: AnyObject {
-   
-    func photoViewer(startFullScreen viewer: STPhotoViewerVC)
-    
-}
 
 class STPhotoViewerVC: UIViewController {
     
     @IBOutlet weak private var zoomImageView: STImageZoomView!
+    @IBOutlet weak private var loadingView: UIActivityIndicatorView!
     
-    weak var delegate: STPhotoViewerVCDelegate?
+    weak var fileViewerDelegate: IFileViewerDelegate?
     private(set) var photoFile: STLibrary.File!
     private(set) var fileIndex: Int = .zero
     
@@ -31,7 +27,13 @@ class STPhotoViewerVC: UIViewController {
         let original = STImageView.Image(file: self.photoFile, isThumb: false)
         let image = STImageView.Images(thumb: thumb, original: original)
         self.zoomImageView.delegate = self
-        self.zoomImageView.imageView.setImage(image)
+        self.loadingView.color = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .white : .appText
+        self.loadingView.startAnimating()
+        self.zoomImageView.imageView.setImages(image) { [weak self] _ in
+            self?.loadingView.stopAnimating()
+        } failure: { [weak self] _ in
+            self?.loadingView.stopAnimating()
+        }
     }
 
 }
@@ -49,13 +51,17 @@ extension STPhotoViewerVC: IFileViewer {
     var file: STLibrary.File {
         return self.photoFile
     }
+    
+    func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool) {
+        self.loadingView.color = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .white : .appText
+    }
 
 }
 
 extension STPhotoViewerVC: STImageZoomViewDelegate {
     
     func zoomViewDidZoom(_ zoomView: STImageZoomView) {
-        self.delegate?.photoViewer(startFullScreen: self)
+        self.fileViewerDelegate?.photoViewer(startFullScreen: self)
     }
         
 }

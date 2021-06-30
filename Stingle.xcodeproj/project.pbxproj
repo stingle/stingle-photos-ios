@@ -166,6 +166,7 @@
 		A06E423D2627230E00F43826 /* STAlbumsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06E423B2627230E00F43826 /* STAlbumsCollectionViewCell.swift */; };
 		A06E423E2627230E00F43826 /* STAlbumsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A06E423C2627230E00F43826 /* STAlbumsCollectionViewCell.xib */; };
 		A06E424526273FAB00F43826 /* STCrypto+Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06E424426273FAB00F43826 /* STCrypto+Album.swift */; };
+		A0735833268CBF9900F82016 /* STSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0735832268CBF9900F82016 /* STSlider.swift */; };
 		A074AE3B26459602004C9E9E /* STAlbumWorker+Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074AE3A26459602004C9E9E /* STAlbumWorker+Share.swift */; };
 		A074AE3E26460203004C9E9E /* STMoveAlbumFilesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074AE3D26460203004C9E9E /* STMoveAlbumFilesVC.swift */; };
 		A074AE40264605AE004C9E9E /* STMoveAlbumFilesVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A074AE3F264605AE004C9E9E /* STMoveAlbumFilesVM.swift */; };
@@ -467,6 +468,7 @@
 		A06E423B2627230E00F43826 /* STAlbumsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsCollectionViewCell.swift; sourceTree = "<group>"; };
 		A06E423C2627230E00F43826 /* STAlbumsCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STAlbumsCollectionViewCell.xib; sourceTree = "<group>"; };
 		A06E424426273FAB00F43826 /* STCrypto+Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STCrypto+Album.swift"; sourceTree = "<group>"; };
+		A0735832268CBF9900F82016 /* STSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSlider.swift; sourceTree = "<group>"; };
 		A074AE3A26459602004C9E9E /* STAlbumWorker+Share.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAlbumWorker+Share.swift"; sourceTree = "<group>"; };
 		A074AE3D26460203004C9E9E /* STMoveAlbumFilesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMoveAlbumFilesVC.swift; sourceTree = "<group>"; };
 		A074AE3F264605AE004C9E9E /* STMoveAlbumFilesVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMoveAlbumFilesVM.swift; sourceTree = "<group>"; };
@@ -811,7 +813,7 @@
 		A02203F925EEDC0300D07C98 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A0F99DC6268365FB00B0F36F /* ZooomView */,
+				A0735832268CBF9900F82016 /* STSlider.swift */,
 				A032096E26546275000C420B /* STVideoView.swift */,
 				A0DC5E392639576300103DE1 /* STButton.swift */,
 				A04BD0162634AA2700C5F29F /* STDynamicTableView.swift */,
@@ -822,6 +824,7 @@
 				A02ED2EA2603FD2200F10D58 /* STImageView.swift */,
 				A06942CA260CDA5A009CFD3A /* STGradientView.swift */,
 				A049459B2611CDF4008D5E48 /* STView.swift */,
+				A0F99DC6268365FB00B0F36F /* ZooomView */,
 				A0E99998263F1DA8002FDCC9 /* TokenView */,
 				A00E8C902629D3680066ED9B /* CollectionView */,
 				A02203FB25EEDC0300D07C98 /* LoadingView */,
@@ -2239,6 +2242,7 @@
 				A075B7302652A22300B4E2DF /* STAlbumSettingsNameCell.swift in Sources */,
 				A00E8C972629D3B70066ED9B /* STCollectionViewDataSource.swift in Sources */,
 				A0E999A0263F2E46002FDCC9 /* STTokenCell.swift in Sources */,
+				A0735833268CBF9900F82016 /* STSlider.swift in Sources */,
 				A05D2697261B5751008E9CF8 /* STMenuMasterTableViewCell.swift in Sources */,
 				A06942D1260CDE3E009CFD3A /* UIColor+Operation.swift in Sources */,
 				A0F467E425F9776600BF00AA /* STAlbumFilesProvider.swift in Sources */,
