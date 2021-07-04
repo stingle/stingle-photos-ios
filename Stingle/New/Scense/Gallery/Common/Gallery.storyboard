@@ -266,6 +266,7 @@
                         <outlet property="emptyDataView" destination="iDE-au-v8a" id="K3k-3D-cRu"/>
                         <outlet property="syncBarButtonItem" destination="bQW-4L-HGt" id="NEc-EU-RWP"/>
                         <outlet property="syncView" destination="giG-pH-3g1" id="P9T-RG-EKJ"/>
+                        <segue destination="wnw-fg-4Rc" kind="show" identifier="Viwer" id="eK4-Lm-Wxm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ew-aZ-3Qw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1006,6 +1007,14 @@
                             <constraint firstAttribute="trailing" secondItem="yxY-ya-53m" secondAttribute="trailing" id="j6K-JA-uFU"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="gzh-pG-42u">
+                        <barButtonItem key="rightBarButtonItem" image="ic_more" id="SDi-kk-oTu">
+                            <color key="tintColor" name="STText"/>
+                            <connections>
+                                <action selector="didSelectMoreButton:" destination="wnw-fg-4Rc" id="qlE-17-cxj"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hby-84-Gct" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1108,10 +1117,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="31D-KR-QeI">
-                                        <rect key="frame" x="105" y="2" width="204.5" height="22"/>
+                                        <rect key="frame" x="104" y="2" width="206" height="22"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kqw-3G-bMb">
-                                                <rect key="frame" x="0.0" y="0.0" width="57.5" height="22"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="58" height="22"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                                 <state key="normal" image="ic_player_backward"/>
@@ -1120,7 +1129,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3F8-bZ-zp5">
-                                                <rect key="frame" x="77.5" y="0.0" width="49.5" height="22"/>
+                                                <rect key="frame" x="78" y="0.0" width="50" height="22"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                                 <state key="normal" image="ic_player_play"/>
@@ -1130,7 +1139,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6g2-Lj-FXl">
-                                                <rect key="frame" x="147" y="0.0" width="57.5" height="22"/>
+                                                <rect key="frame" x="148" y="0.0" width="58" height="22"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                                 <state key="normal" image="ic_player_forward"/>

@@ -101,6 +101,26 @@ class STFileViewerVC: UIViewController {
     
     //MARK: - User action
     
+    @IBAction private func didSelectMoreButton(_ sender: UIBarButtonItem) {
+        self.currentFileViewer?.fileViewer(pauseContent: self)
+        guard let currentFile = self.currentFile else {
+            return
+        }
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let download = UIAlertAction(title: "download_file".localized, style: .default) { [weak self] _ in
+            self?.viewModel.downloadFile(file: currentFile)
+        }
+        alert.addAction(download)
+        
+        let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
+        alert.addAction(cancel)
+            
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.barButtonItem = sender
+        }
+        self.showDetailViewController(alert, sender: nil)
+    }
+    
     @objc private func didSelectBackground(tap: UIGestureRecognizer) {
         UIView.animate(withDuration: 0.1) {
             self.changeViewerStyle()
@@ -312,10 +332,12 @@ extension STFileViewerVC: UIScrollViewDelegate {
 extension STFileViewerVC: STAlbumFilesTabBarAccessoryViewDelegate {
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+        self.currentFileViewer?.fileViewer(pauseContent: self)
         self.showShareFileActionSheet(sender: sendner)
     }
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
+        self.currentFileViewer?.fileViewer(pauseContent: self)
         guard let file = self.currentFile else {
             return
         }

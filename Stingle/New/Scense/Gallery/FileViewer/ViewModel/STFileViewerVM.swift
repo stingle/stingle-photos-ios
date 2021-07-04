@@ -18,9 +18,8 @@ protocol IFileViewerVM {
     func deleteFile(file: STLibrary.File, completion: @escaping (_ result: IError?) -> Void)
     
     func getDeleteFileMessage(file: STLibrary.File) -> String
-    
     func removeFileSystemFolder(url: URL)
-    
+    func downloadFile(file: STLibrary.File)
 }
 
 extension IFileViewerVM {
@@ -89,6 +88,10 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
     
     func removeFileSystemFolder(url: URL) {
         STApplication.shared.fileSystem.remove(file: url)
+    }
+    
+    func downloadFile(file: STLibrary.File) {
+        STApplication.shared.downloaderManager.fileDownloader.download(files: [file])
     }
         
 }

@@ -160,6 +160,7 @@
 "alert_stop_sharing_message" = "Are you sure you want to stop sharing album %@ with everyone";
 
 "move_trash_file_alert_message" = "This file will be move to trash";
+"download_file" = "Download file";
 
 //MARK: - Menu
 
