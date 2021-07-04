@@ -7,16 +7,16 @@
 
 import UIKit
 
-protocol STAlbumFilesTabBarAccessoryViewDelegate: AnyObject {
+protocol STFilesActionTabBarAccessoryViewDelegate: AnyObject {
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton)
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectMoveButton sendner: UIButton)
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton)
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectTrashButton sendner: UIButton)
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton)
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton)
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectDownloadButton sendner: UIButton)
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton)
     
 }
 
-class STAlbumFilesTabBarAccessoryView: UIView {
+class STFilesActionTabBarAccessoryView: UIView {
     
     @IBOutlet weak private(set) var sharButton: STButton!
     @IBOutlet weak private(set) var copyButton: STButton!
@@ -24,7 +24,7 @@ class STAlbumFilesTabBarAccessoryView: UIView {
     @IBOutlet weak private(set) var trashButton: STButton!
     @IBOutlet weak private(set) var titleLabel: UILabel!
     
-    weak var delegate: STAlbumFilesTabBarAccessoryViewDelegate?
+    weak var delegate: STFilesActionTabBarAccessoryViewDelegate?
     
     
     @IBAction func didSelectShareButton(_ sender: UIButton) {
@@ -52,10 +52,10 @@ class STAlbumFilesTabBarAccessoryView: UIView {
     
 }
 
-extension STAlbumFilesTabBarAccessoryView {
+extension STFilesActionTabBarAccessoryView {
     
-    class func loadNib() -> STAlbumFilesTabBarAccessoryView {
-        let contentView = Bundle(for: self).loadNibNamed(String(describing: self), owner: self, options: nil)?.first as! STAlbumFilesTabBarAccessoryView
+    class func loadNib() -> STFilesActionTabBarAccessoryView {
+        let contentView = Bundle(for: self).loadNibNamed(String(describing: self), owner: self, options: nil)?.first as! STFilesActionTabBarAccessoryView
         return contentView
     }
     

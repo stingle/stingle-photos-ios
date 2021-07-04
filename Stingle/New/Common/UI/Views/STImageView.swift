@@ -58,9 +58,8 @@ extension STImageView {
             self.imageType = imageType
             self.version = file.version
             self.isThumb = isThumb
-            let isThumbStr = self.isThumb ? "1" : "0"
             self.header = header
-            self.imageParameters = ["file": self.fileName, "set": "\(self.imageType.rawValue)", "is_thumb": isThumbStr]
+            self.imageParameters = file.getImageParameters(isThumb: self.isThumb)
             self.isRemote = file.isRemote           
         }
         
@@ -70,7 +69,6 @@ extension STImageView {
             }
             albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)
             self.init(file: albumFile, isThumb: isThumb)
-            self.imageParameters?["albumId"] = "\(album.albumId)"
         }
                 
     }
@@ -117,4 +115,23 @@ extension STImageView.Image: STDownloadRequest {
         return STNetworkDispatcher.Encoding.body
     }
        
+}
+
+@objc extension STLibrary.File {
+    
+    func getImageParameters(isThumb: Bool) -> [String: String] {
+        let isThumbStr = isThumb ? "1" : "0"
+        return ["file": self.file, "set": "\(self.dbSet.rawValue)", "is_thumb": isThumbStr]
+    }
+    
+}
+
+@objc extension STLibrary.AlbumFile {
+    
+    override func getImageParameters(isThumb: Bool) -> [String : String] {
+        var params = super.getImageParameters(isThumb: isThumb)
+        params["albumId"] = "\(self.albumId)"
+        return params
+    }
+    
 }

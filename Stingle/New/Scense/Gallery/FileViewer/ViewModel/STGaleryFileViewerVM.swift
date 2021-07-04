@@ -13,7 +13,7 @@ class STGaleryFileViewerVM: STFileViewerVM<STCDFile> {
     
     init(sortDescriptorsKeys: [String], predicate: NSPredicate?) {
         let dataBase = STApplication.shared.dataBase.galleryProvider
-        let dataSource = dataBase.createDataSource(sortDescriptorsKeys: sortDescriptorsKeys, sectionNameKeyPath: nil, predicate: predicate)
+        let dataSource = dataBase.createDataSource(sortDescriptorsKeys: sortDescriptorsKeys, sectionNameKeyPath: nil, predicate: predicate, cacheName: nil)
         super.init(dataSource: dataSource)
     }
     

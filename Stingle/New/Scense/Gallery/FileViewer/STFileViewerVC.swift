@@ -27,14 +27,22 @@ protocol IFileViewerDelegate: AnyObject {
 class STFileViewerVC: UIViewController {
     
     private var viewModel: IFileViewerVM!
-    private var currentIndex: Int?
+    private var currentIndex: Int? {
+        didSet {
+            if self.currentIndex == NSNotFound {
+                print("currentIndex", self.currentIndex ?? "errrrr")
+            }
+            
+        }
+    }
     private var pageViewController: UIPageViewController!
     private var viewControllers = STObserverEvents<IFileViewer>()
     private var viewerStyle: ViewerStyle = .white
     private weak var titleView: STFileViewerNavigationTitleView?
+    private var initialFile: STLibrary.File?
         
-    lazy private var accessoryView: STAlbumFilesTabBarAccessoryView = {
-        let resilt = STAlbumFilesTabBarAccessoryView.loadNib()
+    lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
+        let resilt = STFilesActionTabBarAccessoryView.loadNib()
         return resilt
     }()
     
@@ -65,7 +73,6 @@ class STFileViewerVC: UIViewController {
         self.viewerStyle = .balck
         self.changeViewerStyle()
         self.setupTavigationTitle()
-        self.viewModel.delegate = self
         self.setupPageViewController()
         self.setupTapGesture()
         self.accessoryView.delegate = self
@@ -285,16 +292,18 @@ extension STFileViewerVC {
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STGaleryFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys, predicate: predicate)
         vc.viewModel = viewModel
-        vc.currentIndex = viewModel.index(at: file)
+        vc.initialFile = file
+        vc.viewModel.delegate = vc
         return vc
     }
     
-    static func create(album: STLibrary.Album, file: STLibrary.File, sortDescriptorsKeys: [String]) -> STFileViewerVC {
+    static func create(album: STLibrary.Album, file: STLibrary.AlbumFile, sortDescriptorsKeys: [String]) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STAlbumFileViewerVM(album: album, sortDescriptorsKeys: sortDescriptorsKeys)
         vc.viewModel = viewModel
-        vc.currentIndex = viewModel.index(at: file)
+        vc.initialFile = file
+        vc.viewModel.delegate = vc
         return vc
     }
     
@@ -329,14 +338,14 @@ extension STFileViewerVC: UIScrollViewDelegate {
     
 }
 
-extension STFileViewerVC: STAlbumFilesTabBarAccessoryViewDelegate {
+extension STFileViewerVC: STFilesActionTabBarAccessoryViewDelegate {
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
         self.currentFileViewer?.fileViewer(pauseContent: self)
         self.showShareFileActionSheet(sender: sendner)
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
         self.currentFileViewer?.fileViewer(pauseContent: self)
         guard let file = self.currentFile else {
             return
@@ -346,7 +355,7 @@ extension STFileViewerVC: STAlbumFilesTabBarAccessoryViewDelegate {
         self.showDetailViewController(navVC, sender: nil)
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
         let title = "alert_save_to_device_library_title".localized
         let message = "alert_save_file_to_device_library_message".localized
         self.showInfoAlert(title: title, message: message, cancel: true) { [weak self] in
@@ -354,7 +363,7 @@ extension STFileViewerVC: STAlbumFilesTabBarAccessoryViewDelegate {
         }
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
         guard let file = self.currentFile else {
             return
         }
@@ -390,6 +399,18 @@ extension STFileViewerVC: UIPageViewControllerDataSource, UIPageViewControllerDe
 extension STFileViewerVC: STFileViewerVMDelegate {
     
     func fileViewerVM(didUpdateedData fileViewerVM: IFileViewerVM) {
+        
+        guard self.isViewLoaded else {
+            if let initialFile = self.initialFile {
+                self.currentIndex = self.viewModel.index(at: initialFile)
+            }
+            return
+        }
+        
+        if let initialFile = self.initialFile, self.currentIndex == nil {
+            self.currentIndex = self.viewModel.index(at: initialFile)
+        }
+        
         guard let currentIndex = self.currentIndex else {
             self.navigationController?.popViewController(animated: true)
             return

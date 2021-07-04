@@ -19,7 +19,9 @@ class STPhotoViewerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.reloadImage()
+        DispatchQueue.main.async { [weak self] in
+            self?.reloadImage()
+        }
     }
     
     private func reloadImage() {

@@ -148,8 +148,8 @@
 		A04BD00A26347A8500C5F29F /* STUploadsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04BD00826347A8400C5F29F /* STUploadsTableViewCell.swift */; };
 		A04BD00B26347A8500C5F29F /* STUploadsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A04BD00926347A8500C5F29F /* STUploadsTableViewCell.xib */; };
 		A04BD0172634AA2700C5F29F /* STDynamicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04BD0162634AA2700C5F29F /* STDynamicTableView.swift */; };
-		A052FA96263C9C7200946A8F /* STAlbumFilesTabBarAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A052FA95263C9C7200946A8F /* STAlbumFilesTabBarAccessoryView.swift */; };
-		A052FA98263C9C7E00946A8F /* STAlbumFilesTabBarAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A052FA97263C9C7E00946A8F /* STAlbumFilesTabBarAccessoryView.xib */; };
+		A052FA96263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A052FA95263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift */; };
+		A052FA98263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A052FA97263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib */; };
 		A05AD2D825FCEAC500ABBA59 /* STDBInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05AD2D725FCEAC500ABBA59 /* STDBInfoProvider.swift */; };
 		A05D2682261B2814008E9CF8 /* STMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D2681261B2814008E9CF8 /* STMenuVC.swift */; };
 		A05D2686261B3CEE008E9CF8 /* STMenuMasterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D2685261B3CEE008E9CF8 /* STMenuMasterVC.swift */; };
@@ -453,8 +453,8 @@
 		A04BD00826347A8400C5F29F /* STUploadsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUploadsTableViewCell.swift; sourceTree = "<group>"; };
 		A04BD00926347A8500C5F29F /* STUploadsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STUploadsTableViewCell.xib; sourceTree = "<group>"; };
 		A04BD0162634AA2700C5F29F /* STDynamicTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDynamicTableView.swift; sourceTree = "<group>"; };
-		A052FA95263C9C7200946A8F /* STAlbumFilesTabBarAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFilesTabBarAccessoryView.swift; sourceTree = "<group>"; };
-		A052FA97263C9C7E00946A8F /* STAlbumFilesTabBarAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STAlbumFilesTabBarAccessoryView.xib; sourceTree = "<group>"; };
+		A052FA95263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesActionTabBarAccessoryView.swift; sourceTree = "<group>"; };
+		A052FA97263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilesActionTabBarAccessoryView.xib; sourceTree = "<group>"; };
 		A05AD2D725FCEAC500ABBA59 /* STDBInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDBInfoProvider.swift; sourceTree = "<group>"; };
 		A05D2681261B2814008E9CF8 /* STMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMenuVC.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		A05D2685261B3CEE008E9CF8 /* STMenuMasterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMenuMasterVC.swift; sourceTree = "<group>"; };
@@ -1391,8 +1391,8 @@
 		A052FA94263C9C3F00946A8F /* TabBarAccessoryView */ = {
 			isa = PBXGroup;
 			children = (
-				A052FA95263C9C7200946A8F /* STAlbumFilesTabBarAccessoryView.swift */,
-				A052FA97263C9C7E00946A8F /* STAlbumFilesTabBarAccessoryView.xib */,
+				A052FA95263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift */,
+				A052FA97263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib */,
 			);
 			path = TabBarAccessoryView;
 			sourceTree = "<group>";
@@ -1725,6 +1725,7 @@
 		A099F4B926302AFA000D4F86 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A052FA94263C9C3F00946A8F /* TabBarAccessoryView */,
 				A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */,
 			);
 			path = Views;
@@ -1940,7 +1941,6 @@
 		A0D1A3BE262E0F6A002E326F /* Items */ = {
 			isa = PBXGroup;
 			children = (
-				A052FA94263C9C3F00946A8F /* TabBarAccessoryView */,
 				A0D1A3C0262E0F76002E326F /* Cell */,
 				A0D1A3BF262E0F70002E326F /* Header */,
 			);
@@ -2141,7 +2141,7 @@
 				A075B7312652A22300B4E2DF /* STAlbumSettingsNameCell.xib in Resources */,
 				A075B72B2652A12E00B4E2DF /* STAlbumSettingsPermissionCell.xib in Resources */,
 				A074AE4726460A70004C9E9E /* STMoveAlbumFilesCell.xib in Resources */,
-				A052FA98263C9C7E00946A8F /* STAlbumFilesTabBarAccessoryView.xib in Resources */,
+				A052FA98263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib in Resources */,
 				A02204AE25EEDC0400D07C98 /* SPCollectionViewCell.xib in Resources */,
 				A0B2678B2624E0FC0090E4ED /* STTrashCollectionViewCell.xib in Resources */,
 				A075B7272652A03000B4E2DF /* STAlbumSettingsHeader.xib in Resources */,
@@ -2268,7 +2268,7 @@
 				A09D94462636FD7600268A84 /* STAlbumsSharedVC.swift in Sources */,
 				A022046C25EEDC0400D07C98 /* STNavigationController.swift in Sources */,
 				A022049825EEDC0400D07C98 /* UITextField+Extensions.swift in Sources */,
-				A052FA96263C9C7200946A8F /* STAlbumFilesTabBarAccessoryView.swift in Sources */,
+				A052FA96263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift in Sources */,
 				A0301DE025FD6C6A005281EF /* ICDConvertable.swift in Sources */,
 				A0D8A98A25F43EF8005C12F8 /* STContact.swift in Sources */,
 				A022046E25EEDC0400D07C98 /* STLoadingView.swift in Sources */,

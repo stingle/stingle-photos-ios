@@ -47,7 +47,7 @@ extension UIImageView {
             } progress: { [weak self] (progress) in
                 self?.retryProgress(progressRetry: progress, animator: animator)
             } failure: { [weak self] (error) in
-                self?.retryFailure(error: error, animator: animator)
+                self?.retryFailure(error: error, animator: animator, failure: failure)
             }
         } else {
             self.image = placeholder

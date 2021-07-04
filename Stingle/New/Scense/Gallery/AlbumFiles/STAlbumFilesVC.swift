@@ -98,8 +98,8 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         return STImagePickerHelper(controller: self)
     }()
     
-    lazy private var accessoryView: STAlbumFilesTabBarAccessoryView = {
-        let resilt = STAlbumFilesTabBarAccessoryView.loadNib()
+    lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
+        let resilt = STFilesActionTabBarAccessoryView.loadNib()
         return resilt
     }()
     
@@ -411,6 +411,23 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         STFilesDownloaderActivityVC.showActivity(downloadingFiles: shearing, controller: self.tabBarController ?? self, delegate: self, userInfo: action)
     }
     
+    private func setSelectedItem(for indexPath: IndexPath) {
+        guard let albumFile =  self.dataSource.object(at: indexPath) else {
+            return
+        }
+        var isSelected = false
+        if self.dataSource.viewModel.selectedFileNames.contains(albumFile.file) {
+            self.dataSource.viewModel.selectedFileNames.remove(albumFile.file)
+            isSelected = false
+        } else {
+            self.dataSource.viewModel.selectedFileNames.insert(albumFile.file)
+            isSelected = true
+        }
+        let cell = (collectionView.cellForItem(at: indexPath) as? STAlbumFilesCollectionViewCell)
+        cell?.setSelected(isSelected: isSelected)
+        self.updateSelectedItesmCount()
+    }
+    
 }
 
 extension STAlbumFilesVC: STImagePickerHelperDelegate {
@@ -444,39 +461,32 @@ extension STAlbumFilesVC: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if self.dataSource.viewModel.isSelectedMode {
-            guard let albumFile =  self.dataSource.object(at: indexPath) else {
+            self.setSelectedItem(for: indexPath)
+        } else {
+            guard let file = self.dataSource.object(at: indexPath) else {
                 return
             }
-            var isSelected = false
-            if self.dataSource.viewModel.selectedFileNames.contains(albumFile.file) {
-                self.dataSource.viewModel.selectedFileNames.remove(albumFile.file)
-                isSelected = false
-            } else {
-                self.dataSource.viewModel.selectedFileNames.insert(albumFile.file)
-                isSelected = true
-            }
-            let cell = (collectionView.cellForItem(at: indexPath) as? STAlbumFilesCollectionViewCell)
-            cell?.setSelected(isSelected: isSelected)
-            self.updateSelectedItesmCount()
+            let vc = STFileViewerVC.create(album: self.album, file: file, sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated)])
+            self.show(vc, sender: nil)
         }
     }
     
 }
 
-extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
+extension STAlbumFilesVC: STFilesActionTabBarAccessoryViewDelegate {
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
         self.showShareFilesActionSheet(sender: sendner)
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
         let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
         let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
         (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .albumFiles(album: self.album, files: self.viewModel.getFiles(fileNames: selectedFileNames))
         self.showDetailViewController(navVC, sender: nil)
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
         let title = "alert_save_to_device_library_title".localized
         let message = "alert_save_files_to_device_library_message".localized
         self.showInfoAlert(title: title, message: message, cancel: true) { [weak self] in
@@ -484,7 +494,7 @@ extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
         }
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
+    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
         let count = self.dataSource.viewModel.selectedFileNames.count
         let title = "delete_album_files_alert_title".localized
         let message = String(format: "delete_album_files_alert_message".localized, "\(count)")

@@ -42,12 +42,15 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
     private let dataSource: STDataBase.DataSource<ManagedObject>
     private var snapshot: NSDiffableDataSourceSnapshotReference?
     
-    weak var delegate: STFileViewerVMDelegate?
+    weak var delegate: STFileViewerVMDelegate? {
+        didSet {
+            self.dataSource.reloadData()
+        }
+    }
     
     init(dataSource: STDataBase.DataSource<ManagedObject>) {
         self.dataSource = dataSource
         self.dataSource.delegate = self
-        self.dataSource.reloadData()
     }
     
     func getObject(at index: Int) -> ManagedObject.Model? {
@@ -62,7 +65,6 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
         let indexPath = self.dataSource.indexPath(forObject: model)
         return indexPath?.row
     }
-    
     
     //MARK: - IFileViewerVM
     
@@ -101,7 +103,13 @@ extension STFileViewerVM: IProviderDelegate {
         
     func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
         self.snapshot = snapshot
-        self.delegate?.fileViewerVM(didUpdateedData: self)
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.delegate?.fileViewerVM(didUpdateedData: weakSelf)
+        }
+        
     }
 
 }
