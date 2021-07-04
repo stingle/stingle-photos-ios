@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="R1P-5n-IQm">
-    <device id="retina6_1" orientation="landscape" appearance="light"/>
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -15,7 +15,7 @@
             <objects>
                 <navigationController storyboardIdentifier="TrashID" id="Bpg-Te-50b" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Lez-zF-1Je">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
@@ -95,7 +95,7 @@
                 <navigationController id="UtM-t9-Os5" customClass="STGalleryNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Album" image="ic_album_min" id="F5a-1i-nFa"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cRA-Mk-YDO">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
@@ -116,7 +116,7 @@
                 <navigationController id="dnZ-yy-kva" customClass="STGalleryNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Gallery" image="ic_gallery_min" id="4xE-uT-DxU"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Gy8-mL-8SB">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
@@ -136,7 +136,7 @@
             <objects>
                 <viewController id="4gb-r9-Gut" customClass="STGalleryVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MnP-Jg-WJp">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I75-MK-j84">
@@ -144,22 +144,22 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iDE-au-v8a">
-                                <rect key="frame" x="44" y="44" width="808" height="300"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="641"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VOr-T8-YDO">
-                                        <rect key="frame" x="8" y="9.5" width="792" height="281"/>
+                                        <rect key="frame" x="8" y="180" width="359" height="281"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_empty_files" translatesAutoresizingMaskIntoConstraints="NO" id="KAa-0T-yGP">
-                                                <rect key="frame" x="0.0" y="0.0" width="792" height="200"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="359" height="200"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have photos yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L1D-rv-s3P">
-                                                <rect key="frame" x="280" y="220" width="232.5" height="24"/>
+                                                <rect key="frame" x="63.333333333333314" y="220" width="232.66666666666669" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                 <color key="textColor" name="STText"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imported photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpb-69-iHJ">
-                                                <rect key="frame" x="287.5" y="264" width="217.5" height="17"/>
+                                                <rect key="frame" x="71" y="264" width="217.33333333333337" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -190,7 +190,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="s9v-YZ-AUH" customClass="STCollectionView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="44" y="0.0" width="808" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="2CS-fd-O9c">
                                     <size key="itemSize" width="128" height="128"/>
@@ -204,14 +204,14 @@
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zlm-Ar-TLW">
-                                <rect key="frame" x="762" y="250" width="74" height="74"/>
+                                <rect key="frame" x="285" y="635" width="74" height="74"/>
                                 <state key="normal" image="ic_open_image_picker"/>
                                 <connections>
                                     <action selector="didSelectOpenImagePicker:" destination="4gb-r9-Gut" eventType="touchUpInside" id="XnR-ML-m2H"/>
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="TnY-NB-wrO">
-                                <rect key="frame" x="429.5" y="175.5" width="37" height="37"/>
+                                <rect key="frame" x="169" y="390" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="VNU-0I-8gN"/>
@@ -239,8 +239,8 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" id="bQW-4L-HGt">
-                            <view key="customView" userInteractionEnabled="NO" contentMode="scaleToFill" id="giG-pH-3g1" customClass="STGallerySyncView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="781" y="0.0" width="55" height="44"/>
+                            <view key="customView" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" id="giG-pH-3g1" customClass="STGallerySyncView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="304" y="0.0" width="55" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" name="STPrimary"/>
@@ -277,18 +277,18 @@
             <objects>
                 <viewController storyboardIdentifier="Popover" id="zmF-Ew-Y8v" customClass="STUploadsVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vWP-rc-wqR">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="sgT-Is-HMp">
-                                <rect key="frame" x="44" y="0.0" width="808" height="393"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="dataSource" destination="zmF-Ew-Y8v" id="sB5-4T-GIO"/>
                                 </connections>
                             </tableView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Empty Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="h5S-W4-pyi">
-                                <rect key="frame" x="393.5" y="184.5" width="109" height="24"/>
+                                <rect key="frame" x="133" y="399" width="109" height="24"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="textColor" name="STText"/>
                                 <nil key="highlightedColor"/>
@@ -323,26 +323,26 @@
             <objects>
                 <viewController id="8nd-bs-WGs" customClass="STAlbumsVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ES9-Gw-MFt">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8DH-3L-DED">
-                                <rect key="frame" x="44" y="44" width="808" height="300"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="641"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0zt-2S-PnV">
-                                        <rect key="frame" x="8" y="9" width="792" height="282"/>
+                                        <rect key="frame" x="8" y="179.66666666666669" width="359" height="282"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_empty_albums" translatesAutoresizingMaskIntoConstraints="NO" id="4Pj-x0-YUm">
-                                                <rect key="frame" x="0.0" y="0.0" width="792" height="201"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="359" height="201"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have any shared albums" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="naL-Jg-4Zn">
-                                                <rect key="frame" x="243" y="221" width="306.5" height="24"/>
+                                                <rect key="frame" x="26.333333333333343" y="221" width="306.66666666666663" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                 <color key="textColor" name="STText"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shared photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GFn-Fe-XvY">
-                                                <rect key="frame" x="294" y="265" width="204" height="17"/>
+                                                <rect key="frame" x="77.666666666666686" y="264.99999999999994" width="204" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -373,10 +373,10 @@
                                 </constraints>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="bP3-Lw-AeF">
-                                <rect key="frame" x="429.5" y="175.5" width="37" height="37"/>
+                                <rect key="frame" x="169" y="390" width="37" height="37"/>
                             </activityIndicatorView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="i9L-75-PfS">
-                                <rect key="frame" x="44" y="0.0" width="808" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ddg-vR-wge">
                                     <size key="itemSize" width="128" height="128"/>
@@ -447,7 +447,7 @@
                 <navigationController id="Vpp-rC-Cqb" customClass="STGalleryNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Album" image="ic_shared_album_min" id="Y4F-U0-qDU"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pN7-zR-3cc">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
@@ -467,11 +467,11 @@
             <objects>
                 <viewController id="wit-9s-oEN" customClass="STAlbumFilesVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1TV-8a-GCO">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="WCb-Fx-StB">
-                                <rect key="frame" x="44" y="0.0" width="808" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="2hz-NL-x4s">
                                     <size key="itemSize" width="128" height="128"/>
@@ -485,22 +485,22 @@
                                 </connections>
                             </collectionView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gqO-as-RAE">
-                                <rect key="frame" x="44" y="0.0" width="808" height="344"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FEC-EX-Oax">
-                                        <rect key="frame" x="8" y="31.5" width="792" height="281"/>
+                                        <rect key="frame" x="8" y="224" width="359" height="281"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_empty_files" translatesAutoresizingMaskIntoConstraints="NO" id="mhs-fV-ijf">
-                                                <rect key="frame" x="0.0" y="0.0" width="792" height="200"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="359" height="200"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have photos yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="idu-yX-igR">
-                                                <rect key="frame" x="280" y="220" width="232.5" height="24"/>
+                                                <rect key="frame" x="63.333333333333314" y="220" width="232.66666666666669" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                 <color key="textColor" name="STText"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imported photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNU-M5-vNy">
-                                                <rect key="frame" x="287.5" y="264" width="217.5" height="17"/>
+                                                <rect key="frame" x="71" y="264" width="217.33333333333337" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -531,10 +531,10 @@
                                 </constraints>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="Q8N-dK-Rp8">
-                                <rect key="frame" x="429.5" y="175.5" width="37" height="37"/>
+                                <rect key="frame" x="169" y="390" width="37" height="37"/>
                             </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Liy-mC-aza">
-                                <rect key="frame" x="758" y="250" width="74" height="74"/>
+                                <rect key="frame" x="281" y="635" width="74" height="74"/>
                                 <state key="normal" image="ic_open_image_picker"/>
                                 <connections>
                                     <action selector="didSelectAddButton:" destination="wit-9s-oEN" eventType="touchUpInside" id="k6Y-J5-4nA"/>
@@ -601,26 +601,26 @@
             <objects>
                 <viewController id="dDk-OY-QQq" customClass="STMoveAlbumFilesVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rcU-IS-1Pd">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="K6y-m8-pRG">
-                                <rect key="frame" x="44" y="44" width="808" height="120.5"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="120.66666666666669"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UdC-5E-Ktq">
-                                        <rect key="frame" x="0.0" y="0.0" width="808" height="60.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="60.666666666666664"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1ti-iT-HHI">
-                                                <rect key="frame" x="240.5" y="0.0" width="327.5" height="60.5"/>
+                                                <rect key="frame" x="24" y="0.0" width="327.33333333333331" height="60.666666666666664"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Delete original items after adding" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="iIT-ZT-fqd">
-                                                        <rect key="frame" x="0.0" y="20" width="258.5" height="20.5"/>
+                                                        <rect key="frame" x="0.0" y="20" width="258.33333333333331" height="20.666666666666671"/>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                         <color key="textColor" name="STText"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="67e-1A-hKu">
-                                                        <rect key="frame" x="278.5" y="15" width="51" height="31"/>
+                                                        <rect key="frame" x="278.33333333333331" y="15" width="51" height="31"/>
                                                         <color key="onTintColor" name="STPrimary"/>
                                                     </switch>
                                                 </subviews>
@@ -645,13 +645,13 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HE2-p5-IqI">
-                                        <rect key="frame" x="0.0" y="60.5" width="808" height="60"/>
+                                        <rect key="frame" x="0.0" y="60.666666666666657" width="375" height="60"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="h4O-7Q-Sfz">
-                                                <rect key="frame" x="0.0" y="0.0" width="808" height="60"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tka-DQ-BYQ" customClass="STButton" customModule="Stingle" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="404" height="60"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="187.66666666666666" height="60"/>
                                                         <color key="tintColor" name="STPrimary"/>
                                                         <inset key="contentEdgeInsets" minX="0.0" minY="18" maxX="0.0" maxY="18"/>
                                                         <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -669,7 +669,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvn-d7-faO" customClass="STButton" customModule="Stingle" customModuleProvider="target">
-                                                        <rect key="frame" x="404" y="0.0" width="404" height="60"/>
+                                                        <rect key="frame" x="187.66666666666663" y="0.0" width="187.33333333333337" height="60"/>
                                                         <color key="tintColor" name="STPrimary"/>
                                                         <inset key="contentEdgeInsets" minX="0.0" minY="18" maxX="0.0" maxY="18"/>
                                                         <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -700,7 +700,7 @@
                                 </subviews>
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XKL-Ly-Idj">
-                                <rect key="frame" x="44" y="164.5" width="808" height="228.5"/>
+                                <rect key="frame" x="0.0" y="208.66666666666669" width="375" height="569.33333333333326"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SPk-Jk-1IL">
                                     <size key="itemSize" width="128" height="128"/>
@@ -752,7 +752,7 @@
             <objects>
                 <navigationController storyboardIdentifier="goToMoveAlbumFiles" id="IGO-CV-sc4" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="RXf-uH-Wc4">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -768,7 +768,7 @@
             <objects>
                 <viewController id="xLW-ut-Ylu" customClass="STTrashVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XGI-zP-x8V">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3OF-R3-o5T">
@@ -776,22 +776,22 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JdY-10-o1w">
-                                <rect key="frame" x="44" y="44" width="808" height="349"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="690"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9kh-V7-o9w">
-                                        <rect key="frame" x="8" y="34" width="792" height="281"/>
+                                        <rect key="frame" x="8" y="204.66666666666669" width="359" height="281"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_empty_files" translatesAutoresizingMaskIntoConstraints="NO" id="2ge-6n-Mai">
-                                                <rect key="frame" x="0.0" y="0.0" width="792" height="200"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="359" height="200"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have photos yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WVL-a9-u3z">
-                                                <rect key="frame" x="280" y="220" width="232.5" height="24"/>
+                                                <rect key="frame" x="63.333333333333314" y="219.99999999999994" width="232.66666666666669" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                 <color key="textColor" name="STText"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imported photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efz-8z-Y4X">
-                                                <rect key="frame" x="287.5" y="264" width="217.5" height="17"/>
+                                                <rect key="frame" x="71" y="263.99999999999994" width="217.33333333333337" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -822,7 +822,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KR4-aj-S1s" customClass="STCollectionView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="44" y="0.0" width="808" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="3a6-ni-1HT">
                                     <size key="itemSize" width="128" height="128"/>
@@ -836,7 +836,7 @@
                                 </connections>
                             </collectionView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="74M-7c-UnU">
-                                <rect key="frame" x="429.5" y="200" width="37" height="37"/>
+                                <rect key="frame" x="169" y="414.66666666666669" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="f3X-Cs-zNs"/>
@@ -879,26 +879,26 @@
             <objects>
                 <viewController id="prX-JI-4JC" customClass="STAlbumsSharedVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wXE-Gd-yH0">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TNi-Rs-RIF">
-                                <rect key="frame" x="44" y="44" width="808" height="300"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="641"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="74n-GC-aLB">
-                                        <rect key="frame" x="8" y="11" width="792" height="278"/>
+                                        <rect key="frame" x="8" y="181.66666666666669" width="359" height="278"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_empty_shared_albums" translatesAutoresizingMaskIntoConstraints="NO" id="uv5-HA-oyH">
-                                                <rect key="frame" x="0.0" y="0.0" width="792" height="197"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="359" height="197"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have any shared albums" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofw-Ck-DFN">
-                                                <rect key="frame" x="243" y="217" width="306.5" height="24"/>
+                                                <rect key="frame" x="26.333333333333343" y="217" width="306.66666666666663" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                 <color key="textColor" name="STText"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shared photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="maA-tj-5m1">
-                                                <rect key="frame" x="294" y="261" width="204" height="17"/>
+                                                <rect key="frame" x="77.666666666666686" y="260.99999999999994" width="204" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -929,10 +929,10 @@
                                 </constraints>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="qzy-vu-lpc">
-                                <rect key="frame" x="429.5" y="175.5" width="37" height="37"/>
+                                <rect key="frame" x="169" y="390" width="37" height="37"/>
                             </activityIndicatorView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="xCt-b2-aZh">
-                                <rect key="frame" x="44" y="0.0" width="808" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IEs-3H-pOM">
                                     <size key="itemSize" width="128" height="128"/>
@@ -987,20 +987,20 @@
             <objects>
                 <viewController storyboardIdentifier="STFileViewerVCID" hidesBottomBarWhenPushed="YES" id="wnw-fg-4Rc" customClass="STFileViewerVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lIY-Yr-Y3M">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yxY-ya-53m">
-                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <connections>
                                     <segue destination="FdW-6b-xLM" kind="embed" identifier="pageViewController" id="n3A-wR-wV3"/>
                                 </connections>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jQm-TQ-P5B">
-                                <rect key="frame" x="0.0" y="344" width="896" height="70"/>
+                                <rect key="frame" x="0.0" y="729" width="375" height="83"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dAg-Z8-zZf">
-                                        <rect key="frame" x="0.0" y="49" width="896" height="21"/>
+                                        <rect key="frame" x="0.0" y="49" width="375" height="34"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
                                 </subviews>
@@ -1047,15 +1047,15 @@
             <objects>
                 <viewController storyboardIdentifier="STPhotoViewerVCID" id="Rzl-Sd-6X7" customClass="STPhotoViewerVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="py2-GF-Bzn">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ixm-gA-og5" customClass="STImageZoomView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="J92-t8-aR1">
-                                <rect key="frame" x="429.5" y="188.5" width="37" height="37"/>
+                                <rect key="frame" x="169" y="387.66666666666669" width="37" height="37"/>
                                 <color key="color" name="STText"/>
                             </activityIndicatorView>
                         </subviews>
@@ -1092,21 +1092,21 @@
             <objects>
                 <viewController storyboardIdentifier="STVodeoViewerVCID" id="JWs-vX-jli" customClass="STVideoViewerVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zgX-xQ-N9b">
-                        <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fjh-RQ-9fF" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-Jq-gLv" customClass="STVideoView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vg7-ni-0TF" customClass="STGradientView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="285" width="896" height="64"/>
+                                <rect key="frame" x="0.0" y="683" width="375" height="64"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="Rh3-gX-PCG">
-                                        <rect key="frame" x="8" y="40" width="56" height="14.5"/>
+                                        <rect key="frame" x="8" y="40" width="56" height="14.333333333333336"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="56" id="Tac-Zf-luY"/>
                                         </constraints>
@@ -1115,7 +1115,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Beg-hh-rpG" customClass="STSlider" customModule="Stingle" customModuleProvider="target">
-                                        <rect key="frame" x="70" y="32" width="756" height="31"/>
+                                        <rect key="frame" x="70" y="32" width="235" height="31"/>
                                         <color key="minimumTrackTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="trackHeight">
@@ -1130,7 +1130,7 @@
                                         </connections>
                                     </slider>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="89G-xc-zoK">
-                                        <rect key="frame" x="832" y="40" width="56" height="14.5"/>
+                                        <rect key="frame" x="311" y="40" width="56" height="14.333333333333336"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="56" id="gZk-j7-DmU"/>
                                         </constraints>
@@ -1139,10 +1139,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="31D-KR-QeI">
-                                        <rect key="frame" x="346" y="2" width="204.5" height="22"/>
+                                        <rect key="frame" x="85.333333333333314" y="2" width="204.33333333333337" height="22"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kqw-3G-bMb">
-                                                <rect key="frame" x="0.0" y="0.0" width="57.5" height="22"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="57.333333333333336" height="22"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                                 <state key="normal" image="ic_player_backward"/>
@@ -1151,7 +1151,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3F8-bZ-zp5">
-                                                <rect key="frame" x="77.5" y="0.0" width="49.5" height="22"/>
+                                                <rect key="frame" x="77.333333333333329" y="0.0" width="49.666666666666671" height="22"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                                 <state key="normal" image="ic_player_play"/>
@@ -1161,7 +1161,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6g2-Lj-FXl">
-                                                <rect key="frame" x="147" y="0.0" width="57.5" height="22"/>
+                                                <rect key="frame" x="147" y="0.0" width="57.333333333333343" height="22"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <inset key="contentEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                                 <state key="normal" image="ic_player_forward"/>
@@ -1197,7 +1197,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cPn-ey-qMT" customClass="STView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="409.5" y="168.5" width="77" height="77"/>
+                                <rect key="frame" x="149" y="367.66666666666669" width="77" height="77"/>
                                 <subviews>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="1Ee-jX-pcz">
                                         <rect key="frame" x="20" y="20" width="37" height="37"/>
@@ -1266,14 +1266,14 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="Dtb-DJ-8L1"/>
+        <segue reference="AIi-GL-vll"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ic_album_min" width="20" height="20"/>
         <image name="ic_create_album" width="24" height="24"/>
         <image name="ic_empty_albums" width="190" height="201"/>
-        <image name="ic_empty_files" width="204.5" height="200"/>
-        <image name="ic_empty_shared_albums" width="198" height="197"/>
+        <image name="ic_empty_files" width="204.66667175292969" height="200"/>
+        <image name="ic_empty_shared_albums" width="197.66667175292969" height="197"/>
         <image name="ic_gallery_min" width="24" height="24"/>
         <image name="ic_more" width="13" height="13"/>
         <image name="ic_nav_menu" width="18" height="12"/>
