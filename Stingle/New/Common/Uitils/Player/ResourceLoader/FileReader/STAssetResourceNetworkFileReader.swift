@@ -58,7 +58,7 @@ extension STAssetResourceLoader {
             
             self.readLocal(startOffset: startOffset, fromOffSet: fromOffSet, length: length, dataChunkSize: dataChunkSize, handler: handler, result: { [weak self] fromOffSet, length, canContinue in
                 if canContinue {
-                    self?.readNetwork2(url: url, startOffset: startOffset, fromOffSet: fromOffSet, length: length, dataChunkSize: dataChunkSize, handler: handler, failure: failure)
+                    self?.readNetwork(url: url, startOffset: startOffset, fromOffSet: fromOffSet, length: length, dataChunkSize: dataChunkSize, handler: handler, failure: failure)
                 }
             }, failure: failure)
         }
@@ -117,7 +117,7 @@ extension STAssetResourceLoader {
             }
         }
             
-        private func readNetwork2(url: URL, startOffset: UInt64, fromOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, handler: @escaping (_ chunk: Data, _ fromOffset: UInt64, _ finish: Bool) -> Bool, failure: @escaping (Error) -> Void) {
+        private func readNetwork(url: URL, startOffset: UInt64, fromOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, handler: @escaping (_ chunk: Data, _ fromOffset: UInt64, _ finish: Bool) -> Bool, failure: @escaping (Error) -> Void) {
 
             var writeOffset = fromOffSet
             var oldChankIndex = (writeOffset - startOffset) / dataChunkSize
@@ -321,9 +321,6 @@ fileprivate extension STAssetResourceLoader.NetworkFileReader {
             }
             return try self.fileReader.read(offset: off_t(self.readOffSet), length: UInt64(self.readLength))
         }
-        
-        
- 
         
     }
 }

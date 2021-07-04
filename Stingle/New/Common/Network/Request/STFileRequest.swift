@@ -89,6 +89,4 @@ enum STFileStreamRequest: IStreamRequest {
         }
     }
 
-//      return nil//["Range": "bytes=\(200)-\(7000)"]
-
 }

@@ -400,7 +400,7 @@ extension STCrypto {
         return header
     }
         
-    func reencryptFileHeaders(headersStr: String, publicKeyTo: Bytes, privateKeyFrom: Bytes, publicKeyFrom: Bytes) throws -> String {
+    func reencryptFileHeaders(headersStr: String, publicKeyTo: Bytes, privateKeyFrom: Bytes?, publicKeyFrom: Bytes?) throws -> String {
                 
         let headers = self.getHeaders(headersStrs: headersStr, publicKey: publicKeyFrom, privateKey: privateKeyFrom)
         guard let file = headers.file, let thumb = headers.thumb else {

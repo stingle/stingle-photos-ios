@@ -328,25 +328,6 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         self.albumSettingsButtonItem.image = image
     }
     
-    private func showOkCancelAlert(title: String?, message: String?, textFieldText: String? = nil, textFieldPlaceholder: String? = nil, handler: @escaping ((String?) -> Void)) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction(title: "ok".localized, style: .default) {_ in
-            handler(alert.textFields?.first?.text)
-        }
-        let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
-        alert.addAction(ok)
-        alert.addAction(cancel)
-        
-        if let textFieldPlaceholder = textFieldPlaceholder {
-            alert.addTextField { (textField) in
-                textField.text = textFieldText
-                textField.placeholder = textFieldPlaceholder
-            }
-        }
-        
-        self.present(alert, animated: true, completion: nil)
-    }
-    
     private func deleteSelectedFiles() {
         STLoadingView.show(in: self.view)
         let files: [String] = [String](self.dataSource.viewModel.selectedFileNames)
@@ -497,7 +478,7 @@ extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
     
     func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
         let title = "alert_save_to_device_library_title".localized
-        let message = "alert_save_to_device_library_message".localized
+        let message = "alert_save_files_to_device_library_message".localized
         self.showInfoAlert(title: title, message: message, cancel: true) { [weak self] in
             self?.openDownloadController(action: .saveDevicePhotos)
         }

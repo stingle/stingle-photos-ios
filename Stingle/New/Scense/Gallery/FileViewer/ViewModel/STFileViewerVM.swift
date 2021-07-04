@@ -10,9 +10,16 @@ import UIKit
 protocol IFileViewerVM {
     
     var delegate: STFileViewerVMDelegate? { get set }
+    var countOfItems: Int { get }
+    
     func object(at index: Int) -> STLibrary.File?
     func index(at file: STLibrary.File) -> Int?
-    var countOfItems: Int { get }
+    
+    func deleteFile(file: STLibrary.File, completion: @escaping (_ result: IError?) -> Void)
+    
+    func getDeleteFileMessage(file: STLibrary.File) -> String
+    
+    func removeFileSystemFolder(url: URL)
     
 }
 
@@ -31,7 +38,7 @@ protocol STFileViewerVMDelegate: AnyObject {
     func fileViewerVM(didUpdateedData fileViewerVM: IFileViewerVM)
 }
 
-class STFileViewerVM<ManagedObject: IManagedObject> where ManagedObject.Model == STLibrary.File {
+class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
     
     private let dataSource: STDataBase.DataSource<ManagedObject>
     private var snapshot: NSDiffableDataSourceSnapshotReference?
@@ -56,28 +63,39 @@ class STFileViewerVM<ManagedObject: IManagedObject> where ManagedObject.Model ==
         let indexPath = self.dataSource.indexPath(forObject: model)
         return indexPath?.row
     }
-        
-}
-
-extension STFileViewerVM: IFileViewerVM {
+    
+    
+    //MARK: - IFileViewerVM
     
     func object(at index: Int) -> STLibrary.File? {
-        return self.getObject(at: index)
+        return self.getObject(at: index) as? STLibrary.File
     }
     
     func index(at file: STLibrary.File) -> Int? {
-        return self.getIndex(at: file)
+        return self.getIndex(at: file as! ManagedObject.Model)
+    }
+    
+    var countOfItems: Int {
+        return self.snapshot?.numberOfItems ?? .zero
+    }
+    
+    func deleteFile(file: STLibrary.File, completion: @escaping (_ result: IError?) -> Void) {
+        fatalError("thish methot must be implemented chile classe")
+    }
+    
+    func getDeleteFileMessage(file: STLibrary.File) -> String {
+        fatalError("thish methot must be implemented chile classe")
+    }
+    
+    func removeFileSystemFolder(url: URL) {
+        STApplication.shared.fileSystem.remove(file: url)
     }
         
 }
 
 
 extension STFileViewerVM: IProviderDelegate {
-    
-    var countOfItems: Int {
-        return self.snapshot?.numberOfItems ?? .zero
-    }
-    
+        
     func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
         self.snapshot = snapshot
         self.delegate?.fileViewerVM(didUpdateedData: self)

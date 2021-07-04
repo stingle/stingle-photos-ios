@@ -28,5 +28,24 @@ extension UIViewController {
 	func showError(error: IError, handler: (() -> Void)? = nil) {
 		self.showInfoAlert(title: error.title, message: error.message, handler: handler)
 	}
+    
+    func showOkCancelAlert(title: String?, message: String?, textFieldText: String? = nil, textFieldPlaceholder: String? = nil, handler: @escaping ((String?) -> Void)) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ok".localized, style: .default) {_ in
+            handler(alert.textFields?.first?.text)
+        }
+        let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        
+        if let textFieldPlaceholder = textFieldPlaceholder {
+            alert.addTextField { (textField) in
+                textField.text = textFieldText
+                textField.placeholder = textFieldPlaceholder
+            }
+        }
+        
+        self.present(alert, animated: true, completion: nil)
+    }
 	
 }

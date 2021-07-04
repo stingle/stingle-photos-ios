@@ -63,6 +63,24 @@ extension STAlbumWorker {
         }, failure: failure)
     }
     
+    
+    func createSharedAlbum(name: String, files: [STLibrary.File], contacts: [STContact], permitions: STLibrary.Album.Permission, success: Success<STLibrary.Album>?, failure: Failure?) {
+        
+        guard files.first(where: {$0.isRemote == false}) == nil else {
+            failure?(WorkerError.unknown)
+            return
+        }
+                        
+        self.createAlbum(name: name, reloadDBData: true, success: { [weak self] album in
+            self?.moveFiles(files: files, toAlbum: album, isMoving: false, success: { [weak self] _ in
+                self?.shareAlbum(album: album, contacts: contacts, permitions: permitions, reloadDBData: true, isHidden: !files.isEmpty, success: { _ in
+                    success?(album)
+                }, failure: failure)
+            }, failure: failure)
+            
+        }, failure: failure)
+    }
+    
     func createSharedAlbum(name: String, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], contacts: [STContact], permitions: STLibrary.Album.Permission, success: Success<STLibrary.Album>?, failure: Failure?) {
         
         guard files.first(where: {$0.isRemote == false}) == nil else {

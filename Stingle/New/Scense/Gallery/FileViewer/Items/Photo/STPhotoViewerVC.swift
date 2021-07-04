@@ -55,6 +55,8 @@ extension STPhotoViewerVC: IFileViewer {
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool) {
         self.loadingView.color = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .white : .appText
     }
+    
+    func fileViewer(pauseContent fileViewer: STFileViewerVC) {}
 
 }
 

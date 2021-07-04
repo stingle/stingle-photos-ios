@@ -158,7 +158,7 @@ extension STGalleryVC: UICollectionViewDelegate {
         guard let file = self.dataSource.object(at: indexPath) else {
             return
         }
-        let vc = STFileViewerVC.create(sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated)], predicate: nil, file: file)
+        let vc = STFileViewerVC.create(galery: [#keyPath(STCDFile.dateCreated)], predicate: nil, file: file)
         self.show(vc, sender: nil)
     }
     

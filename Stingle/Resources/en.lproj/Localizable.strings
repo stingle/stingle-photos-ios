@@ -106,7 +106,10 @@
 "share_to_other_apps" = "Share to other apps";
 
 "alert_save_to_device_library_title" = "Decrypt?";
-"alert_save_to_device_library_message" = "Are you sure you want to decrypt selection files? They will become accessible to other applications on this device";
+"alert_save_files_to_device_library_message" = "Are you sure you want to decrypt selection files? They will become accessible to other applications on this device";
+
+"alert_save_file_to_device_library_message" = "Are you sure you want to decrypt selection this file? They will become accessible to other applications on this device";
+
 "album_info" = "Album info";
 "album_settings" = "Album settings";
 "unshare" = "Unshare";
@@ -155,6 +158,8 @@
 
 "stop_sharing" = "Stop sharing";
 "alert_stop_sharing_message" = "Are you sure you want to stop sharing album %@ with everyone";
+
+"move_trash_file_alert_message" = "This file will be move to trash";
 
 //MARK: - Menu
 

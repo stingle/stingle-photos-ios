@@ -105,7 +105,24 @@ class STShareAlbumVC: UITableViewController {
     }
     
     private func shareFiles(files: [STLibrary.File]) {
+        let loadingView: UIView = (self.navigationController?.view ?? self.view)
+        STLoadingView.show(in: loadingView)
+        let name = self.shareAlbumNameTextField.text ?? ""
+        let permitions = (self.addPhotoSwicher.isOn, self.sharingSwicher.isOn, self.copyingSwicher.isOn)
         
+        self.viewModel.shareFiles(name: name, files: files, contact:  self.shareAlbumData.contact, permitions: permitions) { [weak self] error in
+            
+            guard let weakSelf = self else {
+                return
+            }
+            STLoadingView.hide(in: loadingView)
+            if let error = error {
+                weakSelf.showError(error: error)
+            } else {
+                weakSelf.dismiss(animated: true, completion: nil)
+            }
+        }
+                
     }
     
     //MARK: - UserAction
