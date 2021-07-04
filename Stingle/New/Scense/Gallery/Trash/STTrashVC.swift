@@ -122,3 +122,15 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
     }
 
 }
+
+extension STTrashVC: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let file = self.dataSource.object(at: indexPath) else {
+            return
+        }
+        let vc = STFileViewerVC.create(trash: file, sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated)])
+        self.show(vc, sender: nil)
+    }
+    
+}

@@ -27,19 +27,14 @@ protocol IFileViewerDelegate: AnyObject {
 class STFileViewerVC: UIViewController {
     
     private var viewModel: IFileViewerVM!
-    private var currentIndex: Int? {
-        didSet {
-            if self.currentIndex == NSNotFound {
-                print("currentIndex", self.currentIndex ?? "errrrr")
-            }
-            
-        }
-    }
+    private var currentIndex: Int?
     private var pageViewController: UIPageViewController!
     private var viewControllers = STObserverEvents<IFileViewer>()
     private var viewerStyle: ViewerStyle = .white
     private weak var titleView: STFileViewerNavigationTitleView?
     private var initialFile: STLibrary.File?
+    
+    @IBOutlet weak private var toolBar: UIView!
         
     lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
         let resilt = STFilesActionTabBarAccessoryView.loadNib()
@@ -70,6 +65,7 @@ class STFileViewerVC: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureAccessoryView()
         self.viewerStyle = .balck
         self.changeViewerStyle()
         self.setupTavigationTitle()
@@ -77,18 +73,12 @@ class STFileViewerVC: UIViewController {
         self.setupTapGesture()
         self.accessoryView.delegate = self
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
-    }
         
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if self.viewerStyle == .balck {
             self.changeViewerStyle()
         }
-        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = nil
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -129,13 +119,17 @@ class STFileViewerVC: UIViewController {
     }
     
     @objc private func didSelectBackground(tap: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.1) {
+        UIView.animate(withDuration: 0.15) {
             self.changeViewerStyle()
         }
     }
     
     //MARK: - Private methods
     
+    private func configureAccessoryView() {
+        self.toolBar.addSubviewFullContent(view: self.accessoryView)
+    }
+        
     private func setupTavigationTitle() {
         let titleView = STFileViewerNavigationTitleView()
         self.titleView = titleView
@@ -178,13 +172,13 @@ class STFileViewerVC: UIViewController {
         switch self.viewerStyle {
         case .white:
             self.view.backgroundColor = .black
-            self.navigationController?.navigationBar.isHidden = true
-            self.tabBarController?.tabBar.isHidden = true
+            self.navigationController?.setNavigationBarHidden(true, animated: false)
+            self.toolBar.alpha = .zero
             self.viewerStyle = .balck
         case .balck:
             self.view.backgroundColor = .appBackground
-            self.navigationController?.navigationBar.isHidden = false
-            self.tabBarController?.tabBar.isHidden = false
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
+            self.toolBar.alpha = 1
             self.viewerStyle = .white
         }
         
@@ -192,15 +186,33 @@ class STFileViewerVC: UIViewController {
         self.viewControllers.forEach({ $0.fileViewer(didChangeViewerStyle: self, isFullScreen: self.viewerStyle == .balck)})
     }
     
+    private func updateActions() {
+        guard let currentFile = self.currentFile else {
+            self.accessoryView.sharButton.isHidden = false
+            self.accessoryView.moveButton.isHidden = false
+            self.accessoryView.downloadButton.isHidden = false
+            self.accessoryView.trashButton.isHidden = false
+            return
+        }
+        
+        let actions = self.viewModel.getAction(for: currentFile)
+        self.accessoryView.sharButton.isHidden = !actions.contains(.share)
+        self.accessoryView.moveButton.isHidden = !actions.contains(.move)
+        self.accessoryView.downloadButton.isHidden = !actions.contains(.saveToDevice)
+        self.accessoryView.trashButton.isHidden = !actions.contains(.trash)
+    }
+    
     private func didChangeFileViewer() {
         guard let currentIndex = self.currentIndex, let file = self.viewModel.object(at: currentIndex) else {
             self.titleView?.title = nil
             self.titleView?.subTitle = nil
+            self.updateActions()
             return
         }
         let dateManager = STDateManager.shared
         self.titleView?.title = dateManager.dateToString(date: file.dateModified, withFormate: .mmm_dd_yyyy)
         self.titleView?.subTitle = dateManager.dateToString(date: file.dateModified, withFormate: .HH_mm)
+        self.updateActions()
     }
     
     private func deleteCurrentFile() {
@@ -307,6 +319,16 @@ extension STFileViewerVC {
         return vc
     }
     
+    static func create(trash file: STLibrary.TrashFile, sortDescriptorsKeys: [String]) -> STFileViewerVC {
+        let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
+        let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
+        let viewModel = STTrashFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys)
+        vc.viewModel = viewModel
+        vc.initialFile = file
+        vc.viewModel.delegate = vc
+        return vc
+    }
+    
 }
 
 extension STFileViewerVC: UIGestureRecognizerDelegate {
@@ -340,12 +362,12 @@ extension STFileViewerVC: UIScrollViewDelegate {
 
 extension STFileViewerVC: STFilesActionTabBarAccessoryViewDelegate {
     
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
         self.currentFileViewer?.fileViewer(pauseContent: self)
         self.showShareFileActionSheet(sender: sendner)
     }
     
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
         self.currentFileViewer?.fileViewer(pauseContent: self)
         guard let file = self.currentFile else {
             return
@@ -355,7 +377,7 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDelegate {
         self.showDetailViewController(navVC, sender: nil)
     }
     
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectSaveToDeviceButton sendner: UIButton) {
         let title = "alert_save_to_device_library_title".localized
         let message = "alert_save_file_to_device_library_message".localized
         self.showInfoAlert(title: title, message: message, cancel: true) { [weak self] in
@@ -363,7 +385,7 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDelegate {
         }
     }
     
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
         guard let file = self.currentFile else {
             return
         }
@@ -476,6 +498,11 @@ extension STFileViewerVC {
         case saveDevicePhotos
     }
     
+    enum ActionType: CaseIterable {
+        case share
+        case move
+        case saveToDevice
+        case trash
+    }
+    
 }
-
-

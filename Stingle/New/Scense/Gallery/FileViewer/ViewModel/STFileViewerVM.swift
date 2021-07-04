@@ -20,6 +20,9 @@ protocol IFileViewerVM {
     func getDeleteFileMessage(file: STLibrary.File) -> String
     func removeFileSystemFolder(url: URL)
     func downloadFile(file: STLibrary.File)
+    
+    func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType]
+    
 }
 
 extension IFileViewerVM {
@@ -85,6 +88,10 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
     }
     
     func getDeleteFileMessage(file: STLibrary.File) -> String {
+        fatalError("thish methot must be implemented chile classe")
+    }
+    
+    func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
         fatalError("thish methot must be implemented chile classe")
     }
     

@@ -303,14 +303,14 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     }
 
     private func configureAlbumActionView() {
-        
         if self.album.isOwner {
             self.accessoryView.sharButton.isHidden = false
-            self.accessoryView.copyButton.isHidden = false
+            self.accessoryView.moveButton.isHidden = false
             self.accessoryView.downloadButton.isHidden = false
             self.accessoryView.trashButton.isHidden = false
         } else {
-            self.accessoryView.copyButton.isHidden = !self.album.permission.allowCopy
+            self.accessoryView.sharButton.isHidden = !self.album.permission.allowShare
+            self.accessoryView.moveButton.isHidden = !self.album.permission.allowCopy
             self.accessoryView.downloadButton.isHidden = !self.album.permission.allowCopy
             self.addItemButton.isHidden = !self.album.permission.allowAdd
             self.accessoryView.trashButton.isHidden = true
@@ -475,18 +475,18 @@ extension STAlbumFilesVC: UICollectionViewDelegate {
 
 extension STAlbumFilesVC: STFilesActionTabBarAccessoryViewDelegate {
     
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
         self.showShareFilesActionSheet(sender: sendner)
     }
     
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
         let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
         let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
         (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .albumFiles(album: self.album, files: self.viewModel.getFiles(fileNames: selectedFileNames))
         self.showDetailViewController(navVC, sender: nil)
     }
     
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectSaveToDeviceButton sendner: UIButton) {
         let title = "alert_save_to_device_library_title".localized
         let message = "alert_save_files_to_device_library_message".localized
         self.showInfoAlert(title: title, message: message, cancel: true) { [weak self] in
@@ -494,7 +494,7 @@ extension STAlbumFilesVC: STFilesActionTabBarAccessoryViewDelegate {
         }
     }
     
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
         let count = self.dataSource.viewModel.selectedFileNames.count
         let title = "delete_album_files_alert_title".localized
         let message = String(format: "delete_album_files_alert_message".localized, "\(count)")

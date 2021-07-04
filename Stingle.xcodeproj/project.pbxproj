@@ -1178,9 +1178,9 @@
 		A0301DDA25FD603D005281EF /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
-				A005FAF225FF4C9B00E7D8B0 /* Items */,
 				A0301DDB25FD606D005281EF /* STGalleryVC.swift */,
 				A077780025FFF81100BA2BDF /* STGalleryVM.swift */,
+				A005FAF225FF4C9B00E7D8B0 /* Items */,
 			);
 			path = Gallery;
 			sourceTree = "<group>";
@@ -1770,11 +1770,11 @@
 			isa = PBXGroup;
 			children = (
 				A06AF3BF25F0295400B44A87 /* TabBar */,
-				A032096426545B1B000C420B /* FileViewer */,
 				A0301DDA25FD603D005281EF /* Gallery */,
 				A0D1A3B6262E0CE2002E326F /* AlbumFiles */,
 				A0A9F347261C7992000252F2 /* Trash */,
 				A0B267762624DF3A0090E4ED /* Albums */,
+				A032096426545B1B000C420B /* FileViewer */,
 				A04BCFFF2634791C00C5F29F /* Uploads */,
 				A0A9F339261C76B0000252F2 /* Common */,
 			);

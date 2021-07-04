@@ -29,4 +29,8 @@ class STGaleryFileViewerVM: STFileViewerVM<STCDFile> {
         }
     }
     
+    override func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
+        return STFileViewerVC.ActionType.allCases
+    }
+    
 }

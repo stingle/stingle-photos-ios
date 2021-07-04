@@ -9,17 +9,17 @@ import UIKit
 
 protocol STFilesActionTabBarAccessoryViewDelegate: AnyObject {
     
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton)
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton)
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectDownloadButton sendner: UIButton)
-    func albumFilesTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton)
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton)
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton)
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectSaveToDeviceButton sendner: UIButton)
+    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton)
     
 }
 
 class STFilesActionTabBarAccessoryView: UIView {
     
     @IBOutlet weak private(set) var sharButton: STButton!
-    @IBOutlet weak private(set) var copyButton: STButton!
+    @IBOutlet weak private(set) var moveButton: STButton!
     @IBOutlet weak private(set) var downloadButton: STButton!
     @IBOutlet weak private(set) var trashButton: STButton!
     @IBOutlet weak private(set) var titleLabel: UILabel!
@@ -28,24 +28,24 @@ class STFilesActionTabBarAccessoryView: UIView {
     
     
     @IBAction func didSelectShareButton(_ sender: UIButton) {
-        self.delegate?.albumFilesTabBarAccessory(view: self, didSelectShareButton: sender)
+        self.delegate?.filesActionTabBarAccessory(view: self, didSelectShareButton: sender)
     }
     
-    @IBAction func didSelectCopyButton(_ sender: UIButton) {
-        self.delegate?.albumFilesTabBarAccessory(view: self, didSelectMoveButton: sender)
+    @IBAction func didSelectMoveButton(_ sender: UIButton) {
+        self.delegate?.filesActionTabBarAccessory(view: self, didSelectMoveButton: sender)
     }
     
     @IBAction func didSelectDownloadButton(_ sender: UIButton) {
-        self.delegate?.albumFilesTabBarAccessory(view: self, didSelectDownloadButton: sender)
+        self.delegate?.filesActionTabBarAccessory(view: self, didSelectSaveToDeviceButton: sender)
     }
     
     @IBAction func didSelectTrashButton(_ sender: UIButton) {
-        self.delegate?.albumFilesTabBarAccessory(view: self, didSelectTrashButton: sender)
+        self.delegate?.filesActionTabBarAccessory(view: self, didSelectTrashButton: sender)
     }
     
     func setEnabled(isEnabled: Bool) {
         self.sharButton.isEnabled = isEnabled
-        self.copyButton.isEnabled = isEnabled
+        self.moveButton.isEnabled = isEnabled
         self.downloadButton.isEnabled = isEnabled
         self.trashButton.isEnabled = isEnabled
     }
