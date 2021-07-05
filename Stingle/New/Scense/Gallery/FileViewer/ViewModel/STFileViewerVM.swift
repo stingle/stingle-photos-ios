@@ -61,12 +61,15 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
             return nil
         }
         let indexPath = IndexPath(item: index, section: .zero)
-        return self.dataSource.object(at: indexPath)
+        let result = self.dataSource.object(at: indexPath)
+        return result
     }
     
     func getIndex(at model: ManagedObject.Model) -> Int? {
-        let indexPath = self.dataSource.indexPath(forObject: model)
-        return indexPath?.row
+        guard let snapshot = self.snapshot, let managedObjectID = model.managedObjectID else {
+            return .zero
+        }
+        return snapshot.index(ofItemIdentifier: managedObjectID)
     }
     
     //MARK: - IFileViewerVM
@@ -80,7 +83,10 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
     }
     
     var countOfItems: Int {
-        return self.snapshot?.numberOfItems ?? .zero
+        guard let snapshot = self.snapshot, let section = snapshot.sectionIdentifiers.first else {
+            return .zero
+        }
+        return snapshot.numberOfItems(inSection: section)
     }
     
     func deleteFile(file: STLibrary.File, completion: @escaping (_ result: IError?) -> Void) {
@@ -110,12 +116,7 @@ extension STFileViewerVM: IProviderDelegate {
         
     func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
         self.snapshot = snapshot
-        DispatchQueue.main.async { [weak self] in
-            guard let weakSelf = self else {
-                return
-            }
-            weakSelf.delegate?.fileViewerVM(didUpdateedData: weakSelf)
-        }
+        self.delegate?.fileViewerVM(didUpdateedData: self)
         
     }
 

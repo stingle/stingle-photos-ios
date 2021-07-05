@@ -59,12 +59,11 @@ class STFileViewerVC: UIViewController {
         return vc
     }
         
-    override var prefersStatusBarHidden: Bool {
-        return self.viewerStyle == .balck ? true : false
-    }
-        
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let initialFile = self.initialFile, self.currentIndex == nil {
+            self.currentIndex = self.viewModel.index(at: initialFile)
+        }
         self.configureAccessoryView()
         self.viewerStyle = .balck
         self.changeViewerStyle()
@@ -125,7 +124,7 @@ class STFileViewerVC: UIViewController {
     }
     
     //MARK: - Private methods
-    
+        
     private func configureAccessoryView() {
         self.toolBar.addSubviewFullContent(view: self.accessoryView)
     }
@@ -415,6 +414,10 @@ extension STFileViewerVC: UIPageViewControllerDataSource, UIPageViewControllerDe
         let afterIndex = fileViewer.fileIndex + 1
         return self.viewController(for: afterIndex)
     }
+    
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        return self.viewModel.countOfItems
+    }
         
 }
 
@@ -423,9 +426,6 @@ extension STFileViewerVC: STFileViewerVMDelegate {
     func fileViewerVM(didUpdateedData fileViewerVM: IFileViewerVM) {
         
         guard self.isViewLoaded else {
-            if let initialFile = self.initialFile {
-                self.currentIndex = self.viewModel.index(at: initialFile)
-            }
             return
         }
         

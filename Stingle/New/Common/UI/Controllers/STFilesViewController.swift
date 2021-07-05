@@ -20,12 +20,12 @@ class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewCo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureLocalize()
         self.configureRefreshControl()
         self.dataSource = self.createDataSource()
         self.dataSource.delegate = self
         self.dataSource.reloadData()
         self.updateEmptyView()
+        self.configureLocalize()
         STApplication.shared.syncManager.addListener(self)
     }
     

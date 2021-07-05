@@ -13,6 +13,8 @@ class STGalleryVM {
     private let syncManager = STApplication.shared.syncManager
     private let uploader = STApplication.shared.uploader
     
+    private let fileWorker = STFileWorker()
+    
     func createDBDataSource() -> STDataBase.DataSource<STCDFile> {
         let galleryProvider = STApplication.shared.dataBase.galleryProvider
         return galleryProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated)],
@@ -27,6 +29,23 @@ class STGalleryVM {
     func upload(assets: [PHAsset]) {
         let files = assets.compactMap({ return STFileUploader.FileUploadable(asset: $0) })
         self.uploader.upload(files: files)
+    }
+    
+    func getFiles(fileNames: [String]) -> [STLibrary.File] {
+        let files = STApplication.shared.dataBase.galleryProvider.fetchAll(for: fileNames)
+        return files
+    }
+    
+    func removeFileSystemFolder(url: URL) {
+        STApplication.shared.fileSystem.remove(file: url)
+    }
+    
+    func deleteFile(files: [STLibrary.File], completion: @escaping (IError?) -> Void) {
+        self.fileWorker.moveFilesToTrash(files: files, reloadDBData: true) { _ in
+            completion(nil)
+        } failure: { error in
+            completion(error)
+        }
     }
     
 }

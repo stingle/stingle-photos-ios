@@ -139,8 +139,8 @@
 "delete_album_alert_title" = "Delete %@";
 "delete_album_alert_message" = "Are you sure you want to delete the album %@?";
 
-"delete_album_files_alert_title" = "Delete items?";
-"delete_album_files_alert_message" = "Do you really want to move %@ file to trash";
+"delete_files_alert_title" = "Delete items?";
+"delete_files_alert_message" = "Do you really want to move %@ file to trash";
 
 "add_or_move_album" = "Add or move album";
 "delete_original_items_after_adding" = "Delete original items after adding";

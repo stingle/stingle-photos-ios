@@ -95,7 +95,7 @@ class STCircleProgressView: UIView {
     private let activityIndicator = UIActivityIndicatorView()
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: 55, height: 55)
+        return CGSize(width: 44, height: 44)
     }
         
     override init(frame: CGRect) {

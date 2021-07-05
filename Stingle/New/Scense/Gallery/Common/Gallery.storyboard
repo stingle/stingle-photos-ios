@@ -153,13 +153,13 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="359" height="200"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have photos yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L1D-rv-s3P">
-                                                <rect key="frame" x="63.333333333333314" y="220" width="232.66666666666669" height="24"/>
+                                                <rect key="frame" x="63.333333333333329" y="220" width="232.66666666666669" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                 <color key="textColor" name="STText"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imported photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpb-69-iHJ">
-                                                <rect key="frame" x="71" y="264" width="217.33333333333337" height="17"/>
+                                                <rect key="frame" x="71.000000000000014" y="264" width="217.33333333333337" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -238,25 +238,33 @@
                                 <action selector="didSelectMenuBarItem:" destination="4gb-r9-Gut" id="7wX-aA-qGs"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" id="bQW-4L-HGt">
-                            <view key="customView" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" id="giG-pH-3g1" customClass="STGallerySyncView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="304" y="0.0" width="55" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" name="STPrimary"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="progressColor">
-                                        <color key="value" name="STPrimary"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="progress">
-                                        <real key="value" value="0.0"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
+                        <rightBarButtonItems>
+                            <barButtonItem id="bQW-4L-HGt">
+                                <view key="customView" userInteractionEnabled="NO" contentMode="scaleToFill" id="giG-pH-3g1" customClass="STGallerySyncView" customModule="Stingle" customModuleProvider="target">
+                                    <rect key="frame" x="315" y="0.0" width="44" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="tintColor" name="STPrimary"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="color" keyPath="progressColor">
+                                            <color key="value" name="STPrimary"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="progress">
+                                            <real key="value" value="0.0"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="didSelectSyncButton:" destination="4gb-r9-Gut" eventType="touchUpInside" id="J4C-Ii-sxu"/>
+                                    </connections>
+                                </view>
+                            </barButtonItem>
+                            <barButtonItem title="Select" id="koF-2A-OYg">
+                                <color key="tintColor" name="STText"/>
                                 <connections>
-                                    <action selector="didSelectSyncButton:" destination="4gb-r9-Gut" eventType="touchUpInside" id="J4C-Ii-sxu"/>
+                                    <action selector="didSelectSelecedButtonItem:" destination="4gb-r9-Gut" id="byf-LN-xUq"/>
                                 </connections>
-                            </view>
-                        </barButtonItem>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicatorView" destination="TnY-NB-wrO" id="zk2-88-YIb"/>
@@ -264,6 +272,7 @@
                         <outlet property="emptyDataSubTitleLabel" destination="Kpb-69-iHJ" id="wb3-Pr-8KW"/>
                         <outlet property="emptyDataTitleLabel" destination="L1D-rv-s3P" id="USX-QP-uV4"/>
                         <outlet property="emptyDataView" destination="iDE-au-v8a" id="K3k-3D-cRu"/>
+                        <outlet property="selectButtonItem" destination="koF-2A-OYg" id="vhp-pL-Zq2"/>
                         <outlet property="syncBarButtonItem" destination="bQW-4L-HGt" id="NEc-EU-RWP"/>
                         <outlet property="syncView" destination="giG-pH-3g1" id="P9T-RG-EKJ"/>
                     </connections>
@@ -494,13 +503,13 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="359" height="200"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have photos yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="idu-yX-igR">
-                                                <rect key="frame" x="63.333333333333314" y="220" width="232.66666666666669" height="24"/>
+                                                <rect key="frame" x="63.333333333333329" y="220" width="232.66666666666669" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                 <color key="textColor" name="STText"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imported photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNU-M5-vNy">
-                                                <rect key="frame" x="71" y="264" width="217.33333333333337" height="17"/>
+                                                <rect key="frame" x="71.000000000000014" y="264" width="217.33333333333337" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -785,13 +794,13 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="359" height="200"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have photos yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WVL-a9-u3z">
-                                                <rect key="frame" x="63.333333333333314" y="219.99999999999994" width="232.66666666666669" height="24"/>
+                                                <rect key="frame" x="63.333333333333329" y="219.99999999999994" width="232.66666666666669" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                 <color key="textColor" name="STText"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imported photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efz-8z-Y4X">
-                                                <rect key="frame" x="71" y="263.99999999999994" width="217.33333333333337" height="17"/>
+                                                <rect key="frame" x="71.000000000000014" y="263.99999999999994" width="217.33333333333337" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -1139,7 +1148,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="31D-KR-QeI">
-                                        <rect key="frame" x="85.333333333333314" y="2" width="204.33333333333337" height="22"/>
+                                        <rect key="frame" x="85.333333333333329" y="2" width="204.33333333333337" height="22"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kqw-3G-bMb">
                                                 <rect key="frame" x="0.0" y="0.0" width="57.333333333333336" height="22"/>

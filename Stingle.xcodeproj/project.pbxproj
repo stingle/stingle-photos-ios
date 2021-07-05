@@ -1931,9 +1931,9 @@
 		A0D1A3B6262E0CE2002E326F /* AlbumFiles */ = {
 			isa = PBXGroup;
 			children = (
-				A0D1A3BE262E0F6A002E326F /* Items */,
 				A0D1A3B8262E0D3D002E326F /* STAlbumFilesVC.swift */,
 				A0D1A3BB262E0D6E002E326F /* STAlbumFilesVM.swift */,
+				A0D1A3BE262E0F6A002E326F /* Items */,
 			);
 			path = AlbumFiles;
 			sourceTree = "<group>";

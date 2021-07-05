@@ -103,6 +103,12 @@ extension STDataBase {
             
         }
         
+        func fetchAll(for fileNames: [String]) -> [STLibrary.File] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDFile.file)) IN %@", fileNames)
+            let result = self.fetchObjects(predicate: predicate)
+            return result
+        }
+        
         func fetch(fileNames: [String], context: NSManagedObjectContext) -> [STCDFile] {
             let predicate = NSPredicate(format: "\(#keyPath(STCDFile.file)) IN %@", fileNames)
             let fetchRequest = NSFetchRequest<STCDFile>(entityName: STCDFile.entityName)

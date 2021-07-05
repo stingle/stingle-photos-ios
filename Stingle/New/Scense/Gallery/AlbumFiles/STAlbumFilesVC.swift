@@ -496,8 +496,8 @@ extension STAlbumFilesVC: STFilesActionTabBarAccessoryViewDelegate {
     
     func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
         let count = self.dataSource.viewModel.selectedFileNames.count
-        let title = "delete_album_files_alert_title".localized
-        let message = String(format: "delete_album_files_alert_message".localized, "\(count)")
+        let title = "delete_files_alert_title".localized
+        let message = String(format: "delete_files_alert_message".localized, "\(count)")
         self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
             self?.deleteSelectedFiles()
         }
