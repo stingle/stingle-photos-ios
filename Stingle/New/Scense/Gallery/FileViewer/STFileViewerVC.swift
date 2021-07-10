@@ -64,13 +64,13 @@ class STFileViewerVC: UIViewController {
         if let initialFile = self.initialFile, self.currentIndex == nil {
             self.currentIndex = self.viewModel.index(at: initialFile)
         }
+        self.accessoryView.dataSource = self
         self.configureAccessoryView()
         self.viewerStyle = .balck
         self.changeViewerStyle()
         self.setupTavigationTitle()
         self.setupPageViewController()
         self.setupTapGesture()
-        self.accessoryView.delegate = self
     }
         
     override func viewWillDisappear(_ animated: Bool) {
@@ -186,32 +186,32 @@ class STFileViewerVC: UIViewController {
     }
     
     private func updateActions() {
-        guard let currentFile = self.currentFile else {
-            self.accessoryView.sharButton.isHidden = false
-            self.accessoryView.moveButton.isHidden = false
-            self.accessoryView.downloadButton.isHidden = false
-            self.accessoryView.trashButton.isHidden = false
-            return
-        }
-        
-        let actions = self.viewModel.getAction(for: currentFile)
-        self.accessoryView.sharButton.isHidden = !actions.contains(.share)
-        self.accessoryView.moveButton.isHidden = !actions.contains(.move)
-        self.accessoryView.downloadButton.isHidden = !actions.contains(.saveToDevice)
-        self.accessoryView.trashButton.isHidden = !actions.contains(.trash)
+//        guard let currentFile = self.currentFile else {
+//            self.accessoryView.sharButton.isHidden = false
+//            self.accessoryView.moveButton.isHidden = false
+//            self.accessoryView.downloadButton.isHidden = false
+//            self.accessoryView.trashButton.isHidden = false
+//            return
+//        }
+//
+//        let actions = self.viewModel.getAction(for: currentFile)
+//        self.accessoryView.sharButton.isHidden = !actions.contains(.share)
+//        self.accessoryView.moveButton.isHidden = !actions.contains(.move)
+//        self.accessoryView.downloadButton.isHidden = !actions.contains(.saveToDevice)
+//        self.accessoryView.trashButton.isHidden = !actions.contains(.trash)
     }
     
     private func didChangeFileViewer() {
         guard let currentIndex = self.currentIndex, let file = self.viewModel.object(at: currentIndex) else {
             self.titleView?.title = nil
             self.titleView?.subTitle = nil
-            self.updateActions()
+            self.accessoryView.reloadData()
             return
         }
         let dateManager = STDateManager.shared
         self.titleView?.title = dateManager.dateToString(date: file.dateModified, withFormate: .mmm_dd_yyyy)
         self.titleView?.subTitle = dateManager.dateToString(date: file.dateModified, withFormate: .HH_mm)
-        self.updateActions()
+        self.accessoryView.reloadData()
     }
     
     private func deleteCurrentFile() {
@@ -241,7 +241,7 @@ class STFileViewerVC: UIViewController {
     
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
         let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: [])
-        vc.popoverPresentationController?.sourceView = self.accessoryView.sharButton
+        vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: ActionType.share)
         vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
@@ -274,7 +274,7 @@ class STFileViewerVC: UIViewController {
         self.showDetailViewController(vc, sender: nil)
     }
     
-    private func showShareFileActionSheet(sender: UIView) {
+    private func showShareFileActionSheet(sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "share".localized, message: nil, preferredStyle: .actionSheet)
         let stinglePhotos = UIAlertAction(title: "share_via_stingle_photos".localized, style: .default) { [weak self] _ in
             self?.didSelectShareViaStinglePhotos()
@@ -288,7 +288,7 @@ class STFileViewerVC: UIViewController {
         let cancelAction = UIAlertAction(title: "cancel".localized, style: .cancel)
         alert.addAction(cancelAction)
         if let popoverController = alert.popoverPresentationController {
-            popoverController.sourceView = sender
+            popoverController.barButtonItem = sender
         }
         self.showDetailViewController(alert, sender: nil)
     }
@@ -359,14 +359,14 @@ extension STFileViewerVC: UIScrollViewDelegate {
     
 }
 
-extension STFileViewerVC: STFilesActionTabBarAccessoryViewDelegate {
+extension STFileViewerVC {
     
-    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+    private func didSelectShare(sendner: UIBarButtonItem) {
         self.currentFileViewer?.fileViewer(pauseContent: self)
         self.showShareFileActionSheet(sender: sendner)
     }
     
-    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
+    func didSelectMove(sendner: UIBarButtonItem) {
         self.currentFileViewer?.fileViewer(pauseContent: self)
         guard let file = self.currentFile else {
             return
@@ -376,7 +376,7 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDelegate {
         self.showDetailViewController(navVC, sender: nil)
     }
     
-    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectSaveToDeviceButton sendner: UIButton) {
+    func didSelectSaveToDevice(sendner: UIBarButtonItem) {
         let title = "alert_save_to_device_library_title".localized
         let message = "alert_save_file_to_device_library_message".localized
         self.showInfoAlert(title: title, message: message, cancel: true) { [weak self] in
@@ -384,7 +384,7 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDelegate {
         }
     }
     
-    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
+    func didSelectTrash(sendner: UIBarButtonItem) {
         guard let file = self.currentFile else {
             return
         }
@@ -393,6 +393,49 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDelegate {
         self.showOkCancelAlert(title: title, message: nil) { [weak self] _ in
             self?.deleteCurrentFile()
         }
+    }
+    
+}
+
+extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
+    
+    
+    func accessoryView(actions accessoryView: STFilesActionTabBarAccessoryView) -> [STFilesActionTabBarAccessoryView.ActionItem] {
+        
+        guard let currentFile = self.currentFile else {
+            return []
+        }
+        
+        let actions = self.viewModel.getAction(for: currentFile)
+        var result = [STFilesActionTabBarAccessoryView.ActionItem]()
+        
+        actions.forEach { type in
+            switch type {
+            case .share:
+                let share = STFilesActionTabBarAccessoryView.ActionItem.share(identifier: type) { [weak self] _ , buttonItem  in
+                    self?.didSelectShare(sendner: buttonItem)
+                }
+                result.append(share)
+            case .move:
+                let move = STFilesActionTabBarAccessoryView.ActionItem.move(identifier: type) { [weak self] _, buttonItem in
+                    self?.didSelectMove(sendner: buttonItem)
+                }
+                result.append(move)
+            case .saveToDevice:
+                let saveToDevice = STFilesActionTabBarAccessoryView.ActionItem.saveToDevice(identifier: type) { [weak self] _, buttonItem in
+                    self?.didSelectSaveToDevice(sendner: buttonItem)
+                }
+                result.append(saveToDevice)
+            case .trash:
+                let trash = STFilesActionTabBarAccessoryView.ActionItem.trash(identifier: type) { [weak self] _, buttonItem in
+                    self?.didSelectTrash(sendner: buttonItem)
+                }
+                result.append(trash)
+            }
+        }
+        
+        return result
+        
     }
     
 }
@@ -498,11 +541,26 @@ extension STFileViewerVC {
         case saveDevicePhotos
     }
     
-    enum ActionType: CaseIterable {
+    enum ActionType: StringPointer, CaseIterable {
+        
         case share
         case move
         case saveToDevice
         case trash
+        
+        var stringValue: String {
+            switch self {
+            case .share:
+                return "share"
+            case .move:
+                return "move"
+            case .saveToDevice:
+                return "saveToDevice"
+            case .trash:
+                return "trash"
+            }
+        }
+        
     }
     
 }

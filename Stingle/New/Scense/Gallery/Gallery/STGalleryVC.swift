@@ -117,8 +117,9 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         var inset = self.collectionView.contentInset
         inset.bottom = 30
         self.collectionView.contentInset = inset
-        self.accessoryView.delegate = self
+        self.accessoryView.dataSource = self
         self.viewModel.sync()
+        self.accessoryView.reloadData()
     }
     
     override func createDataSource() -> STCollectionViewDataSource<ViewModel> {
@@ -196,7 +197,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     private func updateSelectedItesmCount() {
         let count = self.dataSource.viewModel.selectedFileNames.count
         let title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
-        self.accessoryView.titleLabel.text = title
+        self.accessoryView.title = title
         self.accessoryView.setEnabled(isEnabled: count != .zero)
     }
     
@@ -238,7 +239,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
         let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: [])
-        vc.popoverPresentationController?.sourceView = self.accessoryView.sharButton
+        vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: FileAction.share)
         vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
@@ -263,7 +264,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     
     //MARK: - Private actions
     
-    private func showShareFileActionSheet(sender: UIView) {
+    private func showShareFileActionSheet(sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "share".localized, message: nil, preferredStyle: .actionSheet)
         let stinglePhotos = UIAlertAction(title: "share_via_stingle_photos".localized, style: .default) { [weak self] _ in
             self?.didSelectShareViaStinglePhotos()
@@ -276,7 +277,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         let cancelAction = UIAlertAction(title: "cancel".localized, style: .cancel)
         alert.addAction(cancelAction)
         if let popoverController = alert.popoverPresentationController {
-            popoverController.sourceView = sender
+            popoverController.barButtonItem = sender
         }
         self.showDetailViewController(alert, sender: nil)
     }
@@ -342,18 +343,72 @@ extension STGalleryVC: UIPopoverPresentationControllerDelegate {
     
 }
 
-extension STGalleryVC: STFilesActionTabBarAccessoryViewDelegate {
+extension STGalleryVC: STFilesActionTabBarAccessoryViewDataSource {
     
     enum FilesDownloadDecryptAction {
         case share
         case saveDevicePhotos
     }
     
-    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+        
+    enum FileAction: StringPointer {
+        case share
+        case move
+        case saveToDevice
+        case trash
+        
+        var stringValue: String {
+            switch self {
+            case .share:
+                return "share"
+            case .move:
+                return "move"
+            case .saveToDevice:
+                return "saveToDevice"
+            case .trash:
+                return "trash"
+            }
+        }
+        
+    }
+    
+    func accessoryView(actions accessoryView: STFilesActionTabBarAccessoryView) -> [STFilesActionTabBarAccessoryView.ActionItem] {
+        
+        var items = [STFilesActionTabBarAccessoryView.ActionItem]()
+        
+        let share = STFilesActionTabBarAccessoryView.ActionItem.share(identifier: FileAction.share) { [weak self] _ , buttonItem  in
+            self?.didSelectShare(sendner: buttonItem)
+        }
+        items.append(share)
+        
+        let move = STFilesActionTabBarAccessoryView.ActionItem.move(identifier: FileAction.move) { [weak self] _, buttonItem in
+            self?.didSelectMove(sendner: buttonItem)
+        }
+        items.append(move)
+        
+        let saveToDevice = STFilesActionTabBarAccessoryView.ActionItem.saveToDevice(identifier: FileAction.saveToDevice) { [weak self] _, buttonItem in
+            self?.didSelectSaveToDevice(sendner: buttonItem)
+        }
+        items.append(saveToDevice)
+        
+        let trash = STFilesActionTabBarAccessoryView.ActionItem.trash(identifier: FileAction.trash) { [weak self] _, buttonItem in
+            self?.didSelectTrash(sendner: buttonItem)
+        }
+        items.append(trash)
+        
+        return items
+    }
+    
+    
+}
+
+extension STGalleryVC {
+    
+    private func didSelectShare(sendner: UIBarButtonItem) {
         self.showShareFileActionSheet(sender: sendner)
     }
     
-    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
+    private func didSelectMove(sendner: UIBarButtonItem) {
         let files = self.getSelectedFiles()
         guard !files.isEmpty else {
             return
@@ -363,7 +418,7 @@ extension STGalleryVC: STFilesActionTabBarAccessoryViewDelegate {
         self.showDetailViewController(navVC, sender: nil)
     }
     
-    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectSaveToDeviceButton sendner: UIButton) {
+    private func didSelectSaveToDevice(sendner: UIBarButtonItem) {
         let title = "alert_save_to_device_library_title".localized
         let message = "alert_save_files_to_device_library_message".localized
         self.showInfoAlert(title: title, message: message, cancel: true) { [weak self] in
@@ -371,7 +426,7 @@ extension STGalleryVC: STFilesActionTabBarAccessoryViewDelegate {
         }
     }
     
-    func filesActionTabBarAccessory(view: STFilesActionTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
+    private func didSelectTrash(sendner: UIBarButtonItem) {
         let files = self.getSelectedFiles()
         let title = "delete_files_alert_title".localized
         let message = String(format: "delete_files_alert_message".localized, "\(files.count)")
