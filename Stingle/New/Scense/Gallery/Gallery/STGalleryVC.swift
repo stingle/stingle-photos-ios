@@ -429,7 +429,7 @@ extension STGalleryVC {
     private func didSelectTrash(sendner: UIBarButtonItem) {
         let files = self.getSelectedFiles()
         let title = "delete_files_alert_title".localized
-        let message = String(format: "delete_files_alert_message".localized, "\(files.count)")
+        let message = String(format: "delete_move_files_alert_message".localized, "\(files.count)")
         self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
             self?.deleteCurrentFile(files: files)
         }

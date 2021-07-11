@@ -82,6 +82,9 @@
 "members" = "Members";
 "save" = "Save";
 
+"delete_all" = "Delete All";
+"recover_all" = "Recover All";
+
 //MARK: - Share
 
 "share_via_stingle_photos" = "Share";
@@ -140,7 +143,10 @@
 "delete_album_alert_message" = "Are you sure you want to delete the album %@?";
 
 "delete_files_alert_title" = "Delete items?";
-"delete_files_alert_message" = "Do you really want to move %@ file to trash";
+"delete_files_alert_message" = "Do you really want to delete %@ files?";
+"delete_move_files_alert_message" = "Do you really want to move %@ file to trash";
+"empty_trash" = "Empty trash?";
+"delete_all_files_alert_message" = "Are you sure you want to empty trash? This action cannot be undone";
 
 "add_or_move_album" = "Add or move album";
 "delete_original_items_after_adding" = "Delete original items after adding";

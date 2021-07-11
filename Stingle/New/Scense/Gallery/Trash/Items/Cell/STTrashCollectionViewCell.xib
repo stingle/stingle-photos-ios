@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -25,6 +25,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="263" height="158"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.16" colorSpace="calibratedRGB"/>
                             </imageView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_mark" translatesAutoresizingMaskIntoConstraints="NO" id="cQy-kg-6kR">
+                                <rect key="frame" x="225" y="120" width="30" height="30"/>
+                                <color key="tintColor" name="STPrimary"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="DjR-5H-Sih"/>
+                                    <constraint firstAttribute="height" constant="30" id="OdV-Ce-ik6"/>
+                                </constraints>
+                            </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_isRemote" translatesAutoresizingMaskIntoConstraints="NO" id="7v5-td-zXe">
                                 <rect key="frame" x="8" y="8" width="24" height="24"/>
                             </imageView>
@@ -45,7 +53,9 @@
                             <constraint firstItem="8Mp-aY-Rvs" firstAttribute="top" secondItem="OBQ-I7-bLm" secondAttribute="top" constant="8" id="CZv-hP-MeU"/>
                             <constraint firstItem="7v5-td-zXe" firstAttribute="top" secondItem="OBQ-I7-bLm" secondAttribute="top" constant="8" id="FpK-M4-GBB"/>
                             <constraint firstItem="8Mp-aY-Rvs" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="OBQ-I7-bLm" secondAttribute="leading" constant="8" id="HLx-px-MdX"/>
+                            <constraint firstAttribute="bottom" secondItem="cQy-kg-6kR" secondAttribute="bottom" constant="8" id="TPY-Hh-lbT"/>
                             <constraint firstItem="sB9-Gz-ALS" firstAttribute="top" secondItem="OBQ-I7-bLm" secondAttribute="top" id="cgj-fN-wnQ"/>
+                            <constraint firstAttribute="trailing" secondItem="cQy-kg-6kR" secondAttribute="trailing" constant="8" id="dAt-Sm-cm5"/>
                             <constraint firstItem="sB9-Gz-ALS" firstAttribute="leading" secondItem="OBQ-I7-bLm" secondAttribute="leading" id="nCx-vL-Re0"/>
                             <constraint firstAttribute="trailing" secondItem="8Mp-aY-Rvs" secondAttribute="trailing" constant="8" id="tWX-o9-GQ0"/>
                         </constraints>
@@ -65,15 +75,20 @@
             </constraints>
             <size key="customSize" width="263" height="158"/>
             <connections>
+                <outlet property="checkMarkImageView" destination="cQy-kg-6kR" id="EmY-83-1zA"/>
                 <outlet property="icRemoteImageView" destination="7v5-td-zXe" id="bfP-SY-Iqi"/>
                 <outlet property="imageView" destination="sB9-Gz-ALS" id="5MT-gb-dAp"/>
                 <outlet property="videoDurationLabel" destination="8Mp-aY-Rvs" id="eFv-yc-Yqr"/>
             </connections>
-            <point key="canvasLocation" x="-130" y="-45"/>
+            <point key="canvasLocation" x="-131.15942028985509" y="-45.535714285714285"/>
         </collectionViewCell>
     </objects>
     <resources>
         <image name="ic_isRemote" width="24" height="24"/>
+        <image name="ic_mark" width="13" height="13"/>
+        <namedColor name="STPrimary">
+            <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

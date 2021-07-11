@@ -101,7 +101,6 @@ extension STDataBase {
                     cdModel?.update(model: model, context: context)
                 }
             }
-            
         }
         
         func fetch(fileNames: [String], context: NSManagedObjectContext) -> [STCDTrashFile] {
@@ -110,6 +109,12 @@ extension STDataBase {
             fetchRequest.predicate = predicate
             let cdModels = try? context.fetch(fetchRequest)
             return cdModels ?? []
+        }
+        
+        func fetchAll(for fileNames: [String]) -> [STLibrary.TrashFile] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDTrashFile.file)) IN %@", fileNames)
+            let result = self.fetchObjects(predicate: predicate)
+            return result
         }
         
     }

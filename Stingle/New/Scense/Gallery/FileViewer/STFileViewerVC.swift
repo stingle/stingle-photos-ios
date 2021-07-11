@@ -75,6 +75,7 @@ class STFileViewerVC: UIViewController {
         
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = nil
         if self.viewerStyle == .balck {
             self.changeViewerStyle()
         }
@@ -126,7 +127,12 @@ class STFileViewerVC: UIViewController {
     //MARK: - Private methods
         
     private func configureAccessoryView() {
-        self.toolBar.addSubviewFullContent(view: self.accessoryView)
+        if let tabBarController = self.tabBarController {
+            (tabBarController.tabBar as? STTabBar)?.accessoryView = self.accessoryView
+        } else {
+            self.toolBar.addSubviewFullContent(view: self.accessoryView)
+        }
+        
     }
         
     private func setupTavigationTitle() {
@@ -173,32 +179,18 @@ class STFileViewerVC: UIViewController {
             self.view.backgroundColor = .black
             self.navigationController?.setNavigationBarHidden(true, animated: false)
             self.toolBar.alpha = .zero
+            self.tabBarController?.tabBar.alpha = .zero
             self.viewerStyle = .balck
         case .balck:
             self.view.backgroundColor = .appBackground
             self.navigationController?.setNavigationBarHidden(false, animated: false)
             self.toolBar.alpha = 1
+            self.tabBarController?.tabBar.alpha = 1
             self.viewerStyle = .white
         }
         
         self.splitMenuViewController?.setNeedsStatusBarAppearanceUpdate()
         self.viewControllers.forEach({ $0.fileViewer(didChangeViewerStyle: self, isFullScreen: self.viewerStyle == .balck)})
-    }
-    
-    private func updateActions() {
-//        guard let currentFile = self.currentFile else {
-//            self.accessoryView.sharButton.isHidden = false
-//            self.accessoryView.moveButton.isHidden = false
-//            self.accessoryView.downloadButton.isHidden = false
-//            self.accessoryView.trashButton.isHidden = false
-//            return
-//        }
-//
-//        let actions = self.viewModel.getAction(for: currentFile)
-//        self.accessoryView.sharButton.isHidden = !actions.contains(.share)
-//        self.accessoryView.moveButton.isHidden = !actions.contains(.move)
-//        self.accessoryView.downloadButton.isHidden = !actions.contains(.saveToDevice)
-//        self.accessoryView.trashButton.isHidden = !actions.contains(.trash)
     }
     
     private func didChangeFileViewer() {

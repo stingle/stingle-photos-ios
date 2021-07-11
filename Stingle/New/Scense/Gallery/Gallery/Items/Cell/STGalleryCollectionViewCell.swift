@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 class STGalleryCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
     
     @IBOutlet weak private var icRemoteImageView: UIImageView!

@@ -21,7 +21,6 @@ class STGalleryVM {
                                                 sectionNameKeyPath: #keyPath(STCDFile.day))
     }
     
-    
     func sync() {
         self.syncManager.sync()
     }

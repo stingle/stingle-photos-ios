@@ -45,6 +45,22 @@ extension STFilesActionTabBarAccessoryView {
             return result
         }
         
+        static func recover(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
+            let image = UIImage(named: "ic_ recover")
+            let result = ActionItem(title: nil, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
+            return result
+        }
+        
+        static func deleteAll(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
+            let result = ActionItem(title: "delete_all".localized, image: nil, tintColor: tintColor, handler: handler, identifier: identifier)
+            return result
+        }
+        
+        static func recoverAll(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
+            let result = ActionItem(title: "recover_all".localized, image: nil, tintColor: tintColor, handler: handler, identifier: identifier)
+            return result
+        }
+        
     }
     
     private class ButtonItem: UIBarButtonItem {
@@ -53,7 +69,7 @@ extension STFilesActionTabBarAccessoryView {
     
 }
 
-class STFilesActionTabBarAccessoryView: UIView {    
+class STFilesActionTabBarAccessoryView: UIView {
     
     @IBOutlet weak private(set) var toolBar: UIToolbar!
     weak var dataSource: STFilesActionTabBarAccessoryViewDataSource?
@@ -81,7 +97,7 @@ class STFilesActionTabBarAccessoryView: UIView {
     
     func setEnabled(isEnabled: Bool) {
         self.toolBar.items?.forEach({ item in
-            item.isEnabled = isEnabled
+            (item as? ButtonItem)?.isEnabled = isEnabled
         })
     }
     
@@ -97,6 +113,7 @@ class STFilesActionTabBarAccessoryView: UIView {
         actions.forEach { action in
             let item = ButtonItem(image: action.image, style: .done, target: self, action: #selector(didSelectItem(item:)))
             item.actionItem = action
+            item.title = action.title
             item.tintColor = action.tintColor
             items.append(item)
             let space = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)

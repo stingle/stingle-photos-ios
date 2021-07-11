@@ -39,5 +39,54 @@ class STFileWorker: STWorker {
         }
         
     }
+    
+    func deleteFiles(files: [STLibrary.TrashFile], success: Success<STEmptyResponse>?, failure: Failure?) {
+        guard !files.isEmpty else {
+            success?(STEmptyResponse())
+            return
+        }
+        
+        let remoteFiles = files.filter({ $0.isRemote })
+        guard !remoteFiles.isEmpty else {
+            STApplication.shared.dataBase.deleteFilesIfNeeded(files: files)
+            success?(STEmptyResponse())
+            return
+        }
+        
+        let request = STFilesRequest.delete(files: remoteFiles)
+        let trashProvider = STApplication.shared.dataBase.trashProvider
+        
+        self.request(request: request, success: { (response: STEmptyResponse) in
+            STApplication.shared.dataBase.deleteFilesIfNeeded(files: files)
+            trashProvider.delete(models: files, reloadData: true)
+            success?(response)
+        }, failure: failure)
+        
+    }
+    
+    func moveToGalery(files: [STLibrary.TrashFile], success: Success<STEmptyResponse>?, failure: Failure?) {
+        guard !files.isEmpty else {
+            success?(STEmptyResponse())
+            return
+        }
+        
+        let remoteFiles = files.filter({ $0.isRemote })
+        guard !remoteFiles.isEmpty else {
+            STApplication.shared.dataBase.deleteFilesIfNeeded(files: files)
+            success?(STEmptyResponse())
+            return
+        }
+        
+        let request = STFilesRequest.moveToGalery(files: remoteFiles)
+        let trashProvider = STApplication.shared.dataBase.trashProvider
+        let galleryProvider = STApplication.shared.dataBase.galleryProvider
+        
+        self.request(request: request, success: { (response: STEmptyResponse) in
+            trashProvider.delete(models: files, reloadData: true)
+            galleryProvider.add(models: files, reloadData: true)
+            success?(response)
+        }, failure: failure)
+        
+    }
         
 }

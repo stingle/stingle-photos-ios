@@ -544,7 +544,7 @@ extension STAlbumFilesVC {
     private func didSelectTrashButton(files sendner: UIBarButtonItem) {
         let count = self.dataSource.viewModel.selectedFileNames.count
         let title = "delete_files_alert_title".localized
-        let message = String(format: "delete_files_alert_message".localized, "\(count)")
+        let message = String(format: "delete_move_files_alert_message".localized, "\(count)")
         self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
             self?.deleteSelectedFiles()
         }
