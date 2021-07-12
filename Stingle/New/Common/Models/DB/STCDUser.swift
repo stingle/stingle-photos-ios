@@ -12,7 +12,7 @@ import CoreData
 @objc(STCDUser)
 public class STCDUser: NSManagedObject, IManagedObject {
     
-    func update(model: STUser, context: NSManagedObjectContext) {
+    func update(model: STUser, context: NSManagedObjectContext?) {
         self.email = model.email
         self.homeFolder = model.homeFolder
         self.isKeyBackedUp = model.isKeyBackedUp

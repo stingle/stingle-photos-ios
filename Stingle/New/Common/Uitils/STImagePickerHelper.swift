@@ -16,6 +16,7 @@ protocol STImagePickerHelperDelegate: UIViewController {
 
 extension STImagePickerHelperDelegate {
     func pickerViewControllerDidCancel(_ imagePickerHelper: STImagePickerHelper) {}
+    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {}
 }
 
 class STImagePickerHelper: NSObject {

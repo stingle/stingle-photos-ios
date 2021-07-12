@@ -12,7 +12,7 @@ import CoreData
 @objc(STCDDBInfo)
 public class STCDDBInfo: NSManagedObject, IManagedObject {
     
-    func update(model: STDBInfo, context: NSManagedObjectContext) {
+    func update(model: STDBInfo, context: NSManagedObjectContext?) {
         self.lastSeenTime = model.lastSeenTime
         self.lastTrashSeenTime = model.lastTrashSeenTime
         self.lastAlbumsSeenTime = model.lastAlbumsSeenTime
@@ -25,7 +25,7 @@ public class STCDDBInfo: NSManagedObject, IManagedObject {
     }
     
     func createModel() throws -> STDBInfo {
-        return STDBInfo(lastSeenTime: self.lastSeenTime, lastTrashSeenTime: self.lastTrashSeenTime, lastAlbumsSeenTime: self.lastAlbumsSeenTime, lastAlbumFilesSeenTime: self.lastAlbumFilesSeenTime, lastDelSeenTime: self.lastDelSeenTime, lastContactsSeenTime: self.lastContactsSeenTime, spaceUsed: self.spaceUsed, spaceQuota: self.spaceQuota)
+        return STDBInfo(lastSeenTime: self.lastSeenTime, lastTrashSeenTime: self.lastTrashSeenTime, lastAlbumsSeenTime: self.lastAlbumsSeenTime, lastAlbumFilesSeenTime: self.lastAlbumFilesSeenTime, lastDelSeenTime: self.lastDelSeenTime, lastContactsSeenTime: self.lastContactsSeenTime, spaceUsed: self.spaceUsed, spaceQuota: self.spaceQuota, managedObjectID: self.objectID)
     }
 
 }

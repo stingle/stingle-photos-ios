@@ -5,7 +5,7 @@
 //  Created by Khoren Asatryan on 3/7/21.
 //
 
-import Foundation
+import CoreData
 
 class STContact: Codable, ICDConvertable {
     
@@ -22,6 +22,7 @@ class STContact: Codable, ICDConvertable {
     var userId: String
     var dateUsed: Date
     var dateModified: Date
+    var managedObjectID: NSManagedObjectID?
     
     var identifier: String {
         return self.userId
@@ -42,6 +43,7 @@ class STContact: Codable, ICDConvertable {
         }
         self.dateUsed = Date(milliseconds: dateUsed)
         self.dateModified = Date(milliseconds: dateModified)
+        self.managedObjectID = nil
     }
     
     required init(model: STCDContact) throws {
@@ -58,6 +60,7 @@ class STContact: Codable, ICDConvertable {
         self.userId = userId
         self.dateUsed = dateUsed
         self.dateModified = dateModified
+        self.managedObjectID = model.objectID
     }
     
     func toManagedModelJson() throws -> [String : Any] {

@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class TrashProvider: DataBaseCollectionProvider<STCDTrashFile, STLibrary.DeleteFile.Trash> {
+    class TrashProvider: SyncCollectionProvider<STCDTrashFile, STLibrary.DeleteFile.Trash> {
         
         override func getInsertObjects(with trashFiles: [STLibrary.TrashFile]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.TrashFile], lastDate: Date) {
             var lastDate: Date? = nil
@@ -101,7 +101,6 @@ extension STDataBase {
                     cdModel?.update(model: model, context: context)
                 }
             }
-            
         }
         
         func fetch(fileNames: [String], context: NSManagedObjectContext) -> [STCDTrashFile] {
@@ -110,6 +109,12 @@ extension STDataBase {
             fetchRequest.predicate = predicate
             let cdModels = try? context.fetch(fetchRequest)
             return cdModels ?? []
+        }
+        
+        func fetchAll(for fileNames: [String]) -> [STLibrary.TrashFile] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDTrashFile.file)) IN %@", fileNames)
+            let result = self.fetchObjects(predicate: predicate)
+            return result
         }
         
     }

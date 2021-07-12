@@ -5,7 +5,7 @@
 //  Created by Khoren Asatryan on 3/11/21.O
 //
 
-import Foundation
+import CoreData
 
 extension STLibrary {
     
@@ -23,7 +23,8 @@ extension STLibrary {
                            headers: model.headers,
                            dateCreated: model.dateCreated,
                            dateModified: model.dateModified,
-                           isRemote: model.isRemote)
+                           isRemote: model.isRemote,
+                           managedObjectID: model.objectID)
         }
         
         required init(model: STCDFile) throws {
@@ -34,8 +35,8 @@ extension STLibrary {
             try super.init(from: decoder)
         }
         
-        override init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool) throws {
-            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote)
+        override init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool, managedObjectID: NSManagedObjectID?) throws {
+            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote, managedObjectID: managedObjectID)
         }
         
     }

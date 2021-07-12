@@ -82,6 +82,9 @@
 "members" = "Members";
 "save" = "Save";
 
+"delete_all" = "Delete All";
+"recover_all" = "Recover All";
+
 //MARK: - Share
 
 "share_via_stingle_photos" = "Share";
@@ -106,7 +109,10 @@
 "share_to_other_apps" = "Share to other apps";
 
 "alert_save_to_device_library_title" = "Decrypt?";
-"alert_save_to_device_library_message" = "Are you sure you want to decrypt selection files? They will become accessible to other applications on this device";
+"alert_save_files_to_device_library_message" = "Are you sure you want to decrypt selection files? They will become accessible to other applications on this device";
+
+"alert_save_file_to_device_library_message" = "Are you sure you want to decrypt selection this file? They will become accessible to other applications on this device";
+
 "album_info" = "Album info";
 "album_settings" = "Album settings";
 "unshare" = "Unshare";
@@ -136,8 +142,11 @@
 "delete_album_alert_title" = "Delete %@";
 "delete_album_alert_message" = "Are you sure you want to delete the album %@?";
 
-"delete_album_files_alert_title" = "Delete items?";
-"delete_album_files_alert_message" = "Do you really want to move %@ file to trash";
+"delete_files_alert_title" = "Delete items?";
+"delete_files_alert_message" = "Do you really want to delete %@ files?";
+"delete_move_files_alert_message" = "Do you really want to move %@ file to trash";
+"empty_trash" = "Empty trash?";
+"delete_all_files_alert_message" = "Are you sure you want to empty trash? This action cannot be undone";
 
 "add_or_move_album" = "Add or move album";
 "delete_original_items_after_adding" = "Delete original items after adding";
@@ -155,6 +164,9 @@
 
 "stop_sharing" = "Stop sharing";
 "alert_stop_sharing_message" = "Are you sure you want to stop sharing album %@ with everyone";
+
+"move_trash_file_alert_message" = "This file will be move to trash";
+"download_file" = "Download file";
 
 //MARK: - Menu
 

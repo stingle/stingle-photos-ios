@@ -45,11 +45,12 @@ extension IRequest {
         }
         return AF.request(components, method: self.AFMethod, parameters: self.parameters, encoding: self.encoding, headers: self.afHeaders, interceptor: nil).validate(statusCode: 200..<300)
     }
-    
+        
     var asURLRequest: URLRequest {
         guard let request = try? self.asDataRequest.convertible.asURLRequest() else {
             fatalError()
         }
+                
         return request
     }
     
@@ -67,6 +68,8 @@ extension IRequest {
             return .delete
         }
     }
+    
+
     
 }
 
@@ -132,6 +135,12 @@ extension STDownloadRequest {
     var fileDownloadTmpUrl: URL? {
         return STApplication.shared.fileSystem.tmpURL?.appendingPathComponent(self.fileName)
     }
+    
+}
+
+//MARK: - Stream
+
+protocol IStreamRequest: IRequest {
     
 }
 

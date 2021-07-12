@@ -9,18 +9,20 @@ import CoreData
 import UIKit
 
 protocol IProviderDelegate: AnyObject {
-    
     func didStartSync(dataSource: IProviderDataSource)
     func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference)
     func didEndSync(dataSource: IProviderDataSource)
-    
+}
+
+extension IProviderDelegate {
+    func didStartSync(dataSource: IProviderDataSource) {}
+    func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {}
+    func didEndSync(dataSource: IProviderDataSource) {}
 }
 
 protocol IProviderDataSource: AnyObject {
-    
     var identifier: String { get }
     func reloadData()
-    
 }
 
 extension IProviderDataSource {
@@ -113,6 +115,13 @@ extension STDataBase {
         
         func indexPath(forObject object: ManagedModel) -> IndexPath? {
             return self.controller.indexPath(forObject: object)
+        }
+        
+        func indexPath(forObject model: ManagedModel.Model) -> IndexPath? {
+            guard let managedObjectID = model.managedObjectID, let row = self.snapshotReference?.index(ofItemIdentifier: managedObjectID),  let section = self.snapshotReference?.index(ofSectionIdentifier: managedObjectID) else {
+                return nil
+            }
+            return IndexPath(row: row, section: section)
         }
         
         //MARK: - IProviderDataSource

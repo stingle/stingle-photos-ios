@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="STFilesActionTabBarAccessoryView" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="826" height="93"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i5t-hJ-vpS">
+                    <rect key="frame" x="0.0" y="0.0" width="826" height="59"/>
+                    <items/>
+                </toolbar>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="i5t-hJ-vpS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3bB-Qs-w59"/>
+                <constraint firstAttribute="trailing" secondItem="i5t-hJ-vpS" secondAttribute="trailing" id="Lkt-Dl-Pn2"/>
+                <constraint firstItem="i5t-hJ-vpS" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="R4Q-CW-Gu7"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="i5t-hJ-vpS" secondAttribute="bottom" id="UaH-hR-fnJ"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="toolBar" destination="i5t-hJ-vpS" id="Wn3-Wm-r0P"/>
+            </connections>
+            <point key="canvasLocation" x="420.28985507246381" y="-79.352678571428569"/>
+        </view>
+    </objects>
+</document>

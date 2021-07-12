@@ -10,12 +10,33 @@ import Foundation
 class STMoveAlbumFilesVM {
     
     private let albumWorker = STAlbumWorker()
+    private let fileWorker = STFileWorker()
     
     private(set) var isDeleteFilesLastValue: Bool {
         set {
             STAppSettings.isDeleteFilesWhenMoving = newValue
         } get {
             return STAppSettings.isDeleteFilesWhenMoving
+        }
+    }
+    
+    func moveToAlbum(toAlbum: STLibrary.Album, files: [STLibrary.File], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
+        self.isDeleteFilesLastValue = isDeleteFiles
+        let isMoving = self.isDeleteFilesLastValue
+        self.albumWorker.moveFiles(files: files, toAlbum: toAlbum, isMoving: isMoving) { _ in
+            result(nil)
+        } failure: { error in
+            result(error)
+        }
+    }
+    
+    func moveToAlbum(toAlbum: STLibrary.Album, trashFiles: [STLibrary.TrashFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
+        self.isDeleteFilesLastValue = isDeleteFiles
+        let isMoving = self.isDeleteFilesLastValue
+        self.albumWorker.moveFiles(trashFile: trashFiles, toAlbum: toAlbum, isMoving: isMoving) { _ in
+            result(nil)
+        } failure: { error in
+            result(error)
         }
     }
     

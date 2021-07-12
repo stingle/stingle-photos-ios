@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class ContactProvider: DataBaseCollectionProvider<STCDContact, STLibrary.DeleteFile.Contact> {
+    class ContactProvider: SyncCollectionProvider<STCDContact, STLibrary.DeleteFile.Contact> {
         
         override func getInsertObjects(with contacts: [STContact]) throws -> (json: [[String : Any]], objIds: [String: STContact], lastDate: Date) {
             var lastDate: Date? = nil

@@ -89,7 +89,7 @@ class STAuthWorker: STWorker {
 	private func updateUserParams(login: STAuth.Login, email: String, password: String) throws -> STUser {
 		let isKeyBackedUp = login.isKeyBackedUp == 1 ? true : false
 		
-        let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId)
+        let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId, managedObjectID: nil)
         
         self.userProvider.update(model: user)
         

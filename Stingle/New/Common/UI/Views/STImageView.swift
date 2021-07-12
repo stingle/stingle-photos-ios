@@ -10,14 +10,34 @@ import Kingfisher
 
 class STImageView: UIImageView {
     
-    func setImage(_ image: IDownloaderSource?, placeholder: UIImage?) {
+    func setImage(_ image: IDownloaderSource?, placeholder: UIImage?, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
         let animator = STImageDownloadPlainAnimator()
-        self.setImage(source: image, placeholder: placeholder, animator: animator)
+        self.setImage(source: image, placeholder: placeholder, animator: animator, success: success, progress: progress, failure: failure)
+    }
+    
+    func setImages(_ images: Images?, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
+        guard let images = images else {
+            self.setImage(source: images?.thumb, placeholder: nil, success: success, progress: progress, failure: failure)
+            return
+        }
+        
+        if let thumb = images.thumb, STApplication.shared.downloaderManager.imageRetryer.isFileExists(source: thumb) {
+            self.setImage(source: images.thumb, placeholder: nil, animator: nil, success: { [weak self] _ in
+                self?.setImage(source: images.original, placeholder: nil, animator: nil, success: success, progress: progress, failure: failure, saveOldImage: true)
+            }, progress: progress, failure: failure)
+        } else {
+            self.setImage(source: images.original, placeholder: nil, animator: nil, success: success, progress: progress, failure: failure)
+        }
     }
 
 }
 
 extension STImageView {
+    
+    struct Images {
+        let thumb: Image?
+        let original: Image?
+    }
     
     struct Image {
             
@@ -38,9 +58,8 @@ extension STImageView {
             self.imageType = imageType
             self.version = file.version
             self.isThumb = isThumb
-            let isThumbStr = self.isThumb ? "1" : "0"
             self.header = header
-            self.imageParameters = ["file": self.fileName, "set": "\(self.imageType.rawValue)", "is_thumb": isThumbStr]
+            self.imageParameters = file.getImageParameters(isThumb: self.isThumb)
             self.isRemote = file.isRemote           
         }
         
@@ -50,7 +69,6 @@ extension STImageView {
             }
             albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)
             self.init(file: albumFile, isThumb: isThumb)
-            self.imageParameters?["albumId"] = "\(album.albumId)"
         }
                 
     }
@@ -97,4 +115,23 @@ extension STImageView.Image: STDownloadRequest {
         return STNetworkDispatcher.Encoding.body
     }
        
+}
+
+@objc extension STLibrary.File {
+    
+    func getImageParameters(isThumb: Bool) -> [String: String] {
+        let isThumbStr = isThumb ? "1" : "0"
+        return ["file": self.file, "set": "\(self.dbSet.rawValue)", "is_thumb": isThumbStr]
+    }
+    
+}
+
+@objc extension STLibrary.AlbumFile {
+    
+    override func getImageParameters(isThumb: Bool) -> [String : String] {
+        var params = super.getImageParameters(isThumb: isThumb)
+        params["albumId"] = "\(self.albumId)"
+        return params
+    }
+    
 }

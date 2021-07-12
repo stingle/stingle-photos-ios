@@ -37,5 +37,12 @@ extension Data {
         return ext
     }
     
-    
+}
+
+extension Data {
+
+    init(copying dd: DispatchData) {
+        self.init(dd)
+
+    }
 }

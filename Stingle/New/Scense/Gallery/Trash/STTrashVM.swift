@@ -10,6 +10,8 @@ import Foundation
 class STTrashVM {
     
     private let syncManager = STApplication.shared.syncManager
+    private let fileWorker = STFileWorker()
+    private let trashProvider = STApplication.shared.dataBase.trashProvider
     
     func createDBDataSource() -> STDataBase.DataSource<STCDTrashFile> {
         return STApplication.shared.dataBase.trashProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: #keyPath(STCDTrashFile.day))
@@ -18,7 +20,46 @@ class STTrashVM {
     func sync() {
         self.syncManager.sync()
     }
-        
+    
+    func getFiles(fileNames: [String]) -> [STLibrary.TrashFile] {
+        let files = trashProvider.fetchAll(for: fileNames)
+        return files
+    }
+    
+    func delete(files: [STLibrary.TrashFile], completion: @escaping (IError?) -> Void) {
+        self.fileWorker.deleteFiles(files: files) { _ in
+            completion(nil)
+        } failure: { error in
+            completion(error)
+        }
+    }
+    
+    func deleteAll(completion: @escaping (IError?) -> Void) {
+        let files = self.trashProvider.fetchAllObjects()
+        self.fileWorker.deleteFiles(files: files) { _ in
+            completion(nil)
+        } failure: { error in
+            completion(error)
+        }
+    }
+    
+    func recover(files: [STLibrary.TrashFile], completion: @escaping (IError?) -> Void) {
+        self.fileWorker.moveToGalery(files: files) { _ in
+            completion(nil)
+        } failure: { error in
+            completion(error)
+        }
+    }
+    
+    func recoverAll(completion: @escaping (IError?) -> Void) {
+        let files = self.trashProvider.fetchAllObjects()
+        self.fileWorker.moveToGalery(files: files) { _ in
+            completion(nil)
+        } failure: { error in
+            completion(error)
+        }
+    }
+    
 }
 
 extension STCDTrashFile {

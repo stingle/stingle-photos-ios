@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -55,16 +55,27 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_mark" translatesAutoresizingMaskIntoConstraints="NO" id="d9Z-0R-1VN">
+                        <rect key="frame" x="225" y="120" width="30" height="30"/>
+                        <color key="tintColor" name="STPrimary"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="W64-BY-deS"/>
+                            <constraint firstAttribute="width" constant="30" id="wa3-Y4-hrt"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="Dkn-Fh-O5a" secondAttribute="bottom" id="3wQ-Ju-INp"/>
+                <constraint firstAttribute="trailing" secondItem="d9Z-0R-1VN" secondAttribute="trailing" constant="8" id="W2E-iJ-T8e"/>
+                <constraint firstAttribute="bottom" secondItem="d9Z-0R-1VN" secondAttribute="bottom" constant="8" id="oQO-La-wrV"/>
                 <constraint firstAttribute="trailing" secondItem="Dkn-Fh-O5a" secondAttribute="trailing" id="wfC-E2-MoV"/>
                 <constraint firstItem="Dkn-Fh-O5a" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="xhZ-W0-6y8"/>
                 <constraint firstItem="Dkn-Fh-O5a" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="zru-cP-toy"/>
             </constraints>
             <size key="customSize" width="263" height="158"/>
             <connections>
+                <outlet property="checkMarkImageView" destination="d9Z-0R-1VN" id="hrQ-5x-3bR"/>
                 <outlet property="icRemoteImageView" destination="KBb-3i-f54" id="LQd-o6-Ktp"/>
                 <outlet property="imageView" destination="uxX-i2-5Vu" id="Ndr-62-pSd"/>
                 <outlet property="videoDurationLabel" destination="x4X-kl-gQ6" id="MjW-hs-AXi"/>
@@ -74,6 +85,10 @@
     </objects>
     <resources>
         <image name="ic_isRemote" width="24" height="24"/>
+        <image name="ic_mark" width="13" height="13"/>
+        <namedColor name="STPrimary">
+            <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

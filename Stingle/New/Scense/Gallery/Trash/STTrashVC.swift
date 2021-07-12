@@ -17,6 +17,9 @@ extension STTrashVC {
         typealias Cell = STTrashCollectionViewCell
         typealias CDModel = STCDTrashFile
         
+        var selectedFileNames = Set<String>()
+        var isSelectedMode = false
+        
         func cellModel(for indexPath: IndexPath, data: STLibrary.TrashFile) -> STTrashVC.CellModel {
             let image = STImageView.Image(file: data, isThumb: true)
             var videoDurationStr: String? = nil
@@ -26,7 +29,9 @@ extension STTrashVC {
             return CellModel(image: image,
                              name: data.file,
                              videoDuration: videoDurationStr,
-                             isRemote: data.isRemote)
+                             isRemote: data.isRemote,
+                             selectedMode: self.isSelectedMode,
+                             isSelected: self.selectedFileNames.contains(data.file))
         }
         
         func headerModel(for indexPath: IndexPath, section: String) -> STTrashVC.HeaderModel {
@@ -41,6 +46,8 @@ extension STTrashVC {
         let name: String?
         let videoDuration: String?
         let isRemote: Bool
+        let selectedMode: Bool
+        let isSelected: Bool
     }
     
     struct HeaderModel: IViewDataSourceHeaderModel {
@@ -76,15 +83,36 @@ extension STTrashVC {
 
 class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
     
+    @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
+    
     private let viewModel = STTrashVM()
+    
+    lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
+        let resilt = STFilesActionTabBarAccessoryView.loadNib()
+        return resilt
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.accessoryView.dataSource = self
+        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
+        self.updateTabBarAccessoryView()
+        self.updateSelectedItesmCount()
+    }
+    
+    override func dataSource(didApplySnapshot dataSource: IViewDataSource) {
+        super.dataSource(didApplySnapshot: dataSource)
+        self.updateTabBarAccessoryView()
+        self.updateSelectedItesmCount()
+    }
 
     override func configureLocalize() {
         super.configureLocalize()
         self.navigationItem.title = "trash".localized
-        self.navigationController?.tabBarItem.title = "trash".localized
-        
+        self.navigationController?.tabBarItem.title = nil
         self.emptyDataTitleLabel?.text = "empy_trash_title".localized
         self.emptyDataSubTitleLabel?.text = "empy_trash_message".localized
+        self.selectButtonItem.title = "select".localized
     }
     
     override func createDataSource() -> STCollectionViewDataSource<ViewModel> {
@@ -120,5 +148,203 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
         section.removeContentInsetsReference(safeAreaInsets: self.collectionView.window?.safeAreaInsets)
         return section
     }
+    
+    //MARK: - UserAction
+    
+    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
+        self.setSelectedMode(isSelectedMode: !self.dataSource.viewModel.isSelectedMode)
+    }
+    
+    //MARK: - Private methods
+    
+    private func setSelectedMode(isSelectedMode: Bool) {
+        guard isSelectedMode != self.dataSource.viewModel.isSelectedMode else {
+            return
+        }
+        self.dataSource.viewModel.selectedFileNames.removeAll()
+        self.dataSource.viewModel.isSelectedMode = isSelectedMode
+        self.updateTabBarAccessoryView()
+        self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
+        self.collectionView.reloadData()
+        self.updateSelectedItesmCount()
+    }
+    
+    private func updateTabBarAccessoryView() {
+        self.accessoryView.reloadData()
+    }
+    
+    private func updateSelectedItesmCount() {
+        let count = self.dataSource.viewModel.selectedFileNames.count
+        let title = self.dataSource.viewModel.isSelectedMode ? count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)") : nil
+        self.accessoryView.title = title
+        let isEnabled = self.dataSource.viewModel.isSelectedMode ? count != .zero : !self.dataSource.isEmptyData
+        self.accessoryView.setEnabled(isEnabled: isEnabled)
+    }
+    
+    private func didSelectedTrash() {
+        guard !self.dataSource.viewModel.selectedFileNames.isEmpty else {
+            return
+        }
+        
+        let fileNames = [String](self.dataSource.viewModel.selectedFileNames)
+        let files = self.viewModel.getFiles(fileNames: fileNames)
+        let loadingView: UIView = self.tabBarController?.view ?? self.view
+                
+        let title = "delete_files_alert_title".localized
+        let message = String(format: "delete_files_alert_message".localized, "\(files.count)")
+        
+        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+            STLoadingView.show(in: loadingView)
+            self?.viewModel.delete(files: files, completion: { error in
+                STLoadingView.hide(in: loadingView)
+                if let error = error {
+                    self?.showError(error: error)
+                } else {
+                    self?.setSelectedMode(isSelectedMode: false)
+                }
+            })
+        }
+        
+    }
+    
+    private func didSelectedRecover() {
+        guard !self.dataSource.viewModel.selectedFileNames.isEmpty else {
+            return
+        }
+        
+        let fileNames = [String](self.dataSource.viewModel.selectedFileNames)
+        let files = self.viewModel.getFiles(fileNames: fileNames)
+        let loadingView: UIView = self.tabBarController?.view ?? self.view
 
+        STLoadingView.show(in: loadingView)
+        self.viewModel.recover(files: files, completion: { [weak self] error in
+            STLoadingView.hide(in: loadingView)
+            if let error = error {
+                self?.showError(error: error)
+            } else {
+                self?.setSelectedMode(isSelectedMode: false)
+            }
+        })
+    }
+    
+    private func didSelectedDeleteAll() {
+        
+        let loadingView: UIView = self.tabBarController?.view ?? self.view
+        let title = "empty_trash".localized
+        let message = "delete_all_files_alert_message".localized
+       
+        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+            STLoadingView.show(in: loadingView)
+            self?.viewModel.deleteAll(completion: { error in
+                STLoadingView.hide(in: loadingView)
+                if let error = error {
+                    self?.showError(error: error)
+                } else {
+                    self?.setSelectedMode(isSelectedMode: false)
+                }
+            })
+        }
+    }
+    
+    private func didSelectedRecoverAll() {
+        let loadingView: UIView = self.tabBarController?.view ?? self.view
+        STLoadingView.show(in: loadingView)
+        self.viewModel.recoverAll(completion: { [weak self] error in
+            STLoadingView.hide(in: loadingView)
+            if let error = error {
+                self?.showError(error: error)
+            } else {
+                self?.setSelectedMode(isSelectedMode: false)
+            }
+        })
+    }
+    
+    private func setSelectedItem(for indexPath: IndexPath) {
+        guard let albumFile =  self.dataSource.object(at: indexPath) else {
+            return
+        }
+        var isSelected = false
+        if self.dataSource.viewModel.selectedFileNames.contains(albumFile.file) {
+            self.dataSource.viewModel.selectedFileNames.remove(albumFile.file)
+            isSelected = false
+        } else {
+            self.dataSource.viewModel.selectedFileNames.insert(albumFile.file)
+            isSelected = true
+        }
+        let cell = (collectionView.cellForItem(at: indexPath) as? STTrashCollectionViewCell)
+        cell?.setSelected(isSelected: isSelected)
+        self.updateSelectedItesmCount()
+    }
+            
+}
+
+extension STTrashVC: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if self.dataSource.viewModel.isSelectedMode {
+            self.setSelectedItem(for: indexPath)
+        } else {
+            guard let file = self.dataSource.object(at: indexPath) else {
+                return
+            }
+            let vc = STFileViewerVC.create(trash: file, sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated)])
+            self.show(vc, sender: nil)
+        }
+    }
+    
+}
+
+extension STTrashVC: STFilesActionTabBarAccessoryViewDataSource {
+    
+    enum ActionType: StringPointer {
+        case deleteAll
+        case recoverAll
+        case delete
+        case recover
+        
+        var stringValue: String {
+            switch self {
+            case .deleteAll:
+                return "deleteAll"
+            case .recoverAll:
+                return "recoverAll"
+            case .delete:
+                return "delete"
+            case .recover:
+                return "recover"
+            }
+        }
+    }
+    
+    func accessoryView(actions accessoryView: STFilesActionTabBarAccessoryView) -> [STFilesActionTabBarAccessoryView.ActionItem] {
+        
+        var result = [STFilesActionTabBarAccessoryView.ActionItem]()
+        
+        if self.dataSource.viewModel.isSelectedMode {
+            let trash = STFilesActionTabBarAccessoryView.ActionItem.trash(identifier: ActionType.delete) { [weak self] _, _ in
+                self?.didSelectedTrash()
+            }
+            result.append(trash)
+            let recover = STFilesActionTabBarAccessoryView.ActionItem.recover(identifier: ActionType.recover) { [weak self] _, _ in
+                self?.didSelectedRecover()
+            }
+            result.append(recover)
+            
+        } else {
+            
+            let deleteAll = STFilesActionTabBarAccessoryView.ActionItem.deleteAll(identifier: ActionType.deleteAll) { [weak self] _, _ in
+                self?.didSelectedDeleteAll()
+            }
+            result.append(deleteAll)
+            
+            let recoverAll = STFilesActionTabBarAccessoryView.ActionItem.recoverAll(identifier: ActionType.recoverAll) { [weak self] _, _ in
+                self?.didSelectedRecoverAll()
+            }
+            result.append(recoverAll)
+            
+        }
+        
+        return result
+    }
+    
 }

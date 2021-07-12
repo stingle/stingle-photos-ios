@@ -338,7 +338,7 @@ class STCrypto {
         offset += Constants.FileFileVersionLen
         offset += Constants.FileFileIdLen
         
-        let headerSize:UInt32 = STCrypto.fromBytes(b: Bytes((buf[offset..<offset + Constants.FileHeaderSizeLen])))
+        let headerSize: UInt32 = STCrypto.fromBytes(b: Bytes((buf[offset..<offset + Constants.FileHeaderSizeLen])))
         offset += Constants.FileHeaderSizeLen
         guard headerSize > 0 else {
             throw CryptoError.Header.incorrectHeaderSize

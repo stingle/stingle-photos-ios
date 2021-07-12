@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 extension STLibrary {
         
@@ -25,6 +26,8 @@ extension STLibrary {
         let dateCreated: Date
         let dateModified: Date
         var isRemote: Bool
+        
+        let managedObjectID: NSManagedObjectID?
         
         var identifier: String {
             return self.file
@@ -52,9 +55,10 @@ extension STLibrary {
             self.dateCreated = Date(milliseconds: dateCreated)
             self.dateModified = Date(milliseconds: dateModified)
             self.isRemote = true
+            self.managedObjectID = nil
         }
         
-        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool) throws {
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool, managedObjectID: NSManagedObjectID?) throws {
             guard let file = file,
                   let version = version,
                   let headers = headers,
@@ -70,6 +74,7 @@ extension STLibrary {
             self.dateCreated = dateCreated
             self.dateModified = dateModified
             self.isRemote = isRemote
+            self.managedObjectID = managedObjectID
         }
         
         required convenience init(model: STCDFile) throws {
@@ -78,7 +83,8 @@ extension STLibrary {
                            headers: model.headers,
                            dateCreated: model.dateCreated,
                            dateModified: model.dateModified,
-                           isRemote: model.isRemote)
+                           isRemote: model.isRemote,
+                           managedObjectID: model.objectID)
         }
         
         func toManagedModelJson() throws -> [String : Any] {

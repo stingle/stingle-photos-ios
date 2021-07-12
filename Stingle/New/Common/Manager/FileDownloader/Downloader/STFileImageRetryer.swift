@@ -44,7 +44,6 @@ extension STDownloaderManager {
         private let diskCache = DiskImageCache()
         private let memoryCache = MemoryCache()
         
-        
         override func createOperation(for source: IDownloaderSource) -> Operation {
             
             guard ((source as? IFileRetrySource) != nil) else {
@@ -56,6 +55,10 @@ extension STDownloaderManager {
             } failure: { (error) in
             }
             return operation
+        }
+
+        func isFileExists(source: IDownloaderSource) -> Bool {
+            return self.memoryCache.isFileExists(source: source)
         }
         
     }

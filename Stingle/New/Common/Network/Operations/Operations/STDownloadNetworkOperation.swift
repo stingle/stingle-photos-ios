@@ -5,12 +5,14 @@
 //  Created by Khoren Asatryan on 3/22/21.
 //
 
-import Foundation
+import Alamofire
 
 class STDownloadNetworkOperation: STBaseNetworkOperation<URL> {
     
+    var session: Alamofire.Session?
+    
     init(request: IDownloadRequest, success: STOperationSuccess?, progress: STOperationProgress?, failure: STOperationFailure?) {
-        super.init(request: request, success: success, failure: failure, progress: progress)
+        super.init(request: request, success: success, failure: failure, progress: progress, stream: nil)
     }
     
     func startRequest() {
@@ -23,7 +25,7 @@ class STDownloadNetworkOperation: STBaseNetworkOperation<URL> {
             case .success(let result):
                 self?.responseSucces(result: result)
             case .failure(let error):
-                self?.responseGetError(error: error)
+                self?.responseFailed(error: error)
             }
         }, progress: { [weak self] progress in
             self?.responseProgress(result: progress)

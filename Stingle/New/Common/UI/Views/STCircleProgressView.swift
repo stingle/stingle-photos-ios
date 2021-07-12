@@ -95,7 +95,7 @@ class STCircleProgressView: UIView {
     private let activityIndicator = UIActivityIndicatorView()
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: 55, height: 55)
+        return CGSize(width: 44, height: 44)
     }
         
     override init(frame: CGRect) {
@@ -112,15 +112,10 @@ class STCircleProgressView: UIView {
         super.layoutSubviews()
         self.imageView.frame = self.frameforImageView()
         self.activityIndicator.frame = self.frameforActivityIndicator()
+        self.setNeedsDisplay()
     }
     
     override func draw(_ rect: CGRect) {
-        
-        if self.progress == 0 {
-            print("")
-        } else if self.progress == 1 {
-            print("")
-        }
         
         let interval = self.maxValue - self.minValue
         let progressInterval = self.progress - self.minValue

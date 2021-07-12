@@ -16,7 +16,7 @@ class STJSONNetworkOperation: STBaseNetworkOperation<Any> {
             case .success(let result):
                 self?.responseSucces(result: result)
             case .failure(let error):
-                self?.responseGetError(error: error)
+                self?.responseFailed(error: error)
             }
         }
     }
@@ -32,7 +32,7 @@ class STDataNetworkOperation: STBaseNetworkOperation<Data> {
             case .success(let result):
                 self?.responseSucces(result: result)
             case .failure(let error):
-                self?.responseGetError(error: error)
+                self?.responseFailed(error: error)
             }
         }
     }

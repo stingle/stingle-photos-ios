@@ -10,7 +10,7 @@ import UIKit
 
 extension STDataBase {
     
-    class GalleryProvider: DataBaseCollectionProvider<STCDFile, STLibrary.DeleteFile.Gallery> {
+    class GalleryProvider: SyncCollectionProvider<STCDFile, STLibrary.DeleteFile.Gallery> {
         
         override func getInsertObjects(with files: [STLibrary.File]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.File], lastDate: Date)  {
             var lastDate: Date? = nil
@@ -101,6 +101,12 @@ extension STDataBase {
                 }
             }
             
+        }
+        
+        func fetchAll(for fileNames: [String]) -> [STLibrary.File] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDFile.file)) IN %@", fileNames)
+            let result = self.fetchObjects(predicate: predicate)
+            return result
         }
         
         func fetch(fileNames: [String], context: NSManagedObjectContext) -> [STCDFile] {

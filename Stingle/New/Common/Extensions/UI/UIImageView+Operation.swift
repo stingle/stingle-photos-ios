@@ -18,7 +18,7 @@ extension UIImageView {
     
     private static var retryerIdentifier: String = "retryerIdentifier"
     
-    typealias ISuccess = (_ result: UIImage) -> Void
+    typealias ISuccess = (_ result: UIImage?) -> Void
     typealias IProgress = (_ progress: Progress) -> Void
     typealias IFailure = (_ error: IError) -> Void
     
@@ -30,12 +30,16 @@ extension UIImageView {
         }
     }
         
-    func setImage(source: IDownloaderSource?, placeholder: UIImage? = nil, animator: IImageViewDownloadAnimator? = nil, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
+    func setImage(source: IDownloaderSource?, placeholder: UIImage? = nil, animator: IImageViewDownloadAnimator? = nil, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil, saveOldImage: Bool = false) {
         
         if let retryerIdentifier = self.retryerIdentifier {
             STApplication.shared.downloaderManager.imageRetryer.cancel(operation: retryerIdentifier)
         }
-        self.image = nil
+        
+        if !saveOldImage {
+            self.image = nil
+        }
+        
         if let source = source {
             animator?.imageView(startAnimation: self)
             self.retryerIdentifier = STApplication.shared.downloaderManager.imageRetryer.download(source: source) { [weak self] (image) in
@@ -43,11 +47,12 @@ extension UIImageView {
             } progress: { [weak self] (progress) in
                 self?.retryProgress(progressRetry: progress, animator: animator)
             } failure: { [weak self] (error) in
-                self?.retryFailure(error: error, animator: animator)
+                self?.retryFailure(error: error, animator: animator, failure: failure)
             }
         } else {
             self.image = placeholder
             animator?.imageView(endAnimation: self)
+            success?(nil)
         }
     }
     
@@ -57,6 +62,7 @@ extension UIImageView {
         DispatchQueue.main.async {
             animator?.imageView(endAnimation: self)
             self.image = image
+            success?(image)
         }
     }
     

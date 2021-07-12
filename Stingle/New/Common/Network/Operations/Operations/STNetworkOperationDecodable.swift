@@ -23,18 +23,18 @@ class STNetworkOperationDecodable<T: Decodable>: STBaseNetworkOperation<T> {
             self.dataRequest = self.networkDispatcher.request(request: self.request, decoder: decoder) { [weak self] (result: Result<T>) in
                 switch result {
                 case .success(let result):
-                    self?.responseGetData(result: result)
+                    self?.responseSucces(result: result)
                 case .failure(error: let error):
-                    self?.responseGetError(error: error)
+                    self?.responseFailed(error: error)
                 }
             }
         } else {
             self.dataRequest = self.networkDispatcher.request(request: self.request) { [weak self]  (result: Result<T>) in
                 switch result {
                 case .success(let result):
-                    self?.responseGetData(result: result)
+                    self?.responseSucces(result: result)
                 case .failure(error: let error):
-                    self?.responseGetError(error: error)
+                    self?.responseFailed(error: error)
                 }
             }
         }

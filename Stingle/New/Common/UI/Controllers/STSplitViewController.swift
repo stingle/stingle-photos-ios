@@ -56,7 +56,6 @@ class STSplitViewController: UIViewController {
     private var gestureStartPoint = CGPoint.zero
     private var gestureMasterViewWidth = CGFloat.zero
     private var gestureStartProgress = CGFloat.zero
-    
     private(set) var isMasterViewOpened = false
     
     private let observer = STObserverEvents<UIViewController>()
@@ -67,6 +66,10 @@ class STSplitViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return self.detailViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
     }
             
     //MARK: override
@@ -149,6 +152,9 @@ class STSplitViewController: UIViewController {
         self.addViewController(viewController: detailViewController, in: self.detailView)
         self.detailViewController = detailViewController
         detailViewController.splitMenuViewController = self
+        if self.isMasterViewOpened {
+            self.openOrClosed(isAnimated: true, isClose: self.isMasterViewOpened, isStarted: true, isTouch: false)
+        }
     }
         
     //MARK: Private user actions
@@ -328,8 +334,8 @@ extension STSplitViewController {
     
     var masterViewWidth: CGFloat {
         var masterViewWidth: CGFloat = 0
-        if let masterViewController = self.masterViewController {
-            masterViewWidth = masterViewController.width(forPresentation: self, traitCollection: self.newCollection, size: self.newSize)
+        if let masterViewController = self.masterViewController, let newCollection = self.newCollection {
+            masterViewWidth = masterViewController.width(forPresentation: self, traitCollection: newCollection, size: self.newSize)
         }
         return masterViewWidth
     }
@@ -351,5 +357,3 @@ extension STSplitViewController {
     }
     
 }
-
-

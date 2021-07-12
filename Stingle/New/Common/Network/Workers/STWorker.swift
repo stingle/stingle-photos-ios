@@ -13,6 +13,7 @@ class STWorker {
 	typealias Result<T> = STNetworkDispatcher.Result<T>
 	typealias Success<T> = (_ result: T) -> Void
     typealias ProgressTask = (_ progress: Progress) -> Void
+    typealias StreamTask = (_ progress: Data) -> Void
 	typealias Failure = (_ error: IError) -> Void
 	
 	let operationManager = STOperationManager.shared
@@ -101,6 +102,32 @@ extension STWorker {
         return operation
     }
     
+    @discardableResult
+    func download(request: IDownloadRequest, success: Success<URL>?, progress: ProgressTask? = nil, failure: Failure? = nil) -> STDownloadNetworkOperation {
+        let operation = STDownloadNetworkOperation(request: request, success: { url in
+            success?(url)
+        }, progress: { myProgress in
+            progress?(myProgress)
+        }, failure: failure)        
+        self.operationManager.runDownload(operation: operation)
+        return operation
+    }
+    
+    @discardableResult
+    func stream(request: IStreamRequest, queue: DispatchQueue, success: Success<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)>?, stream: @escaping StreamTask, failure: Failure? = nil) -> STStreamNetworkOperation {
+                
+        let operation = STStreamNetworkOperation(request: request, queue: queue) { result in
+            success?(result)
+        } stream: { data in
+            stream(data)
+        } failure: { error in
+            failure?(error)
+        }
+        self.operationManager.runDownload(operation: operation)
+        return operation
+     
+    }
+        
 }
 
 extension STWorker {

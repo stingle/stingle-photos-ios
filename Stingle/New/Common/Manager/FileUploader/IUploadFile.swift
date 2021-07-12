@@ -73,7 +73,7 @@ extension STFileUploader {
             let dateCreated = creationDate ?? Date()
             let dateModified = modificationDate ?? Date()
 
-            let file = try STLibrary.File(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false)
+            let file = try STLibrary.File(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, managedObjectID: nil)
             
             return file
         }
@@ -131,7 +131,7 @@ extension STFileUploader {
             let dateCreated = creationDate ?? Date()
             let dateModified = modificationDate ?? Date()
             
-            let file = try STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, albumId: self.album.albumId)
+            let file = try STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, albumId: self.album.albumId, managedObjectID: nil)
             return file
             
         }

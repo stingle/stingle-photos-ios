@@ -98,8 +98,8 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         return STImagePickerHelper(controller: self)
     }()
     
-    lazy private var accessoryView: STAlbumFilesTabBarAccessoryView = {
-        let resilt = STAlbumFilesTabBarAccessoryView.loadNib()
+    lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
+        let resilt = STFilesActionTabBarAccessoryView.loadNib()
         return resilt
     }()
     
@@ -107,8 +107,8 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         self.viewModel = STAlbumFilesVM(album: self.album)
         self.viewModel.delegate = self
         super.viewDidLoad()
+        self.accessoryView.dataSource = self
         self.configureAlbumActionView()
-        self.accessoryView.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -290,7 +290,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     private func updateSelectedItesmCount() {
         let count = self.dataSource.viewModel.selectedFileNames.count
         let title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
-        self.accessoryView.titleLabel.text = title
+        self.accessoryView.title = title
         self.accessoryView.setEnabled(isEnabled: count != .zero)
     }
     
@@ -304,19 +304,9 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
 
     private func configureAlbumActionView() {
         
-        if self.album.isOwner {
-            self.accessoryView.sharButton.isHidden = false
-            self.accessoryView.copyButton.isHidden = false
-            self.accessoryView.downloadButton.isHidden = false
-            self.accessoryView.trashButton.isHidden = false
-        } else {
-            self.accessoryView.copyButton.isHidden = !self.album.permission.allowCopy
-            self.accessoryView.downloadButton.isHidden = !self.album.permission.allowCopy
-            self.addItemButton.isHidden = !self.album.permission.allowAdd
-            self.accessoryView.trashButton.isHidden = true
-        }
+        self.addItemButton.isHidden = !(self.album.permission.allowAdd || self.album.isOwner)
         
-        
+        self.accessoryView.reloadData()
         var image: UIImage?
         if !self.album.isShared {
             image = UIImage(named: "ic_shared_album_min")
@@ -326,25 +316,6 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
             image = UIImage(named: "ic_album_info")
         }
         self.albumSettingsButtonItem.image = image
-    }
-    
-    private func showOkCancelAlert(title: String?, message: String?, textFieldText: String? = nil, textFieldPlaceholder: String? = nil, handler: @escaping ((String?) -> Void)) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction(title: "ok".localized, style: .default) {_ in
-            handler(alert.textFields?.first?.text)
-        }
-        let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
-        alert.addAction(ok)
-        alert.addAction(cancel)
-        
-        if let textFieldPlaceholder = textFieldPlaceholder {
-            alert.addTextField { (textField) in
-                textField.text = textFieldText
-                textField.placeholder = textFieldPlaceholder
-            }
-        }
-        
-        self.present(alert, animated: true, completion: nil)
     }
     
     private func deleteSelectedFiles() {
@@ -364,7 +335,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         }
     }
     
-    private func showShareFilesActionSheet(sender: UIView) {
+    private func showShareFilesActionSheet(sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "share".localized, message: nil, preferredStyle: .actionSheet)
         let stinglePhotos = UIAlertAction(title: "share_via_stingle_photos".localized, style: .default) { [weak self] _ in
             self?.didSelectShareViaStinglePhotos()
@@ -378,7 +349,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         let cancelAction = UIAlertAction(title: "cancel".localized, style: .cancel)
         alert.addAction(cancelAction)
         if let popoverController = alert.popoverPresentationController {
-            popoverController.sourceView = sender
+            popoverController.barButtonItem = sender
         }
         self.showDetailViewController(alert, sender: nil)
     }
@@ -397,7 +368,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
         let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: [])
-        vc.popoverPresentationController?.sourceView = self.accessoryView.sharButton
+        vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: FileAction.share)
         vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
@@ -428,6 +399,23 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         let files = self.viewModel.getFiles(fileNames: selectedFileNames)
         let shearing = STFilesDownloaderActivityVC.DownloadFiles.albumFiles(album: self.album, files: files)
         STFilesDownloaderActivityVC.showActivity(downloadingFiles: shearing, controller: self.tabBarController ?? self, delegate: self, userInfo: action)
+    }
+    
+    private func setSelectedItem(for indexPath: IndexPath) {
+        guard let albumFile =  self.dataSource.object(at: indexPath) else {
+            return
+        }
+        var isSelected = false
+        if self.dataSource.viewModel.selectedFileNames.contains(albumFile.file) {
+            self.dataSource.viewModel.selectedFileNames.remove(albumFile.file)
+            isSelected = false
+        } else {
+            self.dataSource.viewModel.selectedFileNames.insert(albumFile.file)
+            isSelected = true
+        }
+        let cell = (collectionView.cellForItem(at: indexPath) as? STAlbumFilesCollectionViewCell)
+        cell?.setSelected(isSelected: isSelected)
+        self.updateSelectedItesmCount()
     }
     
 }
@@ -463,50 +451,100 @@ extension STAlbumFilesVC: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if self.dataSource.viewModel.isSelectedMode {
-            guard let albumFile =  self.dataSource.object(at: indexPath) else {
+            self.setSelectedItem(for: indexPath)
+        } else {
+            guard let file = self.dataSource.object(at: indexPath) else {
                 return
             }
-            var isSelected = false
-            if self.dataSource.viewModel.selectedFileNames.contains(albumFile.file) {
-                self.dataSource.viewModel.selectedFileNames.remove(albumFile.file)
-                isSelected = false
-            } else {
-                self.dataSource.viewModel.selectedFileNames.insert(albumFile.file)
-                isSelected = true
-            }
-            let cell = (collectionView.cellForItem(at: indexPath) as? STAlbumFilesCollectionViewCell)
-            cell?.setSelected(isSelected: isSelected)
-            self.updateSelectedItesmCount()
+            let vc = STFileViewerVC.create(album: self.album, file: file, sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated)])
+            self.show(vc, sender: nil)
         }
     }
     
 }
 
-extension STAlbumFilesVC: STAlbumFilesTabBarAccessoryViewDelegate {
+extension STAlbumFilesVC: STFilesActionTabBarAccessoryViewDataSource {
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectShareButton sendner: UIButton) {
+    func accessoryView(actions accessoryView: STFilesActionTabBarAccessoryView) -> [STFilesActionTabBarAccessoryView.ActionItem] {
+      
+        var items = [STFilesActionTabBarAccessoryView.ActionItem]()
+        if self.album.isOwner {
+           
+            let share = STFilesActionTabBarAccessoryView.ActionItem.share(identifier: FileAction.share) { [weak self] _ , buttonItem  in
+                self?.didSelectShare(files: buttonItem)
+            }
+            items.append(share)
+            
+            let move = STFilesActionTabBarAccessoryView.ActionItem.move(identifier: FileAction.move) { [weak self] _, buttonItem in
+                self?.didSelectMoveButton(files: buttonItem)
+            }
+            items.append(move)
+            
+            let saveToDevice = STFilesActionTabBarAccessoryView.ActionItem.saveToDevice(identifier: FileAction.saveToDevice) { [weak self] _, buttonItem in
+                self?.didSelectSaveToDeviceButton(files: buttonItem)
+            }
+            items.append(saveToDevice)
+            
+            let trash = STFilesActionTabBarAccessoryView.ActionItem.trash(identifier: FileAction.trash) { [weak self] _, buttonItem in
+                self?.didSelectTrashButton(files: buttonItem)
+            }
+            
+            items.append(trash)
+
+        } else {
+            
+            if self.album.permission.allowShare {
+                let share = STFilesActionTabBarAccessoryView.ActionItem.share(identifier: FileAction.share) { [weak self] _ , buttonItem  in
+                    self?.didSelectShare(files: buttonItem)
+                }
+                items.append(share)
+            }
+            
+            if self.album.permission.allowCopy {
+                let move = STFilesActionTabBarAccessoryView.ActionItem.move(identifier: FileAction.move) { [weak self] _, buttonItem in
+                    self?.didSelectMoveButton(files: buttonItem)
+                }
+                items.append(move)
+                
+                let saveToDevice = STFilesActionTabBarAccessoryView.ActionItem.saveToDevice(identifier: FileAction.saveToDevice) { [weak self] _, buttonItem in
+                    self?.didSelectSaveToDeviceButton(files: buttonItem)
+                }
+                items.append(saveToDevice)
+            }
+            
+        }
+        return items
+        
+    }
+    
+}
+
+
+extension STAlbumFilesVC {
+    
+    private func didSelectShare(files sendner: UIBarButtonItem) {
         self.showShareFilesActionSheet(sender: sendner)
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectMoveButton sendner: UIButton) {
+    private func didSelectMoveButton(files sendner: UIBarButtonItem) {
         let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
         let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
         (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .albumFiles(album: self.album, files: self.viewModel.getFiles(fileNames: selectedFileNames))
         self.showDetailViewController(navVC, sender: nil)
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectDownloadButton sendner: UIButton) {
+    private func didSelectSaveToDeviceButton(files sendner: UIBarButtonItem) {
         let title = "alert_save_to_device_library_title".localized
-        let message = "alert_save_to_device_library_message".localized
+        let message = "alert_save_files_to_device_library_message".localized
         self.showInfoAlert(title: title, message: message, cancel: true) { [weak self] in
             self?.openDownloadController(action: .saveDevicePhotos)
         }
     }
     
-    func albumFilesTabBarAccessory(view: STAlbumFilesTabBarAccessoryView, didSelectTrashButton sendner: UIButton) {
+    private func didSelectTrashButton(files sendner: UIBarButtonItem) {
         let count = self.dataSource.viewModel.selectedFileNames.count
-        let title = "delete_album_files_alert_title".localized
-        let message = String(format: "delete_album_files_alert_message".localized, "\(count)")
+        let title = "delete_files_alert_title".localized
+        let message = String(format: "delete_move_files_alert_message".localized, "\(count)")
         self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
             self?.deleteSelectedFiles()
         }
@@ -547,7 +585,6 @@ extension STAlbumFilesVC {
         case downloadSelection
         
         var localized: String {
-
             switch self {
             case .rename:
                 return "rename_album".localized
@@ -566,7 +603,28 @@ extension STAlbumFilesVC {
             }
 
         }
+            
+    }
+    
+    enum FileAction: StringPointer {
         
+        case share
+        case move
+        case saveToDevice
+        case trash
+        
+        var stringValue: String {
+            switch self {
+            case .share:
+                return "share"
+            case .move:
+                return "move"
+            case .saveToDevice:
+                return "saveToDevice"
+            case .trash:
+                return "trashBu"
+            }
+        }
     }
     
 }

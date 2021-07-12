@@ -5,7 +5,7 @@
 //  Created by Khoren Asatryan on 3/10/21.
 //
 
-import Foundation
+import CoreData
 
 class STDBInfo: ICDConvertable {
         
@@ -24,6 +24,7 @@ class STDBInfo: ICDConvertable {
     var lastAlbumFilesSeenTime: Date
     var lastDelSeenTime: Date
     var lastContactsSeenTime: Date
+    var managedObjectID: NSManagedObjectID?
     
     var spaceUsed: String?
     var spaceQuota: String?
@@ -32,7 +33,7 @@ class STDBInfo: ICDConvertable {
         return ""
     }
        
-    init(lastSeenTime: Date? = nil, lastTrashSeenTime: Date? = nil, lastAlbumsSeenTime: Date? = nil, lastAlbumFilesSeenTime: Date? = nil, lastDelSeenTime: Date? = nil, lastContactsSeenTime: Date? = nil, spaceUsed: String? = nil, spaceQuota: String? = nil) {
+    init(lastSeenTime: Date? = nil, lastTrashSeenTime: Date? = nil, lastAlbumsSeenTime: Date? = nil, lastAlbumFilesSeenTime: Date? = nil, lastDelSeenTime: Date? = nil, lastContactsSeenTime: Date? = nil, spaceUsed: String? = nil, spaceQuota: String? = nil, managedObjectID: NSManagedObjectID? = nil) {
         let defaultDate = Date.defaultDate
         self.lastSeenTime = lastSeenTime ?? defaultDate
         self.lastTrashSeenTime = lastTrashSeenTime ?? defaultDate
@@ -42,6 +43,7 @@ class STDBInfo: ICDConvertable {
         self.lastContactsSeenTime = lastContactsSeenTime ?? defaultDate
         self.spaceUsed = spaceUsed
         self.spaceQuota = spaceQuota
+        self.managedObjectID = managedObjectID
     }
     
     required convenience init(model: STCDDBInfo) throws {
@@ -52,7 +54,8 @@ class STDBInfo: ICDConvertable {
                   lastDelSeenTime: model.lastDelSeenTime,
                   lastContactsSeenTime: model.lastContactsSeenTime,
                   spaceUsed: model.spaceUsed,
-                  spaceQuota: model.spaceQuota)
+                  spaceQuota: model.spaceQuota,
+                  managedObjectID: model.objectID)
     }
     
     func update(with used: STDBUsed) {

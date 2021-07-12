@@ -143,4 +143,128 @@ extension STCrypto {
         return base64
     }
     
+    func decryptData(fileReader: STFileReader, header: STHeader, fromOffSet: off_t, length: Int, queue: DispatchQueue = .main, completionHandler: @escaping (Data?, Error?) -> Void) {
+        
+        guard let headerSize = header.headerSize, headerSize > 0, header.chunkSize >= 1 && header.chunkSize < Constants.MAX_BUFFER_LENGTH else {
+            completionHandler(nil, CryptoError.Header.incorrectHeaderSize)
+            return
+        }
+        
+        let startOffSet = off_t(Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Int(headerSize) + Constants.FileHeaderSizeLen)
+        let dataReadSize: off_t = off_t(header.chunkSize) + off_t(self.sodium.aead.xchacha20poly1305ietf.ABytes + self.sodium.aead.xchacha20poly1305ietf.NonceBytes)
+        
+        var fromOffSetRead = fromOffSet
+        let fromOffSetIndex = Int64(floor(Double(fromOffSet) / Double(dataReadSize)))
+        fromOffSetRead = fromOffSetIndex * dataReadSize + startOffSet
+        
+        var toOffSetRead = fromOffSet + off_t(length)
+        let toOffSetReadIndex = Int64(ceil(Double(toOffSetRead) / Double(dataReadSize)))
+        toOffSetRead = toOffSetReadIndex * dataReadSize + startOffSet
+        toOffSetRead = min(toOffSetRead, off_t(fileReader.fullSize))
+        let range = CountableRange<off_t>(uncheckedBounds: (fromOffSetRead, toOffSetRead))
+        
+        let firstDiff = (fromOffSet + startOffSet -  fromOffSetRead)                
+        fileReader.read(byteRange: range, queue: queue) { [weak self] data in
+            guard let weakSelf = self, let data = data else {
+                completionHandler(nil, CryptoError.IO.readFailure)
+                return
+            }
+            
+            if data.count == .zero {
+                print(range)
+            }
+            var chunkIndex = fromOffSetIndex
+            let bytes = Bytes(data)
+            var result = Bytes()
+            while chunkIndex < toOffSetReadIndex {
+                let chunkIndexWtthOuthHeader = chunkIndex - fromOffSetIndex
+                let from = chunkIndexWtthOuthHeader * dataReadSize
+                let to = (chunkIndexWtthOuthHeader + 1) * dataReadSize
+                let chunk = bytes.copyMemory(fromIndex: Int(from), toIndex: Int(to))
+                do {
+                    let decryptChunk = try weakSelf.decryptChunk(chunkData: chunk, chunkNumber: UInt64(chunkIndex + 1), header: header)
+                    result.append(contentsOf: decryptChunk)
+                } catch {
+                    completionHandler(nil, error)
+                    return
+                }
+                chunkIndex = chunkIndex + 1
+            }
+            
+            let lastDiff = Int(firstDiff) + length
+            result = result.copyMemory(fromIndex: Int(firstDiff), toIndex: Int(lastDiff))
+            let resultData = Data(result)
+            completionHandler(resultData, nil)
+        }
+        
+    }
+    
+    func decryptDataChunkIndex(fileReader: STFileReader, header: STHeader, chunkIndex: Int, queue: DispatchQueue = .main, completionHandler: @escaping (Data?, Error?) -> Void) {
+        self.readChunk(fileReader: fileReader, header: header, chunkIndex: chunkIndex) { [weak self] bytes, error in
+            guard let weakSelf = self, let bytes = bytes else {
+                completionHandler(nil, CryptoError.IO.readFailure)
+                return
+            }
+            
+            do {
+                let result = try weakSelf.decryptChunk(chunkData: bytes, chunkNumber: UInt64(chunkIndex + 1), header: header)
+                let resultData = Data(result)
+                completionHandler(resultData, nil)
+            } catch {
+                completionHandler(nil, error)
+            }
+        }
+    }
+    
+    func readChunk(fileReader: STFileReader, header: STHeader, chunkIndex: Int, queue: DispatchQueue = .main, completionHandler: @escaping (Bytes?, Error?) -> Void)  {
+        
+        guard let headerSize = header.headerSize, headerSize > 0, header.chunkSize >= 1 && header.chunkSize < Constants.MAX_BUFFER_LENGTH else {
+            completionHandler(nil, CryptoError.Header.incorrectHeaderSize)
+            return
+        }
+        
+        let dataReadSize: Int = Int(header.chunkSize) + self.sodium.aead.xchacha20poly1305ietf.ABytes + self.sodium.aead.xchacha20poly1305ietf.NonceBytes
+        
+        var startOffset = off_t(Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Int(headerSize) + Constants.FileHeaderSizeLen)
+                
+        startOffset = startOffset + off_t(chunkIndex) * off_t(dataReadSize)
+        startOffset = min(startOffset, off_t(header.dataSize))
+        var endOffset = startOffset + off_t(dataReadSize)
+        
+        endOffset = min(endOffset, off_t(header.dataSize))
+                
+        let range = CountableRange<off_t>(uncheckedBounds: (startOffset, endOffset))
+                        
+        fileReader.read(byteRange: range, queue: queue) { dispatchData in
+            guard let dispatchData = dispatchData else {
+                completionHandler(nil, CryptoError.IO.readFailure)
+                return
+            }
+            let data = Data(copying: dispatchData)
+            let bytes = Bytes(data)
+            completionHandler(bytes, nil)
+        }
+        
+    }
+    
+    func chunkSizeForHeader(header: STHeader) -> UInt64 {
+        let dataReadSize: UInt64 = UInt64(header.chunkSize) + UInt64(self.sodium.aead.xchacha20poly1305ietf.ABytes + self.sodium.aead.xchacha20poly1305ietf.NonceBytes)
+        return dataReadSize
+    }
+    
+    func startOffSet(header: STHeader) -> UInt64 {
+        guard self.isValid(header: header) else {
+            return .zero
+        }
+        let startOffSet = UInt64(Constants.FileBegginingLen + Constants.FileFileVersionLen + Constants.FileFileIdLen + Int(header.headerSize ?? .zero) + Constants.FileHeaderSizeLen)
+        return startOffSet
+    }
+    
+    func isValid(header: STHeader) -> Bool {
+        guard let headerSize = header.headerSize, headerSize > 0, header.chunkSize >= 1 && header.chunkSize < Constants.MAX_BUFFER_LENGTH else {
+            return false
+        }
+        return true
+    }
+    
 }
