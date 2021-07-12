@@ -304,7 +304,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
 
     private func configureAlbumActionView() {
         
-        self.addItemButton.isHidden = !self.album.permission.allowAdd || self.album.isOwner
+        self.addItemButton.isHidden = !(self.album.permission.allowAdd || self.album.isOwner)
         
         self.accessoryView.reloadData()
         var image: UIImage?
