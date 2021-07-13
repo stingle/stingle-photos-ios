@@ -168,6 +168,15 @@
 "move_trash_file_alert_message" = "This file will be move to trash";
 "download_file" = "Download file";
 
+//MARK: - Settings
+
+"account" = "Account";
+"security" = "Security";
+"backup" = "Backup";
+"import" = "Import";
+"appearance" = "Appearance";
+"advanced" = "Advanced";
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";

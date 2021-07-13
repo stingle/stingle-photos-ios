@@ -1,13 +1,13 @@
 //
-//  STBackupPhraseVC.swift
+//  STAccountVC.swift
 //  Stingle
 //
-//  Created by Khoren Asatryan on 4/6/21.
+//  Created by Khoren Asatryan on 7/14/21.
 //
 
 import UIKit
 
-class STBackupPhraseVC: UIViewController {
+class STAccountVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,6 +15,5 @@ class STBackupPhraseVC: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-
 
 }

@@ -1,20 +1,18 @@
 //
-//  STBackupPhraseVC.swift
+//  STSecurityVC.swift
 //  Stingle
 //
-//  Created by Khoren Asatryan on 4/6/21.
+//  Created by Khoren Asatryan on 7/14/21.
 //
 
 import UIKit
 
-class STBackupPhraseVC: UIViewController {
+class STSecurityVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
-    
-
 
 }

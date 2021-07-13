@@ -1,13 +1,13 @@
 //
-//  STBackupPhraseVC.swift
+//  STBackupVC.swift
 //  Stingle
 //
-//  Created by Khoren Asatryan on 4/6/21.
+//  Created by Khoren Asatryan on 7/14/21.
 //
 
 import UIKit
 
-class STBackupPhraseVC: UIViewController {
+class STBackupVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
