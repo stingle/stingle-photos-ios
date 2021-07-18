@@ -85,6 +85,8 @@
 "delete_all" = "Delete All";
 "recover_all" = "Recover All";
 
+"others" = "Others";
+
 //MARK: - Share
 
 "share_via_stingle_photos" = "Share";
@@ -177,6 +179,19 @@
 "appearance" = "Appearance";
 "advanced" = "Advanced";
 
+"lock_up_the_app_after" = "Lock up the app after";
+
+"app_access" = "App access";
+"authentication" = "Authentication";
+
+"biometric_authentication" = "Biometric authentication";
+"biometric_authentication_message" = "Use biometrics to unlock Stingle Photos";
+
+"require_confirmation" = "Require confirmation";
+"require_confirmation_message" = "Press confirm button after face button";
+
+"disallow_screenshots_off_this_app" = "Disallow screenshots off this app";
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";
@@ -186,6 +201,14 @@
 "menu_settings" = "Settings";
 "menu_official_website" = "Official website";
 "menu_sign_out" = "Sign Out";
+
+//MARK: - Time
+
+"immediately" = "immediately";
+"seconds_count" = "%@ seconds";
+"minute" = "minute";
+"minutes_count" = "%@ minutes";
+"hour" = "hour";
 
 //MARK: - Sync
 

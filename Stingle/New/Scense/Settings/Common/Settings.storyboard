@@ -6,7 +6,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -132,7 +131,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="d9H-Ij-Xbj"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                     </view>
                     <navigationItem key="navigationItem" title="Advanced" id="uRz-ag-6sG"/>
                 </viewController>
@@ -148,7 +147,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="a0d-bR-Xuc"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                     </view>
                     <navigationItem key="navigationItem" id="RWA-hY-ZvW"/>
                 </viewController>
@@ -163,10 +162,29 @@
                     <view key="view" contentMode="scaleToFill" id="lOm-Po-dNg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="r3q-xC-z9N">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" name="STBackground"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="RGb-0n-Xsw" id="AA4-Ps-Svx"/>
+                                    <outlet property="delegate" destination="RGb-0n-Xsw" id="dsk-HK-Eow"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Bb2-H6-Knn"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="r3q-xC-z9N" secondAttribute="trailing" id="4eA-BO-bHM"/>
+                            <constraint firstItem="r3q-xC-z9N" firstAttribute="top" secondItem="lOm-Po-dNg" secondAttribute="top" id="GA6-2h-Mf4"/>
+                            <constraint firstAttribute="bottom" secondItem="r3q-xC-z9N" secondAttribute="bottom" id="pf4-xA-M8R"/>
+                            <constraint firstItem="r3q-xC-z9N" firstAttribute="leading" secondItem="lOm-Po-dNg" secondAttribute="leading" id="rBV-Gp-vJc"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="lC5-hC-FtX"/>
+                    <connections>
+                        <outlet property="tableView" destination="r3q-xC-z9N" id="Flf-Rz-JvH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sus-by-ENY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -180,7 +198,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="lw2-Nn-oP4"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                     </view>
                     <navigationItem key="navigationItem" id="hWQ-4P-cFs"/>
                 </viewController>
@@ -196,7 +214,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="Sd8-zv-NCX"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                     </view>
                     <navigationItem key="navigationItem" id="EV9-M4-Lrc"/>
                 </viewController>
@@ -212,7 +230,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="JB4-7t-4BC"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                     </view>
                     <navigationItem key="navigationItem" id="Elk-ov-d4W"/>
                 </viewController>
@@ -228,7 +246,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="dYo-Dy-iVl"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                     </view>
                     <navigationItem key="navigationItem" title="BackupPhrase" id="SPC-AH-kna"/>
                 </viewController>
@@ -244,7 +262,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="2Ge-K5-Lr2"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                     </view>
                     <navigationItem key="navigationItem" id="1iI-x1-FG9"/>
                 </viewController>
@@ -311,8 +329,5 @@
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

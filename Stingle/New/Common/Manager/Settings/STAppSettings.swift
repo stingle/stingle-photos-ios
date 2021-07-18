@@ -12,6 +12,7 @@ extension STAppSettings {
     fileprivate struct Constance {
         static let settingsKey = "settingsKey"
         static let isDeleteFilesWhenMoving = "isDeleteFilesWhenMoving"
+        static let security = "securityKey"
     }
     
 }
@@ -23,7 +24,6 @@ class STAppSettings {
     static var settings: [String: Any] {
         set {
             self.userDefaults.setValue(newValue, forKey: Constance.settingsKey)
-            
         } get {
             return self.userDefaults.dictionary(forKey: Constance.settingsKey) ?? [String: Any]()
         }
@@ -35,9 +35,19 @@ class STAppSettings {
         } get {
             return self.settings[Constance.isDeleteFilesWhenMoving] as? Bool ?? true
         }
-        
     }
     
+    static var security: Security {
+        set {
+            let json = newValue.toJson()
+            self.settings[Constance.isDeleteFilesWhenMoving] = json
+        } get {
+            guard let json = self.settings[Constance.isDeleteFilesWhenMoving], let result = Security(from: json) else {
+                return .default
+            }
+            return result
+        }
         
-    
+    }
+            
 }
