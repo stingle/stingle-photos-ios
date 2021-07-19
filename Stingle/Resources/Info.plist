@@ -65,6 +65,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+    <key>NSFaceIDUsageDescription</key>
+    <string>Accessing sample keychain entry</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

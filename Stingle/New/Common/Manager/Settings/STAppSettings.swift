@@ -40,9 +40,9 @@ class STAppSettings {
     static var security: Security {
         set {
             let json = newValue.toJson()
-            self.settings[Constance.isDeleteFilesWhenMoving] = json
+            self.settings[Constance.security] = json
         } get {
-            guard let json = self.settings[Constance.isDeleteFilesWhenMoving], let result = Security(from: json) else {
+            guard let json = self.settings[Constance.security], let result = Security(from: json) else {
                 return .default
             }
             return result

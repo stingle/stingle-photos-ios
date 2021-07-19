@@ -16,7 +16,7 @@ extension STAppSettings {
         var disallowScreenshots: Bool
         
         static var `default`: Security {
-            let auth = BiometricAuthentication(touchID: true, requireConfirmation: false)
+            let auth = BiometricAuthentication(touchID: false, requireConfirmation: false)
             let result = Security(lockUpApp: .minute, authentication: auth, disallowScreenshots: false)
             return result
         }

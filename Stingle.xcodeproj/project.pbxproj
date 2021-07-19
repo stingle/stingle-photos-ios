@@ -162,6 +162,8 @@
 		A05D2691261B48A6008E9CF8 /* STMenuMasterHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A05D2690261B48A6008E9CF8 /* STMenuMasterHeaderView.xib */; };
 		A05D2697261B5751008E9CF8 /* STMenuMasterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D2695261B5751008E9CF8 /* STMenuMasterTableViewCell.swift */; };
 		A05D2698261B5751008E9CF8 /* STMenuMasterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A05D2696261B5751008E9CF8 /* STMenuMasterTableViewCell.xib */; };
+		A05F9DD126A60E6900F9F343 /* STKeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05F9DD026A60E6900F9F343 /* STKeyChainService.swift */; };
+		A05F9DD326A6155C00F9F343 /* STBiometricAuthServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05F9DD226A6155C00F9F343 /* STBiometricAuthServices.swift */; };
 		A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */; };
 		A0623F3825F41EBB0018D378 /* STLibraryDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */; };
 		A062E0E9264C7FC3000B3595 /* STFileImageRetryer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A062E0E8264C7FC3000B3595 /* STFileImageRetryer.swift */; };
@@ -484,6 +486,8 @@
 		A05D2690261B48A6008E9CF8 /* STMenuMasterHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STMenuMasterHeaderView.xib; sourceTree = "<group>"; };
 		A05D2695261B5751008E9CF8 /* STMenuMasterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMenuMasterTableViewCell.swift; sourceTree = "<group>"; };
 		A05D2696261B5751008E9CF8 /* STMenuMasterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STMenuMasterTableViewCell.xib; sourceTree = "<group>"; };
+		A05F9DD026A60E6900F9F343 /* STKeyChainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STKeyChainService.swift; sourceTree = "<group>"; };
+		A05F9DD226A6155C00F9F343 /* STBiometricAuthServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBiometricAuthServices.swift; sourceTree = "<group>"; };
 		A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryAlbumFile.swift; sourceTree = "<group>"; };
 		A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryDelete.swift; sourceTree = "<group>"; };
 		A062E0E8264C7FC3000B3595 /* STFileImageRetryer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileImageRetryer.swift; sourceTree = "<group>"; };
@@ -1341,6 +1345,8 @@
 			isa = PBXGroup;
 			children = (
 				A086FD8925F5A9ED00A8BC9C /* STApplication.swift */,
+				A05F9DD026A60E6900F9F343 /* STKeyChainService.swift */,
+				A05F9DD226A6155C00F9F343 /* STBiometricAuthServices.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -2366,6 +2372,7 @@
 				A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */,
 				A022049025EEDC0400D07C98 /* STConstants.swift in Sources */,
 				A022048B25EEDC0400D07C98 /* EventManager.swift in Sources */,
+				A05F9DD326A6155C00F9F343 /* STBiometricAuthServices.swift in Sources */,
 				A0FD3F3B26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift in Sources */,
 				A001E6E6267CD8E900948E50 /* STGaleryFileViewerVM.swift in Sources */,
 				A08F0C202607D3B800E81826 /* STJSONNetworkOperation.swift in Sources */,
@@ -2471,6 +2478,7 @@
 				A0D65DF9269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift in Sources */,
 				A022049D25EEDC0400D07C98 /* Localize.swift in Sources */,
 				A0028650260B8121004C0934 /* STDownloaderOperation.swift in Sources */,
+				A05F9DD126A60E6900F9F343 /* STKeyChainService.swift in Sources */,
 				A022049425EEDC0400D07C98 /* Date+Operation.swift in Sources */,
 				A09DF8882628DA6E00CDDA8E /* STDataBaseDataSource.swift in Sources */,
 				A086FD2925F5A10900A8BC9C /* STCDFile.swift in Sources */,

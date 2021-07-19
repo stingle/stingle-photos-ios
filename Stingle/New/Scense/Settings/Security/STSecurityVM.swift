@@ -13,9 +13,17 @@ class STSecurityVM {
         return STAppSettings.security
     }()
     
+    lazy var biometric: STBiometricAuthServices = {
+        return STBiometricAuthServices()
+    }()
+    
     func update(biometricAuthentication isOn: Bool) {
         self.security.authentication.touchID = isOn
         STAppSettings.security = self.security
+        
+        self.biometric.unlockApp { error in
+            print("")
+        }
     }
     
     func update(requireConfirmation isOn: Bool) {

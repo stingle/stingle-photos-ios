@@ -57,8 +57,12 @@ class STSecurityVC: UIViewController {
     }
     
     private func generateAppAccessSection() -> Section {
-        let touchId = STSecuritySwichTableViewCell.Model(itemType: .biometricAuthentication, image: UIImage(named: "ic_touch_id")!, title: "biometric_authentication".localized, subTitle: "biometric_authentication_message".localized, isOn: self.security.authentication.touchID, isEnabled: true)
-        let confirmation = STSecuritySwichTableViewCell.Model(itemType: .requireConfirmation, image: UIImage(named: "ic_mark")!, title: "require_confirmation".localized, subTitle: "require_confirmation_message".localized, isOn: self.security.authentication.requireConfirmation, isEnabled: false)
+        
+        let hasBiometric = self.viewModel.biometric.state != .notAvailable        
+        let touchId = STSecuritySwichTableViewCell.Model(itemType: .biometricAuthentication, image: UIImage(named: "ic_touch_id")!, title: "biometric_authentication".localized, subTitle: "biometric_authentication_message".localized, isOn: self.security.authentication.touchID && hasBiometric, isEnabled: hasBiometric)
+        
+        let confirmation = STSecuritySwichTableViewCell.Model(itemType: .requireConfirmation, image: UIImage(named: "ic_mark")!, title: "require_confirmation".localized, subTitle: "require_confirmation_message".localized, isOn: self.security.authentication.requireConfirmation && hasBiometric, isEnabled: hasBiometric)
+        
         let section = Section(sectionType: .authentication, items: [touchId, confirmation])
         return section
     }
