@@ -43,11 +43,15 @@ class STSecurityVC: UIViewController {
         self.reloadTableData()
     }
     
-    private func reloadTableData() {
+    private func reloadTableDataModels() {
         let authentication = self.generateAuthenticationSection()
         let appAccess = self.generateAppAccessSection()
         let others = self.generateOthersSection()
         self.sections = [authentication, appAccess, others]
+    }
+    
+    private func reloadTableData() {
+        self.reloadTableDataModels()
         self.tableView.reloadData()
     }
     
@@ -58,10 +62,13 @@ class STSecurityVC: UIViewController {
     
     private func generateAppAccessSection() -> Section {
         
-        let hasBiometric = self.viewModel.biometric.state != .notAvailable        
-        let touchId = STSecuritySwichTableViewCell.Model(itemType: .biometricAuthentication, image: UIImage(named: "ic_touch_id")!, title: "biometric_authentication".localized, subTitle: "biometric_authentication_message".localized, isOn: self.security.authentication.touchID && hasBiometric, isEnabled: hasBiometric)
+        let hasBiometric = self.viewModel.biometric.state != .notAvailable
+        let hasBiometricAuthInApp = hasBiometric && self.viewModel.biometric.canUnlockApp
         
-        let confirmation = STSecuritySwichTableViewCell.Model(itemType: .requireConfirmation, image: UIImage(named: "ic_mark")!, title: "require_confirmation".localized, subTitle: "require_confirmation_message".localized, isOn: self.security.authentication.requireConfirmation && hasBiometric, isEnabled: hasBiometric)
+        let imageName = self.viewModel.biometric.type == .faceID ? "ic_face_id" : "ic_touch_id"
+        let touchId = STSecuritySwichTableViewCell.Model(itemType: .biometricAuthentication, image: UIImage(named: imageName)!, title: "biometric_authentication".localized, subTitle: "biometric_authentication_message".localized, isOn: self.security.authentication.unlock && hasBiometricAuthInApp, isEnabled: hasBiometric)
+        
+        let confirmation = STSecuritySwichTableViewCell.Model(itemType: .requireConfirmation, image: UIImage(named: "ic_mark")!, title: "require_confirmation".localized, subTitle: "require_confirmation_message".localized, isOn: self.security.authentication.requireConfirmation && hasBiometricAuthInApp, isEnabled: hasBiometric)
         
         let section = Section(sectionType: .authentication, items: [touchId, confirmation])
         return section
@@ -89,7 +96,37 @@ class STSecurityVC: UIViewController {
         }
         self.showDetailViewController(alert, sender: nil)
     }
-
+    
+    private func addBiometricAuth(password: String?) {
+        guard let password = password, !password.isEmpty else {
+            self.showOkCancelAlert(title: "warning".localized, message: "error_password_not_valed".localized)
+            return
+        }
+        let loadingView: UIView =  self.navigationController?.view ?? self.view
+        STLoadingView.show(in: loadingView)
+        self.viewModel.add(biometricAuthentication: password) { [weak self] error in
+            if let error = error {
+                self?.showError(error: error)
+                self?.reloadTableData()
+            } else {
+                self?.reloadTableDataModels()
+            }
+            STLoadingView.hide(in: loadingView)
+        }
+    }
+    
+    private func addBiometricAuth() {
+        let title = "enter_app_password".localized
+        self.showOkCancelAlert(title: title, message: nil) { textField in
+            textField.placeholder = "password".localized
+            textField.isSecureTextEntry = true
+        } handler: { [weak self] text in
+            self?.addBiometricAuth(password: text)
+        } cancel: { [weak self] in
+            self?.reloadTableData()
+        }
+    }
+    
 }
 
 extension STSecurityVC: UITableViewDataSource {
@@ -158,10 +195,14 @@ extension STSecurityVC: STSecurityVCTableViewCellDelegate {
         case .lockUp:
             return
         case .biometricAuthentication:
-            var touchId = (model as! STSecuritySwichTableViewCell.Model)
-            touchId.isOn = isOn
-            self.sections[indexPath.section].items[indexPath.row] = touchId
-            self.viewModel.update(biometricAuthentication: isOn)
+            if isOn {
+                self.addBiometricAuth()
+            } else {
+                var touchId = (model as! STSecuritySwichTableViewCell.Model)
+                touchId.isOn = isOn
+                self.sections[indexPath.section].items[indexPath.row] = touchId
+                self.viewModel.removeBiometricAuthentication()
+            }
         case .requireConfirmation:
             var touchId = (model as! STSecuritySwichTableViewCell.Model)
             touchId.isOn = isOn

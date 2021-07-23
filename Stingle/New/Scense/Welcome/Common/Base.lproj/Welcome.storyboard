@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CXM-lh-l29">
-    <device id="retina6_7" orientation="portrait" appearance="light"/>
+    <device id="retina6_0" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -20,17 +20,17 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="STLandingVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="02m-fv-OJi">
-                                <rect key="frame" x="0.0" y="153" width="428" height="712"/>
+                                <rect key="frame" x="0.0" y="139.66666666666669" width="390" height="643.33333333333326"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SgF-TV-yfY">
-                                        <rect key="frame" x="0.0" y="593" width="428" height="99"/>
+                                        <rect key="frame" x="0.0" y="524.33333333333337" width="390" height="99"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZH5-tE-YJu">
-                                                <rect key="frame" x="86" y="20" width="256" height="36"/>
+                                                <rect key="frame" x="67" y="20" width="256" height="36"/>
                                                 <color key="backgroundColor" name="STPrimary"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="256" id="C98-Xe-OM3"/>
@@ -45,12 +45,12 @@
                                                 </connections>
                                             </button>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="XsN-rh-uqI">
-                                                <rect key="frame" x="101.00000000000001" y="62" width="226.33333333333337" height="29"/>
+                                                <rect key="frame" x="82.000000000000014" y="62" width="226.33333333333337" height="29"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Already  have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i67-Mc-OOU">
                                                         <rect key="frame" x="0.0" y="0.0" width="169.33333333333334" height="29"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" name="STText"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mgN-bI-81S">
@@ -66,7 +66,7 @@
                                                 </subviews>
                                             </stackView>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="ZH5-tE-YJu" firstAttribute="top" secondItem="SgF-TV-yfY" secondAttribute="top" constant="20" id="4aX-Lr-fj5"/>
                                             <constraint firstItem="ZH5-tE-YJu" firstAttribute="centerX" secondItem="SgF-TV-yfY" secondAttribute="centerX" id="8gN-ro-d5u"/>
@@ -80,14 +80,14 @@
                                         </constraints>
                                     </view>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jjx-5q-gGD">
-                                        <rect key="frame" x="0.0" y="0.0" width="428" height="585"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="516.33333333333337"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <segue destination="jwt-OL-k5N" kind="embed" id="EFz-Ih-3oK"/>
                                         </connections>
                                     </containerView>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" name="STBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="SgF-TV-yfY" secondAttribute="bottom" constant="20" symbolic="YES" id="0NY-GQ-lZN"/>
                                     <constraint firstAttribute="trailing" secondItem="SgF-TV-yfY" secondAttribute="trailing" id="UEM-Oo-TCe"/>
@@ -101,7 +101,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="STBackground"/>
                         <constraints>
                             <constraint firstItem="02m-fv-OJi" firstAttribute="height" secondItem="6Tk-OE-BBY" secondAttribute="height" multiplier="477:568" id="3lz-m6-jTl"/>
                             <constraint firstItem="02m-fv-OJi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AKH-gL-1uE"/>
@@ -119,28 +119,28 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="330" y="-17"/>
+            <point key="canvasLocation" x="329.23076923076923" y="-17.061611374407583"/>
         </scene>
         <!--Sign Up-->
         <scene sceneID="OZA-R6-evH">
             <objects>
                 <tableViewController storyboardIdentifier="SignUpVC" title="Sign Up" id="tey-I4-8sm" customClass="STSignUpVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="100" sectionHeaderHeight="120" sectionFooterHeight="1" id="okH-iI-7fd">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
                             <tableViewSection id="W1v-PC-Fyy">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="130" id="H62-Wj-9kc">
-                                        <rect key="frame" x="0.0" y="24.333333969116211" width="428" height="130"/>
+                                        <rect key="frame" x="0.0" y="24.333333969116211" width="390" height="130"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="H62-Wj-9kc" id="lqN-K9-MbC">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="130"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="130"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cc-JH-4tF">
-                                                    <rect key="frame" x="16" y="22" width="396" height="117"/>
+                                                    <rect key="frame" x="16" y="22" width="358" height="150.66666666666666"/>
                                                     <string key="text">Please choose your master password. While no limit
 is put on what you can enter here, it is strongly advised
 that your password has at least 12 characters and contains 
@@ -148,7 +148,7 @@ lowercase and uppercase letters, digits and special symbols.
 If your password is not secure enough then your photosvideos
 may be vulnerable to brute force attacks.</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="0.87" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="STText"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -161,26 +161,26 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="Wml-Wp-IWm">
-                                        <rect key="frame" x="0.0" y="154.33333396911621" width="428" height="94"/>
+                                        <rect key="frame" x="0.0" y="154.33333396911621" width="390" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Wml-Wp-IWm" id="Ddd-xy-D3p">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="94"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yTq-Wo-xGu" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="396" height="40"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yTq-Wo-xGu" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="18" width="358" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="BOT-ek-TcD"/>
                                                     </constraints>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <color key="textColor" name="STText"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                            <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="underlineColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="selectedUnderlineColor">
                                                             <color key="value" name="STPrimary"/>
@@ -200,26 +200,26 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="79" id="3a0-mM-RtJ">
-                                        <rect key="frame" x="0.0" y="248.33333396911621" width="428" height="79"/>
+                                        <rect key="frame" x="0.0" y="248.33333396911621" width="390" height="79"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3a0-mM-RtJ" id="vcp-ys-hCv">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="79"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hFL-fg-WsP" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="396" height="40"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hFL-fg-WsP" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="18" width="358" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="VTf-m6-AfL"/>
                                                     </constraints>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <color key="textColor" name="STText"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="next" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                            <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="underlineColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="selectedUnderlineColor">
                                                             <color key="value" name="STPrimary"/>
@@ -239,26 +239,26 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="99" id="pIe-1Y-0SP">
-                                        <rect key="frame" x="0.0" y="327.33333396911621" width="428" height="99"/>
+                                        <rect key="frame" x="0.0" y="327.33333396911621" width="390" height="99"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pIe-1Y-0SP" id="jTe-HT-PKX">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="99"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LwS-on-PRS" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="396" height="40"/>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LwS-on-PRS" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="18" width="358" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="kJx-vP-SbF"/>
                                                     </constraints>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <color key="textColor" name="STText"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                            <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="underlineColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="selectedUnderlineColor">
                                                             <color key="value" name="STPrimary"/>
@@ -278,10 +278,10 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="77" id="h8R-AL-IQS">
-                                        <rect key="frame" x="0.0" y="426.33333396911621" width="428" height="77"/>
+                                        <rect key="frame" x="0.0" y="426.33333396911621" width="390" height="77"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="h8R-AL-IQS" id="jIp-ZT-UUV">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="77"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="77"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yyw-JV-l6l">
@@ -291,7 +291,7 @@ may be vulnerable to brute force attacks.</string>
                                                     <inset key="contentEdgeInsets" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     <inset key="imageEdgeInsets" minX="-30" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     <state key="normal" title="Advanced" image="arrowtriangle.right.fill" catalog="system">
-                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="titleColor" name="STText"/>
                                                     </state>
                                                     <connections>
                                                         <action selector="didSelectAdvancedButton:" destination="tey-I4-8sm" eventType="touchUpInside" id="FZV-o1-SsD"/>
@@ -307,17 +307,17 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="46" id="ZUm-3f-761">
-                                        <rect key="frame" x="0.0" y="503.33333396911621" width="428" height="46"/>
+                                        <rect key="frame" x="0.0" y="503.33333396911621" width="390" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZUm-3f-761" id="ZTP-vW-OE8">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="46"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="46"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="78K-JV-W32">
-                                                    <rect key="frame" x="16" y="8" width="396" height="38"/>
+                                                    <rect key="frame" x="16" y="8" width="358" height="38"/>
                                                     <subviews>
                                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p38-Pc-4ec">
-                                                            <rect key="frame" x="347" y="3.6666666666666643" width="51" height="31"/>
+                                                            <rect key="frame" x="309" y="3.6666666666666643" width="51" height="31"/>
                                                         </switch>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAT-4l-uwz">
                                                             <rect key="frame" x="0.0" y="0.0" width="166" height="38"/>
@@ -325,7 +325,7 @@ may be vulnerable to brute force attacks.</string>
                                                             <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                                                             <inset key="imageEdgeInsets" minX="-8" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                             <state key="normal" title="Backup my keys" image="info.circle.fill" catalog="system">
-                                                                <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <color key="titleColor" name="STText"/>
                                                             </state>
                                                             <connections>
                                                                 <action selector="didSelectbackupMyKeysButton:" destination="tey-I4-8sm" eventType="touchUpInside" id="xeG-NL-S1U"/>
@@ -354,14 +354,14 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="126" id="tlO-rd-9fc">
-                                        <rect key="frame" x="0.0" y="549.33333396911621" width="428" height="126"/>
+                                        <rect key="frame" x="0.0" y="549.33333396911621" width="390" height="126"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tlO-rd-9fc" id="lh0-cZ-dwM">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="126"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="126"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2X-Wc-yRK">
-                                                    <rect key="frame" x="16" y="18" width="396" height="36"/>
+                                                    <rect key="frame" x="16" y="18" width="358" height="36"/>
                                                     <color key="backgroundColor" name="STPrimary"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="36" id="gqY-ef-vzw"/>
@@ -374,12 +374,12 @@ may be vulnerable to brute force attacks.</string>
                                                     </connections>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fnF-rr-Svb">
-                                                    <rect key="frame" x="93" y="70" width="242" height="29"/>
+                                                    <rect key="frame" x="74" y="70" width="242" height="29"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Already  have an account?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBb-l9-uvf">
                                                             <rect key="frame" x="0.0" y="0.0" width="190" height="29"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="textColor" name="STText"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ypJ-I1-wYL">
@@ -467,27 +467,28 @@ may be vulnerable to brute force attacks.</string>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="landing_trust_no_one" translatesAutoresizingMaskIntoConstraints="NO" id="vAT-Ht-ATw">
                                 <rect key="frame" x="0.0" y="0.0" width="350" height="235"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="201" id="Mqv-nl-Q2j"/>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="235" id="WZS-zu-rV3"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trust no one Encryption" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hVr-AI-7Uy">
-                                <rect key="frame" x="63.333333333333329" y="243" width="223.33333333333337" height="24"/>
+                                <rect key="frame" x="63.666666666666657" y="243" width="222.99999999999997" height="24"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.87" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" name="STText"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="252" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hdd-Vx-4F0">
                                 <rect key="frame" x="32" y="277" width="286" height="83"/>
                                 <string key="text">Your data yours and only yours. Nobody except you can see it. Even we as a provider, our cloud provider, government or any other entity can't see your data. It's always encrypted and secure!</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" white="0.0" alpha="0.86750856164383561" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" name="STText"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ACE-TS-A3c"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" name="STBackground"/>
                         <constraints>
                             <constraint firstItem="vAT-Ht-ATw" firstAttribute="top" secondItem="je7-6X-zfq" secondAttribute="top" id="IHo-qu-NVJ"/>
                             <constraint firstItem="Hdd-Vx-4F0" firstAttribute="trailing" secondItem="je7-6X-zfq" secondAttribute="trailing" constant="-32" id="MdM-1c-mNf"/>
@@ -521,7 +522,7 @@ may be vulnerable to brute force attacks.</string>
             <objects>
                 <navigationController id="QTr-pJ-YWD" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="6fl-5b-sqd">
-                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="barTintColor" name="STPrimary"/>
@@ -536,18 +537,18 @@ may be vulnerable to brute force attacks.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MEN-Ma-wn0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-593" y="-17"/>
+            <point key="canvasLocation" x="-525" y="-173"/>
         </scene>
         <!--MainVC-->
         <scene sceneID="rnq-br-JtG">
             <objects>
                 <viewController id="CXM-lh-l29" customClass="STMainVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gKb-NH-oSt">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_app_logo_rounded" translatesAutoresizingMaskIntoConstraints="NO" id="SBQ-zd-bq8">
-                                <rect key="frame" x="107" y="236.66666666666663" width="214" height="463"/>
+                                <rect key="frame" x="97.666666666666686" y="216" width="195" height="422"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mSV-rl-AUc"/>
@@ -566,11 +567,113 @@ may be vulnerable to brute force attacks.</string>
                     <connections>
                         <segue destination="QTr-pJ-YWD" kind="custom" identifier="goToAuth" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" animates="NO" id="iCp-gZ-uKM"/>
                         <segue destination="XhX-E3-oy5" kind="custom" identifier="goToApp" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" animates="NO" id="es5-rA-LwU"/>
+                        <segue destination="wE9-QO-UYB" kind="custom" identifier="goToLock" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" animates="NO" id="f77-Sm-OFl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AJx-iw-Bc1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1601" y="-17"/>
+        </scene>
+        <!--Unlock AppVC-->
+        <scene sceneID="Me7-Qv-Epp">
+            <objects>
+                <viewController storyboardIdentifier="STUnlockAppVCID" id="wE9-QO-UYB" customClass="STUnlockAppVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ez5-sI-D75">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="pN1-nC-517">
+                                <rect key="frame" x="60" y="329.66666666666674" width="270" height="396.33333333333326"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="ic_app_logo_rounded" translatesAutoresizingMaskIntoConstraints="NO" id="MhB-3j-nbs">
+                                        <rect key="frame" x="37.666666666666686" y="0.0" width="195" height="195"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="MhB-3j-nbs" secondAttribute="height" id="qFS-8H-Xgx"/>
+                                        </constraints>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OTm-Nu-9Kn">
+                                        <rect key="frame" x="125" y="194.99999999999994" width="20" height="84.333333333333314"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" priority="250" id="OQR-gW-aZO"/>
+                                            <constraint firstAttribute="width" constant="20" id="cAG-Oy-t1g"/>
+                                        </constraints>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" verticalHuggingPriority="254" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7wL-14-1V3" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                        <rect key="frame" x="107" y="279.33333333333331" width="56" height="56"/>
+                                        <color key="tintColor" name="STSecondaryText"/>
+                                        <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                                        <state key="normal" image="ic_face_id"/>
+                                        <connections>
+                                            <action selector="didBiometricAuthButton:" destination="wE9-QO-UYB" eventType="touchUpInside" id="E4t-25-82G"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="LabelLabelLa LabelLabelLabelLabelLabelLa LabelLabelLabelLabelLabelLa L" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xHG-4w-N2d">
+                                        <rect key="frame" x="15.666666666666671" y="335.33333333333331" width="238.66666666666663" height="61"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <variation key="heightClass=compact-widthClass=compact" spacing="5"/>
+                                <variation key="heightClass=compact-widthClass=regular" spacing="5"/>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="FV7-aq-EE7">
+                                <rect key="frame" x="66.666666666666686" y="746" width="257" height="44"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="252" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ogb-HM-5xP" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="106" height="44"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
+                                        <inset key="contentEdgeInsets" minX="20" minY="10" maxX="20" maxY="10"/>
+                                        <state key="normal" title="Log out">
+                                            <color key="titleColor" name="STText"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didSelectLogOutButton:" destination="wE9-QO-UYB" eventType="touchUpInside" id="yRc-Eg-wnA"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="252" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cCz-Wd-5mk" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                        <rect key="frame" x="156" y="0.0" width="101" height="44"/>
+                                        <color key="backgroundColor" name="STPrimary"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
+                                        <inset key="contentEdgeInsets" minX="20" minY="10" maxX="20" maxY="10"/>
+                                        <state key="normal" title="Unlock">
+                                            <color key="titleColor" name="STMenuBackground"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didSelectUnlockButton:" destination="wE9-QO-UYB" eventType="touchUpInside" id="tHU-RB-dPr"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="4Ie-xh-iYA"/>
+                        <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstItem="pN1-nC-517" firstAttribute="leading" secondItem="4Ie-xh-iYA" secondAttribute="leading" constant="60" id="9WP-B5-dwl"/>
+                            <constraint firstItem="FV7-aq-EE7" firstAttribute="centerX" secondItem="4Ie-xh-iYA" secondAttribute="centerX" id="SoK-gs-rRx"/>
+                            <constraint firstItem="4Ie-xh-iYA" firstAttribute="bottom" secondItem="FV7-aq-EE7" secondAttribute="bottom" constant="20" id="WFK-2W-WWK"/>
+                            <constraint firstItem="4Ie-xh-iYA" firstAttribute="trailing" secondItem="pN1-nC-517" secondAttribute="trailing" constant="60" id="edc-vW-cwg"/>
+                            <constraint firstItem="FV7-aq-EE7" firstAttribute="top" secondItem="pN1-nC-517" secondAttribute="bottom" constant="20" id="iUt-mK-8gZ"/>
+                            <constraint firstItem="FV7-aq-EE7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="4Ie-xh-iYA" secondAttribute="leading" constant="20" id="jnx-gO-IJ9"/>
+                            <constraint firstItem="pN1-nC-517" firstAttribute="centerX" secondItem="4Ie-xh-iYA" secondAttribute="centerX" id="l5m-fd-qDK"/>
+                            <constraint firstItem="MhB-3j-nbs" firstAttribute="centerY" relation="lessThanOrEqual" secondItem="4Ie-xh-iYA" secondAttribute="centerY" id="r8B-0f-SMc"/>
+                            <constraint firstItem="MhB-3j-nbs" firstAttribute="width" relation="lessThanOrEqual" secondItem="ez5-sI-D75" secondAttribute="width" multiplier="0.5" id="s5V-4h-qeM"/>
+                            <constraint firstItem="4Ie-xh-iYA" firstAttribute="top" relation="lessThanOrEqual" secondItem="pN1-nC-517" secondAttribute="top" constant="-20" id="tIX-DH-ulK"/>
+                            <constraint firstItem="4Ie-xh-iYA" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="FV7-aq-EE7" secondAttribute="trailing" constant="20" id="v5m-YA-kgE"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="biometricAuthButton" destination="7wL-14-1V3" id="tVq-h3-dHP"/>
+                        <outlet property="descriptionLabel" destination="xHG-4w-N2d" id="Fca-8I-m4h"/>
+                        <outlet property="logOutButton" destination="Ogb-HM-5xP" id="dyc-fk-AZQ"/>
+                        <outlet property="unlockButton" destination="cCz-Wd-5mk" id="bpV-OA-jBn"/>
+                        <segue destination="XhX-E3-oy5" kind="custom" identifier="goToHome" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" id="rwf-aD-Uca"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9i2-xT-5dZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1604.3478260869567" y="762.22826086956525"/>
         </scene>
         <!--Home-->
         <scene sceneID="JLc-Aj-7nN">
@@ -585,33 +688,33 @@ may be vulnerable to brute force attacks.</string>
             <objects>
                 <tableViewController storyboardIdentifier="SignInVC" title="Sign In" id="bwc-ry-oA2" customClass="SignInVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="100" sectionHeaderHeight="120" sectionFooterHeight="1" id="2nB-By-Nbg">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
                             <tableViewSection id="qL5-12-ZHl">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="5Wg-0L-P2Q">
-                                        <rect key="frame" x="0.0" y="24.333333969116211" width="428" height="94"/>
+                                        <rect key="frame" x="0.0" y="24.333333969116211" width="390" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Wg-0L-P2Q" id="P6u-m2-LGl">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="94"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="W7y-BA-ely" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="396" height="40"/>
+                                                    <rect key="frame" x="16" y="18" width="358" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="nTS-EU-lLv"/>
                                                     </constraints>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <color key="textColor" name="STText"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                            <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="underlineColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="selectedUnderlineColor">
                                                             <color key="value" name="STPrimary"/>
@@ -631,26 +734,26 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="149" id="isY-Kr-8IE">
-                                        <rect key="frame" x="0.0" y="118.33333396911621" width="428" height="149"/>
+                                        <rect key="frame" x="0.0" y="118.33333396911621" width="390" height="149"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="isY-Kr-8IE" id="roS-Pd-6Lb">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="149"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="149"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GOP-25-xwS" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="396" height="40"/>
+                                                    <rect key="frame" x="16" y="18" width="358" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="9pk-Mm-iRU"/>
                                                     </constraints>
-                                                    <color key="textColor" systemColor="darkTextColor"/>
+                                                    <color key="textColor" name="STText"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES" secureTextEntry="YES" textContentType="password"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
-                                                            <color key="value" white="0.0" alpha="0.38" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="underlineColor">
-                                                            <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="value" name="STPlaceholder"/>
                                                         </userDefinedRuntimeAttribute>
                                                         <userDefinedRuntimeAttribute type="color" keyPath="selectedUnderlineColor">
                                                             <color key="value" name="STPrimary"/>
@@ -661,7 +764,7 @@ may be vulnerable to brute force attacks.</string>
                                                     </connections>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PgK-RT-3xF">
-                                                    <rect key="frame" x="285" y="68" width="127" height="63"/>
+                                                    <rect key="frame" x="247" y="68" width="127" height="63"/>
                                                     <state key="normal" title="Forgot  password?">
                                                         <color key="titleColor" red="0.71764705880000002" green="0.10980392160000001" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
@@ -679,14 +782,14 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="126" id="gcA-yl-epF">
-                                        <rect key="frame" x="0.0" y="267.33333396911621" width="428" height="126"/>
+                                        <rect key="frame" x="0.0" y="267.33333396911621" width="390" height="126"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gcA-yl-epF" id="fG3-rK-zQm">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="126"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="126"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2T-xJ-rr8">
-                                                    <rect key="frame" x="16" y="18" width="396" height="36"/>
+                                                    <rect key="frame" x="16" y="18" width="358" height="36"/>
                                                     <color key="backgroundColor" name="STPrimary"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="36" id="vik-T7-Cgf"/>
@@ -699,16 +802,16 @@ may be vulnerable to brute force attacks.</string>
                                                     </connections>
                                                 </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DAZ-2P-wgV">
-                                                    <rect key="frame" x="103.66666666666667" y="70" width="220.66666666666663" height="29"/>
+                                                    <rect key="frame" x="84.666666666666686" y="70" width="221" height="29"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Don't have an accout?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BH-MR-IFq">
-                                                            <rect key="frame" x="0.0" y="0.0" width="161.66666666666666" height="29"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="162" height="29"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="textColor" name="STText"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wa1-6e-6hu">
-                                                            <rect key="frame" x="169.66666666666663" y="0.0" width="51" height="29"/>
+                                                            <rect key="frame" x="170" y="0.0" width="51" height="29"/>
                                                             <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="14"/>
                                                             <state key="normal" title="Sign Up">
                                                                 <color key="titleColor" name="STPrimary"/>
@@ -766,36 +869,58 @@ may be vulnerable to brute force attacks.</string>
         </scene>
     </scenes>
     <designables>
+        <designable name="7wL-14-1V3">
+            <size key="intrinsicContentSize" width="56" height="56"/>
+        </designable>
         <designable name="GOP-25-xwS">
             <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>
         </designable>
         <designable name="LwS-on-PRS">
-            <size key="intrinsicContentSize" width="146.33333333333334" height="22"/>
+            <size key="intrinsicContentSize" width="5" height="22"/>
+        </designable>
+        <designable name="Ogb-HM-5xP">
+            <size key="intrinsicContentSize" width="106" height="44"/>
         </designable>
         <designable name="W7y-BA-ely">
             <size key="intrinsicContentSize" width="43" height="23.333333333333332"/>
         </designable>
+        <designable name="cCz-Wd-5mk">
+            <size key="intrinsicContentSize" width="101" height="44"/>
+        </designable>
         <designable name="hFL-fg-WsP">
-            <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>
+            <size key="intrinsicContentSize" width="5" height="22"/>
         </designable>
         <designable name="yTq-Wo-xGu">
-            <size key="intrinsicContentSize" width="43" height="23.333333333333332"/>
+            <size key="intrinsicContentSize" width="5" height="23.333333333333332"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="es5-rA-LwU"/>
+        <segue reference="rwf-aD-Uca"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>
         <image name="ic_app_logo_rounded" width="512" height="512"/>
+        <image name="ic_face_id" width="40" height="40"/>
         <image name="info.circle.fill" catalog="system" width="128" height="121"/>
         <image name="landing_trust_no_one" width="191" height="235.33332824707031"/>
+        <namedColor name="STBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STMenuBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPlaceholder">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.15999999642372131" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="STPrimary">
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="darkTextColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <namedColor name="STSecondaryText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

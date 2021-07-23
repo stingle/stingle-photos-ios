@@ -8,7 +8,7 @@
 import Foundation
 
 class STSecurityVM {
-    
+        
     lazy var security: STAppSettings.Security = {
         return STAppSettings.security
     }()
@@ -17,12 +17,27 @@ class STSecurityVM {
         return STBiometricAuthServices()
     }()
     
-    func update(biometricAuthentication isOn: Bool) {
-        self.security.authentication.touchID = isOn
+    lazy var validator: STValidator = {
+        return STValidator()
+    }()
+    
+    func removeBiometricAuthentication() {
+        self.biometric.removeBiometricAuth()
+        self.security.authentication.unlock = true
         STAppSettings.security = self.security
-        
-        self.biometric.unlockApp { error in
-            print("")
+    }
+    
+    func add(biometricAuthentication password: String, completion: @escaping (IError?) -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.biometric.onBiometricAuth(password: password) {
+                STAppSettings.security.authentication.unlock = true
+                completion(nil)
+            } failure: { error in
+                completion(error)
+            }
         }
     }
     

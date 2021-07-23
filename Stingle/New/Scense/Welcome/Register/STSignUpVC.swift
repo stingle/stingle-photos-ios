@@ -4,6 +4,7 @@ class STSignUpVC: UITableViewController {
 	
 	private let viewModel = STSignUpVM()
 	private var hiddenCells = Set<CellType>()
+    private var appPassword: String?
 	
 	@IBOutlet weak private var emailTextField: UITextField!
 	@IBOutlet weak private var passwordTextField: UITextField!
@@ -60,6 +61,11 @@ class STSignUpVC: UITableViewController {
 		self.configurebBackBarButton()
 		self.configureLocalizable()
 	}
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        (segue.destination as? STMenuVC)?.appPassword = self.appPassword
+    }
 	
 	override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 		return 1
@@ -102,19 +108,19 @@ class STSignUpVC: UITableViewController {
 	//MARK: Private func
 	
 	private func register() {
-		
+        
 		self.tableView.endEditing(true)
-		
 		STLoadingView.show(in: self.navigationController?.view ?? self.view)
 		
 		let email = self.emailTextField.text
 		let passwort = self.passwordTextField.text
 		let includePrivateKey = self.includePrivateKeySwitch.isOn
 		
-		self.viewModel.registr(email: email, password: passwort, confirmPassword: self.confirmPasswordTextField.text, includePrivateKey: includePrivateKey) { [weak self] (registr) in
+		self.viewModel.registr(email: email, password: passwort, confirmPassword: self.confirmPasswordTextField.text, includePrivateKey: includePrivateKey) { [weak self] (user, appPassword) in
 			guard let weakSelf = self else {
 				return
 			}
+            weakSelf.appPassword = appPassword
 			STLoadingView.hide(in: weakSelf.navigationController?.view ?? weakSelf.view)
 			self?.performSegue(withIdentifier: "goToHome", sender: nil)
 		} failure: { [weak self] (error) in

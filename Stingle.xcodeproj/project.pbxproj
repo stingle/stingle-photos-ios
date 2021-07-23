@@ -135,6 +135,9 @@
 		A032096F26546275000C420B /* STVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032096E26546275000C420B /* STVideoView.swift */; };
 		A032097226546602000C420B /* STPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032097126546602000C420B /* STPlayer.swift */; };
 		A032097626547288000C420B /* STAVAssetResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032097526547288000C420B /* STAVAssetResourceLoader.swift */; };
+		A0355C7E26A8A8F9006BE2C4 /* STAppLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */; };
+		A0355C8126A8D084006BE2C4 /* STUnlockAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */; };
+		A0355C8326A8D094006BE2C4 /* STUnlockAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */; };
 		A040E21E269A356300003199 /* STGalleryTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A040E21D269A356300003199 /* STGalleryTabBarVC.swift */; };
 		A04219962690983C001FBFBF /* STTrashFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */; };
 		A042199926909E58001FBFBF /* STFileWorker+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = A042199826909E58001FBFBF /* STFileWorker+Download.swift */; };
@@ -459,6 +462,9 @@
 		A032096E26546275000C420B /* STVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVideoView.swift; sourceTree = "<group>"; };
 		A032097126546602000C420B /* STPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPlayer.swift; sourceTree = "<group>"; };
 		A032097526547288000C420B /* STAVAssetResourceLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAVAssetResourceLoader.swift; sourceTree = "<group>"; };
+		A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAppLocker.swift; sourceTree = "<group>"; };
+		A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVC.swift; sourceTree = "<group>"; };
+		A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVM.swift; sourceTree = "<group>"; };
 		A040E21D269A356300003199 /* STGalleryTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryTabBarVC.swift; sourceTree = "<group>"; };
 		A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashFileViewerVM.swift; sourceTree = "<group>"; };
 		A042199826909E58001FBFBF /* STFileWorker+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STFileWorker+Download.swift"; sourceTree = "<group>"; };
@@ -1113,6 +1119,7 @@
 		A022044525EEDC0300D07C98 /* Welcome */ = {
 			isa = PBXGroup;
 			children = (
+				A0355C7F26A8D063006BE2C4 /* Unlock */,
 				A022044625EEDC0300D07C98 /* Landing */,
 				A022044F25EEDC0300D07C98 /* Register */,
 				A022045225EEDC0400D07C98 /* Main */,
@@ -1399,15 +1406,25 @@
 		A033D6F626014B7C00E6AA83 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				A013D85C269F7C61007ED786 /* Settings */,
 				A087C46C2614A5B8006775D2 /* STSyncManager.swift */,
 				A005FAEA25FEC1D600E7D8B0 /* STDateManager.swift */,
+				A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */,
+				A013D85C269F7C61007ED786 /* Settings */,
 				A030DB4226015AAC00721EA7 /* FileSystem */,
 				A0D29CD5262051260083967D /* FileUploader */,
 				A078F78E2608A915005F40E4 /* FileDownloader */,
 				A022041E25EEDC0300D07C98 /* DB */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		A0355C7F26A8D063006BE2C4 /* Unlock */ = {
+			isa = PBXGroup;
+			children = (
+				A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */,
+				A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */,
+			);
+			path = Unlock;
 			sourceTree = "<group>";
 		};
 		A042199726909E37001FBFBF /* File */ = {
@@ -2370,6 +2387,7 @@
 				A024330D25F64B980054BED9 /* STGalleryProvider.swift in Sources */,
 				A04BD00A26347A8500C5F29F /* STUploadsTableViewCell.swift in Sources */,
 				A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */,
+				A0355C7E26A8A8F9006BE2C4 /* STAppLocker.swift in Sources */,
 				A022049025EEDC0400D07C98 /* STConstants.swift in Sources */,
 				A022048B25EEDC0400D07C98 /* EventManager.swift in Sources */,
 				A05F9DD326A6155C00F9F343 /* STBiometricAuthServices.swift in Sources */,
@@ -2593,6 +2611,7 @@
 				A0794B8D269E349A00B40FE9 /* STStorageVC.swift in Sources */,
 				A0F1437925FAC67B004C0E87 /* STContactProvider.swift in Sources */,
 				A06E423D2627230E00F43826 /* STAlbumsCollectionViewCell.swift in Sources */,
+				A0355C8126A8D084006BE2C4 /* STUnlockAppVC.swift in Sources */,
 				A08B77F92608D56300EEEC93 /* STDownloadNetworkOperation.swift in Sources */,
 				A0FD3F342670E1F30042EB8D /* STFileRequest.swift in Sources */,
 				A01747F3260AA5D8000D98F0 /* STFileMemoryCache.swift in Sources */,
@@ -2601,6 +2620,7 @@
 				A022046D25EEDC0400D07C98 /* STTextField.swift in Sources */,
 				A0D1A3CA262E10E0002E326F /* STAlbumFilesHeaderView.swift in Sources */,
 				A0301DED25FD6DD4005281EF /* STDataBaseCollectionProvider.swift in Sources */,
+				A0355C8326A8D094006BE2C4 /* STUnlockAppVM.swift in Sources */,
 				A0195E132628392F00C8CEA6 /* STAlbumsDataSource.swift in Sources */,
 				A09D944E2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift in Sources */,
 				A04945C92611F77C008D5E48 /* STTabBar.swift in Sources */,

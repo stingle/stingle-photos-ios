@@ -28,7 +28,16 @@ class STMainVC: UIViewController {
 	}
 	
 	private func openAppController() {
-		let identifier = self.viewModel.isLogined() ? "goToApp" : "goToAuth"
+        var identifier = ""
+        if self.viewModel.isLogined() {
+            if self.viewModel.appIsLocked() {
+                identifier = "goToLock"
+            } else {
+                identifier = "goToApp"
+            }
+        } else {
+            identifier = "goToAuth"
+        }
 		self.performSegue(withIdentifier: identifier, sender: nil)
 	}
     

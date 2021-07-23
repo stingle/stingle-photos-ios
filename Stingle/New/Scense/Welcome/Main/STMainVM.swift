@@ -20,5 +20,9 @@ class STMainVM {
 	func isLogined() -> Bool {
         return STApplication.shared.isLogedIn()
 	}
+    
+    func appIsLocked() -> Bool {
+        return STApplication.shared.appIsLocked()
+    }
 	
 }

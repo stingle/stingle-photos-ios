@@ -16,7 +16,7 @@ extension STAppSettings {
         var disallowScreenshots: Bool
         
         static var `default`: Security {
-            let auth = BiometricAuthentication(touchID: false, requireConfirmation: false)
+            let auth = BiometricAuthentication(unlock: false, requireConfirmation: false)
             let result = Security(lockUpApp: .minute, authentication: auth, disallowScreenshots: false)
             return result
         }
@@ -57,10 +57,31 @@ extension STAppSettings.Security {
                 return "hour".localized
             }
         }
+        
+        var timeInterval: TimeInterval {
+            switch self {
+            case .immediately:
+                return .zero
+            case .seconds10:
+                return 10
+            case .seconds30:
+                return 30
+            case .minute:
+                return 60
+            case .minutes5:
+                return 5 * 60
+            case .minutes10:
+                return 10 * 60
+            case .minutes30:
+                return 30 * 60
+            case .hour:
+                return 60 * 60
+            }
+        }
     }
     
     struct BiometricAuthentication: Codable {
-        var touchID: Bool
+        var unlock: Bool
         var requireConfirmation: Bool
     }
     

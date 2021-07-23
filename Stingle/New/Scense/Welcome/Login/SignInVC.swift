@@ -3,6 +3,7 @@ import UIKit
 class SignInVC: UITableViewController {
 	
 	private let viewModel = SignInVM()
+    private var appPassword: String?
 
 	@IBOutlet weak var emailTextField: UITextField!
 	@IBOutlet weak var passwordTextField: UITextField!
@@ -24,7 +25,6 @@ class SignInVC: UITableViewController {
 			navigationController.popViewController(animated: false)
 			navigationController.pushViewController(signInVC, animated: false)
 		}, completion:nil)
-
 	}
 	
 	//MARK: - Override func
@@ -34,6 +34,11 @@ class SignInVC: UITableViewController {
 		self.configurebBackBarButton()
 		self.configureLocalizable()
 	}
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        (segue.destination as? STMenuVC)?.appPassword = self.appPassword
+    }
 	
 	override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 		return 1
@@ -64,7 +69,8 @@ class SignInVC: UITableViewController {
 	private func login() {
 		self.tableView.endEditing(true)
 		STLoadingView.show(in: self.navigationController?.view ?? self.view)
-		self.viewModel.login( email:  self.emailTextField.text, password: self.passwordTextField.text) {[weak self] (_) in
+		self.viewModel.login(email:  self.emailTextField.text, password: self.passwordTextField.text) { [weak self] (_, appPassword) in
+            self?.appPassword = appPassword
 			self?.performSegue(withIdentifier: "goToHome", sender: nil)
 		} failure: { [weak self] (error) in
 			guard let weakSelf = self else {
@@ -104,4 +110,5 @@ extension SignInVC : UITextFieldDelegate {
 		}
 		return true
 	}
+    
 }

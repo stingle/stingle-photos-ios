@@ -95,6 +95,7 @@ class STAuthWorker: STWorker {
         
 		if KeyManagement.key == nil {
 			guard true == KeyManagement.importKeyBundle(keyBundle: login.keyBundle, password: password) else {
+                self.userProvider.deleteAll()
 				throw AuthWorkerError.cantImportKeyBundle
 			}
 			if isKeyBackedUp {

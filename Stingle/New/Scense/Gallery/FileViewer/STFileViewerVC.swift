@@ -382,9 +382,9 @@ extension STFileViewerVC {
         }
         self.currentFileViewer?.fileViewer(pauseContent: self)
         let title = self.viewModel.getDeleteFileMessage(file: file)
-        self.showOkCancelAlert(title: title, message: nil) { [weak self] _ in
+        self.showOkCancelAlert(title: title, message: nil, handler: { [weak self] _ in
             self?.deleteCurrentFile()
-        }
+        })
     }
     
 }

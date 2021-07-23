@@ -69,3 +69,18 @@ extension IError {
 	}
 	
 }
+
+enum STError: IError {
+    
+    case error(error: Error)
+    
+    var message: String {
+        switch self {
+        case .error(let error):
+            if let error = error as? IError {
+                return error.message
+            }
+            return error.localizedDescription
+        }
+    }
+}

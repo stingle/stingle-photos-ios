@@ -11,7 +11,7 @@ import Clibsodium
 
 extension STCrypto {
     
-    func generateMainKeypair(password:String ) throws {
+    func generateMainKeypair(password: String) throws {
         try self.generateMainKeypair(password:password, privateKey:nil, publicKey:nil)
     }
     
@@ -50,7 +50,7 @@ extension STCrypto {
         let encKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
         let encPrivKey = try self.readPrivateFile(filename: Constants.PrivateKeyFilename)
         let nonce = try self.readPrivateFile(filename: Constants.SKNONCEFilename)
-        let privateKey = try self.decryptSymmetric(key:encKey, nonce:nonce, data:encPrivKey)
+        let privateKey = try self.decryptSymmetric(key:encKey, nonce:nonce, data: encPrivKey)
         return privateKey
     }
     
@@ -86,6 +86,30 @@ extension STCrypto {
             throw CryptoError.Internal.hashGenerationFailure
         }
         return key
+    }
+    
+}
+
+extension STCrypto {
+    
+    func generateSecretKey() -> String? {
+        let secretKey = self.sodium.secretBox.key()
+        return self.bytesToBase64(data: secretKey)
+    }
+    
+    func encrypted(text: String, for secretKey: String) -> String? {
+        let message = text.bytes
+        guard let key = self.base64ToByte(encodedStr: secretKey), let encrypted: Bytes = self.sodium.secretBox.seal(message: message, secretKey: key) else {
+            return nil
+        }
+        return self.bytesToBase64(data: encrypted)
+    }
+    
+    func decrypted(text: String, for secretKey: String) -> String? {
+        guard let encrypted = self.base64ToByte(encodedStr: text), let key = self.base64ToByte(encodedStr: secretKey), let decrypted = sodium.secretBox.open(nonceAndAuthenticatedCipherText: encrypted, secretKey: key) else {
+            return nil
+        }
+        return String(data: Data(decrypted), encoding: .utf8)
     }
     
 }

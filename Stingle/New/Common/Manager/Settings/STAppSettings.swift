@@ -47,7 +47,6 @@ class STAppSettings {
             }
             return result
         }
-        
     }
             
 }

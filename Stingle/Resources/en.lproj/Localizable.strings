@@ -87,6 +87,11 @@
 
 "others" = "Others";
 
+"unlock" = "Unlock";
+"log_out" = "Log out";
+
+"confirm_password" = "Confirm password";
+
 //MARK: - Share
 
 "share_via_stingle_photos" = "Share";
@@ -121,6 +126,8 @@
 
 "alert_remove_album_member_title" = "Remove member";
 "alert_remove_album_member_message" = "Are you sure you want to remove %@";
+
+"enter_app_password" = "Enter app password";
 
 
 //MARK: - Gallery
@@ -229,6 +236,7 @@
 "error_empty_password" = "Password cannot be empty";
 "error_incorrect_email" = "Email not valid";
 "error_incorrect_password" = "Password must have at least 6 characters";
+"error_password_not_valed" = "Incorrect password";
 "error_unknown_error" = "Something went wrong, please try again later";
 "error_incorrect_confirm_password" = "Confirm  passwordnot valid";
 

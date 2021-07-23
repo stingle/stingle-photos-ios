@@ -34,6 +34,9 @@ class STApplication {
     private(set) lazy var uploader: STFileUploader = {
         return STFileUploader()
     }()
+    
+    let appLocker = STAppLocker()
+    
             
     private init() { }
     
@@ -47,6 +50,10 @@ extension STApplication {
         } catch  {
             return false
         }
+    }
+    
+    func appIsLocked() -> Bool {
+        return KeyManagement.key == nil
     }
     
     func user() -> STUser? {

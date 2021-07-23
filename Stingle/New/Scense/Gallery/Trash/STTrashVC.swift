@@ -193,7 +193,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
         let title = "delete_files_alert_title".localized
         let message = String(format: "delete_files_alert_message".localized, "\(files.count)")
         
-        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+        self.showOkCancelAlert(title: title, message: message, handler:  { [weak self] _ in
             STLoadingView.show(in: loadingView)
             self?.viewModel.delete(files: files, completion: { error in
                 STLoadingView.hide(in: loadingView)
@@ -203,7 +203,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
                     self?.setSelectedMode(isSelectedMode: false)
                 }
             })
-        }
+        })
         
     }
     
@@ -233,7 +233,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
         let title = "empty_trash".localized
         let message = "delete_all_files_alert_message".localized
        
-        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+        self.showOkCancelAlert(title: title, message: message, handler:  { [weak self] _ in
             STLoadingView.show(in: loadingView)
             self?.viewModel.deleteAll(completion: { error in
                 STLoadingView.hide(in: loadingView)
@@ -243,7 +243,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
                     self?.setSelectedMode(isSelectedMode: false)
                 }
             })
-        }
+        })
     }
     
     private func didSelectedRecoverAll() {

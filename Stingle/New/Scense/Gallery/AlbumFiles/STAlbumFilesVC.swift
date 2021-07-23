@@ -242,12 +242,17 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         case .rename:
             let placeholder = "album_name".localized
             let title = "rename_album".localized
-            self.showOkCancelAlert(title: title, message: nil, textFieldText: self.album.albumMetadata?.name, textFieldPlaceholder: placeholder) { [weak self] newName in
+            
+            self.showOkCancelAlert(title: title, message: nil) { [weak self] textField in
+                textField.text =  self?.album.albumMetadata?.name
+                textField.placeholder = placeholder
+            } handler: { [weak self] newName in
                 STLoadingView.show(in: loadingView)
                 self?.viewModel.renameAlbum(newName: newName, result: { error in
                     didResiveResult(error: error)
                 })
             }
+ 
         case .setBlankCover:
             STLoadingView.show(in: loadingView)
             self.viewModel.setBlankCover { error in
@@ -261,19 +266,19 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         case .delete:
             let title = String(format: "delete_album_alert_title".localized, album.albumMetadata?.name ?? "")
             let message = String(format: "delete_album_alert_message".localized, album.albumMetadata?.name ?? "")
-            self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+            self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
                 STLoadingView.show(in: loadingView)
                 self?.viewModel.delete { error in
                     didResiveResult(error: error)
                 }
-            }
+            })
         case .leave:
             STLoadingView.show(in: loadingView)
-            self.showOkCancelAlert(title: "leave".localized, message: "leave_album_alert_message".localized) { [weak self] _ in
+            self.showOkCancelAlert(title: "leave".localized, message: "leave_album_alert_message".localized, handler: { [weak self] _ in
                 self?.viewModel.leave { error in
                     didResiveResult(error: error)
                 }
-            }
+            })
         case .setCover:
             STLoadingView.show(in: loadingView)
             let fileName = self.dataSource.viewModel.selectedFileNames.first ?? ""
@@ -545,9 +550,9 @@ extension STAlbumFilesVC {
         let count = self.dataSource.viewModel.selectedFileNames.count
         let title = "delete_files_alert_title".localized
         let message = String(format: "delete_move_files_alert_message".localized, "\(count)")
-        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+        self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
             self?.deleteSelectedFiles()
-        }
+        })
     }
     
 }
