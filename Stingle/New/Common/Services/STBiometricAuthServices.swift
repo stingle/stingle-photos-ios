@@ -35,6 +35,11 @@ class STBiometricAuthServices {
         }, failure)
     }
     
+    func unlockApp(password: String) throws {
+        let key = try STApplication.shared.crypto.getPrivateKey(password: password)
+        KeyManagement.key = key
+    }
+    
     //MARK: - Private methods
     
     private func setApp(password: String) throws {
@@ -113,11 +118,10 @@ class STBiometricAuthServices {
     
     private func unlockApp() throws -> String {
         let password = try self.readPassword()
-        let key = try STApplication.shared.crypto.getPrivateKey(password: password)
-        KeyManagement.key = key
+        try self.unlockApp(password: password)
         return password
     }
-    
+        
     private func readPassword() throws -> String {
         guard STApplication.shared.dataBase.userProvider.user != nil else {
             throw AuthError.userNotFound
@@ -161,6 +165,9 @@ extension STBiometricAuthServices {
     }
     
     var canUnlockApp: Bool {
+        guard self.state != .notAvailable else {
+            return false
+        }
         do {
             let password = try self.readPassword()
             let _ = try STApplication.shared.crypto.getPrivateKey(password: password)

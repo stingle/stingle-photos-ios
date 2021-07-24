@@ -37,8 +37,7 @@ class STApplication {
     
     let appLocker = STAppLocker()
     
-            
-    private init() { }
+    private init() {}
     
 }
 
@@ -64,6 +63,18 @@ extension STApplication {
     }
     
     func logout() {
+        
+//        fileSystem.logOut()
+//
+//        let mm = fileSystem.storageURl
+//
+//        print(mm ?? "")
+        
+        
+        self.dataBase.deleteAll()
+        KeyManagement.key = nil
+        STMainVC.show()
+        STOperationManager.shared.logout()
         
     }
         

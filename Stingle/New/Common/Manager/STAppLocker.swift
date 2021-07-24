@@ -22,11 +22,8 @@ class STAppLocker {
     //MARK: - Private
     
     private func addNotifications() {
-        
         let center = NotificationCenter.default
-        center.addObserver(self, selector: #selector(willResignActive(_:)), name: UIApplication.willResignActiveNotification, object: nil)
-        
-        
+        center.addObserver(self, selector: #selector(willResignActive(_:)), name: UIApplication.willResignActiveNotification, object: nil)        
         center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
     

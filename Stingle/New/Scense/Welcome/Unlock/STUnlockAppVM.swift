@@ -15,6 +15,10 @@ class STUnlockAppVM {
         return STBiometricAuthServices()
     }()
     
+    var canUnlockAppBiometric: Bool {
+        return self.biometric.canUnlockApp
+    }
+    
     func unlockAppBiometric(success: @escaping (_ confirmpassword: Bool) -> Void, failure: @escaping (IError?) -> Void) {
         let comfirmPassword = STAppSettings.security.authentication.requireConfirmation
         self.biometric.unlockApp { [weak self] password in
@@ -32,7 +36,23 @@ class STUnlockAppVM {
         if password != self.appBiometricResultPassword  {
             throw UnlockAppVMError.passwordIncorrect
         }
-        
+    }
+    
+    func unlockApp(password: String?, completion: @escaping (IError?) -> Void) {
+        guard let password = password, !password.isEmpty else {
+            completion(UnlockAppVMError.passwordIsNil)
+            return
+        }
+        do {
+            try self.biometric.unlockApp(password: password)
+            completion(nil)
+        } catch {
+            completion(UnlockAppVMError.passwordIncorrect)
+        }
+    }
+    
+    func logOutApp() {
+        STApplication.shared.logout()
     }
     
 }

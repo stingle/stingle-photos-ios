@@ -153,8 +153,17 @@ class STFileSystem {
         return self.fileManager.contents(atPath: url.path)
     }
     
-    open func fileExists(atPath path: String) -> Bool {
+    func fileExists(atPath path: String) -> Bool {
         return self.fileManager.fileExists(atPath: path)
+    }
+    
+    func logOut() {
+        self.deleteFiles(folderType: .cache)
+        self.deleteFiles(folderType: .localCache)
+        self.deleteFiles(folderType: .cache)
+        self.deleteFiles(folderType: .storage)
+        self.deleteFiles(folderType: .private)
+        self.deleteFiles(folderType: .tmp)
     }
     
 }
@@ -327,11 +336,10 @@ extension STFileSystem {
     }
     
     func folder(for type: FolderType) -> URL? {
-        
         if type == .private {
             return self.privateURL
         }
-                
+        
         guard let dest = self.fullPath(type: type, isDirectory: true) else {
             return nil
         }
@@ -343,6 +351,12 @@ extension STFileSystem {
             }
         }
         return dest
+    }
+    
+    func deleteFiles(folderType: FolderType) {
+        if let url = self.folder(for: folderType) {
+            self.remove(file: url)
+        }
     }
     
     func deleteFiles(files: [STLibrary.File]) {

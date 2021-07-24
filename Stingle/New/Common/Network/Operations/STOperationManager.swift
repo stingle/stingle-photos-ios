@@ -40,4 +40,10 @@ class STOperationManager {
         operation.didStartRun(with: queue)
     }
     
+    func logout() {
+        self.defaultQueue.cancelAllOperations()
+        self.uploadQueue.cancelAllOperations()
+        self.downloadQueue.cancelAllOperations()
+    }
+    
 }

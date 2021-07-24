@@ -542,7 +542,7 @@ may be vulnerable to brute force attacks.</string>
         <!--MainVC-->
         <scene sceneID="rnq-br-JtG">
             <objects>
-                <viewController id="CXM-lh-l29" customClass="STMainVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="STMainVCID" id="CXM-lh-l29" customClass="STMainVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gKb-NH-oSt">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -895,7 +895,7 @@ may be vulnerable to brute force attacks.</string>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="rwf-aD-Uca"/>
+        <segue reference="es5-rA-LwU"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>

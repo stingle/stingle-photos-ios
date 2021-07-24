@@ -135,9 +135,10 @@
 		A032096F26546275000C420B /* STVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032096E26546275000C420B /* STVideoView.swift */; };
 		A032097226546602000C420B /* STPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032097126546602000C420B /* STPlayer.swift */; };
 		A032097626547288000C420B /* STAVAssetResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032097526547288000C420B /* STAVAssetResourceLoader.swift */; };
-		A0355C7E26A8A8F9006BE2C4 /* STAppLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */; };
 		A0355C8126A8D084006BE2C4 /* STUnlockAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */; };
 		A0355C8326A8D094006BE2C4 /* STUnlockAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */; };
+		A03D555C26AC5BF6008705F2 /* STAppLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */; };
+		A03D555E26AC6596008705F2 /* STFileSystem2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D555D26AC6596008705F2 /* STFileSystem2.swift */; };
 		A040E21E269A356300003199 /* STGalleryTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A040E21D269A356300003199 /* STGalleryTabBarVC.swift */; };
 		A04219962690983C001FBFBF /* STTrashFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */; };
 		A042199926909E58001FBFBF /* STFileWorker+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = A042199826909E58001FBFBF /* STFileWorker+Download.swift */; };
@@ -465,6 +466,7 @@
 		A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAppLocker.swift; sourceTree = "<group>"; };
 		A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVC.swift; sourceTree = "<group>"; };
 		A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVM.swift; sourceTree = "<group>"; };
+		A03D555D26AC6596008705F2 /* STFileSystem2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileSystem2.swift; sourceTree = "<group>"; };
 		A040E21D269A356300003199 /* STGalleryTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryTabBarVC.swift; sourceTree = "<group>"; };
 		A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashFileViewerVM.swift; sourceTree = "<group>"; };
 		A042199826909E58001FBFBF /* STFileWorker+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STFileWorker+Download.swift"; sourceTree = "<group>"; };
@@ -1244,6 +1246,7 @@
 			isa = PBXGroup;
 			children = (
 				A030DB4326015AC400721EA7 /* STFileSystem.swift */,
+				A03D555D26AC6596008705F2 /* STFileSystem2.swift */,
 			);
 			path = FileSystem;
 			sourceTree = "<group>";
@@ -2387,7 +2390,6 @@
 				A024330D25F64B980054BED9 /* STGalleryProvider.swift in Sources */,
 				A04BD00A26347A8500C5F29F /* STUploadsTableViewCell.swift in Sources */,
 				A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */,
-				A0355C7E26A8A8F9006BE2C4 /* STAppLocker.swift in Sources */,
 				A022049025EEDC0400D07C98 /* STConstants.swift in Sources */,
 				A022048B25EEDC0400D07C98 /* EventManager.swift in Sources */,
 				A05F9DD326A6155C00F9F343 /* STBiometricAuthServices.swift in Sources */,
@@ -2631,6 +2633,8 @@
 				A086FD2625F5A10900A8BC9C /* STCDAlbum.swift in Sources */,
 				A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */,
 				A0B267742624D7B30090E4ED /* STFilesViewController.swift in Sources */,
+				A03D555E26AC6596008705F2 /* STFileSystem2.swift in Sources */,
+				A03D555C26AC5BF6008705F2 /* STAppLocker.swift in Sources */,
 				A0E9999A263F1DE8002FDCC9 /* STTokenView.swift in Sources */,
 				A0C88FE125F3D36A0061A41D /* STLibraryFile.swift in Sources */,
 				A0794B7B269E2D9F00B40FE9 /* STSecurityVC.swift in Sources */,
