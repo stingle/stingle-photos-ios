@@ -18,11 +18,7 @@ class STApplication {
     private(set) lazy var crypto: STCrypto = {
         return STCrypto()
     }()
-    
-    private(set) lazy var fileSystem: STFileSystem = {
-        return STFileSystem()
-    }()
-    
+        
     private(set) lazy var downloaderManager: STDownloaderManager = {
         return STDownloaderManager()
     }()
@@ -35,6 +31,26 @@ class STApplication {
         return STFileUploader()
     }()
     
+    var fileSystem: STFileSystem {
+        
+        guard let user = self.dataBase.userProvider.user else {
+            fatalError("user not found")
+        }
+        if let myFileSystem = self.myFileSystem {
+            return myFileSystem
+        }
+        let result = STFileSystem(userHomeFolderPath: user.homeFolder)
+        self.myFileSystem = result
+        return result
+    }
+    
+    private lazy var myFileSystem: STFileSystem? = {
+        guard let user = self.dataBase.userProvider.user else {
+            fatalError("user not found")
+        }
+        return STFileSystem(userHomeFolderPath: user.homeFolder)
+    }()
+    
     let appLocker = STAppLocker()
     
     private init() {}
@@ -45,7 +61,7 @@ extension STApplication {
             
     func isLogedIn() -> Bool {
         do {
-            return try  STValidator().validate(user: self.dataBase.userProvider.user)
+            return try STValidator().validate(user: self.dataBase.userProvider.user)
         } catch  {
             return false
         }
@@ -63,19 +79,14 @@ extension STApplication {
     }
     
     func logout() {
-        
-//        fileSystem.logOut()
-//
-//        let mm = fileSystem.storageURl
-//
-//        print(mm ?? "")
-        
-        
         self.dataBase.deleteAll()
         KeyManagement.key = nil
-        STMainVC.show()
         STOperationManager.shared.logout()
-        
+        self.fileSystem.logOut()
+        self.myFileSystem = nil
+        STBiometricAuthServices().removeBiometricAuth()
+        STAppSettings.logOut()
+        STMainVC.show()
     }
         
 }

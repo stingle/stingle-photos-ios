@@ -48,20 +48,20 @@ extension STCrypto {
     
     func getPrivateKey(password: String) throws  -> Bytes {
         let encKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
-        let encPrivKey = try self.readPrivateFile(filename: Constants.PrivateKeyFilename)
-        let nonce = try self.readPrivateFile(filename: Constants.SKNONCEFilename)
+        let encPrivKey = try self.readPrivateFile(fileName: Constants.PrivateKeyFilename)
+        let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
         let privateKey = try self.decryptSymmetric(key:encKey, nonce:nonce, data: encPrivKey)
         return privateKey
     }
     
     func getPrivateKeyFromExportedKey(password: String, encPrivKey: Bytes) throws -> Bytes {
-        let nonce = try self.readPrivateFile(filename: Constants.SKNONCEFilename)
+        let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
         let decPK = try self.decryptSymmetric(key: self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard), nonce: nonce, data: encPrivKey)
         return try self.encryptSymmetric(key: self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal), nonce: nonce, data: decPK)
     }
     
     public func getKeyFromPassword(password: String, difficulty: Int) throws -> Bytes {
-        let salt = try self.readPrivateFile(filename: Constants.PwdSaltFilename)
+        let salt = try self.readPrivateFile(fileName: Constants.PwdSaltFilename)
         guard salt.count == self.sodium.pwHash.SaltBytes else {
             throw CryptoError.General.incorrectParameterSize
         }

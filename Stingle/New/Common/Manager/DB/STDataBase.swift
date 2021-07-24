@@ -72,6 +72,7 @@ class STDataBase {
         self.trashProvider.deleteAll()
         self.contactProvider.deleteAll()
         self.dbInfoProvider.deleteAll()
+        self.userProvider.deleteAll()
     }
     
     func reloadData() {

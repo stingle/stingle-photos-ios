@@ -27,7 +27,7 @@ class STFilesDownloaderActivityVM {
     }()
     
     private lazy var tmpURL: URL? = {
-        let url = self.fileSystem.tmpURL?.appendingPathComponent("Sharing")
+        let url = self.fileSystem.url(for: .tmp)
         return url
     }()
     
@@ -82,7 +82,7 @@ class STFilesDownloaderActivityVM {
         var downloaderSources = [IDownloaderSource]()
         files.forEach { file in
             file.updateIfNeeded(albumMetadata: album.albumMetadata)
-            if self.fileSystem.isExistFileile(file: file, isThumb: false), let fileOreginalUrl = file.fileOreginalUrl {
+            if self.fileSystem.isExistFile(file: file, isThumb: false), let fileOreginalUrl = file.fileOreginalUrl {
                 let source = STDownloaderManager.FileDownloaderSource(file: file, fileSaveUrl: fileOreginalUrl, isThumb: false)
                 downloaderSources.append(source)
             } else if let tmpURL = self.tmpDownloadURL {
@@ -97,7 +97,8 @@ class STFilesDownloaderActivityVM {
     private func srartDownload(files: [STLibrary.File]) {
         var downloaderSources = [IDownloaderSource]()
         files.forEach { file in
-            if self.fileSystem.isExistFileile(file: file, isThumb: false), let fileOreginalUrl = file.fileOreginalUrl {
+            
+            if self.fileSystem.isExistFile(file: file, isThumb: false), let fileOreginalUrl = file.fileOreginalUrl {
                 let source = STDownloaderManager.FileDownloaderSource(file: file, fileSaveUrl: fileOreginalUrl, isThumb: false)
                 downloaderSources.append(source)
             } else if let tmpURL = self.tmpDownloadURL {

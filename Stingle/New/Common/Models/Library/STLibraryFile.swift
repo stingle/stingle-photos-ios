@@ -98,23 +98,15 @@ extension STLibrary {
 extension STLibrary.File {
         
     var fileThumbUrl: URL? {
-        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
-        let folder: STFileSystem.FilesFolderType = .thumbs(type: type)
-        guard let url = STApplication.shared.fileSystem.direction(for: folder, create: true) else {
-            fatalError("cacheURL not found")
-        }
-        let result = url.appendingPathComponent(self.file)
-        return result
+        let fileSystem = STApplication.shared.fileSystem
+        let url = self.isRemote ? fileSystem.url(for: .storage(type: .server(type: .thumbs)), filePath: self.file) : fileSystem.url(for: .storage(type: .local(type: .thumbs)), filePath: self.file)
+        return url
     }
     
     var fileOreginalUrl: URL? {
-        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
-        let folder: STFileSystem.FilesFolderType = .oreginals(type: type)
-        guard let url = STApplication.shared.fileSystem.direction(for: folder, create: true) else {
-            fatalError("cacheURL not found")
-        }
-        let result = url.appendingPathComponent(self.file)
-        return result
+        let fileSystem = STApplication.shared.fileSystem
+        let url = self.isRemote ? fileSystem.url(for: .storage(type: .server(type: .oreginals)), filePath: self.file) : fileSystem.url(for: .storage(type: .local(type: .oreginals)), filePath: self.file)
+        return url
     }
         
 }

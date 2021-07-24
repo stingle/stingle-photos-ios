@@ -51,7 +51,7 @@ extension STCrypto {
         let input = InputStream(data: data)
         output.open()
         input.open()
-        let publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+        let publicKey = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
         var bytes = try self.writeHeader(output: output, header: header, publicKey: publicKey)
         let encryptBytes = try self.encryptData(input: input, output: output, header: header)
         bytes.append(contentsOf: encryptBytes)

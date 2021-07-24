@@ -10,13 +10,13 @@ import UIKit
 protocol IFileRetrySource: IDownloaderSource {
     var version: String { get }
     var header: STHeader { get }
-    var filePath: STFileSystem.FilesFolderType { get }
+    var folderType: STFileSystem.FolderType { get }
 }
 
 extension IFileRetrySource {
     
     var identifier: String {
-        return "\(self.version)_\(self.filePath.folderName)_\(self.fileName)"
+        return "\(self.version)_\(self.folderType.stringValue)_\(self.fileName)"
     }
     
     var fileDownloadTmpUrl: URL? {
@@ -28,11 +28,10 @@ extension IFileRetrySource {
     }
     
     var fileSaveUrl: URL {
-        guard let url = STApplication.shared.fileSystem.direction(for: self.filePath, create: true) else {
+        guard let url = STApplication.shared.fileSystem.url(for: self.folderType, filePath: self.fileName) else {
             fatalError("cacheURL not found")
         }
-        let result = url.appendingPathComponent(self.fileName)
-        return result
+        return url
     }
     
 }

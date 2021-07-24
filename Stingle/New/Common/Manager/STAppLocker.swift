@@ -18,6 +18,12 @@ class STAppLocker {
     init() {
         self.addNotifications()
     }
+    
+    func disallowScreenshots() {
+        if STAppSettings.security.disallowScreenshots {
+            UIApplication.shared.ignoreSnapshotOnNextApplicationLaunch()
+        }
+    }
         
     //MARK: - Private
     
@@ -34,6 +40,10 @@ class STAppLocker {
         }
         KeyManagement.key = nil
         STUnlockAppVC.show()
+        
+        if STAppSettings.security.disallowScreenshots {
+            UIApplication.shared.ignoreSnapshotOnNextApplicationLaunch()
+        }
     }
      
     @objc private func willResignActive(_ notification: Notification) {

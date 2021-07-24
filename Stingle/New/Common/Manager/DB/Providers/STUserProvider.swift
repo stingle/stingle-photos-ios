@@ -30,6 +30,15 @@ extension STDataBase {
             }
         }
         
+        override func deleteAll(completion: ((IError?) -> Void)? = nil) {
+            super.deleteAll { [weak self] error in
+                if error == nil {
+                    self?.myUser = nil
+                }
+                completion?(error)
+            }
+        }
+        
         //MARK: - Private func
         
         private func getUser(context: NSManagedObjectContext) -> STCDUser? {

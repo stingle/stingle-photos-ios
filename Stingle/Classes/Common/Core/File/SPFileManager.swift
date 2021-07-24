@@ -31,7 +31,7 @@ public func ==(lhs: FileExistence, rhs: FileExistence) -> Bool {
 	}
 }
 
-class SPFileManager : FileManager {
+class SPFileManager: FileManager {
 		
 	private static var storagePath: URL? {
 		get {

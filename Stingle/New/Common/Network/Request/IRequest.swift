@@ -133,7 +133,8 @@ protocol STDownloadRequest: IDownloadRequest, STRequest {
 extension STDownloadRequest {
     
     var fileDownloadTmpUrl: URL? {
-        return STApplication.shared.fileSystem.tmpURL?.appendingPathComponent(self.fileName)
+        let result = STFileSystem.File(type: .tmp, fileName: self.fileName)
+        return  STApplication.shared.fileSystem.url(for: result)
     }
     
 }

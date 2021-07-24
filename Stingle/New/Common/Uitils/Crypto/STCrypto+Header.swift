@@ -360,7 +360,7 @@ extension STCrypto {
         var publicKey = publicKey
         
         if publicKey == nil {
-            publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+            publicKey = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
         }
         
         var privateKey = privateKey

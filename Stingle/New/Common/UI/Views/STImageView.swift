@@ -84,11 +84,15 @@ extension STImageView {
 
 extension STImageView.Image: IFileRetrySource {
     
-    var filePath: STFileSystem.FilesFolderType {
-        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
-        let folder: STFileSystem.FilesFolderType = self.isThumb ? .thumbs(type: type) : .oreginals(type: type)
-        return folder
+    var folderType: STFileSystem.FolderType {
+        let fileType: STFileSystem.FileType = self.isThumb ? .thumbs : .oreginals
+        if self.isRemote {
+            return STFileSystem.FolderType.storage(type: .server(type: fileType))
+        } else {
+            return STFileSystem.FolderType.storage(type: .local(type: fileType))
+        }
     }
+    
 }
 
 extension STImageView.Image: STDownloadRequest {

@@ -49,6 +49,10 @@ class STSecurityVM {
     func update(disallowScreenshots isOn: Bool) {
         self.security.disallowScreenshots = isOn
         STAppSettings.security = self.security
+        
+        if isOn {
+            STApplication.shared.appLocker.disallowScreenshots()
+        }
     }
     
     func update(lockUpApp: STAppSettings.Security.LockUpApp) {

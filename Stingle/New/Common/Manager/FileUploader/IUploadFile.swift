@@ -49,7 +49,10 @@ extension STFileUploader {
             default:
                 throw STFileUploader.UploaderError.phAssetNotValid
             }
-            guard let localThumbsURL = STApplication.shared.fileSystem.localThumbsURL, let localOreginalsURL = STApplication.shared.fileSystem.localOreginalsURL else {
+            
+            let fileSystem = STApplication.shared.fileSystem
+            
+            guard let localThumbsURL = fileSystem.localThumbsURL, let localOreginalsURL = fileSystem.localOreginalsURL else {
                 throw STFileUploader.UploaderError.fileSystemNotValid
             }
             

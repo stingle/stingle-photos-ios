@@ -146,12 +146,12 @@ class STCrypto {
 	}
 		
     func getServerPublicKey() throws -> Bytes {
-		return try self.readPrivateFile(filename: Constants.ServerPublicKeyFilename)
+		return try self.readPrivateFile(fileName: Constants.ServerPublicKeyFilename)
     }
 	
 	public func getPrivateKeyForExport(password: String) throws -> Bytes {
-		let encPK = try self.readPrivateFile(filename: Constants.PrivateKeyFilename)
-		let nonce = try self.readPrivateFile(filename: Constants.SKNONCEFilename)
+		let encPK = try self.readPrivateFile(fileName: Constants.PrivateKeyFilename)
+		let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
 		let key = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
 		
 		let decPK = try self.decryptSymmetric(key: key, nonce: nonce, data: encPK)
@@ -166,7 +166,7 @@ class STCrypto {
 		pbk += STCrypto.toBytes(value: Constants.CurrentKeyFileVersion)
 		pbk += STCrypto.toBytes(value: Constants.KeyFileTypePublicPlain)
 		do {
-			let pbkBytes = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+			let pbkBytes = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
 			pbk += pbkBytes
 		} catch {
 			throw error
@@ -180,16 +180,16 @@ class STCrypto {
 		result.append(UInt8(Constants.CurrentKeyFileVersion))
 		result.append(UInt8(Constants.KeyFileTypeBundleEncrypted))
 
-		let publicKeyFile = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+		let publicKeyFile = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
 		result.append(contentsOf: publicKeyFile)
 
 		let privateKeyForExport = try self.getPrivateKeyForExport(password: password)
 		result.append(contentsOf: privateKeyForExport)
 
-		let pwdSalt = try self.readPrivateFile(filename: Constants.PwdSaltFilename)
+		let pwdSalt = try self.readPrivateFile(fileName: Constants.PwdSaltFilename)
 		result.append(contentsOf: pwdSalt)
 
-		let nonce = try self.readPrivateFile(filename: Constants.SKNONCEFilename)
+		let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
 		result.append(contentsOf: nonce)
 		
 		return result
@@ -240,7 +240,7 @@ class STCrypto {
     @discardableResult
     public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
         
-		let publicKey = try (publicKey ?? self.readPrivateFile(filename: Constants.PublicKeyFilename))
+		let publicKey = try (publicKey ?? self.readPrivateFile(fileName: Constants.PublicKeyFilename))
 		let symmetricKey = self.sodium.keyDerivation.key()
 		let header = try getNewHeader(symmetricKey: symmetricKey, dataSize: dataLength, filename: filename, fileType: fileType, fileId: fileId, videoDuration: videoDuration)
         let encriptedHeader = try self.writeHeader(output: output, header: header, publicKey: publicKey)
@@ -380,8 +380,7 @@ class STCrypto {
 			
 	@discardableResult
     func savePrivateFile(filename: String, data: Bytes?) throws -> Bool {
-		
-        let path = STApplication.shared.fileSystem.folder(for: .private)
+        let path = STApplication.shared.fileSystem.url(for: .private)
 		guard let fullPath = path?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
@@ -403,12 +402,12 @@ class STCrypto {
 	}
     
     func readPublicKey() throws -> Bytes {
-        return try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+        return try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
     }
 	
-    func readPrivateFile(filename: String) throws -> Bytes {
-        let path = STApplication.shared.fileSystem.folder(for: .private)
-		guard let fullPath = path?.appendingPathComponent(filename) else {
+    func readPrivateFile(fileName: String) throws -> Bytes {
+        let path = STApplication.shared.fileSystem.url(for: .private, filePath: fileName)
+        guard let fullPath = path else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
 		guard let input:InputStream = InputStream(url: fullPath) else {

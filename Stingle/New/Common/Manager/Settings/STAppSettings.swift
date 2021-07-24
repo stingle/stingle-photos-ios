@@ -48,5 +48,9 @@ class STAppSettings {
             return result
         }
     }
+    
+    static func logOut() {
+        self.settings = [:]
+    }
             
 }
