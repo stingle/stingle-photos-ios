@@ -7,9 +7,9 @@
 
 import UIKit
 
-extension STSecurityDetailTableViewCell {
+extension STSettingsDetailTableViewCell {
     
-    struct Model: ISecurityTableViewCellModel {
+    struct Model: ISettingsTableViewCellModel {
         let itemType: STSecurityVC.ItemType
         let image: UIImage
         let title: String?
@@ -18,18 +18,19 @@ extension STSecurityDetailTableViewCell {
     
 }
 
-class STSecurityDetailTableViewCell: STSecurityVCTableViewCell<STSecurityDetailTableViewCell.Model> {
+class STSettingsDetailTableViewCell: STSettingsTableViewCell<STSettingsDetailTableViewCell.Model> {
 
     @IBOutlet weak private var iconImageView: UIImageView!
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var subTitleLabel: UILabel!
     
-    override func configure(model: Model) {
-        self.iconImageView.image = model.image
-        self.titleLabel.text = model.title
-        self.subTitleLabel.text = model.subTitle
-        self.titleLabel.isHidden = model.title == nil
-        self.subTitleLabel.isHidden = model.subTitle == nil
+    override func configure(model: Model?) {
+        super.configure(model: model)
+        self.iconImageView.image = model?.image
+        self.titleLabel.text = model?.title
+        self.subTitleLabel.text = model?.subTitle
+        self.titleLabel.isHidden = model?.title == nil
+        self.subTitleLabel.isHidden = model?.subTitle == nil
     }
     
     func update(subTitle: String?) {

@@ -46,6 +46,7 @@ class STMenuVC: STSplitViewController {
         self.showOkCancelAlert(title: biometricAuthTitle, message: biometricAuthMessage, handler: { [weak self] _ in
             self?.onBiometricAuth(password: password)
         }, cancel: nil)
+        self.appPassword = nil
     }
     
     private func onBiometricAuth(password: String) {

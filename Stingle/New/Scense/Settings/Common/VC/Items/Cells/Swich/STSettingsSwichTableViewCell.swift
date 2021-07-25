@@ -7,9 +7,9 @@
 
 import UIKit
 
-extension STSecuritySwichTableViewCell {
+extension STSettingsSwichTableViewCell {
     
-    struct Model: ISecurityTableViewCellModel {
+    struct Model: ISettingsTableViewCellModel {
         let itemType: STSecurityVC.ItemType
         let image: UIImage
         let title: String?
@@ -20,23 +20,26 @@ extension STSecuritySwichTableViewCell {
     
 }
 
-class STSecuritySwichTableViewCell: STSecurityVCTableViewCell<STSecuritySwichTableViewCell.Model> {
+class STSettingsSwichTableViewCell: STSettingsTableViewCell<STSettingsSwichTableViewCell.Model> {
 
     @IBOutlet weak private var iconImageView: UIImageView!
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var subTitleLabel: UILabel!
     @IBOutlet weak private var swicher: UISwitch!
 
-    override func configure(model: Model) {
-        self.iconImageView.image = model.image
-        self.titleLabel.text = model.title
-        self.subTitleLabel.text = model.subTitle
-        self.swicher.isOn = model.isOn
-        self.swicher.isEnabled = model.isEnabled
-        self.contentView.alpha = model.isEnabled ? 1 : 0.7
+    override func configure(model: Model?) {
+        super.configure(model: model)
+        self.iconImageView.image = model?.image
+        self.titleLabel.text = model?.title
+        self.subTitleLabel.text = model?.subTitle
+        self.swicher.isOn = model?.isOn ?? false
         
-        self.titleLabel.isHidden = model.title == nil
-        self.subTitleLabel.isHidden = model.subTitle == nil
+        let isEnabled =  model?.isEnabled ?? false
+        
+        self.swicher.isEnabled = isEnabled
+        self.contentView.alpha = isEnabled ? 1 : 0.7
+        self.titleLabel.isHidden = model?.title == nil
+        self.subTitleLabel.isHidden = model?.subTitle == nil
     }
     
     
