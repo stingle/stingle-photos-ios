@@ -88,8 +88,6 @@ extension STSecurityVC {
     enum ItemType {
         case lockUp
         case biometricAuthentication
-        case requireConfirmation
-        case disallowScreenshots
     }
     
     struct Section: ISettingsSection {
@@ -150,16 +148,6 @@ class STSecurityVC: STSettingsDetailVC<STSecurityVC.Section> {
                 self.update(cellModel: touchId, for: indexPath)
                 self.viewModel.removeBiometricAuthentication()
             }
-        case .requireConfirmation:
-            var swich = (model as! STSettingsSwichTableViewCell.Model)
-            swich.isOn = isOn
-            self.update(cellModel: swich, for: indexPath)
-            self.viewModel.update(requireConfirmation: isOn)
-        case .disallowScreenshots:
-            var swich = (model as! STSettingsSwichTableViewCell.Model)
-            swich.isOn = isOn
-            self.update(cellModel: swich, for: indexPath)
-            self.viewModel.update(disallowScreenshots: isOn)
         }
     }
     
@@ -168,8 +156,7 @@ class STSecurityVC: STSettingsDetailVC<STSecurityVC.Section> {
     private func reloadTableDataModels() {
         let authentication = self.generateAuthenticationSection()
         let appAccess = self.generateAppAccessSection()
-        let others = self.generateOthersSection()
-        let sections = [authentication, appAccess, others]
+        let sections = [authentication, appAccess]
         self.reloadTable(sections: sections)
     }
     
@@ -197,25 +184,10 @@ class STSecurityVC: STSettingsDetailVC<STSecurityVC.Section> {
         
         let touchIdCell = Cell(reusableIdentifier: .swich, identifier: .biometricAuthentication, cellModel: touchId)
         
-        
-        let confirmation = STSettingsSwichTableViewCell.Model(itemType: .requireConfirmation, image: UIImage(named: "ic_mark")!, title: "require_confirmation".localized, subTitle: "require_confirmation_message".localized, isOn: self.security.authentication.requireConfirmation && hasBiometricAuthInApp, isEnabled: hasBiometric)
-        
-        let confirmationCell = Cell(reusableIdentifier: .swich, identifier: .requireConfirmation, cellModel: confirmation)
-        
         let title = STSettingsHeaderViewModel(title: SectionType.authentication.localized)
         let header = Header(reusableIdentifier: .title, identifier: .authentication, headerModel: title)
-        return Section(header: header, cells: [touchIdCell, confirmationCell])
+        return Section(header: header, cells: [touchIdCell])
         
-    }
-    
-    private func generateOthersSection() -> Section {
-        let screenshot = STSettingsSwichTableViewCell.Model(itemType: .disallowScreenshots, image: UIImage(named: "ic_lock")!, title: "disallow_screenshots_off_this_app".localized, subTitle: nil, isOn: self.security.disallowScreenshots, isEnabled: true)
-        
-        let screenshotCell = Cell(reusableIdentifier: .swich, identifier: .disallowScreenshots, cellModel: screenshot)
-        
-        let title = STSettingsHeaderViewModel(title: SectionType.others.localized)
-        let header = Header(reusableIdentifier: .title, identifier: .others, headerModel: title)
-        return Section(header: header, cells: [screenshotCell])
     }
     
     private func showLockUpAppSheet(in cell: STSettingsDetailTableViewCell) {

@@ -8,9 +8,7 @@
 import Foundation
 
 class STUnlockAppVM {
-    
-    private var appBiometricResultPassword: String?
-    
+        
     lazy var biometric: STBiometricAuthServices = {
         return STBiometricAuthServices()
     }()
@@ -19,11 +17,9 @@ class STUnlockAppVM {
         return self.biometric.canUnlockApp
     }
     
-    func unlockAppBiometric(success: @escaping (_ confirmpassword: Bool) -> Void, failure: @escaping (IError?) -> Void) {
-        let comfirmPassword = STAppSettings.security.authentication.requireConfirmation
-        self.biometric.unlockApp { [weak self] password in
-            self?.appBiometricResultPassword = password
-            success(comfirmPassword)
+    func unlockAppBiometric(success: @escaping () -> Void, failure: @escaping (IError?) -> Void) {
+        self.biometric.unlockApp { _ in
+            success()
         } failure: { error in
             failure(error)
         }
@@ -32,9 +28,6 @@ class STUnlockAppVM {
     func confirmBiometricPassword(password: String?) throws {
         guard let password = password, !password.isEmpty else {
             throw UnlockAppVMError.passwordIsNil
-        }
-        if password != self.appBiometricResultPassword  {
-            throw UnlockAppVMError.passwordIncorrect
         }
     }
     

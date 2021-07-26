@@ -90,7 +90,7 @@ class STBiometricAuthServices {
             return
         }
         let authContext = LAContext()
-        authContext.evaluateAccessControl(accessControl, operation: .useItem, localizedReason: "Hello") { (successPolicy, error) in
+        authContext.evaluateAccessControl(accessControl, operation: .useItem, localizedReason: "unlock".localized) { (successPolicy, error) in
             DispatchQueue.main.async {
                 if let error = error {
                     failure?(AuthError.error(error: error))
@@ -98,7 +98,6 @@ class STBiometricAuthServices {
                     success?()
                 }
             }
-
         }
     }
         

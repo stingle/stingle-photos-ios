@@ -64,18 +64,7 @@ class STUnlockAppVC: UIViewController {
             completion(password)
         }, cancel: nil)
     }
-    
-    private func showConfirmPasswordAfterBiometricAlert(completion: @escaping (IError?) -> Void) {
-        self.showPasswordAlert { [weak self] password in
-            do {
-                try self?.viewModel.confirmBiometricPassword(password: password)
-                completion(nil)
-            } catch {
-                completion(STError.error(error: error))
-            }
-        }
-    }
-    
+   
     private func showImputPasswordAlert(completion: @escaping (IError?) -> Void) {
         self.showPasswordAlert { [weak self] password in
             self?.viewModel.unlockApp(password: password, completion: { error in
@@ -128,18 +117,9 @@ class STUnlockAppVC: UIViewController {
     }
     
     private func unlockAppBiometric(completion: ( (IError?) -> Void)?) {
-        self.viewModel.unlockAppBiometric { [weak self] confirmpassword in
-            if confirmpassword {
-                self?.showConfirmPasswordAfterBiometricAlert(completion: { error in
-                    completion?(error)
-                    if error == nil {
-                        self?.appDidUnlocked()
-                    }
-                })
-            } else {
-                completion?(nil)
-                self?.appDidUnlocked()
-            }
+        self.viewModel.unlockAppBiometric { [weak self] in
+            completion?(nil)
+            self?.appDidUnlocked()
         } failure: { error in
             completion?(error)
         }

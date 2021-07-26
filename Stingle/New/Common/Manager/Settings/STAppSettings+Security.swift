@@ -16,7 +16,7 @@ extension STAppSettings {
         var disallowScreenshots: Bool
         
         static var `default`: Security {
-            let auth = BiometricAuthentication(unlock: false, requireConfirmation: false)
+            let auth = BiometricAuthentication(unlock: false)
             let result = Security(lockUpApp: .minute, authentication: auth, disallowScreenshots: false)
             return result
         }
@@ -82,7 +82,6 @@ extension STAppSettings.Security {
     
     struct BiometricAuthentication: Codable {
         var unlock: Bool
-        var requireConfirmation: Bool
     }
     
 }

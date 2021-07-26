@@ -65,12 +65,16 @@ class STFileViewerVC: UIViewController {
             self.currentIndex = self.viewModel.index(at: initialFile)
         }
         self.accessoryView.dataSource = self
-        self.configureAccessoryView()
         self.viewerStyle = .balck
         self.changeViewerStyle()
         self.setupTavigationTitle()
         self.setupPageViewController()
         self.setupTapGesture()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.configureAccessoryView()
     }
         
     override func viewWillDisappear(_ animated: Bool) {

@@ -106,7 +106,7 @@ extension STCrypto {
     }
     
     func decrypted(text: String, for secretKey: String) -> String? {
-        guard let encrypted = self.base64ToByte(encodedStr: text), let key = self.base64ToByte(encodedStr: secretKey), let decrypted = sodium.secretBox.open(nonceAndAuthenticatedCipherText: encrypted, secretKey: key) else {
+        guard let encrypted = self.base64ToByte(encodedStr: text), let key = self.base64ToByte(encodedStr: secretKey), let decrypted = self.sodium.secretBox.open(nonceAndAuthenticatedCipherText: encrypted, secretKey: key) else {
             return nil
         }
         return String(data: Data(decrypted), encoding: .utf8)
