@@ -10,7 +10,6 @@ import UIKit
 extension STSettingsSwichTableViewCell {
     
     struct Model: ISettingsTableViewCellModel {
-        let itemType: STSecurityVC.ItemType
         let image: UIImage
         let title: String?
         let subTitle: String?

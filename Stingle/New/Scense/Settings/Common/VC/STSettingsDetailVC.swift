@@ -36,7 +36,7 @@ protocol ISettingsSectionCellItemModel: ISettingsSectionItemModel {
 }
 
 class STSettingsDetailVC<Section: ISettingsSection>: UIViewController, UITableViewDataSource, UITableViewDelegate, STSettingsTableViewCellDelegate {
-    
+        
     @IBOutlet weak private(set) var tableView: UITableView!
     private(set) var sections: [Section]?
 
@@ -102,12 +102,18 @@ class STSettingsDetailVC<Section: ISettingsSection>: UIViewController, UITableVi
         return cell
     }
     
+    //MARK: - UITableViewDelegate
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
     
-    
-    //MARK: - UITableViewDelegate
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if self.sections?[section].header == nil {
+            return .zero
+        }
+        return UITableView.automaticDimension
+    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let header = self.sections![section].header else {
@@ -130,4 +136,74 @@ class STSettingsDetailVC<Section: ISettingsSection>: UIViewController, UITableVi
 
     }
 
+}
+
+typealias STSettingsDetailTableVC<SectionType, CellType> = STSettingsDetailVC<STSettingsDetailTableInfo.Section<SectionType, CellType>>
+
+enum STSettingsDetailTableInfo {
+        
+    struct Section<SectionType, CellType>: ISettingsSection {
+        
+        enum CellReusable: ISettingsItemReusableIdentifier {
+
+            case detail
+            case swich
+            
+            var nibName: String {
+                switch self {
+                case .detail:
+                    return "STSettingsDetailTableViewCell"
+                case .swich:
+                    return "STSettingsSwichTableViewCell"
+                }
+            }
+            
+            var identifier: String {
+                switch self {
+                case .detail:
+                    return "detail"
+                case .swich:
+                    return "swich"
+                }
+            }
+            
+        }
+        
+        enum HeaderReusable: ISettingsItemReusableIdentifier {
+
+            case title
+            
+            var nibName: String {
+                switch self {
+                case .title:
+                    return "STSettingsHeaderView"
+                }
+            }
+            
+            var identifier: String {
+                switch self {
+                case .title:
+                    return "title"
+                }
+            }
+        }
+        
+        struct Cell: ISettingsSectionCellItemModel {
+            var reusableIdentifier: CellReusable
+            var identifier: CellType?
+            var cellModel: ISettingsTableViewCellModel?
+        }
+        
+        struct Header: ISettingsSectionHeaderItemModel {
+            var reusableIdentifier: HeaderReusable
+            var identifier: SectionType?
+            var headerModel: STSettingsHeaderViewModel?
+        }
+        
+        var identifier: SectionType?
+        var header: Header?
+        var cells: [Cell]
+        
+    }
+    
 }

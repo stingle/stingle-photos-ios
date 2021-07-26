@@ -91,6 +91,7 @@
 "log_out" = "Log out";
 
 "confirm_password" = "Confirm password";
+"change_password" = "Change Password";
 
 //MARK: - Share
 
@@ -198,6 +199,11 @@
 "require_confirmation_message" = "Press confirm button after face button";
 
 "disallow_screenshots_off_this_app" = "Disallow screenshots off this app";
+
+"backup_my_keys" = "Backup my keys";
+"backup_my_keys_description" = "Backup my keys to allow login without entering backup phrase";
+
+"delete_account" = "Delete account";
 
 //MARK: - Menu
 

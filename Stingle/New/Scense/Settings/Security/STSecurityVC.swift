@@ -9,63 +9,6 @@ import UIKit
 
 extension STSecurityVC {
     
-    enum CellReusable: ISettingsItemReusableIdentifier {
-
-        case detail
-        case swich
-        
-        var nibName: String {
-            switch self {
-            case .detail:
-                return "STSettingsDetailTableViewCell"
-            case .swich:
-                return "STSettingsSwichTableViewCell"
-            }
-        }
-        
-        var identifier: String {
-            switch self {
-            case .detail:
-                return "detail"
-            case .swich:
-                return "swich"
-            }
-        }
-        
-    }
-    
-    enum HeaderReusable: ISettingsItemReusableIdentifier {
-
-        case title
-        
-        var nibName: String {
-            switch self {
-            case .title:
-                return "STSettingsHeaderView"
-            }
-        }
-        
-        var identifier: String {
-            switch self {
-            case .title:
-                return "title"
-            }
-        }
-        
-    }
-    
-    struct Cell: ISettingsSectionCellItemModel {
-        var reusableIdentifier: STSecurityVC.CellReusable
-        var identifier: ItemType?
-        var cellModel: ISettingsTableViewCellModel?
-    }
-    
-    struct Header: ISettingsSectionHeaderItemModel {
-        var reusableIdentifier: HeaderReusable
-        var identifier: SectionType?
-        var headerModel: STSettingsHeaderViewModel?
-    }
-    
     enum SectionType: String {
         
         case appAccess = "appAccess"
@@ -84,20 +27,18 @@ extension STSecurityVC {
         }
     }
     
-    
     enum ItemType {
         case lockUp
         case biometricAuthentication
     }
-    
-    struct Section: ISettingsSection {
-        var header: Header?
-        var cells: [Cell]
-    }
-    
+
 }
 
-class STSecurityVC: STSettingsDetailVC<STSecurityVC.Section> {
+class STSecurityVC: STSettingsDetailTableVC<STSecurityVC.SectionType, STSecurityVC.ItemType> {
+
+    typealias Section = STSettingsDetailTableInfo.Section<STSecurityVC.SectionType, STSecurityVC.ItemType>
+    typealias CellModel = Section.Cell
+    typealias HeaderModel = Section.Header
         
     private var viewModel = STSecurityVM()
     
@@ -166,11 +107,11 @@ class STSecurityVC: STSettingsDetailVC<STSecurityVC.Section> {
     }
     
     private func generateAuthenticationSection() -> Section {
-        let lockUp = STSettingsDetailTableViewCell.Model(itemType: .lockUp, image: UIImage(named: "ic_timer")!, title: "lock_up_the_app_after".localized, subTitle: self.security.lockUpApp.stringValue.localized)
-        let cell = Cell(reusableIdentifier: .detail, identifier: .lockUp, cellModel: lockUp)
+        let lockUp = STSettingsDetailTableViewCell.Model(image: UIImage(named: "ic_timer")!, title: "lock_up_the_app_after".localized, subTitle: self.security.lockUpApp.stringValue.localized)
+        let cell = CellModel(reusableIdentifier: .detail, identifier: .lockUp, cellModel: lockUp)
         
         let title = STSettingsHeaderViewModel(title: SectionType.appAccess.localized)
-        let header = Header(reusableIdentifier: .title, identifier: .appAccess, headerModel: title)
+        let header = HeaderModel(reusableIdentifier: .title, identifier: .appAccess, headerModel: title)
         return Section(header: header, cells: [cell])
     }
     
@@ -180,12 +121,11 @@ class STSecurityVC: STSettingsDetailVC<STSecurityVC.Section> {
         let hasBiometricAuthInApp = hasBiometric && self.viewModel.biometric.canUnlockApp
         
         let imageName = self.viewModel.biometric.type == .faceID ? "ic_face_id" : "ic_touch_id"
-        let touchId = STSettingsSwichTableViewCell.Model(itemType: .biometricAuthentication, image: UIImage(named: imageName)!, title: "biometric_authentication".localized, subTitle: "biometric_authentication_message".localized, isOn: self.security.authentication.unlock && hasBiometricAuthInApp, isEnabled: hasBiometric)
+        let touchId = STSettingsSwichTableViewCell.Model(image: UIImage(named: imageName)!, title: "biometric_authentication".localized, subTitle: "biometric_authentication_message".localized, isOn: self.security.authentication.unlock && hasBiometricAuthInApp, isEnabled: hasBiometric)
         
-        let touchIdCell = Cell(reusableIdentifier: .swich, identifier: .biometricAuthentication, cellModel: touchId)
-        
+        let touchIdCell = CellModel(reusableIdentifier: .swich, identifier: .biometricAuthentication, cellModel: touchId)
         let title = STSettingsHeaderViewModel(title: SectionType.authentication.localized)
-        let header = Header(reusableIdentifier: .title, identifier: .authentication, headerModel: title)
+        let header = HeaderModel(reusableIdentifier: .title, identifier: .authentication, headerModel: title)
         return Section(header: header, cells: [touchIdCell])
         
     }

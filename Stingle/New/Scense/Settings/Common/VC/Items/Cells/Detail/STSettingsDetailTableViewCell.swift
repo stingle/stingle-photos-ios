@@ -10,10 +10,10 @@ import UIKit
 extension STSettingsDetailTableViewCell {
     
     struct Model: ISettingsTableViewCellModel {
-        let itemType: STSecurityVC.ItemType
         let image: UIImage
         let title: String?
         let subTitle: String?
+        var isEnabled: Bool = true
     }
     
 }
@@ -31,6 +31,9 @@ class STSettingsDetailTableViewCell: STSettingsTableViewCell<STSettingsDetailTab
         self.subTitleLabel.text = model?.subTitle
         self.titleLabel.isHidden = model?.title == nil
         self.subTitleLabel.isHidden = model?.subTitle == nil
+        
+        let isEnabled =  model?.isEnabled ?? false
+        self.contentView.alpha = isEnabled ? 1 : 0.7
     }
     
     func update(subTitle: String?) {

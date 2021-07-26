@@ -146,6 +146,7 @@
 		A044ABFD2605427A00BA318F /* STCrypto+Additional.swift in Sources */ = {isa = PBXBuildFile; fileRef = A044ABFC2605427A00BA318F /* STCrypto+Additional.swift */; };
 		A04512B82638B0FD00BE0B06 /* STAlbumWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04512B72638B0FD00BE0B06 /* STAlbumWorker.swift */; };
 		A04512BB2638B13400BE0B06 /* STAlbumRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04512BA2638B13400BE0B06 /* STAlbumRequest.swift */; };
+		A04561C026AF652900DDFE53 /* STAccountVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04561BF26AF652900DDFE53 /* STAccountVM.swift */; };
 		A046A80F261FA815005EDB89 /* STImagePickerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A046A80E261FA815005EDB89 /* STImagePickerHelper.swift */; };
 		A049459C2611CDF4008D5E48 /* STView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A049459B2611CDF4008D5E48 /* STView.swift */; };
 		A04945C92611F77C008D5E48 /* STTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04945C82611F77C008D5E48 /* STTabBar.swift */; };
@@ -474,6 +475,7 @@
 		A044ABFC2605427A00BA318F /* STCrypto+Additional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STCrypto+Additional.swift"; sourceTree = "<group>"; };
 		A04512B72638B0FD00BE0B06 /* STAlbumWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumWorker.swift; sourceTree = "<group>"; };
 		A04512BA2638B13400BE0B06 /* STAlbumRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumRequest.swift; sourceTree = "<group>"; };
+		A04561BF26AF652900DDFE53 /* STAccountVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAccountVM.swift; sourceTree = "<group>"; };
 		A046A80E261FA815005EDB89 /* STImagePickerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STImagePickerHelper.swift; sourceTree = "<group>"; };
 		A049459B2611CDF4008D5E48 /* STView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STView.swift; sourceTree = "<group>"; };
 		A04945C82611F77C008D5E48 /* STTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTabBar.swift; sourceTree = "<group>"; };
@@ -1762,6 +1764,7 @@
 			isa = PBXGroup;
 			children = (
 				A0794B7D269E2E3300B40FE9 /* STAccountVC.swift */,
+				A04561BF26AF652900DDFE53 /* STAccountVM.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -2594,6 +2597,7 @@
 				A0794B9B269E433D00B40FE9 /* STSettingsSwichTableViewCell.swift in Sources */,
 				A04BD0012634794600C5F29F /* STUploadsVC.swift in Sources */,
 				A0794B87269E314200B40FE9 /* STAdvancedVC.swift in Sources */,
+				A04561C026AF652900DDFE53 /* STAccountVM.swift in Sources */,
 				A0F146E7260617090091BBC4 /* CompositionalLayout+Operation.swift in Sources */,
 				A022047325EEDC0400D07C98 /* SPDatasource.swift in Sources */,
 				A099F4B726302386000D4F86 /* STPopoverViewController.swift in Sources */,
