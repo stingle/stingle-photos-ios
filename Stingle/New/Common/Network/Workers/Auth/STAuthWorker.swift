@@ -12,7 +12,6 @@ class STAuthWorker: STWorker {
 	
     private let crypto = STApplication.shared.crypto
     private let userProvider = STApplication.shared.dataBase.userProvider
-    
 	
 	func register(email: String, password: String, includePrivateKey: Bool, success: Success<STAuth.Register>? = nil, failure: Failure? = nil) {
 		do {
@@ -47,13 +46,13 @@ class STAuthWorker: STWorker {
 			weakSelf.login(email: email, password: password, success: success, failure: failure)
 		}, failure: failure)
 	}
-	
+    
 	//MARK: - Private Register
 	
 	private func generateSignUpRequest(email: String, password: String, includePrivateKey: Bool) throws -> STAuthRequest {
 		do {
 			try self.crypto.generateMainKeypair(password: password)
-			guard let pwdHash = try self.crypto.getPasswordHashForStorage(password: password), let salt = pwdHash["salt"], let pwd = pwdHash["hash"], let keyBundle = try KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: includePrivateKey)  else {
+			guard let pwdHash = try self.crypto.getPasswordHashForStorage(password: password), let salt = pwdHash["salt"], let pwd = pwdHash["hash"], let keyBundle = try? KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: includePrivateKey)  else {
 				throw AuthWorkerError.passwordError
 			}
 			return STAuthRequest.register(email: email, password: pwd, salt: salt, keyBundle: keyBundle, isBackup: includePrivateKey)

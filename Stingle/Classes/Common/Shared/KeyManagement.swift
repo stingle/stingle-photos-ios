@@ -45,21 +45,42 @@ class KeyManagement {
 		}
 	}
 	
-	static public func getUploadKeyBundle(password:String, includePrivateKey:Bool) throws -> String? {
+	static public func getUploadKeyBundle(password: String?, includePrivateKey: Bool) throws -> String {
 		var keyBundleBytes:[UInt8]? = nil
 		do {
 			if includePrivateKey {
+                guard let password = password else {
+                    throw KeyManagementError.password
+                }
 				keyBundleBytes = try self.crypto.exportKeyBundle(password: password)
 			} else {
 				keyBundleBytes = try self.crypto.exportPublicKey()
 			}
 		} catch {
-			throw error
+            throw KeyManagementError.password
 		}
 		guard let keyBundle = self.crypto.bytesToBase64(data: keyBundleBytes!) else {
-			//TODO : throw error
-			return nil
+            throw KeyManagementError.unknown
 		}
 		return keyBundle
 	}
+}
+
+extension KeyManagement {
+    
+    enum KeyManagementError: IError {
+        case password
+        case unknown
+        
+        var message: String {
+            switch self {
+            case .password:
+                return "error_password_not_valed".localized
+            case .unknown:
+                return "error_data_not_found".localized
+            }
+        }
+        
+    }
+    
 }

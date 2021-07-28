@@ -15,6 +15,8 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
     
     private let viewModel = STAccountVM()
 
+    //MARK: - Override
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -24,11 +26,106 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
         self.reloadTableData()
     }
     
+    override func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
+        super.securityCel(didSelectSwich: cell, model: model, isOn: isOn)
+        guard let indexPath = self.tableView.indexPath(for: cell), let identifier = self.cellModel(for: indexPath)?.identifier else {
+            return
+        }
+        switch identifier {
+        case .backcupKeys:
+            if isOn {
+                self.addBackcupKeys()
+            } else {
+                self.removeBackcupKeys()
+            }
+        default:
+            break
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        guard let identifier = self.cellModel(for: indexPath)?.identifier else {
+            return false
+        }
+        return identifier == .changePassword || identifier == .deleteAccount
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let identifier = self.cellModel(for: indexPath)?.identifier else {
+            return
+        }
+        
+        switch identifier {
+        case .changePassword:
+            
+            break
+        case .deleteAccount:
+            
+            let title = "delete_account_alert_title".localized
+            let message = "delete_account_aler_alert_message".localized
+
+            self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
+                self?.deleteAccount()
+            })
+            
+            break
+        default:
+            break
+        }
+    }
+    
     //MARK: - Private
     
     private func reloadTableData() {
         self.reloadTableDataModels()
         self.tableView.reloadData()
+    }
+    
+    private func removeBackcupKeys() {
+        let title = "remove_backcup_keys_alert_title".localized
+        let message = "remove_backcup_keys_alert_message".localized
+        let loadingView: UIView =  self.navigationController?.view ?? self.view
+        self.showOkCancelAlert(title: title, message: message, textFieldHandler: nil) { [weak self] _ in
+            STLoadingView.show(in: loadingView)
+            self?.viewModel.removeBackcupKeys(completion: { error in
+                if let error = error {
+                    self?.showError(error: error)
+                }
+                self?.reloadTableData()
+                STLoadingView.hide(in: loadingView)
+            })
+        } cancel: { [weak self]  in
+            self?.reloadTableData()
+        }
+    }
+    
+    private func addBackcupKeys(password: String?) {
+        guard let password = password, !password.isEmpty else {
+            self.showOkCancelAlert(title: "warning".localized, message: "error_password_not_valed".localized)
+            return
+        }
+        let loadingView: UIView =  self.navigationController?.view ?? self.view
+        STLoadingView.show(in: loadingView)
+        self.viewModel.addBackcupKeys(password: password) { [weak self] error in
+            STLoadingView.hide(in: loadingView)
+            if let error = error {
+                self?.showError(error: error)
+            }
+            self?.reloadTableData()
+        }
+        
+    }
+    
+    private func addBackcupKeys() {
+        let title = "enter_app_password".localized
+        self.showOkCancelAlert(title: title, message: nil) { textField in
+            textField.placeholder = "password".localized
+            textField.isSecureTextEntry = true
+        } handler: { [weak self] text in
+            self?.addBackcupKeys(password: text)
+        } cancel: { [weak self] in
+            self?.reloadTableData()
+        }
     }
 
     private func reloadTableDataModels() {
@@ -55,6 +152,18 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
         self.reloadTable(sections: [section])
     }
     
+    private func deleteAccount() {
+        let loadingView: UIView =  self.navigationController?.view ?? self.view
+        STLoadingView.show(in: loadingView)
+        self.viewModel.deleteAccount() { [weak self] error in
+            STLoadingView.hide(in: loadingView)
+            if let error = error {
+                self?.showError(error: error)
+            }
+            self?.reloadTableData()
+        }
+    }
+        
 }
 
 extension STAccountVC {
@@ -62,11 +171,11 @@ extension STAccountVC {
     enum SectionType {
     }
     
-    enum ItemType {
-        case userMail
-        case changePassword
-        case backcupKeys
-        case deleteAccount
+    enum ItemType: Int {
+        case userMail = 0
+        case changePassword = 1
+        case backcupKeys = 2
+        case deleteAccount = 3
     }
 
 }

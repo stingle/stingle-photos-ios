@@ -73,6 +73,7 @@ extension IError {
 enum STError: IError {
     
     case error(error: Error)
+    case passwordNotValied
     
     var message: String {
         switch self {
@@ -81,6 +82,8 @@ enum STError: IError {
                 return error.message
             }
             return error.localizedDescription
+        case .passwordNotValied:
+            return "error_password_not_valed".localized
         }
     }
 }

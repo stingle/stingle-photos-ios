@@ -119,7 +119,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="329.23076923076923" y="-17.061611374407583"/>
+            <point key="canvasLocation" x="260" y="-150"/>
         </scene>
         <!--Sign Up-->
         <scene sceneID="OZA-R6-evH">
@@ -537,7 +537,7 @@ may be vulnerable to brute force attacks.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MEN-Ma-wn0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-525" y="-173"/>
+            <point key="canvasLocation" x="-646" y="-555"/>
         </scene>
         <!--MainVC-->
         <scene sceneID="rnq-br-JtG">
@@ -865,7 +865,7 @@ may be vulnerable to brute force attacks.</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gZD-9J-P08" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1237.5" y="-18.75"/>
+            <point key="canvasLocation" x="1237" y="-161"/>
         </scene>
     </scenes>
     <designables>
@@ -895,7 +895,7 @@ may be vulnerable to brute force attacks.</string>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="es5-rA-LwU"/>
+        <segue reference="Yve-OW-1gT"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>

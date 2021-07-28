@@ -205,6 +205,12 @@
 
 "delete_account" = "Delete account";
 
+"remove_backcup_keys_alert_title" = "Delete backup of keys";
+"remove_backcup_keys_alert_message" = "Are you sure you want to delete backup keys?\nTo login you will need to enter your backup phrase";
+
+"delete_account_alert_title" = "Delete your account?";
+"delete_account_aler_alert_message" = "Are you sure you want to delete your account?\nAll your data will be irreversibly deleted!";
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";

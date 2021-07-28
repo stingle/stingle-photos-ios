@@ -49,7 +49,7 @@ class SyncManager {
 				completionHandler(false, nil)
 				return false
 			}
-			guard let keyBundle = try KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: true) else {
+			guard let keyBundle = try? KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: true) else {
 				completionHandler(false, nil)
 				return false
 			}

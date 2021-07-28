@@ -80,7 +80,7 @@ extension STApplication {
     
     func logout() {
         self.dataBase.deleteAll()
-        KeyManagement.key = nil
+        KeyManagement.signOut()
         STOperationManager.shared.logout()
         self.fileSystem.logOut()
         self.myFileSystem = nil

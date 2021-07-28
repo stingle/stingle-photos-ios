@@ -14,6 +14,6 @@ target 'Stingle' do
   pod 'Tatsi'
   pod 'KeychainSwift'
     
-#  pod 'netfox'
+  pod 'netfox'
 
 end
