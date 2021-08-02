@@ -57,13 +57,12 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
         
         switch identifier {
         case .changePassword:
-            
-            break
+            let storyboard = UIStoryboard(name: "Welcome", bundle: .main)
+            let vc = storyboard.instantiateViewController(identifier: "STChangePasswordVCID")
+            self.show(vc, sender: nil)
         case .deleteAccount:
-            
             let title = "delete_account_alert_title".localized
-            let message = "delete_account_aler_alert_message".localized
-
+            let message = "delete_account_alert_message".localized
             self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
                 self?.deleteAccount()
             })
@@ -152,16 +151,46 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
         self.reloadTable(sections: [section])
     }
     
-    private func deleteAccount() {
+    
+    private func deleteAccount(password: String) {
         let loadingView: UIView =  self.navigationController?.view ?? self.view
         STLoadingView.show(in: loadingView)
-        self.viewModel.deleteAccount() { [weak self] error in
+        self.viewModel.deleteAccount(password: password) { [weak self] error in
             STLoadingView.hide(in: loadingView)
             if let error = error {
                 self?.showError(error: error)
             }
-            self?.reloadTableData()
         }
+    }
+    
+    private func deleteAccount(password: String?) {
+        
+        guard let password = password, !password.isEmpty else {
+            self.showOkCancelAlert(title: "warning".localized, message: "error_password_not_valed".localized)
+            return
+        }
+        
+        self.viewModel.validatePassword(password) { [weak self] error in
+            if let error = error {
+                self?.showError(error: error)
+            } else {
+                let title = "delete_account_seccoundry_alert_title".localized
+                let message = "delete_account_seccoundry_alert_message".localized
+                self?.showOkCancelAlert(title: title, message: message, textFieldHandler: nil, handler: { _ in
+                    self?.deleteAccount(password: password)
+                }, cancel: nil)
+            }
+        }
+    }
+    
+    private func deleteAccount() {
+        let title = "enter_app_password".localized
+        self.showOkCancelAlert(title: title, message: nil, textFieldHandler: { textField in
+            textField.placeholder = "password".localized
+            textField.isSecureTextEntry = true
+        }, handler: { [weak self] text in
+            self?.deleteAccount(password: text)
+        }, cancel: nil)
     }
         
 }

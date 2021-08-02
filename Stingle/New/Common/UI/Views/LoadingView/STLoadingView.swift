@@ -25,6 +25,7 @@ class STLoadingView: UIView {
             loadingView.alpha = 0
             view.addSubviewFullContent(view: loadingView)
         }
+        view.isUserInteractionEnabled = false
 		loadingView.activityIndicatorView.startAnimating()
         UIView.animate(withDuration: 0.3) {
             loadingView.alpha = 1
@@ -41,6 +42,7 @@ class STLoadingView: UIView {
         }) { (_) in
             loadingView.removeFromSuperview()
         }
+        view.isUserInteractionEnabled = true
     }
     
     //MARK: - Private methods

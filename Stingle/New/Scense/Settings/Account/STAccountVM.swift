@@ -37,13 +37,22 @@ class STAccountVM {
         }
     }
     
-    func deleteAccount(completion: @escaping (IError?) -> Void) {
-
-//        self.authWorker.addBackcupKeys(password: password) { _ in
-//            completion(nil)
-//        } failure: { error in
-//            completion(error)
-//        }
+    func validatePassword(_ password: String, completion: @escaping (IError?) -> Void) {
+        do {
+            let _ = try STApplication.shared.crypto.getPrivateKey(password: password)
+            completion(nil)
+        } catch {
+            completion(STError.passwordNotValied)
+            return
+        }
+    }
+    
+    func deleteAccount(password: String, completion: @escaping (IError?) -> Void) {
+        self.authWorker.deleteAccount(password: password) { _ in
+            completion(nil)
+        } failure: { error in
+            completion(error)
+        }
     }
     
     

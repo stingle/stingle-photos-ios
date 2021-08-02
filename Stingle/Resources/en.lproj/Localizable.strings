@@ -36,8 +36,6 @@
 //MARK: - Common
 
 "email" = "Email";
-"password" = "Password";
-"confirm_password" = "Confirm password";
 "already_have_an_account" = "Already  have an account?";
 "dont_have_an_accout" = "Don't have an accout?";
 "advanced" = "Advanced";
@@ -60,6 +58,8 @@
 "trash" = "Trash";
 "albums" = "Albums";
 "sharing" = "Sharing";
+
+"change" = "Change";
 
 "items_count" = "%@ items";
 
@@ -92,6 +92,12 @@
 
 "confirm_password" = "Confirm password";
 "change_password" = "Change Password";
+"current_password" = "Current Password";
+"password" = "Password";
+"new_password" = "New password";
+
+"app_unauthorized_message" = "App automatically log out for your security. Please login and enjoy again";
+
 
 //MARK: - Share
 
@@ -209,7 +215,16 @@
 "remove_backcup_keys_alert_message" = "Are you sure you want to delete backup keys?\nTo login you will need to enter your backup phrase";
 
 "delete_account_alert_title" = "Delete your account?";
-"delete_account_aler_alert_message" = "Are you sure you want to delete your account?\nAll your data will be irreversibly deleted!";
+"delete_account_alert_message" = "Are you sure you want to delete your account?\nAll your data will be irreversibly deleted!";
+
+"delete_account_seccoundry_alert_title" = "Are you REALLY sure you want to account?";
+"delete_account_seccoundry_alert_message" = "Last chance! Your account and all of your photos, videos, albums and shares will be deleted! This cannot be UNDONE!";
+
+
+"reset_password_title" = "Warning! Changing password will log out all others devices currently connected to this account you will need to log them in again with new credentials";
+
+"alert_log_out_title" = "Log Out";
+"alert_log_out_message" = "Are you sure you want to log out?";
 
 //MARK: - Menu
 
@@ -253,6 +268,8 @@
 "error_incorrect_confirm_password" = "Confirm  passwordnot valid";
 
 "error_data_not_found" = "Data not found";
+
+"error_maching_passwords" = "Password don't match. Please enter the same password twice correctly";
 
 //MARK: - NETWORK
 

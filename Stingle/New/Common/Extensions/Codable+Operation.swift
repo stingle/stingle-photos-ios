@@ -43,6 +43,13 @@ extension Decodable {
         self = result
     }
     
+    init?(from data: Data, decoder: JSONDecoder = JSONDecoder()) {
+        guard let result = try? decoder.decode(Self.self, from: data) else {
+            return nil
+        }
+        self = result
+    }
+    
 }
 
 extension Dictionary {

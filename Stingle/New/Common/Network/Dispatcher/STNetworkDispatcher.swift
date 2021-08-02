@@ -24,18 +24,22 @@ class STNetworkDispatcher {
     static let sheared: STNetworkDispatcher = STNetworkDispatcher()
 
     private lazy var session: Alamofire.Session = {
-        return AF
+        let config = URLSessionConfiguration.default
+        let session = Alamofire.Session(configuration: config, eventMonitors: [self])
+        return session
     }()
     
     private lazy var uploadSession: Alamofire.Session = {
         let config = URLSessionConfiguration.default
-        return Alamofire.Session(configuration: config)
+        let session = Alamofire.Session(configuration: config, eventMonitors: [self])
+        return session
     }()
     
     private lazy var streanSession: Alamofire.Session = {
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        return Alamofire.Session(configuration: config)
+        let session = Alamofire.Session(configuration: config, eventMonitors: [self])
+        return session
     }()
         
     private lazy var backgroundSession: Alamofire.Session = {
@@ -46,7 +50,14 @@ class STNetworkDispatcher {
         return backgroundSessionManager
         #endif
     }()
-		
+    
+    private lazy var downloadSession: Alamofire.Session = {
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        let session = Alamofire.Session(configuration: config, eventMonitors: [self])
+        return session
+    }()
+    		
     lazy var decoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -58,7 +69,7 @@ class STNetworkDispatcher {
 	@discardableResult
 	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
         let decoder = decoder ?? self.decoder
-		let request = request.asDataRequest
+        let request = self.afRequest(request: request, sesion: self.session)
 		request.responseDecodable(decoder: decoder) { (response: AFDataResponse<T>) in
 			switch response.result {
 			case .success(let value):
@@ -73,7 +84,7 @@ class STNetworkDispatcher {
     
     @discardableResult
     func requestJSON(request: IRequest, completion: @escaping (Result<Any>) -> Swift.Void) -> NetworkTask? {
-        let request = request.asDataRequest
+        let request = self.afRequest(request: request, sesion: self.session)
         request.responseJSON(completionHandler: { (response: AFDataResponse<Any>) in
             switch response.result {
             case .success(let value):
@@ -88,7 +99,7 @@ class STNetworkDispatcher {
     
     @discardableResult
     func requestData(request: IRequest, completion: @escaping (Result<Data>) -> Swift.Void) -> NetworkTask? {
-        let request = request.asDataRequest
+        let request = self.afRequest(request: request, sesion: self.session)
         request.responseData { (response) in
             switch response.result {
             case .success(let value):
@@ -111,7 +122,7 @@ class STNetworkDispatcher {
             return (fileUrl, [.removePreviousFile, .createIntermediateDirectories])
         }
         
-        let downloadRequest = AF.download(request.url, method: request.AFMethod, parameters: request.parameters, headers: request.afHeaders, to: destination).response { response in
+        let downloadRequest = self.downloadSession.download(request.url, method: request.AFMethod, parameters: request.parameters, headers: request.afHeaders, to: destination).response { response in
             if let error = response.error {
                 let networkError = NetworkError.error(error: error)
                 completion(.failure(error: networkError))
@@ -156,7 +167,10 @@ class STNetworkDispatcher {
     
     func stream(request: IStreamRequest, queue: DispatchQueue, stream: @escaping (_ chank: Data) -> Swift.Void, completion: @escaping (Result<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)>) -> Swift.Void) -> NetworkTask? {
         
-        let streamRequest = self.streanSession.streamRequest(request.asURLRequest).responseStream(on: queue) { response in
+        let dataRequest = self.afRequest(request: request, sesion: self.streanSession)
+        
+        let urlRequest = try! dataRequest.convertible.asURLRequest()
+        let streamRequest = self.streanSession.streamRequest(urlRequest).responseStream(on: queue) { response in
             
             var errorIsResponseed = false
             
@@ -214,4 +228,24 @@ class STNetworkDispatcher {
     
     
         		
+}
+
+
+extension STNetworkDispatcher: EventMonitor {
+    
+    func afRequest(request: IRequest, sesion: Alamofire.Session) -> DataRequest {
+        let url = request.url
+        guard let components = URLComponents(string: url) else {
+            fatalError()
+        }
+        return sesion.request(components, method: request.AFMethod, parameters: request.parameters, encoding: request.encoding, headers: request.afHeaders, interceptor: nil).validate(statusCode: 200..<300)
+    }
+    
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        guard let response = STResponse<STLogoutResponse>(from: data) else {
+            return
+        }
+        STApplication.shared.networkDispatcher(didReceive: self, logOunt: response)
+    }
+    
 }

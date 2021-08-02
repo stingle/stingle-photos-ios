@@ -38,22 +38,6 @@ extension IRequest {
         return nil
     }
     
-    var asDataRequest: DataRequest {
-        let url = self.url
-        guard let components = URLComponents(string: url) else {
-            fatalError()
-        }
-        return AF.request(components, method: self.AFMethod, parameters: self.parameters, encoding: self.encoding, headers: self.afHeaders, interceptor: nil).validate(statusCode: 200..<300)
-    }
-        
-    var asURLRequest: URLRequest {
-        guard let request = try? self.asDataRequest.convertible.asURLRequest() else {
-            fatalError()
-        }
-                
-        return request
-    }
-    
     var AFMethod: Alamofire.HTTPMethod {
         switch self.method {
         case .get:
@@ -158,5 +142,3 @@ struct STUploadRequestFileInfo {
 
 protocol STUploadRequest: IUploadRequest, STRequest {
 }
-
-

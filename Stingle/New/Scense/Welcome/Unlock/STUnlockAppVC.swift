@@ -35,7 +35,12 @@ class STUnlockAppVC: UIViewController {
     //MARK: User Action
 
     @IBAction private func didSelectLogOutButton(_ sender: Any) {
-        self.viewModel.logOutApp()
+        let title = "alert_log_out_title".localized
+        let message = "alert_log_out_message".localized
+        self.showOkCancelAlert(title: title, message: message, textFieldHandler: nil, handler: { [weak self] _ in
+            self?.viewModel.logOutApp()
+        }, cancel: nil)
+        
     }
     
     @IBAction private func didSelectUnlockButton(_ sender: Any) {

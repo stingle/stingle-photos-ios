@@ -72,7 +72,11 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
             }
             self.selectCurrentRow()
         case .signOut:
-            STApplication.shared.logout()
+            let title = "alert_log_out_title".localized
+            let message = "alert_log_out_message".localized
+            self.showOkCancelAlert(title: title, message: message, textFieldHandler: nil, handler: { _ in
+                STApplication.shared.logout()
+            }, cancel: nil)
             self.selectCurrentRow()
         default:
             self.set(controllerType: item.controllerType)

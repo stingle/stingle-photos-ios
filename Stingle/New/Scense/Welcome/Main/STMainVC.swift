@@ -11,21 +11,35 @@ import UIKit
 class STMainVC: UIViewController {
 	
 	private let viewModel = STMainVM()
+    private var appInUnauthorized: Bool = false
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.configure()
-		self.viewModel.setupApp { [weak self] (_) in
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				self?.openAppController()
-			}
-		}
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.viewModel.setupApp { [weak self] (_) in
+            if self?.appInUnauthorized == true {
+                self?.showUnauthorizedAlert()
+            } else {
+                self?.openAppController()
+            }
+        }
     }
 	
 	//MARK: - Private func
 	
 	private func configure() {
 	}
+    
+    private func showUnauthorizedAlert() {
+        self.showInfoAlert(title: nil, message: "app_unauthorized_message".localized) { [weak self] in
+            self?.openAppController()
+        }
+        
+    }
 	
 	private func openAppController() {
         var identifier = ""
@@ -45,11 +59,12 @@ class STMainVC: UIViewController {
 
 extension STMainVC {
     
-    class func show() {
+    class func show(appInUnauthorized: Bool) {
         
         let storyboard = UIStoryboard(name: "Welcome", bundle: .main)
         let vc = storyboard.instantiateViewController(withIdentifier: "STMainVCID")
         let window =  UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+        (vc as? STMainVC)?.appInUnauthorized = appInUnauthorized
         
         if let rootVC = window?.rootViewController {
             let segue = STRootWindowSegue(identifier: "STMainVCID", source: rootVC, destination: vc)

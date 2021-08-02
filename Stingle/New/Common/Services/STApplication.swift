@@ -78,7 +78,46 @@ extension STApplication {
         return nil
     }
     
+    func updateAppPassword(token: String, password: String) {
+        guard let user = self.user() else {
+            return
+        }
+        let newUser = STUser(email: user.email, homeFolder: user.homeFolder, isKeyBackedUp: user.isKeyBackedUp, token: token, userId: user.userId, managedObjectID: nil)
+        self.dataBase.userProvider.update(model: newUser)
+        
+        let key = try? STApplication.shared.crypto.getPrivateKey(password: password)
+        KeyManagement.key = key
+        
+        if STAppSettings.security.authentication.unlock {
+            STBiometricAuthServices().onBiometricAuth(password: password)
+        }
+    }
+    
     func logout() {
+        self.logout(appInUnauthorized: false)
+    }
+    
+    func deleteAccount() {
+        self.dataBase.deleteAll()
+        KeyManagement.signOut()
+        STOperationManager.shared.logout()
+        self.fileSystem.deleteAccount()
+        self.myFileSystem = nil
+        STBiometricAuthServices().removeBiometricAuth()
+        STAppSettings.logOut()
+        STMainVC.show(appInUnauthorized: false)
+    }
+    
+    func networkDispatcher(didReceive networkDispatcher: STNetworkDispatcher, logOunt: STResponse<STLogoutResponse>) {
+        guard  logOunt.parts?.logout == true else {
+            return
+        }
+        self.logout(appInUnauthorized: true)
+    }
+    
+    //MARK: - private
+    
+    private func logout(appInUnauthorized: Bool) {
         self.dataBase.deleteAll()
         KeyManagement.signOut()
         STOperationManager.shared.logout()
@@ -86,7 +125,7 @@ extension STApplication {
         self.myFileSystem = nil
         STBiometricAuthServices().removeBiometricAuth()
         STAppSettings.logOut()
-        STMainVC.show()
+        STMainVC.show(appInUnauthorized: appInUnauthorized)
     }
-        
+    
 }

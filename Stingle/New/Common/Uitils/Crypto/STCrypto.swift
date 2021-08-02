@@ -71,13 +71,13 @@ class STCrypto {
 		self.sodium = Sodium()
 	}
 			
-	public func getPasswordHashForStorage(password: String) throws -> [String: String]? {
+	public func getPasswordHashForStorage(password: String) throws -> [String: String] {
 		guard let salt = self.getRandomBytes(lenght: sodium.pwHash.SaltBytes) else {
-			return nil
+            throw CryptoError.Internal.hashGenerationFailure
 		}
 		let hash =  try self.getPasswordHashForStorage(password: password, salt: salt)
-		guard let saltHex = sodium.utils.bin2hex(salt) else {
-			return nil
+        guard let saltHex = self.sodium.utils.bin2hex(salt) else {
+            throw CryptoError.Internal.hashGenerationFailure
 		}
 		return ["hash": hash, "salt": saltHex]
 	}
@@ -162,9 +162,9 @@ class STCrypto {
 	
 	public func exportPublicKey() throws -> Bytes {
 		var pbk = [UInt8]()
-		pbk += Constants.KeyFileBeggining.bytes
-		pbk += STCrypto.toBytes(value: Constants.CurrentKeyFileVersion)
-		pbk += STCrypto.toBytes(value: Constants.KeyFileTypePublicPlain)
+        pbk.append(contentsOf: Constants.KeyFileBeggining.bytes)
+        pbk.append(UInt8(Constants.CurrentKeyFileVersion))
+        pbk.append(UInt8(Constants.KeyFileTypePublicPlain))
 		do {
 			let pbkBytes = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
 			pbk += pbkBytes
@@ -380,7 +380,7 @@ class STCrypto {
 			
 	@discardableResult
     func savePrivateFile(filename: String, data: Bytes?) throws -> Bool {
-        let path = STApplication.shared.fileSystem.url(for: .private)
+        let path = STFileSystem.privateKeyUrl()//  STApplication.shared.fileSystem.url(for: .private)
 		guard let fullPath = path?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
@@ -406,7 +406,7 @@ class STCrypto {
     }
 	
     func readPrivateFile(fileName: String) throws -> Bytes {
-        let path = STApplication.shared.fileSystem.url(for: .private, filePath: fileName)
+        let path = STFileSystem.privateKeyUrl(filePath: fileName) // STApplication.shared.fileSystem.url(for: .private, filePath: fileName)
         guard let fullPath = path else {
 			throw CryptoError.PrivateFile.invalidPath
 		}

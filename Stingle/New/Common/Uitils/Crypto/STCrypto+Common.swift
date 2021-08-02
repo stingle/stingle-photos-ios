@@ -52,7 +52,14 @@ extension STCrypto {
     
     //ENCODE
     public func bytesToBase64(data: Bytes) -> String? {
-         return Data(data).base64EncodedString()
+        
+        var base64 = Data(data).base64EncodedString()
+        
+        if base64.count % 4 != 0 {
+            base64.append(String(repeating: "=", count: 4 - base64.count % 4))
+        }
+        
+         return base64
     }
     
     public func bytesToBase64Url(data: Bytes) -> String? {

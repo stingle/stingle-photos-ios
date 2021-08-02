@@ -175,6 +175,15 @@ extension STBiometricAuthServices {
             return false
         }
     }
+        
+    func isValiedPassword(password: String) -> Bool {
+        do {
+           let _ = try STApplication.shared.crypto.getPrivateKey(password: password)
+            return true
+        } catch  {
+            return false
+        }
+    }
     
     private var biometricAuthData: [String: Any]? {
         set {
@@ -189,15 +198,6 @@ extension STBiometricAuthServices {
             self.biometricAuthData?[self.encryptedPasswordKey] = newValue
         } get {
             return self.biometricAuthData?[self.encryptedPasswordKey] as? String
-        }
-    }
-    
-    func isValiedPassword(password: String) -> Bool {
-        do {
-           let _ = try STApplication.shared.crypto.getPrivateKey(password: password)
-            return true
-        } catch  {
-            return false
         }
     }
     
@@ -219,7 +219,7 @@ extension STBiometricAuthServices {
         case faceID
     }
     
-    enum AuthError: IError {
+    private enum AuthError: IError {
         
         case error(error: Error)
         case stateNotAvailable

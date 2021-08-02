@@ -54,6 +54,14 @@ extension STCrypto {
         return privateKey
     }
     
+    func reencryptPrivateKey(oldPassword: String, newPassword: String) throws {
+        let privateKey = try self.getPrivateKey(password: oldPassword)
+        let pwdKey = try self.getKeyFromPassword(password: newPassword, difficulty: Constants.KdfDifficultyNormal)
+        let pwdEncNonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
+        let encryptedPrivateKey = try self.encryptSymmetric(key: pwdKey, nonce: pwdEncNonce, data: privateKey)
+        try self.savePrivateFile(filename: Constants.PrivateKeyFilename, data: encryptedPrivateKey)
+    }
+   
     func getPrivateKeyFromExportedKey(password: String, encPrivKey: Bytes) throws -> Bytes {
         let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
         let decPK = try self.decryptSymmetric(key: self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard), nonce: nonce, data: encPrivKey)

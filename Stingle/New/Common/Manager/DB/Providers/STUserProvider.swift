@@ -61,7 +61,7 @@ extension STDataBase {
             }
         }
         
-        func updateMyUser() {
+        private func updateMyUser() {
             guard let cdUser = self.getUser(context: self.container.viewContext) else {
                 self.myUser = nil
                 return

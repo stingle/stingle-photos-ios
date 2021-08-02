@@ -37,10 +37,7 @@ class SyncManager {
 		var request:SPSignUpRequest? = nil
 		do {
 			try crypto.generateMainKeypair(password: password)
-			guard let pwdHash = try crypto.getPasswordHashForStorage(password: password) else {
-				completionHandler(false, nil)
-				return false
-			}
+            let pwdHash = try crypto.getPasswordHashForStorage(password: password)
 			guard let salt = pwdHash["salt"] else {
 				completionHandler(false, nil)
 				return false

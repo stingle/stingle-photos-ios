@@ -122,6 +122,8 @@
 		A024331925F6B40A0054BED9 /* Codable+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024331825F6B40A0054BED9 /* Codable+Operation.swift */; };
 		A027CE1A26B1FB5A00829162 /* STUserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE1926B1FB5A00829162 /* STUserRequest.swift */; };
 		A027CE1D26B20DE000829162 /* STAuthWorker+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE1C26B20DE000829162 /* STAuthWorker+User.swift */; };
+		A027CE2526B2139F00829162 /* STChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2426B2139F00829162 /* STChangePasswordVC.swift */; };
+		A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2726B213B300829162 /* STChangePasswordVM.swift */; };
 		A02D88A3260BE99C00B82F16 /* SDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D88A2260BE99C00B82F16 /* SDownloader.swift */; };
 		A02D88B0260BEEA800B82F16 /* STDownloaderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D88AF260BEEA800B82F16 /* STDownloaderManager.swift */; };
 		A02ED2E82603EED800F10D58 /* UIImageView+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02ED2E72603EED800F10D58 /* UIImageView+Operation.swift */; };
@@ -240,6 +242,7 @@
 		A08F0C192607D01800E81826 /* STNetworkOperationDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */; };
 		A08F0C1C2607D1C400E81826 /* STOperationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1B2607D1C400E81826 /* STOperationManager.swift */; };
 		A08F0C202607D3B800E81826 /* STJSONNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */; };
+		A09387D526B5F5A4000FCB01 /* STResetPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09387D426B5F5A4000FCB01 /* STResetPassword.swift */; };
 		A099F4B726302386000D4F86 /* STPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4B626302386000D4F86 /* STPopoverViewController.swift */; };
 		A099F4BC26302B28000D4F86 /* STGallerySyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */; };
 		A099F4C026302F4A000D4F86 /* STCircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4BF26302F4A000D4F86 /* STCircleProgressView.swift */; };
@@ -453,6 +456,8 @@
 		A024331825F6B40A0054BED9 /* Codable+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Operation.swift"; sourceTree = "<group>"; };
 		A027CE1926B1FB5A00829162 /* STUserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUserRequest.swift; sourceTree = "<group>"; };
 		A027CE1C26B20DE000829162 /* STAuthWorker+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAuthWorker+User.swift"; sourceTree = "<group>"; };
+		A027CE2426B2139F00829162 /* STChangePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STChangePasswordVC.swift; sourceTree = "<group>"; };
+		A027CE2726B213B300829162 /* STChangePasswordVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STChangePasswordVM.swift; sourceTree = "<group>"; };
 		A02D88A2260BE99C00B82F16 /* SDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDownloader.swift; sourceTree = "<group>"; };
 		A02D88AF260BEEA800B82F16 /* STDownloaderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDownloaderManager.swift; sourceTree = "<group>"; };
 		A02ED2E72603EED800F10D58 /* UIImageView+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Operation.swift"; sourceTree = "<group>"; };
@@ -568,6 +573,7 @@
 		A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkOperationDecodable.swift; sourceTree = "<group>"; };
 		A08F0C1B2607D1C400E81826 /* STOperationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOperationManager.swift; sourceTree = "<group>"; };
 		A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STJSONNetworkOperation.swift; sourceTree = "<group>"; };
+		A09387D426B5F5A4000FCB01 /* STResetPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STResetPassword.swift; sourceTree = "<group>"; };
 		A099F4B626302386000D4F86 /* STPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPopoverViewController.swift; sourceTree = "<group>"; };
 		A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGallerySyncView.swift; sourceTree = "<group>"; };
 		A099F4BF26302F4A000D4F86 /* STCircleProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCircleProgressView.swift; sourceTree = "<group>"; };
@@ -1137,11 +1143,12 @@
 		A022044525EEDC0300D07C98 /* Welcome */ = {
 			isa = PBXGroup;
 			children = (
-				A0355C7F26A8D063006BE2C4 /* Unlock */,
+				A022045225EEDC0400D07C98 /* Main */,
 				A022044625EEDC0300D07C98 /* Landing */,
 				A022044F25EEDC0300D07C98 /* Register */,
-				A022045225EEDC0400D07C98 /* Main */,
 				A022045525EEDC0400D07C98 /* Login */,
+				A027CE2326B212FF00829162 /* ChangePassword */,
+				A0355C7F26A8D063006BE2C4 /* Unlock */,
 				A022044C25EEDC0300D07C98 /* Common */,
 			);
 			path = Welcome;
@@ -1257,6 +1264,15 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		A027CE2326B212FF00829162 /* ChangePassword */ = {
+			isa = PBXGroup;
+			children = (
+				A027CE2426B2139F00829162 /* STChangePasswordVC.swift */,
+				A027CE2726B213B300829162 /* STChangePasswordVM.swift */,
+			);
+			path = ChangePassword;
+			sourceTree = "<group>";
+		};
 		A0301DDA25FD603D005281EF /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
@@ -1332,10 +1348,10 @@
 		A033D6E1260146C100E6AA83 /* Scense */ = {
 			isa = PBXGroup;
 			children = (
-				A00B4C21263D75090085C55E /* Shear */,
 				A033D6E2260146D000E6AA83 /* Home */,
-				A0AAA934261C7BFF009E9F51 /* Settings */,
 				A0A9F338261C7678000252F2 /* Gallery */,
+				A0AAA934261C7BFF009E9F51 /* Settings */,
+				A00B4C21263D75090085C55E /* Shear */,
 				A022044525EEDC0300D07C98 /* Welcome */,
 			);
 			path = Scense;
@@ -1406,6 +1422,7 @@
 				A0D8A98925F43EF8005C12F8 /* STContact.swift */,
 				A086FD9725F5B2A300A8BC9C /* STUser.swift */,
 				A0FD3F372670F4C40042EB8D /* STFileUrl.swift */,
+				A09387D426B5F5A4000FCB01 /* STResetPassword.swift */,
 				A0623F3325F419730018D378 /* Library */,
 				A0CFBD8B25F17085003095BE /* DB */,
 			);
@@ -2565,6 +2582,7 @@
 				A0794B84269E308600B40FE9 /* STAppearanceVC.swift in Sources */,
 				A005FB0225FF4F5D00E7D8B0 /* STGaleryHeaderView.swift in Sources */,
 				A005FAF525FF4CBB00E7D8B0 /* STGalleryCollectionViewCell.swift in Sources */,
+				A09387D526B5F5A4000FCB01 /* STResetPassword.swift in Sources */,
 				A02204A725EEDC0400D07C98 /* STSignUpVC.swift in Sources */,
 				A075B7202651BBE700B4E2DF /* STSharedAlbumSettingsVC.swift in Sources */,
 				A02204A425EEDC0400D07C98 /* HeaderPageVC.swift in Sources */,
@@ -2624,6 +2642,7 @@
 				A04BD0172634AA2700C5F29F /* STDynamicTableView.swift in Sources */,
 				A02204AC25EEDC0400D07C98 /* SignInVM.swift in Sources */,
 				A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */,
+				A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */,
 				A0D29CD7262051460083967D /* STFileUploader.swift in Sources */,
 				A0D1A3BC262E0D6E002E326F /* STAlbumFilesVM.swift in Sources */,
 				A022048925EEDC0400D07C98 /* STAuthWorker.swift in Sources */,
@@ -2640,6 +2659,7 @@
 				A0794B8D269E349A00B40FE9 /* STStorageVC.swift in Sources */,
 				A0F1437925FAC67B004C0E87 /* STContactProvider.swift in Sources */,
 				A06E423D2627230E00F43826 /* STAlbumsCollectionViewCell.swift in Sources */,
+				A027CE2526B2139F00829162 /* STChangePasswordVC.swift in Sources */,
 				A0355C8126A8D084006BE2C4 /* STUnlockAppVC.swift in Sources */,
 				A08B77F92608D56300EEEC93 /* STDownloadNetworkOperation.swift in Sources */,
 				A0FD3F342670E1F30042EB8D /* STFileRequest.swift in Sources */,

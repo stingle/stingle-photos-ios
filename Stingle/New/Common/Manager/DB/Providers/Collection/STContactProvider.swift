@@ -61,7 +61,7 @@ extension STDataBase {
             }
             let fetchRequest = NSFetchRequest<STCDContact>(entityName: STCDContact.entityName)
             fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "contactId IN %@", contactIds)
+            fetchRequest.predicate = NSPredicate(format: "userId IN %@", contactIds)
             let deleteingCDItems = try context.fetch(fetchRequest)
             var deleteItems = [STCDContact]()
             let groupCDItems = Dictionary(grouping: deleteingCDItems, by: { $0.userId })

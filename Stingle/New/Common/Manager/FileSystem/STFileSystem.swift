@@ -27,10 +27,19 @@ class STFileSystem {
     }
     
     func logOut() {
-        guard let userUrl = self.appUrl?.appendingPathComponent(self.userHomeFolderPath) else {
+        guard let userUrl = self.appUrl?.appendingPathComponent(self.userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
             return
         }
         self.remove(file: userUrl)
+        self.remove(file: privateKeyUrl)
+    }
+    
+    func deleteAccount() {
+        guard let userUrl = self.appUrl?.appendingPathComponent(self.userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
+            return
+        }
+        self.remove(file: userUrl)
+        self.remove(file: privateKeyUrl)
     }
     
     private func creatAllPath() {
@@ -205,6 +214,24 @@ extension STFileSystem {
         }
     }
     
+    static func privateKeyUrl(filePath: String? = nil) -> URL? {
+        guard let url = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+            return nil
+        }
+        var result = url.appendingPathComponent("private")
+        if let filePath = filePath {
+            result = result.appendingPathComponent(filePath)
+        }
+        
+        let fileManager = FileManager.default
+        
+        if !fileManager.fileExists(atPath: result.path) {
+            try? fileManager.createDirectory(at: result, withIntermediateDirectories: true, attributes: nil)
+        }
+        
+        return result
+    }
+    
 }
 
 extension STFileSystem {
@@ -223,15 +250,12 @@ extension STFileSystem {
     enum FolderType {
         
         case storage(type: CacheType)
-        case `private`
         case tmp
         
         var stringValue: String {
             switch self {
             case .storage(let type):
                 return "storage/" + "\(type.stringValue)"
-            case .private:
-                return "private"
             case .tmp:
                 return "tmp"
             }
@@ -242,7 +266,6 @@ extension STFileSystem {
                     .storage(type: .local(type: .thumbs)),
                     .storage(type: .server(type: .oreginals)),
                     .storage(type: .server(type: .thumbs)),
-                    .private,
                     .tmp]
         }
         
@@ -386,5 +409,5 @@ extension FileManager {
         }
         
     }
-    
+
 }
