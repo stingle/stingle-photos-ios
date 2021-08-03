@@ -12,7 +12,7 @@ extension STSettingsDetailTableViewCell {
     struct Model: ISettingsTableViewCellModel {
         let image: UIImage
         let title: String?
-        let subTitle: String?
+        var subTitle: String?
         var isEnabled: Bool = true
     }
     
@@ -39,6 +39,7 @@ class STSettingsDetailTableViewCell: STSettingsTableViewCell<STSettingsDetailTab
     func update(subTitle: String?) {
         self.subTitleLabel.text = subTitle
         self.titleLabel.isHidden = subTitle == nil
+        self.cellModel?.subTitle = subTitle
     }
     
 }

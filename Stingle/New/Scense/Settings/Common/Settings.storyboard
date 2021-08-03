@@ -6,7 +6,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -220,7 +219,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WYg-0i-yun">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" name="STBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="CYR-sX-hNO" id="KFq-rD-1Lk"/>
                                     <outlet property="delegate" destination="CYR-sX-hNO" id="F2a-wA-HXG"/>
@@ -268,10 +267,29 @@
                     <view key="view" contentMode="scaleToFill" id="FAD-qB-56X">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0Zi-4h-CMU">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" name="STBackground"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Siw-62-mcb" id="hMW-te-uew"/>
+                                    <outlet property="delegate" destination="Siw-62-mcb" id="fNW-fe-oOg"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="JB4-7t-4BC"/>
                         <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="0Zi-4h-CMU" secondAttribute="bottom" id="MJC-uw-3b3"/>
+                            <constraint firstItem="JB4-7t-4BC" firstAttribute="trailing" secondItem="0Zi-4h-CMU" secondAttribute="trailing" id="VnL-I7-Vt4"/>
+                            <constraint firstItem="0Zi-4h-CMU" firstAttribute="leading" secondItem="JB4-7t-4BC" secondAttribute="leading" id="jWg-ay-bJq"/>
+                            <constraint firstItem="0Zi-4h-CMU" firstAttribute="top" secondItem="FAD-qB-56X" secondAttribute="top" id="tJD-iH-Qny"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Elk-ov-d4W"/>
+                    <connections>
+                        <outlet property="tableView" destination="0Zi-4h-CMU" id="BkD-Df-blt"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="amh-Sb-wgx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -368,8 +386,5 @@
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

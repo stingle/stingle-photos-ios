@@ -16,6 +16,13 @@ class STMainVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.configure()
+        
+        let theme = STAppSettings.appearance.theme
+        UIView.animate(withDuration: 0.3) {
+            UIApplication.shared.windows.forEach { window in
+                window.overrideUserInterfaceStyle = theme.interfaceStyle
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

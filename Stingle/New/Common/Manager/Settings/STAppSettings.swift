@@ -14,6 +14,7 @@ extension STAppSettings {
         static let isDeleteFilesWhenMoving = "isDeleteFilesWhenMoving"
         static let security = "security"
         static let backup = "backup"
+        static let appearance = "appearance"
     }
     
 }
@@ -56,6 +57,18 @@ class STAppSettings {
             self.settings[Constance.backup] = json
         } get {
             guard let json = self.settings[Constance.backup], let result = Backup(from: json) else {
+                return .default
+            }
+            return result
+        }
+    }
+    
+    static var appearance: Appearance {
+        set {
+            let json = newValue.toJson()
+            self.settings[Constance.appearance] = json
+        } get {
+            guard let json = self.settings[Constance.appearance], let result = Appearance(from: json) else {
                 return .default
             }
             return result

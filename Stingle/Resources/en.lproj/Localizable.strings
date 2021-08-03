@@ -234,6 +234,10 @@
 
 "backup_battery" = "Don't backup if battery is below";
 
+"follow_system" = "Follow system";
+"light" = "Light";
+"dark" = "Dark";
+"theme" = "Theme";
 
 //MARK: - Menu
 

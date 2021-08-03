@@ -8,9 +8,7 @@
 
 import Foundation
 import netfox
-import Kingfisher
-
-//STNetworkReachableService
+import UIKit
 
 class STMainVM {
     
@@ -23,6 +21,7 @@ class STMainVM {
         }
         STNetworkReachableService.shared.start()
         NFX.sharedInstance().start()
+               
         end(true)
 	}
 	

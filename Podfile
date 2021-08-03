@@ -10,7 +10,6 @@ target 'Stingle' do
 #  pod 'MobileVLCKit'
 
   pod 'Alamofire'
-  pod 'Kingfisher'
   pod 'Tatsi'
   pod 'KeychainSwift'
     

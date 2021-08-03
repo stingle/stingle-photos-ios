@@ -37,6 +37,8 @@
 		A01747F3260AA5D8000D98F0 /* STFileMemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01747F2260AA5D8000D98F0 /* STFileMemoryCache.swift */; };
 		A0195E132628392F00C8CEA6 /* STAlbumsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0195E122628392F00C8CEA6 /* STAlbumsDataSource.swift */; };
 		A01EC21A26B9DF9C000FF4AC /* STNetworkReachableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01EC21926B9DF9C000FF4AC /* STNetworkReachableService.swift */; };
+		A01EC21C26B9F146000FF4AC /* STAppSettings+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01EC21B26B9F146000FF4AC /* STAppSettings+Appearance.swift */; };
+		A01EC21E26B9F379000FF4AC /* STAppearanceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01EC21D26B9F379000FF4AC /* STAppearanceVM.swift */; };
 		A021A17B264F325900394713 /* UINavigationBar+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17A264F325900394713 /* UINavigationBar+Progress.swift */; };
 		A021A17E264F361E00394713 /* STGalleryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17D264F361E00394713 /* STGalleryNavigationController.swift */; };
 		A021A180264F409600394713 /* IUploadFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17F264F409600394713 /* IUploadFile.swift */; };
@@ -364,6 +366,8 @@
 		A01747F2260AA5D8000D98F0 /* STFileMemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileMemoryCache.swift; sourceTree = "<group>"; };
 		A0195E122628392F00C8CEA6 /* STAlbumsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsDataSource.swift; sourceTree = "<group>"; };
 		A01EC21926B9DF9C000FF4AC /* STNetworkReachableService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkReachableService.swift; sourceTree = "<group>"; };
+		A01EC21B26B9F146000FF4AC /* STAppSettings+Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Appearance.swift"; sourceTree = "<group>"; };
+		A01EC21D26B9F379000FF4AC /* STAppearanceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAppearanceVM.swift; sourceTree = "<group>"; };
 		A021A17A264F325900394713 /* UINavigationBar+Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Progress.swift"; sourceTree = "<group>"; };
 		A021A17D264F361E00394713 /* STGalleryNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryNavigationController.swift; sourceTree = "<group>"; };
 		A021A17F264F409600394713 /* IUploadFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUploadFile.swift; sourceTree = "<group>"; };
@@ -790,6 +794,7 @@
 				A04A8ED226473CE200A3DF57 /* STAppSettings.swift */,
 				A013D85D269F7C81007ED786 /* STAppSettings+Security.swift */,
 				A0DE2DEF26B8A52A00887D55 /* STAppSettings+Backup.swift */,
+				A01EC21B26B9F146000FF4AC /* STAppSettings+Appearance.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1824,6 +1829,7 @@
 			isa = PBXGroup;
 			children = (
 				A0794B83269E308600B40FE9 /* STAppearanceVC.swift */,
+				A01EC21D26B9F379000FF4AC /* STAppearanceVM.swift */,
 			);
 			path = Appearance;
 			sourceTree = "<group>";
@@ -2515,6 +2521,7 @@
 				A0E999A0263F2E46002FDCC9 /* STTokenCell.swift in Sources */,
 				A0735833268CBF9900F82016 /* STSlider.swift in Sources */,
 				A05D2697261B5751008E9CF8 /* STMenuMasterTableViewCell.swift in Sources */,
+				A01EC21C26B9F146000FF4AC /* STAppSettings+Appearance.swift in Sources */,
 				A06942D1260CDE3E009CFD3A /* UIColor+Operation.swift in Sources */,
 				A0F467E425F9776600BF00AA /* STAlbumFilesProvider.swift in Sources */,
 				A022047725EEDC0400D07C98 /* STCrypto+Extensions.swift in Sources */,
@@ -2611,6 +2618,7 @@
 				A005FB0225FF4F5D00E7D8B0 /* STGaleryHeaderView.swift in Sources */,
 				A005FAF525FF4CBB00E7D8B0 /* STGalleryCollectionViewCell.swift in Sources */,
 				A09387D526B5F5A4000FCB01 /* STResetPassword.swift in Sources */,
+				A01EC21E26B9F379000FF4AC /* STAppearanceVM.swift in Sources */,
 				A02204A725EEDC0400D07C98 /* STSignUpVC.swift in Sources */,
 				A075B7202651BBE700B4E2DF /* STSharedAlbumSettingsVC.swift in Sources */,
 				A02204A425EEDC0400D07C98 /* HeaderPageVC.swift in Sources */,

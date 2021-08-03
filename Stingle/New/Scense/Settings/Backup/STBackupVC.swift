@@ -19,10 +19,6 @@ class STBackupVC: STSettingsDetailTableVC<STBackupVC.SectionType, STBackupVC.Ite
         return self.viewModel.backup
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
     override func configureLocalized() {
         self.navigationItem.title = "backup".localized
         self.reloadTableData()
