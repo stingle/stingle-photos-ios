@@ -21,7 +21,7 @@ class STMainVM {
         }
         STNetworkReachableService.shared.start()
         NFX.sharedInstance().start()
-               
+        UIDevice.current.isBatteryMonitoringEnabled = true
         end(true)
 	}
 	
