@@ -95,9 +95,13 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.accessoryView.dataSource = self
-        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
         self.updateTabBarAccessoryView()
         self.updateSelectedItesmCount()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
     }
     
     override func dataSource(didApplySnapshot dataSource: IViewDataSource) {

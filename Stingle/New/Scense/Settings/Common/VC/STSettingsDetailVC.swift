@@ -36,7 +36,7 @@ protocol ISettingsSectionCellItemModel: ISettingsSectionItemModel {
 }
 
 class STSettingsDetailVC<Section: ISettingsSection>: UIViewController, UITableViewDataSource, UITableViewDelegate, STSettingsTableViewCellDelegate {
-        
+            
     @IBOutlet weak private(set) var tableView: UITableView!
     private(set) var sections: [Section]?
 
@@ -83,6 +83,15 @@ class STSettingsDetailVC<Section: ISettingsSection>: UIViewController, UITableVi
         self.sections?[indexPath.section].cells[indexPath.row].cellModel = cellModel
     }
     
+    func reloadVisibleCells(sections: [Section]?) {
+        self.sections = sections
+        self.tableView.indexPathsForVisibleRows?.forEach({ indexPath in
+            let cell = self.tableView.cellForRow(at: indexPath) as! ISettingsTableViewCell
+            let cellModel = self.sections![indexPath.section].cells[indexPath.row]
+            self.configureCell(model: cellModel, cell: cell)
+        })
+    }
+        
     //MARK: - UITableViewDataSource
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -133,7 +142,9 @@ class STSettingsDetailVC<Section: ISettingsSection>: UIViewController, UITableVi
     //MARK: - STSettingsCellDelegate
     
     func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
-
+    }
+    
+    func securityCel(didSlide cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, value: Float) {
     }
 
 }
@@ -148,6 +159,7 @@ enum STSettingsDetailTableInfo {
 
             case detail
             case swich
+            case slider
             
             var nibName: String {
                 switch self {
@@ -155,6 +167,8 @@ enum STSettingsDetailTableInfo {
                     return "STSettingsDetailTableViewCell"
                 case .swich:
                     return "STSettingsSwichTableViewCell"
+                case .slider:
+                    return "STSettingsSliderTableViewCell"
                 }
             }
             
@@ -164,6 +178,8 @@ enum STSettingsDetailTableInfo {
                     return "detail"
                 case .swich:
                     return "swich"
+                case .slider:
+                    return "slider"
                 }
             }
             

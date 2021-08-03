@@ -14,7 +14,7 @@ protocol STFileUploaderOperationDelegate: AnyObject {
     func fileUploaderOperation(didStartUploading operation: STFileUploader.Operation, file: STLibrary.File)
     func fileUploaderOperation(didProgress operation: STFileUploader.Operation, progress: Progress, file: STLibrary.File)
     func fileUploaderOperation(didEndFailed operation: STFileUploader.Operation, error: IError, file: STLibrary.File?)
-    func fileUploaderOperation(didEndSucces operation: STFileUploader.Operation, file: STLibrary.File, spaceUsed: STDBUsed)
+    func fileUploaderOperation(didEndSucces operation: STFileUploader.Operation, file: STLibrary.File, spaceUsed: STDBUsed?)
     
 }
 
@@ -75,10 +75,17 @@ extension STFileUploader {
         private func continueOperation(with file: STLibrary.File) {
             self.uploaderOperationDelegate?.fileUploaderOperation(didStartUploading: self, file: file)
             let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
+            
             guard let spaceQuota = dbInfo.spaceQuota, let spaceUsed = dbInfo.spaceUsed, Double(spaceUsed) ?? 0 < Double(spaceQuota) ?? 0 else {
                 self.responseFailed(error: UploaderError.wrongStorageSize, file: file)
                 return
             }
+            
+            guard self.canUploadFile() else {
+                self.responseSucces(result: file, spaceUsed: nil)
+                return
+            }
+                        
             self.networkOperation = self.uploadWorker.upload(file: file) { [weak self] (result) in
                 self?.continueOperation(didUpload: file, spaceUsed: result)
             } progress: { [weak self] (progress) in
@@ -114,11 +121,10 @@ extension STFileUploader {
                     return
                 }
             }
-            
             self.responseSucces(result: file, spaceUsed: spaceUsed)
         }
         
-        private func responseSucces(result: STLibrary.File, spaceUsed: STDBUsed) {
+        private func responseSucces(result: STLibrary.File, spaceUsed: STDBUsed?) {
             super.responseSucces(result: result)
             self.uploaderOperationDelegate?.fileUploaderOperation(didEndSucces: self, file: result, spaceUsed: spaceUsed)
         }
@@ -131,6 +137,28 @@ extension STFileUploader {
         private func responseFailed(error: IError, file: STLibrary.File?) {
             super.responseFailed(error: error)
             self.uploaderOperationDelegate?.fileUploaderOperation(didEndFailed: self, error: error, file: file)
+        }
+        
+        private func canUploadFile() -> Bool {
+            let settings = STAppSettings.backup
+            guard settings.isEnabled else {
+                return false
+            }
+            if settings.isOnlyWiFi && STNetworkReachableService.shared.networkStatus != .wifi {
+                return false
+            }
+            
+            let level = UIDevice.current.batteryLevel
+            
+            #if targetEnvironment(simulator)
+            return true
+            #else
+            if level < settings.batteryLevel {
+                return false
+            }
+            return true
+            #endif
+            
         }
 
     }

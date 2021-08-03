@@ -226,6 +226,15 @@
 "alert_log_out_title" = "Log Out";
 "alert_log_out_message" = "Are you sure you want to log out?";
 
+"enable_backup" = "Enable backup";
+"enable_backup_description" = "Backup your photos and videos to the cloud as soon as you take or import theme";
+
+"backup_only_wifi" = "Backup only in Wifi";
+"backup_only_wifi_description" = "Backup only when you are connected wifi";
+
+"backup_battery" = "Don't backup if battery is below";
+
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";

@@ -10,11 +10,20 @@ import Foundation
 import netfox
 import Kingfisher
 
+//STNetworkReachableService
+
 class STMainVM {
+    
+    static private var isAppSetuped: Bool = false
 	
 	func setupApp(end: ((_ result: Bool) -> Void)) {
+        guard !STMainVM.isAppSetuped else {
+            end(true)
+            return
+        }
+        STNetworkReachableService.shared.start()
         NFX.sharedInstance().start()
-		end(true)
+        end(true)
 	}
 	
 	func isLogined() -> Bool {

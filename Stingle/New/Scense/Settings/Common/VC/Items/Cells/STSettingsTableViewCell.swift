@@ -18,12 +18,21 @@ protocol ISettingsTableViewCell: UITableViewCell {
 
 protocol STSettingsTableViewCellDelegate: AnyObject {
     func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool)
+    func securityCel(didSlide cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, value: Float)
 }
 
 class STSettingsTableViewCell<Model: ISettingsTableViewCellModel>: UITableViewCell, ISettingsTableViewCell {
    
     private(set) var model: ISettingsTableViewCellModel?
     weak var delegate: STSettingsTableViewCellDelegate?
+    
+    var cellModel: Model? {
+        set {
+            self.model = newValue
+        } get {
+            return self.model as? Model
+        }
+    }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)

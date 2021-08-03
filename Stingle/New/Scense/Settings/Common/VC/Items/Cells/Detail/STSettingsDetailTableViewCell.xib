@@ -72,6 +72,7 @@
                     <constraint firstItem="d6j-vc-Puc" firstAttribute="leading" secondItem="koD-0o-YBg" secondAttribute="trailing" constant="20" id="wa0-Wm-aaA"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" name="STBackground"/>
             <connections>
                 <outlet property="iconImageView" destination="koD-0o-YBg" id="10m-CM-bzb"/>
                 <outlet property="subTitleLabel" destination="85B-Cq-TwP" id="lON-kp-Z5Y"/>

@@ -11,7 +11,6 @@ class STFileWorker: STWorker {
     
     func moveFilesToTrash(files: [STLibrary.File], reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         
-        let files = files.filter({ $0.isRemote == true })
         guard !files.isEmpty else {
             success?(STEmptyResponse())
             return

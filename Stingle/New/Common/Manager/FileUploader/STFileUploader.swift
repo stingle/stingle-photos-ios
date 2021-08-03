@@ -227,8 +227,7 @@ extension STFileUploader: STFileUploaderOperationDelegate {
     func fileUploaderOperation(didStart operation: STFileUploader.Operation) {}
     
     func fileUploaderOperation(didStartUploading operation: STFileUploader.Operation, file: STLibrary.File) {
-                
-        self.dispatchQueue.async { [weak self] in
+        self.dispatchQueue.async(flags: .barrier) { [weak self] in
             if !(self?.uploadingFiles.contains(where: { file.file == $0.file }) ?? false) {
                 self?.uploadingFiles.append(file)
             }
@@ -245,17 +244,15 @@ extension STFileUploader: STFileUploaderOperationDelegate {
     }
     
     func fileUploaderOperation(didEndFailed operation: STFileUploader.Operation, error: IError, file: STLibrary.File?) {
-        self.dispatchQueue.async { [weak self] in
+        self.dispatchQueue.async(flags: .barrier) { [weak self] in
             guard let weakSelf = self else {
                 return
             }
             if let file = file, let index = weakSelf.uploadingFiles.firstIndex(where: { $0.file == file.file }) {
                 weakSelf.uploadingFiles.remove(at: index)
             }
-            
             weakSelf.totalCompletedUnitCount = weakSelf.totalCompletedUnitCount + 1
             weakSelf.countAllFiles = weakSelf.countAllFiles - 1
-           
             guard let file = file else {
                 return
             }
@@ -265,8 +262,9 @@ extension STFileUploader: STFileUploaderOperationDelegate {
         }
     }
     
-    func fileUploaderOperation(didEndSucces operation: Operation, file: STLibrary.File, spaceUsed: STDBUsed) {
-        self.dispatchQueue.sync { [weak self] in
+    func fileUploaderOperation(didEndSucces operation: Operation, file: STLibrary.File, spaceUsed: STDBUsed?) {
+        
+        self.dispatchQueue.async(flags: .barrier) { [weak self] in
             guard let weakSelf = self else {
                 return
             }
@@ -276,13 +274,15 @@ extension STFileUploader: STFileUploaderOperationDelegate {
             weakSelf.totalCompletedUnitCount = weakSelf.totalCompletedUnitCount + 1
             weakSelf.countAllFiles = weakSelf.countAllFiles - 1
             weakSelf.progresses.removeValue(forKey: file.file)
-            
             let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
-            dbInfo.update(with: spaceUsed)
+            if let spaceUsed = spaceUsed {
+                dbInfo.update(with: spaceUsed)
+            }
             STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
             weakSelf.updateDB(file: file)
             weakSelf.updateProgress(didEndSucces: file)
         }
+                
     }
     
 }

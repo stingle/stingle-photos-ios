@@ -22,10 +22,10 @@
                         <color key="tintColor" name="STSecondaryText"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="Aba-4B-9uE">
-                                <variation key="heightClass=regular-widthClass=regular" constant="30"/>
+                                <variation key="heightClass=regular-widthClass=regular" constant="50"/>
                             </constraint>
                             <constraint firstAttribute="width" constant="30" id="oOE-E3-xue">
-                                <variation key="heightClass=regular-widthClass=regular" constant="30"/>
+                                <variation key="heightClass=regular-widthClass=regular" constant="50"/>
                             </constraint>
                         </constraints>
                     </imageView>
@@ -68,6 +68,7 @@
                     <constraint firstItem="dwg-92-GDw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" priority="250" constant="10" id="sCO-Xe-U4r"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" name="STBackground"/>
             <connections>
                 <outlet property="iconImageView" destination="BFU-OO-KCu" id="ZIm-Yx-udo"/>
                 <outlet property="subTitleLabel" destination="Dcg-kv-0zk" id="yZe-ZY-gSc"/>

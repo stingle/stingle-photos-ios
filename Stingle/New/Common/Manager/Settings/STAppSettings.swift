@@ -10,9 +10,10 @@ import Foundation
 extension STAppSettings {
     
     fileprivate struct Constance {
-        static let settingsKey = "settingsKey"
+        static let settingsKey = "settings"
         static let isDeleteFilesWhenMoving = "isDeleteFilesWhenMoving"
-        static let security = "securityKey"
+        static let security = "security"
+        static let backup = "backup"
     }
     
 }
@@ -43,6 +44,18 @@ class STAppSettings {
             self.settings[Constance.security] = json
         } get {
             guard let json = self.settings[Constance.security], let result = Security(from: json) else {
+                return .default
+            }
+            return result
+        }
+    }
+    
+    static var backup: Backup {
+        set {
+            let json = newValue.toJson()
+            self.settings[Constance.backup] = json
+        } get {
+            guard let json = self.settings[Constance.backup], let result = Backup(from: json) else {
                 return .default
             }
             return result
