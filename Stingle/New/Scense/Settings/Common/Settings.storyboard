@@ -6,6 +6,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -95,8 +96,8 @@
                         <constraints>
                             <constraint firstItem="Fpk-uR-CJD" firstAttribute="top" secondItem="KQv-yt-Ec8" secondAttribute="top" id="TbP-M8-niu"/>
                             <constraint firstAttribute="bottom" secondItem="Fpk-uR-CJD" secondAttribute="bottom" id="Znd-Bs-ShE"/>
-                            <constraint firstAttribute="trailing" secondItem="Fpk-uR-CJD" secondAttribute="trailing" id="iRd-hd-UhB"/>
-                            <constraint firstItem="Fpk-uR-CJD" firstAttribute="leading" secondItem="KQv-yt-Ec8" secondAttribute="leading" id="oEn-Op-0VB"/>
+                            <constraint firstItem="kuu-f8-Ym9" firstAttribute="trailing" secondItem="Fpk-uR-CJD" secondAttribute="trailing" id="iRd-hd-UhB"/>
+                            <constraint firstItem="Fpk-uR-CJD" firstAttribute="leading" secondItem="kuu-f8-Ym9" secondAttribute="leading" id="oEn-Op-0VB"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -130,10 +131,29 @@
                     <view key="view" contentMode="scaleToFill" id="3c6-R4-Hz0">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="S1A-xN-l91">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="muX-ij-sta" id="ols-3W-rCA"/>
+                                    <outlet property="delegate" destination="muX-ij-sta" id="Dm6-Sv-NxO"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="d9H-Ij-Xbj"/>
                         <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstItem="S1A-xN-l91" firstAttribute="leading" secondItem="d9H-Ij-Xbj" secondAttribute="leading" id="V9S-07-SV4"/>
+                            <constraint firstItem="S1A-xN-l91" firstAttribute="top" secondItem="3c6-R4-Hz0" secondAttribute="top" id="oYH-k5-vHo"/>
+                            <constraint firstItem="d9H-Ij-Xbj" firstAttribute="trailing" secondItem="S1A-xN-l91" secondAttribute="trailing" id="svB-lK-r4U"/>
+                            <constraint firstAttribute="bottom" secondItem="S1A-xN-l91" secondAttribute="bottom" id="uEe-xb-xLV"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Advanced" id="uRz-ag-6sG"/>
+                    <connections>
+                        <outlet property="tableView" destination="S1A-xN-l91" id="HNc-EP-2RJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FPo-Uw-j6T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -386,5 +406,8 @@
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

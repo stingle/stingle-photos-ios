@@ -13,7 +13,6 @@ class STAppearanceVM {
         return STAppSettings.appearance
     }()
     
-    
     func updateTheme(theme: STAppSettings.Appearance.Theme) {
         self.appearance.theme = theme
         STAppSettings.appearance = self.appearance
@@ -21,7 +20,6 @@ class STAppearanceVM {
         UIApplication.shared.windows.forEach { window in
             window.overrideUserInterfaceStyle = theme.interfaceStyle
         }
-        
     }
     
 }

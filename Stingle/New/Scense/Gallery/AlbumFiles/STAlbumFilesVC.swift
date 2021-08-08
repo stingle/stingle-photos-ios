@@ -148,7 +148,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     override func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let inset: CGFloat = 4
-        let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : 3
+        let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : layoutEnvironment.container.contentSize.width > layoutEnvironment.container.contentSize.height ? 4 : 3
         let item = self.dataSource.generateCollectionLayoutItem()
         let itemSizeWidth = (layoutEnvironment.container.contentSize.width - 2 * inset) / CGFloat(lineCount)
         let itemSizeHeight = itemSizeWidth

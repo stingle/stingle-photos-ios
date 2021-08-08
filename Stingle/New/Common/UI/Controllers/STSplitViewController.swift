@@ -252,8 +252,12 @@ class STSplitViewController: UIViewController {
         let screenGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgePan(gestur:)))
         screenGesture.edges = .left
         self.detailView.addGestureRecognizer(screenGesture)
+        
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(screenEdgePan(gestur:)))
         self.backgroundView.addGestureRecognizer(panGesture)
+        
+        let mGesture = UIPanGestureRecognizer(target: self, action: #selector(screenEdgePan(gestur:)))
+        self.masterView.addGestureRecognizer(mGesture)
     }
     
     private func openOrClosed(isAnimated: Bool, isClose: Bool, isStarted: Bool,  isTouch: Bool) {

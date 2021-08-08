@@ -30,10 +30,10 @@ class STSettingsVC: UIViewController {
         let account = CellItem(image: UIImage(named: "ic_settings_account")!, title: "account".localized, itemType: .account)
         let security = CellItem(image: UIImage(named: "ic_settings_security")!, title: "security".localized, itemType: .security)
         let backup = CellItem(image: UIImage(named: "ic_settings_backup")!, title: "backup".localized, itemType: .backup)
-        let `import` = CellItem(image: UIImage(named: "ic_settings_import")!, title: "import".localized, itemType: .import)
+//        let `import` = CellItem(image: UIImage(named: "ic_settings_import")!, title: "import".localized, itemType: .import)
         let appearance = CellItem(image: UIImage(named: "ic_settings_appearance")!, title: "appearance".localized, itemType: .appearance)
         let advanced = CellItem(image: UIImage(named: "ic_settings_advanced")!, title: "advanced".localized, itemType: .advanced)
-        self.items = [account, security, backup, `import`, appearance, advanced]
+        self.items = [account, security, backup, appearance, advanced]
     }
     
     //MARK: - Collection view Layout

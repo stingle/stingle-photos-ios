@@ -227,7 +227,7 @@
 "alert_log_out_message" = "Are you sure you want to log out?";
 
 "enable_backup" = "Enable backup";
-"enable_backup_description" = "Backup your photos and videos to the cloud as soon as you take or import theme";
+"enable_backup_description" = "Backup your photos and delete Cache videos to the cloud as soon as you take or import theme";
 
 "backup_only_wifi" = "Backup only in Wifi";
 "backup_only_wifi_description" = "Backup only when you are connected wifi";
@@ -238,6 +238,16 @@
 "light" = "Light";
 "dark" = "Dark";
 "theme" = "Theme";
+
+"max_cache_size" = "Maximum cache size";
+"unlimited" = "Unlimited";
+"delete_cache" = "Delete cache";
+"delete_cache_description" = "Clear cache of thumbnails and other temporary data";
+
+"delete?" = "Delete?";
+"delete?" = "Delete?";
+
+"delete_cache_alert_message" = "Are you sure you want to delete cache?";
 
 //MARK: - Menu
 

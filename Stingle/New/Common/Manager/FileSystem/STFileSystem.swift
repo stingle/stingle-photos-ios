@@ -42,6 +42,14 @@ class STFileSystem {
         self.remove(file: privateKeyUrl)
     }
     
+    func removeCache() {            
+        guard let oreginals = self.url(for: .storage(type: .server(type: .oreginals))), let thumbs = self.url(for: .storage(type: .server(type: .thumbs))) else {
+            return
+        }
+        self.remove(file: oreginals)
+        self.remove(file: thumbs)
+    }
+    
     private func creatAllPath() {
         FolderType.allCases.forEach { type in
             if let url = self.url(for: type) {
@@ -172,7 +180,7 @@ extension STFileSystem {
     
     func updateUrlDataSize(url: URL) {
         
-        let megabytes: Double = 2000
+        let megabytes: Double = STAppSettings.advanced.cacheSize.bytesUnits.megabytes
         guard let cacheURL = self.cacheUrl(for: .server(type: .oreginals)), url.path.contains(cacheURL.path) else {
             return
         }

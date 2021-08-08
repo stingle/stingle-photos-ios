@@ -223,6 +223,8 @@
 		A0794B97269E3EF500B40FE9 /* STSettingsDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0794B95269E3EF500B40FE9 /* STSettingsDetailTableViewCell.xib */; };
 		A0794B9B269E433D00B40FE9 /* STSettingsSwichTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0794B99269E433D00B40FE9 /* STSettingsSwichTableViewCell.swift */; };
 		A0794B9C269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0794B9A269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib */; };
+		A07B45B426C02442003EB470 /* STAppSettings+Advanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */; };
+		A07B45B626C0263A003EB470 /* STAdvancedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B526C0263A003EB470 /* STAdvancedVM.swift */; };
 		A084182325FA589B00DEAC89 /* STTrashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A084182225FA589B00DEAC89 /* STTrashProvider.swift */; };
 		A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1525F5A10800A8BC9C /* STCDContact.swift */; };
 		A086FD2625F5A10900A8BC9C /* STCDAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1625F5A10800A8BC9C /* STCDAlbum.swift */; };
@@ -564,6 +566,8 @@
 		A0794B95269E3EF500B40FE9 /* STSettingsDetailTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STSettingsDetailTableViewCell.xib; sourceTree = "<group>"; };
 		A0794B99269E433D00B40FE9 /* STSettingsSwichTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSettingsSwichTableViewCell.swift; sourceTree = "<group>"; };
 		A0794B9A269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STSettingsSwichTableViewCell.xib; sourceTree = "<group>"; };
+		A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Advanced.swift"; sourceTree = "<group>"; };
+		A07B45B526C0263A003EB470 /* STAdvancedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAdvancedVM.swift; sourceTree = "<group>"; };
 		A084182225FA589B00DEAC89 /* STTrashProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashProvider.swift; sourceTree = "<group>"; };
 		A086FD1525F5A10800A8BC9C /* STCDContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDContact.swift; sourceTree = "<group>"; };
 		A086FD1625F5A10800A8BC9C /* STCDAlbum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDAlbum.swift; sourceTree = "<group>"; };
@@ -795,6 +799,7 @@
 				A013D85D269F7C81007ED786 /* STAppSettings+Security.swift */,
 				A0DE2DEF26B8A52A00887D55 /* STAppSettings+Backup.swift */,
 				A01EC21B26B9F146000FF4AC /* STAppSettings+Appearance.swift */,
+				A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1838,6 +1843,7 @@
 			isa = PBXGroup;
 			children = (
 				A0794B86269E314200B40FE9 /* STAdvancedVC.swift */,
+				A07B45B526C0263A003EB470 /* STAdvancedVM.swift */,
 			);
 			path = Advanced;
 			sourceTree = "<group>";
@@ -2702,6 +2708,7 @@
 				A01747F3260AA5D8000D98F0 /* STFileMemoryCache.swift in Sources */,
 				A075B7352652A51100B4E2DF /* STAlbumSettingsAddMemberCell.swift in Sources */,
 				A022047425EEDC0400D07C98 /* SPFileSource.swift in Sources */,
+				A07B45B426C02442003EB470 /* STAppSettings+Advanced.swift in Sources */,
 				A022046D25EEDC0400D07C98 /* STTextField.swift in Sources */,
 				A0D1A3CA262E10E0002E326F /* STAlbumFilesHeaderView.swift in Sources */,
 				A0301DED25FD6DD4005281EF /* STDataBaseCollectionProvider.swift in Sources */,
@@ -2711,6 +2718,7 @@
 				A04945C92611F77C008D5E48 /* STTabBar.swift in Sources */,
 				A04512B82638B0FD00BE0B06 /* STAlbumWorker.swift in Sources */,
 				A0CFBD8F25F171ED003095BE /* STTabBarViewController.swift in Sources */,
+				A07B45B626C0263A003EB470 /* STAdvancedVM.swift in Sources */,
 				A0C88FE725F3D6CD0061A41D /* STLibraryAlbum.swift in Sources */,
 				A040E21E269A356300003199 /* STGalleryTabBarVC.swift in Sources */,
 				A086FD2625F5A10900A8BC9C /* STCDAlbum.swift in Sources */,

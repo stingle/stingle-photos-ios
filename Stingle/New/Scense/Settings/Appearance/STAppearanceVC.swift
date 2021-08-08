@@ -36,11 +36,9 @@ class STAppearanceVC: STSettingsDetailTableVC<STAppearanceVC.SectionType, STAppe
         
         switch itemType {
         case .theme:
-            
             guard let detailCell = cell as? STSettingsDetailTableViewCell else {
                 return
             }
-            
             self.showThemeAppSheet(in: detailCell)
         }
     }

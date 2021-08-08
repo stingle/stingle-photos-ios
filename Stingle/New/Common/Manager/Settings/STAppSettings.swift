@@ -15,6 +15,7 @@ extension STAppSettings {
         static let security = "security"
         static let backup = "backup"
         static let appearance = "appearance"
+        static let advanced = "advanced"
     }
     
 }
@@ -69,6 +70,18 @@ class STAppSettings {
             self.settings[Constance.appearance] = json
         } get {
             guard let json = self.settings[Constance.appearance], let result = Appearance(from: json) else {
+                return .default
+            }
+            return result
+        }
+    }
+    
+    static var advanced: Advanced {
+        set {
+            let json = newValue.toJson()
+            self.settings[Constance.advanced] = json
+        } get {
+            guard let json = self.settings[Constance.advanced], let result = Advanced(from: json) else {
                 return .default
             }
             return result

@@ -43,16 +43,17 @@ struct STBytesUnits: Equatable {
         return STBytesUnits(bytes: .zero)
     }
         
-    func getReadableUnit() -> String {
+    func getReadableUnit(format: String = ".2f") -> String {
+        let format = "%" + format
         switch bytes {
         case 0..<1_024:
             return "\(bytes) bytes"
         case 1_024..<(1_024 * 1_024):
-            return "\(String(format: "%.2f", kilobytes)) kb"
+            return "\(String(format: format, kilobytes)) kb"
         case 1_024..<(1_024 * 1_024 * 1_024):
-            return "\(String(format: "%.2f", megabytes)) mb"
+            return "\(String(format: format, megabytes)) mb"
         case (1_024 * 1_024 * 1_024)...Int64.max:
-            return "\(String(format: "%.2f", gigabytes)) gb"
+            return "\(String(format: format, gigabytes)) gb"
         default:
             return "\(bytes) bytes"
         }
