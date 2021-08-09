@@ -33,6 +33,7 @@ class STSecurityVM {
                 return
             }
             weakSelf.biometric.onBiometricAuth(password: password) {
+                weakSelf.security.authentication.unlock = true
                 STAppSettings.security.authentication.unlock = true
                 completion(nil)
             } failure: { error in
