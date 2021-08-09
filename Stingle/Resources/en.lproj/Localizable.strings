@@ -259,6 +259,9 @@
 "menu_official_website" = "Official website";
 "menu_sign_out" = "Sign Out";
 
+"backup_phrase_description" = "Your backup phrase  is most valuable secret of your account, so please make sure to back it up in safe place. If anyone get tis phrase, they can get access to all of your data";
+"ok_get_backup_phrase" = "Ok, get Backup Phrase";
+
 //MARK: - Time
 
 "immediately" = "immediately";

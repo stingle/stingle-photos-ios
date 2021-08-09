@@ -349,6 +349,9 @@
                                         <state key="normal" title="Ok, get Backup Phrase">
                                             <color key="titleColor" name="STBackground"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didSelectBackupPhraseButton:" destination="DOp-L9-uLb" eventType="touchUpInside" id="nsZ-t0-3jS"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -389,7 +392,19 @@
                             <constraint firstItem="dYo-Dy-iVl" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="hRR-7k-TYM" secondAttribute="bottom" constant="20" id="mUf-fd-EMU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="BackupPhrase" id="SPC-AH-kna"/>
+                    <navigationItem key="navigationItem" title="BackupPhrase" id="SPC-AH-kna">
+                        <barButtonItem key="leftBarButtonItem" image="ic_nav_menu" id="xLF-Ee-1E9">
+                            <color key="tintColor" name="STText"/>
+                            <connections>
+                                <action selector="didSelectMenuBarItem:" destination="DOp-L9-uLb" id="Vr3-o7-kdh"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="backupPhraseButton" destination="YrF-n9-ydI" id="yyP-04-BUF"/>
+                        <outlet property="descriptionLabel" destination="y9X-qs-BL1" id="fR9-Vs-XvJ"/>
+                        <outlet property="titleLabel" destination="X3R-I6-Ba6" id="UPl-7e-LP4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mOo-bH-l3w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -458,6 +473,11 @@
             <point key="canvasLocation" x="-2336" y="2423"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="YrF-n9-ydI">
+            <size key="intrinsicContentSize" width="309" height="34"/>
+        </designable>
+    </designables>
     <resources>
         <image name="ic_backup_phrase" width="258" height="202"/>
         <image name="ic_nav_menu" width="18" height="12"/>
