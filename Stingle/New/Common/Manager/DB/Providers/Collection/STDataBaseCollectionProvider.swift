@@ -49,7 +49,7 @@ extension STDataBase {
         
         //MARK: - DataSource
         
-        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?, predicate: NSPredicate? = nil, cacheName: String? = ManagedModel.entityName) -> DataSource<ManagedModel> {
+        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?, predicate: NSPredicate? = nil, cacheName: String? = nil) -> DataSource<ManagedModel> {
             let dataSource = self.generateDataSource(sortDescriptorsKeys: sortDescriptorsKeys, sectionNameKeyPath: sectionNameKeyPath, predicate: predicate, cacheName: cacheName)
             return dataSource as! DataSource<ManagedModel>
         }

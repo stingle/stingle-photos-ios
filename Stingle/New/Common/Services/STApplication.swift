@@ -98,10 +98,10 @@ extension STApplication {
     }
     
     func deleteAccount() {
+        self.fileSystem.deleteAccount()
         self.dataBase.deleteAll()
         KeyManagement.signOut()
         STOperationManager.shared.logout()
-        self.fileSystem.deleteAccount()
         self.myFileSystem = nil
         STBiometricAuthServices().removeBiometricAuth()
         STAppSettings.logOut()
@@ -118,10 +118,10 @@ extension STApplication {
     //MARK: - private
     
     private func logout(appInUnauthorized: Bool) {
+        self.fileSystem.logOut()
         self.dataBase.deleteAll()
         KeyManagement.signOut()
         STOperationManager.shared.logout()
-        self.fileSystem.logOut()
         self.myFileSystem = nil
         STBiometricAuthServices().removeBiometricAuth()
         STAppSettings.logOut()

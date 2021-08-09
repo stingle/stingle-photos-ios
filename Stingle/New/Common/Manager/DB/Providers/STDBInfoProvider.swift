@@ -12,6 +12,15 @@ extension STDataBase {
     class DBInfoProvider: DataBaseProvider<STDBInfo> {
         
         private var myDBInfo: STDBInfo?
+        
+        override func deleteAll(completion: ((IError?) -> Void)? = nil) {
+            super.deleteAll { [weak self] error in
+                if error == nil {
+                    self?.myDBInfo = nil
+                }
+                completion?(error)
+            }
+        }
                
         func update(model info: STDBInfo) {
             self.myDBInfo = info

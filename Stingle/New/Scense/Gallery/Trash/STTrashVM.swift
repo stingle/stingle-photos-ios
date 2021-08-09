@@ -14,7 +14,9 @@ class STTrashVM {
     private let trashProvider = STApplication.shared.dataBase.trashProvider
     
     func createDBDataSource() -> STDataBase.DataSource<STCDTrashFile> {
-        return STApplication.shared.dataBase.trashProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: #keyPath(STCDTrashFile.day))
+        let trashProvider = STApplication.shared.dataBase.trashProvider
+        return trashProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDTrashFile.dateCreated)],
+                                                sectionNameKeyPath: #keyPath(STCDTrashFile.day))
     }
     
     func sync() {

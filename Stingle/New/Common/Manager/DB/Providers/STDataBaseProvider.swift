@@ -30,7 +30,7 @@ extension STDataBase {
         }
         
         func deleteAll(completion: ((IError?) -> Void)? = nil) {
-            let taskContext = self.container.newBackgroundContext()
+            let taskContext = self.container.viewContext
             taskContext.perform {
                 let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Model.ManagedModel.entityName)
                 let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
