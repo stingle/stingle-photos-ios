@@ -9,6 +9,6 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 APP_NAME = Stingle Photos
-APP_BUNDLE_ID = com.photos.Stingle
+APP_BUNDLE_ID = org.photos.Stingle
 BASE_API_URL = https:/$()/api.stingle.org/v2
 BUILD_TYPE = Production

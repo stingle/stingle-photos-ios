@@ -176,6 +176,8 @@
 		A05D2698261B5751008E9CF8 /* STMenuMasterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A05D2696261B5751008E9CF8 /* STMenuMasterTableViewCell.xib */; };
 		A05F9DD126A60E6900F9F343 /* STKeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05F9DD026A60E6900F9F343 /* STKeyChainService.swift */; };
 		A05F9DD326A6155C00F9F343 /* STBiometricAuthServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05F9DD226A6155C00F9F343 /* STBiometricAuthServices.swift */; };
+		A061384726C5AB8400E9A95F /* STMnemonic+Cripto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A061384526C5AB8400E9A95F /* STMnemonic+Cripto.swift */; };
+		A061384826C5AB8400E9A95F /* STMnemonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A061384626C5AB8400E9A95F /* STMnemonic.swift */; };
 		A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */; };
 		A0623F3825F41EBB0018D378 /* STLibraryDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */; };
 		A062E0E9264C7FC3000B3595 /* STFileImageRetryer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A062E0E8264C7FC3000B3595 /* STFileImageRetryer.swift */; };
@@ -519,6 +521,8 @@
 		A05D2696261B5751008E9CF8 /* STMenuMasterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STMenuMasterTableViewCell.xib; sourceTree = "<group>"; };
 		A05F9DD026A60E6900F9F343 /* STKeyChainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STKeyChainService.swift; sourceTree = "<group>"; };
 		A05F9DD226A6155C00F9F343 /* STBiometricAuthServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBiometricAuthServices.swift; sourceTree = "<group>"; };
+		A061384526C5AB8400E9A95F /* STMnemonic+Cripto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "STMnemonic+Cripto.swift"; sourceTree = "<group>"; };
+		A061384626C5AB8400E9A95F /* STMnemonic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STMnemonic.swift; sourceTree = "<group>"; };
 		A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryAlbumFile.swift; sourceTree = "<group>"; };
 		A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryDelete.swift; sourceTree = "<group>"; };
 		A062E0E8264C7FC3000B3595 /* STFileImageRetryer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileImageRetryer.swift; sourceTree = "<group>"; };
@@ -1463,6 +1467,7 @@
 				A022042E25EEDC0300D07C98 /* STValidator.swift */,
 				A024330225F6384C0054BED9 /* STObserverEvents.swift */,
 				A022042B25EEDC0300D07C98 /* STError.swift */,
+				A061384426C5AB8400E9A95F /* Mnemonic */,
 				A0320970265465D5000C420B /* Player */,
 				A022040625EEDC0300D07C98 /* Crypto */,
 			);
@@ -1586,6 +1591,15 @@
 				A05D2696261B5751008E9CF8 /* STMenuMasterTableViewCell.xib */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		A061384426C5AB8400E9A95F /* Mnemonic */ = {
+			isa = PBXGroup;
+			children = (
+				A061384526C5AB8400E9A95F /* STMnemonic+Cripto.swift */,
+				A061384626C5AB8400E9A95F /* STMnemonic.swift */,
+			);
+			path = Mnemonic;
 			sourceTree = "<group>";
 		};
 		A0623F3325F419730018D378 /* Library */ = {
@@ -2513,6 +2527,7 @@
 				A02203C125EED86800D07C98 /* AppDelegate.swift in Sources */,
 				A0FD3F382670F4C40042EB8D /* STFileUrl.swift in Sources */,
 				A086FD9125F5AC7200A8BC9C /* STUserProvider.swift in Sources */,
+				A061384826C5AB8400E9A95F /* STMnemonic.swift in Sources */,
 				A074AE3E26460203004C9E9E /* STMoveAlbumFilesVC.swift in Sources */,
 				A013D85E269F7C81007ED786 /* STAppSettings+Security.swift in Sources */,
 				A075B73A2652A79900B4E2DF /* STAlbumSettingsMemberCell.swift in Sources */,
@@ -2591,6 +2606,7 @@
 				A022048225EEDC0400D07C98 /* SPFile.swift in Sources */,
 				A075B71E2651BBD000B4E2DF /* STSharedAlbumSettingsVM.swift in Sources */,
 				A0794B8A269E33ED00B40FE9 /* STBackupVC.swift in Sources */,
+				A061384726C5AB8400E9A95F /* STMnemonic+Cripto.swift in Sources */,
 				A02204B725EEDC0400D07C98 /* BaseVC.swift in Sources */,
 				A0E1B507266BAB3A0063CB40 /* CountableRange+Operation.swift in Sources */,
 				A022047125EEDC0400D07C98 /* MenuTransitionAnimationControllers.swift in Sources */,
@@ -2843,7 +2859,7 @@
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = CW49KPVSFU;
+				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
@@ -2931,7 +2947,7 @@
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = CW49KPVSFU;
+				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
@@ -3014,7 +3030,7 @@
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = CW49KPVSFU;
+				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
@@ -3097,7 +3113,7 @@
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = CW49KPVSFU;
+				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;

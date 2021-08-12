@@ -12,7 +12,7 @@ target 'Stingle' do
   pod 'Alamofire'
   pod 'Tatsi'
   pod 'KeychainSwift'
-    
+  pod 'CryptoSwift'
   pod 'netfox'
 
 end
