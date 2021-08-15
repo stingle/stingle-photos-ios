@@ -76,6 +76,7 @@ extension STDataBase {
             let sortDescriptors = self.sortDescriptorsKeys.compactMap { (key) -> NSSortDescriptor in
                 return NSSortDescriptor(key: key, ascending: self.ascending)
             }
+            
             filesFetchRequest.predicate = self.predicate
             filesFetchRequest.sortDescriptors = sortDescriptors
             let resultsController = NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: self.viewContext, sectionNameKeyPath: self.sectionNameKeyPath, cacheName: cacheName)

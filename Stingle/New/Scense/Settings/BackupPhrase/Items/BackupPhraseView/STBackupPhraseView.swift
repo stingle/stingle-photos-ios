@@ -19,6 +19,8 @@ class STBackupPhraseView: UIView {
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var textLabel: UILabel!
     
+    private var completion: (() -> Void)?
+    
     weak var delegate: STBackupPhraseViewDelegate?
     
     override func awakeFromNib() {
@@ -33,11 +35,11 @@ class STBackupPhraseView: UIView {
             self.alpha = .zero
         } completion: { [weak self] _ in
             self?.removeFromSuperview()
+            self?.completion?()
         }
     }
     
     //MARK - User action
-    
     
     @IBAction private func didSelectBackround(_ sender: Any) {
         self.delegate?.backupPhraseView(didSelectCancel: self)
@@ -51,22 +53,25 @@ class STBackupPhraseView: UIView {
         self.delegate?.backupPhraseView(didSelectCopy: self, text: self.textLabel.text)
     }
     
+    deinit {
+        self.completion = nil
+    }
+
 }
 
 extension STBackupPhraseView {
     
-    class func show(in view: UIView, text: String?) -> STBackupPhraseView {
-        
+    class func show(in view: UIView, text: String?, completion: (() -> Void)? = nil) -> STBackupPhraseView {
         let contentView = Bundle(for: self).loadNibNamed(String(describing: self), owner: self, options: nil)?.first as! STBackupPhraseView
         contentView.textLabel.text = text
         contentView.alpha = .zero
         
         view.addSubviewFullContent(view: contentView)
-        
+        contentView.completion = completion
+            
         UIView.animate(withDuration: 0.3) {
             contentView.alpha = 1
         }
-        
         return contentView
     }
     

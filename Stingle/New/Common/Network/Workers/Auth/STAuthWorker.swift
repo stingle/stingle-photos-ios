@@ -23,18 +23,7 @@ class STAuthWorker: STWorker {
 	}
 		
 	func login(email: String, password: String, success: Success<STUser>? = nil, failure: Failure? = nil) {
-		self.preLogin(email: email, success: { [weak self] (preLogin) in
-			guard let weakSelf = self else {
-				failure?(AuthWorkerError.loginError)
-				return
-			}
-			do {
-				let pHash = try weakSelf.crypto.getPasswordHashForStorage(password: password, salt: preLogin.salt)
-				weakSelf.finishLogin(email: email, password: password, pHash: pHash, success: success, failure: failure)
-			} catch {
-				failure?(WorkerError.error(error: error))
-			}
-		}, failure: failure)
+        self.loginRequest(email: email, password: password, isPrivateKeyIsAlreadySaved: false, success: success, failure: failure)
 	}
 	
 	func registerAndLogin(email: String, password: String, includePrivateKey: Bool, success: Success<STUser>? = nil, failure: Failure? = nil) {
@@ -43,7 +32,7 @@ class STAuthWorker: STWorker {
 				failure?(AuthWorkerError.loginError)
 				return
 			}
-			weakSelf.login(email: email, password: password, success: success, failure: failure)
+            weakSelf.loginRequest(email: email, password: password, isPrivateKeyIsAlreadySaved: true, success: success, failure: failure)
 		}, failure: failure)
 	}
     
@@ -53,12 +42,27 @@ class STAuthWorker: STWorker {
     }
     
 	//MARK: - Private Register
+    
+    private func loginRequest(email: String, password: String, isPrivateKeyIsAlreadySaved: Bool, success: Success<STUser>? = nil, failure: Failure? = nil) {
+        self.preLogin(email: email, success: { [weak self] (preLogin) in
+            guard let weakSelf = self else {
+                failure?(AuthWorkerError.loginError)
+                return
+            }
+            do {
+                let pHash = try weakSelf.crypto.getPasswordHashForStorage(password: password, salt: preLogin.salt)
+                weakSelf.finishLogin(email: email, password: password, pHash: pHash, isPrivateKeyIsAlreadySaved: isPrivateKeyIsAlreadySaved, success: success, failure: failure)
+            } catch {
+                failure?(WorkerError.error(error: error))
+            }
+        }, failure: failure)
+    }
 	
 	private func generateSignUpRequest(email: String, password: String, includePrivateKey: Bool) throws -> STAuthRequest {
 		do {
 			try self.crypto.generateMainKeypair(password: password)
             let pwdHash = try self.crypto.getPasswordHashForStorage(password: password)
-			guard let salt = pwdHash["salt"], let pwd = pwdHash["hash"], let keyBundle = try? KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: includePrivateKey)  else {
+			guard let salt = pwdHash["salt"], let pwd = pwdHash["hash"], let keyBundle = try? KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: includePrivateKey) else {
 				throw AuthWorkerError.passwordError
 			}
 			return STAuthRequest.register(email: email, password: pwd, salt: salt, keyBundle: keyBundle, isBackup: includePrivateKey)
@@ -69,7 +73,7 @@ class STAuthWorker: STWorker {
 	
 	//MARK: - Private Login
 		
-	private func finishLogin(email: String, password: String, pHash: String, success: Success<STUser>? = nil, failure: Failure? = nil) {
+    private func finishLogin(email: String, password: String, pHash: String, isPrivateKeyIsAlreadySaved: Bool, success: Success<STUser>? = nil, failure: Failure? = nil) {
 		let request = STAuthRequest.login(email: email, password: pHash)
 		self.request(request: request, success: { [weak self] (response: STAuth.Login) in
 			guard let weakSelf = self else {
@@ -77,7 +81,7 @@ class STAuthWorker: STWorker {
 				return
 			}
 			do {
-				let user = try weakSelf.updateUserParams(login: response, email: email, password: password)
+                let user = try weakSelf.updateUserParams(login: response, email: email, password: password, isPrivateKeyIsAlreadySaved: isPrivateKeyIsAlreadySaved)
 				success?(user)
 			} catch {
 				failure?(AuthWorkerError.loginError)
@@ -86,25 +90,28 @@ class STAuthWorker: STWorker {
 		}, failure: failure)
 	}
 	
-	private func updateUserParams(login: STAuth.Login, email: String, password: String) throws -> STUser {
+    private func updateUserParams(login: STAuth.Login, email: String, password: String, isPrivateKeyIsAlreadySaved: Bool) throws -> STUser {
 		let isKeyBackedUp = login.isKeyBackedUp == 1 ? true : false
 		
         let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId, managedObjectID: nil)
         
         self.userProvider.update(model: user)
         
-		if KeyManagement.key == nil {
-			guard true == KeyManagement.importKeyBundle(keyBundle: login.keyBundle, password: password) else {
+        if isPrivateKeyIsAlreadySaved {
+            KeyManagement.key = try self.crypto.getPrivateKey(password: password)
+        } else if KeyManagement.key == nil {
+            guard true == KeyManagement.importKeyBundle(keyBundle: login.keyBundle, password: password) else {
                 self.userProvider.deleteAll()
                 KeyManagement.signOut()
-				throw AuthWorkerError.cantImportKeyBundle
-			}
-			if isKeyBackedUp {
-				KeyManagement.key = try self.crypto.getPrivateKey(password: password)
-			}
-			let pubKey = login.serverPublicKey
-			KeyManagement.importServerPublicKey(pbk: pubKey)
-		}
+                throw AuthWorkerError.cantImportKeyBundle
+            }
+            if isKeyBackedUp {
+                KeyManagement.key = try self.crypto.getPrivateKey(password: password)
+            }
+            let pubKey = login.serverPublicKey
+            KeyManagement.importServerPublicKey(pbk: pubKey)
+        }
+                
 		return user
 	}
 	

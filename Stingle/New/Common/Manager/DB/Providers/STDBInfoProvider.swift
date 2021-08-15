@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class DBInfoProvider: DataBaseProvider<STDBInfo> {
+    class DBInfoProvider: DataBaseProvider<STCDDBInfo> {
         
         private var myDBInfo: STDBInfo?
         

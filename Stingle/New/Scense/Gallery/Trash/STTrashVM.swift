@@ -24,7 +24,7 @@ class STTrashVM {
     }
     
     func getFiles(fileNames: [String]) -> [STLibrary.TrashFile] {
-        let files = trashProvider.fetchAll(for: fileNames)
+        let files = self.trashProvider.fetchAll(for: fileNames)
         return files
     }
     

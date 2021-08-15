@@ -14,6 +14,14 @@
             <rect key="frame" x="0.0" y="0.0" width="752" height="463"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y5G-vA-603">
+                    <rect key="frame" x="0.0" y="0.0" width="752" height="463"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <gestureRecognizers/>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="ZKM-ks-tAB" appends="YES" id="lXm-ah-G65"/>
+                    </connections>
+                </view>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g28-Vo-aUT" customClass="STView" customModule="Stingle" customModuleProvider="target">
                     <rect key="frame" x="276" y="128.5" width="200" height="206.5"/>
                     <subviews>
@@ -79,11 +87,15 @@
             <color key="backgroundColor" name="STPlaceholder"/>
             <gestureRecognizers/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="y5G-vA-603" secondAttribute="bottom" id="1e6-gg-Rk4"/>
+                <constraint firstAttribute="trailing" secondItem="y5G-vA-603" secondAttribute="trailing" id="7uk-sQ-ee3"/>
+                <constraint firstItem="y5G-vA-603" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Hyi-Lp-koW"/>
                 <constraint firstItem="g28-Vo-aUT" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Klb-rf-ae1"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="g28-Vo-aUT" secondAttribute="trailing" constant="20" id="Skx-xe-fuh"/>
                 <constraint firstItem="g28-Vo-aUT" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="URR-UG-BeV"/>
                 <constraint firstItem="g28-Vo-aUT" firstAttribute="top" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="Wzo-0B-mQD"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="g28-Vo-aUT" secondAttribute="bottom" constant="20" id="XLJ-PI-R0L"/>
+                <constraint firstItem="y5G-vA-603" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="aNz-gQ-SYJ"/>
                 <constraint firstItem="g28-Vo-aUT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="bMz-ST-Cu8"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -92,13 +104,12 @@
                 <outlet property="copyTextButton" destination="eQl-sO-l3z" id="Abl-kR-M7g"/>
                 <outlet property="textLabel" destination="14C-yv-hPi" id="XY3-NQ-A4z"/>
                 <outlet property="titleLabel" destination="xka-EG-B1V" id="tZn-Vx-arv"/>
-                <outletCollection property="gestureRecognizers" destination="yFN-Y7-D1V" appends="YES" id="CwW-GW-hjl"/>
             </connections>
             <point key="canvasLocation" x="381.15942028985512" y="-65.290178571428569"/>
         </view>
-        <tapGestureRecognizer id="yFN-Y7-D1V">
+        <tapGestureRecognizer id="ZKM-ks-tAB">
             <connections>
-                <action selector="didSelectBackround:" destination="iN0-l3-epB" id="7by-zQ-qDp"/>
+                <action selector="didSelectBackround:" destination="iN0-l3-epB" id="qXI-R4-qjp"/>
             </connections>
         </tapGestureRecognizer>
     </objects>

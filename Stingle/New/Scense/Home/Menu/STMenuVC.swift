@@ -8,15 +8,20 @@
 import UIKit
 
 class STMenuVC: STSplitViewController {
-    
+        
     private let masterViewControllerIdentifier = "masterViewController"
     private var controllers = [String: UIViewController]()
+    private weak var backupPhraseView: STBackupPhraseView?
     
     lazy private var biometricAuthServices: STBiometricAuthServices = {
         return STBiometricAuthServices()
     }()
     
     var appPassword: String?
+    var isShowBackupPhrase: Bool = false
+    
+    private var isViewDidAppear = false
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +31,12 @@ class STMenuVC: STSplitViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.showBiometricAuthQuestionIfNeeded()
+        
+        guard !self.isViewDidAppear else {
+            return
+        }
+        self.isViewDidAppear = true
+        self.showIsFirstOpensView()
     }
     
     func setDetailViewController(identifier: String) {
@@ -37,24 +47,59 @@ class STMenuVC: STSplitViewController {
     
     //MARK: - Private methods
     
-    private func showBiometricAuthQuestionIfNeeded() {
+    private func showIsFirstOpensView() {
+        self.showBackupPhraseIfNeeded { [weak self] in
+            self?.showBiometricAuthQuestionIfNeeded {}
+        }
+    }
+    
+    private func showBiometricAuthQuestionIfNeeded(completion: @escaping (() -> Void)) {
         guard let password = self.appPassword, self.biometricAuthServices.state != .notAvailable else {
+            completion()
             return
         }
         let biometricAuthTitle = "biometric_authentication".localized
         let biometricAuthMessage = "biometric_authentication_message".localized
-        self.showOkCancelAlert(title: biometricAuthTitle, message: biometricAuthMessage, handler: { [weak self] _ in
+        self.showInfoAlert(title: biometricAuthTitle, message: biometricAuthMessage, cancel: true) { [weak self] in
             self?.onBiometricAuth(password: password)
-        }, cancel: nil)
+            completion()
+        }
         self.appPassword = nil
     }
     
+    private func showBackupPhraseIfNeeded(completion: @escaping (() -> Void)) {
+        
+        let isKeyBackedUp = (STApplication.shared.user()?.isKeyBackedUp ?? true)
+        
+        guard !isKeyBackedUp, let key = KeyManagement.key, let mnemonic = try? STMnemonic.mnemonicString(from: key), self.isShowBackupPhrase else {
+            completion()
+            return
+        }
+        self.backupPhraseView = STBackupPhraseView.show(in: self.view, text: mnemonic, completion: completion)
+        self.backupPhraseView?.delegate = self
+        self.isShowBackupPhrase = false
+    }
+        
     private func onBiometricAuth(password: String) {
         self.biometricAuthServices.onBiometricAuth(password: password, {
             var security = STAppSettings.security
             security.authentication.unlock = true
             STAppSettings.security = security
         }, failure: nil)
+    }
+    
+}
+
+
+extension STMenuVC: STBackupPhraseViewDelegate {
+    
+    func backupPhraseView(didSelectCancel backupPhraseView: STBackupPhraseView) {
+        backupPhraseView.hide()
+    }
+    
+    func backupPhraseView(didSelectCopy backupPhraseView: STBackupPhraseView, text: String?) {
+        backupPhraseView.hide()
+        UIPasteboard.general.string = text
     }
     
 }

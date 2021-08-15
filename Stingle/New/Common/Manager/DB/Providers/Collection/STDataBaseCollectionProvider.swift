@@ -28,7 +28,7 @@ extension ICollectionProviderObserver {
 
 extension STDataBase {
     
-    class CollectionProvider<ManagedModel: IManagedObject>: DataBaseProvider<ManagedModel.Model>, ICollectionProvider {
+    class CollectionProvider<ManagedModel: IManagedObject>: DataBaseProvider<ManagedModel>, ICollectionProvider {
         
         typealias Model = ManagedModel.Model
         let dataSources = STObserverEvents<STDataBase.DataSource<ManagedModel>>()
@@ -263,9 +263,7 @@ extension STDataBase {
             //Implement in chid classes
             throw STDataBase.DataBaseError.dateNotFound
         }
-               
-        
-        
+                       
         //MARK: - Sync delete
         
         func deleteObjects(_ deleteFiles: [DeleteFile]?, in context: NSManagedObjectContext, lastDate: Date) throws -> Date {

@@ -65,6 +65,7 @@ class STSignUpVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         (segue.destination as? STMenuVC)?.appPassword = self.appPassword
+        (segue.destination as? STMenuVC)?.isShowBackupPhrase = true
     }
 	
 	override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class UserProvider: DataBaseProvider<STUser> {
+    class UserProvider: DataBaseProvider<STCDUser> {
         
         fileprivate(set) var myUser: STUser? = nil
                        

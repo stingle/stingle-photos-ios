@@ -73,6 +73,7 @@ class STDataBase {
         self.contactProvider.deleteAll()
         self.dbInfoProvider.deleteAll()
         self.userProvider.deleteAll()
+        self.container.saveContext()
     }
     
     func reloadData() {
