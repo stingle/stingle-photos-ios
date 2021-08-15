@@ -68,15 +68,20 @@ class SignInVC: UITableViewController {
 	
 	private func login() {
 		self.tableView.endEditing(true)
-		STLoadingView.show(in: self.navigationController?.view ?? self.view)
-		self.viewModel.login(email:  self.emailTextField.text, password: self.passwordTextField.text) { [weak self] (_, appPassword) in
+        
+        let view: UIView = self.navigationController?.view ?? self.view
+        
+		STLoadingView.show(in: view)
+		self.viewModel.login(email:  self.emailTextField.text, password: self.passwordTextField.text) { [weak self] (user, appPassword) in
             self?.appPassword = appPassword
-			self?.performSegue(withIdentifier: "goToHome", sender: nil)
+            if user.isKeyBackedUp {
+                self?.performSegue(withIdentifier: "goToHome", sender: nil)
+            } else {
+                self?.showBackupInputPhraseView()
+            }
+            STLoadingView.hide(in: view)
 		} failure: { [weak self] (error) in
-			guard let weakSelf = self else {
-				return
-			}
-			STLoadingView.hide(in: weakSelf.navigationController?.view ?? weakSelf.view)
+			STLoadingView.hide(in: view)
 			self?.showError(error: error)
 		}
 	}
@@ -98,7 +103,27 @@ class SignInVC: UITableViewController {
 	@objc private func backButtonTapped() {
 		self.navigationController?.popViewController(animated: true)
 	}
+    
+    private func showBackupInputPhraseView() {
+        let view: UIView = self.navigationController?.view ?? self.view
+        let backupInputPhraseView = STBackupInputPhraseView.show(in: view)
+        backupInputPhraseView.delegate = self
+    }
+    
 }
+
+extension SignInVC : STBackupInputPhraseViewDelegate {
+   
+    func backupPhraseView(didSelectCancel backupPhraseView: STBackupInputPhraseView) {
+        backupPhraseView.hide()
+    }
+    
+    func backupPhraseView(didSelectOk backupPhraseView: STBackupInputPhraseView, text: String?) {
+        backupPhraseView.hide()
+    }
+    
+}
+
 
 extension SignInVC : UITextFieldDelegate {
 	

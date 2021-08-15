@@ -28,7 +28,13 @@ enum STAuth {
 		var token: String
 		var userId: String
 	}
-			
+    
+    struct Challenge: Codable {
+        var challenge: String
+        var isKeyBackedUp: Int
+        var serverPK: String
+    }
+    			
 }
 
 

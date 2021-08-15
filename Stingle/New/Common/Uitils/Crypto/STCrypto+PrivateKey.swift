@@ -12,7 +12,7 @@ import Clibsodium
 extension STCrypto {
     
     func generateMainKeypair(password: String) throws {
-        try self.generateMainKeypair(password:password, privateKey:nil, publicKey:nil)
+        try self.generateMainKeypair(password:password, privateKey: nil, publicKey: nil)
     }
     
     func generateMainKeypair(password: String , privateKey: Bytes?, publicKey: Bytes?) throws {

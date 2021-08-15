@@ -95,10 +95,9 @@ class STAuthWorker: STWorker {
 		
         let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId, managedObjectID: nil)
         
-        self.userProvider.update(model: user)
-        
         if isPrivateKeyIsAlreadySaved {
             KeyManagement.key = try self.crypto.getPrivateKey(password: password)
+            self.userProvider.update(model: user)
         } else if KeyManagement.key == nil {
             guard true == KeyManagement.importKeyBundle(keyBundle: login.keyBundle, password: password) else {
                 self.userProvider.deleteAll()
@@ -107,6 +106,7 @@ class STAuthWorker: STWorker {
             }
             if isKeyBackedUp {
                 KeyManagement.key = try self.crypto.getPrivateKey(password: password)
+                self.userProvider.update(model: user)
             }
             let pubKey = login.serverPublicKey
             KeyManagement.importServerPublicKey(pbk: pubKey)

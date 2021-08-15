@@ -12,6 +12,7 @@ enum STAuthRequest {
 	case register(email: String, password: String, salt: String, keyBundle: String, isBackup: Bool)
 	case preLogin(email: String)
 	case login(email: String, password: String)
+    case checkRecoveryPhrase(email: String)
 }
 
 extension STAuthRequest: STRequest {
@@ -24,6 +25,8 @@ extension STAuthRequest: STRequest {
 			return "login/preLogin"
 		case .login:
 			return "login/login"
+        case .checkRecoveryPhrase:
+            return "login/checkKey"
 		}
 	}
 	
@@ -35,6 +38,8 @@ extension STAuthRequest: STRequest {
 			return .post
 		case .login:
 			return .post
+        case .checkRecoveryPhrase:
+            return .post
 		}
 	}
 	
@@ -46,6 +51,8 @@ extension STAuthRequest: STRequest {
 			return nil
 		case .login:
 			return nil
+        case .checkRecoveryPhrase:
+            return nil
 		}
 	}
 	
@@ -58,6 +65,8 @@ extension STAuthRequest: STRequest {
 			return ["email": email]
 		case .login(let email, let password):
 			return ["email": email, "password": password]
+        case .checkRecoveryPhrase(let email):
+            return ["email": email]
 		}
 	}
 	
@@ -69,6 +78,8 @@ extension STAuthRequest: STRequest {
 			return STNetworkDispatcher.Encoding.body
 		case .login:
 			return STNetworkDispatcher.Encoding.body
+        case .checkRecoveryPhrase:
+            return STNetworkDispatcher.Encoding.body
 		}
 	}
 	
