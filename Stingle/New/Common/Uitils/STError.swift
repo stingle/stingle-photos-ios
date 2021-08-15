@@ -74,6 +74,7 @@ enum STError: IError {
     
     case error(error: Error)
     case passwordNotValied
+    case unknown
     
     var message: String {
         switch self {
@@ -84,6 +85,8 @@ enum STError: IError {
             return error.localizedDescription
         case .passwordNotValied:
             return "error_password_not_valed".localized
+        case .unknown:
+            return "error_unknown_error".localized
         }
     }
 }

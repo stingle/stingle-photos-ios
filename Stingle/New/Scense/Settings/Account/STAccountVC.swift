@@ -112,7 +112,6 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
             }
             self?.reloadTableData()
         }
-        
     }
     
     private func addBackcupKeys() {

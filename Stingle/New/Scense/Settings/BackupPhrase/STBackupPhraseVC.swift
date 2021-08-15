@@ -13,6 +13,9 @@ class STBackupPhraseVC: UIViewController {
     @IBOutlet weak private var descriptionLabel: UILabel!
     @IBOutlet weak private var backupPhraseButton: STButton!
     
+    private weak var backupPhraseView: STBackupPhraseView?
+    private var viewModel = STBackupPhraseVM()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureLocalized()
@@ -30,8 +33,13 @@ class STBackupPhraseVC: UIViewController {
     //MARK: - User action
     
     @IBAction private func didSelectBackupPhraseButton(_ sender: Any) {
-        
-        
+        let title = "enter_app_password".localized
+        self.showOkCancelAlert(title: title, message: nil) { textField in
+            textField.placeholder = "password".localized
+            textField.isSecureTextEntry = true
+        } handler: { [weak self] text in
+            self?.showBackupPhrase(password: text)
+        } cancel: { }
     }
     
     @IBAction private func didSelectMenuBarItem(_ sender: Any) {
@@ -41,5 +49,30 @@ class STBackupPhraseVC: UIViewController {
             self.splitMenuViewController?.show(master: true)
         }
     }
+    
+    //MARK: - Privite methods
+    
+    private func showBackupPhrase(password: String?) {
+        let view: UIView = self.navigationController?.view ?? self.view
+        self.viewModel.getBackupPhrase(password: password) { [weak self] mnemonic in
+            self?.backupPhraseView = STBackupPhraseView.show(in: view, text: mnemonic)
+            self?.backupPhraseView?.delegate = self
+        } failure: { [weak self] error in
+            self?.showError(error: error)
+        }
+    }
 
+}
+
+extension STBackupPhraseVC: STBackupPhraseViewDelegate {
+    
+    func backupPhraseView(didSelectCancel backupPhraseView: STBackupPhraseView) {
+        backupPhraseView.hide()
+    }
+    
+    func backupPhraseView(didSelectCopy backupPhraseView: STBackupPhraseView, text: String?) {
+        backupPhraseView.hide()
+        self.viewModel.copy(backupPhrase: text)
+    }
+    
 }

@@ -176,8 +176,6 @@
 		A05D2698261B5751008E9CF8 /* STMenuMasterTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A05D2696261B5751008E9CF8 /* STMenuMasterTableViewCell.xib */; };
 		A05F9DD126A60E6900F9F343 /* STKeyChainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05F9DD026A60E6900F9F343 /* STKeyChainService.swift */; };
 		A05F9DD326A6155C00F9F343 /* STBiometricAuthServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05F9DD226A6155C00F9F343 /* STBiometricAuthServices.swift */; };
-		A061384726C5AB8400E9A95F /* STMnemonic+Cripto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A061384526C5AB8400E9A95F /* STMnemonic+Cripto.swift */; };
-		A061384826C5AB8400E9A95F /* STMnemonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A061384626C5AB8400E9A95F /* STMnemonic.swift */; };
 		A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */; };
 		A0623F3825F41EBB0018D378 /* STLibraryDelete.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */; };
 		A062E0E9264C7FC3000B3595 /* STFileImageRetryer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A062E0E8264C7FC3000B3595 /* STFileImageRetryer.swift */; };
@@ -295,6 +293,12 @@
 		A0D29CDB262074560083967D /* STOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D29CDA262074560083967D /* STOperations.swift */; };
 		A0D29CDF262081130083967D /* STFileUploaderOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D29CDE262081130083967D /* STFileUploaderOperation.swift */; };
 		A0D29CE22620818E0083967D /* STUploadNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D29CE12620818E0083967D /* STUploadNetworkOperation.swift */; };
+		A0D4E82F26C8107800556871 /* STMnemonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D4E82826C8107800556871 /* STMnemonic.swift */; };
+		A0D4E83026C8107800556871 /* Chinese.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D4E82A26C8107800556871 /* Chinese.swift */; };
+		A0D4E83126C8107800556871 /* English.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D4E82B26C8107800556871 /* English.swift */; };
+		A0D4E83626C81D1900556871 /* STBackupPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D4E83526C81D1900556871 /* STBackupPhraseView.swift */; };
+		A0D4E83926C81D4C00556871 /* STBackupPhraseView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0D4E83826C81D4C00556871 /* STBackupPhraseView.xib */; };
+		A0D4E83B26C82BF800556871 /* STBackupPhraseVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D4E83A26C82BF800556871 /* STBackupPhraseVM.swift */; };
 		A0D65DF9269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D65DF8269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift */; };
 		A0D8A98A25F43EF8005C12F8 /* STContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D8A98925F43EF8005C12F8 /* STContact.swift */; };
 		A0D8A99125F44B2D005C12F8 /* StingleModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0D8A98F25F44B2D005C12F8 /* StingleModel.xcdatamodeld */; };
@@ -521,8 +525,6 @@
 		A05D2696261B5751008E9CF8 /* STMenuMasterTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STMenuMasterTableViewCell.xib; sourceTree = "<group>"; };
 		A05F9DD026A60E6900F9F343 /* STKeyChainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STKeyChainService.swift; sourceTree = "<group>"; };
 		A05F9DD226A6155C00F9F343 /* STBiometricAuthServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBiometricAuthServices.swift; sourceTree = "<group>"; };
-		A061384526C5AB8400E9A95F /* STMnemonic+Cripto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "STMnemonic+Cripto.swift"; sourceTree = "<group>"; };
-		A061384626C5AB8400E9A95F /* STMnemonic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STMnemonic.swift; sourceTree = "<group>"; };
 		A0623F3425F41C650018D378 /* STLibraryAlbumFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryAlbumFile.swift; sourceTree = "<group>"; };
 		A0623F3725F41EBB0018D378 /* STLibraryDelete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryDelete.swift; sourceTree = "<group>"; };
 		A062E0E8264C7FC3000B3595 /* STFileImageRetryer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileImageRetryer.swift; sourceTree = "<group>"; };
@@ -636,6 +638,12 @@
 		A0D29CDA262074560083967D /* STOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOperations.swift; sourceTree = "<group>"; };
 		A0D29CDE262081130083967D /* STFileUploaderOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileUploaderOperation.swift; sourceTree = "<group>"; };
 		A0D29CE12620818E0083967D /* STUploadNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUploadNetworkOperation.swift; sourceTree = "<group>"; };
+		A0D4E82826C8107800556871 /* STMnemonic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STMnemonic.swift; sourceTree = "<group>"; };
+		A0D4E82A26C8107800556871 /* Chinese.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chinese.swift; sourceTree = "<group>"; };
+		A0D4E82B26C8107800556871 /* English.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = English.swift; sourceTree = "<group>"; };
+		A0D4E83526C81D1900556871 /* STBackupPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBackupPhraseView.swift; sourceTree = "<group>"; };
+		A0D4E83826C81D4C00556871 /* STBackupPhraseView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STBackupPhraseView.xib; sourceTree = "<group>"; };
+		A0D4E83A26C82BF800556871 /* STBackupPhraseVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBackupPhraseVM.swift; sourceTree = "<group>"; };
 		A0D65DF8269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSettingsCollectionViewCell.swift; sourceTree = "<group>"; };
 		A0D8A98925F43EF8005C12F8 /* STContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STContact.swift; sourceTree = "<group>"; };
 		A0D8A99025F44B2D005C12F8 /* StingleModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StingleModel.xcdatamodel; sourceTree = "<group>"; };
@@ -1596,8 +1604,8 @@
 		A061384426C5AB8400E9A95F /* Mnemonic */ = {
 			isa = PBXGroup;
 			children = (
-				A061384526C5AB8400E9A95F /* STMnemonic+Cripto.swift */,
-				A061384626C5AB8400E9A95F /* STMnemonic.swift */,
+				A0D4E82826C8107800556871 /* STMnemonic.swift */,
+				A0D4E82926C8107800556871 /* Language */,
 			);
 			path = Mnemonic;
 			sourceTree = "<group>";
@@ -2095,6 +2103,8 @@
 			isa = PBXGroup;
 			children = (
 				A0AAA943261C7D6E009E9F51 /* STBackupPhraseVC.swift */,
+				A0D4E83A26C82BF800556871 /* STBackupPhraseVM.swift */,
+				A0D4E83426C81CF300556871 /* Items */,
 			);
 			path = BackupPhrase;
 			sourceTree = "<group>";
@@ -2228,6 +2238,32 @@
 				A021A17F264F409600394713 /* IUploadFile.swift */,
 			);
 			path = FileUploader;
+			sourceTree = "<group>";
+		};
+		A0D4E82926C8107800556871 /* Language */ = {
+			isa = PBXGroup;
+			children = (
+				A0D4E82A26C8107800556871 /* Chinese.swift */,
+				A0D4E82B26C8107800556871 /* English.swift */,
+			);
+			path = Language;
+			sourceTree = "<group>";
+		};
+		A0D4E83426C81CF300556871 /* Items */ = {
+			isa = PBXGroup;
+			children = (
+				A0D4E83726C81D3400556871 /* BackupPhraseView */,
+			);
+			path = Items;
+			sourceTree = "<group>";
+		};
+		A0D4E83726C81D3400556871 /* BackupPhraseView */ = {
+			isa = PBXGroup;
+			children = (
+				A0D4E83526C81D1900556871 /* STBackupPhraseView.swift */,
+				A0D4E83826C81D4C00556871 /* STBackupPhraseView.xib */,
+			);
+			path = BackupPhraseView;
 			sourceTree = "<group>";
 		};
 		A0D65DF7269CFF4D0046FBA9 /* Items */ = {
@@ -2410,6 +2446,7 @@
 				A022046F25EEDC0400D07C98 /* STLoadingView.xib in Resources */,
 				A0AAA938261C7C1B009E9F51 /* Settings.storyboard in Resources */,
 				A02203CA25EED86800D07C98 /* Assets.xcassets in Resources */,
+				A0D4E83926C81D4C00556871 /* STBackupPhraseView.xib in Resources */,
 				A02204A625EEDC0400D07C98 /* Welcome.storyboard in Resources */,
 				A02204F225EEE12000D07C98 /* Localizable.strings in Resources */,
 				A09D944F2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib in Resources */,
@@ -2497,6 +2534,7 @@
 				A0DC5E3A2639576300103DE1 /* STButton.swift in Sources */,
 				A022049225EEDC0400D07C98 /* STValidator.swift in Sources */,
 				A086FD3F25F5A2A900A8BC9C /* STDataBaseContainer.swift in Sources */,
+				A0D4E83B26C82BF800556871 /* STBackupPhraseVM.swift in Sources */,
 				A0B267852624E0650090E4ED /* STTrashHeaderView.swift in Sources */,
 				A032097226546602000C420B /* STPlayer.swift in Sources */,
 				A032096F26546275000C420B /* STVideoView.swift in Sources */,
@@ -2527,7 +2565,6 @@
 				A02203C125EED86800D07C98 /* AppDelegate.swift in Sources */,
 				A0FD3F382670F4C40042EB8D /* STFileUrl.swift in Sources */,
 				A086FD9125F5AC7200A8BC9C /* STUserProvider.swift in Sources */,
-				A061384826C5AB8400E9A95F /* STMnemonic.swift in Sources */,
 				A074AE3E26460203004C9E9E /* STMoveAlbumFilesVC.swift in Sources */,
 				A013D85E269F7C81007ED786 /* STAppSettings+Security.swift in Sources */,
 				A075B73A2652A79900B4E2DF /* STAlbumSettingsMemberCell.swift in Sources */,
@@ -2606,7 +2643,6 @@
 				A022048225EEDC0400D07C98 /* SPFile.swift in Sources */,
 				A075B71E2651BBD000B4E2DF /* STSharedAlbumSettingsVM.swift in Sources */,
 				A0794B8A269E33ED00B40FE9 /* STBackupVC.swift in Sources */,
-				A061384726C5AB8400E9A95F /* STMnemonic+Cripto.swift in Sources */,
 				A02204B725EEDC0400D07C98 /* BaseVC.swift in Sources */,
 				A0E1B507266BAB3A0063CB40 /* CountableRange+Operation.swift in Sources */,
 				A022047125EEDC0400D07C98 /* MenuTransitionAnimationControllers.swift in Sources */,
@@ -2651,10 +2687,12 @@
 				A0301DE825FD6D48005281EF /* STDBInfo.swift in Sources */,
 				A04A3E44265CF1F000F16EF9 /* STFileReader.swift in Sources */,
 				A005FAEB25FEC1D600E7D8B0 /* STDateManager.swift in Sources */,
+				A0D4E83626C81D1900556871 /* STBackupPhraseView.swift in Sources */,
 				A0A7974C264FF42F00917C91 /* STFilesDownloaderActivityVM.swift in Sources */,
 				A0F467F625F992F400BF00AA /* STCDTrashFile.swift in Sources */,
 				A02204B325EEDC0400D07C98 /* GalleryFrontVC.swift in Sources */,
 				A0059E6625F8B70F003ABB56 /* STDataBaseProvider.swift in Sources */,
+				A0D4E83126C8107800556871 /* English.swift in Sources */,
 				A022049B25EEDC0400D07C98 /* Theme.swift in Sources */,
 				A0FD3F3D267141430042EB8D /* STStreamNetworkOperation.swift in Sources */,
 				A00E8C932629D38F0066ED9B /* STViewDataSource.swift in Sources */,
@@ -2699,6 +2737,7 @@
 				A02204BA25EEDC0400D07C98 /* SettingsVC.swift in Sources */,
 				A04BD0172634AA2700C5F29F /* STDynamicTableView.swift in Sources */,
 				A02204AC25EEDC0400D07C98 /* SignInVM.swift in Sources */,
+				A0D4E82F26C8107800556871 /* STMnemonic.swift in Sources */,
 				A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */,
 				A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */,
 				A0D29CD7262051460083967D /* STFileUploader.swift in Sources */,
@@ -2742,6 +2781,7 @@
 				A0B267742624D7B30090E4ED /* STFilesViewController.swift in Sources */,
 				A03D555E26AC6596008705F2 /* STFileSystem.swift in Sources */,
 				A03D555C26AC5BF6008705F2 /* STAppLocker.swift in Sources */,
+				A0D4E83026C8107800556871 /* Chinese.swift in Sources */,
 				A0E9999A263F1DE8002FDCC9 /* STTokenView.swift in Sources */,
 				A0C88FE125F3D36A0061A41D /* STLibraryFile.swift in Sources */,
 				A0794B7B269E2D9F00B40FE9 /* STSecurityVC.swift in Sources */,

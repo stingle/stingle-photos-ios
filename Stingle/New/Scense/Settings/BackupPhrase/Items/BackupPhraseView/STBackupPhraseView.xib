@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="STBackupPhraseView" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="752" height="463"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g28-Vo-aUT" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                    <rect key="frame" x="276" y="128.5" width="200" height="206.5"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="14C-yv-hPi">
+                            <rect key="frame" x="8" y="37" width="184" height="107.5"/>
+                            <string key="text">fossil inmate cause stand assault stone dog drop talent ability around praise prison card vintage involve tag sun grief fury liberty local whip sting</string>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQl-sO-l3z" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                            <rect key="frame" x="138" y="164.5" width="52" height="34"/>
+                            <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                            <state key="normal" title="Copy">
+                                <color key="titleColor" name="STText"/>
+                            </state>
+                            <connections>
+                                <action selector="didSelectCopy:" destination="iN0-l3-epB" eventType="touchUpInside" id="U2h-kC-RaE"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XAH-32-1x1" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                            <rect key="frame" x="69" y="164.5" width="64" height="34"/>
+                            <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                            <state key="normal" title="Cancle">
+                                <color key="titleColor" name="STText"/>
+                            </state>
+                            <connections>
+                                <action selector="didSelectCancel:" destination="iN0-l3-epB" eventType="touchUpInside" id="vtZ-VG-NWD"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="850" verticalHuggingPriority="251" horizontalCompressionResistancePriority="850" text="Your Backup Phrase  " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xka-EG-B1V">
+                            <rect key="frame" x="8" y="8" width="165" height="21"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" name="STMenuBackground"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="14C-yv-hPi" secondAttribute="trailing" constant="8" id="1zb-uH-jMI"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" priority="800" constant="200" id="5Ec-cs-nWV">
+                            <variation key="heightClass=regular-widthClass=regular" constant="400"/>
+                        </constraint>
+                        <constraint firstItem="14C-yv-hPi" firstAttribute="leading" secondItem="g28-Vo-aUT" secondAttribute="leading" constant="8" id="Ir6-2Z-eWh"/>
+                        <constraint firstItem="xka-EG-B1V" firstAttribute="top" secondItem="g28-Vo-aUT" secondAttribute="top" constant="8" id="Rp6-Be-xyR"/>
+                        <constraint firstItem="xka-EG-B1V" firstAttribute="leading" secondItem="g28-Vo-aUT" secondAttribute="leading" constant="8" id="TY5-Wn-34F"/>
+                        <constraint firstAttribute="trailing" secondItem="eQl-sO-l3z" secondAttribute="trailing" constant="10" id="TqP-Ge-uB8"/>
+                        <constraint firstAttribute="bottom" secondItem="XAH-32-1x1" secondAttribute="bottom" constant="8" id="fUE-YJ-och"/>
+                        <constraint firstAttribute="bottom" secondItem="eQl-sO-l3z" secondAttribute="bottom" constant="8" id="j1O-hi-Igv"/>
+                        <constraint firstItem="XAH-32-1x1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="g28-Vo-aUT" secondAttribute="leading" id="jZO-ZR-kdG"/>
+                        <constraint firstItem="14C-yv-hPi" firstAttribute="top" secondItem="xka-EG-B1V" secondAttribute="bottom" constant="8" id="l4O-s3-CvD"/>
+                        <constraint firstItem="eQl-sO-l3z" firstAttribute="leading" secondItem="XAH-32-1x1" secondAttribute="trailing" constant="5" id="oNe-4U-dgI"/>
+                        <constraint firstItem="eQl-sO-l3z" firstAttribute="top" secondItem="14C-yv-hPi" secondAttribute="bottom" constant="20" id="ond-Nr-2LG"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xka-EG-B1V" secondAttribute="trailing" constant="20" id="yQx-wv-Bv2"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                            <real key="value" value="0.050000000000000003"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <color key="backgroundColor" name="STPlaceholder"/>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="g28-Vo-aUT" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Klb-rf-ae1"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="g28-Vo-aUT" secondAttribute="trailing" constant="20" id="Skx-xe-fuh"/>
+                <constraint firstItem="g28-Vo-aUT" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="URR-UG-BeV"/>
+                <constraint firstItem="g28-Vo-aUT" firstAttribute="top" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="Wzo-0B-mQD"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="g28-Vo-aUT" secondAttribute="bottom" constant="20" id="XLJ-PI-R0L"/>
+                <constraint firstItem="g28-Vo-aUT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="bMz-ST-Cu8"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="cancelButton" destination="XAH-32-1x1" id="BbY-Yl-bx2"/>
+                <outlet property="copyTextButton" destination="eQl-sO-l3z" id="Abl-kR-M7g"/>
+                <outlet property="textLabel" destination="14C-yv-hPi" id="XY3-NQ-A4z"/>
+                <outlet property="titleLabel" destination="xka-EG-B1V" id="tZn-Vx-arv"/>
+                <outletCollection property="gestureRecognizers" destination="yFN-Y7-D1V" appends="YES" id="CwW-GW-hjl"/>
+            </connections>
+            <point key="canvasLocation" x="381.15942028985512" y="-65.290178571428569"/>
+        </view>
+        <tapGestureRecognizer id="yFN-Y7-D1V">
+            <connections>
+                <action selector="didSelectBackround:" destination="iN0-l3-epB" id="7by-zQ-qDp"/>
+            </connections>
+        </tapGestureRecognizer>
+    </objects>
+    <designables>
+        <designable name="XAH-32-1x1">
+            <size key="intrinsicContentSize" width="64" height="34"/>
+        </designable>
+        <designable name="eQl-sO-l3z">
+            <size key="intrinsicContentSize" width="52" height="34"/>
+        </designable>
+    </designables>
+    <resources>
+        <namedColor name="STMenuBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPlaceholder">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.15999999642372131" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

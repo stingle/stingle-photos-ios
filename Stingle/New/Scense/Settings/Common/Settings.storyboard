@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="ipad10_9rounded" orientation="portrait" layout="fullscreen" appearance="dark"/>
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -16,7 +16,7 @@
             <objects>
                 <navigationController storyboardIdentifier="SettingsID" id="15U-VF-qgH" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="S4X-5h-C6z">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
@@ -39,11 +39,11 @@
             <objects>
                 <viewController id="Oap-3z-8x1" customClass="STSettingsVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KQv-yt-Ec8">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Fpk-uR-CJD">
-                                <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Dec-Lp-yWh">
                                     <size key="itemSize" width="136" height="51"/>
@@ -129,11 +129,11 @@
             <objects>
                 <viewController storyboardIdentifier="STAdvancedVCID" id="muX-ij-sta" customClass="STAdvancedVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3c6-R4-Hz0">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="S1A-xN-l91">
-                                <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="muX-ij-sta" id="ols-3W-rCA"/>
@@ -164,11 +164,11 @@
             <objects>
                 <viewController storyboardIdentifier="STAccountVCID" id="8PJ-Gu-LYW" customClass="STAccountVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DB7-jI-jck">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Da4-dw-BwN">
-                                <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                                 <color key="backgroundColor" name="STBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="8PJ-Gu-LYW" id="d3j-1I-H30"/>
@@ -199,11 +199,11 @@
             <objects>
                 <viewController storyboardIdentifier="STSecurityVCID" id="RGb-0n-Xsw" customClass="STSecurityVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lOm-Po-dNg">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="r3q-xC-z9N">
-                                <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                                 <color key="backgroundColor" name="STBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="RGb-0n-Xsw" id="AA4-Ps-Svx"/>
@@ -234,11 +234,11 @@
             <objects>
                 <viewController storyboardIdentifier="STBackupVCID" id="CYR-sX-hNO" customClass="STBackupVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cHy-IZ-fLa">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WYg-0i-yun">
-                                <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                                 <color key="backgroundColor" name="STBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="CYR-sX-hNO" id="KFq-rD-1Lk"/>
@@ -269,7 +269,7 @@
             <objects>
                 <viewController storyboardIdentifier="STImportVCID" id="iJr-aw-wlH" customClass="STImportVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="y3O-mA-zO6">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="Sd8-zv-NCX"/>
                         <color key="backgroundColor" name="STBackground"/>
@@ -285,11 +285,11 @@
             <objects>
                 <viewController storyboardIdentifier="STAppearanceVCID" id="Siw-62-mcb" customClass="STAppearanceVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FAD-qB-56X">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0Zi-4h-CMU">
-                                <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                                 <color key="backgroundColor" name="STBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Siw-62-mcb" id="hMW-te-uew"/>
@@ -320,30 +320,30 @@
             <objects>
                 <viewController id="DOp-L9-uLb" customClass="STBackupPhraseVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gwy-NG-gYw">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hRR-7k-TYM">
-                                <rect key="frame" x="79" y="425" width="662.5" height="360.5"/>
+                                <rect key="frame" x="64" y="518" width="896" height="360.5"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_backup_phrase" translatesAutoresizingMaskIntoConstraints="NO" id="MjL-FG-A5a">
-                                        <rect key="frame" x="0.0" y="0.0" width="662.5" height="202"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="896" height="202"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" text="Backup phrase" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="X3R-I6-Ba6">
-                                        <rect key="frame" x="264" y="227" width="134.5" height="24"/>
+                                        <rect key="frame" x="381" y="227" width="134.5" height="24"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                         <color key="textColor" name="STText"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y9X-qs-BL1">
-                                        <rect key="frame" x="0.0" y="261" width="662.5" height="33.5"/>
+                                        <rect key="frame" x="0.0" y="261" width="896" height="33.5"/>
                                         <string key="text">Your backup phrase  is most valuable secret of your account, so please make sure to back it up in safe place. If anyone get tis phrase, they can get access to all of your data</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" name="STText"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="257" verticalCompressionResistancePriority="756" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YrF-n9-ydI" customClass="STButton" customModule="Stingle" customModuleProvider="target">
-                                        <rect key="frame" x="176.5" y="326.5" width="309" height="34"/>
+                                        <rect key="frame" x="293.5" y="326.5" width="309" height="34"/>
                                         <color key="backgroundColor" name="STPrimary"/>
                                         <inset key="contentEdgeInsets" minX="76" minY="8" maxX="76" maxY="8"/>
                                         <state key="normal" title="Ok, get Backup Phrase">
@@ -408,14 +408,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mOo-bH-l3w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1469.5652173913045" y="1670.7589285714284"/>
+            <point key="canvasLocation" x="-1470" y="1670.3389830508474"/>
         </scene>
         <!--StorageVC-->
         <scene sceneID="EHJ-pr-Mwq">
             <objects>
                 <viewController id="FYE-Df-fVh" customClass="STStorageVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="q6v-Ds-79y">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="2Ge-K5-Lr2"/>
                         <color key="backgroundColor" name="STBackground"/>
@@ -431,7 +431,7 @@
             <objects>
                 <navigationController storyboardIdentifier="STBackupPhraseVCID" id="PAv-cP-9jK" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="n3k-um-XZ1">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
@@ -454,7 +454,7 @@
             <objects>
                 <navigationController storyboardIdentifier="STStorageVCID" id="lIe-eg-1w9" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="YoJ-pK-hBd">
-                        <rect key="frame" x="0.0" y="0.0" width="820" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">

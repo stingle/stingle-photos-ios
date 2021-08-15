@@ -68,6 +68,7 @@
 "edit" = "Edit";
 "done" = "Done";
 "select" = "Select";
+"copy" = "Copy";
 
 "selected_items_count" = "%@ items Selected";
 "select_items" = "Select items";
@@ -261,6 +262,8 @@
 
 "backup_phrase_description" = "Your backup phrase  is most valuable secret of your account, so please make sure to back it up in safe place. If anyone get tis phrase, they can get access to all of your data";
 "ok_get_backup_phrase" = "Ok, get Backup Phrase";
+
+"your_backup_phrase" = "Your Backup Phrase";
 
 //MARK: - Time
 
