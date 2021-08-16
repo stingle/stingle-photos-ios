@@ -181,51 +181,48 @@ enum STMnemonic {
         guard !mnemonicComponents.isEmpty else {
             throw MnemonicError.wrongWordCount
         }
-
+        
         guard let wordCount = WordCount(rawValue: mnemonicComponents.count) else {
             throw MnemonicError.wrongWordCount
         }
-
+        
         // determine the language of the seed or fail
         let language = try determineLanguage(from: mnemonicComponents)
         let vocabulary = language.words()
-
+        
         // generate indices array
         var seedBits = ""
         for word in mnemonicComponents {
             guard let indexInVocabulary = vocabulary.firstIndex(of: word) else {
                 throw MnemonicError.invalidWord(word: word)
             }
-
+            
             let binaryString = String(indexInVocabulary, radix: 2).pad(toSize: 11)
-
             seedBits.append(contentsOf: binaryString)
         }
-
+        
         let checksumLength = mnemonicComponents.count / 3
-
         guard checksumLength == wordCount.checksumLength else {
-                throw MnemonicError.checksumError
+            throw MnemonicError.checksumError
         }
-
+        
         let dataBitsLength = seedBits.count - checksumLength
-
+        
         let dataBits = String(seedBits.prefix(dataBitsLength))
         let checksumBits = String(seedBits.suffix(checksumLength))
-
+        
         guard let dataBytes = dataBits.bitStringToBytes() else {
             throw MnemonicError.checksumError
         }
-
+        
         let hash = SHA256.hash(data: dataBytes)
         let hashBits = hash.bytes.toBitArray().joined(separator: "").prefix(checksumLength)
-
+        
         guard hashBits == checksumBits else {
             throw MnemonicError.checksumError
         }
         
         return [UInt8](dataBytes)
-
     }
 
     static func determineLanguage(from mnemonicWords: [String]) throws -> MnemonicLanguageType {
@@ -285,7 +282,12 @@ extension STMnemonic {
        case entropyCreationFailed
         
         var message: String {
-            return "error_unknown_error".localized
+            switch self {
+            case .wrongWordCount, .invalidWord, .checksumError:
+                return "error_incorrect_phrase".localized
+            default:
+                return "error_unknown_error".localized
+            }
         }
    }
     

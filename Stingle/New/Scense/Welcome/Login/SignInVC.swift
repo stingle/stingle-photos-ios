@@ -70,7 +70,6 @@ class SignInVC: UITableViewController {
 		self.tableView.endEditing(true)
         
         let view: UIView = self.navigationController?.view ?? self.view
-        
 		STLoadingView.show(in: view)
 		self.viewModel.login(email:  self.emailTextField.text, password: self.passwordTextField.text) { [weak self] (user, appPassword) in
             self?.appPassword = appPassword
@@ -120,6 +119,18 @@ extension SignInVC : STBackupInputPhraseViewDelegate {
     
     func backupPhraseView(didSelectOk backupPhraseView: STBackupInputPhraseView, text: String?) {
         backupPhraseView.hide()
+        let view: UIView = self.navigationController?.view ?? self.view
+        STLoadingView.show(in: view)
+        self.viewModel.checkRecoveryPhrase(phrase: text, password: self.appPassword) { [weak self] error in
+            STLoadingView.hide(in: view)
+            
+            if let error = error {
+                self?.showError(error: error)
+            } else {
+                self?.performSegue(withIdentifier: "goToHome", sender: nil)
+            }
+            
+        }
     }
     
 }

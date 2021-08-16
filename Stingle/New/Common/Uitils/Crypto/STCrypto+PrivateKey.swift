@@ -22,15 +22,15 @@ extension STCrypto {
         
         _ = try self.savePrivateFile(filename: Constants.PwdSaltFilename, data: pwdSalt)
         
-        var newPrivateKey: Bytes?  = nil
-        var newPublicKey: Bytes?  = nil
+        var privateKey: Bytes?  = privateKey
+        var publicKey: Bytes?  = publicKey
         
         if(privateKey == nil || publicKey == nil) {
             guard let keyPair = sodium.box.keyPair() else {
                 throw CryptoError.Internal.keyPairGenerationFailure
             }
-            newPrivateKey = privateKey ?? keyPair.secretKey
-            newPublicKey = publicKey ?? keyPair.publicKey
+            privateKey = privateKey ?? keyPair.secretKey
+            publicKey = publicKey ?? keyPair.publicKey
         }
         
         let pwdKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
@@ -40,10 +40,10 @@ extension STCrypto {
         }
         _ = try self.savePrivateFile(filename: Constants.SKNONCEFilename, data: pwdEncNonce)
         
-        let encryptedPrivateKey = try self.encryptSymmetric(key: pwdKey, nonce: pwdEncNonce, data: newPrivateKey)
+        let encryptedPrivateKey = try self.encryptSymmetric(key: pwdKey, nonce: pwdEncNonce, data: privateKey)
         
         _ = try self.savePrivateFile(filename: Constants.PrivateKeyFilename, data: encryptedPrivateKey)
-        _ = try self.savePrivateFile(filename: Constants.PublicKeyFilename, data: newPublicKey!)
+        _ = try self.savePrivateFile(filename: Constants.PublicKeyFilename, data: publicKey!)
     }
     
     func getPrivateKey(password: String) throws  -> Bytes {

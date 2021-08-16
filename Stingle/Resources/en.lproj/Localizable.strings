@@ -307,6 +307,8 @@
 
 "error_maching_passwords" = "Password don't match. Please enter the same password twice correctly";
 
+"error_incorrect_phrase" = "Your recovery phrase is incorrect!";
+
 //MARK: - NETWORK
 
 "nework_error_data_not_found" = "Data not found";

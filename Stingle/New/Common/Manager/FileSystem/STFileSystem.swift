@@ -147,9 +147,7 @@ extension STFileSystem {
 }
 
 extension STFileSystem {
-    
-    //TODO: Khoren encapsulate its methods
-    
+        
     func fileExists(atPath path: String) -> Bool {
         return self.fileManager.fileExists(atPath: path)
     }

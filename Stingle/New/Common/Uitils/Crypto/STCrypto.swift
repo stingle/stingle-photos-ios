@@ -70,6 +70,20 @@ class STCrypto {
 	public init() {
 		self.sodium = Sodium()
 	}
+    
+    func getPublicKeyFromPrivateKey(byte: Bytes) throws -> Bytes {
+        guard let publicKey = self.sodium.secretBox.exportPublicKey(secretKey: byte) else {
+            throw CryptoError.Internal.sealFailure
+        }
+        return publicKey
+    }
+    
+    func decryptSeal(enc: Bytes, publicKey: Bytes, privateKey: Bytes) throws -> Bytes {
+        guard let decryptSeal = self.sodium.box.open(anonymousCipherText: enc, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
+            throw CryptoError.Internal.openFailure
+        }
+        return decryptSeal
+    }
 			
 	public func getPasswordHashForStorage(password: String) throws -> [String: String] {
 		guard let salt = self.getRandomBytes(lenght: sodium.pwHash.SaltBytes) else {
