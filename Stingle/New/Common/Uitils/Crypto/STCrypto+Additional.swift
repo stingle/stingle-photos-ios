@@ -128,9 +128,19 @@ extension STCrypto {
         }
     }
     
-    func encryptParamsForServer(params: [String: Any?]) throws -> String {
-        let spbk  = try self.getServerPublicKey()
-        guard let pks = KeyManagement.key else {
+    func encryptParamsForServer(params: [String: Any?], serverPK: Bytes? = nil, privateKey: Bytes? = nil) throws -> String {
+        
+        var serverPK: Bytes? = serverPK
+        if serverPK == nil {
+            serverPK = try self.getServerPublicKey()
+        }
+        
+        var privateKey: Bytes? = privateKey
+        if privateKey == nil {
+            privateKey = KeyManagement.key
+        }
+        
+        guard let pks = privateKey, let spbk = serverPK else {
             throw CryptoError.Bundle.pivateKeyIsEmpty
         }
         let json = try JSONSerialization.data(withJSONObject: params)

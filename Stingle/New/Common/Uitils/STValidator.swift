@@ -41,6 +41,14 @@ class STValidator {
 		return password
 	}
     
+    func validate(password: String?, confirmPassword: String?) throws -> String {
+        let password = try self.validate(password: password)
+        guard  password == confirmPassword else {
+            throw ValidatorError.confirmPassword
+        }
+        return password
+    }
+
     @discardableResult
     func validate(string: String?) throws -> String {
         guard let string = string, !string.isEmpty else {
@@ -68,6 +76,7 @@ extension STValidator {
 		case passwordIsNil
 		case passwordIncorrect
         case emptyText
+        case confirmPassword
 		
 		var message: String {
 		
@@ -82,6 +91,8 @@ extension STValidator {
 				return "error_incorrect_password".localized
             case .emptyText:
                 return "error_empty_text".localized
+            case .confirmPassword:
+                return "error_incorrect_confirm_password".localized
 			}
 			
 		}

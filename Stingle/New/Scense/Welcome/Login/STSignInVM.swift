@@ -1,6 +1,6 @@
 import Foundation
 
-class SignInVM {
+class STSignInVM {
 	
 	private let authWorker = STAuthWorker()
 	private let validator = STValidator()
@@ -33,7 +33,7 @@ class SignInVM {
             return
         }
         
-        self.authWorker.checkRecoveryPhrase(user: user, phrase: phrase, password: password) { _ in
+        self.authWorker.checkRecoveryPhraseAfterLogin(user: user, phrase: phrase, password: password) { _ in
             compliation(nil)
         } failure: { error in
             compliation(error)
@@ -51,7 +51,7 @@ class SignInVM {
     	
 }
 
-extension SignInVM {
+extension STSignInVM {
     
     enum SignInError: IError {
         

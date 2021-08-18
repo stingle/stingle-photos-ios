@@ -48,7 +48,7 @@ import UIKit
 		guard let context = UIGraphicsGetCurrentContext(), let drawColor = color else {
 			return
 		}
-		let rect = CGRect(x: 0, y: rect.height - self.underlineHeight, width: rect.width, height: self.underlineHeight)
+        let rect = CGRect(x: 0, y: rect.height - self.underlineHeight + rect.origin.y, width: rect.width, height: self.underlineHeight)
 		let path = CGPath(roundedRect: rect, cornerWidth: 0.5, cornerHeight: 0.5, transform: nil)
 		context.addPath(path)
 		context.setFillColor(drawColor.cgColor)

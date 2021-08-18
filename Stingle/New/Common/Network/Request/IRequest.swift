@@ -91,7 +91,6 @@ extension IEncryptedRequest {
         guard let params = try? STApplication.shared.crypto.encryptParamsForServer(params: bodyParams) else {
             return nil
         }
-        
         var result = ["params": params]
         if self.setToken {
             let token = self.token ?? ""

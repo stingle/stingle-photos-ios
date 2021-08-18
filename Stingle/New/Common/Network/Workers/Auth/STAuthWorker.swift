@@ -41,9 +41,7 @@ class STAuthWorker: STWorker {
         self.request(request: request, success: success, failure: failure)
     }
     
-	//MARK: - Private Register
-    
-    private func loginRequest(email: String, password: String, isPrivateKeyIsAlreadySaved: Bool, success: Success<STUser>? = nil, failure: Failure? = nil) {
+    func loginRequest(email: String, password: String, isPrivateKeyIsAlreadySaved: Bool, success: Success<STUser>? = nil, failure: Failure? = nil) {
         self.preLogin(email: email, success: { [weak self] (preLogin) in
             guard let weakSelf = self else {
                 failure?(AuthWorkerError.loginError)
@@ -57,7 +55,9 @@ class STAuthWorker: STWorker {
             }
         }, failure: failure)
     }
-	
+    
+	//MARK: - Private Register
+    	
 	private func generateSignUpRequest(email: String, password: String, includePrivateKey: Bool) throws -> STAuthRequest {
 		do {
 			try self.crypto.generateMainKeypair(password: password)

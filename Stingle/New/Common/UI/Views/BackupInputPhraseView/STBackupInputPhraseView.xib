@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina6_0" orientation="portrait" appearance="dark"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -21,23 +19,23 @@
                     <gestureRecognizers/>
                 </view>
                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g28-Vo-aUT" customClass="STView" customModule="Stingle" customModuleProvider="target">
-                    <rect key="frame" x="274.66666666666669" y="281" width="293.00000000000006" height="225"/>
+                    <rect key="frame" x="274.5" y="273.5" width="293" height="240"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="850" verticalHuggingPriority="251" horizontalCompressionResistancePriority="850" text="Please enter your backup phrase" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xka-EG-B1V">
-                            <rect key="frame" x="7.9999999999999858" y="7.9999999999999982" width="255.66666666666663" height="20.333333333333329"/>
+                            <rect key="frame" x="8" y="8" width="256" height="20"/>
                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="14C-yv-hPi">
-                            <rect key="frame" x="8" y="36.333333333333321" width="277" height="71.666666666666686"/>
+                            <rect key="frame" x="8" y="36" width="277" height="72"/>
                             <string key="text">fossil inmate cause stand assault stone dog drop talent ability around praise prison card vintage involve tag sun grief fury liberty local whip sting</string>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UHs-sD-TYw" customClass="ATTextView">
-                            <rect key="frame" x="12" y="128" width="269" height="35"/>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UHs-sD-TYw" customClass="STTextView">
+                            <rect key="frame" x="12" y="128" width="269" height="50"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" priority="200" constant="50" id="Fb4-YH-NIx"/>
@@ -63,7 +61,7 @@
                             </userDefinedRuntimeAttributes>
                         </textView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQl-sO-l3z" customClass="STButton" customModule="Stingle" customModuleProvider="target">
-                            <rect key="frame" x="246.99999999999994" y="183" width="36" height="34"/>
+                            <rect key="frame" x="247" y="198" width="36" height="34"/>
                             <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                             <state key="normal" title="Ok">
                                 <color key="titleColor" name="STText"/>
@@ -73,7 +71,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XAH-32-1x1" customClass="STButton" customModule="Stingle" customModuleProvider="target">
-                            <rect key="frame" x="178" y="183" width="64" height="34"/>
+                            <rect key="frame" x="178" y="198" width="64" height="34"/>
                             <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                             <state key="normal" title="Cancle">
                                 <color key="titleColor" name="STText"/>
@@ -139,17 +137,6 @@
             <point key="canvasLocation" x="449.23076923076923" y="49.407582938388622"/>
         </view>
     </objects>
-    <designables>
-        <designable name="UHs-sD-TYw">
-            <size key="intrinsicContentSize" width="190.33333333333334" height="35"/>
-        </designable>
-        <designable name="XAH-32-1x1">
-            <size key="intrinsicContentSize" width="64" height="34"/>
-        </designable>
-        <designable name="eQl-sO-l3z">
-            <size key="intrinsicContentSize" width="36" height="34"/>
-        </designable>
-    </designables>
     <resources>
         <namedColor name="STMenuBackground">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

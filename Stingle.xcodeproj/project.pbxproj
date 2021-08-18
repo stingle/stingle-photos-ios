@@ -103,8 +103,8 @@
 		A02204A825EEDC0400D07C98 /* STSignUpVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045125EEDC0400D07C98 /* STSignUpVM.swift */; };
 		A02204A925EEDC0400D07C98 /* STMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045325EEDC0400D07C98 /* STMainVC.swift */; };
 		A02204AA25EEDC0400D07C98 /* STMainVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045425EEDC0400D07C98 /* STMainVM.swift */; };
-		A02204AB25EEDC0400D07C98 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045625EEDC0400D07C98 /* SignInVC.swift */; };
-		A02204AC25EEDC0400D07C98 /* SignInVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045725EEDC0400D07C98 /* SignInVM.swift */; };
+		A02204AB25EEDC0400D07C98 /* STSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045625EEDC0400D07C98 /* STSignInVC.swift */; };
+		A02204AC25EEDC0400D07C98 /* STSignInVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045725EEDC0400D07C98 /* STSignInVM.swift */; };
 		A02204AE25EEDC0400D07C98 /* SPCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A022045B25EEDC0400D07C98 /* SPCollectionViewCell.xib */; };
 		A02204AF25EEDC0400D07C98 /* SPCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045C25EEDC0400D07C98 /* SPCollectionHeader.swift */; };
 		A02204B025EEDC0400D07C98 /* SPImagePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045D25EEDC0400D07C98 /* SPImagePreviewVC.swift */; };
@@ -317,6 +317,8 @@
 		A0E1B505266BAAE20063CB40 /* STFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B504266BAAE20063CB40 /* STFileHandle.swift */; };
 		A0E1B507266BAB3A0063CB40 /* CountableRange+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B506266BAB3A0063CB40 /* CountableRange+Operation.swift */; };
 		A0E1B50A266BB0850063CB40 /* STAssetResourceDecrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B509266BB0850063CB40 /* STAssetResourceDecrypter.swift */; };
+		A0E4F5AF26CD23F500D8A65A /* STForgetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E4F5AE26CD23F500D8A65A /* STForgetPasswordVC.swift */; };
+		A0E4F5B126CD240400D8A65A /* STForgetPasswordVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E4F5B026CD240400D8A65A /* STForgetPasswordVM.swift */; };
 		A0E9999A263F1DE8002FDCC9 /* STTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E99999263F1DE8002FDCC9 /* STTokenView.swift */; };
 		A0E9999C263F2CC1002FDCC9 /* STTokenView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0E9999B263F2CC1002FDCC9 /* STTokenView.xib */; };
 		A0E999A0263F2E46002FDCC9 /* STTokenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E9999E263F2E46002FDCC9 /* STTokenCell.swift */; };
@@ -450,8 +452,8 @@
 		A022045125EEDC0400D07C98 /* STSignUpVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STSignUpVM.swift; sourceTree = "<group>"; };
 		A022045325EEDC0400D07C98 /* STMainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STMainVC.swift; sourceTree = "<group>"; };
 		A022045425EEDC0400D07C98 /* STMainVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STMainVM.swift; sourceTree = "<group>"; };
-		A022045625EEDC0400D07C98 /* SignInVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
-		A022045725EEDC0400D07C98 /* SignInVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInVM.swift; sourceTree = "<group>"; };
+		A022045625EEDC0400D07C98 /* STSignInVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STSignInVC.swift; sourceTree = "<group>"; };
+		A022045725EEDC0400D07C98 /* STSignInVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STSignInVM.swift; sourceTree = "<group>"; };
 		A022045A25EEDC0400D07C98 /* SPImagePageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPImagePageVC.swift; sourceTree = "<group>"; };
 		A022045B25EEDC0400D07C98 /* SPCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SPCollectionViewCell.xib; sourceTree = "<group>"; };
 		A022045C25EEDC0400D07C98 /* SPCollectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPCollectionHeader.swift; sourceTree = "<group>"; };
@@ -666,6 +668,8 @@
 		A0E1B504266BAAE20063CB40 /* STFileHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileHandle.swift; sourceTree = "<group>"; };
 		A0E1B506266BAB3A0063CB40 /* CountableRange+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CountableRange+Operation.swift"; sourceTree = "<group>"; };
 		A0E1B509266BB0850063CB40 /* STAssetResourceDecrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAssetResourceDecrypter.swift; sourceTree = "<group>"; };
+		A0E4F5AE26CD23F500D8A65A /* STForgetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STForgetPasswordVC.swift; sourceTree = "<group>"; };
+		A0E4F5B026CD240400D8A65A /* STForgetPasswordVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STForgetPasswordVM.swift; sourceTree = "<group>"; };
 		A0E99999263F1DE8002FDCC9 /* STTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTokenView.swift; sourceTree = "<group>"; };
 		A0E9999B263F2CC1002FDCC9 /* STTokenView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STTokenView.xib; sourceTree = "<group>"; };
 		A0E9999E263F2E46002FDCC9 /* STTokenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTokenCell.swift; sourceTree = "<group>"; };
@@ -1191,6 +1195,7 @@
 				A022044625EEDC0300D07C98 /* Landing */,
 				A022044F25EEDC0300D07C98 /* Register */,
 				A022045525EEDC0400D07C98 /* Login */,
+				A0E4F5AD26CD237700D8A65A /* ForgetPassword */,
 				A027CE2326B212FF00829162 /* ChangePassword */,
 				A0355C7F26A8D063006BE2C4 /* Unlock */,
 				A022044C25EEDC0300D07C98 /* Common */,
@@ -1247,8 +1252,8 @@
 		A022045525EEDC0400D07C98 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				A022045625EEDC0400D07C98 /* SignInVC.swift */,
-				A022045725EEDC0400D07C98 /* SignInVM.swift */,
+				A022045625EEDC0400D07C98 /* STSignInVC.swift */,
+				A022045725EEDC0400D07C98 /* STSignInVM.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -2331,6 +2336,15 @@
 			path = ResourceLoader;
 			sourceTree = "<group>";
 		};
+		A0E4F5AD26CD237700D8A65A /* ForgetPassword */ = {
+			isa = PBXGroup;
+			children = (
+				A0E4F5AE26CD23F500D8A65A /* STForgetPasswordVC.swift */,
+				A0E4F5B026CD240400D8A65A /* STForgetPasswordVM.swift */,
+			);
+			path = ForgetPassword;
+			sourceTree = "<group>";
+		};
 		A0E99998263F1DA8002FDCC9 /* TokenView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2579,6 +2593,7 @@
 				A02204B025EEDC0400D07C98 /* SPImagePreviewVC.swift in Sources */,
 				A0B614A9266E3BC700339FFF /* STAssetResourceLoaderOperation.swift in Sources */,
 				A062E0EC264C811A000B3595 /* STFileDownloader.swift in Sources */,
+				A0E4F5AF26CD23F500D8A65A /* STForgetPasswordVC.swift in Sources */,
 				A00C6E5E26486ED20001662E /* STAlbumWorker+Move.swift in Sources */,
 				A099F4C026302F4A000D4F86 /* STCircleProgressView.swift in Sources */,
 				A049459C2611CDF4008D5E48 /* STView.swift in Sources */,
@@ -2711,7 +2726,7 @@
 				A075B7202651BBE700B4E2DF /* STSharedAlbumSettingsVC.swift in Sources */,
 				A02204A425EEDC0400D07C98 /* HeaderPageVC.swift in Sources */,
 				A074AE40264605AE004C9E9E /* STMoveAlbumFilesVM.swift in Sources */,
-				A02204AB25EEDC0400D07C98 /* SignInVC.swift in Sources */,
+				A02204AB25EEDC0400D07C98 /* STSignInVC.swift in Sources */,
 				A05D2686261B3CEE008E9CF8 /* STMenuMasterVC.swift in Sources */,
 				A0794B81269E2F1800B40FE9 /* STImportVC.swift in Sources */,
 				A0301DE825FD6D48005281EF /* STDBInfo.swift in Sources */,
@@ -2751,6 +2766,7 @@
 				A022049325EEDC0400D07C98 /* STEnvironment.swift in Sources */,
 				A022046B25EEDC0400D07C98 /* STSegue.swift in Sources */,
 				A0B2678A2624E0FC0090E4ED /* STTrashCollectionViewCell.swift in Sources */,
+				A0E4F5B126CD240400D8A65A /* STForgetPasswordVM.swift in Sources */,
 				A08F0C112607CBB600E81826 /* STOperationQueue.swift in Sources */,
 				A0B267782624DFA10090E4ED /* STTrashVM.swift in Sources */,
 				A0D29CDB262074560083967D /* STOperations.swift in Sources */,
@@ -2768,7 +2784,7 @@
 				A075B72A2652A12E00B4E2DF /* STAlbumSettingsPermissionCell.swift in Sources */,
 				A02204BA25EEDC0400D07C98 /* SettingsVC.swift in Sources */,
 				A04BD0172634AA2700C5F29F /* STDynamicTableView.swift in Sources */,
-				A02204AC25EEDC0400D07C98 /* SignInVM.swift in Sources */,
+				A02204AC25EEDC0400D07C98 /* STSignInVM.swift in Sources */,
 				A0D4E82F26C8107800556871 /* STMnemonic.swift in Sources */,
 				A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */,
 				A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */,

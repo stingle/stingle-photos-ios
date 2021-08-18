@@ -97,8 +97,11 @@
 "password" = "Password";
 "new_password" = "New password";
 
+"check" = "Check";
+
 "app_unauthorized_message" = "App automatically log out for your security. Please login and enjoy again";
 
+"please_set_a_new_password" = "Please set a new password";
 
 //MARK: - Share
 
@@ -260,16 +263,17 @@
 "menu_official_website" = "Official website";
 "menu_sign_out" = "Sign Out";
 
+//MARK: - Backup phrase
+
 "backup_phrase_description" = "Your backup phrase  is most valuable secret of your account, so please make sure to back it up in safe place. If anyone get tis phrase, they can get access to all of your data";
 "ok_get_backup_phrase" = "Ok, get Backup Phrase";
 
 "your_backup_phrase" = "Your Backup Phrase";
-
 "backup_phrase_input_title" = "Please enter your backup phrase";
 "backup_phrase_input_sup_title" = "Because you have chosen not to backup your private key, you have to enter your backup phrase to reconstruction tour private key locally. Without one it's impossible to decrypt your photos and videos.";
 "backup_phrase_input_placeholder" = "Please enter your 24 word recovery phrase";
 
-
+"forget_password_title" = "Please enter your email address and your recovery phrase. If correct you will able to set a new password for your account.";
 
 
 //MARK: - Time

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CXM-lh-l29">
-    <device id="retina6_0" orientation="portrait" appearance="light"/>
+    <device id="retina6_0" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -29,7 +29,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SgF-TV-yfY">
                                         <rect key="frame" x="0.0" y="524.33333333333337" width="390" height="99"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZH5-tE-YJu">
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZH5-tE-YJu" customClass="STButton" customModule="Stingle" customModuleProvider="target">
                                                 <rect key="frame" x="67" y="20" width="256" height="36"/>
                                                 <color key="backgroundColor" name="STPrimary"/>
                                                 <constraints>
@@ -40,6 +40,11 @@
                                                 <state key="normal" title="Sign Up ">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="7"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <segue destination="tey-I4-8sm" kind="show" id="h3M-eT-WXe"/>
                                                 </connections>
@@ -64,6 +69,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -128,7 +134,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="100" sectionHeaderHeight="120" sectionFooterHeight="1" id="okH-iI-7fd">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                         <sections>
                             <tableViewSection id="W1v-PC-Fyy">
                                 <cells>
@@ -159,6 +165,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstItem="9cc-JH-4tF" firstAttribute="leading" secondItem="lqN-K9-MbC" secondAttribute="leading" constant="16" id="xlf-8g-cE5"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="Wml-Wp-IWm">
                                         <rect key="frame" x="0.0" y="154.33333396911621" width="390" height="94"/>
@@ -198,6 +205,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstAttribute="trailing" secondItem="yTq-Wo-xGu" secondAttribute="trailing" constant="16" id="pMz-bc-CgR"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="79" id="3a0-mM-RtJ">
                                         <rect key="frame" x="0.0" y="248.33333396911621" width="390" height="79"/>
@@ -237,6 +245,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstAttribute="bottom" secondItem="hFL-fg-WsP" secondAttribute="bottom" constant="18" id="nnG-QJ-BBE"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="99" id="pIe-1Y-0SP">
                                         <rect key="frame" x="0.0" y="327.33333396911621" width="390" height="99"/>
@@ -276,6 +285,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstItem="LwS-on-PRS" firstAttribute="leading" secondItem="jTe-HT-PKX" secondAttribute="leading" constant="16" id="x2w-kW-aGE"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="77" id="h8R-AL-IQS">
                                         <rect key="frame" x="0.0" y="426.33333396911621" width="390" height="77"/>
@@ -305,6 +315,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstItem="Yyw-JV-l6l" firstAttribute="top" secondItem="jIp-ZT-UUV" secondAttribute="top" constant="8" id="vhF-jJ-osL"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="46" id="ZUm-3f-761">
                                         <rect key="frame" x="0.0" y="503.33333396911621" width="390" height="46"/>
@@ -332,7 +343,7 @@ may be vulnerable to brute force attacks.</string>
                                                             </connections>
                                                         </button>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="p38-Pc-4ec" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fAT-4l-uwz" secondAttribute="trailing" constant="8" id="Aum-lr-1iP"/>
                                                         <constraint firstItem="fAT-4l-uwz" firstAttribute="top" secondItem="78K-JV-W32" secondAttribute="top" id="COl-Xg-V2p"/>
@@ -352,6 +363,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstItem="78K-JV-W32" firstAttribute="top" secondItem="ZTP-vW-OE8" secondAttribute="top" constant="8" id="RwV-6l-qeC"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="126" id="tlO-rd-9fc">
                                         <rect key="frame" x="0.0" y="549.33333396911621" width="390" height="126"/>
@@ -360,7 +372,7 @@ may be vulnerable to brute force attacks.</string>
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="126"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2X-Wc-yRK">
+                                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2X-Wc-yRK" customClass="STButton" customModule="Stingle" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="18" width="358" height="36"/>
                                                     <color key="backgroundColor" name="STPrimary"/>
                                                     <constraints>
@@ -369,6 +381,11 @@ may be vulnerable to brute force attacks.</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Sign Up"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="7"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <action selector="didSelectSignUp:" destination="tey-I4-8sm" eventType="touchUpInside" id="A3U-Cf-KxC"/>
                                                     </connections>
@@ -378,6 +395,7 @@ may be vulnerable to brute force attacks.</string>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Already  have an account?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBb-l9-uvf">
                                                             <rect key="frame" x="0.0" y="0.0" width="190" height="29"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" name="STText"/>
                                                             <nil key="highlightedColor"/>
@@ -393,7 +411,7 @@ may be vulnerable to brute force attacks.</string>
                                                             </connections>
                                                         </button>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="jBb-l9-uvf" firstAttribute="top" secondItem="fnF-rr-Svb" secondAttribute="top" id="N8m-Vj-zn0"/>
                                                         <constraint firstItem="jBb-l9-uvf" firstAttribute="leading" secondItem="fnF-rr-Svb" secondAttribute="leading" id="U8y-gv-SCf"/>
@@ -416,6 +434,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstItem="fnF-rr-Svb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lh0-cZ-dwM" secondAttribute="leading" constant="16" id="vVq-uJ-ATr"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -903,22 +922,167 @@ may be vulnerable to brute force attacks.</string>
             </objects>
             <point key="canvasLocation" x="-1603.0769230769231" y="1539.8104265402842"/>
         </scene>
+        <!--Forget PasswordVC-->
+        <scene sceneID="lWz-Z3-qNW">
+            <objects>
+                <tableViewController id="TWK-qk-TGA" customClass="STForgetPasswordVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="grouped" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="20" sectionFooterHeight="18" id="5K0-kg-DVb">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" name="STBackground"/>
+                        <sections>
+                            <tableViewSection id="eZJ-5P-Zrd">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="n36-81-9Ik">
+                                        <rect key="frame" x="0.0" y="18" width="390" height="94"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="n36-81-9Ik" id="OcC-j4-grJ">
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GgA-dA-pbE" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="18" width="358" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="yfU-K0-nZe"/>
+                                                    </constraints>
+                                                    <color key="textColor" name="STText"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" enablesReturnKeyAutomatically="YES" textContentType="email"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="placeHolderColor">
+                                                            <color key="value" name="STPlaceholder"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="underlineColor">
+                                                            <color key="value" name="STPlaceholder"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="selectedUnderlineColor">
+                                                            <color key="value" name="STPrimary"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="GgA-dA-pbE" secondAttribute="trailing" constant="16" id="O81-B8-04O"/>
+                                                <constraint firstAttribute="bottom" secondItem="GgA-dA-pbE" secondAttribute="bottom" priority="200" constant="18" id="cNg-Xo-zbQ"/>
+                                                <constraint firstItem="GgA-dA-pbE" firstAttribute="top" secondItem="OcC-j4-grJ" secondAttribute="top" constant="18" id="fP7-NI-stC"/>
+                                                <constraint firstItem="GgA-dA-pbE" firstAttribute="leading" secondItem="OcC-j4-grJ" secondAttribute="leading" constant="16" id="okU-cI-pbq"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="9d0-gs-IFv">
+                                        <rect key="frame" x="0.0" y="112" width="390" height="94"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9d0-gs-IFv" id="gdf-Xh-jd4">
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="252" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Oja-Mn-XQv" customClass="STTextView">
+                                                    <rect key="frame" x="16" y="17.999999999999996" width="358" height="38.666666666666657"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="100" id="93D-E9-zsk"/>
+                                                    </constraints>
+                                                    <color key="textColor" name="STText"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="Hello"/>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="placeholderTextColor">
+                                                            <color key="value" name="STPlaceholder"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="selectedUnderlineColor">
+                                                            <color key="value" name="STPrimary"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="underlineColor">
+                                                            <color key="value" name="STPlaceholder"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="TWK-qk-TGA" id="Yxn-c2-Mt5"/>
+                                                    </connections>
+                                                </textView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Oja-Mn-XQv" firstAttribute="top" secondItem="gdf-Xh-jd4" secondAttribute="top" constant="18" id="asq-BX-65N"/>
+                                                <constraint firstItem="Oja-Mn-XQv" firstAttribute="leading" secondItem="gdf-Xh-jd4" secondAttribute="leading" constant="16" id="dpZ-c8-zIO"/>
+                                                <constraint firstAttribute="trailing" secondItem="Oja-Mn-XQv" secondAttribute="trailing" constant="16" id="yZb-VQ-X2h"/>
+                                                <constraint firstAttribute="bottom" secondItem="Oja-Mn-XQv" secondAttribute="bottom" priority="250" constant="18" id="zgv-rc-U8n"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="hRy-ez-MVQ">
+                                        <rect key="frame" x="0.0" y="206" width="390" height="94"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hRy-ez-MVQ" id="Rr5-WX-ZXl">
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tDY-pk-j6h" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                                    <rect key="frame" x="16" y="18" width="358" height="36"/>
+                                                    <color key="backgroundColor" name="STPrimary"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="36" id="GLP-Dt-WTj"/>
+                                                    </constraints>
+                                                    <state key="normal" title="CHECK">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="7"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="didSelectCheckButton:" destination="TWK-qk-TGA" eventType="touchUpInside" id="qys-on-O7L"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="tDY-pk-j6h" firstAttribute="top" secondItem="Rr5-WX-ZXl" secondAttribute="top" constant="18" id="603-JZ-0Qs"/>
+                                                <constraint firstAttribute="bottom" secondItem="tDY-pk-j6h" secondAttribute="bottom" priority="250" constant="16" id="G2z-fs-CEf"/>
+                                                <constraint firstAttribute="trailing" secondItem="tDY-pk-j6h" secondAttribute="trailing" constant="16" id="Y3e-Qd-Umf"/>
+                                                <constraint firstItem="tDY-pk-j6h" firstAttribute="leading" secondItem="Rr5-WX-ZXl" secondAttribute="leading" constant="16" id="j7k-zU-TrF"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="TWK-qk-TGA" id="GUm-aP-oBC"/>
+                            <outlet property="delegate" destination="TWK-qk-TGA" id="Jjf-Pt-bA5"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="dS5-jJ-Udu"/>
+                    <connections>
+                        <outlet property="checkButton" destination="tDY-pk-j6h" id="AN9-qY-5MX"/>
+                        <outlet property="emailTextField" destination="GgA-dA-pbE" id="ZyP-YO-5Oj"/>
+                        <outlet property="phraseTextView" destination="Oja-Mn-XQv" id="qHv-88-TNA"/>
+                        <segue destination="XhX-E3-oy5" kind="custom" identifier="goToHome" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" id="km2-Eh-Ame"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lrP-sD-M8d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2141.5384615384614" y="-150"/>
+        </scene>
         <!--Home-->
         <scene sceneID="JLc-Aj-7nN">
             <objects>
                 <viewControllerPlaceholder storyboardName="Home" id="XhX-E3-oy5" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jck-WD-khq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2313" y="122"/>
+            <point key="canvasLocation" x="3877" y="21"/>
         </scene>
         <!--Sign In-->
         <scene sceneID="jh2-kq-qUi">
             <objects>
-                <tableViewController storyboardIdentifier="SignInVC" title="Sign In" id="bwc-ry-oA2" customClass="SignInVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SignInVC" title="Sign In" id="bwc-ry-oA2" customClass="STSignInVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="100" sectionHeaderHeight="120" sectionFooterHeight="1" id="2nB-By-Nbg">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" name="STBackground"/>
                         <sections>
                             <tableViewSection id="qL5-12-ZHl">
                                 <cells>
@@ -960,6 +1124,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstAttribute="bottom" secondItem="W7y-BA-ely" secondAttribute="bottom" priority="200" constant="18" id="kKw-B9-FzR"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="149" id="isY-Kr-8IE">
                                         <rect key="frame" x="0.0" y="118.33333396911621" width="390" height="149"/>
@@ -996,6 +1161,9 @@ may be vulnerable to brute force attacks.</string>
                                                     <state key="normal" title="Forgot  password?">
                                                         <color key="titleColor" red="0.71764705880000002" green="0.10980392160000001" blue="0.10980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
+                                                    <connections>
+                                                        <segue destination="TWK-qk-TGA" kind="show" id="dtZ-uY-79k"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -1008,6 +1176,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstAttribute="trailing" secondItem="PgK-RT-3xF" secondAttribute="trailing" constant="16" id="yqQ-D4-RMS"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="126" id="gcA-yl-epF">
                                         <rect key="frame" x="0.0" y="267.33333396911621" width="390" height="126"/>
@@ -1016,7 +1185,7 @@ may be vulnerable to brute force attacks.</string>
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="126"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2T-xJ-rr8">
+                                                <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2T-xJ-rr8" customClass="STButton" customModule="Stingle" customModuleProvider="target">
                                                     <rect key="frame" x="16" y="18" width="358" height="36"/>
                                                     <color key="backgroundColor" name="STPrimary"/>
                                                     <constraints>
@@ -1025,6 +1194,11 @@ may be vulnerable to brute force attacks.</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <state key="normal" title="Sign In"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="7"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <action selector="didSelectSingInButton:" destination="bwc-ry-oA2" eventType="touchUpInside" id="aEU-Z6-NSP"/>
                                                     </connections>
@@ -1034,6 +1208,7 @@ may be vulnerable to brute force attacks.</string>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Don't have an accout?" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8BH-MR-IFq">
                                                             <rect key="frame" x="0.0" y="0.0" width="162" height="29"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" name="STText"/>
                                                             <nil key="highlightedColor"/>
@@ -1049,7 +1224,7 @@ may be vulnerable to brute force attacks.</string>
                                                             </connections>
                                                         </button>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="Wa1-6e-6hu" secondAttribute="trailing" id="Arc-d0-0ff"/>
                                                         <constraint firstItem="Wa1-6e-6hu" firstAttribute="leading" secondItem="8BH-MR-IFq" secondAttribute="trailing" constant="8" id="Di7-QP-aYT"/>
@@ -1072,6 +1247,7 @@ may be vulnerable to brute force attacks.</string>
                                                 <constraint firstItem="DAZ-2P-wgV" firstAttribute="top" secondItem="b2T-xJ-rr8" secondAttribute="bottom" constant="16" id="wWr-Tc-MEy"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -1093,7 +1269,7 @@ may be vulnerable to brute force attacks.</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gZD-9J-P08" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1237" y="-161"/>
+            <point key="canvasLocation" x="1236.9230769230769" y="-161.37440758293837"/>
         </scene>
     </scenes>
     <designables>
@@ -1103,8 +1279,14 @@ may be vulnerable to brute force attacks.</string>
         <designable name="8zM-Nh-fG8">
             <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>
         </designable>
+        <designable name="C2X-Wc-yRK">
+            <size key="intrinsicContentSize" width="58" height="32"/>
+        </designable>
         <designable name="GOP-25-xwS">
             <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>
+        </designable>
+        <designable name="GgA-dA-pbE">
+            <size key="intrinsicContentSize" width="43" height="23.333333333333332"/>
         </designable>
         <designable name="LwS-on-PRS">
             <size key="intrinsicContentSize" width="5" height="22"/>
@@ -1112,8 +1294,17 @@ may be vulnerable to brute force attacks.</string>
         <designable name="Ogb-HM-5xP">
             <size key="intrinsicContentSize" width="106" height="44"/>
         </designable>
+        <designable name="Oja-Mn-XQv">
+            <size key="intrinsicContentSize" width="51" height="38.666666666666664"/>
+        </designable>
         <designable name="W7y-BA-ely">
             <size key="intrinsicContentSize" width="43" height="23.333333333333332"/>
+        </designable>
+        <designable name="ZH5-tE-YJu">
+            <size key="intrinsicContentSize" width="56" height="29"/>
+        </designable>
+        <designable name="b2T-xJ-rr8">
+            <size key="intrinsicContentSize" width="50" height="32"/>
         </designable>
         <designable name="cCz-Wd-5mk">
             <size key="intrinsicContentSize" width="101" height="44"/>
@@ -1124,6 +1315,9 @@ may be vulnerable to brute force attacks.</string>
         <designable name="oEH-dP-giw">
             <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>
         </designable>
+        <designable name="tDY-pk-j6h">
+            <size key="intrinsicContentSize" width="51" height="30"/>
+        </designable>
         <designable name="tM7-BX-imO">
             <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>
         </designable>
@@ -1132,7 +1326,7 @@ may be vulnerable to brute force attacks.</string>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="ty4-hQ-4RS"/>
+        <segue reference="km2-Eh-Ame"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>
@@ -1147,7 +1341,7 @@ may be vulnerable to brute force attacks.</string>
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STPlaceholder">
-            <color red="0.0" green="0.0" blue="0.0" alpha="0.15999999642372131" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STPrimary">
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

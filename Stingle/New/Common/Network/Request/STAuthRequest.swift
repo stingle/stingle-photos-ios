@@ -13,6 +13,7 @@ enum STAuthRequest {
 	case preLogin(email: String)
 	case login(email: String, password: String)
     case checkRecoveryPhrase(email: String)
+    case recoverAccount(email: String, loginHash: String, newSalt: String, uploadKeyBundle: String, serverPK: [UInt8], privateKey: [UInt8])
 }
 
 extension STAuthRequest: STRequest {
@@ -27,6 +28,8 @@ extension STAuthRequest: STRequest {
 			return "login/login"
         case .checkRecoveryPhrase:
             return "login/checkKey"
+        case .recoverAccount:
+            return "login/recoverAccount"
 		}
 	}
 	
@@ -40,6 +43,8 @@ extension STAuthRequest: STRequest {
 			return .post
         case .checkRecoveryPhrase:
             return .post
+        case .recoverAccount:
+            return .post
 		}
 	}
 	
@@ -52,6 +57,8 @@ extension STAuthRequest: STRequest {
 		case .login:
 			return nil
         case .checkRecoveryPhrase:
+            return nil
+        case .recoverAccount:
             return nil
 		}
 	}
@@ -67,7 +74,20 @@ extension STAuthRequest: STRequest {
 			return ["email": email, "password": password]
         case .checkRecoveryPhrase(let email):
             return ["email": email]
-		}
+        case .recoverAccount(let email, let loginHash, let newSalt, let uploadKeyBundle, let serverPK, let privateKey):
+            var params = [String: Any]()
+            params["newPassword"] = loginHash
+            params["newSalt"] = newSalt
+            params["keyBundle"] = uploadKeyBundle
+           
+            var postParams = [String: Any]()
+            postParams["email"] = email
+            
+            if let params = try? STApplication.shared.crypto.encryptParamsForServer(params: params, serverPK: serverPK, privateKey: privateKey) {
+                postParams["params"] = params
+            }
+            return postParams
+        }
 	}
 	
 	var encoding: STNetworkDispatcher.Encoding {
@@ -79,6 +99,8 @@ extension STAuthRequest: STRequest {
 		case .login:
 			return STNetworkDispatcher.Encoding.body
         case .checkRecoveryPhrase:
+            return STNetworkDispatcher.Encoding.body
+        case .recoverAccount:
             return STNetworkDispatcher.Encoding.body
 		}
 	}

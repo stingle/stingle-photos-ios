@@ -1,8 +1,8 @@
 import UIKit
 
-class SignInVC: UITableViewController {
+class STSignInVC: UITableViewController {
 	
-	private let viewModel = SignInVM()
+	private let viewModel = STSignInVM()
     private var appPassword: String?
 
 	@IBOutlet weak var emailTextField: UITextField!
@@ -111,7 +111,7 @@ class SignInVC: UITableViewController {
     
 }
 
-extension SignInVC : STBackupInputPhraseViewDelegate {
+extension STSignInVC : STBackupInputPhraseViewDelegate {
    
     func backupPhraseView(didSelectCancel backupPhraseView: STBackupInputPhraseView) {
         backupPhraseView.hide()
@@ -136,7 +136,7 @@ extension SignInVC : STBackupInputPhraseViewDelegate {
 }
 
 
-extension SignInVC : UITextFieldDelegate {
+extension STSignInVC : UITextFieldDelegate {
 	
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		if textField == self.emailTextField {

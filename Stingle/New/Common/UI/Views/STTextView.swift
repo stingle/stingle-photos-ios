@@ -7,9 +7,13 @@
 
 import UIKit
 
+protocol STTextViewDelegate: UITextViewDelegate {
+    func textView(textView: STTextView, didChangeText: String?)
+}
+
 @IBDesignable
-@objc(ATTextView)
-public class ATTextView: UITextView {
+@objc(STTextView)
+public class STTextView: UITextView {
     
     // MARK: - Private Properties
     
@@ -66,6 +70,10 @@ public class ATTextView: UITextView {
     /// Returns true if the placeholder is currently showing.
     public var isShowingPlaceholder: Bool {
         return placeholderView.superview != nil
+    }
+    
+    public var optimalSize: CGSize {
+        return self.intrinsicContentSize
     }
     
     // MARK: - Observed Properties
@@ -163,9 +171,14 @@ public class ATTextView: UITextView {
     // MARK: - Notification
     
     @objc func textDidChange(notification: NSNotification) {
+        guard (notification.object as? STTextView) == self else {
+            return
+        }
+                
         showPlaceholderViewIfNeeded()
         self.setNeedsDisplay()
         self.invalidateIntrinsicContentSize()
+        (self.delegate as? STTextViewDelegate)?.textView(textView: self, didChangeText: self.text)
     }
     
     // MARK: - Placeholder

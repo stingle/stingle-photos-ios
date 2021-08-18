@@ -18,7 +18,7 @@ class STBackupInputPhraseView: UIView {
     @IBOutlet weak private var cancelButton: STButton!
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var subTitleLabel: UILabel!
-    @IBOutlet weak private var textView: ATTextView!
+    @IBOutlet weak private var textView: STTextView!
     @IBOutlet weak private var bottomLayoutConstraint: NSLayoutConstraint!
     
     weak var delegate: STBackupInputPhraseViewDelegate?

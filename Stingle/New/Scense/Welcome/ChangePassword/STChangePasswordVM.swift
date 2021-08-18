@@ -61,6 +61,7 @@ extension STChangePasswordVM {
     private enum ChangePasswordError: IError {
         
         case confirmPassword
+        case emptyEmail
         case emptyPassword
         case passwordIncorrect
         case machingPasswords
@@ -69,6 +70,8 @@ extension STChangePasswordVM {
             switch self {
             case .confirmPassword:
                 return "error_incorrect_confirm_password".localized
+            case .emptyEmail:
+                return "error_incorrect_email".localized
             case .emptyPassword:
                 return "error_password_not_valed".localized
             case .passwordIncorrect:

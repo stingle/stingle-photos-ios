@@ -117,7 +117,7 @@ class STSignUpVC: UITableViewController {
 		let passwort = self.passwordTextField.text
 		let includePrivateKey = self.includePrivateKeySwitch.isOn
 		
-		self.viewModel.registr(email: email, password: passwort, confirmPassword: self.confirmPasswordTextField.text, includePrivateKey: includePrivateKey) { [weak self] (user, appPassword) in
+		self.viewModel.registr(email: email, password: passwort, confirmPassword: self.confirmPasswordTextField.text, includePrivateKey: includePrivateKey) { [weak self] ( _, appPassword) in
 			guard let weakSelf = self else {
 				return
 			}
