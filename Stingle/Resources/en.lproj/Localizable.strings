@@ -230,6 +230,9 @@
 "alert_log_out_title" = "Log Out";
 "alert_log_out_message" = "Are you sure you want to log out?";
 
+"alert_free_up_space_title" = "Nothing to delete";
+"alert_free_up_space_message" = "There are backed up files that we can safely delete from your device at this point";
+
 "enable_backup" = "Enable backup";
 "enable_backup_description" = "Backup your photos and delete Cache videos to the cloud as soon as you take or import theme";
 
@@ -262,6 +265,7 @@
 "menu_settings" = "Settings";
 "menu_official_website" = "Official website";
 "menu_sign_out" = "Sign Out";
+"menu_free_up_space" = "Free up space";
 
 //MARK: - Backup phrase
 

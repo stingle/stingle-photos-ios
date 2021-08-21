@@ -78,6 +78,14 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
                 STApplication.shared.logout()
             }, cancel: nil)
             self.selectCurrentRow()
+        case .freeUpSpace:
+            STApplication.shared.fileSystem.freeUpSpace()
+            let title = "alert_free_up_space_title".localized
+            let message = "alert_free_up_space_message".localized
+            self.showInfoAlert(title: title, message: message)
+            self.selectCurrentRow()
+            self.splitMenuViewController?.closeMenu()
+            break
         default:
             self.set(controllerType: item.controllerType)
         }
@@ -123,9 +131,10 @@ extension STMenuMasterVC {
         case trash = 1
         case storage = 2
         case backupPhrase = 3
-        case settings = 4
-        case officialWebsite = 5
-        case signOut = 6
+        case freeUpSpace = 4
+        case settings = 5
+        case officialWebsite = 6
+        case signOut = 7
         
         var identifier: String {
             switch self {
@@ -137,6 +146,8 @@ extension STMenuMasterVC {
                 return "StorageID"
             case .backupPhrase:
                 return "BackupPhraseID"
+            case .freeUpSpace:
+                return "FreeUpSpaceID"
             case .settings:
                 return "SettingsID"
             case .officialWebsite:
@@ -204,6 +215,9 @@ extension STMenuMasterVC {
                 case .backupPhrase:
                     name = "menu_backup_phrase".localized
                     icon = UIImage(named: "ic_menu_backup_phrase")
+                case .freeUpSpace:
+                    name = "menu_free_up_space".localized
+                    icon = UIImage(systemName: "iphone.homebutton")
                 case .settings:
                     name = "menu_settings".localized
                     icon = UIImage(named: "ic_menu_settings")

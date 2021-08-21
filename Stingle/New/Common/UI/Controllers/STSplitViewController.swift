@@ -141,11 +141,7 @@ class STSplitViewController: UIViewController {
             return
         }
         self.updateFrames(isMasterViewOpened: self.isMasterViewOpened, didUpdateProgress: true, isTouch: false)
-        if isAnimated {
-            UIView.animate(withDuration: 0.3) {
-//                self.view.layoutIfNeeded()
-            }
-        }
+
     }
     
     func setDetailViewController(detailViewController: UIViewController, isAnimated: Bool) {
@@ -154,6 +150,18 @@ class STSplitViewController: UIViewController {
         self.detailViewController = detailViewController
         detailViewController.splitMenuViewController = self
         if self.isMasterViewOpened {
+            self.openOrClosed(isAnimated: true, isClose: self.isMasterViewOpened, isStarted: true, isTouch: false)
+        }
+    }
+    
+    func closeMenu() {
+        if self.isMasterViewOpened {
+            self.openOrClosed(isAnimated: true, isClose: self.isMasterViewOpened, isStarted: true, isTouch: false)
+        }
+    }
+    
+    func openMenu() {
+        if !self.isMasterViewOpened {
             self.openOrClosed(isAnimated: true, isClose: self.isMasterViewOpened, isStarted: true, isTouch: false)
         }
     }

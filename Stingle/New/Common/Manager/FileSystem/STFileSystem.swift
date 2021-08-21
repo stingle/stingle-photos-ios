@@ -50,6 +50,13 @@ class STFileSystem {
         self.remove(file: thumbs)
     }
     
+    func freeUpSpace() {
+        guard let oreginals = self.url(for: .storage(type: .server(type: .oreginals))) else {
+            return
+        }
+        self.remove(file: oreginals)
+    }
+        
     private func creatAllPath() {
         FolderType.allCases.forEach { type in
             if let url = self.url(for: type) {

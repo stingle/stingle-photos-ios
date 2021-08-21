@@ -31,7 +31,6 @@ class STMenuVC: STSplitViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         guard !self.isViewDidAppear else {
             return
         }
@@ -44,7 +43,7 @@ class STMenuVC: STSplitViewController {
         self.controllers[identifier] = detailViewController
         self.setDetailViewController(detailViewController: detailViewController, isAnimated: true)
     }
-    
+        
     //MARK: - Private methods
     
     private func showIsFirstOpensView() {
@@ -68,9 +67,7 @@ class STMenuVC: STSplitViewController {
     }
     
     private func showBackupPhraseIfNeeded(completion: @escaping (() -> Void)) {
-        
         let isKeyBackedUp = (STApplication.shared.user()?.isKeyBackedUp ?? true)
-        
         guard !isKeyBackedUp, let key = KeyManagement.key, let mnemonic = try? STMnemonic.mnemonicString(from: key), self.isShowBackupPhrase else {
             completion()
             return
