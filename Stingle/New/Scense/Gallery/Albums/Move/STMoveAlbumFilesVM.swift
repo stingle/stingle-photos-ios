@@ -71,4 +71,12 @@ class STMoveAlbumFilesVM {
         }
     }
     
+    func createAlbum(name: String, result: @escaping (_ result: IError?) -> Void) {
+        self.albumWorker.createAlbum(name: name) { album in
+            result(nil)
+        } failure: { error in
+            result(error)
+        }        
+    }
+    
 }

@@ -175,21 +175,26 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     private func moveFilesToAlbum(toAlbum: STLibrary.Album, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile]) {
         let view: UIView = (self.navigationController?.view ?? self.view)
         STLoadingView.show(in: view)
+        self.isModalInPresentation = true
         self.viewModel.moveToAlbum(fromAlbum: fromAlbum, toAlbum: toAlbum, files: files, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
             STLoadingView.hide(in: view)
+            self?.isModalInPresentation = false
             if let error = error {
                 self?.showError(error: error)
             } else {
                 self?.dismiss(animated: true, completion: nil)
             }
+           
         }
     }
     
     private func moveFilesToAlbum(toAlbum: STLibrary.Album, files: [STLibrary.File]) {
         let view: UIView = (self.navigationController?.view ?? self.view)
         STLoadingView.show(in: view)
+        self.isModalInPresentation = true
         self.viewModel.moveToAlbum(toAlbum: toAlbum, files: files, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
             STLoadingView.hide(in: view)
+            self?.isModalInPresentation = false
             if let error = error {
                 self?.showError(error: error)
             } else {
@@ -201,8 +206,10 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     private func moveFilesToAlbum(toAlbum: STLibrary.Album, trashFiles: [STLibrary.TrashFile]) {
         let view: UIView = (self.navigationController?.view ?? self.view)
         STLoadingView.show(in: view)
+        self.isModalInPresentation = true
         self.viewModel.moveToAlbum(toAlbum: toAlbum, trashFiles: trashFiles, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
             STLoadingView.hide(in: view)
+            self?.isModalInPresentation = false
             if let error = error {
                 self?.showError(error: error)
             } else {
@@ -233,8 +240,10 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     private func moveFilesToNewAlbum(albumName: String, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile]) {
         let view: UIView = (self.navigationController?.view ?? self.view)
         STLoadingView.show(in: view)
+        self.isModalInPresentation = true
         self.viewModel.createAlbum(name: albumName, fromAlbum: fromAlbum, files: files, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
             STLoadingView.hide(in: view)
+            self?.isModalInPresentation = false
             if let error = error {
                 self?.showError(error: error)
             } else {
@@ -247,8 +256,7 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
         switch self.moveInfo {
         case .albumFiles(let album, let files):
             self.moveFilesToNewAlbum(albumName: albumName, fromAlbum: album, files: files)
-        case .files(let files):
-            self.moveFilesToNewAlbum(albumName: albumName, files: files)
+        case .files:
            break
         default:
             break
@@ -256,8 +264,17 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     }
     
     private func moveFilesToNewAlbum() {
+        let view: UIView = (self.navigationController?.view ?? self.view)
         self.showAddAlbumAlert { [weak self] name in
-            self?.moveFilesToNewAlbum(albumName: name)
+            STLoadingView.show(in: view)
+            self?.isModalInPresentation = true
+            self?.viewModel.createAlbum(name: name, result: { error in
+                STLoadingView.hide(in: view)
+                self?.isModalInPresentation = false
+                if let error = error {
+                    self?.showError(error: error)
+                }
+            })
         }
     }
     
@@ -266,8 +283,10 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     private func moveFilesToGallery(fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile]) {
         let view: UIView = (self.navigationController?.view ?? self.view)
         STLoadingView.show(in: view)
+        self.isModalInPresentation = true
         self.viewModel.moveFilesToGallery(fromAlbum: fromAlbum, files: files, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
             STLoadingView.hide(in: view)
+            self?.isModalInPresentation = false
             if let error = error {
                 self?.showError(error: error)
             } else {

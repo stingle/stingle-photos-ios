@@ -143,27 +143,21 @@ class STFileUploader {
         if !uploadFiles.contains(where: { $0.file == file.file }) {
             uploadFiles.append(file)
         }
+        
         if uploadFiles.count > self.maxCountUpdateDB || self.countAllFiles == 0 {
             uploadFiles.removeAll()
         }
         
         self.uploadedFiles = uploadFiles
-        
         guard updateDB else {
             return
         }
         
-        if let albumFile = file as? STLibrary.AlbumFile {
-            if file.isRemote {
+        if file.isRemote {
+            if let albumFile = file as? STLibrary.AlbumFile {
                 STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: true)
             } else {
-                STApplication.shared.dataBase.addAlbumFile(albumFile: albumFile, reloadData: self.uploadedFiles.isEmpty)
-            }
-        } else {
-            if file.isRemote {
                 STApplication.shared.dataBase.galleryProvider.update(models: [file], reloadData: true)
-            } else {
-                STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: self.uploadedFiles.isEmpty)
             }
         }
         
