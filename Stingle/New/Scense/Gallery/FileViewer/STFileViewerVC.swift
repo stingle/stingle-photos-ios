@@ -132,8 +132,10 @@ class STFileViewerVC: UIViewController {
         
     private func configureAccessoryView() {
         if let tabBarController = self.tabBarController {
+            self.toolBar.isHidden = true
             (tabBarController.tabBar as? STTabBar)?.accessoryView = self.accessoryView
         } else {
+            self.toolBar.isHidden = false
             self.toolBar.addSubviewFullContent(view: self.accessoryView)
         }
         
@@ -476,6 +478,8 @@ extension STFileViewerVC: STFileViewerVMDelegate {
             self.navigationController?.popViewController(animated: true)
             return
         }
+      
+        
         if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex)  {
             self.pageViewController.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
         } else if currentIndex - 1 < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex - 1) {

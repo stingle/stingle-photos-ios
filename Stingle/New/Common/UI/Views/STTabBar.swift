@@ -9,16 +9,6 @@ import UIKit
 
 class STTabBar: UITabBar {
     
-    private let seperator = UIView()
-        
-    @IBInspectable var seperatorColor: UIColor? {
-        set {
-            self.seperator.backgroundColor = newValue
-        } get {
-            return self.seperator.backgroundColor
-        }
-    }
-    
     @IBInspectable var shadowRadius: CGFloat = 0.0 {
         didSet {
             self.layer.shadowRadius = shadowRadius
@@ -114,26 +104,10 @@ class STTabBar: UITabBar {
         self.setupView()
     }
     
-    override var selectedItem: UITabBarItem? {
-        didSet {
-            UIView.animate(withDuration: 0.3) {
-                self.updateFrame()
-            }
-        }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.updateFrame()
-    }
-    
     //MARK: - private
     
     private func setupView() {
-        self.seperator.backgroundColor = UIColor.lightGray
-        self.updateFrame()
-        self.addSubview(self.seperator)
-
+        
         let appearance = self.standardAppearance
         appearance.backgroundColor = self.barBackroundColor
         
@@ -143,29 +117,6 @@ class STTabBar: UITabBar {
         }
                         
         self.standardAppearance = appearance
-    }
-    
-    private func updateFrame() {
-        var itemFrame = self.frameForTabAtIndex()
-        itemFrame.origin.y = 0
-        itemFrame.size.height = 2
-        self.seperator.frame = itemFrame
-    }
-    
-    private func frameForTabAtIndex() -> CGRect {
-        guard let index = self.items?.firstIndex(where: {$0 == self.selectedItem}) else { return .zero
-        }
-        var frames = self.subviews.compactMap { (view:UIView) -> CGRect? in
-            if let view = view as? UIControl {
-                return view.frame
-            }
-            return nil
-        }
-        frames.sort { $0.origin.x < $1.origin.x }
-        if frames.count > index {
-            return frames[index]
-        }
-        return frames.last ?? CGRect.zero
     }
     
     var accessoryView: UIView? {

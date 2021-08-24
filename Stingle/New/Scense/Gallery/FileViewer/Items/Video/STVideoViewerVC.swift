@@ -12,7 +12,6 @@ class STVideoViewerVC: UIViewController {
     @IBOutlet weak private var videoView: STVideoView!
     @IBOutlet weak private var slider: UISlider!
     @IBOutlet weak private var playerControllView: STGradientView!
-    @IBOutlet weak private var playerControllBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak private var imageView: STImageView!
    
     @IBOutlet weak private var loadingView: UIActivityIndicatorView!
@@ -38,7 +37,6 @@ class STVideoViewerVC: UIViewController {
         self.player.addObserver(deleagte: self)
         self.setImage()
         self.playerControllView.alpha = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .zero : 1
-        self.playerControllBottomConstraint.constant = self.tabBarController?.tabBar.frame.height ?? .zero
         self.videoView.setPlayer(player: self.player)
         self.player.replaceCurrentItem(with: self.file)
     }
@@ -134,7 +132,6 @@ extension STVideoViewerVC: IFileViewer {
     
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool) {
         self.playerControllView.alpha = isFullScreen ? .zero : 1
-        self.playerControllBottomConstraint.constant = self.tabBarController?.tabBar.frame.height ?? .zero
     }
     
     func fileViewer(pauseContent fileViewer: STFileViewerVC) {
