@@ -59,6 +59,14 @@ class STCircleProgressView: UIView {
         }
     }
     
+    @IBInspectable var borderInset: CGFloat = .zero {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    
+    
     @IBInspectable var image: UIImage? {
         set {
             self.imageView.image = newValue
@@ -116,16 +124,18 @@ class STCircleProgressView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        
         let interval = self.maxValue - self.minValue
         let progressInterval = self.progress - self.minValue
         let progress = interval == .zero ? 0 : progressInterval / interval
         guard let context = UIGraphicsGetCurrentContext() else {
             return
         }
-        self.drawCircle(rect, context: context, startAngel: 0, progress: 1, lineWidth: self.lineWidth, color: self.trackColor, clockwise: false)
+        
+        let inset = self.borderInset
+        let drawRect = CGRect(x: inset, y: inset, width: rect.width - inset, height: rect.height - inset)
+        self.drawCircle(drawRect, context: context, startAngel: 0, progress: 1, lineWidth: self.lineWidth, color: self.trackColor, clockwise: false)
                 
-        self.drawCircle(rect, context: context, startAngel: self.startAngel, progress: progress, lineWidth: self.progressLineWidth, color: self.progressColor, clockwise: false)
+        self.drawCircle(drawRect, context: context, startAngel: self.startAngel, progress: progress, lineWidth: self.progressLineWidth, color: self.progressColor, clockwise: false)
     }
     
     // MARK: - Public
@@ -199,7 +209,7 @@ class STCircleProgressView: UIView {
     
     private func drawCircle(_ rect: CGRect, context: CGContext, startAngel: CGFloat, endAngel: CGFloat, lineWidth: CGFloat, color: UIColor, clockwise: Bool) {
         let path = CGMutablePath()
-        let center = CGPoint(x: rect.width / 2, y: rect.height / 2)
+        let center = CGPoint(x: (rect.width + rect.origin.x) / 2, y: (rect.height + rect.origin.y) / 2)
         
         switch self.drawStyle {
         case .stroke:

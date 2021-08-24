@@ -111,7 +111,6 @@ extension STMoveAlbumFilesVC {
                 let title = String(format: "items_count".localized, "\(albumInfo?.countFiles ?? 0)")
                 return (title, nil)
             }
-            
         }
 
     }

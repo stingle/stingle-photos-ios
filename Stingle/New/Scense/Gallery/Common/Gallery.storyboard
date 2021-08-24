@@ -253,6 +253,9 @@
                                         <userDefinedRuntimeAttribute type="number" keyPath="progress">
                                             <real key="value" value="0.0"/>
                                         </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="borderInset">
+                                            <real key="value" value="5"/>
+                                        </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="didSelectSyncButton:" destination="4gb-r9-Gut" eventType="touchUpInside" id="J4C-Ii-sxu"/>
@@ -1309,6 +1312,17 @@
             <point key="canvasLocation" x="-5362" y="1775"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="Beg-hh-rpG">
+            <size key="intrinsicContentSize" width="-1" height="30"/>
+        </designable>
+        <designable name="Cvn-d7-faO">
+            <size key="intrinsicContentSize" width="170" height="60"/>
+        </designable>
+        <designable name="Tka-DQ-BYQ">
+            <size key="intrinsicContentSize" width="121" height="60"/>
+        </designable>
+    </designables>
     <inferredMetricsTieBreakers>
         <segue reference="AIi-GL-vll"/>
     </inferredMetricsTieBreakers>
