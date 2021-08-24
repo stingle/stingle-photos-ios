@@ -28,7 +28,7 @@ class STZoomView: UIView, UIGestureRecognizerDelegate {
     
     weak var delegate: STZoomViewDelegate?
     
-    let maximumZoomScale: CGFloat = 5
+    let maximumZoomScale: CGFloat = 4
     let minimumZoomScale: CGFloat = 1
     
     var contentView: IZoomContentView? {

@@ -88,9 +88,7 @@ class STFileViewerVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "pageViewController" {
             self.pageViewController = segue.destination as? UIPageViewController
-            self.pageViewController.delegate = self
             self.pageViewController.dataSource = self
-            
             for v in pageViewController.view.subviews {
                 if let scrollView = v as? UIScrollView {
                     scrollView.delegate = self
