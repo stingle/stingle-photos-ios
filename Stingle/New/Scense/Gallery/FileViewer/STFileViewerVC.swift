@@ -128,6 +128,14 @@ class STFileViewerVC: UIViewController {
         }
     }
     
+    @objc private func didSwapDown(tap: UIGestureRecognizer) {
+        let transition = CATransition()
+        transition.duration = 0.1
+        transition.type = CATransitionType.fade
+        self.navigationController?.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.popViewController(animated: false)
+    }
+        
     //MARK: - Private methods
         
     private func configureAccessoryView() {
@@ -159,6 +167,11 @@ class STFileViewerVC: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didSelectBackground(tap:)))
         tapGesture.delegate = self
         self.view.addGestureRecognizer(tapGesture)
+        
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwapDown(tap:)))
+        swipeGesture.direction = .down
+        self.view.addGestureRecognizer(swipeGesture)
+
     }
     
     private func viewController(for index: Int?) -> IFileViewer? {
