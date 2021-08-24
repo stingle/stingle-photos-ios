@@ -34,10 +34,18 @@ extension STDataBase {
         let dataSources = STObserverEvents<STDataBase.DataSource<ManagedModel>>()
         let observerProvider = STObserverEvents<ICollectionProviderObserver>()
         
-        func reloadData() {
+        func reloadData(models: [Model]? = nil) {
             DispatchQueue.main.async { [weak self] in
-                self?.dataSources.forEach { (controller) in
+                guard let weakSelf = self else {
+                    return
+                }
+                weakSelf.dataSources.forEach { (controller) in
                     controller.reloadData()
+                }
+                if let models = models, !models.isEmpty {
+                    weakSelf.observerProvider.forEach { observer in
+                        observer.dataBaseCollectionProvider(didUpdated: weakSelf, models: models)
+                    }
                 }
             }
         }
@@ -72,10 +80,7 @@ extension STDataBase {
             }
             
             if reloadData {
-                self.reloadData()
-                self.observerProvider.forEach { observer in
-                    observer.dataBaseCollectionProvider(didAdded: self, models: models)
-                }
+                self.reloadData(models: models)
             }
         }
         
@@ -94,43 +99,38 @@ extension STDataBase {
                     let deleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
                     let _ = try? context.execute(deleteRequest)
                 } catch {
-                    print("error")
                 }
                 
             }
             
             if reloadData {
-                self.reloadData()
-                self.observerProvider.forEach { observer in
-                    observer.dataBaseCollectionProvider(didDeleted: self, models: models)
-                }
+                self.reloadData(models: models)
             }
         }
         
         func update(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
+            
             let context = context ?? self.container.newBackgroundContext()
-            var resultError: Error?
-            context.performAndWait {
+            var requests = [NSBatchUpdateRequest]()
+            models.forEach { cdConvertable in
                 do {
-                    let cdModel = try self.getObjects(by: models, in: context)
-                    try self.updateObjects(by: models, managedModels: cdModel, in: context)
-                    if context.hasChanges {
-                        try context.save()
-                    }
-                } catch {
-                    resultError = error
+                    let json = try cdConvertable.toManagedModelJson()
+                    let predicate = NSPredicate(format: "\(#keyPath(STCDAlbum.identifier)) == %@", cdConvertable.identifier)
+                    let request = NSBatchUpdateRequest(entityName: ManagedModel.entityName)
+                    request.predicate = predicate
+                    request.propertiesToUpdate = json
+                    requests.append(request)
+                } catch {}
+            }
+            
+            context.performAndWait {
+                requests.forEach { request in
+                    let _ = try? context.execute(request)
                 }
-                
-                if resultError != nil {
-                    return
-                }
-                
-                if reloadData {
-                    self.reloadData()
-                    self.observerProvider.forEach { observer in
-                        observer.dataBaseCollectionProvider(didUpdated: self, models: models)
-                    }
-                }
+            }
+            
+            if reloadData {
+                self.reloadData(models: models)
             }
         }
         
@@ -217,7 +217,14 @@ extension STDataBase {
         }
         
         func updateObjects(by models: [Model], managedModels: [ManagedModel], in context: NSManagedObjectContext) throws {
-            throw STDataBase.DataBaseError.dateNotFound
+            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
+            managedGroup.forEach { (keyValue) in
+                if let key = keyValue.key, let model = modelsGroup[key]?.first {
+                    let cdModel = keyValue.value.first
+                    cdModel?.update(model: model, context: context)
+                }
+            }
         }
 
         //MARK: - ICollectionProvider

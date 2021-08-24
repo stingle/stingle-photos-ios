@@ -117,7 +117,6 @@ class STOperation<T>: Operation, INetworkOperation {
         } else {
             self.resume()
         }
-        
     }
 
     override func cancel() {

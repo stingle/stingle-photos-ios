@@ -12,7 +12,6 @@ protocol INetworkOperationQueue: AnyObject {
     func operation(didFinish operation: INetworkOperation, result: Any)
     func operation(didFinish operation: INetworkOperation, error: IError)
     func operationWaitUntil(didStarted operation: INetworkOperation)
-    
     var underlyingQueue: DispatchQueue? { get }
 }
 

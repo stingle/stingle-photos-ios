@@ -45,7 +45,6 @@
 		A02203C125EED86800D07C98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203C025EED86800D07C98 /* AppDelegate.swift */; };
 		A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203C225EED86800D07C98 /* SceneDelegate.swift */; };
 		A02203CA25EED86800D07C98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A02203C925EED86800D07C98 /* Assets.xcassets */; };
-		A02203E725EEDB4100D07C98 /* StingleModel_old.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A02203E525EEDB4100D07C98 /* StingleModel_old.xcdatamodeld */; };
 		A02203EB25EEDB6300D07C98 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A02203EA25EEDB6300D07C98 /* LaunchScreen.storyboard */; };
 		A022046B25EEDC0400D07C98 /* STSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203F625EEDC0300D07C98 /* STSegue.swift */; };
 		A022046C25EEDC0400D07C98 /* STNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203F825EEDC0300D07C98 /* STNavigationController.swift */; };
@@ -127,6 +126,7 @@
 		A027CE1D26B20DE000829162 /* STAuthWorker+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE1C26B20DE000829162 /* STAuthWorker+User.swift */; };
 		A027CE2526B2139F00829162 /* STChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2426B2139F00829162 /* STChangePasswordVC.swift */; };
 		A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2726B213B300829162 /* STChangePasswordVM.swift */; };
+		A0287EE126D1761D009E002B /* STFileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0287EE026D1761D009E002B /* STFileImporter.swift */; };
 		A02D88A3260BE99C00B82F16 /* SDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D88A2260BE99C00B82F16 /* SDownloader.swift */; };
 		A02D88B0260BEEA800B82F16 /* STDownloaderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D88AF260BEEA800B82F16 /* STDownloaderManager.swift */; };
 		A02ED2E82603EED800F10D58 /* UIImageView+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02ED2E72603EED800F10D58 /* UIImageView+Operation.swift */; };
@@ -390,7 +390,6 @@
 		A02203C225EED86800D07C98 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A02203C925EED86800D07C98 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A02203CE25EED86800D07C98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A02203E625EEDB4100D07C98 /* StingleModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StingleModel.xcdatamodel; sourceTree = "<group>"; };
 		A02203EA25EEDB6300D07C98 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A02203F625EEDC0300D07C98 /* STSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STSegue.swift; sourceTree = "<group>"; };
 		A02203F825EEDC0300D07C98 /* STNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STNavigationController.swift; sourceTree = "<group>"; };
@@ -482,6 +481,7 @@
 		A027CE1C26B20DE000829162 /* STAuthWorker+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAuthWorker+User.swift"; sourceTree = "<group>"; };
 		A027CE2426B2139F00829162 /* STChangePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STChangePasswordVC.swift; sourceTree = "<group>"; };
 		A027CE2726B213B300829162 /* STChangePasswordVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STChangePasswordVM.swift; sourceTree = "<group>"; };
+		A0287EE026D1761D009E002B /* STFileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileImporter.swift; sourceTree = "<group>"; };
 		A02D88A2260BE99C00B82F16 /* SDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDownloader.swift; sourceTree = "<group>"; };
 		A02D88AF260BEEA800B82F16 /* STDownloaderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDownloaderManager.swift; sourceTree = "<group>"; };
 		A02ED2E72603EED800F10D58 /* UIImageView+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Operation.swift"; sourceTree = "<group>"; };
@@ -873,7 +873,6 @@
 				A02203CE25EED86800D07C98 /* Info.plist */,
 				A02203EA25EEDB6300D07C98 /* LaunchScreen.storyboard */,
 				A0D8A98F25F44B2D005C12F8 /* StingleModel.xcdatamodeld */,
-				A02203E525EEDB4100D07C98 /* StingleModel_old.xcdatamodeld */,
 				A02204F425EEE12000D07C98 /* Localizable.strings */,
 			);
 			path = Resources;
@@ -2270,6 +2269,7 @@
 				A0D29CD6262051460083967D /* STFileUploader.swift */,
 				A0D29CDE262081130083967D /* STFileUploaderOperation.swift */,
 				A021A17F264F409600394713 /* IUploadFile.swift */,
+				A0287EE026D1761D009E002B /* STFileImporter.swift */,
 			);
 			path = FileUploader;
 			sourceTree = "<group>";
@@ -2583,7 +2583,6 @@
 				A032096F26546275000C420B /* STVideoView.swift in Sources */,
 				A00B4C20263D74270085C55E /* STSharedMembersVC.swift in Sources */,
 				A0D29CDF262081130083967D /* STFileUploaderOperation.swift in Sources */,
-				A02203E725EEDB4100D07C98 /* StingleModel_old.xcdatamodeld in Sources */,
 				A0777811260001B100BA2BDF /* STCrypto+Common.swift in Sources */,
 				A0AAA944261C7D6E009E9F51 /* STBackupPhraseVC.swift in Sources */,
 				A0E999A5263F54E3002FDCC9 /* STContactRequest.swift in Sources */,
@@ -2823,6 +2822,7 @@
 				A0CFBD8F25F171ED003095BE /* STTabBarViewController.swift in Sources */,
 				A07B45B626C0263A003EB470 /* STAdvancedVM.swift in Sources */,
 				A0C88FE725F3D6CD0061A41D /* STLibraryAlbum.swift in Sources */,
+				A0287EE126D1761D009E002B /* STFileImporter.swift in Sources */,
 				A040E21E269A356300003199 /* STGalleryTabBarVC.swift in Sources */,
 				A086FD2625F5A10900A8BC9C /* STCDAlbum.swift in Sources */,
 				A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */,
@@ -2955,7 +2955,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.photos.Stingle.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3043,7 +3043,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.photos.Stingle.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3126,7 +3126,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.photos.Stingle;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3209,7 +3209,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.photos.Stingle;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3244,16 +3244,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		A02203E525EEDB4100D07C98 /* StingleModel_old.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				A02203E625EEDB4100D07C98 /* StingleModel.xcdatamodel */,
-			);
-			currentVersion = A02203E625EEDB4100D07C98 /* StingleModel.xcdatamodel */;
-			path = StingleModel_old.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
 		A0D8A98F25F44B2D005C12F8 /* StingleModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (

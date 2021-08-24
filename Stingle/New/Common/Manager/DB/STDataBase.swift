@@ -195,7 +195,31 @@ extension STDataBase {
         
         albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
         albumFilesProvider.add(models: [albumFile], reloadData: reloadData, context: context)
+    }
+    
+    func addAlbumFiles(albumFiles: [STLibrary.AlbumFile], album: STLibrary.Album, reloadData: Bool) {
+        let context = self.container.viewContext
+        let albumsProvider = STApplication.shared.dataBase.albumsProvider
+        let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
+       
+        let newAlbum = STLibrary.Album(albumId: album.albumId,
+                                       encPrivateKey: album.encPrivateKey,
+                                       publicKey: album.publicKey,
+                                       metadata: album.metadata,
+                                       isShared: album.isShared,
+                                       isHidden: album.isHidden,
+                                       isOwner: album.isOwner,
+                                       isLocked: album.isLocked,
+                                       isRemote: album.isRemote,
+                                       permissions: album.permissions,
+                                       members: album.members,
+                                       cover: album.cover,
+                                       dateCreated: album.dateCreated,
+                                       dateModified: Date(),
+                                       managedObjectID: album.managedObjectID)
         
+        albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
+        albumFilesProvider.add(models: albumFiles, reloadData: reloadData, context: context)
     }
     
 }

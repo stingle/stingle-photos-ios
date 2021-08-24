@@ -133,7 +133,7 @@ class STAlbumFilesVM {
     
     func upload(assets: [PHAsset]) {
         let files = assets.compactMap({ return STFileUploader.AlbumFileUploadable(asset: $0, album: self.album) })
-        self.uploader.upload(files: files)
+        self.uploader.uploadAlbum(files: files, album: self.album)
     }
     
     func removeFileSystemFolder(url: URL) {

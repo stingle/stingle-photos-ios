@@ -19,6 +19,7 @@ extension STFileUploader {
     class FileUploadable: IUploadFile {
         
         let asset: PHAsset
+        
         init(asset: PHAsset) {
             self.asset = asset
         }
@@ -135,6 +136,7 @@ extension STFileUploader {
             let dateModified = modificationDate ?? Date()
             
             let file = try STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, albumId: self.album.albumId, managedObjectID: nil)
+//            file.updateIfNeeded(albumMetadata: self.album.albumMetadata)
             return file
             
         }

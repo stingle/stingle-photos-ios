@@ -125,18 +125,18 @@ extension STFileUploader {
         }
         
         private func responseSucces(result: STLibrary.File, spaceUsed: STDBUsed?) {
-            super.responseSucces(result: result)
             self.uploaderOperationDelegate?.fileUploaderOperation(didEndSucces: self, file: result, spaceUsed: spaceUsed)
+            super.responseSucces(result: result)
         }
 
         private func responseProgress(result: Progress, file: STLibrary.File) {
-            super.responseProgress(result: result)
             self.uploaderOperationDelegate?.fileUploaderOperation(didProgress: self, progress: result, file: file)
+            super.responseProgress(result: result)
         }
 
         private func responseFailed(error: IError, file: STLibrary.File?) {
-            super.responseFailed(error: error)
             self.uploaderOperationDelegate?.fileUploaderOperation(didEndFailed: self, error: error, file: file)
+            super.responseFailed(error: error)
         }
         
         private func canUploadFile() -> Bool {
