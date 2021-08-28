@@ -37,6 +37,9 @@ extension STDataBase {
                 self.container.saveContext(context)
                 context.reset()
             }
+            self.observerProvider.forEach { obs in
+                obs.dataBaseProvider(didUpdated: self, models: [info])
+            }
         }
         
         //MARK: - Private func

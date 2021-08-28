@@ -17,17 +17,17 @@ class STGalleryVM {
     
     func createDBDataSource() -> STDataBase.DataSource<STCDFile> {
         let galleryProvider = STApplication.shared.dataBase.galleryProvider
-        return galleryProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated)],
-                                                sectionNameKeyPath: #keyPath(STCDFile.day))
+        return galleryProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated), #keyPath(STCDFile.file)], sectionNameKeyPath: #keyPath(STCDFile.day))
     }
     
     func sync() {
         self.syncManager.sync()
     }
     
-    func upload(assets: [PHAsset]) {
+    func upload(assets: [PHAsset]) -> STFileUploader.Importer {
         let files = assets.compactMap({ return STFileUploader.FileUploadable(asset: $0) })
-        self.uploader.upload(files: files)
+        let importer = self.uploader.upload(files: files)
+        return importer
     }
     
     func getFiles(fileNames: [String]) -> [STLibrary.File] {

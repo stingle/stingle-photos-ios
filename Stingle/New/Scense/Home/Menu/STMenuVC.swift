@@ -22,7 +22,6 @@ class STMenuVC: STSplitViewController {
     
     private var isViewDidAppear = false
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         let menu = self.storyboard!.instantiateViewController(identifier: self.masterViewControllerIdentifier) as! IMasterViewController

@@ -34,6 +34,7 @@ extension UIImageView {
         
         if let retryerIdentifier = self.retryerIdentifier {
             STApplication.shared.downloaderManager.imageRetryer.cancel(operation: retryerIdentifier)
+            self.retryerIdentifier = nil
         }
         
         if !saveOldImage {
@@ -43,15 +44,18 @@ extension UIImageView {
         if let source = source {
             animator?.imageView(startAnimation: self)
             self.retryerIdentifier = STApplication.shared.downloaderManager.imageRetryer.download(source: source) { [weak self] (image) in
+                self?.retryerIdentifier = nil
                 self?.retrySuccess(image: image, animator: animator, success: success)
             } progress: { [weak self] (progress) in
                 self?.retryProgress(progressRetry: progress, animator: animator)
             } failure: { [weak self] (error) in
+                self?.retryerIdentifier = nil
                 self?.retryFailure(error: error, animator: animator, failure: failure)
             }
         } else {
             self.image = placeholder
             animator?.imageView(endAnimation: self)
+            self.retryerIdentifier = nil
             success?(nil)
         }
     }

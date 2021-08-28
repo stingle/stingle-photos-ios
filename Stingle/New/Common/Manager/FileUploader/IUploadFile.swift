@@ -9,9 +9,7 @@ import Photos
 import UIKit
 
 protocol IUploadFile {
-    
     func requestFile(success: @escaping (_ file: STLibrary.File) -> Void, failure: @escaping (_ failure: IError ) -> Void)
-    
 }
 
 extension STFileUploader {
@@ -136,7 +134,7 @@ extension STFileUploader {
             let dateModified = modificationDate ?? Date()
             
             let file = try STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, albumId: self.album.albumId, managedObjectID: nil)
-//            file.updateIfNeeded(albumMetadata: self.album.albumMetadata)
+            file.updateIfNeeded(albumMetadata: self.album.albumMetadata)
             return file
             
         }

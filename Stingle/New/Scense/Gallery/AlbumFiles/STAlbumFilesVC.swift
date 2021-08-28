@@ -308,9 +308,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     }
 
     private func configureAlbumActionView() {
-        
         self.addItemButton.isHidden = !(self.album.permission.allowAdd || self.album.isOwner)
-        
         self.accessoryView.reloadData()
         var image: UIImage?
         if !self.album.isShared {
@@ -428,7 +426,40 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
 extension STAlbumFilesVC: STImagePickerHelperDelegate {
     
     func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
-        self.viewModel.upload(assets: assets)
+        let importer = self.viewModel.upload(assets: assets)
+        
+        let progressView = STProgressView()
+        progressView.title = "importing".localized
+        
+        let view: UIView = self.navigationController?.view ?? self.view
+        progressView.show(in: view)
+    
+        importer.startHendler = { progress in
+            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    progressView.progress = progressValue
+                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                }
+            }
+        }
+        
+        importer.progressHendler = { progress in
+            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    progressView.progress = progressValue
+                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                }
+            }
+        }
+        
+        importer.complition = { _ in
+            DispatchQueue.main.async {
+                progressView.hide()
+            }
+        }
+        
     }
     
 }

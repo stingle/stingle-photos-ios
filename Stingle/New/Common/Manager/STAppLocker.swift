@@ -10,13 +10,19 @@ import UIKit
 class STAppLocker {
     
     private var resignActiveDate: Date?
-    
-    private var timer3: STRepeatingTimer?
     private var timer: Timer?
     private var taskIdentifier: UIBackgroundTaskIdentifier?
         
     init() {
         self.addNotifications()
+    }
+    
+    func lockApp() {
+        guard STApplication.shared.isLogedIn() else {
+            return
+        }
+        KeyManagement.key = nil
+        STUnlockAppVC.show()
     }
         
     //MARK: - Private
@@ -29,11 +35,10 @@ class STAppLocker {
     
     @objc private func didActivate(_ notification: Notification) {
         let timeInterval = STAppSettings.security.lockUpApp.timeInterval
-        guard STApplication.shared.isLogedIn(), let resignActiveDate = self.resignActiveDate, resignActiveDate.distance(to: Date()) >= timeInterval  else {
+        guard let resignActiveDate = self.resignActiveDate, resignActiveDate.distance(to: Date()) >= timeInterval  else {
             return
         }
-        KeyManagement.key = nil
-        STUnlockAppVC.show()
+        self.lockApp()
     }
      
     @objc private func willResignActive(_ notification: Notification) {
@@ -44,46 +49,4 @@ class STAppLocker {
         NotificationCenter.default.removeObserver(self)
     }
     
-}
-
-
-class STRepeatingTimer {
-    
-    private enum State {
-        case suspended
-        case resumed
-    }
-    
-    private var state: State = .suspended
-    var eventHandler: (() -> Void)?
-    let timeInterval: TimeInterval
-    
-    private lazy var timer: DispatchSourceTimer = {
-        let t = DispatchSource.makeTimerSource()
-        t.schedule(deadline: .now() + self.timeInterval, repeating: self.timeInterval)
-        t.setEventHandler(handler: { [weak self] in
-            self?.eventHandler?()
-        })
-        return t
-    }()
-    
-    init(timeInterval: TimeInterval) {
-        self.timeInterval = timeInterval
-    }
-                
-    func resume() {
-        if state == .resumed {
-            return
-        }
-        state = .resumed
-        timer.resume()
-    }
-    
-    func suspend() {
-        if state == .suspended {
-            return
-        }
-        state = .suspended
-        timer.suspend()
-    }
 }

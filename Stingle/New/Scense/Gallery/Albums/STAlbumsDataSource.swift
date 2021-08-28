@@ -80,9 +80,9 @@ extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
     
 }
 
-extension STAlbumsDataSource: ICollectionProviderObserver {
+extension STAlbumsDataSource: IDataBaseProviderProviderObserver {
     
-    func dataBaseCollectionProvider(didAdded provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+    func dataBaseProvider(didAdded provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         if provider === STApplication.shared.dataBase.contactProvider {
             self.contacts = nil
         } else if provider === STApplication.shared.dataBase.albumFilesProvider {
@@ -90,7 +90,7 @@ extension STAlbumsDataSource: ICollectionProviderObserver {
         }
     }
     
-    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+    func dataBaseProvider(didDeleted provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         if provider === STApplication.shared.dataBase.contactProvider {
             self.contacts = nil
         } else if provider === STApplication.shared.dataBase.albumFilesProvider {
@@ -98,7 +98,8 @@ extension STAlbumsDataSource: ICollectionProviderObserver {
         }
     }
     
-    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+    
+    func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         if provider === STApplication.shared.dataBase.contactProvider {
             self.contacts = nil
         } else if provider === STApplication.shared.dataBase.albumFilesProvider {

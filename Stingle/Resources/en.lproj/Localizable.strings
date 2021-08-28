@@ -44,11 +44,11 @@
 "gallery" = "Gallery";
 "forgot_password?" = "Forgot  password?";
 
+"importing" = "Importing";
+
 "service_busy?" = "Service busy";
 
-"storage_space_used_info" = "%@ MB of %@ GB (%@%%) used";
-
-"storage_space_used_info" = "%@ MB of %@ GB (%@%%) used";
+"storage_space_used_info" = "%@ MB of %@ (%@%%) used";
 
 "alert_error_permission_photos_title" = "Not authorized";
 "alert_error_permission_photos_message" = "Stingle haven't permission your photos. Please check your settings";
@@ -263,6 +263,7 @@
 "menu_storage" = "Storage";
 "menu_backup_phrase" = "Backup phrase";
 "menu_settings" = "Settings";
+"menu_lock_app" = "Lock app";
 "menu_official_website" = "Official website";
 "menu_sign_out" = "Sign Out";
 "menu_free_up_space" = "Free up space";

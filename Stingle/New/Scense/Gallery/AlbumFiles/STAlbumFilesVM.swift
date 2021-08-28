@@ -31,7 +31,7 @@ class STAlbumFilesVM {
     
     func createDBDataSource() -> STDataBase.DataSource<STCDAlbumFile> {
         let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", self.album.albumId)
-        return self.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated)], sectionNameKeyPath: #keyPath(STCDAlbumFile.day), predicate: predicate, cacheName: nil)
+        return self.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated), #keyPath(STCDAlbumFile.file)], sectionNameKeyPath: #keyPath(STCDAlbumFile.day), predicate: predicate, cacheName: nil)
     }
     
     func sync() {
@@ -131,9 +131,9 @@ class STAlbumFilesVM {
         STApplication.shared.downloaderManager.fileDownloader.download(files: files)
     }
     
-    func upload(assets: [PHAsset]) {
+    func upload(assets: [PHAsset]) -> STFileUploader.Importer {
         let files = assets.compactMap({ return STFileUploader.AlbumFileUploadable(asset: $0, album: self.album) })
-        self.uploader.uploadAlbum(files: files, album: self.album)
+        return self.uploader.uploadAlbum(files: files, album: self.album)
     }
     
     func removeFileSystemFolder(url: URL) {
@@ -142,9 +142,9 @@ class STAlbumFilesVM {
     
 }
 
-extension STAlbumFilesVM: ICollectionProviderObserver {
+extension STAlbumFilesVM: IDataBaseProviderProviderObserver {
     
-    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+    func dataBaseProvider(didDeleted provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         guard provider === self.albumProvider, let album = models.first(where: {$0.identifier == self.album.identifier}) as? STLibrary.Album else {
             return
         }
@@ -152,7 +152,7 @@ extension STAlbumFilesVM: ICollectionProviderObserver {
         self.delegate?.albumFilesVM(didDeletedAlbum: self)
     }
     
-    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+    func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         guard provider === self.albumProvider, let album = models.first(where: {$0.identifier == self.album.identifier}) as? STLibrary.Album else {
             return
         }

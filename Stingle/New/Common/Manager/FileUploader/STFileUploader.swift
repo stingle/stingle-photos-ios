@@ -277,17 +277,14 @@ extension STFileUploader: STFileUploaderOperationDelegate {
             weakSelf.countAllFiles = weakSelf.countAllFiles - 1
             weakSelf.progresses.removeValue(forKey: file.file)
             
-            
-//            if let spaceUsed = spaceUsed {
-//                DispatchQueue.main.async {
-//                    let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
-//                    dbInfo.update(with: spaceUsed)
-//                    STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
-//                }
-//            }
-            
-            
-            
+            if let spaceUsed = spaceUsed {
+                DispatchQueue.main.async {
+                    let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
+                    dbInfo.update(with: spaceUsed)
+                    STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
+                }
+            }
+                    
             weakSelf.updateDB(file: file, updateDB: true)
             weakSelf.updateProgress(didEndSucces: file)
         }

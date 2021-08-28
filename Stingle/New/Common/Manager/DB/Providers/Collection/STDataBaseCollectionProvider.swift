@@ -8,31 +8,12 @@
 import CoreData
 import UIKit
 
-protocol ICollectionProvider: AnyObject {
-   
-}
-
-protocol ICollectionProviderObserver {
-    func dataBaseCollectionProvider(didAdded provider: ICollectionProvider, models: [IDataBaseProviderModel])
-    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel])
-    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel])
-}
-
-extension ICollectionProviderObserver {
-    
-    func dataBaseCollectionProvider(didAdded provider: ICollectionProvider, models: [IDataBaseProviderModel]) {}
-    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel]) {}
-    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel]) {}
-    
-}
-
 extension STDataBase {
     
-    class CollectionProvider<ManagedModel: IManagedObject>: DataBaseProvider<ManagedModel>, ICollectionProvider {
+    class CollectionProvider<ManagedModel: IManagedObject>: DataBaseProvider<ManagedModel> {
         
         typealias Model = ManagedModel.Model
         let dataSources = STObserverEvents<STDataBase.DataSource<ManagedModel>>()
-        let observerProvider = STObserverEvents<ICollectionProviderObserver>()
         
         func reloadData(models: [Model]? = nil) {
             DispatchQueue.main.async { [weak self] in
@@ -44,7 +25,7 @@ extension STDataBase {
                 }
                 if let models = models, !models.isEmpty {
                     weakSelf.observerProvider.forEach { observer in
-                        observer.dataBaseCollectionProvider(didUpdated: weakSelf, models: models)
+                        observer.dataBaseProvider(didUpdated: weakSelf, models: models)
                     }
                 }
             }
@@ -214,15 +195,7 @@ extension STDataBase {
             self.dataSources.addObject(dataSource)
             return dataSource
         }
-        
-        func add(_ observer: ICollectionProviderObserver) {
-            self.observerProvider.addObject(observer)
-        }
-        
-        func remove(_ observer: ICollectionProviderObserver) {
-            self.observerProvider.removeObject(observer)
-        }
-        
+                
     }
 }
 

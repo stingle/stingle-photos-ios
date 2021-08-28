@@ -330,7 +330,40 @@ extension STGalleryVC: UICollectionViewDelegate {
 extension STGalleryVC: STImagePickerHelperDelegate {
     
     func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
-        self.viewModel.upload(assets: assets)
+        let importer = self.viewModel.upload(assets: assets)
+        
+        let progressView = STProgressView()
+        progressView.title = "importing".localized
+        
+        let view: UIView = self.navigationController?.view ?? self.view
+        progressView.show(in: view)
+    
+        importer.startHendler = { progress in
+            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    progressView.progress = progressValue
+                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                }
+            }
+        }
+        
+        importer.progressHendler = { progress in
+            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    progressView.progress = progressValue
+                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                }
+            }
+        }
+        
+        importer.complition = { _ in
+            DispatchQueue.main.async {
+                progressView.hide()
+            }
+        }
+        
     }
     
 }
@@ -349,7 +382,6 @@ extension STGalleryVC: STFilesActionTabBarAccessoryViewDataSource {
         case share
         case saveDevicePhotos
     }
-    
         
     enum FileAction: StringPointer {
         case share
@@ -395,7 +427,6 @@ extension STGalleryVC: STFilesActionTabBarAccessoryViewDataSource {
             self?.didSelectTrash(sendner: buttonItem)
         }
         items.append(trash)
-        
         return items
     }
     

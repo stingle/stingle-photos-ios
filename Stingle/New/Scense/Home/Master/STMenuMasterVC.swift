@@ -24,6 +24,7 @@ class STMenuMasterVC: UIViewController {
         STApplication.shared.syncManager.addListener(self)
         self.tableView.selectRow(at: IndexPath(row: self.currentControllerType.rawValue, section: 0), animated: true, scrollPosition: .none)
         self.set(controllerType: self.currentControllerType)
+        STApplication.shared.dataBase.dbInfoProvider.add(self)
     }
     
     //MARK: - Private
@@ -78,6 +79,9 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
                 STApplication.shared.logout()
             }, cancel: nil)
             self.selectCurrentRow()
+        case .lockApp:
+            self.splitMenuViewController?.closeMenu()
+            STApplication.shared.appLocker.lockApp()
         case .freeUpSpace:
             STApplication.shared.fileSystem.freeUpSpace()
             let title = "alert_free_up_space_title".localized
@@ -102,7 +106,6 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
         cell.configure(model: self.menu?.cells[indexPath.row])
         return cell
     }
-    
 
 }
  
@@ -123,6 +126,15 @@ extension STMenuMasterVC: ISyncManagerObserver {
     
 }
 
+extension STMenuMasterVC: IDataBaseProviderProviderObserver {
+    
+    func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
+        self.menu = Menu.current()
+        self.reloadData()
+    }
+
+}
+
 
 extension STMenuMasterVC {
     
@@ -133,8 +145,9 @@ extension STMenuMasterVC {
         case backupPhrase = 3
         case freeUpSpace = 4
         case settings = 5
-        case officialWebsite = 6
-        case signOut = 7
+        case lockApp = 7
+        case officialWebsite = 8
+        case signOut = 9
         
         var identifier: String {
             switch self {
@@ -150,6 +163,8 @@ extension STMenuMasterVC {
                 return "FreeUpSpaceID"
             case .settings:
                 return "SettingsID"
+            case .lockApp:
+                return "LockAppID"
             case .officialWebsite:
                 return "OfficialWebsiteID"
             case .signOut:
@@ -188,12 +203,12 @@ extension STMenuMasterVC {
             let info = STApplication.shared.dataBase.dbInfoProvider.dbInfo
             let appName = STEnvironment.current.appName
             let userEmail = user?.email ?? ""
-            let usedSpace = Int64(info.spaceUsed ?? "0") ?? 0
-            let allSpace = Int64(info.spaceQuota ?? "0") ?? 0
+            let usedSpace = Int64(Float(info.spaceUsed ?? "0") ?? 0)
+            let allSpace = Int64(Float(info.spaceQuota ?? "0") ?? 0)
             let progress: Float = allSpace != 0 ? Float(usedSpace) / Float(allSpace) : 0
             let percent: Int = Int(progress * 100)
             let allSpaceGB = STBytesUnits(mb: allSpace)
-            let used = String(format: "storage_space_used_info".localized, "\(usedSpace)", "\(allSpaceGB.gigabytes)", "\(percent)")
+            let used = String(format: "storage_space_used_info".localized, "\(usedSpace)", allSpaceGB.getReadableUnit(format: ".0f").uppercased(), "\(percent)")
             let header = Header(appName: appName, userEmail: userEmail, used: used, usedProgress: progress)
             return header
         }
@@ -221,6 +236,9 @@ extension STMenuMasterVC {
                 case .settings:
                     name = "menu_settings".localized
                     icon = UIImage(named: "ic_menu_settings")
+                case .lockApp:
+                    name = "menu_lock_app".localized
+                    icon = UIImage(named: "ic_menu_lock_app")
                 case .officialWebsite:
                     name = "menu_official_website".localized
                     icon = UIImage(named: "ic_menu_official_website")

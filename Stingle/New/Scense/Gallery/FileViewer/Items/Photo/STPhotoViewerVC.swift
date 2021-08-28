@@ -20,7 +20,7 @@ class STPhotoViewerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let thumb = STImageView.Image(file: self.photoFile, isThumb: true)
-        self.zoomImageView.imageView.setImage(source: thumb)
+        self.zoomImageView.imageView.setImage(source: thumb, saveOldImage: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {

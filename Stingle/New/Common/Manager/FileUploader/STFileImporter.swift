@@ -23,7 +23,7 @@ extension STFileUploader {
         let uploadFiles: [IUploadFile]
         let dispatchQueue: DispatchQueue
         
-        var startHendler: Hendler?
+        var startHendler: ProgressHendler?
         var progressHendler: ProgressHendler?
         var complition: Complition?
         
@@ -31,9 +31,12 @@ extension STFileUploader {
         init(uploadFiles: [IUploadFile], dispatchQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
             self.uploadFiles = uploadFiles
             self.dispatchQueue = dispatchQueue
-            self.startImport(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
+            
+            defer {
+                self.startImport(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
+            }
+            
         }
-        
         
         func addDB(files: [STLibrary.File]) -> [STLibrary.File] {
             var galleryFiles = [STLibrary.File]()
@@ -50,7 +53,7 @@ extension STFileUploader {
         //MARK: - Private methods
         
         private func startImport(startHendler:  @escaping Hendler, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
-            self.dispatchQueue.async {
+            self.dispatchQueue.asyncAfter(deadline: .now() + 0.1) {
                 self.importFiles(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
             }
         }
@@ -61,7 +64,8 @@ extension STFileUploader {
             var completedUnitCount: Int = .zero
             
             startHendler()
-            self.startHendler?()
+            let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount)
+            self.startHendler?(progress)
             var files = [STLibrary.File]()
             
             self.uploadFiles.forEach { uploadFile in
