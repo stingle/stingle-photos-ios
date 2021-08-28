@@ -29,7 +29,7 @@ class STAppLocker {
     
     @objc private func didActivate(_ notification: Notification) {
         let timeInterval = STAppSettings.security.lockUpApp.timeInterval
-        guard let resignActiveDate = self.resignActiveDate, resignActiveDate.distance(to: Date()) >= timeInterval  else {
+        guard STApplication.shared.isLogedIn(), let resignActiveDate = self.resignActiveDate, resignActiveDate.distance(to: Date()) >= timeInterval  else {
             return
         }
         KeyManagement.key = nil
