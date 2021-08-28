@@ -109,29 +109,9 @@ extension STDataBase {
         }
         
         func update(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
-            
             let context = context ?? self.container.newBackgroundContext()
-            var requests = [NSBatchUpdateRequest]()
-            models.forEach { cdConvertable in
-                do {
-                    let json = try cdConvertable.toManagedModelJson()
-                    let predicate = NSPredicate(format: "\(#keyPath(STCDAlbum.identifier)) == %@", cdConvertable.identifier)
-                    let request = NSBatchUpdateRequest(entityName: ManagedModel.entityName)
-                    request.predicate = predicate
-                    request.propertiesToUpdate = json
-                    requests.append(request)
-                } catch {}
-            }
-            
-            context.performAndWait {
-                requests.forEach { request in
-                    let _ = try? context.execute(request)
-                }
-            }
-            
-            if reloadData {
-                self.reloadData(models: models)
-            }
+            self.delete(models: models, reloadData: false, context: context)
+            self.add(models: models, reloadData: reloadData, context: context)
         }
         
         //MARK: - Fetch

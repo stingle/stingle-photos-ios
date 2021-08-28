@@ -29,6 +29,11 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
         STApplication.shared.dataBase.albumFilesProvider.add(self)
     }
     
+    override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
+        self.albumInfoFiles.removeAll()
+        super.didChangeContent(with: snapshot)
+    }
+    
 }
 
 extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
@@ -67,7 +72,7 @@ extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
         if self.contacts == nil {
             self.contacts = STApplication.shared.dataBase.contactProvider.fetchAllObjects()
         }
-        
+        self.albumInfoFiles[album.albumId] = albumInfo
         let members = album.members?.components(separatedBy: ",")
         let contacts = self.contacts?.filter({ members?.contains($0.userId) ?? false })
         return (albumInfo.countFiles, albumInfo.albumFile, contacts)

@@ -144,6 +144,7 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
         self.isReloadingCollectionView = true
+        self.delegate?.dataSource(willApplySnapshot: self)
         super.didChangeContent(with: snapshot)
         self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true) { [weak self] in
             guard let weakSelf = self else {
@@ -153,7 +154,6 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
             weakSelf.delegate?.dataSource(didApplySnapshot: weakSelf)
             self?.isReloadingCollectionView = false
         }
-        self.delegate?.dataSource(willApplySnapshot: self)
     }
     
     //MARK: - Public

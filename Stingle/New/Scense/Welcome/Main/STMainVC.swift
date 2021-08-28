@@ -39,6 +39,7 @@ class STMainVC: UIViewController {
 	//MARK: - Private func
 	
 	private func configure() {
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .appText
 	}
     
     private func showUnauthorizedAlert() {

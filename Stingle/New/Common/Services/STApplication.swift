@@ -32,7 +32,6 @@ class STApplication {
     }()
     
     var fileSystem: STFileSystem {
-        
         guard let user = self.dataBase.userProvider.user else {
             fatalError("user not found")
         }

@@ -101,15 +101,21 @@ class STFileViewerVC: UIViewController {
     //MARK: - User action
     
     @IBAction private func didSelectMoreButton(_ sender: UIBarButtonItem) {
-        self.currentFileViewer?.fileViewer(pauseContent: self)
+        
         guard let currentFile = self.currentFile else {
             return
         }
+        self.currentFileViewer?.fileViewer(pauseContent: self)
+        
+        let actions = self.viewModel.getMorAction(for: currentFile)
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let download = UIAlertAction(title: "download_file".localized, style: .default) { [weak self] _ in
-            self?.viewModel.downloadFile(file: currentFile)
+        
+        actions.forEach { action in
+            let action = UIAlertAction(title: action.localized, style: .default) { [weak self] _ in
+                self?.didSelectMore(action: action, file: currentFile)
+            }
+            alert.addAction(action)
         }
-        alert.addAction(download)
         
         let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
         alert.addAction(cancel)
@@ -132,6 +138,10 @@ class STFileViewerVC: UIViewController {
         transition.type = CATransitionType.fade
         self.navigationController?.view.layer.add(transition, forKey: kCATransition)
         self.navigationController?.popViewController(animated: false)
+    }
+    
+    private func didSelectMore(action: MoreAction, file: STLibrary.File) {
+        self.viewModel.selectMore(action: action, file: file)
     }
         
     //MARK: - Private methods
@@ -169,7 +179,6 @@ class STFileViewerVC: UIViewController {
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwapDown(tap:)))
         swipeGesture.direction = .down
         self.view.addGestureRecognizer(swipeGesture)
-
     }
     
     private func viewController(for index: Int?) -> IFileViewer? {
@@ -573,5 +582,32 @@ extension STFileViewerVC {
         }
         
     }
+    
+    enum MoreAction: StringPointer, CaseIterable {
+        
+        case download
+        case setAlbumCover
+       
+        var stringValue: String {
+            switch self {
+            case .download:
+                return "download"
+            case .setAlbumCover:
+                return "setAlbumCover"
+            }
+        }
+        
+        var localized: String {
+            switch self {
+            case .download:
+                return "download_file".localized
+            case .setAlbumCover:
+                return "set_album_cover".localized
+            }
+        }
+        
+    }
+    
+    
     
 }
