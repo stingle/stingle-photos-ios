@@ -19,9 +19,13 @@ class STPhotoViewerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue.main.async { [weak self] in
-            self?.reloadImage()
-        }
+        let thumb = STImageView.Image(file: self.photoFile, isThumb: true)
+        self.zoomImageView.imageView.setImage(source: thumb)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.reloadImage()
     }
     
     private func reloadImage() {

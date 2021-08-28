@@ -347,8 +347,13 @@
                                         <color key="backgroundColor" name="STPrimary"/>
                                         <inset key="contentEdgeInsets" minX="76" minY="8" maxX="76" maxY="8"/>
                                         <state key="normal" title="Ok, get Backup Phrase">
-                                            <color key="titleColor" name="STBackground"/>
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                                                <real key="value" value="0.20000000000000001"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="didSelectBackupPhraseButton:" destination="DOp-L9-uLb" eventType="touchUpInside" id="nsZ-t0-3jS"/>
                                         </connections>
