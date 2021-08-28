@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class STPhotoViewerVC: UIViewController {
     
     @IBOutlet weak private var zoomImageView: STImageZoomView!
@@ -19,27 +18,21 @@ class STPhotoViewerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.zoomImageView.delegate = self
         let thumb = STImageView.Image(file: self.photoFile, isThumb: true)
         self.zoomImageView.imageView.setImage(source: thumb, saveOldImage: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.reloadImage()
-    }
-    
-    private func reloadImage() {
-        let thumb = STImageView.Image(file: self.photoFile, isThumb: true)
-        let original = STImageView.Image(file: self.photoFile, isThumb: false)
-        let image = STImageView.Images(thumb: thumb, original: original)
-        self.zoomImageView.delegate = self
-        self.loadingView.color = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .white : .appText
         self.loadingView.startAnimating()
-        self.zoomImageView.imageView.setImages(image) { [weak self] _ in
+        let image = STImageView.Image(file: self.photoFile, isThumb: false)
+        self.zoomImageView.imageView.setImage(source: image, placeholder: nil, animator: nil, success: { [weak self] _ in
             self?.loadingView.stopAnimating()
-        } failure: { [weak self] _ in
+        }, progress: nil, failure: { [weak self] _ in
             self?.loadingView.stopAnimating()
-        }
+        }, saveOldImage: true)
+        
     }
 
 }

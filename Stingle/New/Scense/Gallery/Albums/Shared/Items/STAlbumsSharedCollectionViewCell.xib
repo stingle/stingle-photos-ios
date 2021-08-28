@@ -101,7 +101,7 @@
     <resources>
         <image name="ic_alnum_shared_no_owner" width="15" height="17"/>
         <namedColor name="STPlaceholder">
-            <color red="0.0" green="0.0" blue="0.0" alpha="0.15999999642372131" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STSecondaryText">
             <color red="0.0" green="0.0" blue="0.0" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="sRGB"/>

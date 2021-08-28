@@ -32,7 +32,7 @@ extension UIImageView {
         
     func setImage(source: IDownloaderSource?, placeholder: UIImage? = nil, animator: IImageViewDownloadAnimator? = nil, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil, saveOldImage: Bool = false) {
         
-        if let retryerIdentifier = self.retryerIdentifier {
+        if let retryerIdentifier = self.retryerIdentifier, !saveOldImage {
             STApplication.shared.downloaderManager.imageRetryer.cancel(operation: retryerIdentifier)
             self.retryerIdentifier = nil
         }
