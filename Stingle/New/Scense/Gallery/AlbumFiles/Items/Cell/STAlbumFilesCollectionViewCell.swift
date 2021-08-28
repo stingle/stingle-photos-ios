@@ -13,6 +13,7 @@ class STAlbumFilesCollectionViewCell: UICollectionViewCell, IViewDataSourceCell 
     @IBOutlet weak private var icRemoteImageView: UIImageView!
     @IBOutlet weak private var videoDurationLabel: UILabel!
     @IBOutlet weak private var imageView: STImageView!
+    @IBOutlet weak private var videoInfoBgView: STView!
     
     override var isHighlighted: Bool {
         didSet {
@@ -23,6 +24,7 @@ class STAlbumFilesCollectionViewCell: UICollectionViewCell, IViewDataSourceCell 
     func configure(model viewItem: STAlbumFilesVC.CellModel?) {
         self.imageView.setImage(viewItem?.image, placeholder: nil)
         self.videoDurationLabel.text = viewItem?.videoDuration
+        self.videoInfoBgView.isHidden = viewItem?.videoDuration == nil
         self.icRemoteImageView.isHidden = viewItem?.isRemote ?? false
         
         self.checkMarkImageView.isHidden = !(viewItem?.selectedMode ?? true)

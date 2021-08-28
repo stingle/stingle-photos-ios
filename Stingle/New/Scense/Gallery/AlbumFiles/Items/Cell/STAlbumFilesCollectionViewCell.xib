@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,14 +27,6 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_isRemote" translatesAutoresizingMaskIntoConstraints="NO" id="6IN-Ko-7AL">
                                 <rect key="frame" x="8" y="8" width="24" height="24"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b2C-td-erz">
-                                <rect key="frame" x="220" y="8" width="35" height="15.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" systemColor="secondarySystemBackgroundColor"/>
-                                <nil key="highlightedColor"/>
-                                <color key="shadowColor" name="STText"/>
-                                <size key="shadowOffset" width="1" height="-1"/>
-                            </label>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_mark" translatesAutoresizingMaskIntoConstraints="NO" id="eFR-7M-sud">
                                 <rect key="frame" x="225" y="206" width="30" height="30"/>
                                 <color key="tintColor" name="STPrimary"/>
@@ -44,6 +35,36 @@
                                     <constraint firstAttribute="height" constant="30" id="aMN-Vh-gRL"/>
                                 </constraints>
                             </imageView>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QmY-o8-TJJ" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="187.5" y="8" width="67.5" height="30.5"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play.fill" translatesAutoresizingMaskIntoConstraints="NO" id="rCD-PA-eXE">
+                                        <rect key="frame" x="8" y="10" width="9.5" height="10.5"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7zj-BJ-NFj">
+                                        <rect key="frame" x="25.5" y="8" width="34" height="14.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                        <size key="shadowOffset" width="1" height="-1"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.33096022829999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="7zj-BJ-NFj" firstAttribute="leading" secondItem="rCD-PA-eXE" secondAttribute="trailing" constant="8" symbolic="YES" id="6V6-sh-SfP"/>
+                                    <constraint firstAttribute="trailing" secondItem="7zj-BJ-NFj" secondAttribute="trailing" constant="8" id="UHV-fL-cV0"/>
+                                    <constraint firstItem="rCD-PA-eXE" firstAttribute="leading" secondItem="QmY-o8-TJJ" secondAttribute="leading" constant="8" id="bi1-92-hGo"/>
+                                    <constraint firstItem="rCD-PA-eXE" firstAttribute="centerY" secondItem="7zj-BJ-NFj" secondAttribute="centerY" id="p5r-R8-YOw"/>
+                                    <constraint firstItem="7zj-BJ-NFj" firstAttribute="top" secondItem="QmY-o8-TJJ" secondAttribute="top" constant="8" id="sE6-b1-TOD"/>
+                                    <constraint firstAttribute="bottom" secondItem="7zj-BJ-NFj" secondAttribute="bottom" constant="8" id="vQa-rJ-mzB"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                                        <real key="value" value="0.050000000000000003"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -51,13 +72,13 @@
                             <constraint firstAttribute="trailing" secondItem="eFR-7M-sud" secondAttribute="trailing" constant="8" id="E8K-pe-3sx"/>
                             <constraint firstAttribute="bottom" secondItem="eFR-7M-sud" secondAttribute="bottom" constant="8" id="J7m-U8-rgK"/>
                             <constraint firstItem="FB9-Kv-5rA" firstAttribute="leading" secondItem="KoI-8N-S4X" secondAttribute="leading" id="JHk-St-nCy"/>
-                            <constraint firstItem="b2C-td-erz" firstAttribute="top" secondItem="KoI-8N-S4X" secondAttribute="top" constant="8" id="Lid-Rc-eNB"/>
                             <constraint firstAttribute="trailing" secondItem="FB9-Kv-5rA" secondAttribute="trailing" id="Rmm-u0-Rin"/>
+                            <constraint firstItem="QmY-o8-TJJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6IN-Ko-7AL" secondAttribute="trailing" constant="8" id="XVq-sn-Dad"/>
                             <constraint firstItem="6IN-Ko-7AL" firstAttribute="leading" secondItem="KoI-8N-S4X" secondAttribute="leading" constant="8" id="eX9-6K-BME"/>
                             <constraint firstItem="FB9-Kv-5rA" firstAttribute="top" secondItem="KoI-8N-S4X" secondAttribute="top" id="fYX-kV-s7h"/>
-                            <constraint firstAttribute="trailing" secondItem="b2C-td-erz" secondAttribute="trailing" constant="8" id="lfP-dC-Exk"/>
+                            <constraint firstItem="QmY-o8-TJJ" firstAttribute="top" secondItem="KoI-8N-S4X" secondAttribute="top" constant="8" id="mVa-3M-jEy"/>
                             <constraint firstItem="6IN-Ko-7AL" firstAttribute="top" secondItem="KoI-8N-S4X" secondAttribute="top" constant="8" id="yhs-h6-ZIo"/>
-                            <constraint firstItem="b2C-td-erz" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KoI-8N-S4X" secondAttribute="leading" constant="8" id="zUv-DE-Pdq"/>
+                            <constraint firstAttribute="trailing" secondItem="QmY-o8-TJJ" secondAttribute="trailing" constant="8" id="zTG-NN-Y4t"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -78,7 +99,8 @@
                 <outlet property="checkMarkImageView" destination="eFR-7M-sud" id="v0r-eG-mph"/>
                 <outlet property="icRemoteImageView" destination="6IN-Ko-7AL" id="mIt-CH-R6d"/>
                 <outlet property="imageView" destination="FB9-Kv-5rA" id="VdR-aO-Vpb"/>
-                <outlet property="videoDurationLabel" destination="b2C-td-erz" id="OZq-TU-2yI"/>
+                <outlet property="videoDurationLabel" destination="7zj-BJ-NFj" id="cxi-O7-9ge"/>
+                <outlet property="videoInfoBgView" destination="QmY-o8-TJJ" id="oph-UN-FXZ"/>
             </connections>
             <point key="canvasLocation" x="-131.15942028985509" y="-16.741071428571427"/>
         </collectionViewCell>
@@ -86,14 +108,9 @@
     <resources>
         <image name="ic_isRemote" width="24" height="24"/>
         <image name="ic_mark" width="13" height="13"/>
+        <image name="play.fill" width="10" height="11"/>
         <namedColor name="STPrimary">
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="STText">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
     </resources>
 </document>

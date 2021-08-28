@@ -15,6 +15,7 @@ class STTrashCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
     @IBOutlet weak private var videoDurationLabel: UILabel!
     @IBOutlet weak private var imageView: STImageView!
     @IBOutlet weak private var checkMarkImageView: UIImageView!
+    @IBOutlet weak private var videoInfoBgView: STView!
     
     override var isHighlighted: Bool {
         didSet {
@@ -25,6 +26,7 @@ class STTrashCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
     func configure(model viewItem: STTrashVC.CellModel?) {
         self.imageView.setImage(viewItem?.image, placeholder: nil)
         self.videoDurationLabel.text = viewItem?.videoDuration
+        self.videoInfoBgView.isHidden = viewItem?.videoDuration == nil
         self.icRemoteImageView.isHidden = viewItem?.isRemote ?? false
         self.checkMarkImageView.isHidden = !(viewItem?.selectedMode ?? true)
         self.setSelected(isSelected: viewItem?.isSelected ?? false)

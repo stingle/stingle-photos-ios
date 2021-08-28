@@ -24,7 +24,7 @@ extension STTrashVC {
             let image = STImageView.Image(file: data, isThumb: true)
             var videoDurationStr: String? = nil
             if let duration = data.decryptsHeaders.file?.videoDuration, duration > 0 {
-                videoDurationStr = TimeInterval(duration).toString()
+                videoDurationStr = TimeInterval(duration).timeFormat()
             }
             return CellModel(image: image,
                              name: data.file,

@@ -71,7 +71,7 @@ extension STFileUploader {
             self.uploadFiles.forEach { uploadFile in
                 
                 uploadFile.requestFile { file in
-                    completedUnitCount = completedUnitCount + 1
+                    completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
                     files.append(file)
                     let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount)
                     progressHendler(progress)
@@ -84,7 +84,7 @@ extension STFileUploader {
                     }
                     
                 } failure: { error in
-                    completedUnitCount = completedUnitCount + 1
+                    completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
                     let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount)
                     progressHendler(progress)
                     self.progressHendler?(progress)
