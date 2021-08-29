@@ -291,7 +291,8 @@ extension STTrashVC: UICollectionViewDelegate {
             guard let file = self.dataSource.object(at: indexPath) else {
                 return
             }
-            let vc = STFileViewerVC.create(trash: file, sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated)])
+            let sorting = self.viewModel.getSorting()
+            let vc = STFileViewerVC.create(trash: file, sortDescriptorsKeys: sorting)
             self.show(vc, sender: nil)
         }
     }

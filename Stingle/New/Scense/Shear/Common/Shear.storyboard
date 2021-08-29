@@ -533,7 +533,7 @@
     </scenes>
     <designables>
         <designable name="M9d-TA-Efm">
-            <size key="intrinsicContentSize" width="55" height="55"/>
+            <size key="intrinsicContentSize" width="44" height="44"/>
         </designable>
         <designable name="sHw-lS-Q1w">
             <size key="intrinsicContentSize" width="4" height="18.5"/>
@@ -545,7 +545,7 @@
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STPlaceholder">
-            <color red="0.0" green="0.0" blue="0.0" alpha="0.15999999642372131" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STPrimary">
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

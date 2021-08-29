@@ -96,20 +96,6 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         return STImagePickerHelper(controller: self)
     }()
     
-    @IBAction func didSelectSyncButton(_ sender: Any) {
-        let controller = self.storyboard!.instantiateViewController(identifier: "Popover")
-        controller.modalPresentationStyle = .popover
-        let popController = controller.popoverPresentationController
-        popController?.permittedArrowDirections = .any
-        popController?.barButtonItem = self.syncBarButtonItem
-        popController?.delegate = self
-        self.showDetailViewController(controller, sender: nil)
-    }
-    
-    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
-        self.setSelectedMode(isSelected: !self.dataSource.viewModel.isSelectedMode)
-    }
-        
     //MARK: - Override
     
     override func viewDidLoad() {
@@ -148,6 +134,20 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     
     @IBAction private func didSelectOpenImagePicker(_ sender: Any) {
         self.pickerHelper.openPicker()
+    }
+    
+    @IBAction func didSelectSyncButton(_ sender: Any) {
+        let controller = self.storyboard!.instantiateViewController(identifier: "Popover")
+        controller.modalPresentationStyle = .popover
+        let popController = controller.popoverPresentationController
+        popController?.permittedArrowDirections = .any
+        popController?.barButtonItem = self.syncBarButtonItem
+        popController?.delegate = self
+        self.showDetailViewController(controller, sender: nil)
+    }
+    
+    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
+        self.setSelectedMode(isSelected: !self.dataSource.viewModel.isSelectedMode)
     }
 
     //MARK: - Layout
@@ -240,10 +240,16 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
         let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: FileAction.share)
-        vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
+        vc.completionWithItemsHandler = { [weak self] (type, completed, items, error) in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
             }
+            
+            if completed {
+                let isSelectedMode = self?.dataSource.viewModel.isSelectedMode ?? true
+                self?.setSelectedMode(isSelected: !isSelectedMode)
+            }
+            
         }
         self.present(vc, animated: true)
     }
@@ -320,7 +326,8 @@ extension STGalleryVC: UICollectionViewDelegate {
             guard let file = self.dataSource.object(at: indexPath) else {
                 return
             }
-            let vc = STFileViewerVC.create(galery: [#keyPath(STCDFile.dateCreated)], predicate: nil, file: file)
+            let sorting = self.viewModel.getSorting()
+            let vc = STFileViewerVC.create(galery: sorting, predicate: nil, file: file)
             self.show(vc, sender: nil)
         }
     }

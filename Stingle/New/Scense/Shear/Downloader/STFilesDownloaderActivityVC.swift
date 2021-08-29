@@ -97,7 +97,7 @@ class STFilesDownloaderActivityVC: UIViewController {
         } completion: { _ in
             self.dismiss(animated: false, completion: nil)
             completion()
-        }        
+        }
     }
     
     private func dismiss(with decryptFiles: [STFilesDownloaderActivityVM.DecryptDownloadFile]) {

@@ -12,7 +12,7 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
     private let album: STLibrary.Album
     private let albumWorker = STAlbumWorker()
     
-    init(album: STLibrary.Album, sortDescriptorsKeys: [String]) {
+    init(album: STLibrary.Album, sortDescriptorsKeys: [STDataBase.DataSource<STCDAlbumFile>.Sort]) {
         self.album = album
         let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", album.albumId)
         let dataBase = STApplication.shared.dataBase.albumFilesProvider

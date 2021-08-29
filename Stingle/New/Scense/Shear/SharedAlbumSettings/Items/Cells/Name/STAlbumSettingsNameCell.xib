@@ -50,7 +50,7 @@
                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                         <inset key="contentEdgeInsets" minX="20" minY="8" maxX="20" maxY="8"/>
                         <state key="normal" title="Unshare">
-                            <color key="titleColor" name="STBackground"/>
+                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </state>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="radius">
@@ -86,9 +86,6 @@
         </designable>
     </designables>
     <resources>
-        <namedColor name="STBackground">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="STPrimary">
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

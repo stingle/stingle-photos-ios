@@ -38,7 +38,7 @@ extension STDataBase {
         
         //MARK: - DataSource
         
-        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?, predicate: NSPredicate? = nil, cacheName: String? = nil) -> DataSource<ManagedModel> {
+        func createDataSource(sortDescriptorsKeys: [DataSource<ManagedModel>.Sort], sectionNameKeyPath: String?, predicate: NSPredicate? = nil, cacheName: String? = nil) -> DataSource<ManagedModel> {
             let dataSource = self.generateDataSource(sortDescriptorsKeys: sortDescriptorsKeys, sectionNameKeyPath: sectionNameKeyPath, predicate: predicate, cacheName: cacheName)
             return dataSource as! DataSource<ManagedModel>
         }
@@ -190,7 +190,7 @@ extension STDataBase {
 
         //MARK: - ICollectionProvider
         
-        func generateDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?, predicate: NSPredicate?, cacheName: String?) -> IProviderDataSource {
+        func generateDataSource(sortDescriptorsKeys: [STDataBase.DataSource<ManagedModel>.Sort], sectionNameKeyPath: String?, predicate: NSPredicate?, cacheName: String?) -> IProviderDataSource {
             let dataSource = STDataBase.DataSource<ManagedModel>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, predicate: predicate, sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
             self.dataSources.addObject(dataSource)
             return dataSource

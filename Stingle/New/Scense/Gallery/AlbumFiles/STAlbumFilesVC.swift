@@ -492,7 +492,8 @@ extension STAlbumFilesVC: UICollectionViewDelegate {
             guard let file = self.dataSource.object(at: indexPath) else {
                 return
             }
-            let vc = STFileViewerVC.create(album: self.album, file: file, sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated)])
+            let sorting = self.viewModel.getSorting()
+            let vc = STFileViewerVC.create(album: self.album, file: file, sortDescriptorsKeys: sorting)
             self.show(vc, sender: nil)
         }
     }

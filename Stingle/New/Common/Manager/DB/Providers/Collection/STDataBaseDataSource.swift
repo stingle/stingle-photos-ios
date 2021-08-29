@@ -36,10 +36,10 @@ extension IProviderDataSource {
 extension STDataBase {
     
     class DataSource<ManagedModel: IManagedObject>: NSObject, NSFetchedResultsControllerDelegate, IProviderDataSource {
-                
+                        
         typealias Model = ManagedModel.Model
         
-        let sortDescriptorsKeys: [String]
+        let sortDescriptorsKeys: [Sort]
         let sectionNameKeyPath: String?
         let ascending: Bool
         let predicate: NSPredicate?
@@ -59,7 +59,7 @@ extension STDataBase {
         
         weak var delegate: IProviderDelegate?
         
-        init(sortDescriptorsKeys: [String], viewContext: NSManagedObjectContext, predicate: NSPredicate? = nil, sectionNameKeyPath: String?, ascending: Bool = false, cacheName: String? = ManagedModel.entityName) {
+        init(sortDescriptorsKeys: [Sort], viewContext: NSManagedObjectContext, predicate: NSPredicate? = nil, sectionNameKeyPath: String?, ascending: Bool = false, cacheName: String? = ManagedModel.entityName) {
             self.ascending = ascending
             self.sortDescriptorsKeys = sortDescriptorsKeys
             self.viewContext = viewContext
@@ -73,8 +73,8 @@ extension STDataBase {
         
         private func createResultsController(cacheName: String?) -> NSFetchedResultsController<ManagedModel> {
             let filesFetchRequest = NSFetchRequest<ManagedModel>(entityName: ManagedModel.entityName)
-            let sortDescriptors = self.sortDescriptorsKeys.compactMap { (key) -> NSSortDescriptor in
-                return NSSortDescriptor(key: key, ascending: self.ascending)
+            let sortDescriptors = self.sortDescriptorsKeys.compactMap { (sort) -> NSSortDescriptor in
+                return NSSortDescriptor(key: sort.key, ascending: sort.ascending ?? self.ascending)
             }
             
             filesFetchRequest.predicate = self.predicate
@@ -141,4 +141,18 @@ extension STDataBase {
         
     }
         
+}
+
+extension STDataBase.DataSource {
+    
+    struct Sort {
+        let key: String
+        let ascending: Bool?
+        
+        func create(key: String, ascending: Bool? = nil) -> Sort {
+            return Sort(key: key, ascending: ascending)
+        }
+        
+    }
+    
 }

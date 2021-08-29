@@ -23,7 +23,9 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
     
     init(collectionView: UICollectionView, predicate: NSPredicate?, viewModel: ViewModel) {
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
-        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbum.dateModified)], sectionNameKeyPath: nil, predicate: predicate, cacheName: nil)
+        let dateModified = STDataBase.DataSource<STCDAlbum>.Sort(key: #keyPath(STCDAlbum.dateModified), ascending: false)
+        let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [dateModified], sectionNameKeyPath: nil, predicate: predicate, cacheName: nil)
+        
         super.init(dbDataSource: dbDataSource, collectionView: collectionView, viewModel: viewModel)
         self.viewModel.delegate = self
         STApplication.shared.dataBase.albumFilesProvider.add(self)

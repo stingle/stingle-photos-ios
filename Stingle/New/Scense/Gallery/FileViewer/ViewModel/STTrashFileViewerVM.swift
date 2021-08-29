@@ -9,7 +9,7 @@ import Foundation
 
 class STTrashFileViewerVM: STFileViewerVM<STCDTrashFile> {
     
-    init(sortDescriptorsKeys: [String]) {
+    init(sortDescriptorsKeys: [STDataBase.DataSource<STCDTrashFile>.Sort]) {
         let dataBase = STApplication.shared.dataBase.trashProvider
         let dataSource = dataBase.createDataSource(sortDescriptorsKeys: sortDescriptorsKeys, sectionNameKeyPath: nil, predicate: nil, cacheName: nil)
         super.init(dataSource: dataSource)

@@ -10,7 +10,6 @@ import Foundation
 import Alamofire
 
 protocol NetworkTask {
-
 	func cancel()
 	func suspend()
 	func resume()
@@ -23,52 +22,36 @@ class STNetworkDispatcher {
     
     static let sheared: STNetworkDispatcher = STNetworkDispatcher()
 
-    private lazy var session: Alamofire.Session = {
-        let config = URLSessionConfiguration.default
-        let session = Alamofire.Session(configuration: config, eventMonitors: [self])
-        return session
-    }()
+    private var session: Alamofire.Session!
+    private var uploadSession: Alamofire.Session!
+    private var streanSession: Alamofire.Session!
+    private var downloadSession: Alamofire.Session!
     
-    private lazy var uploadSession: Alamofire.Session = {
-        let config = URLSessionConfiguration.default
-        let session = Alamofire.Session(configuration: config, eventMonitors: [self])
-        return session
-    }()
+    private var decoder: JSONDecoder!
+	
+	private init() {
+        self.configure()
+    }
     
-    private lazy var streanSession: Alamofire.Session = {
+    private func configure()  {
         let config = URLSessionConfiguration.default
-        config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        let session = Alamofire.Session(configuration: config, eventMonitors: [self])
-        return session
-    }()
+        self.session = Alamofire.Session(configuration: config, eventMonitors: [self])
+        self.uploadSession = Alamofire.Session(configuration: config, eventMonitors: [self])
         
-    private lazy var backgroundSession: Alamofire.Session = {
-        #if targetEnvironment(simulator)
-        return self.session
-        #else
-        let backgroundSessionManager = Alamofire.Session(configuration: URLSessionConfiguration.background(withIdentifier: "Alamofire.backgroundSessio"))
-        return backgroundSessionManager
-        #endif
-    }()
-    
-    private lazy var downloadSession: Alamofire.Session = {
-        let config = URLSessionConfiguration.default
         config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        let session = Alamofire.Session(configuration: config, eventMonitors: [self])
-        return session
-    }()
-    		
-    lazy var decoder: JSONDecoder = {
+        
+        self.streanSession = Alamofire.Session(configuration: config, eventMonitors: [self])
+        self.downloadSession = Alamofire.Session(configuration: config, eventMonitors: [self])
+        
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return decoder
-    }()
-	
-	private init() {}
+        
+        self.decoder = decoder
+    }
 		
 	@discardableResult
 	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
-        let decoder = decoder ?? self.decoder
+        let decoder: IDecoder = decoder ?? self.decoder
         let request = self.afRequest(request: request, sesion: self.session)
 		request.responseDecodable(decoder: decoder) { (response: AFDataResponse<T>) in
 			switch response.result {

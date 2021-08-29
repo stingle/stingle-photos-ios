@@ -316,7 +316,7 @@ class STFileViewerVC: UIViewController {
 
 extension STFileViewerVC {
     
-    static func create(galery sortDescriptorsKeys: [String], predicate: NSPredicate?, file: STLibrary.File) -> STFileViewerVC {
+    static func create(galery sortDescriptorsKeys: [STDataBase.DataSource<STCDFile>.Sort], predicate: NSPredicate?, file: STLibrary.File) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STGaleryFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys, predicate: predicate)
@@ -326,7 +326,7 @@ extension STFileViewerVC {
         return vc
     }
     
-    static func create(album: STLibrary.Album, file: STLibrary.AlbumFile, sortDescriptorsKeys: [String]) -> STFileViewerVC {
+    static func create(album: STLibrary.Album, file: STLibrary.AlbumFile, sortDescriptorsKeys: [STDataBase.DataSource<STCDAlbumFile>.Sort]) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STAlbumFileViewerVM(album: album, sortDescriptorsKeys: sortDescriptorsKeys)
@@ -336,7 +336,7 @@ extension STFileViewerVC {
         return vc
     }
     
-    static func create(trash file: STLibrary.TrashFile, sortDescriptorsKeys: [String]) -> STFileViewerVC {
+    static func create(trash file: STLibrary.TrashFile, sortDescriptorsKeys: [STDataBase.DataSource<STCDTrashFile>.Sort]) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STTrashFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys)

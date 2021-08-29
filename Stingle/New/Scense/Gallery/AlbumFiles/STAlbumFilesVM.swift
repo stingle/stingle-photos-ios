@@ -31,7 +31,8 @@ class STAlbumFilesVM {
     
     func createDBDataSource() -> STDataBase.DataSource<STCDAlbumFile> {
         let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", self.album.albumId)
-        return self.albumFilesProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated), #keyPath(STCDAlbumFile.file)], sectionNameKeyPath: #keyPath(STCDAlbumFile.day), predicate: predicate, cacheName: nil)
+        let soring = self.getSorting()
+        return self.albumFilesProvider.createDataSource(sortDescriptorsKeys: soring, sectionNameKeyPath: #keyPath(STCDAlbumFile.day), predicate: predicate, cacheName: nil)
     }
     
     func sync() {
@@ -138,6 +139,13 @@ class STAlbumFilesVM {
     
     func removeFileSystemFolder(url: URL) {
         STApplication.shared.fileSystem.remove(file: url)
+    }
+    
+    func getSorting() -> [STDataBase.DataSource<STCDAlbumFile>.Sort] {
+        let dateCreated = STDataBase.DataSource<STCDAlbumFile>.Sort(key: #keyPath(STCDAlbumFile.dateCreated), ascending: nil)
+        let dateModified = STDataBase.DataSource<STCDAlbumFile>.Sort(key: #keyPath(STCDAlbumFile.dateModified), ascending: false)
+        let file = STDataBase.DataSource<STCDAlbumFile>.Sort(key: #keyPath(STCDAlbumFile.file), ascending: false)
+        return [dateCreated, dateModified, file]
     }
     
 }
