@@ -451,8 +451,7 @@ extension STGalleryVC: STFilesActionTabBarAccessoryViewDataSource {
         items.append(trash)
         return items
     }
-    
-    
+
 }
 
 extension STGalleryVC {
