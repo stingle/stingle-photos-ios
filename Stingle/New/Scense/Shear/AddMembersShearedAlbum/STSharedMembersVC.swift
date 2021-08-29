@@ -18,6 +18,9 @@ class STSharedMembersVC: UIViewController {
     private var contacts = [STContact]()
     private var selectedContactsIDS = Set<String>()
     
+    private var isShared = false
+    
+    var complition: ((_ success: Bool) -> Void)?
     var shearedType: ShearedType!
    
     private let searchController = UISearchController(searchResultsController: nil)
@@ -41,6 +44,7 @@ class STSharedMembersVC: UIViewController {
             let contacsList = self.contacts.filter({self.selectedContactsIDS.contains($0.userId)})
             let shareAlbumData = STShareAlbumVC.ShareAlbumData(shareType: self.shearedType, contact: contacsList)
             vc.shareAlbumData = shareAlbumData
+            vc.delegate = self
         }
     }
         
@@ -210,6 +214,10 @@ class STSharedMembersVC: UIViewController {
         }
     }
     
+    deinit {
+        self.complition?(self.isShared)
+    }
+    
 }
 
 extension STSharedMembersVC: UISearchResultsUpdating, UISearchBarDelegate, UITextFieldDelegate {
@@ -253,6 +261,14 @@ extension STSharedMembersVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let contact = self.contacts[indexPath.row]
         self.reloadContact(contact: contact)
+    }
+    
+}
+
+extension STSharedMembersVC: STShareAlbumVCDelegate {
+    
+    func shareAlbumVC(didShare shareAlbumVC: STShareAlbumVC) {
+        self.isShared = true
     }
     
 }

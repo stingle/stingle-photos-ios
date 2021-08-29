@@ -129,6 +129,10 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     @IBOutlet weak private var deleteFileLabel: UILabel!
     @IBOutlet weak private var deleteFilesSwitcher: UISwitch!
     
+    private var isSuccessMoved = false
+        
+    var complition: ((_ success: Bool) -> Void)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureViews()
@@ -181,6 +185,7 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
             if let error = error {
                 self?.showError(error: error)
             } else {
+                self?.isSuccessMoved = true
                 self?.dismiss(animated: true, completion: nil)
             }
            
@@ -197,6 +202,7 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
             if let error = error {
                 self?.showError(error: error)
             } else {
+                self?.isSuccessMoved = true
                 self?.dismiss(animated: true, completion: nil)
             }
         }
@@ -212,6 +218,7 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
             if let error = error {
                 self?.showError(error: error)
             } else {
+                self?.isSuccessMoved = true
                 self?.dismiss(animated: true, completion: nil)
             }
         }
@@ -246,6 +253,7 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
             if let error = error {
                 self?.showError(error: error)
             } else {
+                self?.isSuccessMoved = true
                 self?.dismiss(animated: true, completion: nil)
             }
         }
@@ -289,6 +297,7 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
             if let error = error {
                 self?.showError(error: error)
             } else {
+                self?.isSuccessMoved = true
                 self?.dismiss(animated: true, completion: nil)
             }
         }
@@ -346,6 +355,10 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     
     @IBAction private func didSelectCloseButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    deinit {
+        self.complition?(self.isSuccessMoved)
     }
     
 }

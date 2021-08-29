@@ -97,7 +97,6 @@ class STFilesDownloaderActivityVM {
     private func srartDownload(files: [STLibrary.File]) {
         var downloaderSources = [IDownloaderSource]()
         files.forEach { file in
-            
             if self.fileSystem.isExistFile(file: file, isThumb: false), let fileOreginalUrl = file.fileOreginalUrl {
                 let source = STDownloaderManager.FileDownloaderSource(file: file, fileSaveUrl: fileOreginalUrl, isThumb: false)
                 downloaderSources.append(source)

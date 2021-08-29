@@ -87,7 +87,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     @IBOutlet weak private var addItemButton: UIButton!
     @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
-    @IBOutlet weak private var albumSettingsButtonItem: UIBarButtonItem!
+    @IBOutlet private var albumSettingsButtonItem: UIBarButtonItem!
     @IBOutlet weak private var moreBarButtonItem: UIBarButtonItem!
     
     var album: STLibrary.Album!
@@ -170,7 +170,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     //MARK: - UserAction
     
-    @IBAction func didSelectMoreButton(_ sender: UIBarButtonItem) {
+    @IBAction private func didSelectMoreButton(_ sender: UIBarButtonItem) {
         let fileNames = self.dataSource.viewModel.isSelectedMode ? [String](self.dataSource.viewModel.selectedFileNames) : nil
         var actions = [STAlbumFilesVC.AlbumAction]()
         do {
@@ -198,11 +198,20 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         self.showDetailViewController(alert, sender: nil)
     }
     
-    @IBAction func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
+    @IBAction private func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
         if !self.album.isShared {
             let storyboard = UIStoryboard(name: "Shear", bundle: .main)
             let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
-            (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .album(album: self.album)
+            
+            let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
+            sharedMembersVC?.shearedType = .album(album: self.album)
+            
+            sharedMembersVC?.complition = { [weak self] success in
+                if success {
+                    self?.setSelectMode(isSelected: false)
+                }
+            }
+            
             self.showDetailViewController(vc, sender: nil)
         } else {
             let storyboard = UIStoryboard(name: "Shear", bundle: .main)
@@ -212,30 +221,50 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         }
     }
     
-    @IBAction func didSelectAddButton(_ sender: Any) {
+    @IBAction private func didSelectAddButton(_ sender: Any) {
         self.pickerHelper.openPicker()
     }
     
-    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
-        self.dataSource.viewModel.selectedFileNames.removeAll()
-        self.dataSource.viewModel.isSelectedMode = !self.dataSource.viewModel.isSelectedMode
-        self.updateTabBarAccessoryView()
-        self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
-        self.collectionView.reloadData()
-        self.updateSelectedItesmCount()
+    @IBAction private func didSelectButtonItem(_ sender: UIBarButtonItem) {
+        self.setSelectMode(isSelected: !self.dataSource.viewModel.isSelectedMode)
     }
     
     //MARK: - Private
     
+    private func setSelectMode(isSelected: Bool) {
+        guard self.dataSource.viewModel.isSelectedMode != isSelected else {
+            return
+        }
+        self.dataSource.viewModel.selectedFileNames.removeAll()
+        self.dataSource.viewModel.isSelectedMode = isSelected
+        self.updateTabBarAccessoryView()
+        self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
+        self.collectionView.reloadData()
+        self.updateSelectedItesmCount()
+                
+        guard var toolbarItems = self.navigationItem.rightBarButtonItems else { return  }
+        
+        if isSelected {
+            if let index = toolbarItems.firstIndex(where: { $0 == self.albumSettingsButtonItem }) {
+                toolbarItems.remove(at: index)
+            }
+        } else {
+            if !toolbarItems.contains(self.albumSettingsButtonItem) {
+                toolbarItems.append(self.albumSettingsButtonItem)
+            }
+        }
+        self.navigationItem.setRightBarButtonItems(toolbarItems, animated: true)
+        
+    }
+    
     private func didSelectShitAction(action: AlbumAction) {
-        
         let loadingView: UIView =  self.navigationController?.view ?? self.view
-        
         func didResiveResult(error: IError?) {
             STLoadingView.hide(in: loadingView)
             if let error = error {
                 self.showError(error: error)
             }
+            self.setSelectMode(isSelected: false)
         }
         
         switch action {
@@ -288,6 +317,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         case .downloadSelection:
             let fileName = [String](self.dataSource.viewModel.selectedFileNames)
             self.viewModel.downloadSelection(fileNames: fileName)
+            self.setSelectMode(isSelected: false)
         }
         
     }
@@ -332,8 +362,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
             if let error = error {
                 weakSelf.showError(error: error)
             } else {
-                weakSelf.dataSource.viewModel.selectedFileNames.removeAll()
-                weakSelf.updateSelectedItesmCount()
+                self?.setSelectMode(isSelected: false)
             }
         }
     }
@@ -365,7 +394,16 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         let files = self.viewModel.getFiles(fileNames: selectedFileNames)
         let storyboard = UIStoryboard(name: "Shear", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
-        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .albumFiles(album: self.album, files: files)
+        
+        let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
+        
+        sharedMembersVC?.complition = { [weak self] success in
+            if success {
+                self?.setSelectMode(isSelected: false)
+            }
+        }
+        
+        sharedMembersVC?.shearedType = .albumFiles(album: self.album, files: files)
         self.showDetailViewController(vc, sender: nil)
     }
     
@@ -375,6 +413,9 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
+            }
+            if completed {
+                self?.setSelectMode(isSelected: false)
             }
         }
         self.present(vc, animated: true)
@@ -390,6 +431,9 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         self.pickerHelper.save(items: filesSave) { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
+            }
+            DispatchQueue.main.async {
+                self?.setSelectMode(isSelected: false)
             }
         }
     }
@@ -566,7 +610,13 @@ extension STAlbumFilesVC {
     private func didSelectMoveButton(files sendner: UIBarButtonItem) {
         let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
         let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
-        (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .albumFiles(album: self.album, files: self.viewModel.getFiles(fileNames: selectedFileNames))
+        let moveAlbumFilesVC = (navVC.viewControllers.first as? STMoveAlbumFilesVC)
+        moveAlbumFilesVC?.moveInfo = .albumFiles(album: self.album, files: self.viewModel.getFiles(fileNames: selectedFileNames))
+        moveAlbumFilesVC?.complition = { [weak self] success in
+            if success {
+                self?.setSelectMode(isSelected: false)
+            }
+        }
         self.showDetailViewController(navVC, sender: nil)
     }
     

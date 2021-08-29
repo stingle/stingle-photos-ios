@@ -146,8 +146,8 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         self.showDetailViewController(controller, sender: nil)
     }
     
-    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
-        self.setSelectedMode(isSelected: !self.dataSource.viewModel.isSelectedMode)
+    @IBAction private func didSelecedButtonItem(_ sender: UIBarButtonItem) {
+        self.setSelectMode(isSelected: !self.dataSource.viewModel.isSelectedMode)
     }
 
     //MARK: - Layout
@@ -176,7 +176,10 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     
     //MARK: - Private
     
-    private func setSelectedMode(isSelected: Bool) {
+    private func setSelectMode(isSelected: Bool) {
+        guard self.dataSource.viewModel.isSelectedMode != isSelected else {
+            return
+        }
         self.dataSource.viewModel.selectedFileNames.removeAll()
         self.dataSource.viewModel.isSelectedMode = isSelected
         self.updateTabBarAccessoryView()
@@ -233,7 +236,16 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         }
         let storyboard = UIStoryboard(name: "Shear", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
-        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .files(files: files)
+        
+        let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
+        sharedMembersVC?.shearedType = .files(files: files)
+        
+        sharedMembersVC?.complition = { [weak self] success in
+            if success {
+                self?.setSelectMode(isSelected: false)
+            }
+        }
+        
         self.showDetailViewController(vc, sender: nil)
     }
     
@@ -246,8 +258,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
             }
             
             if completed {
-                let isSelectedMode = self?.dataSource.viewModel.isSelectedMode ?? true
-                self?.setSelectedMode(isSelected: !isSelectedMode)
+                self?.setSelectMode(isSelected: false)
             }
             
         }
@@ -264,6 +275,10 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         self.pickerHelper.save(items: filesSave) { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
+            }
+            
+            DispatchQueue.main.async {
+                self?.setSelectMode(isSelected: false)
             }
         }
     }
@@ -310,7 +325,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
             if let error = error {
                 weakSelf.showError(error: error)
             } else {
-                weakSelf.setSelectedMode(isSelected: false)
+                weakSelf.setSelectMode(isSelected: false)
             }
         }
     }
@@ -452,7 +467,13 @@ extension STGalleryVC {
             return
         }
         let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
-        (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .files(files: files)
+        let moveAlbumFilesVC = (navVC.viewControllers.first as? STMoveAlbumFilesVC)
+        moveAlbumFilesVC?.moveInfo = .files(files: files)
+        moveAlbumFilesVC?.complition = { [weak self] success in
+            if success {
+                self?.setSelectMode(isSelected: false)
+            }
+        }
         self.showDetailViewController(navVC, sender: nil)
     }
     

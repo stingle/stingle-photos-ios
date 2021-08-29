@@ -263,7 +263,7 @@
                             <barButtonItem title="Select" id="koF-2A-OYg">
                                 <color key="tintColor" name="STText"/>
                                 <connections>
-                                    <action selector="didSelectSelecedButtonItem:" destination="4gb-r9-Gut" id="byf-LN-xUq"/>
+                                    <action selector="didSelecedButtonItem:" destination="4gb-r9-Gut" id="byf-LN-xUq"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -580,7 +580,7 @@
                             <barButtonItem title="Select" id="tf6-KG-fad">
                                 <color key="tintColor" name="STText"/>
                                 <connections>
-                                    <action selector="didSelectSelecedButtonItem:" destination="wit-9s-oEN" id="rAd-wv-Gjm"/>
+                                    <action selector="didSelectButtonItem:" destination="wit-9s-oEN" id="rAd-wv-Gjm"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Item" image="ic_shared_album_min" id="5Tx-zN-0ew">
