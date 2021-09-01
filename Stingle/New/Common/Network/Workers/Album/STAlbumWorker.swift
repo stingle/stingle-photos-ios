@@ -99,7 +99,6 @@ class STAlbumWorker: STWorker {
             let publicKey = try crypto.readPublicKey()
             let metadata = try STApplication.shared.crypto.decryptAlbum(albumPKStr: album.publicKey, encAlbumSKStr: album.encPrivateKey, metadataStr: album.metadata)
             var headers = [String: String]()
-            
             var trahFiles = [STLibrary.TrashFile]()
                         
             for file in files {

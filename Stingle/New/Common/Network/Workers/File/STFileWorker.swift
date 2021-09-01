@@ -16,11 +16,14 @@ class STFileWorker: STWorker {
             return
         }
         
+        let uploader = STApplication.shared.uploader
+        
         do {
             var trashFiles = [STLibrary.TrashFile]()
             for file in files {
-                let file = try STLibrary.TrashFile(file: file.file, version: file.version, headers: file.headers, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: true, managedObjectID: file.managedObjectID)
+                let file = try STLibrary.TrashFile(file: file.file, version: file.version, headers: file.headers, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: file.isRemote, managedObjectID: file.managedObjectID)
                 trashFiles.append(file)
+                uploader.cancelUploadIng(for: file)
             }
             
             let request = STFilesRequest.moveToTrash(files: files)
@@ -45,19 +48,12 @@ class STFileWorker: STWorker {
             return
         }
         
-        let remoteFiles = files.filter({ $0.isRemote })
-        guard !remoteFiles.isEmpty else {
-            STApplication.shared.dataBase.deleteFilesIfNeeded(files: files)
-            success?(STEmptyResponse())
-            return
-        }
-        
-        let request = STFilesRequest.delete(files: remoteFiles)
         let trashProvider = STApplication.shared.dataBase.trashProvider
+        let request = STFilesRequest.delete(files: files)
         
         self.request(request: request, success: { (response: STEmptyResponse) in
-            STApplication.shared.dataBase.deleteFilesIfNeeded(files: files)
             trashProvider.delete(models: files, reloadData: true)
+            STApplication.shared.utils.deleteFilesIfNeeded(files: files)
             success?(response)
         }, failure: failure)
         
@@ -70,15 +66,17 @@ class STFileWorker: STWorker {
         }
         
         let remoteFiles = files.filter({ $0.isRemote })
+        let trashProvider = STApplication.shared.dataBase.trashProvider
+        let galleryProvider = STApplication.shared.dataBase.galleryProvider
+        
         guard !remoteFiles.isEmpty else {
-            STApplication.shared.dataBase.deleteFilesIfNeeded(files: files)
+            trashProvider.delete(models: files, reloadData: true)
+            galleryProvider.add(models: files, reloadData: true)
             success?(STEmptyResponse())
             return
         }
         
         let request = STFilesRequest.moveToGalery(files: remoteFiles)
-        let trashProvider = STApplication.shared.dataBase.trashProvider
-        let galleryProvider = STApplication.shared.dataBase.galleryProvider
         
         self.request(request: request, success: { (response: STEmptyResponse) in
             trashProvider.delete(models: files, reloadData: true)

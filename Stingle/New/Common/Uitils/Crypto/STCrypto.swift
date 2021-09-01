@@ -262,6 +262,29 @@ class STCrypto {
     
         return (header, encriptedHeader)
 	}
+    
+    public func generateEncriptedHeader(header: STHeader, publicKey: Bytes? = nil) throws -> String {
+        
+        let publicKey = try (publicKey ?? self.readPrivateFile(fileName: Constants.PublicKeyFilename))
+        
+        let outputStream = OutputStream(toMemory: ())
+        outputStream.open()
+        defer {
+            outputStream.close()
+        }
+        let encriptedHeaderBytes = try self.writeHeader(output: outputStream, header: header, publicKey: publicKey)
+        guard let base64Original = self.bytesToBase64Url(data: encriptedHeaderBytes) else {
+            throw CryptoError.Header.incorrectHeader
+        }
+        return base64Original
+    }
+    
+    public func generateEncriptedHeaders(oreginalHeader: STHeader, thumbHeader: STHeader, publicKey: Bytes? = nil) throws -> String {
+        let original = try self.generateEncriptedHeader(header: oreginalHeader, publicKey: publicKey)
+        let thumb = try self.generateEncriptedHeader(header: thumbHeader, publicKey: publicKey)
+        let headers = original + "*" + thumb
+        return headers
+    }
 	
 	@discardableResult
     func encryptData(input: InputStream, output: OutputStream, header: STHeader?) throws -> Bytes {

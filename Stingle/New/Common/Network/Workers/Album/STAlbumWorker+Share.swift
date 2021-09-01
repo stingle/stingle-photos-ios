@@ -83,7 +83,7 @@ extension STAlbumWorker {
     
     func createSharedAlbum(name: String, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], contacts: [STContact], permitions: STLibrary.Album.Permission, success: Success<STLibrary.Album>?, failure: Failure?) {
         
-        guard files.first(where: {$0.isRemote == false}) == nil else {
+        guard files.first(where: { $0.isRemote == false }) == nil else {
             failure?(WorkerError.unknown)
             return
         }
@@ -164,7 +164,8 @@ extension STAlbumWorker {
             
             albumFilesProvider.delete(models: files, reloadData: true)
             albumProvider.delete(models: [album], reloadData: true)
-            dataBase.deleteFilesIfNeeded(files: files)
+            STApplication.shared.utils.deleteFilesIfNeeded(files: files)
+            
             success(response)
         }, failure: failure)
         

@@ -152,7 +152,7 @@ struct SPUploadFileRequest : SPRequest {
 	let folder:Int
 
 	init(file:SPFileInfo, folder:Int) {
-        token = STApplication.shared.user()!.token
+        token = STApplication.shared.utils.user()!.token
 		self.fileName = file.name
 		version = file.version
 		dateCreated = file.dateCreated

@@ -13,7 +13,7 @@ extension STAuthWorker {
         do {
             let keyBundle = try KeyManagement.getUploadKeyBundle(password: nil, includePrivateKey: false)
             self.updateBackcupKeys(keyBundle: keyBundle, success: { response in
-                guard let user = STApplication.shared.user() else {
+                guard let user = STApplication.shared.utils.user() else {
                     failure?(WorkerError.emptyData)
                     return
                 }
@@ -30,7 +30,7 @@ extension STAuthWorker {
         do {
             let keyBundle = try KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: true)
             self.updateBackcupKeys(keyBundle: keyBundle, success: { response in
-                guard let user = STApplication.shared.user() else {
+                guard let user = STApplication.shared.utils.user() else {
                     failure?(WorkerError.emptyData)
                     return
                 }
@@ -54,12 +54,12 @@ extension STAuthWorker {
             }
             try self.crypto.reencryptPrivateKey(oldPassword: oldPassword, newPassword: newPassword)
             isReencrypt = true
-            let includePrivateKey = STApplication.shared.user()?.isKeyBackedUp ?? true
+            let includePrivateKey = STApplication.shared.utils.user()?.isKeyBackedUp ?? true
             let uploadKeyBundle = try KeyManagement.getUploadKeyBundle(password: newPassword, includePrivateKey: includePrivateKey)
             let request = STUserRequest.changePassword(keyBundle: uploadKeyBundle, newPasswordHash: newPasswordHash, newPasswordSalt: newPasswordSalt)
                                    
             self.request(request: request) { (response: STResetPassword) in
-                STApplication.shared.updateAppPassword(token: response.token, password: newPassword)
+                STApplication.shared.utils.updateAppPassword(token: response.token, password: newPassword)
                 success?(STEmptyResponse())
             } failure: { error in
                 try? STApplication.shared.crypto.reencryptPrivateKey(oldPassword: newPassword, newPassword: oldPassword)
@@ -76,7 +76,7 @@ extension STAuthWorker {
     }
     
     func deleteAccount(password: String, success: Success<STEmptyResponse>? = nil, failure: Failure? = nil) {
-        guard let email = STApplication.shared.user()?.email else {
+        guard let email = STApplication.shared.utils.user()?.email else {
             failure?(AuthWorkerError.unknown)
             return
         }
@@ -96,7 +96,7 @@ extension STAuthWorker {
         
         let request = STUserRequest.deleteAccount(loginHash: loginHash)
         self.request(request: request, success: { (response: STEmptyResponse) in
-            application.deleteAccount()
+            application.utils.deleteAccount()
             success?(response)
         }, failure: failure)
         

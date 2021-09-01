@@ -76,7 +76,7 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
             let title = "alert_log_out_title".localized
             let message = "alert_log_out_message".localized
             self.showOkCancelAlert(title: title, message: message, textFieldHandler: nil, handler: { _ in
-                STApplication.shared.logout()
+                STApplication.shared.utils.logout()
             }, cancel: nil)
             self.selectCurrentRow()
         case .lockApp:

@@ -11,18 +11,7 @@ extension STAlbumWorker {
         
     
     //MARK: - General
-    
-    func moveFiles(trashFile: [STLibrary.TrashFile], toAlbum: STLibrary.Album, isMoving: Bool, reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
-        self.moveFilesWithoutDelete(files: trashFile, fromSet: .trash, toAlbum: toAlbum, isMoving: isMoving, reloadDBData: reloadDBData, success: { responce in
-            if isMoving {
-                let trashProvider = STApplication.shared.dataBase.trashProvider
-                trashProvider.delete(models: trashFile, reloadData: reloadDBData)
-            }
-            success?(responce)
-        }, failure: failure)
-    }
-    
-    
+
     func moveFiles(files: [STLibrary.File], toAlbum: STLibrary.Album, isMoving: Bool, reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         self.moveFilesWithoutDelete(files: files, fromSet: .file, toAlbum: toAlbum, isMoving: isMoving, reloadDBData: reloadDBData, success: { responce in
             if isMoving {
@@ -31,7 +20,6 @@ extension STAlbumWorker {
             }
             success?(responce)
         }, failure: failure)
-        
     }
     
     private func moveFilesWithoutDelete(files: [STLibrary.File], fromSet: STLibrary.DBSet, toAlbum: STLibrary.Album, isMoving: Bool, reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {

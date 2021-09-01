@@ -57,12 +57,10 @@ class STDataBase {
                 finish(DataBaseError.error(error: error))
                 return
             }
-            
         }
         
         self.endSync()
         finish(nil)
-        
     }
     
     func deleteAll() {
@@ -84,7 +82,8 @@ class STDataBase {
         self.contactProvider.reloadData()
     }
     
-    func deleteFilesIfNeeded(files: [STLibrary.File]) {
+    func filtrNotExistFiles(files: [STLibrary.File]) -> [STLibrary.File] {
+        
         let context = self.container.newBackgroundContext()
         var fileNames = [String]()
         
@@ -92,13 +91,13 @@ class STDataBase {
             fileNames.append(file.file)
         }
         
-        context.performAndWait {
+        return context.performAndWait {
                         
             let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
             let albumFiles = self.albumFilesProvider.fetch(fileNames: fileNames, context: context)
             let trashFile = self.trashProvider.fetch(fileNames: fileNames, context: context)
            
-            let deleteFiles = files.filter { file in
+            let resultFiles = files.filter { file in
                 let galleryContains = galleryFiles.contains(where: { $0.file == file.file })
                 if galleryContains {
                     return false
@@ -114,7 +113,37 @@ class STDataBase {
                 return true
             }
             
-            STApplication.shared.fileSystem.deleteFiles(files: deleteFiles)
+            return resultFiles
+        }
+        
+    }
+    
+    func filtrNotExistFileNames(fileNames: [String]) -> [String] {
+       
+        let context = self.container.newBackgroundContext()
+        return context.performAndWait {
+            
+            let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
+            let albumFiles = self.albumFilesProvider.fetch(fileNames: fileNames, context: context)
+            let trashFile = self.trashProvider.fetch(fileNames: fileNames, context: context)
+           
+            let resultFiles = fileNames.filter { fileName in
+                let galleryContains = galleryFiles.contains(where: { $0.file == fileName })
+                if galleryContains {
+                    return false
+                }
+                let albumContains = albumFiles.contains(where: { $0.file == fileName })
+                if albumContains {
+                    return false
+                }
+                let trashContains = trashFile.contains(where: { $0.file == fileName })
+                if trashContains {
+                    return false
+                }
+                return true
+            }
+            
+            return resultFiles
         }
         
     }

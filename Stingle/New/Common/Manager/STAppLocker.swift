@@ -18,7 +18,7 @@ class STAppLocker {
     }
     
     func lockApp() {
-        guard STApplication.shared.isLogedIn() else {
+        guard STApplication.shared.utils.isLogedIn() else {
             return
         }
         KeyManagement.key = nil

@@ -27,10 +27,10 @@ class STFileSystem {
     }
     
     func logOut() {
-        guard let userUrl = self.appUrl?.appendingPathComponent(self.userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
+        guard let cacheUrl = self.url(for: .storage(type: .server(type: nil))), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
             return
         }
-        self.remove(file: userUrl)
+        self.remove(file: cacheUrl)
         self.remove(file: privateKeyUrl)
     }
     
@@ -74,11 +74,6 @@ class STFileSystem {
 }
 
 extension STFileSystem {
-        
-    func cacheUrl(for type: CacheType) -> URL? {
-        let url = self.appUrl?.appendingPathComponent(self.userHomeFolderPath).appendingPathComponent(type.name)
-        return url
-    }
     
     func url(for type: FolderType, filePath: String) -> URL? {
         let url = self.url(for: type)?.appendingPathComponent(filePath)
@@ -126,6 +121,10 @@ extension STFileSystem {
             throw FileSystemError.incorrectUrl
         }
         try self.move(file: fromUrl, to: toUrl)
+    }
+    
+    func scanFolder(_ folderPath: String) -> (size: STBytesUnits, files: [FileManager.File]) {
+        return self.fileManager.scanFolder(folderPath)
     }
                 
 }
@@ -186,7 +185,7 @@ extension STFileSystem {
     func updateUrlDataSize(url: URL) {
         
         let megabytes: Double = STAppSettings.advanced.cacheSize.bytesUnits.megabytes
-        guard let cacheURL = self.cacheUrl(for: .server(type: .oreginals)), url.path.contains(cacheURL.path) else {
+        guard let cacheURL = self.url(for: .storage(type: .server(type: nil))),  url.path.contains(cacheURL.path) else {
             return
         }
         
@@ -286,9 +285,9 @@ extension STFileSystem {
     
     enum CacheType {
                 
-        case local(type: FileType)
-        case server(type: FileType)
-        
+        case local(type: FileType? = nil)
+        case server(type: FileType? = nil)
+                
         var name: String {
             switch self {
             case .local:
@@ -301,9 +300,17 @@ extension STFileSystem {
         var stringValue: String {
             switch self {
             case .local(let type):
-                return self.name + "/" + type.stringValue
+                var result = self.name
+                if let type = type {
+                    result = result + "/" + type.stringValue
+                }
+                return result
             case .server(let type):
-                return self.name + "/"  + type.stringValue
+                var result = self.name
+                if let type = type {
+                    result = result + "/" + type.stringValue
+                }
+                return result
             }
         }
     }
@@ -341,7 +348,6 @@ extension FileManager {
     }
     
     func existence(atUrl url: URL) -> FileExistence {
-        
         var isDirectory: ObjCBool = false
         let exists = self.fileExists(atPath: url.path, isDirectory: &isDirectory)
         
@@ -352,7 +358,7 @@ extension FileManager {
         }
     }
     
-    func subDirectories(atPath: String) -> [String]? {
+    fileprivate func subDirectories(atPath: String) -> [String]? {
         guard let subpaths = self.subpaths(atPath: atPath) else {
             return nil
         }
@@ -367,7 +373,7 @@ extension FileManager {
         return subDirs
     }
     
-    func subUrls(atPath: String) -> [URL]? {
+    fileprivate func subUrls(atPath: String) -> [URL]? {
         guard let subpaths = self.subpaths(atPath: atPath) else {
             return nil
         }
@@ -381,7 +387,7 @@ extension FileManager {
         return subDirs
     }
     
-    func scanFolder(_ folderPath: String) -> (size: STBytesUnits, files: [File]) {
+    fileprivate func scanFolder(_ folderPath: String) -> (size: STBytesUnits, files: [File]) {
         var folderSize: Int64 = 0
         guard let fileAttributes = try? self.attributesOfItem(atPath: folderPath), let type = fileAttributes[FileAttributeKey.type] as? FileAttributeType else {
             return (.zero, [File]())

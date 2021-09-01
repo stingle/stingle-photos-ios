@@ -228,7 +228,7 @@ extension STNetworkDispatcher: EventMonitor {
         guard let response = STResponse<STLogoutResponse>(from: data) else {
             return
         }
-        STApplication.shared.networkDispatcher(didReceive: self, logOunt: response)
+        STApplication.shared.utils.networkDispatcher(didReceive: self, logOunt: response)
     }
     
 }

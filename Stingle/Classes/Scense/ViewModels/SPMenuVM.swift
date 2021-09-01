@@ -74,7 +74,7 @@ class SPMenuVM {
 	}
 	
 	func email() -> String {
-        guard let email = STApplication.shared.user()?.email else {
+        guard let email = STApplication.shared.utils.user()?.email else {
 			return ""
 		}
 		return email

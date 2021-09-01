@@ -66,7 +66,7 @@ class STMenuVC: STSplitViewController {
     }
     
     private func showBackupPhraseIfNeeded(completion: @escaping (() -> Void)) {
-        let isKeyBackedUp = (STApplication.shared.user()?.isKeyBackedUp ?? true)
+        let isKeyBackedUp = (STApplication.shared.utils.user()?.isKeyBackedUp ?? true)
         guard !isKeyBackedUp, let key = KeyManagement.key, let mnemonic = try? STMnemonic.mnemonicString(from: key), self.isShowBackupPhrase else {
             completion()
             return

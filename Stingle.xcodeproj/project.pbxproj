@@ -150,6 +150,7 @@
 		A04219962690983C001FBFBF /* STTrashFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */; };
 		A042199926909E58001FBFBF /* STFileWorker+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = A042199826909E58001FBFBF /* STFileWorker+Download.swift */; };
 		A042199B2690A23C001FBFBF /* STFilesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A042199A2690A23C001FBFBF /* STFilesRequest.swift */; };
+		A043B18E26DD821200613CDA /* STApplicationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A043B18D26DD821200613CDA /* STApplicationUtils.swift */; };
 		A044ABFD2605427A00BA318F /* STCrypto+Additional.swift in Sources */ = {isa = PBXBuildFile; fileRef = A044ABFC2605427A00BA318F /* STCrypto+Additional.swift */; };
 		A04512B82638B0FD00BE0B06 /* STAlbumWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04512B72638B0FD00BE0B06 /* STAlbumWorker.swift */; };
 		A04512BB2638B13400BE0B06 /* STAlbumRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04512BA2638B13400BE0B06 /* STAlbumRequest.swift */; };
@@ -507,6 +508,7 @@
 		A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashFileViewerVM.swift; sourceTree = "<group>"; };
 		A042199826909E58001FBFBF /* STFileWorker+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STFileWorker+Download.swift"; sourceTree = "<group>"; };
 		A042199A2690A23C001FBFBF /* STFilesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesRequest.swift; sourceTree = "<group>"; };
+		A043B18D26DD821200613CDA /* STApplicationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STApplicationUtils.swift; sourceTree = "<group>"; };
 		A044ABFC2605427A00BA318F /* STCrypto+Additional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STCrypto+Additional.swift"; sourceTree = "<group>"; };
 		A04512B72638B0FD00BE0B06 /* STAlbumWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumWorker.swift; sourceTree = "<group>"; };
 		A04512BA2638B13400BE0B06 /* STAlbumRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumRequest.swift; sourceTree = "<group>"; };
@@ -1449,7 +1451,7 @@
 		A033D6F026014A1B00E6AA83 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				A086FD8925F5A9ED00A8BC9C /* STApplication.swift */,
+				A043B18C26DD81F900613CDA /* Application */,
 				A05F9DD026A60E6900F9F343 /* STKeyChainService.swift */,
 				A05F9DD226A6155C00F9F343 /* STBiometricAuthServices.swift */,
 				A01EC21926B9DF9C000FF4AC /* STNetworkReachableService.swift */,
@@ -1536,6 +1538,15 @@
 				A042199826909E58001FBFBF /* STFileWorker+Download.swift */,
 			);
 			path = File;
+			sourceTree = "<group>";
+		};
+		A043B18C26DD81F900613CDA /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				A086FD8925F5A9ED00A8BC9C /* STApplication.swift */,
+				A043B18D26DD821200613CDA /* STApplicationUtils.swift */,
+			);
+			path = Application;
 			sourceTree = "<group>";
 		};
 		A04BCFFF2634791C00C5F29F /* Uploads */ = {
@@ -2673,6 +2684,7 @@
 				A0B3EA6525F28798000091E1 /* STLibrary.swift in Sources */,
 				A022049125EEDC0400D07C98 /* Utils.swift in Sources */,
 				A01EC21A26B9DF9C000FF4AC /* STNetworkReachableService.swift in Sources */,
+				A043B18E26DD821200613CDA /* STApplicationUtils.swift in Sources */,
 				A086FD2E25F5A10900A8BC9C /* STCDAlbumFile.swift in Sources */,
 				A02204BC25EEDC0400D07C98 /* SPMenuVC.swift in Sources */,
 				A022049F25EEDC0400D07C98 /* SPMediaPreviewVM.swift in Sources */,

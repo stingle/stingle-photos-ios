@@ -315,6 +315,19 @@ extension STCrypto {
         
         return result
     }
+    
+    func getFileHeader(url: URL, publicKey: Bytes? = nil, privateKey: Bytes? = nil) throws -> STHeader {
+        guard let input = InputStream(url: url) else {
+            throw CryptoError.IO.readFailure
+        }
+        input.open()
+        
+        defer {
+            input.close()
+        }
+        
+        return try self.getFileHeader(input: input, publicKey: publicKey, privateKey: privateKey)
+    }
         
     func getFileHeader(input: InputStream, publicKey: Bytes? = nil, privateKey: Bytes? = nil) throws -> STHeader {
         var buf:Bytes = Bytes(repeating: 0, count: Constants.FileHeaderBeginningLen)

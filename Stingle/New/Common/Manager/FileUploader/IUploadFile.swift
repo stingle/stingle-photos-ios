@@ -61,7 +61,8 @@ extension STFileUploader {
                                      duration: info.duration,
                                      toUrl: localOreginalsURL,
                                      toThumbUrl: localThumbsURL,
-                                     fileSize: info.fileSize, creationDate: info.creationDate,
+                                     fileSize: info.fileSize,
+                                     creationDate: info.creationDate,
                                      modificationDate: info.modificationDate)
             
             return file

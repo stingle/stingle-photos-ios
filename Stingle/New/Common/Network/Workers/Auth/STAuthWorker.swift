@@ -97,6 +97,7 @@ class STAuthWorker: STWorker {
         
         if isPrivateKeyIsAlreadySaved {
             KeyManagement.key = try self.crypto.getPrivateKey(password: password)
+            KeyManagement.importServerPublicKey(pbk: login.serverPublicKey)
             self.userProvider.update(model: user)
         } else if KeyManagement.key == nil {
             guard true == KeyManagement.importKeyBundle(keyBundle: login.keyBundle, password: password) else {

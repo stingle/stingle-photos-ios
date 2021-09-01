@@ -31,26 +31,33 @@ class STSyncManager {
             return
         }
         self.didStartSync()
-        
-        self.syncWorker.getUpdates { [weak self] (sync) in
-            self?.startDBSync(sync: sync, success: success, failure: failure)
-        } failure: { [weak self] (error) in
-            self?.didEndSync(error: error)
-        }
-
+        STApplication.shared.utils.restoreFilesIfNeeded(reloadDB: true) { [weak self] in
+            self?.syncWorker.getUpdates { [weak self] (sync) in
+                self?.startDBSync(sync: sync, success: success, failure: failure)
+            } failure: { [weak self] (error) in
+                self?.didEndSync(error: error)
+            }
+        }        
     }
 
     //MARK: - private
     
     private func startDBSync(sync: STSync, success: (() -> Void)? = nil, failure: ((_ error: IError) -> Void)? = nil)  {
         self.dataBase.sync(sync, finish: { error in
+                       
             if let error = error {
                 failure?(error)
                 self.didEndSync(error: error)
             } else {
+                                
                 success?()
                 self.didEndSync(error: nil)
                 STApplication.shared.uploader.uploadAllLocalFiles()
+                
+                //TODO: ----- Khoren
+    //            STApplication.shared.utils.deleteFilesIfNeeded(files: <#T##[STLibrary.File]#>) trash delets
+                
+                
             }
         })
     }

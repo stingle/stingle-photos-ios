@@ -30,20 +30,10 @@ class STMoveAlbumFilesVM {
         }
     }
     
-    func moveToAlbum(toAlbum: STLibrary.Album, trashFiles: [STLibrary.TrashFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
-        self.isDeleteFilesLastValue = isDeleteFiles
-        let isMoving = self.isDeleteFilesLastValue
-        self.albumWorker.moveFiles(trashFile: trashFiles, toAlbum: toAlbum, isMoving: isMoving) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
-        }
-    }
     
     func moveToAlbum(fromAlbum: STLibrary.Album, toAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
         self.isDeleteFilesLastValue = isDeleteFiles
         let isMoving = self.isDeleteFilesLastValue && fromAlbum.isOwner
-        
         self.albumWorker.moveFiles(fromAlbum: fromAlbum, toAlbum: toAlbum, files: files, isMoving: isMoving, reloadDBData: true) { _ in
             result(nil)
         } failure: { error in

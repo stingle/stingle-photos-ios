@@ -12,7 +12,7 @@ class STAccountVM {
     private let authWorker = STAuthWorker()
     
     func getUser() -> STUser? {
-        return STApplication.shared.user()
+        return STApplication.shared.utils.user()
     }
     
     func removeBackcupKeys(completion: @escaping (IError?) -> Void) {

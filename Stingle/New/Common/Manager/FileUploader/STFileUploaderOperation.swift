@@ -121,6 +121,12 @@ extension STFileUploader {
                     return
                 }
             }
+            
+            if let fileOreginalUrl = newFileOreginalUrl {
+                STApplication.shared.fileSystem.updateUrlDataSize(url: fileOreginalUrl)
+            }
+            
+            
             self.responseSucces(result: file, spaceUsed: spaceUsed)
         }
         
@@ -140,25 +146,7 @@ extension STFileUploader {
         }
         
         private func canUploadFile() -> Bool {
-            let settings = STAppSettings.backup
-            guard settings.isEnabled else {
-                return false
-            }
-            if settings.isOnlyWiFi && STNetworkReachableService.shared.networkStatus != .wifi {
-                return false
-            }
-            
-            let level = UIDevice.current.batteryLevel
-            
-            #if targetEnvironment(simulator)
-            return true
-            #else
-            if level < settings.batteryLevel {
-                return false
-            }
-            return true
-            #endif
-            
+            return STApplication.shared.utils.canUploadFile()
         }
 
     }

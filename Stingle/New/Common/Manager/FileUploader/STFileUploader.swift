@@ -62,6 +62,9 @@ class STFileUploader {
     }
     
     func uploadAllLocalFiles() {
+        guard STApplication.shared.utils.canUploadFile() else {
+            return
+        }
         DispatchQueue.main.async { [weak self] in
             var localFiles = STApplication.shared.dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
             let localAlbumFiles = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")

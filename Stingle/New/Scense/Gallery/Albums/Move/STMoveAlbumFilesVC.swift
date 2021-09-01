@@ -208,30 +208,12 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
         }
     }
     
-    private func moveFilesToAlbum(toAlbum: STLibrary.Album, trashFiles: [STLibrary.TrashFile]) {
-        let view: UIView = (self.navigationController?.view ?? self.view)
-        STLoadingView.show(in: view)
-        self.isModalInPresentation = true
-        self.viewModel.moveToAlbum(toAlbum: toAlbum, trashFiles: trashFiles, isDeleteFiles: self.deleteFilesSwitcher.isOn) { [weak self] error in
-            STLoadingView.hide(in: view)
-            self?.isModalInPresentation = false
-            if let error = error {
-                self?.showError(error: error)
-            } else {
-                self?.isSuccessMoved = true
-                self?.dismiss(animated: true, completion: nil)
-            }
-        }
-    }
-    
     private func moveFilesToAlbum(album: STLibrary.Album) {
         switch self.moveInfo {
         case .files(let files):
             self.moveFilesToAlbum(toAlbum: album, files: files)
         case .albumFiles(let fromAlbum, let files):
             self.moveFilesToAlbum(toAlbum: album, fromAlbum: fromAlbum, files: files)
-        case .trashFiles(let trashFiles):
-            self.moveFilesToAlbum(toAlbum: album, trashFiles: trashFiles)
         default:
             break
         }
@@ -383,7 +365,6 @@ extension STMoveAlbumFilesVC {
     
     enum MoveInfo {
         case files(files: [STLibrary.File])
-        case trashFiles(trashFiles: [STLibrary.TrashFile])
         case albumFiles(album: STLibrary.Album, files: [STLibrary.AlbumFile])
     }
     

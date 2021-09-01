@@ -26,11 +26,11 @@ class STMainVM {
 	}
 	
 	func isLogined() -> Bool {
-        return STApplication.shared.isLogedIn()
+        return STApplication.shared.utils.isLogedIn()
 	}
     
     func appIsLocked() -> Bool {
-        return STApplication.shared.appIsLocked()
+        return STApplication.shared.utils.appIsLocked()
     }
 	
 }
