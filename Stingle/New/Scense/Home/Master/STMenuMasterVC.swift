@@ -171,6 +171,11 @@ extension STMenuMasterVC {
                 return "SignOutID"
             }
         }
+        
+        static var actualCasses: [ControllerType] {
+            return [.gallery, .trash, .backupPhrase, .freeUpSpace, .settings, .lockApp, .officialWebsite, .signOut]
+        }
+        
     }
     
     struct Menu {
@@ -214,7 +219,7 @@ extension STMenuMasterVC {
         }
         
         private static func createCells() -> [Cell] {
-            let result = ControllerType.allCases.compactMap { (type) -> Cell in
+            let result = ControllerType.actualCasses.compactMap { (type) -> Cell in
                 var name: String?
                 var icon: UIImage?
                 switch type {
@@ -249,7 +254,6 @@ extension STMenuMasterVC {
                 return Cell(name: name, icon: icon, controllerType: type)
             }
             return result
-
         }
                 
     }

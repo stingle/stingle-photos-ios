@@ -16,23 +16,49 @@ class STPhotoViewerVC: UIViewController {
     private(set) var photoFile: STLibrary.File!
     private(set) var fileIndex: Int = .zero
     
+    private var isThumbSeted = false
+    private var isViewDidAppear = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.zoomImageView.delegate = self
-        let thumb = STImageView.Image(file: self.photoFile, isThumb: true)
-        self.zoomImageView.imageView.setImage(source: thumb, saveOldImage: true)
+        self.setImage(isThumb: true) { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.isThumbSeted = true
+            if weakSelf.isViewDidAppear {
+                weakSelf.setImage(isThumb: false) { }
+            }
+        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        guard !self.isViewDidAppear else {
+            return
+        }
+        
+        self.isViewDidAppear = true
+        if self.isThumbSeted {
+            self.setImage(isThumb: false) { }
+        }
+    }
+    
+    //MARK: - Private
+    
+    private func setImage(isThumb: Bool, complition: @escaping (() -> Void)) {
         self.loadingView.startAnimating()
-        let image = STImageView.Image(file: self.photoFile, isThumb: false)
-        self.zoomImageView.imageView.setImage(source: image, placeholder: nil, animator: nil, success: { [weak self] _ in
+        let source = STImageView.Image(file: self.photoFile, isThumb: isThumb)
+        self.zoomImageView.imageView.setImage(source: source, success: { [weak self] _ in
             self?.loadingView.stopAnimating()
+            complition()
         }, progress: nil, failure: { [weak self] _ in
             self?.loadingView.stopAnimating()
+            complition()
         }, saveOldImage: true)
-        
     }
 
 }
