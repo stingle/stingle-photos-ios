@@ -83,8 +83,7 @@ enum STMnemonic {
         let passwordBytes = normalizedData.map { Int8(bitPattern: $0) }
 
         do {
-            let bytes =
-                try PKCS5.PBKDF2SHA512(password: passwordBytes, salt: [UInt8](saltData), iterations: iterations)
+            let bytes = try PKCS5.PBKDF2SHA512(password: passwordBytes, salt: [UInt8](saltData), iterations: iterations)
             return bytes
         } catch {
             throw MnemonicError.invalidInput
@@ -296,9 +295,7 @@ extension STMnemonic {
 fileprivate extension PKCS5 {
     
     static func PBKDF2SHA512(password: String, salt: String, iterations: Int = 2_048, keyLength: Int = 64) throws -> Array<UInt8> {
-
         let saltData = try STMnemonic.normalizedString(salt)
-
         return try PBKDF2SHA512(password: password.utf8.map({ Int8(bitPattern: $0) }), salt: [UInt8](saltData), iterations: iterations, keyLength: keyLength)
     }
 }

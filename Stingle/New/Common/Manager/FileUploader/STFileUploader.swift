@@ -65,13 +65,13 @@ class STFileUploader {
         guard STApplication.shared.utils.canUploadFile() else {
             return
         }
-        DispatchQueue.main.async { [weak self] in
-            var localFiles = STApplication.shared.dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
-            let localAlbumFiles = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")
-            localFiles.append(contentsOf: localAlbumFiles)
-            self?.dispatchQueue.sync {
-                self?.uploadAllLocalFilesInQueue(files: localFiles)
+        
+        self.dispatchQueue.async { [weak self] in
+            guard let weakSelf = self else {
+                return
             }
+            let files = weakSelf.getRemoteFiles()
+            weakSelf.uploadAllLocalFilesInQueue(files: files)
         }
     }
     
@@ -93,6 +93,29 @@ class STFileUploader {
     }
     
     // MARK: - private
+    
+    private func getRemoteFiles() -> [STLibrary.File] {
+        let dataBase = STApplication.shared.dataBase
+        
+        var localFiles = dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
+        let localAlbumFiles = dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")
+        
+        let albumIds: [String] = localAlbumFiles.compactMap( { return $0.albumId } )
+        let albums: [STLibrary.Album] = dataBase.albumsProvider.fetch(identifiers: albumIds)
+        var albumIdsDic = [String: STLibrary.Album]()
+        
+        albums.forEach { album in
+            albumIdsDic[album.albumId] = album
+        }
+        
+        localAlbumFiles.forEach { albumFile in
+            if let album = albumIdsDic[albumFile.albumId] {
+                albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)
+            }
+        }
+        localFiles.append(contentsOf: localAlbumFiles)
+        return localFiles
+    }
     
     private func uploadAllLocalFilesInQueue(files: [STLibrary.File]) {
         guard self.checkCanUploadFiles() else {
