@@ -106,7 +106,7 @@ extension STNetworkDispatcher {
         case completed = 3
     }
     
-    struct Task: NetworkTask {
+    struct Task: INetworkTask {
         
         let request: Request
         
@@ -132,6 +132,38 @@ extension STNetworkDispatcher {
                 return .canceling
             case .finished:
                 return .completed
+            }
+        }
+    }
+    
+    struct SessionTask: INetworkTask {
+        
+        let sessionTask: URLSessionTask
+        
+        func cancel() {
+            self.sessionTask.cancel()
+        }
+        
+        func suspend() {
+            self.sessionTask.suspend()
+        }
+        
+        func resume() {
+            self.sessionTask.resume()
+        }
+        
+        var taskState: STNetworkDispatcher.TaskState {
+            switch self.sessionTask.state {
+            case .running:
+                return .running
+            case .suspended:
+                return .suspended
+            case .canceling:
+                return .canceling
+            case .completed:
+                return .completed
+            @unknown default:
+                return .suspended
             }
         }
     }

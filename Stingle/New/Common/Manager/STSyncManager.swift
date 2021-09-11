@@ -43,15 +43,15 @@ class STSyncManager {
     //MARK: - private
     
     private func startDBSync(sync: STSync, success: (() -> Void)? = nil, failure: ((_ error: IError) -> Void)? = nil)  {
-        self.dataBase.sync(sync, finish: { error in
+        self.dataBase.sync(sync, finish: { [weak self] error in
                        
             if let error = error {
                 failure?(error)
-                self.didEndSync(error: error)
+                self?.didEndSync(error: error)
             } else {
                                 
                 success?()
-                self.didEndSync(error: nil)
+                self?.didEndSync(error: nil)
                 STApplication.shared.uploader.uploadAllLocalFiles()
                 
                 //TODO: ----- Khoren

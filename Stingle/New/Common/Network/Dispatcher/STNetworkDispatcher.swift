@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-protocol NetworkTask {
+protocol INetworkTask {
 	func cancel()
 	func suspend()
 	func resume()
@@ -26,6 +26,7 @@ class STNetworkDispatcher {
     private var uploadSession: Alamofire.Session!
     private var streanSession: Alamofire.Session!
     private var downloadSession: Alamofire.Session!
+    private var networkSession: STNetworkSession!
     
     private var decoder: JSONDecoder!
 	
@@ -47,10 +48,13 @@ class STNetworkDispatcher {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         
         self.decoder = decoder
+        
+        let configuration = URLSessionConfiguration.background(withIdentifier: "STNetworkSession")
+        self.networkSession = STNetworkSession(configuration: configuration)
     }
 		
 	@discardableResult
-	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> NetworkTask? {
+	func request<T: Decodable>(request: IRequest, decoder: IDecoder? = nil, completion: @escaping (Result<T>) -> Swift.Void) -> INetworkTask? {
         let decoder: IDecoder = decoder ?? self.decoder
         let request = self.afRequest(request: request, sesion: self.session)
 		request.responseDecodable(decoder: decoder) { (response: AFDataResponse<T>) in
@@ -66,7 +70,7 @@ class STNetworkDispatcher {
 	}
     
     @discardableResult
-    func requestJSON(request: IRequest, completion: @escaping (Result<Any>) -> Swift.Void) -> NetworkTask? {
+    func requestJSON(request: IRequest, completion: @escaping (Result<Any>) -> Swift.Void) -> INetworkTask? {
         let request = self.afRequest(request: request, sesion: self.session)
         request.responseJSON(completionHandler: { (response: AFDataResponse<Any>) in
             switch response.result {
@@ -81,7 +85,7 @@ class STNetworkDispatcher {
     }
     
     @discardableResult
-    func requestData(request: IRequest, completion: @escaping (Result<Data>) -> Swift.Void) -> NetworkTask? {
+    func requestData(request: IRequest, completion: @escaping (Result<Data>) -> Swift.Void) -> INetworkTask? {
         let request = self.afRequest(request: request, sesion: self.session)
         request.responseData { (response) in
             switch response.result {
@@ -95,7 +99,7 @@ class STNetworkDispatcher {
         return Task(request: request)
     }
     
-    func download(request: IDownloadRequest, completion: @escaping (Result<URL>) -> Swift.Void, progress: @escaping (Progress) -> Swift.Void) -> NetworkTask? {
+    func download(request: IDownloadRequest, completion: @escaping (Result<URL>) -> Swift.Void, progress: @escaping (Progress) -> Swift.Void) -> INetworkTask? {
         guard let fileUrl = request.fileDownloadTmpUrl else {
             completion(.failure(error: NetworkError.badRequest))
             return nil
@@ -120,8 +124,8 @@ class STNetworkDispatcher {
         return Task(request: downloadRequest)
     }
     
-    func upload<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> NetworkTask? {
-        
+    func upload<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
+
         let uploadRequest = self.uploadSession.upload(multipartFormData: { (data) in
             request.files.forEach { (file) in
                 data.append(file.fileUrl, withName: file.name, fileName: file.fileName, mimeType: file.type)
@@ -144,11 +148,34 @@ class STNetworkDispatcher {
         } ).uploadProgress { (uploadProgress) in
             progress?(uploadProgress)
         }
-        
+
         return Task(request: uploadRequest)
     }
     
-    func stream(request: IStreamRequest, queue: DispatchQueue, stream: @escaping (_ chank: Data) -> Swift.Void, completion: @escaping (Result<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)>) -> Swift.Void) -> NetworkTask? {
+    func upload1<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
+
+        let url = URL(string: request.url)!
+
+
+        let formDataRequest = MultipartFormDataRequest(url: url, headers: request.headers)
+
+        request.files.forEach { (file) in
+            formDataRequest.addDataField(named: file.name, filename: file.fileName, fileUrl: file.fileUrl, mimeType: file.type)
+        }
+
+        if let parameters = request.parameters {
+            for parame in parameters {
+                formDataRequest.addTextField(named: parame.key, value: "\(parame.value)")
+            }
+        }
+        try? formDataRequest.build()
+
+        let task = self.networkSession.upload(request: formDataRequest)
+
+        return SessionTask(sessionTask: task)
+    }
+    
+    func stream(request: IStreamRequest, queue: DispatchQueue, stream: @escaping (_ chank: Data) -> Swift.Void, completion: @escaping (Result<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)>) -> Swift.Void) -> INetworkTask? {
         
         let dataRequest = self.afRequest(request: request, sesion: self.streanSession)
         

@@ -11,6 +11,8 @@ class STFileWorker: STWorker {
     
     func moveFilesToTrash(files: [STLibrary.File], reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         
+        //TODO: - khoren
+        
         guard !files.isEmpty else {
             success?(STEmptyResponse())
             return

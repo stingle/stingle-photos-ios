@@ -188,7 +188,7 @@ class STDataBase {
         let lastSeenTimeDelete = try self.galleryProvider.deleteObjects(deletes?.gallery, in: context, lastDate: lastDelSeenTime)
         let lastAlbumsSeenTimeDelete = try self.albumsProvider.deleteObjects(deletes?.albums, in: context, lastDate: lastDelSeenTime)
         let lastAlbumFilesSeenTimeDelete = try self.albumFilesProvider.deleteObjects(deletes?.albumFiles, in: context, lastDate: lastDelSeenTime)
-        let lastTrashRecovorsSeenTimeDelete = try self.trashProvider.deleteObjects(deletes?.recovors, in: context, lastDate: lastDelSeenTime)
+        let lastTrashRecovorsSeenTimeDelete = try self.trashProvider.deleteObjects(deletes?.recovers, in: context, lastDate: lastDelSeenTime)
         let lastTrashhDeletesSeenTimeDelete = try self.trashProvider.deleteObjects(deletes?.trashDeletes, in: context, lastDate: lastDelSeenTime)
         let lastContactsSeenTimeDelete = try self.contactProvider.deleteObjects(deletes?.contacts, in: context, lastDate: lastDelSeenTime)
         let timeDeletes = max(lastSeenTimeDelete, lastAlbumsSeenTimeDelete, lastAlbumFilesSeenTimeDelete, lastTrashRecovorsSeenTimeDelete, lastTrashhDeletesSeenTimeDelete, lastContactsSeenTimeDelete)
