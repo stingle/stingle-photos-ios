@@ -10,5 +10,6 @@ target 'Stingle' do
   pod 'Alamofire'
   pod 'Tatsi'
   pod 'KeychainSwift'
+  pod 'netfox'
 
 end

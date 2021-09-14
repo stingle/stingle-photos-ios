@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="STStorageProductCell" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="276" height="207"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="276" height="207"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UPL-6G-xUL">
+                        <rect key="frame" x="0.0" y="0.0" width="276" height="207"/>
+                        <subviews>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vAA-7W-Myd" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="276" height="207"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="urE-0q-edA">
+                                        <rect key="frame" x="9.5" y="15.5" width="257" height="176"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100 GB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jhS-ur-EVf">
+                                                <rect key="frame" x="101" y="0.0" width="55.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" name="STText"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="free" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VPs-bk-nxt">
+                                                <rect key="frame" x="113.5" y="32.5" width="30.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QSZ-Oe-2Mb" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                                <rect key="frame" x="30" y="65" width="197" height="58"/>
+                                                <color key="backgroundColor" name="STPrimary"/>
+                                                <inset key="contentEdgeInsets" minX="50" minY="20" maxX="50" maxY="20"/>
+                                                <state key="normal" title="59.99 / mount">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                                                        <real key="value" value="0.10000000000000001"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                                        <color key="value" name="STText"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                                        <real key="value" value="0.20000000000000001"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                                        <real key="value" value="6"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Descriptopn Descriptopn Descriptopn Descriptopn Descriptopn" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="06F-Wd-bsT">
+                                                <rect key="frame" x="0.0" y="135" width="257" height="41"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" name="STBackground"/>
+                                <constraints>
+                                    <constraint firstItem="urE-0q-edA" firstAttribute="centerY" secondItem="vAA-7W-Myd" secondAttribute="centerY" id="57S-6l-iZy"/>
+                                    <constraint firstAttribute="bottom" secondItem="urE-0q-edA" secondAttribute="bottom" priority="200" constant="20" id="KKO-Qe-1BP"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="urE-0q-edA" secondAttribute="trailing" constant="8" id="U6c-an-4iJ"/>
+                                    <constraint firstItem="urE-0q-edA" firstAttribute="top" secondItem="vAA-7W-Myd" secondAttribute="top" priority="200" constant="20" id="WWi-5h-YXA"/>
+                                    <constraint firstItem="urE-0q-edA" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vAA-7W-Myd" secondAttribute="leading" constant="8" id="eNE-Df-97t"/>
+                                    <constraint firstItem="urE-0q-edA" firstAttribute="centerX" secondItem="vAA-7W-Myd" secondAttribute="centerX" id="oNX-hm-gWa"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                                        <real key="value" value="0.10000000000000001"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" name="STPrimary"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="vAA-7W-Myd" firstAttribute="top" secondItem="UPL-6G-xUL" secondAttribute="top" id="1gC-xa-Hz7"/>
+                            <constraint firstAttribute="bottom" secondItem="vAA-7W-Myd" secondAttribute="bottom" id="JRD-TO-m5O"/>
+                            <constraint firstItem="vAA-7W-Myd" firstAttribute="leading" secondItem="UPL-6G-xUL" secondAttribute="leading" id="vJQ-xe-eCU"/>
+                            <constraint firstAttribute="trailing" secondItem="vAA-7W-Myd" secondAttribute="trailing" id="wt7-Dy-uhg"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="UPL-6G-xUL" secondAttribute="bottom" id="3K5-sO-76f"/>
+                <constraint firstItem="UPL-6G-xUL" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="M5P-SV-WbP"/>
+                <constraint firstAttribute="trailing" secondItem="UPL-6G-xUL" secondAttribute="trailing" id="ddF-ec-lWB"/>
+                <constraint firstItem="UPL-6G-xUL" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="rZe-C3-8W5"/>
+            </constraints>
+            <size key="customSize" width="276" height="207"/>
+            <connections>
+                <outlet property="bgView" destination="vAA-7W-Myd" id="vxL-WV-cCt"/>
+                <outlet property="byButton" destination="QSZ-Oe-2Mb" id="uQe-Ma-o5w"/>
+                <outlet property="descriptionLabel" destination="06F-Wd-bsT" id="FI2-Zn-g9Q"/>
+                <outlet property="quantityLabel" destination="jhS-ur-EVf" id="Abj-NZ-YeJ"/>
+                <outlet property="typeLabel" destination="VPs-bk-nxt" id="373-f2-QIP"/>
+            </connections>
+            <point key="canvasLocation" x="279.71014492753625" y="128.23660714285714"/>
+        </collectionViewCell>
+    </objects>
+    <designables>
+        <designable name="QSZ-Oe-2Mb">
+            <size key="intrinsicContentSize" width="197" height="58"/>
+        </designable>
+    </designables>
+    <resources>
+        <namedColor name="STBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPrimary">
+            <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

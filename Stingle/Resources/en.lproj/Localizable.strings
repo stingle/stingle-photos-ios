@@ -100,8 +100,19 @@
 "check" = "Check";
 
 "app_unauthorized_message" = "App automatically log out for your security. Please login and enjoy again";
-
 "please_set_a_new_password" = "Please set a new password";
+
+"reconnect_server_try_again_message" = "An error has occurred. click the try again button to reconnect to the server";
+"try_again" = "Try again";
+
+"day" = "Day";
+"week" = "Week";
+"month" = "Month";
+"year" = "Year";
+
+"current_storage" = "Current storage";
+"current_plan" = "Current plan";
+"free" = "Free";
 
 //MARK: - Share
 

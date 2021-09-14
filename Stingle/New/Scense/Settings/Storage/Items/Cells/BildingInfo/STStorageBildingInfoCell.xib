@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="STStorageBildingInfoCell" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="306" height="182"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="306" height="182"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YSW-gD-pSM">
+                        <rect key="frame" x="0.0" y="0.0" width="306" height="106"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Storage" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="49W-VP-zt1">
+                                <rect key="frame" x="0.0" y="12" width="128" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <color key="textColor" name="STText"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="170 MB of 1 GB (16%) used" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Dnp-Pb-rwW">
+                                <rect key="frame" x="0.0" y="53" width="206.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" name="STText"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b8X-bd-eC2">
+                                <rect key="frame" x="0.0" y="82" width="306" height="4"/>
+                                <color key="progressTintColor" name="STPrimary"/>
+                            </progressView>
+                        </subviews>
+                        <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstItem="b8X-bd-eC2" firstAttribute="top" secondItem="Dnp-Pb-rwW" secondAttribute="bottom" constant="8" id="DaM-TZ-kfw"/>
+                            <constraint firstItem="Dnp-Pb-rwW" firstAttribute="top" secondItem="49W-VP-zt1" secondAttribute="bottom" constant="20" id="Mrb-zs-qMZ"/>
+                            <constraint firstAttribute="bottom" secondItem="b8X-bd-eC2" secondAttribute="bottom" constant="20" id="VdS-nY-c4m"/>
+                            <constraint firstItem="49W-VP-zt1" firstAttribute="top" secondItem="YSW-gD-pSM" secondAttribute="top" constant="12" id="cGM-3E-4mF"/>
+                            <constraint firstItem="Dnp-Pb-rwW" firstAttribute="leading" secondItem="YSW-gD-pSM" secondAttribute="leading" id="cYq-o0-OAz"/>
+                            <constraint firstAttribute="trailing" secondItem="b8X-bd-eC2" secondAttribute="trailing" id="kgp-L4-ePv"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Dnp-Pb-rwW" secondAttribute="trailing" id="kyQ-vR-PlM"/>
+                            <constraint firstItem="b8X-bd-eC2" firstAttribute="leading" secondItem="YSW-gD-pSM" secondAttribute="leading" id="riq-C0-89o"/>
+                            <constraint firstItem="49W-VP-zt1" firstAttribute="leading" secondItem="YSW-gD-pSM" secondAttribute="leading" id="t9N-La-cqK"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="49W-VP-zt1" secondAttribute="trailing" id="yJO-va-bor"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="YSW-gD-pSM" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="1Ga-UP-3h2"/>
+                <constraint firstAttribute="trailing" secondItem="YSW-gD-pSM" secondAttribute="trailing" id="Bkv-Aj-ehT"/>
+                <constraint firstItem="YSW-gD-pSM" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="EiX-tB-KMk"/>
+                <constraint firstAttribute="bottom" secondItem="YSW-gD-pSM" secondAttribute="bottom" priority="200" id="Z2V-jR-NdG"/>
+            </constraints>
+            <size key="customSize" width="306" height="182"/>
+            <connections>
+                <outlet property="progressView" destination="b8X-bd-eC2" id="uJg-CD-uMb"/>
+                <outlet property="subTitleLabel" destination="Dnp-Pb-rwW" id="9eR-la-4zZ"/>
+                <outlet property="titleLabel" destination="49W-VP-zt1" id="0C6-ZN-eh8"/>
+            </connections>
+            <point key="canvasLocation" x="323.1884057971015" y="127.90178571428571"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="STBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPrimary">
+            <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

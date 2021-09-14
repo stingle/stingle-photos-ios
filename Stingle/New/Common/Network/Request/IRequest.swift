@@ -71,6 +71,18 @@ extension STRequest {
         return STApplication.shared.utils.user()?.token
     }
     
+    var method: STNetworkDispatcher.Method {
+        return .post
+    }
+    
+    var encoding: STNetworkDispatcher.Encoding {
+        return .body
+    }
+    
+    var headers: [String : String]? {
+        return nil
+    }
+    
 }
 
 protocol IEncryptedRequest: STRequest {

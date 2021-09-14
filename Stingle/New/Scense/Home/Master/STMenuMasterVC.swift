@@ -173,7 +173,7 @@ extension STMenuMasterVC {
         }
         
         static var actualCasses: [ControllerType] {
-            return [.gallery, .trash, .backupPhrase, .freeUpSpace, .settings, .lockApp, .officialWebsite, .signOut]
+            return [.gallery, .trash, .storage, .backupPhrase, .freeUpSpace, .settings, .lockApp, .officialWebsite, .signOut]
         }
         
     }
@@ -237,7 +237,7 @@ extension STMenuMasterVC {
                     icon = UIImage(named: "ic_menu_backup_phrase")
                 case .freeUpSpace:
                     name = "menu_free_up_space".localized
-                    icon = UIImage(systemName: "iphone.homebutton")
+                    icon = UIImage(named: "ic_menu_free_up_space")
                 case .settings:
                     name = "menu_settings".localized
                     icon = UIImage(named: "ic_menu_settings")

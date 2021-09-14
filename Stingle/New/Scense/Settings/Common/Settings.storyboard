@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <device id="retina3_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -16,7 +16,7 @@
             <objects>
                 <navigationController storyboardIdentifier="SettingsID" id="15U-VF-qgH" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="S4X-5h-C6z">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
@@ -39,11 +39,11 @@
             <objects>
                 <viewController id="Oap-3z-8x1" customClass="STSettingsVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KQv-yt-Ec8">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Fpk-uR-CJD">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Dec-Lp-yWh">
                                     <size key="itemSize" width="136" height="51"/>
@@ -129,11 +129,11 @@
             <objects>
                 <viewController storyboardIdentifier="STAdvancedVCID" id="muX-ij-sta" customClass="STAdvancedVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3c6-R4-Hz0">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="S1A-xN-l91">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="muX-ij-sta" id="ols-3W-rCA"/>
@@ -164,11 +164,11 @@
             <objects>
                 <viewController storyboardIdentifier="STAccountVCID" id="8PJ-Gu-LYW" customClass="STAccountVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DB7-jI-jck">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Da4-dw-BwN">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <color key="backgroundColor" name="STBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="8PJ-Gu-LYW" id="d3j-1I-H30"/>
@@ -199,11 +199,11 @@
             <objects>
                 <viewController storyboardIdentifier="STSecurityVCID" id="RGb-0n-Xsw" customClass="STSecurityVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lOm-Po-dNg">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="r3q-xC-z9N">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <color key="backgroundColor" name="STBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="RGb-0n-Xsw" id="AA4-Ps-Svx"/>
@@ -234,11 +234,11 @@
             <objects>
                 <viewController storyboardIdentifier="STBackupVCID" id="CYR-sX-hNO" customClass="STBackupVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cHy-IZ-fLa">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WYg-0i-yun">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <color key="backgroundColor" name="STBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="CYR-sX-hNO" id="KFq-rD-1Lk"/>
@@ -269,7 +269,7 @@
             <objects>
                 <viewController storyboardIdentifier="STImportVCID" id="iJr-aw-wlH" customClass="STImportVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="y3O-mA-zO6">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="Sd8-zv-NCX"/>
                         <color key="backgroundColor" name="STBackground"/>
@@ -285,11 +285,11 @@
             <objects>
                 <viewController storyboardIdentifier="STAppearanceVCID" id="Siw-62-mcb" customClass="STAppearanceVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FAD-qB-56X">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0Zi-4h-CMU">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <color key="backgroundColor" name="STBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="Siw-62-mcb" id="hMW-te-uew"/>
@@ -320,30 +320,30 @@
             <objects>
                 <viewController id="DOp-L9-uLb" customClass="STBackupPhraseVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gwy-NG-gYw">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hRR-7k-TYM">
-                                <rect key="frame" x="64" y="518" width="896" height="360.5"/>
+                                <rect key="frame" x="20" y="64" width="280" height="396"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_backup_phrase" translatesAutoresizingMaskIntoConstraints="NO" id="MjL-FG-A5a">
-                                        <rect key="frame" x="0.0" y="0.0" width="896" height="202"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="187"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" text="Backup phrase" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="X3R-I6-Ba6">
-                                        <rect key="frame" x="381" y="227" width="134.5" height="24"/>
+                                        <rect key="frame" x="73" y="212" width="134.5" height="24"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                         <color key="textColor" name="STText"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y9X-qs-BL1">
-                                        <rect key="frame" x="0.0" y="261" width="896" height="33.5"/>
+                                        <rect key="frame" x="0.0" y="246" width="280" height="84"/>
                                         <string key="text">Your backup phrase  is most valuable secret of your account, so please make sure to back it up in safe place. If anyone get tis phrase, they can get access to all of your data</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" name="STText"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="257" verticalCompressionResistancePriority="756" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YrF-n9-ydI" customClass="STButton" customModule="Stingle" customModuleProvider="target">
-                                        <rect key="frame" x="293.5" y="326.5" width="309" height="34"/>
+                                        <rect key="frame" x="0.0" y="362" width="280" height="34"/>
                                         <color key="backgroundColor" name="STPrimary"/>
                                         <inset key="contentEdgeInsets" minX="76" minY="8" maxX="76" maxY="8"/>
                                         <state key="normal" title="Ok, get Backup Phrase">
@@ -420,23 +420,107 @@
             <objects>
                 <viewController id="FYE-Df-fVh" customClass="STStorageVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="q6v-Ds-79y">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="JLd-8R-iMw">
+                                <rect key="frame" x="0.0" y="44" width="320" height="436"/>
+                                <color key="backgroundColor" name="STBackground"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="e9d-lg-vA4">
+                                    <size key="itemSize" width="209" height="148"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cqC-MQ-26e" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="33" y="174.5" width="254" height="175"/>
+                                <subviews>
+                                    <view alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KJX-2A-gCL">
+                                        <rect key="frame" x="0.0" y="0.0" width="254" height="175"/>
+                                        <color key="backgroundColor" name="STPlaceholder"/>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="An error has occurred. click the try again button to reconnect to the server" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G0y-9T-zSW">
+                                        <rect key="frame" x="20" y="20" width="214" height="61"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5HJ-Vi-RSK" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                        <rect key="frame" x="55.5" y="117" width="143" height="38"/>
+                                        <color key="backgroundColor" name="STPrimary"/>
+                                        <inset key="contentEdgeInsets" minX="40" minY="10" maxX="40" maxY="10"/>
+                                        <state key="normal" title="Try again">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="circle" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="didSelectTyyAgainButton:" destination="FYE-Df-fVh" eventType="touchUpInside" id="Gnh-e9-ggF"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="5HJ-Vi-RSK" secondAttribute="bottom" constant="20" id="1AE-zN-MvW"/>
+                                    <constraint firstAttribute="trailing" secondItem="G0y-9T-zSW" secondAttribute="trailing" constant="20" id="FVB-o2-28w"/>
+                                    <constraint firstItem="5HJ-Vi-RSK" firstAttribute="centerX" secondItem="cqC-MQ-26e" secondAttribute="centerX" id="HnM-nT-W3v"/>
+                                    <constraint firstItem="G0y-9T-zSW" firstAttribute="leading" secondItem="cqC-MQ-26e" secondAttribute="leading" constant="20" id="Jgc-Tp-yft"/>
+                                    <constraint firstItem="G0y-9T-zSW" firstAttribute="top" secondItem="cqC-MQ-26e" secondAttribute="top" constant="20" id="Kge-ef-Qou"/>
+                                    <constraint firstAttribute="trailing" secondItem="KJX-2A-gCL" secondAttribute="trailing" id="UMC-zA-tyt"/>
+                                    <constraint firstItem="5HJ-Vi-RSK" firstAttribute="top" secondItem="G0y-9T-zSW" secondAttribute="bottom" constant="36" id="WVt-Nq-q45"/>
+                                    <constraint firstItem="KJX-2A-gCL" firstAttribute="leading" secondItem="cqC-MQ-26e" secondAttribute="leading" id="dIF-sQ-EC4"/>
+                                    <constraint firstAttribute="bottom" secondItem="KJX-2A-gCL" secondAttribute="bottom" id="dau-FE-Mdc"/>
+                                    <constraint firstItem="KJX-2A-gCL" firstAttribute="top" secondItem="cqC-MQ-26e" secondAttribute="top" id="sO4-Jl-eIm"/>
+                                    <constraint firstItem="G0y-9T-zSW" firstAttribute="centerX" secondItem="cqC-MQ-26e" secondAttribute="centerX" id="zEd-qS-uFU"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                                        <real key="value" value="0.20000000000000001"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="2Ge-K5-Lr2"/>
                         <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstItem="2Ge-K5-Lr2" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cqC-MQ-26e" secondAttribute="trailing" constant="30" id="HAI-Zn-Krm"/>
+                            <constraint firstItem="cqC-MQ-26e" firstAttribute="centerY" secondItem="2Ge-K5-Lr2" secondAttribute="centerY" id="Peh-11-Cpk"/>
+                            <constraint firstItem="2Ge-K5-Lr2" firstAttribute="trailing" secondItem="JLd-8R-iMw" secondAttribute="trailing" id="Ru9-3F-Di0"/>
+                            <constraint firstItem="cqC-MQ-26e" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2Ge-K5-Lr2" secondAttribute="leading" constant="30" id="aTg-r8-hzh"/>
+                            <constraint firstItem="2Ge-K5-Lr2" firstAttribute="bottom" secondItem="JLd-8R-iMw" secondAttribute="bottom" id="okl-Oi-Abf"/>
+                            <constraint firstItem="JLd-8R-iMw" firstAttribute="leading" secondItem="2Ge-K5-Lr2" secondAttribute="leading" id="sgq-XN-6jA"/>
+                            <constraint firstItem="cqC-MQ-26e" firstAttribute="centerX" secondItem="2Ge-K5-Lr2" secondAttribute="centerX" id="ta2-Ii-xmC"/>
+                            <constraint firstItem="JLd-8R-iMw" firstAttribute="top" secondItem="2Ge-K5-Lr2" secondAttribute="top" id="tbA-9I-6lb"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="1iI-x1-FG9"/>
+                    <navigationItem key="navigationItem" id="1iI-x1-FG9">
+                        <barButtonItem key="leftBarButtonItem" image="ic_nav_menu" id="a9R-OX-n6A">
+                            <color key="tintColor" name="STText"/>
+                            <connections>
+                                <action selector="didSelectMenuButton:" destination="FYE-Df-fVh" id="3jn-VE-cM7"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="collectionView" destination="JLd-8R-iMw" id="vs7-s0-NPI"/>
+                        <outlet property="errorMassageLabel" destination="G0y-9T-zSW" id="DVY-d0-UQR"/>
+                        <outlet property="errorView" destination="cqC-MQ-26e" id="rah-og-RLj"/>
+                        <outlet property="tryAgainButton" destination="5HJ-Vi-RSK" id="x2r-G9-bgS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EEa-t6-EeJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1468" y="2423"/>
+            <point key="canvasLocation" x="-1468.359375" y="2422.4011713030745"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="nQI-ip-l6W">
             <objects>
                 <navigationController storyboardIdentifier="STBackupPhraseVCID" id="PAv-cP-9jK" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="n3k-um-XZ1">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
@@ -459,7 +543,7 @@
             <objects>
                 <navigationController storyboardIdentifier="STStorageVCID" id="lIe-eg-1w9" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="YoJ-pK-hBd">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="50"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
@@ -479,6 +563,9 @@
         </scene>
     </scenes>
     <designables>
+        <designable name="5HJ-Vi-RSK">
+            <size key="intrinsicContentSize" width="143" height="38"/>
+        </designable>
         <designable name="YrF-n9-ydI">
             <size key="intrinsicContentSize" width="309" height="34"/>
         </designable>
@@ -489,6 +576,9 @@
         <image name="ic_settings_account" width="12" height="12"/>
         <namedColor name="STBackground">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPlaceholder">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STPrimary">
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

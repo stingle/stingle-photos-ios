@@ -277,4 +277,11 @@ extension STCrypto {
         return true
     }
     
+    func getRandomString(length: Int) -> String? {
+        guard let random = self.getRandomBytes(lenght: length) else {
+            return nil
+        }
+        return self.bytesToBase64(data: random)
+    }
+    
 }
