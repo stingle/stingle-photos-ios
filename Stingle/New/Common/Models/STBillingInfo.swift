@@ -9,8 +9,22 @@ import Foundation
 
 class STBillingInfo: Decodable {
     
-    enum Plan: String, Decodable {
-        case free = "free"
+    enum Plan {
+        case free
+        case product(id: String)
+        
+        var identifier: String {
+            switch self {
+            case .free:
+                return "free"
+            case .product(let id):
+                return id
+            }
+        }
+        
+        static func == (lhs: Plan, rhs: Plan) -> Bool {
+            lhs.identifier == rhs.identifier
+        }
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -32,14 +46,22 @@ class STBillingInfo: Decodable {
     required init(from decoder: Decoder) throws {
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.plan = try container.decode(Plan.self, forKey: .plan)
+        
+        guard let spaceQuota = Int(try container.decode(String.self, forKey: .spaceQuota)), let spaceUsed = Int(try container.decode(String.self, forKey: .spaceUsed)) else {
+            throw STError.unknown
+        }
+        
         self.isManual = try container.decode(String.self, forKey: .isManual) == "0" ? false : true
         
         self.expiration = try container.decodeIfPresent(String.self, forKey: .expiration)
         self.paymentGw = try container.decodeIfPresent(String.self, forKey: .paymentGw)
         
-        guard let spaceQuota = Int(try container.decode(String.self, forKey: .spaceQuota)), let spaceUsed = Int(try container.decode(String.self, forKey: .spaceUsed)) else {
-            throw STError.unknown
+        let plan = try container.decode(String.self, forKey: .plan)
+        
+        if plan == "free" {
+            self.plan = .free
+        } else {
+            self.plan = .product(id: plan)
         }
         
         self.spaceUsed = spaceUsed

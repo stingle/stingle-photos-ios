@@ -5,15 +5,15 @@
 //  Created by Khoren Asatryan on 9/11/21.
 //
 
-import Foundation
+import StoreKit
 
 class STStore {
     
     typealias Complition<T> = (_ result: T) -> Void
     
     static let store = STStore()
-    
     private var productsRequests = [ProductsRequest]()
+    private let purchese = Purchese()
     
     private init() {}
     
@@ -35,6 +35,14 @@ class STStore {
         self.productsRequests.append(productsRequest)
     }
     
+    func buy(product: SKProduct, success: @escaping Complition<SKPaymentTransaction>, failure: @escaping Complition<StoreError>) {
+        self.purchese.buy(product: product, success: success, failure: failure)
+    }
+    
+    func buy(product: Product, success: @escaping Complition<SKPaymentTransaction>, failure: @escaping Complition<StoreError>) {
+        self.buy(product: product.skProduct, success: success, failure: failure)
+    }
+    
          
 }
 
@@ -42,6 +50,8 @@ extension STStore {
     
     enum StoreError: IError {
         case error(error: Error)
+        case serviceBusy
+        case paymentFailed
         
         var message: String {
             switch self {
@@ -50,6 +60,10 @@ extension STStore {
                     return error.message
                 }
                 return error.localizedDescription
+            case .serviceBusy:
+                return "service_busy".localized
+            case .paymentFailed:
+                return "payment_failed_message".localized
             }
         }
     }

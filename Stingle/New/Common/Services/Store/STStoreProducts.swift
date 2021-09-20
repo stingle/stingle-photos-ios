@@ -74,6 +74,8 @@ extension STStore {
         let productIdentifier: String
         let period: SubscriptionPeriod?
         
+        let skProduct: SKProduct
+        
         
         init(with product: SKProduct) {
             self.localizedDescription = product.localizedDescription
@@ -82,6 +84,7 @@ extension STStore {
             self.priceLocale = product.priceLocale
             self.productIdentifier = product.productIdentifier
             self.period = SubscriptionPeriod(period: product.subscriptionPeriod)
+            self.skProduct = product
         }
                 
         var localizedPrice: String {

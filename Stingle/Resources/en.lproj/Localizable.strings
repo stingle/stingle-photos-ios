@@ -114,6 +114,10 @@
 "current_plan" = "Current plan";
 "free" = "Free";
 
+"service_busy" = "The service is busy, please wait";
+"payment_failed_message" = "Your payment failed";
+"yearly_plan_save" = "Or prepay annually (save %@ %.2f)";
+
 //MARK: - Share
 
 "share_via_stingle_photos" = "Share";

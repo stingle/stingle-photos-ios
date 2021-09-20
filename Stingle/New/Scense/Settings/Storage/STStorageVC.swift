@@ -30,6 +30,11 @@ class STStorageVC: UIViewController {
     //MARK: - Private methods
     
     private func configureLayout() {
+        
+        var contentInset = self.collectionView.contentInset
+        contentInset.bottom = 20
+        self.collectionView.contentInset = contentInset
+        
         let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int,
         layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             guard let weakSelf = self else {
@@ -43,24 +48,27 @@ class STStorageVC: UIViewController {
     private func collectionLayoutSection(for sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
                 
         let inset: CGFloat = 16
-        let lineCount = sectionIndex == .zero ? 1 : layoutEnvironment.traitCollection.isHorizontalIpad() ? 2 : 1
-        
-        let item = self.generateCollectionLayoutItem()
+        let lineCount = 1
+        let item = self.generateCollectionLayoutItem(sectionIndex: sectionIndex)
         
         let itemSizeHeight: CGFloat =  sectionIndex == .zero ? 106 : 207
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(itemSizeHeight))
+        
+        let grouplWidth: NSCollectionLayoutDimension = .fractionalWidth(1)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: grouplWidth, heightDimension: .estimated(itemSizeHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: lineCount)
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 0, trailing: inset)
         group.interItemSpacing = .fixed(inset)
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 20, bottom: 8, trailing: 20)
+        section.contentInsets = .zero
         section.interGroupSpacing = inset
         section.removeContentInsetsReference(safeAreaInsets: self.collectionView.window?.safeAreaInsets)
         return section
     }
     
-    private func generateCollectionLayoutItem() -> NSCollectionLayoutItem {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1))
+    private func generateCollectionLayoutItem(sectionIndex: Int) -> NSCollectionLayoutItem {
+        let itemSizeHeight: CGFloat =  sectionIndex == .zero ? 106 : 207
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(itemSizeHeight))
         let resutl = NSCollectionLayoutItem(layoutSize: itemSize)
         resutl.contentInsets = .zero
         return resutl
@@ -74,7 +82,9 @@ class STStorageVC: UIViewController {
         
         self.dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: self.collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: item.reuseIdentifier.rawValue, for: indexPath)
-            (cell as? IStorageCell)?.confugure(model: item.item)
+            let storageCell = (cell as? IStorageCell)
+            storageCell?.delegate = self
+            storageCell?.confugure(model: item.item)
             return cell
         }
         self.collectionView.dataSource = self.dataSource
@@ -133,117 +143,19 @@ class STStorageVC: UIViewController {
     
 }
 
-extension STStorageVC {
+extension STStorageVC: STStorageCellDelegate {
     
-    struct Section: Hashable {
-
-        enum SectionType: String {
-            case bildingInfo = "bildingInfo"
-            case product = "product"
-        }
+    func storageCell(didSelectBuy cell: STStorageProductCell, model: STStorageProductCell.Model.Button) {
         
-        let type: SectionType
-        let items: [Item]
+        let view: UIView = self.navigationController?.view ?? self.view
+        STLoadingView.show(in: view)
         
-        static func == (lhs: STStorageVC.Section, rhs: STStorageVC.Section) -> Bool {
-            return lhs.type == rhs.type
-        }
-        
-        func hash(into hasher: inout Hasher) {
-            return self.type.hash(into: &hasher)
-        }
-        
-    }
-    
-    struct Item: Hashable {
-        
-        var item: IStorageCellModel
-        var reuseIdentifier: CellReuseIdentifier
-
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(self.item.identifier)
-        }
-
-        static func == (lhs: Item, rhs: Item) -> Bool {
-            return lhs.item.identifier == rhs.item.identifier
-        }
-
-    }
-    
-    enum CellReuseIdentifier: String, CaseIterable {
-        case bildingInfo = "bildingInfoCell"
-        case product = "productCell"
-        
-        var nibName: String {
-            switch self {
-            case .bildingInfo:
-                return "STStorageBildingInfoCell"
-            case .product:
-                return "STStorageProductCell"
+        self.viewModel.buy(product: model.identifier) { [weak self] error in
+            STLoadingView.hide(in: view)
+            if let error = error {
+                self?.showError(error: error)
             }
         }
-                
-    }
-    
-    func generateSections(products: [STStore.Product], billingInfo: STBillingInfo) -> [Section] {
-        let billingInfoSection = self.generateBillingInfoSection(billingInfo: billingInfo)
-        let productsSection = self.generateProductsSection(products: products, billingInfo: billingInfo)
-        return [billingInfoSection, productsSection]
-    }
-    
-    
-    func generateBillingInfoSection(billingInfo: STBillingInfo) -> Section {
-        let usedSpace = billingInfo.spaceUsed
-        let allSpace = billingInfo.spaceQuota
-        let progress: Float = allSpace != 0 ? Float(usedSpace) / Float(allSpace) : 0
-        let percent: Int = Int(progress * 100)
-        let allSpaceGB = STBytesUnits(mb: Int64(allSpace))
-        let used = String(format: "storage_space_used_info".localized, "\(usedSpace)", allSpaceGB.getReadableUnit(format: ".0f").uppercased(), "\(percent)")
-        let model = STStorageBildingInfoCell.Model(title: "current_storage".localized, used: used, usedProgress: progress)
-        let item = Item(item: model, reuseIdentifier: .bildingInfo)
-        return Section(type: .bildingInfo, items: [item])
-    }
-    
-    func item(for product: STStore.Product, isCurrent: Bool) -> Item {
-        let pearPrice = product.localizedPricePeriod
-        let type: String? = isCurrent ? pearPrice : nil
-                    
-        var description = product.localizedDescription
-        
-        if let pearPrice = pearPrice {
-            description = description + "\n" + pearPrice
-        }
-        
-        let descriptionAtr = NSMutableAttributedString(string: description)
-        
-        if let pearPrice = pearPrice {
-            descriptionAtr.setColor(color: .appPrimary, forText: pearPrice)
-        }
-        let model = STStorageProductCell.Model(identifier: product.productIdentifier, quantity: product.localizedTitle, type: type, byText: pearPrice, description: descriptionAtr, isCurrent: isCurrent)
-        return Item(item: model, reuseIdentifier: .product)
-    }
-    
-    func defaultProductItem() -> Item {
-        let model = STStorageProductCell.Model(identifier: "defaultProduct", quantity: "1.0 GB", type: "free".localized, byText: "current_plan".localized, description: nil, isCurrent: true)
-        return Item(item: model, reuseIdentifier: .product)
-    }
-    
-    func generateProductsSection(products: [STStore.Product], billingInfo: STBillingInfo) -> Section {
-        var items = [Item]()
-        if billingInfo.plan == .free {
-            let `default` = self.defaultProductItem()
-            items.append(`default`)
-            products.forEach { product in
-                let item = self.item(for: product, isCurrent: false)
-                items.append(item)
-            }
-        } else {
-            products.forEach { product in
-                let item = self.item(for: product, isCurrent: false)
-                items.append(item)
-            }
-        }
-        return Section(type: .product, items: items)
         
     }
     

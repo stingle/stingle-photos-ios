@@ -10,7 +10,7 @@ import UIKit
 extension NSCollectionLayoutSection {
     
     func removeContentInsetsReference(safeAreaInsets: UIEdgeInsets?) {
-        if #available(iOS 14.0, tvOS 14.0, *) {
+        if #available(iOS 14.0, *) {
             self.contentInsetsReference = .none
         } else if let safeAreaInsets = safeAreaInsets {
             var contentInsets = self.contentInsets

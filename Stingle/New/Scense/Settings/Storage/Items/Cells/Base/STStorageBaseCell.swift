@@ -12,14 +12,19 @@ protocol IStorageCellModel {
 }
 
 protocol IStorageCell: UICollectionViewCell {
-    
+    var delegate: STStorageCellDelegate? { get set }
     func confugure(model: IStorageCellModel?)
-    
+}
+
+protocol STStorageCellDelegate: AnyObject {
+    func storageCell(didSelectBuy cell: STStorageProductCell, model: STStorageProductCell.Model.Button)
 }
 
 class STStorageBaseCell<Model: IStorageCellModel>: UICollectionViewCell {
     
     private(set) var model: Model?
+    
+    weak var delegate: STStorageCellDelegate?
 
     func confugure(model: Model?) {
         self.model = model

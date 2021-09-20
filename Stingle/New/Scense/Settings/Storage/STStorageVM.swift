@@ -15,6 +15,57 @@ protocol STStorageVMDelegate: AnyObject {
 
 class STStorageVM {
     
+    enum ProductGroup: CaseIterable {
+        
+        case gb100
+        case gb300
+        case tb1
+        case tb3
+        case tb5
+        case tb10
+        case tb20
+        
+        struct Identifiers {
+            let monthly: String
+            let yearly: String
+        }
+        
+        var identifiers: Identifiers {
+            switch self {
+            case .gb100:
+                return Identifiers(monthly: "100gb_monthly", yearly: "100gb_yearly")
+            case .gb300:
+                return Identifiers(monthly: "300gb_monthly", yearly: "300gb_yearly")
+            case .tb1:
+                return Identifiers(monthly: "1tb_monthly", yearly: "1tb_yearly")
+            case .tb3:
+                return Identifiers(monthly: "3tb_monthly", yearly: "3tb_yearly")
+            case .tb5:
+                return Identifiers(monthly: "5tb_monthly", yearly: "5tb_yearly")
+            case .tb10:
+                return Identifiers(monthly: "10tb_monthly", yearly: "10tb_yearly")
+            case .tb20:
+                return Identifiers(monthly: "20tb_monthly", yearly: "20tb_yearly")
+            }
+        }
+        
+        
+        static var allIdentifiers: [Identifiers] {
+            return self.allCases.compactMap({ $0.identifiers})
+        }
+        
+        static var allProducts: [String] {
+            var result = [String]()
+            self.allCases.forEach { product in
+                let identifier = product.identifiers
+                result.append(identifier.monthly)
+                result.append(identifier.yearly)
+            }
+            return result
+        }
+        
+    }
+    
     weak  var delegate: STStorageVMDelegate?
     
     private let billingWorker = STBillingWorker()
@@ -26,20 +77,7 @@ class STStorageVM {
     private let dbInfoProvider = STApplication.shared.dataBase.dbInfoProvider
     
     lazy var productIdentifiers: [String] = {
-        return ["100gb_monthly",
-                "100gb_yearly",
-                "300gb_monthly",
-                "300gb_yearly",
-                "1tb_monthly",
-                "1tb_yearly",
-                "3tb_monthly",
-                "3tb_yearly",
-                "5tb_monthly",
-                "5tb_yearly",
-                "10tb_monthly",
-                "10tb_yearly",
-                "20tb_monthly",
-                "20tb_yearly"]
+        return ProductGroup.allProducts
     }()
     
     init() {
@@ -50,7 +88,6 @@ class STStorageVM {
         
         var myBillingInfo: STBillingInfo?
         var myProducts: [STStore.Product]?
-        
         var hasError: Bool = false
         
         self.getBildingInfo(forceGet: forceGet) { billingInfo in
@@ -77,9 +114,7 @@ class STStorageVM {
                 hasError = true
                 failure(error)
             }
-        }
-
-        
+        }        
     }
     
     func getProducts(forceGet: Bool, success: @escaping (_ result: [STStore.Product]) -> Void, failure: @escaping (_ error: IError) -> Void) {
@@ -116,6 +151,21 @@ class STStorageVM {
         
     func getBildingInfo() -> STDBInfo {
         return self.dbInfoProvider.dbInfo
+    }
+    
+    func buy(product identifier: String, complition: @escaping ((_ error: IError?) -> Void))  {
+        
+        guard let product = self.products?.first(where: { $0.productIdentifier == identifier }) else {
+            complition(STError.unknown)
+            return
+        }
+        
+        self.store.buy(product: product) { transaction in
+            complition(nil)
+        } failure: { error in
+            complition(error)
+        }
+
     }
     
 }
