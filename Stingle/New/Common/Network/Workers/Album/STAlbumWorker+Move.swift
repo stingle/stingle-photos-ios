@@ -8,7 +8,6 @@
 import Foundation
 
 extension STAlbumWorker {
-        
     
     //MARK: - General
 
@@ -24,29 +23,45 @@ extension STAlbumWorker {
     
     private func moveFilesWithoutDelete(files: [STLibrary.File], fromSet: STLibrary.DBSet, toAlbum: STLibrary.Album, isMoving: Bool, reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         
-        let files = files.filter({ $0.isRemote == true })
-        guard !files.isEmpty else {
-            success?(STEmptyResponse())
-            return
-        }
-        
         let crypto = STApplication.shared.crypto
         let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
+        let uploader = STApplication.shared.uploader
         var newHeaders = [String: String]()
+        
+        func responceSuccess(newAlbumFiles: [STLibrary.AlbumFile]) {
+            
+            let updatedAlbum = STLibrary.Album(albumId: toAlbum.albumId,
+                                               encPrivateKey: toAlbum.encPrivateKey,
+                                               publicKey: toAlbum.publicKey,
+                                               metadata: toAlbum.metadata,
+                                               isShared: toAlbum.isShared,
+                                               isHidden: toAlbum.isHidden,
+                                               isOwner: toAlbum.isOwner,
+                                               isLocked: toAlbum.isLocked,
+                                               isRemote: toAlbum.isRemote,
+                                               permissions: toAlbum.permissions,
+                                               members: toAlbum.members,
+                                               cover: toAlbum.cover,
+                                               dateCreated: toAlbum.dateCreated,
+                                               dateModified: Date())
+
+            albumFilesProvider.add(models: newAlbumFiles, reloadData: reloadDBData)
+            albumsProvider.update(models: [updatedAlbum], reloadData: reloadDBData)
+
+            success?(STEmptyResponse())
+        }
         
         do {
             var newAlbumFiles = [STLibrary.AlbumFile]()
-            
+            var isRemoteFiles = [STLibrary.File]()
             for file in files {
                 guard let publicKey = crypto.base64ToByte(encodedStr: toAlbum.publicKey) else {
                     failure?(WorkerError.emptyData)
                     return
                 }
-               
+                uploader.cancelUploadIng(for: file)
                 let newHeader = try crypto.reencryptFileHeaders(headersStr: file.headers, publicKeyTo: publicKey, privateKeyFrom: nil, publicKeyFrom: nil)
-               
-                newHeaders[file.file] = newHeader
                 let newAlbumFile = try STLibrary.AlbumFile(file: file.file,
                                                        version: file.version,
                                                        headers: newHeader,
@@ -55,32 +70,22 @@ extension STAlbumWorker {
                                                        isRemote: file.isRemote,
                                                        albumId: toAlbum.albumId,
                                                        managedObjectID: file.managedObjectID)
+                if file.isRemote {
+                    newHeaders[file.file] = newHeader
+                    isRemoteFiles.append(newAlbumFile)
+                }
                 newAlbumFiles.append(newAlbumFile)
             }
             
-            let request = STAlbumRequest.moveFile(fromSet: fromSet, toSet: .album, albumIdFrom: nil, albumIdTo: toAlbum.albumId, isMoving: isMoving, headers: newHeaders, files: files)
+            if isRemoteFiles.isEmpty {
+                responceSuccess(newAlbumFiles: newAlbumFiles)
+                return
+            }
             
+            let request = STAlbumRequest.moveFile(fromSet: fromSet, toSet: .album, albumIdFrom: nil, albumIdTo: toAlbum.albumId, isMoving: isMoving, headers: newHeaders, files: isRemoteFiles)
             
             self.request(request: request, success: { (response: STEmptyResponse) in
-                let updatedAlbum = STLibrary.Album(albumId: toAlbum.albumId,
-                                                   encPrivateKey: toAlbum.encPrivateKey,
-                                                   publicKey: toAlbum.publicKey,
-                                                   metadata: toAlbum.metadata,
-                                                   isShared: toAlbum.isShared,
-                                                   isHidden: toAlbum.isHidden,
-                                                   isOwner: toAlbum.isOwner,
-                                                   isLocked: toAlbum.isLocked,
-                                                   isRemote: toAlbum.isRemote,
-                                                   permissions: toAlbum.permissions,
-                                                   members: toAlbum.members,
-                                                   cover: toAlbum.cover,
-                                                   dateCreated: toAlbum.dateCreated,
-                                                   dateModified: Date())
-                                
-                albumFilesProvider.add(models: newAlbumFiles, reloadData: reloadDBData)
-                albumsProvider.update(models: [updatedAlbum], reloadData: reloadDBData)
-                
-                success?(response)
+                responceSuccess(newAlbumFiles: newAlbumFiles)
             }, failure: failure)
      
         } catch {
@@ -93,13 +98,36 @@ extension STAlbumWorker {
     func moveFiles(fromAlbum: STLibrary.Album, toAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isMoving: Bool, reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         
         var isRemoteFiles =  [STLibrary.AlbumFile]()
-       
         
         let uploader = STApplication.shared.uploader
         let crypto = STApplication.shared.crypto
         let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
         var newHeaders = [String: String]()
+        
+        func responceSuccess(newAlbumFiles: [STLibrary.AlbumFile]) {
+            if isMoving {
+                albumFilesProvider.delete(models: files, reloadData: reloadDBData)
+            }
+            let updatedAlbum = STLibrary.Album(albumId: toAlbum.albumId,
+                                               encPrivateKey: toAlbum.encPrivateKey,
+                                               publicKey: toAlbum.publicKey,
+                                               metadata: toAlbum.metadata,
+                                               isShared: toAlbum.isShared,
+                                               isHidden: toAlbum.isHidden,
+                                               isOwner: toAlbum.isOwner,
+                                               isLocked: toAlbum.isLocked,
+                                               isRemote: toAlbum.isRemote,
+                                               permissions: toAlbum.permissions,
+                                               members: toAlbum.members,
+                                               cover: toAlbum.cover,
+                                               dateCreated: toAlbum.dateCreated,
+                                               dateModified: Date())
+            
+            albumFilesProvider.add(models: newAlbumFiles, reloadData: reloadDBData)
+            albumsProvider.update(models: [updatedAlbum], reloadData: reloadDBData)
+            success?(STEmptyResponse())
+        }
         
         do {
             let fromAlbumData = try crypto.decryptAlbum(albumPKStr: fromAlbum.publicKey, encAlbumSKStr: fromAlbum.encPrivateKey, metadataStr: fromAlbum.metadata)
@@ -131,54 +159,13 @@ extension STAlbumWorker {
             }
             
             if isRemoteFiles.isEmpty {
-                if isMoving {
-                    albumFilesProvider.delete(models: files, reloadData: reloadDBData)
-                }
-                let updatedAlbum = STLibrary.Album(albumId: toAlbum.albumId,
-                                                   encPrivateKey: toAlbum.encPrivateKey,
-                                                   publicKey: toAlbum.publicKey,
-                                                   metadata: toAlbum.metadata,
-                                                   isShared: toAlbum.isShared,
-                                                   isHidden: toAlbum.isHidden,
-                                                   isOwner: toAlbum.isOwner,
-                                                   isLocked: toAlbum.isLocked,
-                                                   isRemote: toAlbum.isRemote,
-                                                   permissions: toAlbum.permissions,
-                                                   members: toAlbum.members,
-                                                   cover: toAlbum.cover,
-                                                   dateCreated: toAlbum.dateCreated,
-                                                   dateModified: Date())
-                
-                albumFilesProvider.add(models: newAlbumFiles, reloadData: reloadDBData)
-                albumsProvider.update(models: [updatedAlbum], reloadData: reloadDBData)
-                success?(STEmptyResponse())
+                responceSuccess(newAlbumFiles: newAlbumFiles)
                 return
             }
             
             let request = STAlbumRequest.moveFile(fromSet: .album, toSet: .album, albumIdFrom: fromAlbum.albumId, albumIdTo: toAlbum.albumId, isMoving: isMoving, headers: newHeaders, files: isRemoteFiles)
             self.request(request: request, success: { (response: STEmptyResponse) in
-                if isMoving {
-                    albumFilesProvider.delete(models: files, reloadData: reloadDBData)
-                }
-                let updatedAlbum = STLibrary.Album(albumId: toAlbum.albumId,
-                                                   encPrivateKey: toAlbum.encPrivateKey,
-                                                   publicKey: toAlbum.publicKey,
-                                                   metadata: toAlbum.metadata,
-                                                   isShared: toAlbum.isShared,
-                                                   isHidden: toAlbum.isHidden,
-                                                   isOwner: toAlbum.isOwner,
-                                                   isLocked: toAlbum.isLocked,
-                                                   isRemote: toAlbum.isRemote,
-                                                   permissions: toAlbum.permissions,
-                                                   members: toAlbum.members,
-                                                   cover: toAlbum.cover,
-                                                   dateCreated: toAlbum.dateCreated,
-                                                   dateModified: Date())
-                
-                albumFilesProvider.add(models: newAlbumFiles, reloadData: reloadDBData)
-                albumsProvider.update(models: [updatedAlbum], reloadData: reloadDBData)
-                
-                success?(response)
+                responceSuccess(newAlbumFiles: newAlbumFiles)
             }, failure: failure)
      
         } catch {
@@ -188,13 +175,20 @@ extension STAlbumWorker {
     
     func moveFilesToGallery(fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isMoving: Bool, reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         
-        let files = files.filter({ $0.isRemote == true })
-        guard !files.isEmpty else {
+        var isRemoteFiles =  [STLibrary.File]()
+        let crypto = STApplication.shared.crypto
+        let uploader = STApplication.shared.uploader
+        let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
+        let galleryProvider = STApplication.shared.dataBase.galleryProvider
+        
+        func responceSuccess(galeryFiles: [STLibrary.File]) {
+            if isMoving {
+                albumFilesProvider.delete(models: files, reloadData: reloadDBData)
+            }
+            galleryProvider.add(models: galeryFiles, reloadData: reloadDBData)
             success?(STEmptyResponse())
-            return
         }
         
-        let crypto = STApplication.shared.crypto
         do {
             let publicKey = try crypto.readPublicKey()
             let fromAlbumData = try crypto.decryptAlbum(albumPKStr: fromAlbum.publicKey, encAlbumSKStr: fromAlbum.encPrivateKey, metadataStr: fromAlbum.metadata)
@@ -203,23 +197,28 @@ extension STAlbumWorker {
             var galeryFiles = [STLibrary.File]()
             
             for file in files {
+                
+                uploader.cancelUploadIng(for: file)
+                
                 let newHeader = try crypto.reencryptFileHeaders(headersStr: file.headers, publicKeyTo: publicKey, privateKeyFrom: fromAlbumData.privateKey, publicKeyFrom: fromAlbumData.publicKey)
-                newHeaders[file.file] = newHeader
-                let file = try STLibrary.File(file: file.file, version: file.version, headers: newHeader, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: true, managedObjectID: file.managedObjectID)
+                let file = try STLibrary.File(file: file.file, version: file.version, headers: newHeader, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: file.isRemote, managedObjectID: file.managedObjectID)
+
+                if file.isRemote {
+                    newHeaders[file.file] = newHeader
+                    isRemoteFiles.append(file)
+                }
                 galeryFiles.append(file)
             }
             
-            let request = STAlbumRequest.moveFile(fromSet: .album, toSet: .file, albumIdFrom: fromAlbum.albumId, albumIdTo: nil, isMoving: isMoving, headers: newHeaders, files: galeryFiles)
+            if isRemoteFiles.isEmpty {
+                responceSuccess(galeryFiles: galeryFiles)
+                return
+            }
             
-            let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
-            let galleryProvider = STApplication.shared.dataBase.galleryProvider
+            let request = STAlbumRequest.moveFile(fromSet: .album, toSet: .file, albumIdFrom: fromAlbum.albumId, albumIdTo: nil, isMoving: isMoving, headers: newHeaders, files: isRemoteFiles)
             
             self.request(request: request, success: { (response: STEmptyResponse) in
-                if isMoving {
-                    albumFilesProvider.delete(models: files, reloadData: reloadDBData)
-                }
-                galleryProvider.add(models: galeryFiles, reloadData: reloadDBData)
-                success?(response)
+                responceSuccess(galeryFiles: galeryFiles)
             }, failure: failure)
             
         } catch {

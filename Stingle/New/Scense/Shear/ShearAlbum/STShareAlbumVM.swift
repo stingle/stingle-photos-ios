@@ -38,11 +38,6 @@ class STShareAlbumVM {
     
     func shareFiles(name: String, files: [STLibrary.File], contact: [STContact], permitions: Permitions, result: @escaping (_ result: IError?) -> Void) {
         
-        guard files.first(where: {$0.isRemote == false}) == nil else {
-            result(ShareAlbumError.hasIsRemoteItems)
-            return
-        }
-    
         let permitions = STLibrary.Album.Permission(allowAdd: permitions.addPhoto, allowShare: permitions.sharing, allowCopy: permitions.copying)
         
         self.albumWorker.createSharedAlbum(name: name, files: files, contacts: contact, permitions: permitions) { _ in
