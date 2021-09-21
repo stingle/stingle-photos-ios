@@ -577,6 +577,9 @@
                             <color key="textColor" name="STText"/>
                         </textAttributes>
                     </navigationBar>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="saveInMenuQue" value="NO"/>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="FYE-Df-fVh" kind="relationship" relationship="rootViewController" id="MO6-qA-5Ks"/>
                     </connections>

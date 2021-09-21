@@ -39,7 +39,9 @@ class STMenuVC: STSplitViewController {
     
     func setDetailViewController(identifier: String) {
         let detailViewController = self.controllers[identifier] ?? self.storyboard!.instantiateViewController(identifier: identifier)
-        self.controllers[identifier] = detailViewController
+        if detailViewController.menu(saveInQue: self) {
+            self.controllers[identifier] = detailViewController
+        }
         self.setDetailViewController(detailViewController: detailViewController, isAnimated: true)
     }
         
@@ -96,6 +98,15 @@ extension STMenuVC: STBackupPhraseViewDelegate {
     func backupPhraseView(didSelectCopy backupPhraseView: STBackupPhraseView, text: String?) {
         backupPhraseView.hide()
         UIPasteboard.general.string = text
+    }
+    
+}
+
+
+@objc extension UIViewController {
+    
+    func menu(saveInQue menuVC: STMenuVC) -> Bool {
+        return true
     }
     
 }

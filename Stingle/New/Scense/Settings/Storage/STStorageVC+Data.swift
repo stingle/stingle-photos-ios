@@ -172,7 +172,7 @@ extension STStorageVC {
             }
             guard let item = item else {
                 continue
-            }                        
+            }
             if identifiers.monthly == billingInfo.plan.identifier || identifiers.yearly == billingInfo.plan.identifier {
                 selectedItem = item
             } else {

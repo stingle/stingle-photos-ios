@@ -27,6 +27,10 @@ class STStorageVC: UIViewController {
         self.viewModel.delegate = self
     }
     
+    override func menu(saveInQue menuVC: STMenuVC) -> Bool {
+        return false
+    }
+    
     //MARK: - Private methods
     
     private func configureLayout() {

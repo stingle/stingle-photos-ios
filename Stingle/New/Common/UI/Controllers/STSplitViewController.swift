@@ -141,7 +141,6 @@ class STSplitViewController: UIViewController {
             return
         }
         self.updateFrames(isMasterViewOpened: self.isMasterViewOpened, didUpdateProgress: true, isTouch: false)
-
     }
     
     func setDetailViewController(detailViewController: UIViewController, isAnimated: Bool) {

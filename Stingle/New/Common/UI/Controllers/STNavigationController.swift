@@ -9,6 +9,12 @@
 import UIKit
 
 class STNavigationController: UINavigationController {
+    
+    @IBInspectable var saveInMenuQue: Bool = true
+    
+    override func menu(saveInQue menuVC: STMenuVC) -> Bool {
+        return self.saveInMenuQue
+    }
 	
 	override init(rootViewController: UIViewController) {
 		super.init(rootViewController: rootViewController)
