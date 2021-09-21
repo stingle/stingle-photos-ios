@@ -131,6 +131,42 @@ extension STFileSystem {
 
 extension STFileSystem {
     
+    func fileThumbUrl(fileName: String, isRemote: Bool) -> URL? {
+        let url = isRemote ? self.url(for: .storage(type: .server(type: .thumbs)), filePath: fileName) : self.url(for: .storage(type: .local(type: .thumbs)), filePath: fileName)
+        return url
+    }
+    
+    func fileOreginalUrl(fileName: String, isRemote: Bool) -> URL? {
+        let url = isRemote ? self.url(for: .storage(type: .server(type: .oreginals)), filePath: fileName) : self.url(for: .storage(type: .local(type: .oreginals)), filePath: fileName)
+        return url
+    }
+    
+    func deleteAllData(for fileName: String) {
+        
+        if let fileThumbUrl = self.fileThumbUrl(fileName: fileName, isRemote: true) {
+            self.remove(file: fileThumbUrl)
+        }
+        
+        if let fileThumbUrl = self.fileThumbUrl(fileName: fileName, isRemote: false) {
+            self.remove(file: fileThumbUrl)
+        }
+        
+        if let fileOreginalUrl = self.fileOreginalUrl(fileName: fileName, isRemote: true) {
+            self.remove(file: fileOreginalUrl)
+        }
+        
+        if let fileOreginalUrl = self.fileOreginalUrl(fileName: fileName, isRemote: false) {
+            self.remove(file: fileOreginalUrl)
+        }
+        
+    }
+    
+    func deleteFiles(for fileNames: [String]) {
+        fileNames.forEach { fileName in
+            self.deleteAllData(for: fileName)
+        }
+    }
+    
     func deleteFiles(files: [STLibrary.File]) {
         for file in files {
             if let oldFileThumbPath = file.fileOreginalUrl?.path {
@@ -159,6 +195,9 @@ extension STFileSystem {
     }
     
     func remove(file url: URL) {
+        guard self.fileExists(atPath: url.path) else {
+            return
+        }
         do {
             try self.fileManager.removeItem(at: url)
         } catch {

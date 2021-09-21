@@ -99,14 +99,12 @@ extension STLibrary.File {
         
     var fileThumbUrl: URL? {
         let fileSystem = STApplication.shared.fileSystem
-        let url = self.isRemote ? fileSystem.url(for: .storage(type: .server(type: .thumbs)), filePath: self.file) : fileSystem.url(for: .storage(type: .local(type: .thumbs)), filePath: self.file)
-        return url
+        return fileSystem.fileThumbUrl(fileName: self.file, isRemote: self.isRemote)
     }
     
     var fileOreginalUrl: URL? {
         let fileSystem = STApplication.shared.fileSystem
-        let url = self.isRemote ? fileSystem.url(for: .storage(type: .server(type: .oreginals)), filePath: self.file) : fileSystem.url(for: .storage(type: .local(type: .oreginals)), filePath: self.file)
-        return url
+        return fileSystem.fileOreginalUrl(fileName: self.file, isRemote: self.isRemote)
     }
         
 }

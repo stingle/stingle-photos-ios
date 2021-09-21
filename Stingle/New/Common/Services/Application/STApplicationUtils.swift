@@ -25,7 +25,12 @@ extension STApplication {
             let notExistFiles = self.application.dataBase.filtrNotExistFiles(files: files)
             self.application.fileSystem.deleteFiles(files: notExistFiles)
         }
-                        
+        
+        func deleteFilesIfNeeded(fileNames: [String]) {
+            let notExistFiles = self.application.dataBase.filtrNotExistFileNames(fileNames: fileNames)
+            self.application.fileSystem.deleteFiles(for: notExistFiles)
+        }
+        
     }
         
 }

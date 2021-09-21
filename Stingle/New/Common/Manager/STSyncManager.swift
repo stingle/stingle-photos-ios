@@ -49,15 +49,14 @@ class STSyncManager {
                 failure?(error)
                 self?.didEndSync(error: error)
             } else {
-                                
+                
+                if let trashDeletes = sync.deletes?.trashDeletes {
+                    let deletes = trashDeletes.compactMap( {$0.fileName} )
+                    STApplication.shared.utils.deleteFilesIfNeeded(fileNames: deletes)
+                }
                 success?()
                 self?.didEndSync(error: nil)
                 STApplication.shared.uploader.uploadAllLocalFiles()
-                
-                //TODO: ----- Khoren
-    //            STApplication.shared.utils.deleteFilesIfNeeded(files: <#T##[STLibrary.File]#>) trash delets
-                
-                
             }
         })
     }
