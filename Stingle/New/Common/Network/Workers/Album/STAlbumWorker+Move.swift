@@ -92,12 +92,10 @@ extension STAlbumWorker {
     
     func moveFiles(fromAlbum: STLibrary.Album, toAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isMoving: Bool, reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         
-        let files = files.filter({ $0.isRemote == true })
-        guard !files.isEmpty else {
-            success?(STEmptyResponse())
-            return
-        }
+        var isRemoteFiles =  [STLibrary.AlbumFile]()
+       
         
+        let uploader = STApplication.shared.uploader
         let crypto = STApplication.shared.crypto
         let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
@@ -107,12 +105,20 @@ extension STAlbumWorker {
             let fromAlbumData = try crypto.decryptAlbum(albumPKStr: fromAlbum.publicKey, encAlbumSKStr: fromAlbum.encPrivateKey, metadataStr: fromAlbum.metadata)
             var newAlbumFiles = [STLibrary.AlbumFile]()
             for file in files {
+                
+                uploader.cancelUploadIng(for: file)
+                
                 guard let publicKey = crypto.base64ToByte(encodedStr: toAlbum.publicKey) else {
                     failure?(WorkerError.emptyData)
                     return
                 }
                 let newHeader = try crypto.reencryptFileHeaders(headersStr: file.headers, publicKeyTo: publicKey, privateKeyFrom: fromAlbumData.privateKey, publicKeyFrom: fromAlbumData.publicKey)
-                newHeaders[file.file] = newHeader
+                
+                if file.isRemote {
+                    newHeaders[file.file] = newHeader
+                    isRemoteFiles.append(file)
+                }
+                
                 let newAlbumFile = try STLibrary.AlbumFile(file: file.file,
                                                        version: file.version,
                                                        headers: newHeader,
@@ -124,7 +130,32 @@ extension STAlbumWorker {
                 newAlbumFiles.append(newAlbumFile)
             }
             
-            let request = STAlbumRequest.moveFile(fromSet: .album, toSet: .album, albumIdFrom: fromAlbum.albumId, albumIdTo: toAlbum.albumId, isMoving: isMoving, headers: newHeaders, files: files)
+            if isRemoteFiles.isEmpty {
+                if isMoving {
+                    albumFilesProvider.delete(models: files, reloadData: reloadDBData)
+                }
+                let updatedAlbum = STLibrary.Album(albumId: toAlbum.albumId,
+                                                   encPrivateKey: toAlbum.encPrivateKey,
+                                                   publicKey: toAlbum.publicKey,
+                                                   metadata: toAlbum.metadata,
+                                                   isShared: toAlbum.isShared,
+                                                   isHidden: toAlbum.isHidden,
+                                                   isOwner: toAlbum.isOwner,
+                                                   isLocked: toAlbum.isLocked,
+                                                   isRemote: toAlbum.isRemote,
+                                                   permissions: toAlbum.permissions,
+                                                   members: toAlbum.members,
+                                                   cover: toAlbum.cover,
+                                                   dateCreated: toAlbum.dateCreated,
+                                                   dateModified: Date())
+                
+                albumFilesProvider.add(models: newAlbumFiles, reloadData: reloadDBData)
+                albumsProvider.update(models: [updatedAlbum], reloadData: reloadDBData)
+                success?(STEmptyResponse())
+                return
+            }
+            
+            let request = STAlbumRequest.moveFile(fromSet: .album, toSet: .album, albumIdFrom: fromAlbum.albumId, albumIdTo: toAlbum.albumId, isMoving: isMoving, headers: newHeaders, files: isRemoteFiles)
             self.request(request: request, success: { (response: STEmptyResponse) in
                 if isMoving {
                     albumFilesProvider.delete(models: files, reloadData: reloadDBData)

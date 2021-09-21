@@ -15,10 +15,7 @@ class STShareAlbumVM {
     let albumWorker = STAlbumWorker()
     
     func shareAlbum(album: STLibrary.Album, contact: [STContact], permitions: Permitions, result: @escaping (_ result: IError?) -> Void) {
-        guard self.albumFilesProvider.fetchAll(for: album.albumId, isRemote: false).isEmpty else {
-            result(ShareAlbumError.hasIsRemoteItems)
-            return
-        }
+
         let permitions = STLibrary.Album.Permission(allowAdd: permitions.addPhoto, allowShare: permitions.sharing, allowCopy: permitions.copying)
         self.albumWorker.shareAlbum(album: album, contacts: contact, permitions: permitions) { _ in
             result(nil)
@@ -28,11 +25,6 @@ class STShareAlbumVM {
     }
     
     func shareAlbumFiles(name: String, album: STLibrary.Album, files: [STLibrary.AlbumFile], contact: [STContact], permitions: Permitions, result: @escaping (_ result: IError?) -> Void) {
-        
-        guard files.first(where: {$0.isRemote == false}) == nil else {
-            result(ShareAlbumError.hasIsRemoteItems)
-            return
-        }
     
         let permitions = STLibrary.Album.Permission(allowAdd: permitions.addPhoto, allowShare: permitions.sharing, allowCopy: permitions.copying)
         

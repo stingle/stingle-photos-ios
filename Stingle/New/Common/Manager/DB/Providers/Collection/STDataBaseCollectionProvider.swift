@@ -86,6 +86,9 @@ extension STDataBase {
             
             if reloadData {
                 self.reloadData(models: models)
+                self.observerProvider.forEach { observer in
+                    observer.dataBaseProvider(didDeleted: self, models: models)
+                }
             }
         }
         
