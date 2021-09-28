@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CXM-lh-l29">
-    <device id="retina6_0" orientation="portrait" appearance="dark"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CXM-lh-l29">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -139,7 +139,7 @@
                             <tableViewSection id="W1v-PC-Fyy">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="130" id="H62-Wj-9kc">
-                                        <rect key="frame" x="0.0" y="24.333333969116211" width="390" height="130"/>
+                                        <rect key="frame" x="0.0" y="44.666666030883789" width="390" height="130"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="H62-Wj-9kc" id="lqN-K9-MbC">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="130"/>
@@ -168,7 +168,7 @@ may be vulnerable to brute force attacks.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="Wml-Wp-IWm">
-                                        <rect key="frame" x="0.0" y="154.33333396911621" width="390" height="94"/>
+                                        <rect key="frame" x="0.0" y="174.66666603088379" width="390" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Wml-Wp-IWm" id="Ddd-xy-D3p">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
@@ -208,14 +208,14 @@ may be vulnerable to brute force attacks.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="79" id="3a0-mM-RtJ">
-                                        <rect key="frame" x="0.0" y="248.33333396911621" width="390" height="79"/>
+                                        <rect key="frame" x="0.0" y="268.66666603088379" width="390" height="79"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3a0-mM-RtJ" id="vcp-ys-hCv">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3a0-mM-RtJ" id="vcp-ys-hCv">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hFL-fg-WsP" customClass="STTextField" customModule="Stingle" customModuleProvider="target">
-                                                    <rect key="frame" x="16" y="18" width="358" height="40"/>
+                                                    <rect key="frame" x="16" y="18" width="358" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="VTf-m6-AfL"/>
                                                     </constraints>
@@ -248,7 +248,7 @@ may be vulnerable to brute force attacks.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="99" id="pIe-1Y-0SP">
-                                        <rect key="frame" x="0.0" y="327.33333396911621" width="390" height="99"/>
+                                        <rect key="frame" x="0.0" y="347.66666603088379" width="390" height="99"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pIe-1Y-0SP" id="jTe-HT-PKX">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="99"/>
@@ -288,7 +288,7 @@ may be vulnerable to brute force attacks.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="77" id="h8R-AL-IQS">
-                                        <rect key="frame" x="0.0" y="426.33333396911621" width="390" height="77"/>
+                                        <rect key="frame" x="0.0" y="446.66666603088379" width="390" height="77"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="h8R-AL-IQS" id="jIp-ZT-UUV">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="77"/>
@@ -318,7 +318,7 @@ may be vulnerable to brute force attacks.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="46" id="ZUm-3f-761">
-                                        <rect key="frame" x="0.0" y="503.33333396911621" width="390" height="46"/>
+                                        <rect key="frame" x="0.0" y="523.66666603088379" width="390" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZUm-3f-761" id="ZTP-vW-OE8">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="46"/>
@@ -366,7 +366,7 @@ may be vulnerable to brute force attacks.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="126" id="tlO-rd-9fc">
-                                        <rect key="frame" x="0.0" y="549.33333396911621" width="390" height="126"/>
+                                        <rect key="frame" x="0.0" y="569.66666603088379" width="390" height="126"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tlO-rd-9fc" id="lh0-cZ-dwM">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="126"/>
@@ -539,26 +539,24 @@ may be vulnerable to brute force attacks.</string>
             <point key="canvasLocation" x="1096.2616822429907" y="-704.31965442764579"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="8et-ph-f7e">
+        <scene sceneID="y8G-Ct-1Y8">
             <objects>
-                <navigationController id="QTr-pJ-YWD" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="6fl-5b-sqd">
+                <navigationController id="xpF-M5-p6F" customClass="STNavigationController" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="zwE-Nb-ROI">
                         <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" name="STPrimary"/>
+                        <color key="tintColor" name="STText"/>
                         <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="textColor" name="STText"/>
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="gMs-za-Ad3"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="bMy-xz-mwt"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MEN-Ma-wn0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mN6-sT-kbr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-635" y="-150"/>
+            <point key="canvasLocation" x="-691" y="-150"/>
         </scene>
         <!--MainVC-->
         <scene sceneID="rnq-br-JtG">
@@ -586,9 +584,9 @@ may be vulnerable to brute force attacks.</string>
                         </constraints>
                     </view>
                     <connections>
-                        <segue destination="QTr-pJ-YWD" kind="custom" identifier="goToAuth" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" animates="NO" id="iCp-gZ-uKM"/>
                         <segue destination="XhX-E3-oy5" kind="custom" identifier="goToApp" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" animates="NO" id="es5-rA-LwU"/>
                         <segue destination="wE9-QO-UYB" kind="custom" identifier="goToLock" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" animates="NO" id="f77-Sm-OFl"/>
+                        <segue destination="xpF-M5-p6F" kind="custom" identifier="goToAuth" customClass="STRootWindowSegue" customModule="Stingle" customModuleProvider="target" animates="NO" id="Wsp-tq-zVq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AJx-iw-Bc1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -713,7 +711,7 @@ may be vulnerable to brute force attacks.</string>
                             <tableViewSection id="hjc-aK-sFi">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="116" id="rbg-vj-9fA">
-                                        <rect key="frame" x="0.0" y="24.333333969116211" width="390" height="116"/>
+                                        <rect key="frame" x="0.0" y="44.666666030883789" width="390" height="116"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rbg-vj-9fA" id="zMA-Tk-nGU">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="116"/>
@@ -736,7 +734,7 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="ATK-hR-FnP">
-                                        <rect key="frame" x="0.0" y="140.33333396911621" width="390" height="94"/>
+                                        <rect key="frame" x="0.0" y="160.66666603088379" width="390" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ATK-hR-FnP" id="QXj-Jq-Sha">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
@@ -775,7 +773,7 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="uek-ni-ELt">
-                                        <rect key="frame" x="0.0" y="234.33333396911621" width="390" height="94"/>
+                                        <rect key="frame" x="0.0" y="254.66666603088379" width="390" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uek-ni-ELt" id="8Jl-DH-GKT">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
@@ -814,7 +812,7 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="s1e-as-8i6">
-                                        <rect key="frame" x="0.0" y="328.33333396911621" width="390" height="94"/>
+                                        <rect key="frame" x="0.0" y="348.66666603088379" width="390" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="s1e-as-8i6" id="IP4-Cx-veQ">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
@@ -853,7 +851,7 @@ may be vulnerable to brute force attacks.</string>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="116" id="aQP-Oe-0O5">
-                                        <rect key="frame" x="0.0" y="422.33333396911621" width="390" height="116"/>
+                                        <rect key="frame" x="0.0" y="442.66666603088379" width="390" height="116"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="aQP-Oe-0O5" id="bc6-ye-flx">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="116"/>
@@ -1094,7 +1092,7 @@ may be vulnerable to brute force attacks.</string>
                             <tableViewSection id="qL5-12-ZHl">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="94" id="5Wg-0L-P2Q">
-                                        <rect key="frame" x="0.0" y="24.333333969116211" width="390" height="94"/>
+                                        <rect key="frame" x="0.0" y="44.666666030883789" width="390" height="94"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Wg-0L-P2Q" id="P6u-m2-LGl">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="94"/>
@@ -1134,7 +1132,7 @@ may be vulnerable to brute force attacks.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="149" id="isY-Kr-8IE">
-                                        <rect key="frame" x="0.0" y="118.33333396911621" width="390" height="149"/>
+                                        <rect key="frame" x="0.0" y="138.66666603088379" width="390" height="149"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="isY-Kr-8IE" id="roS-Pd-6Lb">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="149"/>
@@ -1186,7 +1184,7 @@ may be vulnerable to brute force attacks.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="126" id="gcA-yl-epF">
-                                        <rect key="frame" x="0.0" y="267.33333396911621" width="390" height="126"/>
+                                        <rect key="frame" x="0.0" y="287.66666603088379" width="390" height="126"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gcA-yl-epF" id="fG3-rK-zQm">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="126"/>
@@ -1335,7 +1333,7 @@ may be vulnerable to brute force attacks.</string>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="rwf-aD-Uca"/>
+        <segue reference="Yve-OW-1gT"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrowtriangle.right.fill" catalog="system" width="128" height="113"/>

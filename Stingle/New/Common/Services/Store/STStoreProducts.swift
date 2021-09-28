@@ -102,13 +102,6 @@ extension STStore {
             return self.priceLocale.currencyCode
         }
         
-        var localizedPricePeriod: String? {
-            guard let period = self.period else {
-                return nil
-            }
-            return self.localizedPrice + " / " + period.periodUnit.localized
-        }
-        
     }
     
 }

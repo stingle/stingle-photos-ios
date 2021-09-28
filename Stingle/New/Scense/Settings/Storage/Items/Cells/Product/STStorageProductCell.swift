@@ -9,21 +9,13 @@ import UIKit
 
 extension STStorageProductCell {
     
-    struct Model: IStorageCellModel {
-        
-        struct Button {
-            let text: String
-            let isEnabled: Bool
-            let identifier: String
-        }
-        
+    struct Model: IStorageItemModel {
         let identifier: String
-        let quantity: String
-        let type: String?
-        let buyButtonFirst: Button?
-        let description: String?
-        let buyButtonSecondary: Button?
-        let isHighlighted: Bool
+        let quantity: String?
+        let price: String?
+        let period: String?
+        let prodictID: String?
+        let isSelected: Bool
     }
     
 }
@@ -31,51 +23,34 @@ extension STStorageProductCell {
 class STStorageProductCell:  STStorageBaseCell<STStorageProductCell.Model> {
 
     @IBOutlet weak private var quantityLabel: UILabel!
-    @IBOutlet weak private var typeLabel: UILabel!
-    @IBOutlet weak private var buyFirstButton: STButton!
-    @IBOutlet weak private var descriptionLabel: UILabel!
-    @IBOutlet weak private var bgView: STView!
-    @IBOutlet weak private var buyButtonSecondaryButton: STButton!
+    @IBOutlet weak private var priceLabel: UILabel!
+    @IBOutlet weak private var periodLabel: UILabel!
+    @IBOutlet weak private var checkImageView: UIImageView!
+    @IBOutlet weak private var bgView: UIView!
+    
+    override var isHighlighted: Bool {
+        didSet {
+            self.bgView.alpha = self.isHighlighted ? 0.7 : 1
+        }
+    }
     
     override func confugure(model: Model?) {
         super.confugure(model: model)
+        
         self.quantityLabel.text = model?.quantity
-        self.typeLabel.text = model?.type
-        self.descriptionLabel.text = model?.description
-        self.configureButton(button: self.buyFirstButton, info: model?.buyButtonFirst)
-        self.configureButton(button: self.buyButtonSecondaryButton, info: model?.buyButtonSecondary)
-        let isHighlighted = model?.isHighlighted ?? false
-        self.bgView.borderColor = isHighlighted ? .appPrimary : .lightGray
+        self.priceLabel.text = model?.price
+        self.periodLabel.text = model?.period
         
-        self.quantityLabel.isHidden = model?.quantity == nil
-        self.typeLabel.isHidden = model?.type == nil
-        self.buyFirstButton.isHidden = model?.buyButtonFirst == nil
-        self.descriptionLabel.isHidden = model?.description == nil
-        self.buyButtonSecondaryButton.isHidden = model?.buyButtonSecondary == nil
+        let isSelected = model?.isSelected ?? false
         
+        let imageName = isSelected ? "ic_rounded_check_mark_check" : "ic_rounded_check_mark"
+        let checkTintColor: UIColor = isSelected ? .appPrimary : .darkGray
+        let bgColor: UIColor = isSelected ? .lightGray.withAlphaComponent(0.3) : .clear
+        
+        self.checkImageView.image = UIImage(named: imageName)
+        self.checkImageView.tintColor = checkTintColor
+        self.bgView.backgroundColor = bgColor
     }
+    
 
-    @IBAction private func didSelectBuyFirst(_ sender: Any) {
-        guard let model = self.model?.buyButtonFirst else {
-            return
-        }
-        self.delegate?.storageCell(didSelectBuy: self, model: model)
-    }
-    
-    @IBAction private func didSelectBuySecondary(_ sender: Any) {
-        guard let model = self.model?.buyButtonSecondary else {
-            return
-        }
-        self.delegate?.storageCell(didSelectBuy: self, model: model)
-    }
-    
-    //MARK: - Private methods
-    
-    private func configureButton(button: STButton, info: Model.Button?)  {
-        button.setTitle(info?.text, for: .normal)
-        let isEnabled = info?.isEnabled ?? false
-        button.isEnabled = isEnabled
-        button.backgroundColor = isEnabled ? .appPrimary : .lightGray
-    }
-    
 }

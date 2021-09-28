@@ -12,6 +12,11 @@ class STNavigationController: UINavigationController {
     
     @IBInspectable var saveInMenuQue: Bool = true
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationBar.scrollEdgeAppearance = self.navigationBar.standardAppearance
+    }
+    
     override func menu(saveInQue menuVC: STMenuVC) -> Bool {
         return self.saveInMenuQue
     }

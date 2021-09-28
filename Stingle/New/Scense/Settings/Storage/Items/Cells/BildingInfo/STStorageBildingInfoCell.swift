@@ -9,7 +9,7 @@ import UIKit
 
 extension STStorageBildingInfoCell {
     
-    struct Model: IStorageCellModel {
+    struct Model: IStorageItemModel {
         let title: String
         let used: String
         let usedProgress: Float

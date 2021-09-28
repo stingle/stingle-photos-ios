@@ -28,6 +28,9 @@
 		A00C6E5E26486ED20001662E /* STAlbumWorker+Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00C6E5D26486ED20001662E /* STAlbumWorker+Move.swift */; };
 		A00E8C932629D38F0066ED9B /* STViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00E8C922629D38F0066ED9B /* STViewDataSource.swift */; };
 		A00E8C972629D3B70066ED9B /* STCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00E8C962629D3B70066ED9B /* STCollectionViewDataSource.swift */; };
+		A012B48A2700BED5001E79E9 /* STStoragePeriodHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A012B4882700BED5001E79E9 /* STStoragePeriodHeaderView.swift */; };
+		A012B48B2700BED5001E79E9 /* STStoragePeriodHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A012B4892700BED5001E79E9 /* STStoragePeriodHeaderView.xib */; };
+		A012B48D2700D53A001E79E9 /* STStorageProductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A012B48C2700D53A001E79E9 /* STStorageProductCell.xib */; };
 		A0134D8C26ADDB4C00FA5129 /* STSettingsDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0134D8B26ADDB4C00FA5129 /* STSettingsDetailVC.swift */; };
 		A013D859269F700A007ED786 /* STSettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A013D858269F700A007ED786 /* STSettingsHeaderView.swift */; };
 		A013D85B269F701D007ED786 /* STSettingsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A013D85A269F701D007ED786 /* STSettingsHeaderView.xib */; };
@@ -42,7 +45,6 @@
 		A021014726EFEC8C00BBEF65 /* STStorageBildingInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021014526EFEC8C00BBEF65 /* STStorageBildingInfoCell.swift */; };
 		A021014826EFEC8C00BBEF65 /* STStorageBildingInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A021014626EFEC8C00BBEF65 /* STStorageBildingInfoCell.xib */; };
 		A021014C26EFF08E00BBEF65 /* STStorageProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021014A26EFF08E00BBEF65 /* STStorageProductCell.swift */; };
-		A021014D26EFF08E00BBEF65 /* STStorageProductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A021014B26EFF08E00BBEF65 /* STStorageProductCell.xib */; };
 		A021A17B264F325900394713 /* UINavigationBar+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17A264F325900394713 /* UINavigationBar+Progress.swift */; };
 		A021A17E264F361E00394713 /* STGalleryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17D264F361E00394713 /* STGalleryNavigationController.swift */; };
 		A021A180264F409600394713 /* IUploadFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17F264F409600394713 /* IUploadFile.swift */; };
@@ -388,6 +390,9 @@
 		A00C6E5D26486ED20001662E /* STAlbumWorker+Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAlbumWorker+Move.swift"; sourceTree = "<group>"; };
 		A00E8C922629D38F0066ED9B /* STViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STViewDataSource.swift; sourceTree = "<group>"; };
 		A00E8C962629D3B70066ED9B /* STCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		A012B4882700BED5001E79E9 /* STStoragePeriodHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStoragePeriodHeaderView.swift; sourceTree = "<group>"; };
+		A012B4892700BED5001E79E9 /* STStoragePeriodHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STStoragePeriodHeaderView.xib; sourceTree = "<group>"; };
+		A012B48C2700D53A001E79E9 /* STStorageProductCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STStorageProductCell.xib; sourceTree = "<group>"; };
 		A0134D8B26ADDB4C00FA5129 /* STSettingsDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSettingsDetailVC.swift; sourceTree = "<group>"; };
 		A013D858269F700A007ED786 /* STSettingsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSettingsHeaderView.swift; sourceTree = "<group>"; };
 		A013D85A269F701D007ED786 /* STSettingsHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STSettingsHeaderView.xib; sourceTree = "<group>"; };
@@ -402,7 +407,6 @@
 		A021014526EFEC8C00BBEF65 /* STStorageBildingInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStorageBildingInfoCell.swift; sourceTree = "<group>"; };
 		A021014626EFEC8C00BBEF65 /* STStorageBildingInfoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STStorageBildingInfoCell.xib; sourceTree = "<group>"; };
 		A021014A26EFF08E00BBEF65 /* STStorageProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStorageProductCell.swift; sourceTree = "<group>"; };
-		A021014B26EFF08E00BBEF65 /* STStorageProductCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STStorageProductCell.xib; sourceTree = "<group>"; };
 		A021A17A264F325900394713 /* UINavigationBar+Progress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Progress.swift"; sourceTree = "<group>"; };
 		A021A17D264F361E00394713 /* STGalleryNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryNavigationController.swift; sourceTree = "<group>"; };
 		A021A17F264F409600394713 /* IUploadFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IUploadFile.swift; sourceTree = "<group>"; };
@@ -841,6 +845,15 @@
 			path = DataSource;
 			sourceTree = "<group>";
 		};
+		A012B4872700BE77001E79E9 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				A012B4882700BED5001E79E9 /* STStoragePeriodHeaderView.swift */,
+				A012B4892700BED5001E79E9 /* STStoragePeriodHeaderView.xib */,
+			);
+			path = Header;
+			sourceTree = "<group>";
+		};
 		A0134D8A26ADDB1E00FA5129 /* VC */ = {
 			isa = PBXGroup;
 			children = (
@@ -866,7 +879,7 @@
 			isa = PBXGroup;
 			children = (
 				A021014A26EFF08E00BBEF65 /* STStorageProductCell.swift */,
-				A021014B26EFF08E00BBEF65 /* STStorageProductCell.xib */,
+				A012B48C2700D53A001E79E9 /* STStorageProductCell.xib */,
 			);
 			path = Product;
 			sourceTree = "<group>";
@@ -2274,6 +2287,7 @@
 		A0B8092626ED29E70063DA42 /* Items */ = {
 			isa = PBXGroup;
 			children = (
+				A012B4872700BE77001E79E9 /* Header */,
 				A0B8092726ED32830063DA42 /* Cells */,
 			);
 			path = Items;
@@ -2580,10 +2594,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A013D85B269F701D007ED786 /* STSettingsHeaderView.xib in Resources */,
+				A012B48B2700BED5001E79E9 /* STStoragePeriodHeaderView.xib in Resources */,
 				A021014826EFEC8C00BBEF65 /* STStorageBildingInfoCell.xib in Resources */,
 				A0D1A3CB262E10E0002E326F /* STAlbumFilesHeaderView.xib in Resources */,
 				A0B152D42636DB0700D36619 /* Gallery.storyboard in Resources */,
-				A021014D26EFF08E00BBEF65 /* STStorageProductCell.xib in Resources */,
 				A0A9767B263DD78400E391D1 /* STSharedMembersTableViewCell.xib in Resources */,
 				A06E423E2627230E00F43826 /* STAlbumsCollectionViewCell.xib in Resources */,
 				A0DE2DEC26B89F4500887D55 /* STSettingsSliderTableViewCell.xib in Resources */,
@@ -2620,6 +2634,7 @@
 				A075B7272652A03000B4E2DF /* STAlbumSettingsHeader.xib in Resources */,
 				A0794B9C269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib in Resources */,
 				A0E999A1263F2E46002FDCC9 /* STTokenCell.xib in Resources */,
+				A012B48D2700D53A001E79E9 /* STStorageProductCell.xib in Resources */,
 				A02204B425EEDC0400D07C98 /* SPCollectionHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2861,6 +2876,7 @@
 				A0A7974C264FF42F00917C91 /* STFilesDownloaderActivityVM.swift in Sources */,
 				A059D1D626C99AEB0045AC61 /* STBackupInputPhraseView.swift in Sources */,
 				A0F467F625F992F400BF00AA /* STCDTrashFile.swift in Sources */,
+				A012B48A2700BED5001E79E9 /* STStoragePeriodHeaderView.swift in Sources */,
 				A02204B325EEDC0400D07C98 /* GalleryFrontVC.swift in Sources */,
 				A0059E6625F8B70F003ABB56 /* STDataBaseProvider.swift in Sources */,
 				A0D4E83126C8107800556871 /* English.swift in Sources */,

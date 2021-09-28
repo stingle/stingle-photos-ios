@@ -116,7 +116,21 @@
 
 "service_busy" = "The service is busy, please wait";
 "payment_failed_message" = "Your payment failed";
-"yearly_plan_save" = "Or prepay annually (save %@ %.2f)";
+
+"yearly_plan_save" = "Save 2 months";
+"billed_monthly" = "Billed monthly";
+"billed_yearly" = "Billed yearly";
+"yearly" = "Yearly";
+
+"buy_now" = "Buy now";
+
+"100_gb" = "100 GB";
+"300_gb" = "300 GB";
+"1_tb" = "1 TB";
+"3_tb" = "3 TB";
+"5_tb" = "5 TB";
+"10_tb" = "10 TB";
+"20_tb" = "20 TB";
 
 //MARK: - Share
 

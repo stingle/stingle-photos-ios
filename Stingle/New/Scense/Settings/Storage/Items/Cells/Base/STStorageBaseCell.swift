@@ -7,25 +7,14 @@
 
 import UIKit
 
-protocol IStorageCellModel {
-    var identifier: String { get }
-}
-
 protocol IStorageCell: UICollectionViewCell {
-    var delegate: STStorageCellDelegate? { get set }
-    func confugure(model: IStorageCellModel?)
+    func confugure(model: IStorageItemModel?)
 }
 
-protocol STStorageCellDelegate: AnyObject {
-    func storageCell(didSelectBuy cell: STStorageProductCell, model: STStorageProductCell.Model.Button)
-}
-
-class STStorageBaseCell<Model: IStorageCellModel>: UICollectionViewCell {
+class STStorageBaseCell<Model: IStorageItemModel>: UICollectionViewCell {
     
     private(set) var model: Model?
     
-    weak var delegate: STStorageCellDelegate?
-
     func confugure(model: Model?) {
         self.model = model
     }
@@ -34,7 +23,7 @@ class STStorageBaseCell<Model: IStorageCellModel>: UICollectionViewCell {
 
 extension STStorageBaseCell: IStorageCell {
     
-    func confugure(model: IStorageCellModel?) {
+    func confugure(model: IStorageItemModel?) {
         self.confugure(model: (model as? Model))
     }
     

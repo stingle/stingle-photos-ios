@@ -7,6 +7,107 @@
 
 import Foundation
 
+protocol IStorageItemModel {
+    var identifier: String { get }
+}
+
+extension STStorageVC {
+    
+    struct ProductGroup: CaseIterable, Hashable {
+        
+        enum Product: String, CaseIterable {
+            case gb100 = "100gb"
+            case gb300 = "300gb"
+            case tb1 = "1tb"
+            case tb3 = "3tb"
+            case tb5 = "5tb"
+            case tb10 = "10tb"
+            case tb20 = "20tb"
+            
+            var localized: String {
+                switch self {
+                case .gb100:
+                    return "100_gb".localized
+                case .gb300:
+                    return "300_gb".localized
+                case .tb1:
+                    return "1_tb".localized
+                case .tb3:
+                    return "3_tb".localized
+                case .tb5:
+                    return "5_tb".localized
+                case .tb10:
+                    return "10_tb".localized
+                case .tb20:
+                    return "20_tb".localized
+                }
+            }
+        }
+        
+        enum Period: String, CaseIterable {
+            case monthly = "monthly"
+            case yearly = "yearly"
+        }
+        
+        static var allCases: [ProductGroup] {
+            
+            let productCasses = Product.allCases
+            let periodCasses = Period.allCases
+            
+            var result = [ProductGroup]()
+            productCasses.forEach { product in
+                periodCasses.forEach { period in
+                    let group = ProductGroup(product: product, period: period)
+                    result.append(group)
+                }
+            }
+            return result
+        }
+        
+        static var allIdentifiers: [String] {
+            
+            let productCasses = Product.allCases
+            let periodCasses = Period.allCases
+            
+            var result = [String]()
+            productCasses.forEach { product in
+                periodCasses.forEach { period in
+                    let identifier = ProductGroup(product: product, period: period).identifier
+                    result.append(identifier)
+                }
+            }
+            return result
+        }
+        
+        static func productGroup(for identifier: String) -> ProductGroup? {
+            let parts: [String] = identifier.components(separatedBy: "_")
+            guard parts.count == 2, let product = Product(rawValue: parts.first!), let period = Period(rawValue: parts.last!) else {
+                return nil
+            }
+            let group = ProductGroup(product: product, period: period)
+            return group
+        }
+        
+        
+        func hash(into hasher: inout Hasher) {
+            return self.identifier.hash(into: &hasher)
+        }
+        
+        static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.identifier == rhs.identifier
+        }
+        
+        var identifier: String {
+            return self.product.rawValue + "_" + self.period.rawValue
+        }
+        
+        let product: Product
+        let period: Period
+        
+    }
+}
+
+
 extension STStorageVC {
         
     struct Section: Hashable {
@@ -17,22 +118,24 @@ extension STStorageVC {
         }
         
         let type: SectionType
+        let herader: Item?
         let items: [Item]
         
         static func == (lhs: STStorageVC.Section, rhs: STStorageVC.Section) -> Bool {
-            return lhs.type == rhs.type
+            return lhs.type == rhs.type && lhs.herader == rhs.herader
         }
         
         func hash(into hasher: inout Hasher) {
-            return self.type.hash(into: &hasher)
+            self.type.hash(into: &hasher)
+            self.herader.hash(into: &hasher)
         }
         
     }
     
     struct Item: Hashable {
         
-        var item: IStorageCellModel
-        var reuseIdentifier: CellReuseIdentifier
+        var item: IStorageItemModel
+        var reuseIdentifier: ItemReuseIdentifier
 
         func hash(into hasher: inout Hasher) {
             hasher.combine(self.item.identifier)
@@ -44,9 +147,16 @@ extension STStorageVC {
 
     }
     
-    enum CellReuseIdentifier: String, CaseIterable {
-        case bildingInfo = "bildingInfoCell"
-        case product = "productCell"
+    enum ItemReuseIdentifier: CaseIterable {
+        
+        enum Kinde {
+            case herader
+            case cell
+        }
+        
+        case bildingInfo
+        case product
+        case periodHeader
         
         var nibName: String {
             switch self {
@@ -54,10 +164,39 @@ extension STStorageVC {
                 return "STStorageBildingInfoCell"
             case .product:
                 return "STStorageProductCell"
+            case .periodHeader:
+                return "STStoragePeriodHeaderView"
+            }
+        }
+        
+        var identifier: String {
+            switch self {
+            case .bildingInfo:
+                return "bildingInfoCell"
+            case .product:
+                return "productCell"
+            case .periodHeader:
+                return "periodHeaderView"
+            }
+        }
+        
+        var kinde: Kinde {
+            switch self {
+            case .periodHeader:
+                return .herader
+            case .bildingInfo:
+                return .cell
+            case .product:
+                return .cell
             }
         }
                 
     }
+        
+}
+
+
+extension STStorageVC {
     
     func generateSections(products: [STStore.Product], billingInfo: STBillingInfo) -> [Section] {
         let billingInfoSection = self.generateBillingInfoSection(billingInfo: billingInfo)
@@ -74,121 +213,44 @@ extension STStorageVC {
         let used = String(format: "storage_space_used_info".localized, "\(usedSpace)", allSpaceGB.getReadableUnit(format: ".0f").uppercased(), "\(percent)")
         let model = STStorageBildingInfoCell.Model(title: "current_storage".localized, used: used, usedProgress: progress)
         let item = Item(item: model, reuseIdentifier: .bildingInfo)
-        return Section(type: .bildingInfo, items: [item])
+        return Section(type: .bildingInfo, herader: nil, items: [item])
     }
     
-    func item(forMounth mounth: STStore.Product, year: STStore.Product) -> Item {
-        let mounthButton = STStorageProductCell.Model.Button(text: "current_plan".localized, isEnabled: false, identifier: mounth.productIdentifier)
-        let pearMounthPrice = mounth.localizedPricePeriod ?? ""
-        
-        let pearYearPrice = year.localizedPricePeriod ?? ""
-        let yearButton = STStorageProductCell.Model.Button(text: pearYearPrice, isEnabled: true, identifier: year.productIdentifier)
-        let currencyCode = mounth.currencyCode ?? ""
-        let saved = mounth.priceValue * 12 - year.priceValue
-        let description = String(format: "yearly_plan_save".localized, currencyCode, saved)
-        
-        let identifier = mounth.productIdentifier + year.productIdentifier
-        let model = STStorageProductCell.Model(identifier: identifier, quantity: mounth.localizedTitle, type: pearMounthPrice, buyButtonFirst: mounthButton, description: description, buyButtonSecondary: yearButton, isHighlighted: true)
-        
+    func item(for product: STStore.Product, selectedProductID: String?, productGroup: ProductGroup? = nil) -> Item {
+        let productGroup = productGroup ?? ProductGroup.productGroup(for: product.productIdentifier)
+        let isSelected = product.productIdentifier == selectedProductID
+        let price = product.localizedPrice
+        let quantity = productGroup?.product.localized ?? product.localizedTitle
+        let period = product.period?.periodUnit.localized
+        let identifier = product.productIdentifier + "_" + "\(isSelected)"
+        let model = STStorageProductCell.Model(identifier: identifier, quantity: quantity, price: price, period: period, prodictID: product.productIdentifier, isSelected: isSelected)
         return Item(item: model, reuseIdentifier: .product)
     }
     
-    func item(forYear mounth: STStore.Product, year: STStore.Product) -> Item {
-        
-        let pearYearPrice = year.localizedPricePeriod ?? ""
-        let yearButton = STStorageProductCell.Model.Button(text: "current_plan".localized, isEnabled: false, identifier: year.productIdentifier)
-        
-        let pearMounthPrice = mounth.localizedPricePeriod ?? ""
-        let mounthButton = STStorageProductCell.Model.Button(text: pearMounthPrice, isEnabled: true, identifier: mounth.productIdentifier)
-        
-        let identifier = mounth.productIdentifier + year.productIdentifier
-        let model = STStorageProductCell.Model(identifier: identifier, quantity: year.localizedTitle, type: pearYearPrice, buyButtonFirst: yearButton, description: nil, buyButtonSecondary: mounthButton, isHighlighted: true)
-        return Item(item: model, reuseIdentifier: .product)
-    }
-    
-    
-    func item(for mounth: STStore.Product, year: STStore.Product) -> Item {
-        
-        let pearMounthPrice = mounth.localizedPricePeriod ?? ""
-        let mounthButton = STStorageProductCell.Model.Button(text: pearMounthPrice, isEnabled: true, identifier: mounth.productIdentifier)
-        
-        let pearYearPrice = year.localizedPricePeriod ?? ""
-        let yearButton = STStorageProductCell.Model.Button(text: pearYearPrice, isEnabled: true, identifier: year.productIdentifier)
-        let currencyCode = mounth.currencyCode ?? ""
-        let saved = mounth.priceValue * 12 - year.priceValue
-        let description = String(format: "yearly_plan_save".localized, currencyCode, saved)
-        
-        let identifier = mounth.productIdentifier + year.productIdentifier
-        let model = STStorageProductCell.Model(identifier: identifier, quantity: mounth.localizedTitle, type: nil, buyButtonFirst: mounthButton, description: description, buyButtonSecondary: yearButton, isHighlighted: false)
-        
-        return Item(item: model, reuseIdentifier: .product)
-    }
-    
-    func item(for mounth: STStore.Product, year: STStore.Product, billingInfo: STBillingInfo) -> Item {
-        if billingInfo.plan.identifier == mounth.productIdentifier {
-            return self.item(forMounth: mounth, year: year)
-        } else if billingInfo.plan.identifier == year.productIdentifier {
-            return self.item(forYear: mounth, year: year)
+    func generateProductsHeader() -> Item {
+        var model: IStorageItemModel!
+        switch self.period {
+        case .monthly:
+            model = STStoragePeriodHeaderView.Model(description: "billed_monthly".localized, period: "yearly".localized, swich: false, info: "yearly_plan_save".localized)
+        case .yearly:
+            model = STStoragePeriodHeaderView.Model(description: "billed_yearly".localized, period: nil, swich: true, info: nil)
         }
-        return self.item(for: mounth, year: year)
-    }
-    
-    func item(for product: STStore.Product, billingInfo: STBillingInfo) -> Item {
-        let isCurrent = product.productIdentifier == billingInfo.plan.identifier
-        let pearPrice = product.localizedPricePeriod ?? ""
-        let title = isCurrent ? "current_plan".localized : pearPrice
-        let button = STStorageProductCell.Model.Button(text: title, isEnabled: !isCurrent, identifier: product.productIdentifier)
-        let model = STStorageProductCell.Model(identifier: product.productIdentifier, quantity: product.localizedTitle, type: nil, buyButtonFirst: button, description: nil, buyButtonSecondary: nil, isHighlighted: isCurrent)
-        return Item(item: model, reuseIdentifier: .product)
-    }
-    
-    func freeProductItem() -> Item {
-        let button = STStorageProductCell.Model.Button(text: "current_plan".localized, isEnabled: false, identifier: "defaultProduct")
-        let model = STStorageProductCell.Model(identifier: "defaultProduct", quantity: "1.0 GB", type: "free".localized, buyButtonFirst: button, description: nil, buyButtonSecondary: nil, isHighlighted: true)
-        return Item(item: model, reuseIdentifier: .product)
+        return Item(item: model, reuseIdentifier: .periodHeader)
     }
     
     func generateProductsSection(products: [STStore.Product], billingInfo: STBillingInfo) -> Section {
         var items = [Item]()
-        
-        let allIdentifiers = STStorageVM.ProductGroup.allIdentifiers
-        
-        var productsGroup = [String: STStore.Product]()
-        
-        products.forEach { product in
-            productsGroup[product.productIdentifier] = product
-        }
-        
-        var selectedItem: Item?
-        
-        for identifiers in allIdentifiers {
-            var item: Item?
-            if let mount = productsGroup[identifiers.monthly], let year = productsGroup[identifiers.yearly] {
-                item = self.item(for: mount, year: year, billingInfo: billingInfo)
-            } else if let product = productsGroup[identifiers.monthly] {
-                item = self.item(for: product, billingInfo: billingInfo)
-            } else if let product = productsGroup[identifiers.yearly] {
-                item = self.item(for: product, billingInfo: billingInfo)
-            }
-            guard let item = item else {
+        let selectedProductID = self.selectedProductID ?? billingInfo.plan.identifier
+        for product in products {
+            let productGroup = ProductGroup.productGroup(for: product.productIdentifier)
+            guard productGroup?.period == self.period else {
                 continue
             }
-            if identifiers.monthly == billingInfo.plan.identifier || identifiers.yearly == billingInfo.plan.identifier {
-                selectedItem = item
-            } else {
-                items.append(item)
-            }
-            
+            let item = self.item(for: product, selectedProductID: selectedProductID, productGroup: productGroup)
+            items.append(item)
         }
-        
-        if let selectedItem = selectedItem {
-            items.insert(selectedItem, at: .zero)
-        } else if billingInfo.plan == .free {
-            let `default` = self.freeProductItem()
-            items.insert(`default`, at: .zero)
-        }
-
-        return Section(type: .product, items: items)
+        let header = self.generateProductsHeader()
+        return Section(type: .product, herader: header, items: items)
         
     }
     

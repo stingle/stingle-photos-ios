@@ -30,6 +30,7 @@ class STTabBar: UITabBar {
     @IBInspectable var shadowColor: UIColor = UIColor.clear {
         didSet {
             self.layer.shadowColor = shadowColor.cgColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -39,6 +40,7 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.normal.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.inlineLayoutAppearance.normal.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.compactInlineLayoutAppearance.normal.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -48,6 +50,7 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.normal.iconColor = newColor
             self.standardAppearance.inlineLayoutAppearance.normal.iconColor = newColor
             self.standardAppearance.compactInlineLayoutAppearance.normal.iconColor = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -57,6 +60,7 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.selected.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.inlineLayoutAppearance.selected.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.compactInlineLayoutAppearance.selected.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -66,6 +70,7 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.focused.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.inlineLayoutAppearance.focused.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.compactInlineLayoutAppearance.focused.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -75,12 +80,14 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.selected.iconColor = newColor
             self.standardAppearance.inlineLayoutAppearance.selected.iconColor = newColor
             self.standardAppearance.compactInlineLayoutAppearance.selected.iconColor = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
     @IBInspectable var barBackroundColor: UIColor? {
         set {
             self.standardAppearance.backgroundColor = newValue
+            self.reloadScrollEdgeAppearance()
         } get {
             return self.standardAppearance.backgroundColor
         }
@@ -89,6 +96,7 @@ class STTabBar: UITabBar {
     @IBInspectable var selectionIndicatorTintColor: UIColor? {
         set {
             self.standardAppearance.selectionIndicatorTintColor = newValue
+            self.reloadScrollEdgeAppearance()
         } get {
             return self.standardAppearance.selectionIndicatorTintColor
         }
@@ -110,13 +118,20 @@ class STTabBar: UITabBar {
         
         let appearance = self.standardAppearance
         appearance.backgroundColor = self.barBackroundColor
-        
         if UIDevice.current.userInterfaceIdiom != .tv {
             appearance.inlineLayoutAppearance.normal.titleTextAttributes[NSAttributedString.Key.font] = UIFont.regular(light: 13)
             appearance.inlineLayoutAppearance.selected.titleTextAttributes[NSAttributedString.Key.font] = UIFont.regular(light: 13)
         }
-                        
+        if #available(iOS 15.0, *) {
+            self.scrollEdgeAppearance = appearance
+        }
         self.standardAppearance = appearance
+    }
+    
+    private func reloadScrollEdgeAppearance() {
+        if #available(iOS 15.0, *) {
+            self.scrollEdgeAppearance = self.standardAppearance
+        }
     }
     
     var accessoryView: UIView? {

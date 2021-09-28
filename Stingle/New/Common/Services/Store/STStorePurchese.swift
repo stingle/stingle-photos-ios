@@ -77,4 +77,12 @@ extension STStore.Purchese: SKPaymentTransactionObserver {
        
     }
     
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+        guard queue.transactions.first(where: { $0.payment == self.payment }) != nil else {
+            return
+        }
+        self.failure?(STStore.StoreError.error(error: error))
+        self.clean()
+    }
+    
 }
