@@ -20,16 +20,16 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="ckg-pS-Zn4">
-                    <rect key="frame" x="0.0" y="0.0" width="83" height="135"/>
+                    <rect key="frame" x="0.0" y="2" width="83" height="131"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0L0-Nm-kYT">
-                            <rect key="frame" x="22" y="0.0" width="39.5" height="65"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="0L0-Nm-kYT">
+                            <rect key="frame" x="16.5" y="0.0" width="50" height="63"/>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <color key="textColor" name="STText"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ovh-6k-xar">
-                            <rect key="frame" x="24" y="69" width="35.5" height="66"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Ovh-6k-xar">
+                            <rect key="frame" x="16.5" y="67" width="50" height="64"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" name="STText"/>
                             <nil key="highlightedColor"/>
@@ -40,9 +40,9 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="ckg-pS-Zn4" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="5cD-Fo-dbW"/>
-                <constraint firstAttribute="bottom" secondItem="ckg-pS-Zn4" secondAttribute="bottom" id="9wS-yc-Lv0"/>
+                <constraint firstAttribute="bottom" secondItem="ckg-pS-Zn4" secondAttribute="bottom" constant="2" id="9wS-yc-Lv0"/>
                 <constraint firstAttribute="trailing" secondItem="ckg-pS-Zn4" secondAttribute="trailing" id="kam-BO-xcP"/>
-                <constraint firstItem="ckg-pS-Zn4" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="sHW-Qm-YgD"/>
+                <constraint firstItem="ckg-pS-Zn4" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="2" id="sHW-Qm-YgD"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="212.31884057971016" y="-231.36160714285714"/>

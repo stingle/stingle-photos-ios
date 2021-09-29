@@ -14,7 +14,9 @@ class STTrashVM {
     private let trashProvider = STApplication.shared.dataBase.trashProvider
     
     func createDBDataSource() -> STDataBase.DataSource<STCDTrashFile> {
-        return STApplication.shared.dataBase.trashProvider.createDataSource(sortDescriptorsKeys: ["dateCreated"], sectionNameKeyPath: #keyPath(STCDTrashFile.day))
+        let trashProvider = STApplication.shared.dataBase.trashProvider
+        let sorting = self.getSorting()
+        return trashProvider.createDataSource(sortDescriptorsKeys: sorting, sectionNameKeyPath: #keyPath(STCDTrashFile.day))
     }
     
     func sync() {
@@ -22,7 +24,7 @@ class STTrashVM {
     }
     
     func getFiles(fileNames: [String]) -> [STLibrary.TrashFile] {
-        let files = trashProvider.fetchAll(for: fileNames)
+        let files = self.trashProvider.fetchAll(for: fileNames)
         return files
     }
     
@@ -58,6 +60,13 @@ class STTrashVM {
         } failure: { error in
             completion(error)
         }
+    }
+    
+    func getSorting() -> [STDataBase.DataSource<STCDTrashFile>.Sort] {
+        let dateCreated = STDataBase.DataSource<STCDTrashFile>.Sort(key: #keyPath(STCDTrashFile.dateCreated), ascending: nil)
+        let dateModified = STDataBase.DataSource<STCDTrashFile>.Sort(key: #keyPath(STCDTrashFile.dateModified), ascending: false)
+        let file = STDataBase.DataSource<STCDTrashFile>.Sort(key: #keyPath(STCDTrashFile.file), ascending: false)
+        return [dateCreated, dateModified, file]
     }
     
 }

@@ -13,7 +13,7 @@ class STBaseNetworkOperation<T>: STOperation<T> {
     private(set) var request: IRequest
     
     let networkDispatcher = STNetworkDispatcher.sheared
-    var dataRequest: NetworkTask?
+    var dataRequest: INetworkTask?
     
     init(request: IRequest, success: STOperationSuccess?, failure: STOperationFailure?) {
         self.request = request

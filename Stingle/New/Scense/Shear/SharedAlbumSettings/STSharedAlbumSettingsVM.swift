@@ -82,16 +82,16 @@ class STSharedAlbumSettingsVM {
         
 }
 
-extension STSharedAlbumSettingsVM: ICollectionProviderObserver {
+extension STSharedAlbumSettingsVM: IDataBaseProviderProviderObserver {
     
-    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+    func dataBaseProvider(didDeleted provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         guard (((models as? [STLibrary.Album])?.contains(where: { $0.albumId == self.album.albumId })) != nil) else {
             return
         }
         self.delegate?.sharedAlbumSettingsVM(albumDidDeleted: self)
     }
     
-    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel]) {
+    func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         guard let albums = (models as? [STLibrary.Album]), let album = albums.first(where: { $0.albumId == self.album.albumId}) else {
             return
         }

@@ -28,7 +28,7 @@ class STZoomView: UIView, UIGestureRecognizerDelegate {
     
     weak var delegate: STZoomViewDelegate?
     
-    let maximumZoomScale: CGFloat = 5
+    let maximumZoomScale: CGFloat = 4
     let minimumZoomScale: CGFloat = 1
     
     var contentView: IZoomContentView? {
@@ -183,7 +183,10 @@ class STZoomView: UIView, UIGestureRecognizerDelegate {
         if !self.contentViewFrame.contains(point) {
             return
         }
-        if Int(self.scrollView.zoomScale) == Int(self.scrollView.maximumZoomScale) {
+        
+        let zoomFactor = self.scrollView.zoomScale / (self.scrollView.maximumZoomScale != .zero ? self.scrollView.maximumZoomScale : 100)
+        
+        if zoomFactor > 0.8 {
             self.scrollView.setZoomScale(self.scrollView.minimumZoomScale, animated: true)
         }else {
             self.zoomToPoint(zoomPoint: point, scale: self.scrollView.maximumZoomScale, animated: true)

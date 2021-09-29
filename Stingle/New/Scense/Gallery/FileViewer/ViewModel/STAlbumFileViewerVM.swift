@@ -12,7 +12,7 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
     private let album: STLibrary.Album
     private let albumWorker = STAlbumWorker()
     
-    init(album: STLibrary.Album, sortDescriptorsKeys: [String]) {
+    init(album: STLibrary.Album, sortDescriptorsKeys: [STDataBase.DataSource<STCDAlbumFile>.Sort]) {
         self.album = album
         let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", album.albumId)
         let dataBase = STApplication.shared.dataBase.albumFilesProvider
@@ -44,7 +44,6 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
     }
     
     override func deleteFile(file: STLibrary.File, completion: @escaping (_ result: IError?) -> Void) {
-        
         guard let file = file as? STLibrary.AlbumFile else {
             completion(nil)
             return
@@ -59,6 +58,21 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
     
     override func getDeleteFileMessage(file: STLibrary.File) -> String {
         return "move_trash_file_alert_message".localized
+    }
+    
+    override func getMorAction(for file: STLibrary.File) -> [STFileViewerVC.MoreAction] {
+        return [.download, .setAlbumCover]
+    }
+    
+    override func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.File) {
+        switch action {
+        case .download:
+            self.downloadFile(file: file)
+        case .setAlbumCover:
+            self.albumWorker.setCover(album: self.album, caver: file.file, success: { _ in
+                print("")
+            }, failure: nil)
+        }
     }
     
 }

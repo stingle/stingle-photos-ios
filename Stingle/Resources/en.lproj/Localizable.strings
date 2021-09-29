@@ -36,21 +36,19 @@
 //MARK: - Common
 
 "email" = "Email";
-"password" = "Password";
-"confirm_password" = "Confirm password";
 "already_have_an_account" = "Already  have an account?";
 "dont_have_an_accout" = "Don't have an accout?";
 "advanced" = "Advanced";
 "backup_my_keys" = "Backup my keys";
 "info" = "Info";
 "gallery" = "Gallery";
-"forgot_password?" = "Forgot  password?";
+"forgot_password?" = "Forgot password?";
+
+"importing" = "Importing";
 
 "service_busy?" = "Service busy";
 
-"storage_space_used_info" = "%@ MB of %@ GB (%@%%) used";
-
-"storage_space_used_info" = "%@ MB of %@ GB (%@%%) used";
+"storage_space_used_info" = "%@ MB of %@ (%@%%) used";
 
 "alert_error_permission_photos_title" = "Not authorized";
 "alert_error_permission_photos_message" = "Stingle haven't permission your photos. Please check your settings";
@@ -61,6 +59,8 @@
 "albums" = "Albums";
 "sharing" = "Sharing";
 
+"change" = "Change";
+
 "items_count" = "%@ items";
 
 "have_not_any_uploading_item" = "Backup and sync complete";
@@ -68,6 +68,7 @@
 "edit" = "Edit";
 "done" = "Done";
 "select" = "Select";
+"copy" = "Copy";
 
 "selected_items_count" = "%@ items Selected";
 "select_items" = "Select items";
@@ -84,6 +85,52 @@
 
 "delete_all" = "Delete All";
 "recover_all" = "Recover All";
+
+"others" = "Others";
+
+"unlock" = "Unlock";
+"log_out" = "Log out";
+
+"confirm_password" = "Confirm password";
+"change_password" = "Change Password";
+"current_password" = "Current Password";
+"password" = "Password";
+"new_password" = "New password";
+
+"check" = "Check";
+
+"app_unauthorized_message" = "App automatically log out for your security. Please login and enjoy again";
+"please_set_a_new_password" = "Please set a new password";
+
+"reconnect_server_try_again_message" = "An error has occurred. click the try again button to reconnect to the server";
+"try_again" = "Try again";
+
+"day" = "Day";
+"week" = "Week";
+"month" = "Month";
+"year" = "Year";
+
+"current_storage" = "Current storage";
+"current_plan" = "Current plan";
+"free" = "Free";
+
+"service_busy" = "The service is busy, please wait";
+"payment_failed_message" = "Your payment failed";
+
+"yearly_plan_save" = "Save 2 months";
+"billed_monthly" = "Billed monthly";
+"billed_yearly" = "Billed yearly";
+"yearly" = "Yearly";
+
+"buy_now" = "Buy now";
+
+"100_gb" = "100 GB";
+"300_gb" = "300 GB";
+"1_tb" = "1 TB";
+"3_tb" = "3 TB";
+"5_tb" = "5 TB";
+"10_tb" = "10 TB";
+"20_tb" = "20 TB";
 
 //MARK: - Share
 
@@ -119,6 +166,8 @@
 
 "alert_remove_album_member_title" = "Remove member";
 "alert_remove_album_member_message" = "Are you sure you want to remove %@";
+
+"enter_app_password" = "Enter app password";
 
 
 //MARK: - Gallery
@@ -168,6 +217,74 @@
 "move_trash_file_alert_message" = "This file will be move to trash";
 "download_file" = "Download file";
 
+//MARK: - Settings
+
+"account" = "Account";
+"security" = "Security";
+"backup" = "Backup";
+"import" = "Import";
+"appearance" = "Appearance";
+"advanced" = "Advanced";
+
+"lock_up_the_app_after" = "Lock up the app after";
+
+"app_access" = "App access";
+"authentication" = "Authentication";
+
+"biometric_authentication" = "Biometric authentication";
+"biometric_authentication_message" = "Use biometrics to unlock Stingle Photos";
+
+"require_confirmation" = "Require confirmation";
+"require_confirmation_message" = "Press confirm button after face button";
+
+"disallow_screenshots_off_this_app" = "Disallow screenshots off this app";
+
+"backup_my_keys" = "Backup my keys";
+"backup_my_keys_description" = "Backup my keys to allow login without entering backup phrase";
+
+"delete_account" = "Delete account";
+
+"remove_backcup_keys_alert_title" = "Delete backup of keys";
+"remove_backcup_keys_alert_message" = "Are you sure you want to delete backup keys?\nTo login you will need to enter your backup phrase";
+
+"delete_account_alert_title" = "Delete your account?";
+"delete_account_alert_message" = "Are you sure you want to delete your account?\nAll your data will be irreversibly deleted!";
+
+"delete_account_seccoundry_alert_title" = "Are you REALLY sure you want to account?";
+"delete_account_seccoundry_alert_message" = "Last chance! Your account and all of your photos, videos, albums and shares will be deleted! This cannot be UNDONE!";
+
+
+"reset_password_title" = "Warning! Changing password will log out all others devices currently connected to this account you will need to log them in again with new credentials";
+
+"alert_log_out_title" = "Log Out";
+"alert_log_out_message" = "Are you sure you want to log out?";
+
+"alert_free_up_space_title" = "Nothing to delete";
+"alert_free_up_space_message" = "There are backed up files that we can safely delete from your device at this point";
+
+"enable_backup" = "Enable backup";
+"enable_backup_description" = "Backup your photos and delete Cache videos to the cloud as soon as you take or import theme";
+
+"backup_only_wifi" = "Backup only in Wifi";
+"backup_only_wifi_description" = "Backup only when you are connected wifi";
+
+"backup_battery" = "Don't backup if battery is below";
+
+"follow_system" = "Follow system";
+"light" = "Light";
+"dark" = "Dark";
+"theme" = "Theme";
+
+"max_cache_size" = "Maximum cache size";
+"unlimited" = "Unlimited";
+"delete_cache" = "Delete cache";
+"delete_cache_description" = "Clear cache of thumbnails and other temporary data";
+
+"delete?" = "Delete?";
+"delete?" = "Delete?";
+
+"delete_cache_alert_message" = "Are you sure you want to delete cache?";
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";
@@ -175,8 +292,31 @@
 "menu_storage" = "Storage";
 "menu_backup_phrase" = "Backup phrase";
 "menu_settings" = "Settings";
+"menu_lock_app" = "Lock app";
 "menu_official_website" = "Official website";
 "menu_sign_out" = "Sign Out";
+"menu_free_up_space" = "Free up space";
+
+//MARK: - Backup phrase
+
+"backup_phrase_description" = "Your backup phrase  is most valuable secret of your account, so please make sure to back it up in safe place. If anyone get tis phrase, they can get access to all of your data";
+"ok_get_backup_phrase" = "Ok, get Backup Phrase";
+
+"your_backup_phrase" = "Your Backup Phrase";
+"backup_phrase_input_title" = "Please enter your backup phrase";
+"backup_phrase_input_sup_title" = "Because you have chosen not to backup your private key, you have to enter your backup phrase to reconstruction tour private key locally. Without one it's impossible to decrypt your photos and videos.";
+"backup_phrase_input_placeholder" = "Please enter your 24 word recovery phrase";
+
+"forget_password_title" = "Please enter your email address and your recovery phrase. If correct you will able to set a new password for your account.";
+
+
+//MARK: - Time
+
+"immediately" = "immediately";
+"seconds_count" = "%@ seconds";
+"minute" = "minute";
+"minutes_count" = "%@ minutes";
+"hour" = "hour";
 
 //MARK: - Sync
 
@@ -197,10 +337,15 @@
 "error_empty_password" = "Password cannot be empty";
 "error_incorrect_email" = "Email not valid";
 "error_incorrect_password" = "Password must have at least 6 characters";
+"error_password_not_valed" = "Incorrect password";
 "error_unknown_error" = "Something went wrong, please try again later";
 "error_incorrect_confirm_password" = "Confirm  passwordnot valid";
 
 "error_data_not_found" = "Data not found";
+
+"error_maching_passwords" = "Password don't match. Please enter the same password twice correctly";
+
+"error_incorrect_phrase" = "Your recovery phrase is incorrect!";
 
 //MARK: - NETWORK
 

@@ -8,8 +8,6 @@
 import Foundation
 
 struct STDBUsed: Codable {
-    
     let spaceUsed: Float
     let spaceQuota: String
-    
 }

@@ -20,7 +20,7 @@ extension STCrypto {
         guard let privateKey = KeyManagement.key else {
             throw CryptoError.Bundle.pivateKeyIsEmpty
         }
-        let publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+        let publicKey = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
         
         
         guard let albumSK = self.sodium.box.open(anonymousCipherText: encAlbumSK, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
@@ -83,7 +83,7 @@ extension STCrypto {
     }
     
     func generateEncryptedAlbumData(albumName: String) throws -> (encPrivateKey: String, publicKey: String, metadata: String) {
-        let userPK = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+        let userPK = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
         let keyPair = self.sodium.box.keyPair()
         guard let albumSK = keyPair?.secretKey, let albumPK = keyPair?.publicKey else {
             throw CryptoError.Internal.keyPairGenerationFailure

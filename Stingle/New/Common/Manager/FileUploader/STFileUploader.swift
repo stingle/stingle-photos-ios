@@ -33,7 +33,7 @@ class STFileUploader {
     private(set) var progresses = [String: Progress]()
     private(set) var uploadedFiles = [STLibrary.File]()
     private(set) var uploadingFiles = [STLibrary.File]()
-    let maxCountUploads = 10
+    let maxCountUploads = 5
     let maxCountUpdateDB = 5
     
     var isUploading: Bool {
@@ -45,27 +45,33 @@ class STFileUploader {
         return queue
     }()
     
-    func upload(files: [IUploadFile]) {
-        for file in files {
-            self.upload(file: file)
+    @discardableResult
+    func upload(files: [IUploadFile]) -> Importer {
+        let importer = Importer(uploadFiles: files, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+            self?.uploadAllLocalFilesInQueue(files: files)
         }
-        self.countAllFiles = self.countAllFiles + Int64(files.count)
-        self.updateProgress(files: [])
+        return importer
     }
     
-    func upload(file: IUploadFile) {
-        let operation = Operation(file: file, delegate: self)
-        self.operationManager.run(operation: operation, in: self.operationQueue)
+    @discardableResult
+    func uploadAlbum(files: [IUploadFile], album: STLibrary.Album) -> Importer {
+        let importer = AlbumFileImporter(uploadFiles: files, album: album, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+            self?.uploadAllLocalFilesInQueue(files: files)
+        }
+        return importer
     }
     
     func uploadAllLocalFiles() {
-        DispatchQueue.main.async { [weak self] in
-            var localFiles = STApplication.shared.dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
-            let localAlbumFiles = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")
-            localFiles.append(contentsOf: localAlbumFiles)
-            self?.dispatchQueue.sync {
-                self?.uploadAllLocalFilesInQueue(files: localFiles)
+        guard STApplication.shared.utils.canUploadFile() else {
+            return
+        }
+        
+        self.dispatchQueue.async { [weak self] in
+            guard let weakSelf = self else {
+                return
             }
+            let files = weakSelf.getRemoteFiles()
+            weakSelf.uploadAllLocalFilesInQueue(files: files)
         }
     }
     
@@ -87,6 +93,29 @@ class STFileUploader {
     }
     
     // MARK: - private
+    
+    private func getRemoteFiles() -> [STLibrary.File] {
+        let dataBase = STApplication.shared.dataBase
+        
+        var localFiles = dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
+        let localAlbumFiles = dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")
+        
+        let albumIds: [String] = localAlbumFiles.compactMap( { return $0.albumId } )
+        let albums: [STLibrary.Album] = dataBase.albumsProvider.fetch(identifiers: albumIds)
+        var albumIdsDic = [String: STLibrary.Album]()
+        
+        albums.forEach { album in
+            albumIdsDic[album.albumId] = album
+        }
+        
+        localAlbumFiles.forEach { albumFile in
+            if let album = albumIdsDic[albumFile.albumId] {
+                albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)
+            }
+        }
+        localFiles.append(contentsOf: localAlbumFiles)
+        return localFiles
+    }
     
     private func uploadAllLocalFilesInQueue(files: [STLibrary.File]) {
         guard self.checkCanUploadFiles() else {
@@ -135,30 +164,29 @@ class STFileUploader {
         return true
     }
         
-    private func updateDB(file: STLibrary.File) {
+    private func updateDB(file: STLibrary.File, updateDB: Bool) {
         var uploadFiles = self.uploadedFiles
         if !uploadFiles.contains(where: { $0.file == file.file }) {
             uploadFiles.append(file)
         }
+        
         if uploadFiles.count > self.maxCountUpdateDB || self.countAllFiles == 0 {
             uploadFiles.removeAll()
         }
         
         self.uploadedFiles = uploadFiles
-        if let albumFile = file as? STLibrary.AlbumFile {
-            if file.isRemote {
+        guard updateDB else {
+            return
+        }
+        
+        if file.isRemote {
+            if let albumFile = file as? STLibrary.AlbumFile {
                 STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: true)
             } else {
-                STApplication.shared.dataBase.addAlbumFile(albumFile: albumFile, reloadData: true)
-            }
-            
-        } else {
-            if file.isRemote {
                 STApplication.shared.dataBase.galleryProvider.update(models: [file], reloadData: true)
-            } else {
-                STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: self.uploadedFiles.isEmpty)
             }
         }
+        
     }
     
 }
@@ -227,12 +255,11 @@ extension STFileUploader: STFileUploaderOperationDelegate {
     func fileUploaderOperation(didStart operation: STFileUploader.Operation) {}
     
     func fileUploaderOperation(didStartUploading operation: STFileUploader.Operation, file: STLibrary.File) {
-                
-        self.dispatchQueue.async { [weak self] in
+        self.dispatchQueue.async(flags: .barrier) { [weak self] in
             if !(self?.uploadingFiles.contains(where: { file.file == $0.file }) ?? false) {
                 self?.uploadingFiles.append(file)
             }
-            self?.updateDB(file: file)
+            self?.updateDB(file: file, updateDB: false)
             self?.updateProgress(files: [file])
         }
     }
@@ -245,28 +272,27 @@ extension STFileUploader: STFileUploaderOperationDelegate {
     }
     
     func fileUploaderOperation(didEndFailed operation: STFileUploader.Operation, error: IError, file: STLibrary.File?) {
-        self.dispatchQueue.async { [weak self] in
+        self.dispatchQueue.async(flags: .barrier) { [weak self] in
             guard let weakSelf = self else {
                 return
             }
             if let file = file, let index = weakSelf.uploadingFiles.firstIndex(where: { $0.file == file.file }) {
                 weakSelf.uploadingFiles.remove(at: index)
             }
-            
             weakSelf.totalCompletedUnitCount = weakSelf.totalCompletedUnitCount + 1
             weakSelf.countAllFiles = weakSelf.countAllFiles - 1
-           
             guard let file = file else {
                 return
             }
             weakSelf.progresses.removeValue(forKey: file.file)
-            weakSelf.updateDB(file: file)
+            weakSelf.updateDB(file: file, updateDB: false)
             weakSelf.updateProgress(didEndFailed: file, error: error)
         }
     }
     
-    func fileUploaderOperation(didEndSucces operation: Operation, file: STLibrary.File, spaceUsed: STDBUsed) {
-        self.dispatchQueue.sync { [weak self] in
+    func fileUploaderOperation(didEndSucces operation: Operation, file: STLibrary.File, spaceUsed: STDBUsed?) {
+        
+        self.dispatchQueue.async(flags: .barrier) { [weak self] in
             guard let weakSelf = self else {
                 return
             }
@@ -277,12 +303,18 @@ extension STFileUploader: STFileUploaderOperationDelegate {
             weakSelf.countAllFiles = weakSelf.countAllFiles - 1
             weakSelf.progresses.removeValue(forKey: file.file)
             
-            let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
-            dbInfo.update(with: spaceUsed)
-            STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
-            weakSelf.updateDB(file: file)
+            if let spaceUsed = spaceUsed {
+                DispatchQueue.main.async {
+                    let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
+                    dbInfo.update(with: spaceUsed)
+                    STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
+                }
+            }
+                    
+            weakSelf.updateDB(file: file, updateDB: true)
             weakSelf.updateProgress(didEndSucces: file)
         }
+                
     }
     
 }

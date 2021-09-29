@@ -99,10 +99,12 @@ class STAlbumWorker: STWorker {
             let publicKey = try crypto.readPublicKey()
             let metadata = try STApplication.shared.crypto.decryptAlbum(albumPKStr: album.publicKey, encAlbumSKStr: album.encPrivateKey, metadataStr: album.metadata)
             var headers = [String: String]()
-            
             var trahFiles = [STLibrary.TrashFile]()
                         
             for file in files {
+                
+                STApplication.shared.uploader.cancelUploadIng(for: file)
+                
                 let newHeader = try crypto.reencryptFileHeaders(headersStr: file.headers, publicKeyTo: publicKey, privateKeyFrom: metadata.privateKey, publicKeyFrom: metadata.publicKey);
                 headers[file.file] = newHeader
                 uploader.cancelUploadIng(for: file)

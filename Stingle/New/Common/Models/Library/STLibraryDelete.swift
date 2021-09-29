@@ -15,7 +15,7 @@ extension STLibrary {
         
         enum `Type`: Int, Codable {
             case gallery = 1
-            case trashRecovor = 2
+            case trashRecover = 2
             case trashDelete = 3
             case album = 4
             case albumFile = 5
@@ -36,7 +36,7 @@ extension STLibrary {
         }
         
         private(set) var gallery: [Gallery] = [Gallery]()
-        private(set) var recovors: [Recovor] = [Recovor]()
+        private(set) var recovers: [Recover] = [Recover]()
         private(set) var trashDeletes: [TrashDelete] = [TrashDelete]()
         private(set) var albums: [Album] = [Album]()
         private(set) var albumFiles: [AlbumFile] = [AlbumFile]()
@@ -56,9 +56,9 @@ extension STLibrary {
                 case .gallery:
                     let item = try containerObject.decode(Gallery.self)
                     self.gallery.append(item)
-                case .trashRecovor:
-                    let item = try containerObject.decode(Recovor.self)
-                    self.recovors.append(item)
+                case .trashRecover:
+                    let item = try containerObject.decode(Recover.self)
+                    self.recovers.append(item)
                 case .trashDelete:
                     let item = try containerObject.decode(TrashDelete.self)
                     self.trashDeletes.append(item)
@@ -122,7 +122,7 @@ extension STLibrary.DeleteFile {
         }
     }
     
-    class Recovor: Trash {
+    class Recover: Trash {
     }
     
     class TrashDelete: Trash {

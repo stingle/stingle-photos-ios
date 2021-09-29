@@ -34,3 +34,18 @@ class STResponse<T: Decodable>: IResponse {
 struct STEmptyResponse: Codable {
     
 }
+
+struct STLogoutResponse: Codable {
+    
+    private enum CodingKeys: String, CodingKey {
+        case logout = "logout"
+    }
+    
+    let logout: Bool?
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.logout = (try? container.decodeIfPresent(Int.self, forKey: .logout) ?? .zero) == 1
+    }
+    
+}

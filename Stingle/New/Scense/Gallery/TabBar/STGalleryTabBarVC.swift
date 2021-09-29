@@ -15,8 +15,7 @@ class STGalleryTabBarVC: STTabBarViewController {
             vc.element.tabBarItem.title = ControllersTypes(rawValue: vc.offset)?.title
         })
     }
-    
-    
+
 }
 
 extension STGalleryTabBarVC {

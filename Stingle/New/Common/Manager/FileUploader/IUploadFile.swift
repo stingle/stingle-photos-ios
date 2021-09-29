@@ -9,9 +9,7 @@ import Photos
 import UIKit
 
 protocol IUploadFile {
-    
     func requestFile(success: @escaping (_ file: STLibrary.File) -> Void, failure: @escaping (_ failure: IError ) -> Void)
-    
 }
 
 extension STFileUploader {
@@ -19,6 +17,7 @@ extension STFileUploader {
     class FileUploadable: IUploadFile {
         
         let asset: PHAsset
+        
         init(asset: PHAsset) {
             self.asset = asset
         }
@@ -49,7 +48,10 @@ extension STFileUploader {
             default:
                 throw STFileUploader.UploaderError.phAssetNotValid
             }
-            guard let localThumbsURL = STApplication.shared.fileSystem.localThumbsURL, let localOreginalsURL = STApplication.shared.fileSystem.localOreginalsURL else {
+            
+            let fileSystem = STApplication.shared.fileSystem
+            
+            guard let localThumbsURL = fileSystem.localThumbsURL, let localOreginalsURL = fileSystem.localOreginalsURL else {
                 throw STFileUploader.UploaderError.fileSystemNotValid
             }
             
@@ -59,7 +61,8 @@ extension STFileUploader {
                                      duration: info.duration,
                                      toUrl: localOreginalsURL,
                                      toThumbUrl: localThumbsURL,
-                                     fileSize: info.fileSize, creationDate: info.creationDate,
+                                     fileSize: info.fileSize,
+                                     creationDate: info.creationDate,
                                      modificationDate: info.modificationDate)
             
             return file
@@ -132,6 +135,7 @@ extension STFileUploader {
             let dateModified = modificationDate ?? Date()
             
             let file = try STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, albumId: self.album.albumId, managedObjectID: nil)
+            file.updateIfNeeded(albumMetadata: self.album.albumMetadata)
             return file
             
         }

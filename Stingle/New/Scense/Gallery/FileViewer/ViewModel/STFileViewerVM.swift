@@ -22,6 +22,9 @@ protocol IFileViewerVM {
     func downloadFile(file: STLibrary.File)
     
     func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType]
+    func getMorAction(for file: STLibrary.File) -> [STFileViewerVC.MoreAction]
+    
+    func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.File)
     
 }
 
@@ -101,12 +104,25 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
         fatalError("thish methot must be implemented chile classe")
     }
     
+    func getMorAction(for file: STLibrary.File) -> [STFileViewerVC.MoreAction] {
+        return [.download]
+    }
+    
     func removeFileSystemFolder(url: URL) {
         STApplication.shared.fileSystem.remove(file: url)
     }
     
     func downloadFile(file: STLibrary.File) {
         STApplication.shared.downloaderManager.fileDownloader.download(files: [file])
+    }
+    
+    func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.File) {
+        switch action {
+        case .download:
+            self.downloadFile(file: file)
+        default:
+            break
+        }
     }
         
 }

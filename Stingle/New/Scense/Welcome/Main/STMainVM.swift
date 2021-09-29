@@ -7,18 +7,30 @@
 //
 
 import Foundation
-//import netfox
-import Kingfisher
+import netfox
+import UIKit
 
 class STMainVM {
+    
+    static private var isAppSetuped: Bool = false
 	
 	func setupApp(end: ((_ result: Bool) -> Void)) {
+        guard !STMainVM.isAppSetuped else {
+            end(true)
+            return
+        }
+        STNetworkReachableService.shared.start()
 //        NFX.sharedInstance().start()
-		end(true)
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        end(true)
 	}
 	
 	func isLogined() -> Bool {
-        return STApplication.shared.isLogedIn()
+        return STApplication.shared.utils.isLogedIn()
 	}
+    
+    func appIsLocked() -> Bool {
+        return STApplication.shared.utils.appIsLocked()
+    }
 	
 }

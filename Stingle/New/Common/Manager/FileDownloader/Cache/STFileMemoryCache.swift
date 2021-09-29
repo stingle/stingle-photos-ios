@@ -28,7 +28,7 @@ extension STDownloaderManager {
         }
         
         func resetCache(source: IDownloaderSource) {
-            STApplication.shared.fileSystem.updateUrlDataSize(url: source.fileSaveUrl, size: 2000)
+            STApplication.shared.fileSystem.updateUrlDataSize(url: source.fileSaveUrl)
         }
         
         func isFileExists(source: IDownloaderSource) -> Bool {

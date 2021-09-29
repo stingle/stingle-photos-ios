@@ -52,8 +52,8 @@ extension UICollectionView {
         self.register(UINib(nibName: nibName, bundle: Bundle.main), forSupplementaryViewOfKind: kind, withReuseIdentifier: kind)
     }
     
-    func registerHeader(nibName: String, identifier: String) {
-        self.register(UINib(nibName: nibName, bundle: Bundle.main), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: identifier)
+    func registerHeader(nibName: String, identifier: String, kind: String = UICollectionView.elementKindSectionHeader) {
+        self.register(UINib(nibName: nibName, bundle: Bundle.main), forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
     }
     
     func registerFooter(nibName: String, identifier: String) {

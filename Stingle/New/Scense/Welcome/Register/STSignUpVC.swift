@@ -4,6 +4,7 @@ class STSignUpVC: UITableViewController {
 	
 	private let viewModel = STSignUpVM()
 	private var hiddenCells = Set<CellType>()
+    private var appPassword: String?
 	
 	@IBOutlet weak private var emailTextField: UITextField!
 	@IBOutlet weak private var passwordTextField: UITextField!
@@ -19,11 +20,11 @@ class STSignUpVC: UITableViewController {
 	
 	//MARK: User action
     
-    @IBAction func didSelectbackupMyKeysButton(_ sender: UIButton) {
+    @IBAction private func didSelectbackupMyKeysButton(_ sender: UIButton) {
 		self.showInfoAlert(title: "info".localized, message: "backup_my_keys_description".localized)
     }
 	
-	@IBAction func didSelectAdvancedButton(_ sender: UIButton) {
+	@IBAction private func didSelectAdvancedButton(_ sender: UIButton) {
 		var transform = CGAffineTransform.identity
 		if self.hiddenCells.contains(.backupMyKeys) {
 			self.hiddenCells.remove(.backupMyKeys)
@@ -37,11 +38,11 @@ class STSignUpVC: UITableViewController {
 		}
 	}
 	
-	@IBAction func didSelectSignUp(_ sender: Any) {
+	@IBAction private func didSelectSignUp(_ sender: Any) {
 		self.register()
 	}
 	
-	@IBAction func didSelectSignIn(_ sender: Any) {
+	@IBAction private func didSelectSignIn(_ sender: Any) {
 		guard let navigationController = self.navigationController else {
 			return
 		}
@@ -60,6 +61,12 @@ class STSignUpVC: UITableViewController {
 		self.configurebBackBarButton()
 		self.configureLocalizable()
 	}
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        (segue.destination as? STMenuVC)?.appPassword = self.appPassword
+        (segue.destination as? STMenuVC)?.isShowBackupPhrase = true
+    }
 	
 	override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
 		return 1
@@ -102,19 +109,19 @@ class STSignUpVC: UITableViewController {
 	//MARK: Private func
 	
 	private func register() {
-		
+        
 		self.tableView.endEditing(true)
-		
 		STLoadingView.show(in: self.navigationController?.view ?? self.view)
 		
 		let email = self.emailTextField.text
 		let passwort = self.passwordTextField.text
 		let includePrivateKey = self.includePrivateKeySwitch.isOn
 		
-		self.viewModel.registr(email: email, password: passwort, confirmPassword: self.confirmPasswordTextField.text, includePrivateKey: includePrivateKey) { [weak self] (registr) in
+		self.viewModel.registr(email: email, password: passwort, confirmPassword: self.confirmPasswordTextField.text, includePrivateKey: includePrivateKey) { [weak self] ( _, appPassword) in
 			guard let weakSelf = self else {
 				return
 			}
+            weakSelf.appPassword = appPassword
 			STLoadingView.hide(in: weakSelf.navigationController?.view ?? weakSelf.view)
 			self?.performSegue(withIdentifier: "goToHome", sender: nil)
 		} failure: { [weak self] (error) in

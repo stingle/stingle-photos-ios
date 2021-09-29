@@ -28,7 +28,7 @@ class STLandingVM {
 		}
 		let string = NSMutableAttributedString(string: "\(text)_title".localized)
 		string.setFont(font: Theme.Fonts.SFProMedium(size: 20), forText: text)
-		string.setColor(color: Theme.Colors.SPBlackOpacity87, forText: text)
+		string.setColor(color: UIColor.appText, forText: text)
 		return string
 	}
 	
@@ -38,7 +38,7 @@ class STLandingVM {
 		}
 		let string = NSMutableAttributedString(string: "\(text)_description".localized)
 		string.setFont(font: Theme.Fonts.SFProRegular(size: 14), forText: text)
-		string.setColor(color: Theme.Colors.SPBlackOpacity87, forText: text)
+        string.setColor(color: UIColor.appText, forText: text)
 		return string
 	}
 	
@@ -60,7 +60,7 @@ class STLandingVM {
 		let text = "landing_have_an_account".localized
 		let string = NSMutableAttributedString(string: text)
 		string.setFont(font: Theme.Fonts.SFProRegular(size: 14), forText: text)
-		string.setColor(color: Theme.Colors.SPBlackOpacity87, forText: text)
+		string.setColor(color: UIColor.appText, forText: text)
 		return string
 	}
 

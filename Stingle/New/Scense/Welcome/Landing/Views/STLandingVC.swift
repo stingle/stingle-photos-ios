@@ -21,7 +21,7 @@ class STLandingVC: UIViewController {
 	
 	private func configure() {
 		self.signInButton.titleLabel?.attributedText = self.viewModel.signInTitle()
-		self.signInButton.setTitleColor(Theme.Colors.SPRed, for: UIControl.State.normal)
+        self.signInButton.setTitleColor(UIColor.appPrimary, for: UIControl.State.normal)
 		self.signUpButton.titleLabel?.attributedText = self.viewModel.signUpTitle()
 		self.alreadyHaveAnAccountLabel?.attributedText = self.viewModel.haveAnAccountTitle()
 	}

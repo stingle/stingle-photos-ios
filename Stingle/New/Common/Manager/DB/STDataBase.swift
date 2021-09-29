@@ -57,12 +57,10 @@ class STDataBase {
                 finish(DataBaseError.error(error: error))
                 return
             }
-            
         }
         
         self.endSync()
         finish(nil)
-        
     }
     
     func deleteAll() {
@@ -72,6 +70,8 @@ class STDataBase {
         self.trashProvider.deleteAll()
         self.contactProvider.deleteAll()
         self.dbInfoProvider.deleteAll()
+        self.userProvider.deleteAll()
+        self.container.saveContext()
     }
     
     func reloadData() {
@@ -82,7 +82,8 @@ class STDataBase {
         self.contactProvider.reloadData()
     }
     
-    func deleteFilesIfNeeded(files: [STLibrary.File]) {
+    func filtrNotExistFiles(files: [STLibrary.File]) -> [STLibrary.File] {
+        
         let context = self.container.newBackgroundContext()
         var fileNames = [String]()
         
@@ -90,13 +91,13 @@ class STDataBase {
             fileNames.append(file.file)
         }
         
-        context.performAndWait {
+        return context.performAndWait {
                         
             let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
             let albumFiles = self.albumFilesProvider.fetch(fileNames: fileNames, context: context)
             let trashFile = self.trashProvider.fetch(fileNames: fileNames, context: context)
            
-            let deleteFiles = files.filter { file in
+            let resultFiles = files.filter { file in
                 let galleryContains = galleryFiles.contains(where: { $0.file == file.file })
                 if galleryContains {
                     return false
@@ -112,7 +113,37 @@ class STDataBase {
                 return true
             }
             
-            STApplication.shared.fileSystem.deleteFiles(files: deleteFiles)
+            return resultFiles
+        }
+        
+    }
+    
+    func filtrNotExistFileNames(fileNames: [String]) -> [String] {
+       
+        let context = self.container.newBackgroundContext()
+        return context.performAndWait {
+            
+            let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
+            let albumFiles = self.albumFilesProvider.fetch(fileNames: fileNames, context: context)
+            let trashFile = self.trashProvider.fetch(fileNames: fileNames, context: context)
+           
+            let resultFiles = fileNames.filter { fileName in
+                let galleryContains = galleryFiles.contains(where: { $0.file == fileName })
+                if galleryContains {
+                    return false
+                }
+                let albumContains = albumFiles.contains(where: { $0.file == fileName })
+                if albumContains {
+                    return false
+                }
+                let trashContains = trashFile.contains(where: { $0.file == fileName })
+                if trashContains {
+                    return false
+                }
+                return true
+            }
+            
+            return resultFiles
         }
         
     }
@@ -157,7 +188,7 @@ class STDataBase {
         let lastSeenTimeDelete = try self.galleryProvider.deleteObjects(deletes?.gallery, in: context, lastDate: lastDelSeenTime)
         let lastAlbumsSeenTimeDelete = try self.albumsProvider.deleteObjects(deletes?.albums, in: context, lastDate: lastDelSeenTime)
         let lastAlbumFilesSeenTimeDelete = try self.albumFilesProvider.deleteObjects(deletes?.albumFiles, in: context, lastDate: lastDelSeenTime)
-        let lastTrashRecovorsSeenTimeDelete = try self.trashProvider.deleteObjects(deletes?.recovors, in: context, lastDate: lastDelSeenTime)
+        let lastTrashRecovorsSeenTimeDelete = try self.trashProvider.deleteObjects(deletes?.recovers, in: context, lastDate: lastDelSeenTime)
         let lastTrashhDeletesSeenTimeDelete = try self.trashProvider.deleteObjects(deletes?.trashDeletes, in: context, lastDate: lastDelSeenTime)
         let lastContactsSeenTimeDelete = try self.contactProvider.deleteObjects(deletes?.contacts, in: context, lastDate: lastDelSeenTime)
         let timeDeletes = max(lastSeenTimeDelete, lastAlbumsSeenTimeDelete, lastAlbumFilesSeenTimeDelete, lastTrashRecovorsSeenTimeDelete, lastTrashhDeletesSeenTimeDelete, lastContactsSeenTimeDelete)
@@ -193,7 +224,31 @@ extension STDataBase {
         
         albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
         albumFilesProvider.add(models: [albumFile], reloadData: reloadData, context: context)
+    }
+    
+    func addAlbumFiles(albumFiles: [STLibrary.AlbumFile], album: STLibrary.Album, reloadData: Bool) {
+        let context = self.container.viewContext
+        let albumsProvider = STApplication.shared.dataBase.albumsProvider
+        let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
+       
+        let newAlbum = STLibrary.Album(albumId: album.albumId,
+                                       encPrivateKey: album.encPrivateKey,
+                                       publicKey: album.publicKey,
+                                       metadata: album.metadata,
+                                       isShared: album.isShared,
+                                       isHidden: album.isHidden,
+                                       isOwner: album.isOwner,
+                                       isLocked: album.isLocked,
+                                       isRemote: album.isRemote,
+                                       permissions: album.permissions,
+                                       members: album.members,
+                                       cover: album.cover,
+                                       dateCreated: album.dateCreated,
+                                       dateModified: Date(),
+                                       managedObjectID: album.managedObjectID)
         
+        albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
+        albumFilesProvider.add(models: albumFiles, reloadData: reloadData, context: context)
     }
     
 }

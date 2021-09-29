@@ -24,7 +24,7 @@ extension STTrashVC {
             let image = STImageView.Image(file: data, isThumb: true)
             var videoDurationStr: String? = nil
             if let duration = data.decryptsHeaders.file?.videoDuration, duration > 0 {
-                videoDurationStr = TimeInterval(duration).toString()
+                videoDurationStr = TimeInterval(duration).timeFormat()
             }
             return CellModel(image: image,
                              name: data.file,
@@ -95,9 +95,13 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.accessoryView.dataSource = self
-        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
         self.updateTabBarAccessoryView()
         self.updateSelectedItesmCount()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
     }
     
     override func dataSource(didApplySnapshot dataSource: IViewDataSource) {
@@ -129,7 +133,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
     
     override func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let inset: CGFloat = 4
-        let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : 3
+        let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : layoutEnvironment.container.contentSize.width > layoutEnvironment.container.contentSize.height ? 4 : 3
         let item = self.dataSource.generateCollectionLayoutItem()
         let itemSizeWidth = (layoutEnvironment.container.contentSize.width - 2 * inset) / CGFloat(lineCount)
         let itemSizeHeight = itemSizeWidth
@@ -193,7 +197,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
         let title = "delete_files_alert_title".localized
         let message = String(format: "delete_files_alert_message".localized, "\(files.count)")
         
-        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+        self.showOkCancelAlert(title: title, message: message, handler:  { [weak self] _ in
             STLoadingView.show(in: loadingView)
             self?.viewModel.delete(files: files, completion: { error in
                 STLoadingView.hide(in: loadingView)
@@ -203,7 +207,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
                     self?.setSelectedMode(isSelectedMode: false)
                 }
             })
-        }
+        })
         
     }
     
@@ -233,7 +237,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
         let title = "empty_trash".localized
         let message = "delete_all_files_alert_message".localized
        
-        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+        self.showOkCancelAlert(title: title, message: message, handler:  { [weak self] _ in
             STLoadingView.show(in: loadingView)
             self?.viewModel.deleteAll(completion: { error in
                 STLoadingView.hide(in: loadingView)
@@ -243,7 +247,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
                     self?.setSelectedMode(isSelectedMode: false)
                 }
             })
-        }
+        })
     }
     
     private func didSelectedRecoverAll() {
@@ -287,7 +291,8 @@ extension STTrashVC: UICollectionViewDelegate {
             guard let file = self.dataSource.object(at: indexPath) else {
                 return
             }
-            let vc = STFileViewerVC.create(trash: file, sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated)])
+            let sorting = self.viewModel.getSorting()
+            let vc = STFileViewerVC.create(trash: file, sortDescriptorsKeys: sorting)
             self.show(vc, sender: nil)
         }
     }

@@ -78,7 +78,7 @@ extension STDataBase {
             guard !models.isEmpty else {
                 return []
             }
-            let identifiers = models.compactMap({return $0.identifier})
+            let identifiers = models.compactMap({ return $0.identifier })
             let fetchRequest = NSFetchRequest<STCDAlbumFile>(entityName: STCDAlbumFile.entityName)
             fetchRequest.predicate = NSPredicate(format: "identifier IN %@", identifiers)
             let cdItems = try context.fetch(fetchRequest)

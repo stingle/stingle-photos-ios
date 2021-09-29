@@ -18,16 +18,18 @@ struct STEnvironment {
 	let buildType: BuildType
 	let baseUrl: String
     let appName: String
+    let bundleIdentifier: String
     let appWebUrl: String = "https://stingle.org"
+    
 	    
 	static let current: STEnvironment = STEnvironment()
 	
 	private init() {
-		guard let buildTypeName = Self.variable(named: "BUILD_TYPE") as? String, let buildType = BuildType(rawValue: buildTypeName),
-			  let baseUrl = Self.variable(named: "BASE_API_URL") else {
+		guard let buildTypeName = Self.variable(named: "BUILD_TYPE") as? String, let buildType = BuildType(rawValue: buildTypeName), let baseUrl = Self.variable(named: "BASE_API_URL"), let bundleIdentifier = Self.variable(named: "CFBundleIdentifier") else {
 			fatalError("Can't find configuration")
 		}
 		
+        self.bundleIdentifier = bundleIdentifier as! String
 		self.baseUrl = baseUrl as! String
 		self.buildType = buildType
         self.appName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as! String

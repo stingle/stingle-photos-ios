@@ -40,6 +40,7 @@ class STSplitViewController: UIViewController {
     private(set) weak var masterViewController: MasterViewController?
     private(set) weak var detailViewController: UIViewController?
     
+    private var maskView = UIView()
     private var backgroundView = UIView()
     private var masterView = UIView()
     private var detailView = UIView()
@@ -77,7 +78,7 @@ class STSplitViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupViews()
-        self.backgroundView.backgroundColor = .black
+        self.maskView.backgroundColor = .black
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -140,11 +141,6 @@ class STSplitViewController: UIViewController {
             return
         }
         self.updateFrames(isMasterViewOpened: self.isMasterViewOpened, didUpdateProgress: true, isTouch: false)
-        if isAnimated {
-            UIView.animate(withDuration: 0.3) {
-                self.view.layoutIfNeeded()
-            }
-        }
     }
     
     func setDetailViewController(detailViewController: UIViewController, isAnimated: Bool) {
@@ -153,6 +149,18 @@ class STSplitViewController: UIViewController {
         self.detailViewController = detailViewController
         detailViewController.splitMenuViewController = self
         if self.isMasterViewOpened {
+            self.openOrClosed(isAnimated: true, isClose: self.isMasterViewOpened, isStarted: true, isTouch: false)
+        }
+    }
+    
+    func closeMenu() {
+        if self.isMasterViewOpened {
+            self.openOrClosed(isAnimated: true, isClose: self.isMasterViewOpened, isStarted: true, isTouch: false)
+        }
+    }
+    
+    func openMenu() {
+        if !self.isMasterViewOpened {
             self.openOrClosed(isAnimated: true, isClose: self.isMasterViewOpened, isStarted: true, isTouch: false)
         }
     }
@@ -166,6 +174,7 @@ class STSplitViewController: UIViewController {
     @objc private func screenEdgePan(gestur: UIPanGestureRecognizer) {
         switch gestur.state {
         case .began:
+            self.backgroundView.isHidden = false
             self.gestureStartPoint = gestur.location(in: self.view)
             self.gestureMasterViewWidth = self.masterViewWidth
             self.gestureStartProgress = self.isMasterViewOpened ? 1 : 0
@@ -235,9 +244,11 @@ class STSplitViewController: UIViewController {
     
     private func setupViewsConstraints() {
         self.detailViewLeftLayoutConstraint = self.view.addSubviewFullContent(view: self.detailView).left
-        self.backgroundView.alpha = 0
+        self.maskView.alpha = 0
+                
         self.view.addSubviewFullContent(view: self.backgroundView)
-        self.view.addSubviewFullContent(view: self.masterView, right: nil, left: nil)
+        self.backgroundView.addSubviewFullContent(view: self.maskView)
+        self.backgroundView.addSubviewFullContent(view: self.masterView, right: nil, left: nil)
         self.masterViewRightLayoutConstraint = NSLayoutConstraint(item: self.masterView, attribute: .right, relatedBy: .equal, toItem: self.view, attribute: .left, multiplier: 1, constant: 0)
         self.masterViewRightLayoutConstraint?.isActive = true
         self.masterViewWidthLayoutConstraint = self.masterView.widthAnchor.constraint(equalToConstant: 0)
@@ -247,16 +258,21 @@ class STSplitViewController: UIViewController {
     
     private func addGestures() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didSelectBackgroundView))
-        self.backgroundView.addGestureRecognizer(tapGesture)
+        self.maskView.addGestureRecognizer(tapGesture)
         
         let screenGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgePan(gestur:)))
         screenGesture.edges = .left
         self.detailView.addGestureRecognizer(screenGesture)
+        
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(screenEdgePan(gestur:)))
-        self.backgroundView.addGestureRecognizer(panGesture)
+        self.maskView.addGestureRecognizer(panGesture)
+        
+        let mGesture = UIPanGestureRecognizer(target: self, action: #selector(screenEdgePan(gestur:)))
+        self.masterView.addGestureRecognizer(mGesture)
     }
     
     private func openOrClosed(isAnimated: Bool, isClose: Bool, isStarted: Bool,  isTouch: Bool) {
+        self.backgroundView.isHidden = false
         let isMasterViewOpened = !isClose
         let progress: CGFloat = isClose ? 0 : 1
         if isAnimated {
@@ -264,14 +280,15 @@ class STSplitViewController: UIViewController {
                 self.didStartUpdateOpenedMode(progress: progress, isTouch: isTouch)
             }
             self.updateFrames(isMasterViewOpened: isMasterViewOpened, didUpdateProgress: false, isTouch: isTouch)
-            self.view.setNeedsLayout()
+            self.backgroundView.setNeedsLayout()
             UIView.animate(withDuration: 0.3, delay: 0.0, options: [.beginFromCurrentState], animations: {
                 self.updateBackgroundView(progress: progress)
                 self.didUpdateProgress(progress: progress, isTouch: isTouch)
-                self.view.layoutIfNeeded()
+                self.backgroundView.layoutIfNeeded()
             }, completion: { (_) in
                 self.isMasterViewOpened = isMasterViewOpened
                 self.didEndOpenedMode(progress: progress, isTouch: isTouch)
+                self.backgroundView.isHidden = isClose
             })
         } else {
             if isStarted {
@@ -281,12 +298,13 @@ class STSplitViewController: UIViewController {
             self.isMasterViewOpened = isMasterViewOpened
             self.didUpdateProgress(progress: progress, isTouch: isTouch)
             self.didEndOpenedMode(progress: progress, isTouch: isTouch)
+            self.backgroundView.isHidden = isClose
         }
     }
     
     private func updateBackgroundView(progress: CGFloat) {
         let alpha: CGFloat = (self.splitBehavior == .overlay ? 0.3 : 0) * progress
-        self.backgroundView.alpha = alpha
+        self.maskView.alpha = alpha
     }
     
     private func updateFrames(isMasterViewOpened: Bool, didUpdateProgress: Bool, isTouch: Bool) {

@@ -9,16 +9,6 @@ import UIKit
 
 class STTabBar: UITabBar {
     
-    private let seperator = UIView()
-        
-    @IBInspectable var seperatorColor: UIColor? {
-        set {
-            self.seperator.backgroundColor = newValue
-        } get {
-            return self.seperator.backgroundColor
-        }
-    }
-    
     @IBInspectable var shadowRadius: CGFloat = 0.0 {
         didSet {
             self.layer.shadowRadius = shadowRadius
@@ -40,6 +30,7 @@ class STTabBar: UITabBar {
     @IBInspectable var shadowColor: UIColor = UIColor.clear {
         didSet {
             self.layer.shadowColor = shadowColor.cgColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -49,6 +40,7 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.normal.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.inlineLayoutAppearance.normal.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.compactInlineLayoutAppearance.normal.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -58,6 +50,7 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.normal.iconColor = newColor
             self.standardAppearance.inlineLayoutAppearance.normal.iconColor = newColor
             self.standardAppearance.compactInlineLayoutAppearance.normal.iconColor = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -67,6 +60,7 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.selected.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.inlineLayoutAppearance.selected.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.compactInlineLayoutAppearance.selected.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -76,6 +70,7 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.focused.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.inlineLayoutAppearance.focused.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
             self.standardAppearance.compactInlineLayoutAppearance.focused.titleTextAttributes[NSAttributedString.Key.foregroundColor] = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
@@ -85,12 +80,14 @@ class STTabBar: UITabBar {
             self.standardAppearance.stackedLayoutAppearance.selected.iconColor = newColor
             self.standardAppearance.inlineLayoutAppearance.selected.iconColor = newColor
             self.standardAppearance.compactInlineLayoutAppearance.selected.iconColor = newColor
+            self.reloadScrollEdgeAppearance()
         }
     }
     
     @IBInspectable var barBackroundColor: UIColor? {
         set {
             self.standardAppearance.backgroundColor = newValue
+            self.reloadScrollEdgeAppearance()
         } get {
             return self.standardAppearance.backgroundColor
         }
@@ -99,6 +96,7 @@ class STTabBar: UITabBar {
     @IBInspectable var selectionIndicatorTintColor: UIColor? {
         set {
             self.standardAppearance.selectionIndicatorTintColor = newValue
+            self.reloadScrollEdgeAppearance()
         } get {
             return self.standardAppearance.selectionIndicatorTintColor
         }
@@ -114,58 +112,26 @@ class STTabBar: UITabBar {
         self.setupView()
     }
     
-    override var selectedItem: UITabBarItem? {
-        didSet {
-            UIView.animate(withDuration: 0.3) {
-                self.updateFrame()
-            }
-        }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.updateFrame()
-    }
-    
     //MARK: - private
     
     private func setupView() {
-        self.seperator.backgroundColor = UIColor.lightGray
-        self.updateFrame()
-        self.addSubview(self.seperator)
-
+        
         let appearance = self.standardAppearance
         appearance.backgroundColor = self.barBackroundColor
-        
         if UIDevice.current.userInterfaceIdiom != .tv {
             appearance.inlineLayoutAppearance.normal.titleTextAttributes[NSAttributedString.Key.font] = UIFont.regular(light: 13)
             appearance.inlineLayoutAppearance.selected.titleTextAttributes[NSAttributedString.Key.font] = UIFont.regular(light: 13)
         }
-                        
+        if #available(iOS 15.0, *) {
+            self.scrollEdgeAppearance = appearance
+        }
         self.standardAppearance = appearance
     }
     
-    private func updateFrame() {
-        var itemFrame = self.frameForTabAtIndex()
-        itemFrame.origin.y = 0
-        itemFrame.size.height = 2
-        self.seperator.frame = itemFrame
-    }
-    
-    private func frameForTabAtIndex() -> CGRect {
-        guard let index = self.items?.firstIndex(where: {$0 == self.selectedItem}) else { return .zero
+    private func reloadScrollEdgeAppearance() {
+        if #available(iOS 15.0, *) {
+            self.scrollEdgeAppearance = self.standardAppearance
         }
-        var frames = self.subviews.compactMap { (view:UIView) -> CGRect? in
-            if let view = view as? UIControl {
-                return view.frame
-            }
-            return nil
-        }
-        frames.sort { $0.origin.x < $1.origin.x }
-        if frames.count > index {
-            return frames[index]
-        }
-        return frames.last ?? CGRect.zero
     }
     
     var accessoryView: UIView? {

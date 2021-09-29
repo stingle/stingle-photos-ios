@@ -110,11 +110,11 @@ class DataSource {
 				}
 				let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
 				out.close()
+                guard let image = UIImage(data:imageData) else {
+                    print("Ivnalid data for image")
+                    return
+                }
 				DispatchQueue.main.async {
-					guard let image = UIImage(data:imageData) else {
-						print("Ivnalid data for image")
-						return
-					}
 					self.thumbCache[file.name] = image
 					//Dispatch event
 					self.delegate?.imageReady(at: indexPath)
@@ -178,11 +178,11 @@ class DataSource {
 					return
 				}
 				let imageData = out.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as! Data
+                guard let image = UIImage(data:imageData) else {
+                    print("Ivnalid data for image")
+                    return
+                }
 				DispatchQueue.main.async {
-					guard let image = UIImage(data:imageData) else {
-						print("Ivnalid data for image")
-						return
-					}
 					self.imageCache[file.name] = image
 					completionHandler(image)
 				}

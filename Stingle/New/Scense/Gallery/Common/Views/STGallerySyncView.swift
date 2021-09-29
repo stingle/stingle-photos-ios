@@ -29,6 +29,14 @@ import UIKit
         }
     }
     
+    @IBInspectable var borderInset: CGFloat {
+        set {
+            self.circleProgressView.borderInset = newValue
+        } get {
+            return self.circleProgressView.borderInset
+        }
+    }
+    
     @IBInspectable private(set) var progress: CGFloat {
         set {
             self.circleProgressView.progress = newValue

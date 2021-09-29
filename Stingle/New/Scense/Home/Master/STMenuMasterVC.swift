@@ -24,6 +24,7 @@ class STMenuMasterVC: UIViewController {
         STApplication.shared.syncManager.addListener(self)
         self.tableView.selectRow(at: IndexPath(row: self.currentControllerType.rawValue, section: 0), animated: true, scrollPosition: .none)
         self.set(controllerType: self.currentControllerType)
+        STApplication.shared.dataBase.dbInfoProvider.add(self)
     }
     
     //MARK: - Private
@@ -72,8 +73,23 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
             }
             self.selectCurrentRow()
         case .signOut:
-            STApplication.shared.logout()
+            let title = "alert_log_out_title".localized
+            let message = "alert_log_out_message".localized
+            self.showOkCancelAlert(title: title, message: message, textFieldHandler: nil, handler: { _ in
+                STApplication.shared.utils.logout()
+            }, cancel: nil)
             self.selectCurrentRow()
+        case .lockApp:
+            self.splitMenuViewController?.closeMenu()
+            STApplication.shared.appLocker.lockApp()
+        case .freeUpSpace:
+            STApplication.shared.fileSystem.freeUpSpace()
+            let title = "alert_free_up_space_title".localized
+            let message = "alert_free_up_space_message".localized
+            self.showInfoAlert(title: title, message: message)
+            self.selectCurrentRow()
+            self.splitMenuViewController?.closeMenu()
+            break
         default:
             self.set(controllerType: item.controllerType)
         }
@@ -90,7 +106,6 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
         cell.configure(model: self.menu?.cells[indexPath.row])
         return cell
     }
-    
 
 }
  
@@ -111,6 +126,15 @@ extension STMenuMasterVC: ISyncManagerObserver {
     
 }
 
+extension STMenuMasterVC: IDataBaseProviderProviderObserver {
+    
+    func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
+        self.menu = Menu.current()
+        self.reloadData()
+    }
+
+}
+
 
 extension STMenuMasterVC {
     
@@ -119,9 +143,11 @@ extension STMenuMasterVC {
         case trash = 1
         case storage = 2
         case backupPhrase = 3
-        case settings = 4
-        case officialWebsite = 5
-        case signOut = 6
+        case freeUpSpace = 4
+        case settings = 5
+        case lockApp = 7
+        case officialWebsite = 8
+        case signOut = 9
         
         var identifier: String {
             switch self {
@@ -133,14 +159,23 @@ extension STMenuMasterVC {
                 return "StorageID"
             case .backupPhrase:
                 return "BackupPhraseID"
+            case .freeUpSpace:
+                return "FreeUpSpaceID"
             case .settings:
                 return "SettingsID"
+            case .lockApp:
+                return "LockAppID"
             case .officialWebsite:
                 return "OfficialWebsiteID"
             case .signOut:
                 return "SignOutID"
             }
         }
+        
+        static var actualCasses: [ControllerType] {
+            return [.gallery, .trash, .storage, .backupPhrase, .freeUpSpace, .settings, .lockApp, .officialWebsite, .signOut]
+        }
+        
     }
     
     struct Menu {
@@ -173,18 +208,18 @@ extension STMenuMasterVC {
             let info = STApplication.shared.dataBase.dbInfoProvider.dbInfo
             let appName = STEnvironment.current.appName
             let userEmail = user?.email ?? ""
-            let usedSpace = Int64(info.spaceUsed ?? "0") ?? 0
-            let allSpace = Int64(info.spaceQuota ?? "0") ?? 0
+            let usedSpace = Int64(Float(info.spaceUsed ?? "0") ?? 0)
+            let allSpace = Int64(Float(info.spaceQuota ?? "0") ?? 0)
             let progress: Float = allSpace != 0 ? Float(usedSpace) / Float(allSpace) : 0
             let percent: Int = Int(progress * 100)
             let allSpaceGB = STBytesUnits(mb: allSpace)
-            let used = String(format: "storage_space_used_info".localized, "\(usedSpace)", "\(allSpaceGB.gigabytes)", "\(percent)")
+            let used = String(format: "storage_space_used_info".localized, "\(usedSpace)", allSpaceGB.getReadableUnit(format: ".0f").uppercased(), "\(percent)")
             let header = Header(appName: appName, userEmail: userEmail, used: used, usedProgress: progress)
             return header
         }
         
         private static func createCells() -> [Cell] {
-            let result = ControllerType.allCases.compactMap { (type) -> Cell in
+            let result = ControllerType.actualCasses.compactMap { (type) -> Cell in
                 var name: String?
                 var icon: UIImage?
                 switch type {
@@ -200,9 +235,15 @@ extension STMenuMasterVC {
                 case .backupPhrase:
                     name = "menu_backup_phrase".localized
                     icon = UIImage(named: "ic_menu_backup_phrase")
+                case .freeUpSpace:
+                    name = "menu_free_up_space".localized
+                    icon = UIImage(named: "ic_menu_free_up_space")
                 case .settings:
                     name = "menu_settings".localized
                     icon = UIImage(named: "ic_menu_settings")
+                case .lockApp:
+                    name = "menu_lock_app".localized
+                    icon = UIImage(named: "ic_menu_lock_app")
                 case .officialWebsite:
                     name = "menu_official_website".localized
                     icon = UIImage(named: "ic_menu_official_website")
@@ -213,7 +254,6 @@ extension STMenuMasterVC {
                 return Cell(name: name, icon: icon, controllerType: type)
             }
             return result
-
         }
                 
     }

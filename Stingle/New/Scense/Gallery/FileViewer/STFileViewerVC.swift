@@ -65,12 +65,16 @@ class STFileViewerVC: UIViewController {
             self.currentIndex = self.viewModel.index(at: initialFile)
         }
         self.accessoryView.dataSource = self
-        self.configureAccessoryView()
         self.viewerStyle = .balck
         self.changeViewerStyle()
         self.setupTavigationTitle()
         self.setupPageViewController()
         self.setupTapGesture()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.configureAccessoryView()
     }
         
     override func viewWillDisappear(_ animated: Bool) {
@@ -84,9 +88,7 @@ class STFileViewerVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "pageViewController" {
             self.pageViewController = segue.destination as? UIPageViewController
-            self.pageViewController.delegate = self
             self.pageViewController.dataSource = self
-            
             for v in pageViewController.view.subviews {
                 if let scrollView = v as? UIScrollView {
                     scrollView.delegate = self
@@ -99,15 +101,21 @@ class STFileViewerVC: UIViewController {
     //MARK: - User action
     
     @IBAction private func didSelectMoreButton(_ sender: UIBarButtonItem) {
-        self.currentFileViewer?.fileViewer(pauseContent: self)
+        
         guard let currentFile = self.currentFile else {
             return
         }
+        self.currentFileViewer?.fileViewer(pauseContent: self)
+        
+        let actions = self.viewModel.getMorAction(for: currentFile)
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let download = UIAlertAction(title: "download_file".localized, style: .default) { [weak self] _ in
-            self?.viewModel.downloadFile(file: currentFile)
+        
+        actions.forEach { action in
+            let action = UIAlertAction(title: action.localized, style: .default) { [weak self] _ in
+                self?.didSelectMore(action: action, file: currentFile)
+            }
+            alert.addAction(action)
         }
-        alert.addAction(download)
         
         let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
         alert.addAction(cancel)
@@ -124,12 +132,26 @@ class STFileViewerVC: UIViewController {
         }
     }
     
+    @objc private func didSwapDown(tap: UIGestureRecognizer) {
+        let transition = CATransition()
+        transition.duration = 0.1
+        transition.type = CATransitionType.fade
+        self.navigationController?.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.popViewController(animated: false)
+    }
+    
+    private func didSelectMore(action: MoreAction, file: STLibrary.File) {
+        self.viewModel.selectMore(action: action, file: file)
+    }
+        
     //MARK: - Private methods
         
     private func configureAccessoryView() {
         if let tabBarController = self.tabBarController {
+            self.toolBar.isHidden = true
             (tabBarController.tabBar as? STTabBar)?.accessoryView = self.accessoryView
         } else {
+            self.toolBar.isHidden = false
             self.toolBar.addSubviewFullContent(view: self.accessoryView)
         }
         
@@ -153,6 +175,10 @@ class STFileViewerVC: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didSelectBackground(tap:)))
         tapGesture.delegate = self
         self.view.addGestureRecognizer(tapGesture)
+        
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwapDown(tap:)))
+        swipeGesture.direction = .down
+        self.view.addGestureRecognizer(swipeGesture)
     }
     
     private func viewController(for index: Int?) -> IFileViewer? {
@@ -290,7 +316,7 @@ class STFileViewerVC: UIViewController {
 
 extension STFileViewerVC {
     
-    static func create(galery sortDescriptorsKeys: [String], predicate: NSPredicate?, file: STLibrary.File) -> STFileViewerVC {
+    static func create(galery sortDescriptorsKeys: [STDataBase.DataSource<STCDFile>.Sort], predicate: NSPredicate?, file: STLibrary.File) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STGaleryFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys, predicate: predicate)
@@ -300,7 +326,7 @@ extension STFileViewerVC {
         return vc
     }
     
-    static func create(album: STLibrary.Album, file: STLibrary.AlbumFile, sortDescriptorsKeys: [String]) -> STFileViewerVC {
+    static func create(album: STLibrary.Album, file: STLibrary.AlbumFile, sortDescriptorsKeys: [STDataBase.DataSource<STCDAlbumFile>.Sort]) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STAlbumFileViewerVM(album: album, sortDescriptorsKeys: sortDescriptorsKeys)
@@ -310,7 +336,7 @@ extension STFileViewerVC {
         return vc
     }
     
-    static func create(trash file: STLibrary.TrashFile, sortDescriptorsKeys: [String]) -> STFileViewerVC {
+    static func create(trash file: STLibrary.TrashFile, sortDescriptorsKeys: [STDataBase.DataSource<STCDTrashFile>.Sort]) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STTrashFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys)
@@ -382,9 +408,9 @@ extension STFileViewerVC {
         }
         self.currentFileViewer?.fileViewer(pauseContent: self)
         let title = self.viewModel.getDeleteFileMessage(file: file)
-        self.showOkCancelAlert(title: title, message: nil) { [weak self] _ in
+        self.showOkCancelAlert(title: title, message: nil, handler: { [weak self] _ in
             self?.deleteCurrentFile()
-        }
+        })
     }
     
 }
@@ -472,6 +498,8 @@ extension STFileViewerVC: STFileViewerVMDelegate {
             self.navigationController?.popViewController(animated: true)
             return
         }
+      
+        
         if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex)  {
             self.pageViewController.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
         } else if currentIndex - 1 < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex - 1) {
@@ -554,5 +582,32 @@ extension STFileViewerVC {
         }
         
     }
+    
+    enum MoreAction: StringPointer, CaseIterable {
+        
+        case download
+        case setAlbumCover
+       
+        var stringValue: String {
+            switch self {
+            case .download:
+                return "download"
+            case .setAlbumCover:
+                return "setAlbumCover"
+            }
+        }
+        
+        var localized: String {
+            switch self {
+            case .download:
+                return "download_file".localized
+            case .setAlbumCover:
+                return "set_album_cover".localized
+            }
+        }
+        
+    }
+    
+    
     
 }

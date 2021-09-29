@@ -38,22 +38,6 @@ extension IRequest {
         return nil
     }
     
-    var asDataRequest: DataRequest {
-        let url = self.url
-        guard let components = URLComponents(string: url) else {
-            fatalError()
-        }
-        return AF.request(components, method: self.AFMethod, parameters: self.parameters, encoding: self.encoding, headers: self.afHeaders, interceptor: nil).validate(statusCode: 200..<300)
-    }
-        
-    var asURLRequest: URLRequest {
-        guard let request = try? self.asDataRequest.convertible.asURLRequest() else {
-            fatalError()
-        }
-                
-        return request
-    }
-    
     var AFMethod: Alamofire.HTTPMethod {
         switch self.method {
         case .get:
@@ -68,8 +52,6 @@ extension IRequest {
             return .delete
         }
     }
-    
-
     
 }
 
@@ -86,7 +68,19 @@ extension STRequest {
 	}
     
     var token: String? {
-        return STApplication.shared.user()?.token
+        return STApplication.shared.utils.user()?.token
+    }
+    
+    var method: STNetworkDispatcher.Method {
+        return .post
+    }
+    
+    var encoding: STNetworkDispatcher.Encoding {
+        return .body
+    }
+    
+    var headers: [String : String]? {
+        return nil
     }
     
 }
@@ -109,7 +103,6 @@ extension IEncryptedRequest {
         guard let params = try? STApplication.shared.crypto.encryptParamsForServer(params: bodyParams) else {
             return nil
         }
-        
         var result = ["params": params]
         if self.setToken {
             let token = self.token ?? ""
@@ -133,7 +126,8 @@ protocol STDownloadRequest: IDownloadRequest, STRequest {
 extension STDownloadRequest {
     
     var fileDownloadTmpUrl: URL? {
-        return STApplication.shared.fileSystem.tmpURL?.appendingPathComponent(self.fileName)
+        let result = STFileSystem.File(type: .tmp, fileName: self.fileName)
+        return  STApplication.shared.fileSystem.url(for: result)
     }
     
 }
@@ -159,5 +153,3 @@ struct STUploadRequestFileInfo {
 
 protocol STUploadRequest: IUploadRequest, STRequest {
 }
-
-

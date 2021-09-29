@@ -1,8 +1,8 @@
 //
-//  STFileSystem.swift
+//  STFileSystem2.swift
 //  Stingle
 //
-//  Created by Khoren Asatryan on 3/17/21.
+//  Created by Khoren Asatryan on 7/24/21.
 //
 
 import Foundation
@@ -10,85 +10,194 @@ import Foundation
 class STFileSystem {
     
     private let fileManager = FileManager.default
-    private var myStoragePath: URL?
-
-    lazy var tmpURL = self.createTmpPath()
-    lazy var privateURL = self.createPrivatePath()
+    private let userHomeFolderPath: String
     
     private var cacheFolderDataSize: STBytesUnits? = nil
-    private var existFilesFolderType = [FilesFolderType: URL]()
-
-    var storageURl: URL? {
-        if let myStoragePath = self.myStoragePath {
-            return myStoragePath
+        
+    lazy private var appUrl: URL? = {
+        guard let url = self.fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+            return nil
         }
-        self.myStoragePath = self.createStoragePath()
-        return self.myStoragePath
-    }
-
-    var cacheOreginalsURL: URL? {
-        let folder: FilesFolderType = .oreginals(type: .cache)
-        if let myCachePath = self.existFilesFolderType[folder] {
-            return myCachePath
-        }
-        if let url = self.createPath(for: folder) {
-            self.existFilesFolderType[folder] = url
-            return url
-        }
-        return nil
+        return url
+    }()
+   
+    init(userHomeFolderPath: String) {
+        self.userHomeFolderPath = userHomeFolderPath
+        self.creatAllPath()
     }
     
-    var cacheThumbsURL: URL? {
-        let folder: FilesFolderType = .thumbs(type: .cache)
-        if let myCachePath = self.existFilesFolderType[folder] {
-            return myCachePath
+    func logOut() {
+        guard let cacheUrl = self.url(for: .storage(type: .server(type: nil))), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
+            return
         }
-        if let url = self.createPath(for: folder) {
-            self.existFilesFolderType[folder] = url
-            return url
+        self.remove(file: cacheUrl)
+        self.remove(file: privateKeyUrl)
+    }
+    
+    func deleteAccount() {
+        guard let userUrl = self.appUrl?.appendingPathComponent(self.userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
+            return
         }
-        return nil
+        self.remove(file: userUrl)
+        self.remove(file: privateKeyUrl)
+    }
+    
+    func removeCache() {            
+        guard let oreginals = self.url(for: .storage(type: .server(type: .oreginals))), let thumbs = self.url(for: .storage(type: .server(type: .thumbs))) else {
+            return
+        }
+        self.remove(file: oreginals)
+        self.remove(file: thumbs)
+    }
+    
+    func freeUpSpace() {
+        guard let oreginals = self.url(for: .storage(type: .server(type: .oreginals))) else {
+            return
+        }
+        self.remove(file: oreginals)
+    }
+        
+    private func creatAllPath() {
+        FolderType.allCases.forEach { type in
+            if let url = self.url(for: type) {
+                switch type {
+                case .tmp:
+                    self.remove(file: url)
+                default:
+                    break
+                }
+                try? self.createDirectory(url: url)
+            }
+        }
+    }
+    
+}
+
+extension STFileSystem {
+    
+    func url(for type: FolderType, filePath: String) -> URL? {
+        let url = self.url(for: type)?.appendingPathComponent(filePath)
+        return url
+    }
+    
+    func url(for type: FolderType) -> URL? {
+        let url = self.appUrl?.appendingPathComponent(self.userHomeFolderPath).appendingPathComponent(type.stringValue)
+        return url
+    }
+    
+    func remove(folderType: FolderType) {
+        guard let url = self.url(for: folderType) else {
+            return
+        }
+        self.remove(file: url)
+    }
+    
+}
+
+extension STFileSystem {
+    
+    var localThumbsURL: URL? {
+        return self.url(for: .storage(type: .local(type: .thumbs)))
     }
     
     var localOreginalsURL: URL? {
-        let folder: FilesFolderType = .oreginals(type: .local)
-        if let myCachePath = self.existFilesFolderType[folder] {
-            return myCachePath
-        }
-        if let url = self.createPath(for: folder) {
-            self.existFilesFolderType[folder] = url
-            return url
-        }
-        return nil
+        return self.url(for: .storage(type: .local(type: .oreginals)))
     }
     
-    var localThumbsURL: URL? {
-        let folder: FilesFolderType = .thumbs(type: .local)
-        if let myCachePath = self.existFilesFolderType[folder] {
-            return myCachePath
+    func url(for file: File) -> URL? {
+        let url = self.url(for: file.type, filePath: file.fileName)
+        return url
+    }
+   
+    func remove(file: File) {
+        guard let url = self.url(for: file) else {
+            return
         }
-        if let url = self.createPath(for: folder) {
-            self.existFilesFolderType[folder] = url
-            return url
-        }
-        return nil
+        self.remove(file: url)
     }
     
-    func direction(for files: FilesFolderType.FolderType, create: Bool) -> URL? {
-        if create {
-            return self.createPath(for: files)
+    func move(file from: File, to: File) throws {
+        guard let fromUrl = self.url(for: from), let toUrl = self.url(for: to)  else {
+            throw FileSystemError.incorrectUrl
         }
-        return self.storageURl?.appendingPathComponent(files.rawValue)
+        try self.move(file: fromUrl, to: toUrl)
     }
     
-    func direction(for files: FilesFolderType, create: Bool) -> URL? {
-        if create {
-            return self.createPath(for: files)
-        }
-        return self.storageURl?.appendingPathComponent(files.folderName)
+    func scanFolder(_ folderPath: String) -> (size: STBytesUnits, files: [FileManager.File]) {
+        return self.fileManager.scanFolder(folderPath)
     }
+                
+}
+
+extension STFileSystem {
+    
+    func fileThumbUrl(fileName: String, isRemote: Bool) -> URL? {
+        let url = isRemote ? self.url(for: .storage(type: .server(type: .thumbs)), filePath: fileName) : self.url(for: .storage(type: .local(type: .thumbs)), filePath: fileName)
+        return url
+    }
+    
+    func fileOreginalUrl(fileName: String, isRemote: Bool) -> URL? {
+        let url = isRemote ? self.url(for: .storage(type: .server(type: .oreginals)), filePath: fileName) : self.url(for: .storage(type: .local(type: .oreginals)), filePath: fileName)
+        return url
+    }
+    
+    func deleteAllData(for fileName: String) {
+        
+        if let fileThumbUrl = self.fileThumbUrl(fileName: fileName, isRemote: true) {
+            self.remove(file: fileThumbUrl)
+        }
+        
+        if let fileThumbUrl = self.fileThumbUrl(fileName: fileName, isRemote: false) {
+            self.remove(file: fileThumbUrl)
+        }
+        
+        if let fileOreginalUrl = self.fileOreginalUrl(fileName: fileName, isRemote: true) {
+            self.remove(file: fileOreginalUrl)
+        }
+        
+        if let fileOreginalUrl = self.fileOreginalUrl(fileName: fileName, isRemote: false) {
+            self.remove(file: fileOreginalUrl)
+        }
+        
+    }
+    
+    func deleteFiles(for fileNames: [String]) {
+        fileNames.forEach { fileName in
+            self.deleteAllData(for: fileName)
+        }
+    }
+    
+    func deleteFiles(files: [STLibrary.File]) {
+        for file in files {
+            if let oldFileThumbPath = file.fileOreginalUrl?.path {
+                try? self.fileManager.removeItem(atPath: oldFileThumbPath)
+            }
             
+            if let fileThumbPath = file.fileThumbUrl?.path {
+                try? self.fileManager.removeItem(atPath: fileThumbPath)
+            }
+        }
+    }
+    
+    func isExistFile(file: STLibrary.File, isThumb: Bool) -> Bool {
+        guard let url = isThumb ? file.fileThumbUrl : file.fileOreginalUrl else {
+            return false
+        }
+        return self.fileExists(atPath: url.path)
+    }
+    
+}
+
+extension STFileSystem {
+        
+    func fileExists(atPath path: String) -> Bool {
+        return self.fileManager.fileExists(atPath: path)
+    }
+    
     func remove(file url: URL) {
+        guard self.fileExists(atPath: url.path) else {
+            return
+        }
         do {
             try self.fileManager.removeItem(at: url)
         } catch {
@@ -96,10 +205,6 @@ class STFileSystem {
         }
     }
     
-    func createDirectory(url: URL) throws {
-        try self.fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-    }
-        
     func move(file from: URL, to: URL) throws {
         var toPath = to
         toPath = toPath.deletingPathExtension()
@@ -108,12 +213,23 @@ class STFileSystem {
         try self.fileManager.moveItem(at: from, to: to)
     }
     
-    func updateUrlDataSize(url: URL, size megabytes: Double) {
-        guard let cacheURL = self.direction(for: .cache, create: false), url.path.contains(cacheURL.path) else {
+    func contents(in url: URL) -> Data? {
+        return self.fileManager.contents(atPath: url.path)
+    }
+    
+    func createDirectory(url: URL) throws {
+        try self.fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+    }
+    
+    func updateUrlDataSize(url: URL) {
+        
+        let megabytes: Double = STAppSettings.advanced.cacheSize.bytesUnits.megabytes
+        guard let cacheURL = self.url(for: .storage(type: .server(type: nil))),  url.path.contains(cacheURL.path) else {
             return
         }
         
         var cacheFolderDataSize: STBytesUnits
+        
         if let size = self.cacheFolderDataSize {
             let newSize = self.fileManager.scanFolder(url.path).size
             cacheFolderDataSize = size + newSize
@@ -149,223 +265,117 @@ class STFileSystem {
         }
     }
     
-    func contents(in url: URL) -> Data? {
-        return self.fileManager.contents(atPath: url.path)
+    static func privateKeyUrl(filePath: String? = nil) -> URL? {
+        guard let url = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+            return nil
+        }
+        var result = url.appendingPathComponent("private")
+        if let filePath = filePath {
+            result = result.appendingPathComponent(filePath)
+        }
+        
+        let fileManager = FileManager.default
+        
+        if !fileManager.fileExists(atPath: result.path) {
+            try? fileManager.createDirectory(at: result, withIntermediateDirectories: true, attributes: nil)
+        }
+        
+        return result
     }
     
-    open func fileExists(atPath path: String) -> Bool {
-        return self.fileManager.fileExists(atPath: path)
-    }
-    
-}
-
-private extension STFileSystem {
-    
-    private func createStoragePath() -> URL? {
-        guard let path = self.fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
-            return nil
-        }
-        guard let  home = STApplication.shared.user()?.homeFolder else {
-            return nil
-        }
-        let homePath = "\(path)\(home)"
-        guard let homePathUrl = URL(string: homePath) else {
-            return nil
-        }
-        if self.fileManager.existence(atUrl: homePathUrl) != .directory {
-            do {
-                try self.fileManager.createDirectory(at: homePathUrl, withIntermediateDirectories: false, attributes: nil)
-            } catch {
-                return nil
-            }
-        }
-        return homePathUrl
-    }
-    
-    private func createPrivatePath() -> URL? {
-        guard let path = self.fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
-            return nil
-        }
-        let privatePath = "\(path)\(FolderType.private.rawValue)"
-        guard let privatePathUrl = URL(string: privatePath) else {
-            return nil
-        }
-        if self.fileManager.existence(atUrl: privatePathUrl) != .directory {
-            do {
-                try self.fileManager.createDirectory(at: privatePathUrl, withIntermediateDirectories: false, attributes: nil)
-            } catch {
-                return nil
-            }
-        }
-        return privatePathUrl
-    }
-    
-    private func createTmpPath() -> URL? {
-        guard let path = self.fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
-            return nil
-        }
-        let tmpPath = "\(path)\(FolderType.tmp.rawValue)"
-        guard let tmpUrl = URL(string: tmpPath) else {
-            return nil
-        }
-            
-        self.remove(file: tmpUrl)
-        do {
-            try self.fileManager.createDirectory(at: tmpUrl, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            return nil
-        }
-        return tmpUrl
-    }
-    
-    private func createCachePath() -> URL? {
-        guard let url = self.storageURl else {
-            return nil
-        }
-        let pathUrl = url.appendingPathComponent(FolderType.cache.rawValue)
-        if self.fileManager.existence(atUrl: pathUrl) != .directory {
-            do {
-                try self.fileManager.createDirectory(at: pathUrl, withIntermediateDirectories: false, attributes: nil)
-            } catch {
-                return nil
-            }
-        }
-        return pathUrl
-    }
-    
-    private func createLoalCachePath() -> URL? {
-        guard let url = self.storageURl else {
-            return nil
-        }
-        let pathUrl = url.appendingPathComponent(FolderType.localCache.rawValue)
-        if self.fileManager.existence(atUrl: pathUrl) != .directory {
-            do {
-                try self.fileManager.createDirectory(at: pathUrl, withIntermediateDirectories: false, attributes: nil)
-            } catch {
-                return nil
-            }
-        }
-        return pathUrl
-    }
-    
-    private func createPath(for filesType: FilesFolderType) -> URL? {
-        guard let url = self.storageURl else {
-            return nil
-        }
-        let pathUrl = url.appendingPathComponent(filesType.folderName)
-        if self.fileManager.existence(atUrl: pathUrl) != .directory {
-            do {
-                try self.fileManager.createDirectory(at: pathUrl, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                return nil
-            }
-        }
-        return pathUrl
-    }
-    
-    private func createPath(for type: FilesFolderType.FolderType) -> URL? {
-        guard let url = self.storageURl else {
-            return nil
-        }
-        let pathUrl = url.appendingPathComponent(type.rawValue)
-        if self.fileManager.existence(atUrl: pathUrl) != .directory {
-            do {
-                try self.fileManager.createDirectory(at: pathUrl, withIntermediateDirectories: false, attributes: nil)
-            } catch {
-                return nil
-            }
-        }
-        return pathUrl
-    }
-            
 }
 
 extension STFileSystem {
     
-    enum FolderType: String {
-        case storage = "storage"
-        case `private` = "private"
-        case tmp = "tmp"
-        case cache = "Cache"
-        case localCache = "LocalCache"
-    }
-    
-    enum FilesFolderType: Equatable, Hashable {
+    enum FileSystemError: IError {
+        case incorrectUrl
         
-        enum FolderType: String {
-            case cache = "Cache"
-            case local = "Local"
-        }
-        
-        case thumbs(type: FolderType)
-        case oreginals(type: FolderType)
-        
-        var folderName: String {
+        var message: String {
             switch self {
-            case .thumbs(type: let type):
-                return type.rawValue + "/Thumbs"
-            case .oreginals(type: let type):
-                return type.rawValue + "/Oreginals"
+            case .incorrectUrl:
+                return "incorrect_url"
+            }
+        }
+    }
+    
+    enum FolderType {
+        
+        case storage(type: CacheType)
+        case tmp
+        
+        var stringValue: String {
+            switch self {
+            case .storage(let type):
+                return "storage/" + "\(type.stringValue)"
+            case .tmp:
+                return "tmp"
             }
         }
         
-        static func == (lhs: Self, rhs: Self) -> Bool {
-            return lhs.folderName == rhs.folderName
+        static var allCases: [FolderType] {
+            return [.storage(type: .local(type: .oreginals)),
+                    .storage(type: .local(type: .thumbs)),
+                    .storage(type: .server(type: .oreginals)),
+                    .storage(type: .server(type: .thumbs)),
+                    .tmp]
         }
         
-        func hash(into hasher: inout Hasher) {
-            self.folderName.hash(into: &hasher)
-        }
-
     }
     
-    func fullPath(type: FolderType, isDirectory: Bool = false) -> URL? {
-        guard let fullPath = (self.storageURl?.appendingPathComponent(type.rawValue, isDirectory: isDirectory)) else {
-            return nil
-        }
-        return fullPath
-    }
-    
-    func folder(for type: FolderType) -> URL? {
-        
-        if type == .private {
-            return self.privateURL
-        }
+    enum CacheType {
                 
-        guard let dest = self.fullPath(type: type, isDirectory: true) else {
-            return nil
-        }
-        if self.fileManager.existence(atUrl: dest) != .directory {
-            do {
-                try self.fileManager.createDirectory(at: dest, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                return nil
+        case local(type: FileType? = nil)
+        case server(type: FileType? = nil)
+                
+        var name: String {
+            switch self {
+            case .local:
+                return "local"
+            case .server:
+                return "server"
             }
         }
-        return dest
+        
+        var stringValue: String {
+            switch self {
+            case .local(let type):
+                var result = self.name
+                if let type = type {
+                    result = result + "/" + type.stringValue
+                }
+                return result
+            case .server(let type):
+                var result = self.name
+                if let type = type {
+                    result = result + "/" + type.stringValue
+                }
+                return result
+            }
+        }
     }
     
-    func deleteFiles(files: [STLibrary.File]) {
-        for file in files {
-            if let oldFileThumbPath = file.fileOreginalUrl?.path {
-                try? self.fileManager.removeItem(atPath: oldFileThumbPath)
+    enum FileType {
+        
+        case thumbs
+        case oreginals
+        
+        var stringValue: String {
+            switch self {
+            case .thumbs:
+                return "thumbs"
+            case .oreginals:
+                return "oreginals"
             }
-            
-            if let fileThumbPath = file.fileThumbUrl?.path {
-                try? self.fileManager.removeItem(atPath: fileThumbPath)
-            }
-            
         }
     }
     
-    func isExistFileile(file: STLibrary.File, isThumb: Bool) -> Bool {
-        guard let url = isThumb ? file.fileThumbUrl : file.fileOreginalUrl else {
-            return false
-        }
-        return self.fileExists(atPath: url.path)
+    struct File {
+        let type: FolderType
+        let fileName: String
     }
     
 }
+
 
 extension FileManager {
     
@@ -377,7 +387,6 @@ extension FileManager {
     }
     
     func existence(atUrl url: URL) -> FileExistence {
-        
         var isDirectory: ObjCBool = false
         let exists = self.fileExists(atPath: url.path, isDirectory: &isDirectory)
         
@@ -388,7 +397,7 @@ extension FileManager {
         }
     }
     
-    func subDirectories(atPath: String) -> [String]? {
+    fileprivate func subDirectories(atPath: String) -> [String]? {
         guard let subpaths = self.subpaths(atPath: atPath) else {
             return nil
         }
@@ -403,7 +412,7 @@ extension FileManager {
         return subDirs
     }
     
-    func subUrls(atPath: String) -> [URL]? {
+    fileprivate func subUrls(atPath: String) -> [URL]? {
         guard let subpaths = self.subpaths(atPath: atPath) else {
             return nil
         }
@@ -417,7 +426,7 @@ extension FileManager {
         return subDirs
     }
     
-    func scanFolder(_ folderPath: String) -> (size: STBytesUnits, files: [File]) {
+    fileprivate func scanFolder(_ folderPath: String) -> (size: STBytesUnits, files: [File]) {
         var folderSize: Int64 = 0
         guard let fileAttributes = try? self.attributesOfItem(atPath: folderPath), let type = fileAttributes[FileAttributeKey.type] as? FileAttributeType else {
             return (.zero, [File]())
@@ -458,7 +467,5 @@ extension FileManager {
         }
         
     }
-    
+
 }
-
-

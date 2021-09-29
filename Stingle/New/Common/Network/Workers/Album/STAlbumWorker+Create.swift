@@ -9,7 +9,7 @@ import Foundation
 
 extension STAlbumWorker {
     
-    func createAlbum(name: String, reloadDBData: Bool = true, success: Success<STLibrary.Album>? = nil, failure: Failure?) {
+    func createAlbum(name: String, reloadDBData: Bool = true, success: Success<STLibrary.Album>?, failure: Failure?) {
         do {
             let encryptedAlbumData = try STApplication.shared.crypto.generateEncryptedAlbumDataAndID(albumName: name)
             self.createAlbum(encryptedAlbumData: encryptedAlbumData, reloadDBData: reloadDBData, success: success, failure: failure)

@@ -18,7 +18,7 @@ extension Date {
 
 extension TimeInterval {
     
-    func toString() -> String {
+    func timeFormat() -> String {
         let ti = Int(self)
         let seconds = ti % 60
         let minutes = (ti / 60) % 60

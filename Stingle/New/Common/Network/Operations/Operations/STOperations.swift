@@ -117,7 +117,6 @@ class STOperation<T>: Operation, INetworkOperation {
         } else {
             self.resume()
         }
-        
     }
 
     override func cancel() {
@@ -198,7 +197,7 @@ class STOperation<T>: Operation, INetworkOperation {
     
     private func setCancel() {
         if self.isExecuting {
-            self.setFinished()
+            super.cancel()
         } else if self.isReady {
             self.success = nil
             self.failure = nil

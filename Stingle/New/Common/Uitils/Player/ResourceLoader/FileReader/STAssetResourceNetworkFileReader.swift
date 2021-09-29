@@ -28,7 +28,7 @@ extension STAssetResourceLoader {
         }()
         
         private lazy var fileHandleUrl: URL = {
-            guard let url = STApplication.shared.fileSystem.tmpURL else {
+            guard let url = STApplication.shared.fileSystem.url(for: .tmp) else {
                 fatalError("tmpURL is nil")
             }
             let uuid = UUID().uuidString

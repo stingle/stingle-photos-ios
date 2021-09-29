@@ -7,11 +7,9 @@ target 'Stingle' do
   inhibit_all_warnings!
 
   pod 'Sodium'
-#  pod 'MobileVLCKit'
   pod 'Alamofire'
-  pod 'Kingfisher'
   pod 'Tatsi'
-    
-#  pod 'netfox'
+  pod 'KeychainSwift'
+  pod 'netfox'
 
 end

@@ -23,7 +23,7 @@ extension STGalleryVC {
             let image = STImageView.Image(file: data, isThumb: true)
             var videoDurationStr: String? = nil
             if let duration = data.decryptsHeaders.file?.videoDuration, duration > 0 {
-                videoDurationStr = TimeInterval(duration).toString()
+                videoDurationStr = TimeInterval(duration).timeFormat()
             }
             return CellModel(image: image,
                              name: data.file,
@@ -96,20 +96,6 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         return STImagePickerHelper(controller: self)
     }()
     
-    @IBAction func didSelectSyncButton(_ sender: Any) {
-        let controller = self.storyboard!.instantiateViewController(identifier: "Popover")
-        controller.modalPresentationStyle = .popover
-        let popController = controller.popoverPresentationController
-        popController?.permittedArrowDirections = .any
-        popController?.barButtonItem = self.syncBarButtonItem
-        popController?.delegate = self
-        self.showDetailViewController(controller, sender: nil)
-    }
-    
-    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
-        self.setSelectedMode(isSelected: !self.dataSource.viewModel.isSelectedMode)
-    }
-        
     //MARK: - Override
     
     override func viewDidLoad() {
@@ -149,12 +135,26 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     @IBAction private func didSelectOpenImagePicker(_ sender: Any) {
         self.pickerHelper.openPicker()
     }
+    
+    @IBAction func didSelectSyncButton(_ sender: Any) {
+        let controller = self.storyboard!.instantiateViewController(identifier: "Popover")
+        controller.modalPresentationStyle = .popover
+        let popController = controller.popoverPresentationController
+        popController?.permittedArrowDirections = .any
+        popController?.barButtonItem = self.syncBarButtonItem
+        popController?.delegate = self
+        self.showDetailViewController(controller, sender: nil)
+    }
+    
+    @IBAction private func didSelecedButtonItem(_ sender: UIBarButtonItem) {
+        self.setSelectMode(isSelected: !self.dataSource.viewModel.isSelectedMode)
+    }
 
     //MARK: - Layout
 
     override func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let inset: CGFloat = 4
-        let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : 3
+        let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : layoutEnvironment.container.contentSize.width > layoutEnvironment.container.contentSize.height ? 4 : 3
         let item = self.dataSource.generateCollectionLayoutItem()
         let itemSizeWidth = (layoutEnvironment.container.contentSize.width - 2 * inset) / CGFloat(lineCount)
         let itemSizeHeight = itemSizeWidth
@@ -176,7 +176,10 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     
     //MARK: - Private
     
-    private func setSelectedMode(isSelected: Bool) {
+    private func setSelectMode(isSelected: Bool) {
+        guard self.dataSource.viewModel.isSelectedMode != isSelected else {
+            return
+        }
         self.dataSource.viewModel.selectedFileNames.removeAll()
         self.dataSource.viewModel.isSelectedMode = isSelected
         self.updateTabBarAccessoryView()
@@ -233,17 +236,31 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         }
         let storyboard = UIStoryboard(name: "Shear", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
-        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .files(files: files)
+        
+        let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
+        sharedMembersVC?.shearedType = .files(files: files)
+        
+        sharedMembersVC?.complition = { [weak self] success in
+            if success {
+                self?.setSelectMode(isSelected: false)
+            }
+        }
+        
         self.showDetailViewController(vc, sender: nil)
     }
     
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
         let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: FileAction.share)
-        vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
+        vc.completionWithItemsHandler = { [weak self] (type, completed, items, error) in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
             }
+            
+            if completed {
+                self?.setSelectMode(isSelected: false)
+            }
+            
         }
         self.present(vc, animated: true)
     }
@@ -258,6 +275,10 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         self.pickerHelper.save(items: filesSave) { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
+            }
+            
+            DispatchQueue.main.async {
+                self?.setSelectMode(isSelected: false)
             }
         }
     }
@@ -304,7 +325,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
             if let error = error {
                 weakSelf.showError(error: error)
             } else {
-                weakSelf.setSelectedMode(isSelected: false)
+                weakSelf.setSelectMode(isSelected: false)
             }
         }
     }
@@ -320,7 +341,8 @@ extension STGalleryVC: UICollectionViewDelegate {
             guard let file = self.dataSource.object(at: indexPath) else {
                 return
             }
-            let vc = STFileViewerVC.create(galery: [#keyPath(STCDFile.dateCreated)], predicate: nil, file: file)
+            let sorting = self.viewModel.getSorting()
+            let vc = STFileViewerVC.create(galery: sorting, predicate: nil, file: file)
             self.show(vc, sender: nil)
         }
     }
@@ -330,7 +352,40 @@ extension STGalleryVC: UICollectionViewDelegate {
 extension STGalleryVC: STImagePickerHelperDelegate {
     
     func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
-        self.viewModel.upload(assets: assets)
+        let importer = self.viewModel.upload(assets: assets)
+        
+        let progressView = STProgressView()
+        progressView.title = "importing".localized
+        
+        let view: UIView = self.navigationController?.view ?? self.view
+        progressView.show(in: view)
+    
+        importer.startHendler = { progress in
+            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    progressView.progress = progressValue
+                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                }
+            }
+        }
+        
+        importer.progressHendler = { progress in
+            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    progressView.progress = progressValue
+                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                }
+            }
+        }
+        
+        importer.complition = { _ in
+            DispatchQueue.main.async {
+                progressView.hide()
+            }
+        }
+        
     }
     
 }
@@ -349,7 +404,6 @@ extension STGalleryVC: STFilesActionTabBarAccessoryViewDataSource {
         case share
         case saveDevicePhotos
     }
-    
         
     enum FileAction: StringPointer {
         case share
@@ -395,11 +449,9 @@ extension STGalleryVC: STFilesActionTabBarAccessoryViewDataSource {
             self?.didSelectTrash(sendner: buttonItem)
         }
         items.append(trash)
-        
         return items
     }
-    
-    
+
 }
 
 extension STGalleryVC {
@@ -414,7 +466,13 @@ extension STGalleryVC {
             return
         }
         let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
-        (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .files(files: files)
+        let moveAlbumFilesVC = (navVC.viewControllers.first as? STMoveAlbumFilesVC)
+        moveAlbumFilesVC?.moveInfo = .files(files: files)
+        moveAlbumFilesVC?.complition = { [weak self] success in
+            if success {
+                self?.setSelectMode(isSelected: false)
+            }
+        }
         self.showDetailViewController(navVC, sender: nil)
     }
     
@@ -430,9 +488,9 @@ extension STGalleryVC {
         let files = self.getSelectedFiles()
         let title = "delete_files_alert_title".localized
         let message = String(format: "delete_move_files_alert_message".localized, "\(files.count)")
-        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+        self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
             self?.deleteCurrentFile(files: files)
-        }
+        })
     }
     
 }

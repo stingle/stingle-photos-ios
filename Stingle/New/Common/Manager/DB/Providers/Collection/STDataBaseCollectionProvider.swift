@@ -8,36 +8,25 @@
 import CoreData
 import UIKit
 
-protocol ICollectionProvider: AnyObject {
-   
-}
-
-protocol ICollectionProviderObserver {
-    func dataBaseCollectionProvider(didAdded provider: ICollectionProvider, models: [IDataBaseProviderModel])
-    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel])
-    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel])
-}
-
-extension ICollectionProviderObserver {
-    
-    func dataBaseCollectionProvider(didAdded provider: ICollectionProvider, models: [IDataBaseProviderModel]) {}
-    func dataBaseCollectionProvider(didDeleted provider: ICollectionProvider, models: [IDataBaseProviderModel]) {}
-    func dataBaseCollectionProvider(didUpdated provider: ICollectionProvider, models: [IDataBaseProviderModel]) {}
-    
-}
-
 extension STDataBase {
     
-    class CollectionProvider<ManagedModel: IManagedObject>: DataBaseProvider<ManagedModel.Model>, ICollectionProvider {
+    class CollectionProvider<ManagedModel: IManagedObject>: DataBaseProvider<ManagedModel> {
         
         typealias Model = ManagedModel.Model
         let dataSources = STObserverEvents<STDataBase.DataSource<ManagedModel>>()
-        let observerProvider = STObserverEvents<ICollectionProviderObserver>()
         
-        func reloadData() {
+        func reloadData(models: [Model]? = nil) {
             DispatchQueue.main.async { [weak self] in
-                self?.dataSources.forEach { (controller) in
+                guard let weakSelf = self else {
+                    return
+                }
+                weakSelf.dataSources.forEach { (controller) in
                     controller.reloadData()
+                }
+                if let models = models, !models.isEmpty {
+                    weakSelf.observerProvider.forEach { observer in
+                        observer.dataBaseProvider(didUpdated: weakSelf, models: models)
+                    }
                 }
             }
         }
@@ -49,7 +38,7 @@ extension STDataBase {
         
         //MARK: - DataSource
         
-        func createDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?, predicate: NSPredicate? = nil, cacheName: String? = ManagedModel.entityName) -> DataSource<ManagedModel> {
+        func createDataSource(sortDescriptorsKeys: [DataSource<ManagedModel>.Sort], sectionNameKeyPath: String?, predicate: NSPredicate? = nil, cacheName: String? = nil) -> DataSource<ManagedModel> {
             let dataSource = self.generateDataSource(sortDescriptorsKeys: sortDescriptorsKeys, sectionNameKeyPath: sectionNameKeyPath, predicate: predicate, cacheName: cacheName)
             return dataSource as! DataSource<ManagedModel>
         }
@@ -72,10 +61,7 @@ extension STDataBase {
             }
             
             if reloadData {
-                self.reloadData()
-                self.observerProvider.forEach { observer in
-                    observer.dataBaseCollectionProvider(didAdded: self, models: models)
-                }
+                self.reloadData(models: models)
             }
         }
         
@@ -94,44 +80,22 @@ extension STDataBase {
                     let deleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
                     let _ = try? context.execute(deleteRequest)
                 } catch {
-                    print("error")
                 }
                 
             }
             
             if reloadData {
-                self.reloadData()
+                self.reloadData(models: models)
                 self.observerProvider.forEach { observer in
-                    observer.dataBaseCollectionProvider(didDeleted: self, models: models)
+                    observer.dataBaseProvider(didDeleted: self, models: models)
                 }
             }
         }
         
         func update(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
             let context = context ?? self.container.newBackgroundContext()
-            var resultError: Error?
-            context.performAndWait {
-                do {
-                    let cdModel = try self.getObjects(by: models, in: context)
-                    try self.updateObjects(by: models, managedModels: cdModel, in: context)
-                    if context.hasChanges {
-                        try context.save()
-                    }
-                } catch {
-                    resultError = error
-                }
-                
-                if resultError != nil {
-                    return
-                }
-                
-                if reloadData {
-                    self.reloadData()
-                    self.observerProvider.forEach { observer in
-                        observer.dataBaseCollectionProvider(didUpdated: self, models: models)
-                    }
-                }
-            }
+            self.delete(models: models, reloadData: false, context: context)
+            self.add(models: models, reloadData: reloadData, context: context)
         }
         
         //MARK: - Fetch
@@ -217,25 +181,24 @@ extension STDataBase {
         }
         
         func updateObjects(by models: [Model], managedModels: [ManagedModel], in context: NSManagedObjectContext) throws {
-            throw STDataBase.DataBaseError.dateNotFound
+            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
+            managedGroup.forEach { (keyValue) in
+                if let key = keyValue.key, let model = modelsGroup[key]?.first {
+                    let cdModel = keyValue.value.first
+                    cdModel?.update(model: model, context: context)
+                }
+            }
         }
 
         //MARK: - ICollectionProvider
         
-        func generateDataSource(sortDescriptorsKeys: [String], sectionNameKeyPath: String?, predicate: NSPredicate?, cacheName: String?) -> IProviderDataSource {
+        func generateDataSource(sortDescriptorsKeys: [STDataBase.DataSource<ManagedModel>.Sort], sectionNameKeyPath: String?, predicate: NSPredicate?, cacheName: String?) -> IProviderDataSource {
             let dataSource = STDataBase.DataSource<ManagedModel>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, predicate: predicate, sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
             self.dataSources.addObject(dataSource)
             return dataSource
         }
-        
-        func add(_ observer: ICollectionProviderObserver) {
-            self.observerProvider.addObject(observer)
-        }
-        
-        func remove(_ observer: ICollectionProviderObserver) {
-            self.observerProvider.removeObject(observer)
-        }
-        
+                
     }
 }
 
@@ -263,9 +226,7 @@ extension STDataBase {
             //Implement in chid classes
             throw STDataBase.DataBaseError.dateNotFound
         }
-               
-        
-        
+                       
         //MARK: - Sync delete
         
         func deleteObjects(_ deleteFiles: [DeleteFile]?, in context: NSManagedObjectContext, lastDate: Date) throws -> Date {

@@ -70,14 +70,28 @@ class STCrypto {
 	public init() {
 		self.sodium = Sodium()
 	}
+    
+    func getPublicKeyFromPrivateKey(byte: Bytes) throws -> Bytes {
+        guard let publicKey = self.sodium.secretBox.exportPublicKey(secretKey: byte) else {
+            throw CryptoError.Internal.sealFailure
+        }
+        return publicKey
+    }
+    
+    func decryptSeal(enc: Bytes, publicKey: Bytes, privateKey: Bytes) throws -> Bytes {
+        guard let decryptSeal = self.sodium.box.open(anonymousCipherText: enc, recipientPublicKey: publicKey, recipientSecretKey: privateKey) else {
+            throw CryptoError.Internal.openFailure
+        }
+        return decryptSeal
+    }
 			
-	public func getPasswordHashForStorage(password: String) throws -> [String: String]? {
+	public func getPasswordHashForStorage(password: String) throws -> [String: String] {
 		guard let salt = self.getRandomBytes(lenght: sodium.pwHash.SaltBytes) else {
-			return nil
+            throw CryptoError.Internal.hashGenerationFailure
 		}
 		let hash =  try self.getPasswordHashForStorage(password: password, salt: salt)
-		guard let saltHex = sodium.utils.bin2hex(salt) else {
-			return nil
+        guard let saltHex = self.sodium.utils.bin2hex(salt) else {
+            throw CryptoError.Internal.hashGenerationFailure
 		}
 		return ["hash": hash, "salt": saltHex]
 	}
@@ -146,12 +160,12 @@ class STCrypto {
 	}
 		
     func getServerPublicKey() throws -> Bytes {
-		return try self.readPrivateFile(filename: Constants.ServerPublicKeyFilename)
+		return try self.readPrivateFile(fileName: Constants.ServerPublicKeyFilename)
     }
 	
 	public func getPrivateKeyForExport(password: String) throws -> Bytes {
-		let encPK = try self.readPrivateFile(filename: Constants.PrivateKeyFilename)
-		let nonce = try self.readPrivateFile(filename: Constants.SKNONCEFilename)
+		let encPK = try self.readPrivateFile(fileName: Constants.PrivateKeyFilename)
+		let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
 		let key = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
 		
 		let decPK = try self.decryptSymmetric(key: key, nonce: nonce, data: encPK)
@@ -162,11 +176,11 @@ class STCrypto {
 	
 	public func exportPublicKey() throws -> Bytes {
 		var pbk = [UInt8]()
-		pbk += Constants.KeyFileBeggining.bytes
-		pbk += STCrypto.toBytes(value: Constants.CurrentKeyFileVersion)
-		pbk += STCrypto.toBytes(value: Constants.KeyFileTypePublicPlain)
+        pbk.append(contentsOf: Constants.KeyFileBeggining.bytes)
+        pbk.append(UInt8(Constants.CurrentKeyFileVersion))
+        pbk.append(UInt8(Constants.KeyFileTypePublicPlain))
 		do {
-			let pbkBytes = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+			let pbkBytes = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
 			pbk += pbkBytes
 		} catch {
 			throw error
@@ -180,16 +194,16 @@ class STCrypto {
 		result.append(UInt8(Constants.CurrentKeyFileVersion))
 		result.append(UInt8(Constants.KeyFileTypeBundleEncrypted))
 
-		let publicKeyFile = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+		let publicKeyFile = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
 		result.append(contentsOf: publicKeyFile)
 
 		let privateKeyForExport = try self.getPrivateKeyForExport(password: password)
 		result.append(contentsOf: privateKeyForExport)
 
-		let pwdSalt = try self.readPrivateFile(filename: Constants.PwdSaltFilename)
+		let pwdSalt = try self.readPrivateFile(fileName: Constants.PwdSaltFilename)
 		result.append(contentsOf: pwdSalt)
 
-		let nonce = try self.readPrivateFile(filename: Constants.SKNONCEFilename)
+		let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
 		result.append(contentsOf: nonce)
 		
 		return result
@@ -240,7 +254,7 @@ class STCrypto {
     @discardableResult
     public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
         
-		let publicKey = try (publicKey ?? self.readPrivateFile(filename: Constants.PublicKeyFilename))
+		let publicKey = try (publicKey ?? self.readPrivateFile(fileName: Constants.PublicKeyFilename))
 		let symmetricKey = self.sodium.keyDerivation.key()
 		let header = try getNewHeader(symmetricKey: symmetricKey, dataSize: dataLength, filename: filename, fileType: fileType, fileId: fileId, videoDuration: videoDuration)
         let encriptedHeader = try self.writeHeader(output: output, header: header, publicKey: publicKey)
@@ -248,6 +262,29 @@ class STCrypto {
     
         return (header, encriptedHeader)
 	}
+    
+    public func generateEncriptedHeader(header: STHeader, publicKey: Bytes? = nil) throws -> String {
+        
+        let publicKey = try (publicKey ?? self.readPrivateFile(fileName: Constants.PublicKeyFilename))
+        
+        let outputStream = OutputStream(toMemory: ())
+        outputStream.open()
+        defer {
+            outputStream.close()
+        }
+        let encriptedHeaderBytes = try self.writeHeader(output: outputStream, header: header, publicKey: publicKey)
+        guard let base64Original = self.bytesToBase64Url(data: encriptedHeaderBytes) else {
+            throw CryptoError.Header.incorrectHeader
+        }
+        return base64Original
+    }
+    
+    public func generateEncriptedHeaders(oreginalHeader: STHeader, thumbHeader: STHeader, publicKey: Bytes? = nil) throws -> String {
+        let original = try self.generateEncriptedHeader(header: oreginalHeader, publicKey: publicKey)
+        let thumb = try self.generateEncriptedHeader(header: thumbHeader, publicKey: publicKey)
+        let headers = original + "*" + thumb
+        return headers
+    }
 	
 	@discardableResult
     func encryptData(input: InputStream, output: OutputStream, header: STHeader?) throws -> Bytes {
@@ -380,8 +417,7 @@ class STCrypto {
 			
 	@discardableResult
     func savePrivateFile(filename: String, data: Bytes?) throws -> Bool {
-		
-        let path = STApplication.shared.fileSystem.folder(for: .private)
+        let path = STFileSystem.privateKeyUrl()//  STApplication.shared.fileSystem.url(for: .private)
 		guard let fullPath = path?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
@@ -403,12 +439,12 @@ class STCrypto {
 	}
     
     func readPublicKey() throws -> Bytes {
-        return try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+        return try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
     }
 	
-    func readPrivateFile(filename: String) throws -> Bytes {
-        let path = STApplication.shared.fileSystem.folder(for: .private)
-		guard let fullPath = path?.appendingPathComponent(filename) else {
+    func readPrivateFile(fileName: String) throws -> Bytes {
+        let path = STFileSystem.privateKeyUrl(filePath: fileName) // STApplication.shared.fileSystem.url(for: .private, filePath: fileName)
+        guard let fullPath = path else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
 		guard let input:InputStream = InputStream(url: fullPath) else {

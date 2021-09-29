@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol STShareAlbumVCDelegate: AnyObject {
+    func shareAlbumVC(didShare shareAlbumVC: STShareAlbumVC)
+}
+
 class STShareAlbumVC: UITableViewController {
     
     @IBOutlet weak private var shareButtonItem: UIBarButtonItem!
@@ -28,6 +32,8 @@ class STShareAlbumVC: UITableViewController {
     
     @IBOutlet weak private var copyingTitleLabel: UILabel!
     @IBOutlet weak private var copyingDescriptionLabel: UILabel!
+    
+    weak var delegate: STShareAlbumVCDelegate?
     
     private let viewModel = STShareAlbumVM()
     
@@ -81,6 +87,7 @@ class STShareAlbumVC: UITableViewController {
             if let error = error {
                 weakSelf.showError(error: error)
             } else {
+                weakSelf.delegate?.shareAlbumVC(didShare: weakSelf)
                 weakSelf.dismiss(animated: true, completion: nil)
             }
         }
@@ -99,6 +106,7 @@ class STShareAlbumVC: UITableViewController {
             if let error = error {
                 weakSelf.showError(error: error)
             } else {
+                weakSelf.delegate?.shareAlbumVC(didShare: weakSelf)
                 weakSelf.dismiss(animated: true, completion: nil)
             }
         }
@@ -119,6 +127,7 @@ class STShareAlbumVC: UITableViewController {
             if let error = error {
                 weakSelf.showError(error: error)
             } else {
+                weakSelf.delegate?.shareAlbumVC(didShare: weakSelf)
                 weakSelf.dismiss(animated: true, completion: nil)
             }
         }

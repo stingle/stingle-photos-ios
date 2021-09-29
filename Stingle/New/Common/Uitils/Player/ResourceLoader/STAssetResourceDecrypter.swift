@@ -20,7 +20,7 @@ extension STAssetResourceLoader {
         
         init?(header: STHeader, reader: IAssetResourceReader) {
 
-            guard var url = STApplication.shared.fileSystem.tmpURL?.appendingPathComponent("VideoDecryp"), let name = header.fileName else {
+            guard var url = STApplication.shared.fileSystem.url(for: .tmp, filePath: "VideoDecryp"), let name = header.fileName else {
                 return nil
             }
             do {

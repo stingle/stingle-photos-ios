@@ -9,10 +9,22 @@ import CoreData
 
 extension STDataBase {
     
-    class DBInfoProvider: DataBaseProvider<STDBInfo> {
+    class DBInfoProvider: DataBaseProvider<STCDDBInfo> {
+        
+        private var myDBInfo: STDBInfo?
+        
+        override func deleteAll(completion: ((IError?) -> Void)? = nil) {
+            super.deleteAll { [weak self] error in
+                if error == nil {
+                    self?.myDBInfo = nil
+                }
+                completion?(error)
+            }
+        }
                
         func update(model info: STDBInfo) {
-            let context = self.container.newBackgroundContext()
+            self.myDBInfo = info
+            let context = self.container.viewContext
             context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             context.undoManager = nil
             context.performAndWait {
@@ -24,6 +36,9 @@ extension STDataBase {
                 cdInfo.update(model: info, context: context)
                 self.container.saveContext(context)
                 context.reset()
+            }
+            self.observerProvider.forEach { obs in
+                obs.dataBaseProvider(didUpdated: self, models: [info])
             }
         }
         
@@ -48,13 +63,21 @@ extension STDataBase {
 extension STDataBase.DBInfoProvider {
     
     var dbInfo: STDBInfo {
-        guard  let info = self.getInfo(context: self.container.viewContext) else {
-            return STDBInfo()
+        
+        if let myDBInfo = self.myDBInfo {
+            return myDBInfo
+        }
+        
+        guard let info = self.getInfo(context: self.container.viewContext) else {
+            self.myDBInfo = STDBInfo()
+            return self.myDBInfo!
         }
         do {
-            return try STDBInfo(model: info)
+            self.myDBInfo = try STDBInfo(model: info)
+            return self.myDBInfo!
         } catch  {
-            return STDBInfo()
+            self.myDBInfo = STDBInfo()
+            return self.myDBInfo!
         }
     }
     

@@ -31,14 +31,14 @@ public func ==(lhs: FileExistence, rhs: FileExistence) -> Bool {
 	}
 }
 
-class SPFileManager : FileManager {
+class SPFileManager: FileManager {
 		
 	private static var storagePath: URL? {
 		get {
 			guard let path = self.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
 				return nil
 			}
-			guard let  home = STApplication.shared.user()?.homeFolder else {
+            guard let  home = STApplication.shared.utils.user()?.homeFolder else {
 				return nil
 			}
 			let homePath = "\(path)\(home)"

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class STImageView: UIImageView {
     
@@ -15,21 +14,6 @@ class STImageView: UIImageView {
         self.setImage(source: image, placeholder: placeholder, animator: animator, success: success, progress: progress, failure: failure)
     }
     
-    func setImages(_ images: Images?, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil) {
-        guard let images = images else {
-            self.setImage(source: images?.thumb, placeholder: nil, success: success, progress: progress, failure: failure)
-            return
-        }
-        
-        if let thumb = images.thumb, STApplication.shared.downloaderManager.imageRetryer.isFileExists(source: thumb) {
-            self.setImage(source: images.thumb, placeholder: nil, animator: nil, success: { [weak self] _ in
-                self?.setImage(source: images.original, placeholder: nil, animator: nil, success: success, progress: progress, failure: failure, saveOldImage: true)
-            }, progress: progress, failure: failure)
-        } else {
-            self.setImage(source: images.original, placeholder: nil, animator: nil, success: success, progress: progress, failure: failure)
-        }
-    }
-
 }
 
 extension STImageView {
@@ -84,11 +68,15 @@ extension STImageView {
 
 extension STImageView.Image: IFileRetrySource {
     
-    var filePath: STFileSystem.FilesFolderType {
-        let type: STFileSystem.FilesFolderType.FolderType = !self.isRemote ? .local : .cache
-        let folder: STFileSystem.FilesFolderType = self.isThumb ? .thumbs(type: type) : .oreginals(type: type)
-        return folder
+    var folderType: STFileSystem.FolderType {
+        let fileType: STFileSystem.FileType = self.isThumb ? .thumbs : .oreginals
+        if self.isRemote {
+            return STFileSystem.FolderType.storage(type: .server(type: fileType))
+        } else {
+            return STFileSystem.FolderType.storage(type: .local(type: fileType))
+        }
     }
+    
 }
 
 extension STImageView.Image: STDownloadRequest {

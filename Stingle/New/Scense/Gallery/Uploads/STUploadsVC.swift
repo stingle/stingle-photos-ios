@@ -29,6 +29,7 @@ class STUploadsVC: STPopoverViewController {
         var size = self.setupPreferredContentSize
         let itemsCount = self.cellModels.count
         size.height = CGFloat(itemsCount == .zero ? Int(size.height) : 90 * itemsCount)
+        size.height = size.height.isZero ? 100 : size.height
         return size
     }
     

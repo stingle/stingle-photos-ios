@@ -145,6 +145,7 @@ extension STDownloaderManager {
         }
         
         private func didFailDownload(source: IDownloaderSource) {
+            self.progressesCount = self.progressesCount - 1
             if self.progressesCount == .zero {
                 self.updateFinished()
             }

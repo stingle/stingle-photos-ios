@@ -12,22 +12,22 @@ class STGalleryVM {
     
     private let syncManager = STApplication.shared.syncManager
     private let uploader = STApplication.shared.uploader
-    
     private let fileWorker = STFileWorker()
     
     func createDBDataSource() -> STDataBase.DataSource<STCDFile> {
         let galleryProvider = STApplication.shared.dataBase.galleryProvider
-        return galleryProvider.createDataSource(sortDescriptorsKeys: [#keyPath(STCDFile.dateCreated)],
-                                                sectionNameKeyPath: #keyPath(STCDFile.day))
+        let sorting = self.getSorting()
+        return galleryProvider.createDataSource(sortDescriptorsKeys: sorting, sectionNameKeyPath: #keyPath(STCDFile.day))
     }
     
     func sync() {
         self.syncManager.sync()
     }
     
-    func upload(assets: [PHAsset]) {
+    func upload(assets: [PHAsset]) -> STFileUploader.Importer {
         let files = assets.compactMap({ return STFileUploader.FileUploadable(asset: $0) })
-        self.uploader.upload(files: files)
+        let importer = self.uploader.upload(files: files)
+        return importer
     }
     
     func getFiles(fileNames: [String]) -> [STLibrary.File] {
@@ -45,6 +45,13 @@ class STGalleryVM {
         } failure: { error in
             completion(error)
         }
+    }
+    
+    func getSorting() -> [STDataBase.DataSource<STCDFile>.Sort] {
+        let dateCreated = STDataBase.DataSource<STCDFile>.Sort(key: #keyPath(STCDFile.dateCreated), ascending: nil)
+        let dateModified = STDataBase.DataSource<STCDFile>.Sort(key: #keyPath(STCDFile.dateModified), ascending: true)
+        let file = STDataBase.DataSource<STCDFile>.Sort(key: #keyPath(STCDFile.file), ascending: true)
+        return [dateCreated, dateModified, file]
     }
     
 }

@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class UserProvider: DataBaseProvider<STUser> {
+    class UserProvider: DataBaseProvider<STCDUser> {
         
         fileprivate(set) var myUser: STUser? = nil
                        
@@ -27,6 +27,15 @@ extension STDataBase {
                 self.container.saveContext(context)
                 context.reset()
                 self.myUser = nil
+            }
+        }
+        
+        override func deleteAll(completion: ((IError?) -> Void)? = nil) {
+            super.deleteAll { [weak self] error in
+                if error == nil {
+                    self?.myUser = nil
+                }
+                completion?(error)
             }
         }
         
@@ -52,7 +61,7 @@ extension STDataBase {
             }
         }
         
-        func updateMyUser() {
+        private func updateMyUser() {
             guard let cdUser = self.getUser(context: self.container.viewContext) else {
                 self.myUser = nil
                 return

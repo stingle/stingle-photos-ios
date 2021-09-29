@@ -28,7 +28,7 @@ extension STAlbumFilesVC {
             let image = STImageView.Image(album: self.album, albumFile: data, isThumb: true)
             var videoDurationStr: String? = nil
             if let duration = data.decryptsHeaders.file?.videoDuration, duration > 0 {
-                videoDurationStr = TimeInterval(duration).toString()
+                videoDurationStr = TimeInterval(duration).timeFormat()
             }
             return CellModel(image: image,
                              name: data.file,
@@ -87,7 +87,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     @IBOutlet weak private var addItemButton: UIButton!
     @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
-    @IBOutlet weak private var albumSettingsButtonItem: UIBarButtonItem!
+    @IBOutlet private var albumSettingsButtonItem: UIBarButtonItem!
     @IBOutlet weak private var moreBarButtonItem: UIBarButtonItem!
     
     var album: STLibrary.Album!
@@ -148,7 +148,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     override func layoutSection(sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? {
         let inset: CGFloat = 4
-        let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : 3
+        let lineCount = layoutEnvironment.traitCollection.isIpad() ? 5 : layoutEnvironment.container.contentSize.width > layoutEnvironment.container.contentSize.height ? 4 : 3
         let item = self.dataSource.generateCollectionLayoutItem()
         let itemSizeWidth = (layoutEnvironment.container.contentSize.width - 2 * inset) / CGFloat(lineCount)
         let itemSizeHeight = itemSizeWidth
@@ -170,7 +170,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     
     //MARK: - UserAction
     
-    @IBAction func didSelectMoreButton(_ sender: UIBarButtonItem) {
+    @IBAction private func didSelectMoreButton(_ sender: UIBarButtonItem) {
         let fileNames = self.dataSource.viewModel.isSelectedMode ? [String](self.dataSource.viewModel.selectedFileNames) : nil
         var actions = [STAlbumFilesVC.AlbumAction]()
         do {
@@ -198,11 +198,20 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         self.showDetailViewController(alert, sender: nil)
     }
     
-    @IBAction func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
+    @IBAction private func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
         if !self.album.isShared {
             let storyboard = UIStoryboard(name: "Shear", bundle: .main)
             let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
-            (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .album(album: self.album)
+            
+            let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
+            sharedMembersVC?.shearedType = .album(album: self.album)
+            
+            sharedMembersVC?.complition = { [weak self] success in
+                if success {
+                    self?.setSelectMode(isSelected: false)
+                }
+            }
+            
             self.showDetailViewController(vc, sender: nil)
         } else {
             let storyboard = UIStoryboard(name: "Shear", bundle: .main)
@@ -212,42 +221,67 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         }
     }
     
-    @IBAction func didSelectAddButton(_ sender: Any) {
+    @IBAction private func didSelectAddButton(_ sender: Any) {
         self.pickerHelper.openPicker()
     }
     
-    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
-        self.dataSource.viewModel.selectedFileNames.removeAll()
-        self.dataSource.viewModel.isSelectedMode = !self.dataSource.viewModel.isSelectedMode
-        self.updateTabBarAccessoryView()
-        self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
-        self.collectionView.reloadData()
-        self.updateSelectedItesmCount()
+    @IBAction private func didSelectButtonItem(_ sender: UIBarButtonItem) {
+        self.setSelectMode(isSelected: !self.dataSource.viewModel.isSelectedMode)
     }
     
     //MARK: - Private
     
+    private func setSelectMode(isSelected: Bool) {
+        guard self.dataSource.viewModel.isSelectedMode != isSelected else {
+            return
+        }
+        self.dataSource.viewModel.selectedFileNames.removeAll()
+        self.dataSource.viewModel.isSelectedMode = isSelected
+        self.updateTabBarAccessoryView()
+        self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
+        self.collectionView.reloadData()
+        self.updateSelectedItesmCount()
+                
+        guard var toolbarItems = self.navigationItem.rightBarButtonItems else { return  }
+        
+        if isSelected {
+            if let index = toolbarItems.firstIndex(where: { $0 == self.albumSettingsButtonItem }) {
+                toolbarItems.remove(at: index)
+            }
+        } else {
+            if !toolbarItems.contains(self.albumSettingsButtonItem) {
+                toolbarItems.append(self.albumSettingsButtonItem)
+            }
+        }
+        self.navigationItem.setRightBarButtonItems(toolbarItems, animated: true)
+        
+    }
+    
     private func didSelectShitAction(action: AlbumAction) {
-        
         let loadingView: UIView =  self.navigationController?.view ?? self.view
-        
         func didResiveResult(error: IError?) {
             STLoadingView.hide(in: loadingView)
             if let error = error {
                 self.showError(error: error)
             }
+            self.setSelectMode(isSelected: false)
         }
         
         switch action {
         case .rename:
             let placeholder = "album_name".localized
             let title = "rename_album".localized
-            self.showOkCancelAlert(title: title, message: nil, textFieldText: self.album.albumMetadata?.name, textFieldPlaceholder: placeholder) { [weak self] newName in
+            
+            self.showOkCancelAlert(title: title, message: nil) { [weak self] textField in
+                textField.text =  self?.album.albumMetadata?.name
+                textField.placeholder = placeholder
+            } handler: { [weak self] newName in
                 STLoadingView.show(in: loadingView)
                 self?.viewModel.renameAlbum(newName: newName, result: { error in
                     didResiveResult(error: error)
                 })
             }
+ 
         case .setBlankCover:
             STLoadingView.show(in: loadingView)
             self.viewModel.setBlankCover { error in
@@ -261,19 +295,19 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         case .delete:
             let title = String(format: "delete_album_alert_title".localized, album.albumMetadata?.name ?? "")
             let message = String(format: "delete_album_alert_message".localized, album.albumMetadata?.name ?? "")
-            self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+            self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
                 STLoadingView.show(in: loadingView)
                 self?.viewModel.delete { error in
                     didResiveResult(error: error)
                 }
-            }
+            })
         case .leave:
             STLoadingView.show(in: loadingView)
-            self.showOkCancelAlert(title: "leave".localized, message: "leave_album_alert_message".localized) { [weak self] _ in
+            self.showOkCancelAlert(title: "leave".localized, message: "leave_album_alert_message".localized, handler: { [weak self] _ in
                 self?.viewModel.leave { error in
                     didResiveResult(error: error)
                 }
-            }
+            })
         case .setCover:
             STLoadingView.show(in: loadingView)
             let fileName = self.dataSource.viewModel.selectedFileNames.first ?? ""
@@ -283,6 +317,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         case .downloadSelection:
             let fileName = [String](self.dataSource.viewModel.selectedFileNames)
             self.viewModel.downloadSelection(fileNames: fileName)
+            self.setSelectMode(isSelected: false)
         }
         
     }
@@ -303,9 +338,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
     }
 
     private func configureAlbumActionView() {
-        
         self.addItemButton.isHidden = !(self.album.permission.allowAdd || self.album.isOwner)
-        
         self.accessoryView.reloadData()
         var image: UIImage?
         if !self.album.isShared {
@@ -329,8 +362,7 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
             if let error = error {
                 weakSelf.showError(error: error)
             } else {
-                weakSelf.dataSource.viewModel.selectedFileNames.removeAll()
-                weakSelf.updateSelectedItesmCount()
+                self?.setSelectMode(isSelected: false)
             }
         }
     }
@@ -362,7 +394,16 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         let files = self.viewModel.getFiles(fileNames: selectedFileNames)
         let storyboard = UIStoryboard(name: "Shear", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
-        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .albumFiles(album: self.album, files: files)
+        
+        let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
+        
+        sharedMembersVC?.complition = { [weak self] success in
+            if success {
+                self?.setSelectMode(isSelected: false)
+            }
+        }
+        
+        sharedMembersVC?.shearedType = .albumFiles(album: self.album, files: files)
         self.showDetailViewController(vc, sender: nil)
     }
     
@@ -372,6 +413,9 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
+            }
+            if completed {
+                self?.setSelectMode(isSelected: false)
             }
         }
         self.present(vc, animated: true)
@@ -387,6 +431,9 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
         self.pickerHelper.save(items: filesSave) { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
+            }
+            DispatchQueue.main.async {
+                self?.setSelectMode(isSelected: false)
             }
         }
     }
@@ -423,7 +470,40 @@ class STAlbumFilesVC: STFilesViewController<STAlbumFilesVC.ViewModel> {
 extension STAlbumFilesVC: STImagePickerHelperDelegate {
     
     func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
-        self.viewModel.upload(assets: assets)
+        let importer = self.viewModel.upload(assets: assets)
+        
+        let progressView = STProgressView()
+        progressView.title = "importing".localized
+        
+        let view: UIView = self.navigationController?.view ?? self.view
+        progressView.show(in: view)
+    
+        importer.startHendler = { progress in
+            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    progressView.progress = progressValue
+                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                }
+            }
+        }
+        
+        importer.progressHendler = { progress in
+            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    progressView.progress = progressValue
+                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                }
+            }
+        }
+        
+        importer.complition = { _ in
+            DispatchQueue.main.async {
+                progressView.hide()
+            }
+        }
+        
     }
     
 }
@@ -456,7 +536,8 @@ extension STAlbumFilesVC: UICollectionViewDelegate {
             guard let file = self.dataSource.object(at: indexPath) else {
                 return
             }
-            let vc = STFileViewerVC.create(album: self.album, file: file, sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated)])
+            let sorting = self.viewModel.getSorting()
+            let vc = STFileViewerVC.create(album: self.album, file: file, sortDescriptorsKeys: sorting)
             self.show(vc, sender: nil)
         }
     }
@@ -529,7 +610,13 @@ extension STAlbumFilesVC {
     private func didSelectMoveButton(files sendner: UIBarButtonItem) {
         let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
         let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
-        (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .albumFiles(album: self.album, files: self.viewModel.getFiles(fileNames: selectedFileNames))
+        let moveAlbumFilesVC = (navVC.viewControllers.first as? STMoveAlbumFilesVC)
+        moveAlbumFilesVC?.moveInfo = .albumFiles(album: self.album, files: self.viewModel.getFiles(fileNames: selectedFileNames))
+        moveAlbumFilesVC?.complition = { [weak self] success in
+            if success {
+                self?.setSelectMode(isSelected: false)
+            }
+        }
         self.showDetailViewController(navVC, sender: nil)
     }
     
@@ -545,9 +632,9 @@ extension STAlbumFilesVC {
         let count = self.dataSource.viewModel.selectedFileNames.count
         let title = "delete_files_alert_title".localized
         let message = String(format: "delete_move_files_alert_message".localized, "\(count)")
-        self.showOkCancelAlert(title: title, message: message) { [weak self] _ in
+        self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
             self?.deleteSelectedFiles()
-        }
+        })
     }
     
 }

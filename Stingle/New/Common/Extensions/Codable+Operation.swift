@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension Encodable {
     
     func toJson(encoder: JSONEncoder = JSONEncoder()) -> [String: Any]? {
@@ -31,6 +30,24 @@ extension Encodable {
             print(error)
         }
         return nil
+    }
+    
+}
+
+extension Decodable {
+    
+    init?(from json: Any, decoder: JSONDecoder = JSONDecoder()) {
+        guard let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted), let result = try? decoder.decode(Self.self, from: data) else {
+            return nil
+        }
+        self = result
+    }
+    
+    init?(from data: Data, decoder: JSONDecoder = JSONDecoder()) {
+        guard let result = try? decoder.decode(Self.self, from: data) else {
+            return nil
+        }
+        self = result
     }
     
 }

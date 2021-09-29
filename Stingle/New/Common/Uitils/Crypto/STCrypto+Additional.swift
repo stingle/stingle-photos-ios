@@ -51,7 +51,7 @@ extension STCrypto {
         let input = InputStream(data: data)
         output.open()
         input.open()
-        let publicKey = try self.readPrivateFile(filename: Constants.PublicKeyFilename)
+        let publicKey = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
         var bytes = try self.writeHeader(output: output, header: header, publicKey: publicKey)
         let encryptBytes = try self.encryptData(input: input, output: output, header: header)
         bytes.append(contentsOf: encryptBytes)
@@ -128,9 +128,19 @@ extension STCrypto {
         }
     }
     
-    func encryptParamsForServer(params: [String: Any?]) throws -> String {
-        let spbk  = try self.getServerPublicKey()
-        guard let pks = KeyManagement.key else {
+    func encryptParamsForServer(params: [String: Any?], serverPK: Bytes? = nil, privateKey: Bytes? = nil) throws -> String {
+        
+        var serverPK: Bytes? = serverPK
+        if serverPK == nil {
+            serverPK = try self.getServerPublicKey()
+        }
+        
+        var privateKey: Bytes? = privateKey
+        if privateKey == nil {
+            privateKey = KeyManagement.key
+        }
+        
+        guard let pks = privateKey, let spbk = serverPK else {
             throw CryptoError.Bundle.pivateKeyIsEmpty
         }
         let json = try JSONSerialization.data(withJSONObject: params)
@@ -265,6 +275,13 @@ extension STCrypto {
             return false
         }
         return true
+    }
+    
+    func getRandomString(length: Int) -> String? {
+        guard let random = self.getRandomBytes(lenght: length) else {
+            return nil
+        }
+        return self.bytesToBase64(data: random)
     }
     
 }

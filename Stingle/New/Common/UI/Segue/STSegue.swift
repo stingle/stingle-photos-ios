@@ -30,8 +30,6 @@ class STRootWindowSegue: UIStoryboardSegue {
 			})
 		}
 	}
-    
-	
 }
 
 class STMenuStoryboardSegue: UIStoryboardSegue {
