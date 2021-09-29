@@ -137,7 +137,7 @@ extension STCrypto {
         
         var privateKey: Bytes? = privateKey
         if privateKey == nil {
-            privateKey = KeyManagement.key
+            privateKey = STKeyManagement.key
         }
         
         guard let pks = privateKey, let spbk = serverPK else {

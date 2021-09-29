@@ -17,7 +17,7 @@ class STBackupPhraseVM {
             return
         }
         
-        guard let key = KeyManagement.key else {
+        guard let key = STKeyManagement.key else {
             failure(STError.unknown)
             return
         }

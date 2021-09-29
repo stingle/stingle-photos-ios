@@ -21,7 +21,7 @@ class STAppLocker {
         guard STApplication.shared.utils.isLogedIn() else {
             return
         }
-        KeyManagement.key = nil
+        STKeyManagement.key = nil
         STUnlockAppVC.show()
     }
         

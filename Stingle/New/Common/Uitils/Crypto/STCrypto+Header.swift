@@ -379,7 +379,7 @@ extension STCrypto {
         var privateKey = privateKey
         
         if privateKey == nil {
-            privateKey = KeyManagement.key
+            privateKey = STKeyManagement.key
             if privateKey == nil {
                 throw CryptoError.Bundle.pivateKeyIsEmpty
             }

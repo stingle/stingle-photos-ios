@@ -11,7 +11,7 @@ extension STAuthWorker {
     
     func removeBackcupKeys(success: Success<STEmptyResponse>? = nil, failure: Failure? = nil) {
         do {
-            let keyBundle = try KeyManagement.getUploadKeyBundle(password: nil, includePrivateKey: false)
+            let keyBundle = try STKeyManagement.getUploadKeyBundle(password: nil, includePrivateKey: false)
             self.updateBackcupKeys(keyBundle: keyBundle, success: { response in
                 guard let user = STApplication.shared.utils.user() else {
                     failure?(WorkerError.emptyData)
@@ -28,7 +28,7 @@ extension STAuthWorker {
     
     func addBackcupKeys(password: String, success: Success<STEmptyResponse>? = nil, failure: Failure? = nil) {
         do {
-            let keyBundle = try KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: true)
+            let keyBundle = try STKeyManagement.getUploadKeyBundle(password: password, includePrivateKey: true)
             self.updateBackcupKeys(keyBundle: keyBundle, success: { response in
                 guard let user = STApplication.shared.utils.user() else {
                     failure?(WorkerError.emptyData)
@@ -55,7 +55,7 @@ extension STAuthWorker {
             try self.crypto.reencryptPrivateKey(oldPassword: oldPassword, newPassword: newPassword)
             isReencrypt = true
             let includePrivateKey = STApplication.shared.utils.user()?.isKeyBackedUp ?? true
-            let uploadKeyBundle = try KeyManagement.getUploadKeyBundle(password: newPassword, includePrivateKey: includePrivateKey)
+            let uploadKeyBundle = try STKeyManagement.getUploadKeyBundle(password: newPassword, includePrivateKey: includePrivateKey)
             let request = STUserRequest.changePassword(keyBundle: uploadKeyBundle, newPasswordHash: newPasswordHash, newPasswordSalt: newPasswordSalt)
                                    
             self.request(request: request) { (response: STResetPassword) in

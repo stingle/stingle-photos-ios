@@ -37,7 +37,7 @@ class STBiometricAuthServices {
     
     func unlockApp(password: String) throws {
         let key = try STApplication.shared.crypto.getPrivateKey(password: password)
-        KeyManagement.key = key
+        STKeyManagement.key = key
     }
     
     //MARK: - Private methods

@@ -62,7 +62,7 @@ class STAuthWorker: STWorker {
 		do {
 			try self.crypto.generateMainKeypair(password: password)
             let pwdHash = try self.crypto.getPasswordHashForStorage(password: password)
-			guard let salt = pwdHash["salt"], let pwd = pwdHash["hash"], let keyBundle = try? KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: includePrivateKey) else {
+			guard let salt = pwdHash["salt"], let pwd = pwdHash["hash"], let keyBundle = try? STKeyManagement.getUploadKeyBundle(password: password, includePrivateKey: includePrivateKey) else {
 				throw AuthWorkerError.passwordError
 			}
 			return STAuthRequest.register(email: email, password: pwd, salt: salt, keyBundle: keyBundle, isBackup: includePrivateKey)
@@ -96,21 +96,21 @@ class STAuthWorker: STWorker {
         let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId, managedObjectID: nil)
         
         if isPrivateKeyIsAlreadySaved {
-            KeyManagement.key = try self.crypto.getPrivateKey(password: password)
-            KeyManagement.importServerPublicKey(pbk: login.serverPublicKey)
+            STKeyManagement.key = try self.crypto.getPrivateKey(password: password)
+            STKeyManagement.importServerPublicKey(pbk: login.serverPublicKey)
             self.userProvider.update(model: user)
-        } else if KeyManagement.key == nil {
-            guard true == KeyManagement.importKeyBundle(keyBundle: login.keyBundle, password: password) else {
+        } else if STKeyManagement.key == nil {
+            guard true == STKeyManagement.importKeyBundle(keyBundle: login.keyBundle, password: password) else {
                 self.userProvider.deleteAll()
-                KeyManagement.signOut()
+                STKeyManagement.signOut()
                 throw AuthWorkerError.cantImportKeyBundle
             }
             if isKeyBackedUp {
-                KeyManagement.key = try self.crypto.getPrivateKey(password: password)
+                STKeyManagement.key = try self.crypto.getPrivateKey(password: password)
                 self.userProvider.update(model: user)
             }
             let pubKey = login.serverPublicKey
-            KeyManagement.importServerPublicKey(pbk: pubKey)
+            STKeyManagement.importServerPublicKey(pbk: pubKey)
         }
                 
 		return user

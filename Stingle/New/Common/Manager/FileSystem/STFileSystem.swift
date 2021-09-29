@@ -378,23 +378,12 @@ extension STFileSystem {
 
 
 extension FileManager {
-    
+
     struct File {
         let path: String
         let size: STBytesUnits
         let dateCreation: Date?
         let dateModification: Date?
-    }
-    
-    func existence(atUrl url: URL) -> FileExistence {
-        var isDirectory: ObjCBool = false
-        let exists = self.fileExists(atPath: url.path, isDirectory: &isDirectory)
-        
-        switch (exists, isDirectory.boolValue) {
-        case (false, _): return .none
-        case (true, false): return .file
-        case (true, true): return .directory
-        }
     }
     
     fileprivate func subDirectories(atPath: String) -> [String]? {

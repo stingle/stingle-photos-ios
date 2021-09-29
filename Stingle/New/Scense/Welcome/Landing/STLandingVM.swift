@@ -26,8 +26,9 @@ class STLandingVM {
 		guard let text = text() else {
 			return nil
 		}
+                
 		let string = NSMutableAttributedString(string: "\(text)_title".localized)
-		string.setFont(font: Theme.Fonts.SFProMedium(size: 20), forText: text)
+        string.setFont(font: .medium(light: 20), forText: text)
 		string.setColor(color: UIColor.appText, forText: text)
 		return string
 	}
@@ -37,7 +38,7 @@ class STLandingVM {
 			return nil
 		}
 		let string = NSMutableAttributedString(string: "\(text)_description".localized)
-		string.setFont(font: Theme.Fonts.SFProRegular(size: 14), forText: text)
+        string.setFont(font: .regular(light: 14), forText: text)
         string.setColor(color: UIColor.appText, forText: text)
 		return string
 	}
@@ -45,21 +46,21 @@ class STLandingVM {
 	public func signInTitle() -> NSAttributedString? {
 		let text = "landing_sign_in".localized
 		let string = NSMutableAttributedString(string: text)
-		string.setFont(font: Theme.Fonts.SFProMedium(size: 14), forText: text)
+        string.setFont(font: .medium(light: 14), forText: text)
 		return string
 	}
 	
 	public func signUpTitle() -> NSAttributedString? {
 		let text = "landing_sign_up".localized
 		let string = NSMutableAttributedString(string: text)
-		string.setFont(font: Theme.Fonts.SFProMedium(size: 14), forText: text)
+		string.setFont(font: .medium(light: 14), forText: text)
 		return string
 	}
 	
 	public func haveAnAccountTitle () -> NSAttributedString? {
 		let text = "landing_have_an_account".localized
 		let string = NSMutableAttributedString(string: text)
-		string.setFont(font: Theme.Fonts.SFProRegular(size: 14), forText: text)
+		string.setFont(font: .medium(light: 14), forText: text)
 		string.setColor(color: UIColor.appText, forText: text)
 		return string
 	}

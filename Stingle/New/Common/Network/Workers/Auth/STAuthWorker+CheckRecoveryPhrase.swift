@@ -15,18 +15,18 @@ extension STAuthWorker {
         self.checkRecoveryPhrase(email: user.email, phrase: phrase) { responce in
             do {
                 try crypto.generateMainKeypair(password: password, privateKey: responce.privateKey, publicKey: responce.publicKey)
-                KeyManagement.key = responce.privateKey
+                STKeyManagement.key = responce.privateKey
                 userProvider.update(model: user)
-                KeyManagement.importServerPublicKey(pbk: responce.serverPK)
+                STKeyManagement.importServerPublicKey(pbk: responce.serverPK)
                 success(STEmptyResponse())
             } catch {
                 userProvider.deleteAll()
-                KeyManagement.signOut()
+                STKeyManagement.signOut()
                 failure(AuthWorkerError.loginError)
             }
         } failure: { error in
             userProvider.deleteAll()
-            KeyManagement.signOut()
+            STKeyManagement.signOut()
             failure(error)
         }
     }
@@ -49,7 +49,7 @@ extension STAuthWorker {
         do {
             try crypto.generateMainKeypair(password: password, privateKey: phraseResponse.privateKey, publicKey: phraseResponse.publicKey)
             let loginHash = try crypto.getPasswordHashForStorage(password: password)
-            let uploadKeyBundle = try KeyManagement.getUploadKeyBundle(password: password, includePrivateKey: phraseResponse.isKeyBackedUp)
+            let uploadKeyBundle = try STKeyManagement.getUploadKeyBundle(password: password, includePrivateKey: phraseResponse.isKeyBackedUp)
             guard let hash = loginHash["hash"], let salt = loginHash["salt"] else {
                 failure(AuthWorkerError.loginError)
                 return
@@ -58,14 +58,14 @@ extension STAuthWorker {
             
             self.request(request: request) { [weak self] (response: STEmptyResponse) in
                 self?.loginRequest(email: email, password: password, isPrivateKeyIsAlreadySaved: true, success: { user in
-                    KeyManagement.importServerPublicKey(pbk: phraseResponse.serverPK)
+                    STKeyManagement.importServerPublicKey(pbk: phraseResponse.serverPK)
                     success(user)
                 }, failure: { error in
-                    KeyManagement.signOut()
+                    STKeyManagement.signOut()
                     failure(error)
                 })
             } failure: { error in
-                KeyManagement.signOut()
+                STKeyManagement.signOut()
                 failure(error)
             }
         } catch {

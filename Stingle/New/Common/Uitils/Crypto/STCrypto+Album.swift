@@ -17,7 +17,7 @@ extension STCrypto {
               else {
             throw CryptoError.Bundle.pivateKeyIsEmpty
         }
-        guard let privateKey = KeyManagement.key else {
+        guard let privateKey = STKeyManagement.key else {
             throw CryptoError.Bundle.pivateKeyIsEmpty
         }
         let publicKey = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)

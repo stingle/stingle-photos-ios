@@ -7,9 +7,7 @@ class HeaderPageVC : UIPageViewController, UIPageViewControllerDataSource, UIPag
 		super.viewDidLoad()
 		self.dataSource = self
 		self.delegate = self
-		
-		UIPageControl.appearance().pageIndicatorTintColor = Theme.Colors.SPLightGray
-		UIPageControl.appearance().currentPageIndicatorTintColor = Theme.Colors.SPRed
+        UIPageControl.appearance().currentPageIndicatorTintColor = .appPrimary
 		let initialPage = createPage(index: 0)
 		setViewControllers([initialPage], direction: UIPageViewController.NavigationDirection.forward, animated: true) { (completed) in
 		}

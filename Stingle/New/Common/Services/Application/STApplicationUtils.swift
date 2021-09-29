@@ -124,7 +124,7 @@ extension STApplication.Utils {
     }
     
     func appIsLocked() -> Bool {
-        return KeyManagement.key == nil
+        return STKeyManagement.key == nil
     }
     
     func canUploadFile() -> Bool {
@@ -168,7 +168,7 @@ extension STApplication.Utils  {
         self.application.dataBase.userProvider.update(model: newUser)
         
         let key = try? STApplication.shared.crypto.getPrivateKey(password: password)
-        KeyManagement.key = key
+        STKeyManagement.key = key
         
         if STAppSettings.security.authentication.unlock {
             STBiometricAuthServices().onBiometricAuth(password: password)
@@ -182,7 +182,7 @@ extension STApplication.Utils  {
     func deleteAccount() {
         self.application.fileSystem.deleteAccount()
         self.application.dataBase.deleteAll()
-        KeyManagement.signOut()
+        STKeyManagement.signOut()
         STOperationManager.shared.logout()
         STBiometricAuthServices().removeBiometricAuth()
         STAppSettings.logOut()
@@ -202,7 +202,7 @@ extension STApplication.Utils  {
     private func logout(appInUnauthorized: Bool) {
         self.application.fileSystem.logOut()
         self.application.dataBase.deleteAll()
-        KeyManagement.signOut()
+        STKeyManagement.signOut()
         STOperationManager.shared.logout()
         STBiometricAuthServices().removeBiometricAuth()
         STAppSettings.logOut()
