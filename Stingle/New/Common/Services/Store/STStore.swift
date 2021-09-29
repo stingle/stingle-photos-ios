@@ -24,7 +24,21 @@ class STStore {
                 return
             }
             self.productsRequests.remove(at: index)
-            success(products)
+            
+            var productsGroup = [String: Product]()
+            products.forEach { product in
+                productsGroup[product.productIdentifier] = product
+            }
+            
+            var result = [Product]()
+            
+            identifiers.forEach { identifier in
+                if let product = productsGroup[identifier] {
+                    result.append(product)
+                }
+            }
+            
+            success(result)
         } failure: { [weak self] error in
             guard let self = self, let index = self.productsRequests.firstIndex(of: productsRequest) else {
                 return
