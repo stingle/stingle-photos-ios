@@ -839,7 +839,8 @@
 		A02203BF25EED86800D07C98 /* Stingle */ = {
 			isa = PBXGroup;
 			children = (
-				A033D6E0260146A300E6AA83 /* New */,
+				A033D6E1260146C100E6AA83 /* Scense */,
+				A033D6EA2601491B00E6AA83 /* Common */,
 				A02203E425EEDB2500D07C98 /* Resources */,
 			);
 			path = Stingle;
@@ -1179,15 +1180,6 @@
 				A032097126546602000C420B /* STPlayer.swift */,
 			);
 			path = Player;
-			sourceTree = "<group>";
-		};
-		A033D6E0260146A300E6AA83 /* New */ = {
-			isa = PBXGroup;
-			children = (
-				A033D6E1260146C100E6AA83 /* Scense */,
-				A033D6EA2601491B00E6AA83 /* Common */,
-			);
-			path = New;
 			sourceTree = "<group>";
 		};
 		A033D6E1260146C100E6AA83 /* Scense */ = {
