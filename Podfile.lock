@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.4.3)
+  - Alamofire (5.4.4)
   - KeychainSwift (19.0.0)
   - netfox (1.19.0)
   - Sodium (0.9.1)
@@ -21,7 +21,7 @@ SPEC REPOS:
     - Tatsi
 
 SPEC CHECKSUMS:
-  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
   KeychainSwift: a06190cf933ad46b1e0abc3d77d29c06331715c7
   netfox: efeec1d23406df6cd605212f09a40957bb5654eb
   Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
