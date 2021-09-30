@@ -64,7 +64,6 @@ class STLandingVM {
 		string.setColor(color: UIColor.appText, forText: text)
 		return string
 	}
-
 	
 	private func text() -> String? {
 		switch index {
