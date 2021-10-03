@@ -44,6 +44,11 @@ class STPlayer: NSObject {
     
     private var observerToken: Any?
     
+    override init() {
+        super.init()
+        STApplication.shared.downloaderManager.fileDownloader.add(self)
+    }
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if object as AnyObject? === self.player {
             if keyPath == "timeControlStatus" {
@@ -135,6 +140,19 @@ class STPlayer: NSObject {
         self.didChange(time: time.seconds)
     }
     
+    private func replaceCurrentFile(file: STLibrary.File) {
+        
+        guard let fileHeader = file.decryptsHeaders.file else {
+            return
+        }
+        
+        self.file = file
+        let resourceLoader = STAssetResourceLoader1(file: file, header: fileHeader)
+        self.assetResourceLoader = resourceLoader
+        let item = AVPlayerItem(asset: resourceLoader.asset, automaticallyLoadedAssetKeys: nil)
+        self.player.replaceCurrentItem(with: item)
+    }
+    
 }
 
 
@@ -182,14 +200,11 @@ extension STPlayer {
     
     func replaceCurrentItem(with file: STLibrary.File?) {
         self.file = file
-        guard let file = file, let fileHeader = file.decryptsHeaders.file else {
+        guard let file = file else {
             self.player.replaceCurrentItem(with: nil)
             return
         }
-        let resourceLoader = STAssetResourceLoader1(file: file, header: fileHeader)
-        self.assetResourceLoader = resourceLoader
-        let item = AVPlayerItem(asset: resourceLoader.asset, automaticallyLoadedAssetKeys: nil)
-        self.player.replaceCurrentItem(with: item)
+        self.replaceCurrentFile(file: file)
     }
     
     func play(file: STLibrary.File?) {
@@ -302,6 +317,22 @@ fileprivate extension STPlayer {
     
 }
 
+extension STPlayer: STFileDownloaderObserver {
+    
+    func downloader(didEndDownload downloader: STDownloaderManager.FileDownloader, source: IDownloaderSource) {
+        guard let file = (source as? STLibrary.File), file.file == self.file?.file, file.dbSet == self.file?.dbSet else {
+            return
+        }
+        let currentTime = self.currentTime
+        let isPLaying = self.isPlaying
+        self.replaceCurrentFile(file: file)
+        self.seek(currentTime: currentTime)
+        if isPLaying {
+            self.play()
+        }
+    }
+    
+}
 
 extension STPlayer {
     

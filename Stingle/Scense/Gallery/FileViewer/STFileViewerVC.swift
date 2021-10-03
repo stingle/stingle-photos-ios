@@ -58,7 +58,11 @@ class STFileViewerVC: UIViewController {
         }
         return vc
     }
-        
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return self.currentFileViewer?.prefersHomeIndicatorAutoHidden ?? super.prefersHomeIndicatorAutoHidden
+    }
+            
     override func viewDidLoad() {
         super.viewDidLoad()
         if let initialFile = self.initialFile, self.currentIndex == nil {

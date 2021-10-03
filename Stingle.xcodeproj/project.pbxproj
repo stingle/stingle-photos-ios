@@ -91,6 +91,7 @@
 		A02204AB25EEDC0400D07C98 /* STSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045625EEDC0400D07C98 /* STSignInVC.swift */; };
 		A02204AC25EEDC0400D07C98 /* STSignInVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045725EEDC0400D07C98 /* STSignInVM.swift */; };
 		A02204F225EEE12000D07C98 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A02204F425EEE12000D07C98 /* Localizable.strings */; };
+		A022553B2709CFD0007888EC /* STAssetResourceLoader1+NetworkReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022553A2709CFD0007888EC /* STAssetResourceLoader1+NetworkReader.swift */; };
 		A024330325F6384C0054BED9 /* STObserverEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024330225F6384C0054BED9 /* STObserverEvents.swift */; };
 		A024330D25F64B980054BED9 /* STGalleryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024330C25F64B980054BED9 /* STGalleryProvider.swift */; };
 		A024331925F6B40A0054BED9 /* Codable+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024331825F6B40A0054BED9 /* Codable+Operation.swift */; };
@@ -425,6 +426,7 @@
 		A02204F325EEE12000D07C98 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A02204F925EEE5A200D07C98 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		A02204FA25EEE6B500D07C98 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
+		A022553A2709CFD0007888EC /* STAssetResourceLoader1+NetworkReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAssetResourceLoader1+NetworkReader.swift"; sourceTree = "<group>"; };
 		A024330225F6384C0054BED9 /* STObserverEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STObserverEvents.swift; sourceTree = "<group>"; };
 		A024330C25F64B980054BED9 /* STGalleryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryProvider.swift; sourceTree = "<group>"; };
 		A024331825F6B40A0054BED9 /* Codable+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Operation.swift"; sourceTree = "<group>"; };
@@ -1373,6 +1375,7 @@
 			isa = PBXGroup;
 			children = (
 				A050C50827066B23007587B5 /* STAssetResourceLoader1+LocaleReader.swift */,
+				A022553A2709CFD0007888EC /* STAssetResourceLoader1+NetworkReader.swift */,
 			);
 			path = Readers;
 			sourceTree = "<group>";
@@ -2570,6 +2573,7 @@
 				A075B7202651BBE700B4E2DF /* STSharedAlbumSettingsVC.swift in Sources */,
 				A02204A425EEDC0400D07C98 /* HeaderPageVC.swift in Sources */,
 				A074AE40264605AE004C9E9E /* STMoveAlbumFilesVM.swift in Sources */,
+				A022553B2709CFD0007888EC /* STAssetResourceLoader1+NetworkReader.swift in Sources */,
 				A02204AB25EEDC0400D07C98 /* STSignInVC.swift in Sources */,
 				A05D2686261B3CEE008E9CF8 /* STMenuMasterVC.swift in Sources */,
 				A0794B81269E2F1800B40FE9 /* STImportVC.swift in Sources */,

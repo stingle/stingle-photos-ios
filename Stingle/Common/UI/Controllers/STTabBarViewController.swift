@@ -41,6 +41,10 @@ class STTabBarViewController: UITabBarController {
         return self.selectedViewController?.preferredInterfaceOrientationForPresentation ?? super.preferredInterfaceOrientationForPresentation
     }
     
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return self.selectedViewController?.prefersHomeIndicatorAutoHidden ?? super.prefersHomeIndicatorAutoHidden
+    }
+    
     private func updateSplitViewController() {
         self.viewControllers?.forEach { (vc) in
             if vc.splitMenuViewController != self.splitMenuViewController {

@@ -58,7 +58,8 @@ class STAssetResourceLoader1: NSObject {
             let fileReader = LocaleReader(url: self.url, queue: self.dispatchQueue)
             return fileReader
         } else {
-            fatalError()
+            let fileReader = NetworkReader(filename: self.file.file, dbSet: self.file.dbSet, queue: self.dispatchQueue)
+            return fileReader
         }
     }
     
