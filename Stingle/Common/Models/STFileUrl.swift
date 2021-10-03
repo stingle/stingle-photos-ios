@@ -7,6 +7,6 @@
 
 import Foundation
 
-class STFileUrl: Decodable {
+struct STFileUrl: Decodable {
     let url: URL
 }

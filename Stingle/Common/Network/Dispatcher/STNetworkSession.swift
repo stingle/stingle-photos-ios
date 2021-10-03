@@ -320,7 +320,7 @@ extension MultipartFormDataRequest {
     
 }
 
-extension Data {
+fileprivate extension Data {
     
     mutating func append(_ string: String) {
         let data = Data(string.utf8)

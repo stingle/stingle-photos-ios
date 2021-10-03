@@ -91,6 +91,7 @@
 		A02204AB25EEDC0400D07C98 /* STSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045625EEDC0400D07C98 /* STSignInVC.swift */; };
 		A02204AC25EEDC0400D07C98 /* STSignInVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045725EEDC0400D07C98 /* STSignInVM.swift */; };
 		A02204F225EEE12000D07C98 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A02204F425EEE12000D07C98 /* Localizable.strings */; };
+		A022553B2709CFD0007888EC /* STAssetResourceLoader+NetworkReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022553A2709CFD0007888EC /* STAssetResourceLoader+NetworkReader.swift */; };
 		A024330325F6384C0054BED9 /* STObserverEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024330225F6384C0054BED9 /* STObserverEvents.swift */; };
 		A024330D25F64B980054BED9 /* STGalleryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024330C25F64B980054BED9 /* STGalleryProvider.swift */; };
 		A024331925F6B40A0054BED9 /* Codable+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024331825F6B40A0054BED9 /* Codable+Operation.swift */; };
@@ -113,7 +114,6 @@
 		A032096D26545E6B000C420B /* STVideoViewerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032096C26545E6B000C420B /* STVideoViewerVC.swift */; };
 		A032096F26546275000C420B /* STVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032096E26546275000C420B /* STVideoView.swift */; };
 		A032097226546602000C420B /* STPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032097126546602000C420B /* STPlayer.swift */; };
-		A032097626547288000C420B /* STAVAssetResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032097526547288000C420B /* STAVAssetResourceLoader.swift */; };
 		A033889126E1780200C03FE1 /* STNetworkSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A033889026E1780200C03FE1 /* STNetworkSession.swift */; };
 		A0355C8126A8D084006BE2C4 /* STUnlockAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */; };
 		A0355C8326A8D094006BE2C4 /* STUnlockAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */; };
@@ -140,6 +140,9 @@
 		A04BD00B26347A8500C5F29F /* STUploadsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A04BD00926347A8500C5F29F /* STUploadsTableViewCell.xib */; };
 		A04BD0172634AA2700C5F29F /* STDynamicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04BD0162634AA2700C5F29F /* STDynamicTableView.swift */; };
 		A04EF0FF26F27BD700C3FF31 /* STStorePurchese.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04EF0FE26F27BD700C3FF31 /* STStorePurchese.swift */; };
+		A050C50427065EB5007587B5 /* STAssetResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A050C50327065EB5007587B5 /* STAssetResourceLoader.swift */; };
+		A050C50627066530007587B5 /* STAssetResourceLoader+Decrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A050C50527066530007587B5 /* STAssetResourceLoader+Decrypter.swift */; };
+		A050C50927066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A050C50827066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift */; };
 		A052FA96263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A052FA95263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift */; };
 		A052FA98263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A052FA97263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib */; };
 		A059D1D226C98CCE0045AC61 /* STAuthWorker+CheckRecoveryPhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059D1D126C98CCE0045AC61 /* STAuthWorker+CheckRecoveryPhrase.swift */; };
@@ -256,7 +259,6 @@
 		A0B2678E2624FBB60090E4ED /* STAlbumsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B2678D2624FBB60090E4ED /* STAlbumsVC.swift */; };
 		A0B267912624FD4A0090E4ED /* STAlbumsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B267902624FD4A0090E4ED /* STAlbumsVM.swift */; };
 		A0B3EA6525F28798000091E1 /* STLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B3EA6425F28798000091E1 /* STLibrary.swift */; };
-		A0B614A9266E3BC700339FFF /* STAssetResourceLoaderOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B614A8266E3BC700339FFF /* STAssetResourceLoaderOperation.swift */; };
 		A0B8090426ECF6F30063DA42 /* STBillingWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B8090326ECF6F30063DA42 /* STBillingWorker.swift */; };
 		A0B8090626ECF98E0063DA42 /* STBillingRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B8090526ECF98E0063DA42 /* STBillingRequest.swift */; };
 		A0B8090826ECFAE30063DA42 /* STBillingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B8090726ECFAE30063DA42 /* STBillingInfo.swift */; };
@@ -297,10 +299,8 @@
 		A0DE2DF026B8A52A00887D55 /* STAppSettings+Backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DE2DEF26B8A52A00887D55 /* STAppSettings+Backup.swift */; };
 		A0E03C88268B4C6F00BB4F0C /* STFileViewerNavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E03C87268B4C6F00BB4F0C /* STFileViewerNavigationTitleView.swift */; };
 		A0E03C8A268B4CAB00BB4F0C /* STFileViewerNavigationTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0E03C89268B4CAB00BB4F0C /* STFileViewerNavigationTitleView.xib */; };
-		A0E1B503266BA7690063CB40 /* STAssetResourceLocalFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B502266BA7690063CB40 /* STAssetResourceLocalFileReader.swift */; };
 		A0E1B505266BAAE20063CB40 /* STFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B504266BAAE20063CB40 /* STFileHandle.swift */; };
 		A0E1B507266BAB3A0063CB40 /* CountableRange+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B506266BAB3A0063CB40 /* CountableRange+Operation.swift */; };
-		A0E1B50A266BB0850063CB40 /* STAssetResourceDecrypter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1B509266BB0850063CB40 /* STAssetResourceDecrypter.swift */; };
 		A0E4F5AF26CD23F500D8A65A /* STForgetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E4F5AE26CD23F500D8A65A /* STForgetPasswordVC.swift */; };
 		A0E4F5B126CD240400D8A65A /* STForgetPasswordVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E4F5B026CD240400D8A65A /* STForgetPasswordVM.swift */; };
 		A0E9999A263F1DE8002FDCC9 /* STTokenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E99999263F1DE8002FDCC9 /* STTokenView.swift */; };
@@ -317,7 +317,6 @@
 		A0F467F625F992F400BF00AA /* STCDTrashFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F467F525F992F400BF00AA /* STCDTrashFile.swift */; };
 		A0F99DC82683662800B0F36F /* STZoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F99DC72683662800B0F36F /* STZoomView.swift */; };
 		A0F99DCA2683696100B0F36F /* STImageZoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F99DC92683696100B0F36F /* STImageZoomView.swift */; };
-		A0FD3F322670D8D00042EB8D /* STAssetResourceNetworkFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD3F312670D8D00042EB8D /* STAssetResourceNetworkFileReader.swift */; };
 		A0FD3F342670E1F30042EB8D /* STFileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD3F332670E1F30042EB8D /* STFileRequest.swift */; };
 		A0FD3F362670E34F0042EB8D /* STFileWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD3F352670E34F0042EB8D /* STFileWorker.swift */; };
 		A0FD3F382670F4C40042EB8D /* STFileUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD3F372670F4C40042EB8D /* STFileUrl.swift */; };
@@ -422,6 +421,7 @@
 		A02204F325EEE12000D07C98 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A02204F925EEE5A200D07C98 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		A02204FA25EEE6B500D07C98 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
+		A022553A2709CFD0007888EC /* STAssetResourceLoader+NetworkReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAssetResourceLoader+NetworkReader.swift"; sourceTree = "<group>"; };
 		A024330225F6384C0054BED9 /* STObserverEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STObserverEvents.swift; sourceTree = "<group>"; };
 		A024330C25F64B980054BED9 /* STGalleryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryProvider.swift; sourceTree = "<group>"; };
 		A024331825F6B40A0054BED9 /* Codable+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Operation.swift"; sourceTree = "<group>"; };
@@ -444,7 +444,6 @@
 		A032096C26545E6B000C420B /* STVideoViewerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVideoViewerVC.swift; sourceTree = "<group>"; };
 		A032096E26546275000C420B /* STVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVideoView.swift; sourceTree = "<group>"; };
 		A032097126546602000C420B /* STPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPlayer.swift; sourceTree = "<group>"; };
-		A032097526547288000C420B /* STAVAssetResourceLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAVAssetResourceLoader.swift; sourceTree = "<group>"; };
 		A033889026E1780200C03FE1 /* STNetworkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkSession.swift; sourceTree = "<group>"; };
 		A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAppLocker.swift; sourceTree = "<group>"; };
 		A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVC.swift; sourceTree = "<group>"; };
@@ -471,6 +470,9 @@
 		A04BD00926347A8500C5F29F /* STUploadsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STUploadsTableViewCell.xib; sourceTree = "<group>"; };
 		A04BD0162634AA2700C5F29F /* STDynamicTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDynamicTableView.swift; sourceTree = "<group>"; };
 		A04EF0FE26F27BD700C3FF31 /* STStorePurchese.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStorePurchese.swift; sourceTree = "<group>"; };
+		A050C50327065EB5007587B5 /* STAssetResourceLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAssetResourceLoader.swift; sourceTree = "<group>"; };
+		A050C50527066530007587B5 /* STAssetResourceLoader+Decrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAssetResourceLoader+Decrypter.swift"; sourceTree = "<group>"; };
+		A050C50827066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAssetResourceLoader+LocaleReader.swift"; sourceTree = "<group>"; };
 		A052FA95263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesActionTabBarAccessoryView.swift; sourceTree = "<group>"; };
 		A052FA97263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilesActionTabBarAccessoryView.xib; sourceTree = "<group>"; };
 		A059D1D126C98CCE0045AC61 /* STAuthWorker+CheckRecoveryPhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAuthWorker+CheckRecoveryPhrase.swift"; sourceTree = "<group>"; };
@@ -587,7 +589,6 @@
 		A0B2678D2624FBB60090E4ED /* STAlbumsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsVC.swift; sourceTree = "<group>"; };
 		A0B267902624FD4A0090E4ED /* STAlbumsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsVM.swift; sourceTree = "<group>"; };
 		A0B3EA6425F28798000091E1 /* STLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibrary.swift; sourceTree = "<group>"; };
-		A0B614A8266E3BC700339FFF /* STAssetResourceLoaderOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAssetResourceLoaderOperation.swift; sourceTree = "<group>"; };
 		A0B8090326ECF6F30063DA42 /* STBillingWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBillingWorker.swift; sourceTree = "<group>"; };
 		A0B8090526ECF98E0063DA42 /* STBillingRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBillingRequest.swift; sourceTree = "<group>"; };
 		A0B8090726ECFAE30063DA42 /* STBillingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBillingInfo.swift; sourceTree = "<group>"; };
@@ -628,10 +629,8 @@
 		A0DE2DEF26B8A52A00887D55 /* STAppSettings+Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Backup.swift"; sourceTree = "<group>"; };
 		A0E03C87268B4C6F00BB4F0C /* STFileViewerNavigationTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileViewerNavigationTitleView.swift; sourceTree = "<group>"; };
 		A0E03C89268B4CAB00BB4F0C /* STFileViewerNavigationTitleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFileViewerNavigationTitleView.xib; sourceTree = "<group>"; };
-		A0E1B502266BA7690063CB40 /* STAssetResourceLocalFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAssetResourceLocalFileReader.swift; sourceTree = "<group>"; };
 		A0E1B504266BAAE20063CB40 /* STFileHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileHandle.swift; sourceTree = "<group>"; };
 		A0E1B506266BAB3A0063CB40 /* CountableRange+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CountableRange+Operation.swift"; sourceTree = "<group>"; };
-		A0E1B509266BB0850063CB40 /* STAssetResourceDecrypter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAssetResourceDecrypter.swift; sourceTree = "<group>"; };
 		A0E4F5AE26CD23F500D8A65A /* STForgetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STForgetPasswordVC.swift; sourceTree = "<group>"; };
 		A0E4F5B026CD240400D8A65A /* STForgetPasswordVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STForgetPasswordVM.swift; sourceTree = "<group>"; };
 		A0E99999263F1DE8002FDCC9 /* STTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTokenView.swift; sourceTree = "<group>"; };
@@ -648,7 +647,6 @@
 		A0F467F525F992F400BF00AA /* STCDTrashFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDTrashFile.swift; sourceTree = "<group>"; };
 		A0F99DC72683662800B0F36F /* STZoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STZoomView.swift; sourceTree = "<group>"; };
 		A0F99DC92683696100B0F36F /* STImageZoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STImageZoomView.swift; sourceTree = "<group>"; };
-		A0FD3F312670D8D00042EB8D /* STAssetResourceNetworkFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAssetResourceNetworkFileReader.swift; sourceTree = "<group>"; };
 		A0FD3F332670E1F30042EB8D /* STFileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileRequest.swift; sourceTree = "<group>"; };
 		A0FD3F352670E34F0042EB8D /* STFileWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileWorker.swift; sourceTree = "<group>"; };
 		A0FD3F372670F4C40042EB8D /* STFileUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileUrl.swift; sourceTree = "<group>"; };
@@ -1176,8 +1174,8 @@
 		A0320970265465D5000C420B /* Player */ = {
 			isa = PBXGroup;
 			children = (
-				A0E1B508266BB07B0063CB40 /* ResourceLoader */,
 				A032097126546602000C420B /* STPlayer.swift */,
+				A050C50227065E8F007587B5 /* ResourceLoader */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -1350,6 +1348,25 @@
 				A04BD00926347A8500C5F29F /* STUploadsTableViewCell.xib */,
 			);
 			path = Items;
+			sourceTree = "<group>";
+		};
+		A050C50227065E8F007587B5 /* ResourceLoader */ = {
+			isa = PBXGroup;
+			children = (
+				A050C50327065EB5007587B5 /* STAssetResourceLoader.swift */,
+				A050C50527066530007587B5 /* STAssetResourceLoader+Decrypter.swift */,
+				A050C50727066AE9007587B5 /* Readers */,
+			);
+			path = ResourceLoader;
+			sourceTree = "<group>";
+		};
+		A050C50727066AE9007587B5 /* Readers */ = {
+			isa = PBXGroup;
+			children = (
+				A050C50827066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift */,
+				A022553A2709CFD0007888EC /* STAssetResourceLoader+NetworkReader.swift */,
+			);
+			path = Readers;
 			sourceTree = "<group>";
 		};
 		A052FA94263C9C3F00946A8F /* TabBarAccessoryView */ = {
@@ -2156,17 +2173,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		A0E1B508266BB07B0063CB40 /* ResourceLoader */ = {
-			isa = PBXGroup;
-			children = (
-				A032097526547288000C420B /* STAVAssetResourceLoader.swift */,
-				A0E1B509266BB0850063CB40 /* STAssetResourceDecrypter.swift */,
-				A0B614A8266E3BC700339FFF /* STAssetResourceLoaderOperation.swift */,
-				A0FD3F302670D8860042EB8D /* FileReader */,
-			);
-			path = ResourceLoader;
-			sourceTree = "<group>";
-		};
 		A0E4F5AD26CD237700D8A65A /* ForgetPassword */ = {
 			isa = PBXGroup;
 			children = (
@@ -2202,15 +2208,6 @@
 				A0F99DC92683696100B0F36F /* STImageZoomView.swift */,
 			);
 			path = ZooomView;
-			sourceTree = "<group>";
-		};
-		A0FD3F302670D8860042EB8D /* FileReader */ = {
-			isa = PBXGroup;
-			children = (
-				A0E1B502266BA7690063CB40 /* STAssetResourceLocalFileReader.swift */,
-				A0FD3F312670D8D00042EB8D /* STAssetResourceNetworkFileReader.swift */,
-			);
-			path = FileReader;
 			sourceTree = "<group>";
 		};
 		A0FD3F3926713D7E0042EB8D /* Dispatcher */ = {
@@ -2422,7 +2419,6 @@
 				A005FAFB25FF4D8F00E7D8B0 /* UICollectionView+Operation.swift in Sources */,
 				A0D1A3C3262E0F9F002E326F /* STAlbumFilesCollectionViewCell.swift in Sources */,
 				A005FAEF25FF48A500E7D8B0 /* UITraitCollection+Operation.swift in Sources */,
-				A0B614A9266E3BC700339FFF /* STAssetResourceLoaderOperation.swift in Sources */,
 				A062E0EC264C811A000B3595 /* STFileDownloader.swift in Sources */,
 				A0E4F5AF26CD23F500D8A65A /* STForgetPasswordVC.swift in Sources */,
 				A00C6E5E26486ED20001662E /* STAlbumWorker+Move.swift in Sources */,
@@ -2458,6 +2454,7 @@
 				A0F467E425F9776600BF00AA /* STAlbumFilesProvider.swift in Sources */,
 				A022047725EEDC0400D07C98 /* STCrypto+Extensions.swift in Sources */,
 				A09D94462636FD7600268A84 /* STAlbumsSharedVC.swift in Sources */,
+				A050C50427065EB5007587B5 /* STAssetResourceLoader.swift in Sources */,
 				A04EF0FF26F27BD700C3FF31 /* STStorePurchese.swift in Sources */,
 				A022046C25EEDC0400D07C98 /* STNavigationController.swift in Sources */,
 				A022049825EEDC0400D07C98 /* UITextField+Extensions.swift in Sources */,
@@ -2492,7 +2489,6 @@
 				A074AE4626460A70004C9E9E /* STMoveAlbumFilesCell.swift in Sources */,
 				A0D1A3B9262E0D3D002E326F /* STAlbumFilesVC.swift in Sources */,
 				A046A80F261FA815005EDB89 /* STImagePickerHelper.swift in Sources */,
-				A0FD3F322670D8D00042EB8D /* STAssetResourceNetworkFileReader.swift in Sources */,
 				A02204A325EEDC0400D07C98 /* CurrentPageVC.swift in Sources */,
 				A02204A925EEDC0400D07C98 /* STMainVC.swift in Sources */,
 				A059D1D226C98CCE0045AC61 /* STAuthWorker+CheckRecoveryPhrase.swift in Sources */,
@@ -2501,6 +2497,7 @@
 				A0D65DF9269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift in Sources */,
 				A0028650260B8121004C0934 /* STDownloaderOperation.swift in Sources */,
 				A05F9DD126A60E6900F9F343 /* STKeyChainService.swift in Sources */,
+				A050C50627066530007587B5 /* STAssetResourceLoader+Decrypter.swift in Sources */,
 				A022049425EEDC0400D07C98 /* Date+Operation.swift in Sources */,
 				A09DF8882628DA6E00CDDA8E /* STDataBaseDataSource.swift in Sources */,
 				A086FD2925F5A10900A8BC9C /* STCDFile.swift in Sources */,
@@ -2522,7 +2519,6 @@
 				A02D88A3260BE99C00B82F16 /* SDownloader.swift in Sources */,
 				A0B8092C26ED33140063DA42 /* STStorageBaseCell.swift in Sources */,
 				A022048425EEDC0400D07C98 /* STAuth.swift in Sources */,
-				A0E1B50A266BB0850063CB40 /* STAssetResourceDecrypter.swift in Sources */,
 				A022047B25EEDC0400D07C98 /* STResponse.swift in Sources */,
 				A04A20CF2606AE6400AFE2A2 /* Data+Operation.swift in Sources */,
 				A013D860269F9F7B007ED786 /* STSecurityVM.swift in Sources */,
@@ -2543,6 +2539,7 @@
 				A075B7202651BBE700B4E2DF /* STSharedAlbumSettingsVC.swift in Sources */,
 				A02204A425EEDC0400D07C98 /* HeaderPageVC.swift in Sources */,
 				A074AE40264605AE004C9E9E /* STMoveAlbumFilesVM.swift in Sources */,
+				A022553B2709CFD0007888EC /* STAssetResourceLoader+NetworkReader.swift in Sources */,
 				A02204AB25EEDC0400D07C98 /* STSignInVC.swift in Sources */,
 				A05D2686261B3CEE008E9CF8 /* STMenuMasterVC.swift in Sources */,
 				A0794B81269E2F1800B40FE9 /* STImportVC.swift in Sources */,
@@ -2603,7 +2600,6 @@
 				A0D1A3BC262E0D6E002E326F /* STAlbumFilesVM.swift in Sources */,
 				A022048925EEDC0400D07C98 /* STAuthWorker.swift in Sources */,
 				A0E03C88268B4C6F00BB4F0C /* STFileViewerNavigationTitleView.swift in Sources */,
-				A0E1B503266BA7690063CB40 /* STAssetResourceLocalFileReader.swift in Sources */,
 				A0794B92269E3CC000B40FE9 /* STSettingsTableViewCell.swift in Sources */,
 				A02204AA25EEDC0400D07C98 /* STMainVM.swift in Sources */,
 				A0E999A3263F54A5002FDCC9 /* STContactWorker.swift in Sources */,
@@ -2656,6 +2652,7 @@
 				A0301DDC25FD606D005281EF /* STGalleryVC.swift in Sources */,
 				A0B8090A26ECFE2E0063DA42 /* STStorageVM.swift in Sources */,
 				A0794B7E269E2E3300B40FE9 /* STAccountVC.swift in Sources */,
+				A050C50927066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift in Sources */,
 				A024330325F6384C0054BED9 /* STObserverEvents.swift in Sources */,
 				A01747EF260A9C60000D98F0 /* STFileDiskCache.swift in Sources */,
 				A0D8A99125F44B2D005C12F8 /* StingleModel.xcdatamodeld in Sources */,
@@ -2663,7 +2660,6 @@
 				A077780125FFF81100BA2BDF /* STGalleryVM.swift in Sources */,
 				A022047E25EEDC0400D07C98 /* STSyncRequest.swift in Sources */,
 				A06C56BC26406E15009D0596 /* STShareAlbumVM.swift in Sources */,
-				A032097626547288000C420B /* STAVAssetResourceLoader.swift in Sources */,
 				A0134D8C26ADDB4C00FA5129 /* STSettingsDetailVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

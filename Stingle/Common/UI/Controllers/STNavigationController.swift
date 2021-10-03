@@ -51,6 +51,10 @@ class STNavigationController: UINavigationController {
     override var prefersStatusBarHidden: Bool {
         return self.topViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
     }
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return self.topViewController?.prefersHomeIndicatorAutoHidden ?? super.prefersHomeIndicatorAutoHidden
+    }
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()

@@ -114,7 +114,7 @@ extension STUploadsVC {
         }
         
         static func == (lhs: STUploadsVC.CellModel, rhs: STUploadsVC.CellModel) -> Bool {
-            lhs.id == rhs.id
+            return lhs.id == rhs.id
         }
     }
     

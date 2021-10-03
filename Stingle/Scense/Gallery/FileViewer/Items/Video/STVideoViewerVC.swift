@@ -29,7 +29,11 @@ class STVideoViewerVC: UIViewController {
     private let playerSeekTime: TimeInterval = 15
     
     weak var fileViewerDelegate: IFileViewerDelegate?
-   
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
+    }
+       
     override func viewDidLoad() {
         super.viewDidLoad()
         self.slider.value = .zero
