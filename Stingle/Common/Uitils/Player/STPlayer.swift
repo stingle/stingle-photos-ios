@@ -33,7 +33,7 @@ class STPlayer: NSObject {
     
     private(set) var file: STLibrary.File?
     
-    private var assetResourceLoader: STAssetResourceLoader1?
+    private var assetResourceLoader: STAssetResourceLoader?
     private let dispatchQueue = DispatchQueue(label: "Player.Queue", attributes: .concurrent)
     private let observers = STObserverEvents<IPlayerObservers>()
     
@@ -147,7 +147,7 @@ class STPlayer: NSObject {
         }
         
         self.file = file
-        let resourceLoader = STAssetResourceLoader1(file: file, header: fileHeader)
+        let resourceLoader = STAssetResourceLoader(file: file, header: fileHeader)
         self.assetResourceLoader = resourceLoader
         let item = AVPlayerItem(asset: resourceLoader.asset, automaticallyLoadedAssetKeys: nil)
         self.player.replaceCurrentItem(with: item)

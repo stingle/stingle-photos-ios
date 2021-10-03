@@ -1,5 +1,5 @@
 //
-//  STAssetResourceLoader1+Decrypter.swift
+//  STAssetResourceLoader+Decrypter.swift
 //  Stingle
 //
 //  Created by Khoren Asatryan on 10/1/21.
@@ -16,11 +16,11 @@ protocol IAssetResourceLoader {
 
 protocol STAssetResourceLoaderDecrypterDelegate: AnyObject {
     
-    func decrypter(didFinished decrypter: STAssetResourceLoader1.Decrypter)
+    func decrypter(didFinished decrypter: STAssetResourceLoader.Decrypter)
     
 }
 
-extension STAssetResourceLoader1 {
+extension STAssetResourceLoader {
     
     class Decrypter {
         
@@ -149,7 +149,7 @@ extension STAssetResourceLoader1 {
 }
 
 
-fileprivate extension STAssetResourceLoader1.Decrypter {
+fileprivate extension STAssetResourceLoader.Decrypter {
     
     var chankCount: UInt64 {
         let count = Double(self.header.dataSize) / Double(self.decryptChankSize)

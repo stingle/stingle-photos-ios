@@ -1,5 +1,5 @@
 //
-//  STAssetResourceLoader1+NetworkReader.swift
+//  STAssetResourceLoader+NetworkReader.swift
 //  Stingle
 //
 //  Created by Khoren Asatryan on 10/3/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension STAssetResourceLoader1 {
+extension STAssetResourceLoader {
     
     class NetworkReader {
         
@@ -76,7 +76,7 @@ extension STAssetResourceLoader1 {
 }
 
 
-extension STAssetResourceLoader1.NetworkReader: IAssetResourceLoader {
+extension STAssetResourceLoader.NetworkReader: IAssetResourceLoader {
     
     func startRead(startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, handler: @escaping (Data) -> Bool, error: @escaping (Error) -> Void) {
         

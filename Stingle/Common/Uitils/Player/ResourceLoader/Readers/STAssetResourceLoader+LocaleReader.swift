@@ -1,5 +1,5 @@
 //
-//  STAssetResourceLoader1+LocaleReader.swift
+//  STAssetResourceLoader+LocaleReader.swift
 //  Stingle
 //
 //  Created by Khoren Asatryan on 10/1/21.
@@ -8,7 +8,7 @@
 import Foundation
 import Sodium
 
-extension STAssetResourceLoader1 {
+extension STAssetResourceLoader {
     
     class LocaleReader {
 
@@ -55,7 +55,7 @@ extension STAssetResourceLoader1 {
 }
 
 
-extension STAssetResourceLoader1.LocaleReader: IAssetResourceLoader {
+extension STAssetResourceLoader.LocaleReader: IAssetResourceLoader {
     
     func startRead(startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, handler: @escaping (Data) -> Bool, error: @escaping (Error) -> Void) {
         self.read(startOffSet: startOffSet, fromOffSet: startOffSet, length: length, dataChunkSize: dataChunkSize, fullDataSize: fullDataSize, handler: handler, error: error)
