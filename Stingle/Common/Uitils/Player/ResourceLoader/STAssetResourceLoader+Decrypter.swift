@@ -138,6 +138,7 @@ extension STAssetResourceLoader {
         private func didFinishLoading(error: Error?) {
             if let error = error {
                 self.request.finishLoading(with: LoaderError.error(error: error))
+                print("AssetResourceLoader", error)
             } else {
                 self.request.finishLoading()
             }

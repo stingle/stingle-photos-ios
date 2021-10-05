@@ -186,6 +186,10 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
         self.collectionView.reloadData()
         self.updateSelectedItesmCount()
+        
+        if #available(iOS 14.0, *) {
+            self.collectionView.isEditing = isSelected
+        }
     }
     
     private func getSelectedFiles() -> [STLibrary.File] {
@@ -345,6 +349,11 @@ extension STGalleryVC: UICollectionViewDelegate {
             let vc = STFileViewerVC.create(galery: sorting, predicate: nil, file: file)
             self.show(vc, sender: nil)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
+        
+        return true
     }
     
 }

@@ -13,6 +13,7 @@ class STOperationManager {
     let defaultQueue = STOperationQueue(qualityOfService: .userInteractive)
     let uploadQueue = STOperationQueue(qualityOfService: .background)
     let downloadQueue = STOperationQueue(qualityOfService: .background)
+    let streamQueue = STOperationQueue(qualityOfService: .userInteractive)
    
     private var othersQueue = [STOperationQueue]()
     
@@ -36,6 +37,10 @@ class STOperationManager {
         operation.didStartRun(with: self.downloadQueue)
     }
     
+    func runStream(operation: INetworkOperation) {
+        operation.didStartRun(with: self.streamQueue)
+    }
+    
     func run(operation: INetworkOperation, in queue: STOperationQueue) {
         operation.didStartRun(with: queue)
     }
@@ -44,6 +49,7 @@ class STOperationManager {
         self.defaultQueue.cancelAllOperations()
         self.uploadQueue.cancelAllOperations()
         self.downloadQueue.cancelAllOperations()
+        self.streamQueue.cancelAllOperations()
     }
     
 }

@@ -17,11 +17,6 @@ class STStreamNetworkOperation: STBaseNetworkOperation<(requestLength: UInt64, c
         super.init(request: request, success: success, failure: failure, progress: nil, stream: stream)
     }
     
-//    override func cancel() {
-//        super.cancel()
-//        self.responseFailed(error: STNetworkDispatcher.NetworkError.cancelled)
-//    }
-    
     override func resume() {
         super.resume()
         self.startStream()

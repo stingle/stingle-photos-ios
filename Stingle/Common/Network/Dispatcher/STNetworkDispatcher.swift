@@ -24,7 +24,7 @@ class STNetworkDispatcher {
 
     private var session: Alamofire.Session!
     private var uploadSession: Alamofire.Session!
-    private var streanSession: Alamofire.Session!
+    private var streamSession: Alamofire.Session!
     private var downloadSession: Alamofire.Session!
     private var networkSession: STNetworkSession!
     
@@ -41,7 +41,7 @@ class STNetworkDispatcher {
         
         config.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         
-        self.streanSession = Alamofire.Session(configuration: config, eventMonitors: [self])
+        self.streamSession = Alamofire.Session(configuration: config, eventMonitors: [self])
         self.downloadSession = Alamofire.Session(configuration: config, eventMonitors: [self])
         
         let decoder = JSONDecoder()
@@ -152,35 +152,28 @@ class STNetworkDispatcher {
         return Task(request: uploadRequest)
     }
     
-    func upload1<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
-
+    func uploadBackround<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
         let url = URL(string: request.url)!
-
-
         let formDataRequest = MultipartFormDataRequest(url: url, headers: request.headers)
-
         request.files.forEach { (file) in
             formDataRequest.addDataField(named: file.name, filename: file.fileName, fileUrl: file.fileUrl, mimeType: file.type)
         }
-
         if let parameters = request.parameters {
             for parame in parameters {
                 formDataRequest.addTextField(named: parame.key, value: "\(parame.value)")
             }
         }
         try? formDataRequest.build()
-
         let task = self.networkSession.upload(request: formDataRequest)
-
         return SessionTask(sessionTask: task)
     }
     
     func stream(request: IStreamRequest, queue: DispatchQueue, stream: @escaping (_ chank: Data) -> Swift.Void, completion: @escaping (Result<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)>) -> Swift.Void) -> INetworkTask? {
         
-        let dataRequest = self.afRequest(request: request, sesion: self.streanSession)
+        let dataRequest = self.afRequest(request: request, sesion: self.streamSession)
         
         let urlRequest = try! dataRequest.convertible.asURLRequest()
-        let streamRequest = self.streanSession.streamRequest(urlRequest).responseStream(on: queue) { response in
+        let streamRequest = self.streamSession.streamRequest(urlRequest).responseStream(on: queue) { response in
             
             var errorIsResponseed = false
             

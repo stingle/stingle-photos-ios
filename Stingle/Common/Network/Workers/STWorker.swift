@@ -123,7 +123,7 @@ extension STWorker {
         } failure: { error in
             failure?(error)
         }
-        self.operationManager.runDownload(operation: operation)
+        self.operationManager.runStream(operation: operation)
         return operation
      
     }
