@@ -17,7 +17,6 @@ extension STTrashVC {
         typealias Cell = STTrashCollectionViewCell
         typealias CDModel = STCDTrashFile
         
-        var selectedFileNames = Set<String>()
         var isSelectedMode = false
         
         func cellModel(for indexPath: IndexPath, data: STLibrary.TrashFile) -> STTrashVC.CellModel {
@@ -30,14 +29,12 @@ extension STTrashVC {
                              name: data.file,
                              videoDuration: videoDurationStr,
                              isRemote: data.isRemote,
-                             selectedMode: self.isSelectedMode,
-                             isSelected: self.selectedFileNames.contains(data.file))
+                             selectedMode: self.isSelectedMode)
         }
         
         func headerModel(for indexPath: IndexPath, section: String) -> STTrashVC.HeaderModel {
             return STTrashVC.HeaderModel(text: section)
         }
-        
     }
     
     struct CellModel: IViewDataSourceCellModel {
@@ -47,7 +44,6 @@ extension STTrashVC {
         let videoDuration: String?
         let isRemote: Bool
         let selectedMode: Bool
-        let isSelected: Bool
     }
     
     struct HeaderModel: IViewDataSourceHeaderModel {
@@ -81,7 +77,7 @@ extension STTrashVC {
 }
 
 
-class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
+class STTrashVC: STFilesSelectionViewController<STTrashVC.ViewModel> {
     
     @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
     
@@ -153,44 +149,57 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
         return section
     }
     
-    //MARK: - UserAction
-    
-    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
-        self.setSelectedMode(isSelectedMode: !self.dataSource.viewModel.isSelectedMode)
-    }
-    
-    //MARK: - Private methods
-    
-    private func setSelectedMode(isSelectedMode: Bool) {
-        guard isSelectedMode != self.dataSource.viewModel.isSelectedMode else {
+    override func setSelectionMode(isSelectionMode: Bool) {
+        guard self.isSelectionMode != isSelectionMode else {
             return
         }
-        self.dataSource.viewModel.selectedFileNames.removeAll()
-        self.dataSource.viewModel.isSelectedMode = isSelectedMode
+        self.dataSource.viewModel.isSelectedMode = isSelectionMode
+        super.setSelectionMode(isSelectionMode: isSelectionMode)
         self.updateTabBarAccessoryView()
         self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
-        self.collectionView.reloadData()
         self.updateSelectedItesmCount()
     }
     
+    override func updatedSelect(for indexPath: IndexPath, isSlected: Bool) {
+        super.updatedSelect(for: indexPath, isSlected: isSlected)
+        self.updateSelectedItesmCount()
+    }
+    
+    override func collectionView(didSelectItemAt indexPath: IndexPath) {
+        guard !self.isSelectionMode, let file = self.dataSource.object(at: indexPath) else {
+            return
+        }
+        let sorting = self.viewModel.getSorting()
+        let vc = STFileViewerVC.create(trash: file, sortDescriptorsKeys: sorting)
+        self.show(vc, sender: nil)
+    }
+    
+    //MARK: - UserAction
+    
+    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
+        self.setSelectionMode(isSelectionMode: !self.isSelectionMode)
+    }
+    
+    //MARK: - Private methods
+        
     private func updateTabBarAccessoryView() {
         self.accessoryView.reloadData()
     }
     
     private func updateSelectedItesmCount() {
-        let count = self.dataSource.viewModel.selectedFileNames.count
-        let title = self.dataSource.viewModel.isSelectedMode ? count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)") : nil
+        let count = self.selectionObjectsIdentifiers.count
+        let title = self.isSelectionMode ? count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)") : nil
         self.accessoryView.title = title
-        let isEnabled = self.dataSource.viewModel.isSelectedMode ? count != .zero : !self.dataSource.isEmptyData
+        let isEnabled = self.isSelectionMode ? count != .zero : !self.dataSource.isEmptyData
         self.accessoryView.setEnabled(isEnabled: isEnabled)
     }
     
     private func didSelectedTrash() {
-        guard !self.dataSource.viewModel.selectedFileNames.isEmpty else {
+        guard !self.selectionObjectsIdentifiers.isEmpty else {
             return
         }
         
-        let fileNames = [String](self.dataSource.viewModel.selectedFileNames)
+        let fileNames = [String](self.selectionObjectsIdentifiers)
         let files = self.viewModel.getFiles(fileNames: fileNames)
         let loadingView: UIView = self.tabBarController?.view ?? self.view
                 
@@ -204,7 +213,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
                 if let error = error {
                     self?.showError(error: error)
                 } else {
-                    self?.setSelectedMode(isSelectedMode: false)
+                    self?.setSelectionMode(isSelectionMode: false)
                 }
             })
         })
@@ -212,11 +221,11 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
     }
     
     private func didSelectedRecover() {
-        guard !self.dataSource.viewModel.selectedFileNames.isEmpty else {
+        guard !selectionObjectsIdentifiers.isEmpty else {
             return
         }
         
-        let fileNames = [String](self.dataSource.viewModel.selectedFileNames)
+        let fileNames = [String](self.selectionObjectsIdentifiers)
         let files = self.viewModel.getFiles(fileNames: fileNames)
         let loadingView: UIView = self.tabBarController?.view ?? self.view
 
@@ -226,7 +235,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
             if let error = error {
                 self?.showError(error: error)
             } else {
-                self?.setSelectedMode(isSelectedMode: false)
+                self?.setSelectionMode(isSelectionMode: false)
             }
         })
     }
@@ -244,7 +253,7 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
                 if let error = error {
                     self?.showError(error: error)
                 } else {
-                    self?.setSelectedMode(isSelectedMode: false)
+                    self?.setSelectionMode(isSelectionMode: false)
                 }
             })
         })
@@ -258,45 +267,11 @@ class STTrashVC: STFilesViewController<STTrashVC.ViewModel> {
             if let error = error {
                 self?.showError(error: error)
             } else {
-                self?.setSelectedMode(isSelectedMode: false)
+                self?.setSelectionMode(isSelectionMode: false)
             }
         })
     }
-    
-    private func setSelectedItem(for indexPath: IndexPath) {
-        guard let albumFile =  self.dataSource.object(at: indexPath) else {
-            return
-        }
-        var isSelected = false
-        if self.dataSource.viewModel.selectedFileNames.contains(albumFile.file) {
-            self.dataSource.viewModel.selectedFileNames.remove(albumFile.file)
-            isSelected = false
-        } else {
-            self.dataSource.viewModel.selectedFileNames.insert(albumFile.file)
-            isSelected = true
-        }
-        let cell = (collectionView.cellForItem(at: indexPath) as? STTrashCollectionViewCell)
-        cell?.setSelected(isSelected: isSelected)
-        self.updateSelectedItesmCount()
-    }
-            
-}
-
-extension STTrashVC: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if self.dataSource.viewModel.isSelectedMode {
-            self.setSelectedItem(for: indexPath)
-        } else {
-            guard let file = self.dataSource.object(at: indexPath) else {
-                return
-            }
-            let sorting = self.viewModel.getSorting()
-            let vc = STFileViewerVC.create(trash: file, sortDescriptorsKeys: sorting)
-            self.show(vc, sender: nil)
-        }
-    }
-    
+                
 }
 
 extension STTrashVC: STFilesActionTabBarAccessoryViewDataSource {
@@ -325,7 +300,7 @@ extension STTrashVC: STFilesActionTabBarAccessoryViewDataSource {
         
         var result = [STFilesActionTabBarAccessoryView.ActionItem]()
         
-        if self.dataSource.viewModel.isSelectedMode {
+        if self.isSelectionMode {
             let trash = STFilesActionTabBarAccessoryView.ActionItem.trash(identifier: ActionType.delete) { [weak self] _, _ in
                 self?.didSelectedTrash()
             }

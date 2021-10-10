@@ -17,7 +17,6 @@ extension STGalleryVC {
         typealias CDModel = STCDFile
         
         var isSelectedMode = false
-        var selectedFileNames = Set<String>()
         
         func cellModel(for indexPath: IndexPath, data: STLibrary.File) -> CellModel {
             let image = STImageView.Image(file: data, isThumb: true)
@@ -29,8 +28,7 @@ extension STGalleryVC {
                              name: data.file,
                              videoDuration: videoDurationStr,
                              isRemote: data.isRemote,
-                             selectedMode: self.isSelectedMode,
-                             isSelected: self.selectedFileNames.contains(data.file))
+                             selectedMode: self.isSelectedMode)
         }
         
         func headerModel(for indexPath: IndexPath, section: String) -> HeaderModel {
@@ -46,7 +44,6 @@ extension STGalleryVC {
         let videoDuration: String?
         let isRemote: Bool
         let selectedMode: Bool
-        let isSelected: Bool
     }
     
     struct HeaderModel: IViewDataSourceHeaderModel {
@@ -79,7 +76,7 @@ extension STGalleryVC {
         
 }
 
-class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
+class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
         
     @IBOutlet weak private var syncBarButtonItem: UIBarButtonItem!
     @IBOutlet weak private var syncView: STGallerySyncView!
@@ -130,6 +127,45 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         self.viewModel.sync()
     }
     
+    override func setSelectionMode(isSelectionMode: Bool) {
+        guard self.isSelectionMode != isSelectionMode else {
+            return
+        }
+        self.dataSource.viewModel.isSelectedMode = isSelectionMode
+        super.setSelectionMode(isSelectionMode: isSelectionMode)
+        self.updateTabBarAccessoryView()
+        self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
+        self.updateSelectedItesmCount()
+    }
+    
+    override func updatedSelect(for indexPath: IndexPath, isSlected: Bool) {
+        super.updatedSelect(for: indexPath, isSlected: isSlected)
+        self.updateSelectedItesmCount()
+    }
+    
+    override func collectionView(didSelectItemAt indexPath: IndexPath) {
+        guard !self.isSelectionMode, let file = self.dataSource.object(at: indexPath) else {
+            return
+        }
+        let sorting = self.viewModel.getSorting()
+        let vc = STFileViewerVC.create(galery: sorting, predicate: nil, file: file)
+        self.show(vc, sender: nil)
+    }
+    
+    override func collectionView(didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        UIView.animate(withDuration: 0.3) {
+            self.navigationController?.navigationBar.alpha = 0.7
+            self.accessoryView.alpha = 0.7
+        }
+    }
+    
+    override func collectionViewDidEndMultipleSelectionInteraction() {
+        UIView.animate(withDuration: 0.3) {
+            self.navigationController?.navigationBar.alpha = 1
+            self.accessoryView.alpha = 1
+        }
+    }
+    
     //MARK: - User action
     
     @IBAction private func didSelectOpenImagePicker(_ sender: Any) {
@@ -147,7 +183,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     }
     
     @IBAction private func didSelecedButtonItem(_ sender: UIBarButtonItem) {
-        self.setSelectMode(isSelected: !self.dataSource.viewModel.isSelectedMode)
+        self.setSelectionMode(isSelectionMode: !self.isSelectionMode)
     }
 
     //MARK: - Layout
@@ -175,25 +211,9 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     }
     
     //MARK: - Private
-    
-    private func setSelectMode(isSelected: Bool) {
-        guard self.dataSource.viewModel.isSelectedMode != isSelected else {
-            return
-        }
-        self.dataSource.viewModel.selectedFileNames.removeAll()
-        self.dataSource.viewModel.isSelectedMode = isSelected
-        self.updateTabBarAccessoryView()
-        self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized
-        self.collectionView.reloadData()
-        self.updateSelectedItesmCount()
         
-        if #available(iOS 14.0, *) {
-            self.collectionView.isEditing = isSelected
-        }
-    }
-    
     private func getSelectedFiles() -> [STLibrary.File] {
-        let selectedFileNames = [String](self.dataSource.viewModel.selectedFileNames)
+        let selectedFileNames = [String](self.selectionObjectsIdentifiers)
         guard !selectedFileNames.isEmpty else {
             return []
         }
@@ -202,7 +222,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
     }
     
     private func updateSelectedItesmCount() {
-        let count = self.dataSource.viewModel.selectedFileNames.count
+        let count = self.selectionObjectsIdentifiers.count
         let title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
         self.accessoryView.title = title
         self.accessoryView.setEnabled(isEnabled: count != .zero)
@@ -215,24 +235,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
             (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = nil
         }
     }
-    
-    private func setSelectedItem(for indexPath: IndexPath) {
-        guard let albumFile =  self.dataSource.object(at: indexPath) else {
-            return
-        }
-        var isSelected = false
-        if self.dataSource.viewModel.selectedFileNames.contains(albumFile.file) {
-            self.dataSource.viewModel.selectedFileNames.remove(albumFile.file)
-            isSelected = false
-        } else {
-            self.dataSource.viewModel.selectedFileNames.insert(albumFile.file)
-            isSelected = true
-        }
-        let cell = (collectionView.cellForItem(at: indexPath) as? STGalleryCollectionViewCell)
-        cell?.setSelected(isSelected: isSelected)
-        self.updateSelectedItesmCount()
-    }
-    
+
     private func didSelectShareViaStinglePhotos() {
         let files = self.getSelectedFiles()
         guard !files.isEmpty else {
@@ -246,7 +249,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
         
         sharedMembersVC?.complition = { [weak self] success in
             if success {
-                self?.setSelectMode(isSelected: false)
+                self?.setSelectionMode(isSelectionMode: false)
             }
         }
         
@@ -262,7 +265,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
             }
             
             if completed {
-                self?.setSelectMode(isSelected: false)
+                self?.setSelectionMode(isSelectionMode: false)
             }
             
         }
@@ -282,7 +285,7 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
             }
             
             DispatchQueue.main.async {
-                self?.setSelectMode(isSelected: false)
+                self?.setSelectionMode(isSelectionMode: false)
             }
         }
     }
@@ -329,31 +332,9 @@ class STGalleryVC: STFilesViewController<STGalleryVC.ViewModel> {
             if let error = error {
                 weakSelf.showError(error: error)
             } else {
-                weakSelf.setSelectMode(isSelected: false)
+                self?.setSelectionMode(isSelectionMode: false)
             }
         }
-    }
-    
-}
-
-extension STGalleryVC: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if self.dataSource.viewModel.isSelectedMode {
-            self.setSelectedItem(for: indexPath)
-        } else {
-            guard let file = self.dataSource.object(at: indexPath) else {
-                return
-            }
-            let sorting = self.viewModel.getSorting()
-            let vc = STFileViewerVC.create(galery: sorting, predicate: nil, file: file)
-            self.show(vc, sender: nil)
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
-        
-        return true
     }
     
 }
@@ -479,7 +460,7 @@ extension STGalleryVC {
         moveAlbumFilesVC?.moveInfo = .files(files: files)
         moveAlbumFilesVC?.complition = { [weak self] success in
             if success {
-                self?.setSelectMode(isSelected: false)
+                self?.setSelectionMode(isSelectionMode: false)
             }
         }
         self.showDetailViewController(navVC, sender: nil)

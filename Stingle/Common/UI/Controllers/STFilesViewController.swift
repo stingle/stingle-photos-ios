@@ -129,3 +129,90 @@ extension STFilesViewController: ISyncManagerObserver {
     }
     
 }
+
+class STFilesSelectionViewController<ViewModel: ICollectionDataSourceViewModel>: STFilesViewController<ViewModel>, UICollectionViewDelegate {
+    
+    private(set) var isSelectionMode = false
+    private(set) var selectionObjectsIdentifiers = Set<String>()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.configureSelectionMode()
+    }
+    
+    //MARK: - Public methods
+    
+    func setSelectionMode(isSelectionMode: Bool) {
+        guard self.isSelectionMode != isSelectionMode else {
+            return
+        }
+        self.isSelectionMode = isSelectionMode
+        self.selectionObjectsIdentifiers.removeAll()
+        if #available(iOS 14.0, *) {
+            self.collectionView.isEditing = isSelectionMode
+        }
+        self.collectionView.reloadData()
+    }
+    
+    func collectionView(didSelectItemAt indexPath: IndexPath) {
+        //Implement chid classes
+    }
+    
+    func collectionView(didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        //Implement chid classes
+    }
+    
+    func collectionViewDidEndMultipleSelectionInteraction() {
+        //Implement chid classes
+    }
+    
+    func updatedSelect(for indexPath: IndexPath, isSlected: Bool) {
+        guard let identifier = self.dataSource.object(at: indexPath)?.identifier else {
+            return
+        }
+        if isSlected {
+            self.selectionObjectsIdentifiers.insert(identifier)
+        } else {
+            self.selectionObjectsIdentifiers.remove(identifier)
+        }
+    }
+
+    //MARK: - Private methods
+    
+    private func configureSelectionMode() {
+        self.collectionView.delegate = self
+        self.collectionView.allowsSelection = true
+        self.collectionView.allowsMultipleSelection = false
+        if #available(iOS 14.0, *) {
+            self.collectionView.allowsMultipleSelectionDuringEditing = true
+        }
+    }
+        
+    //MARK: - UITableViewDelegate
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if self.isSelectionMode {
+            self.updatedSelect(for: indexPath, isSlected: true)
+        }
+        self.collectionView(didSelectItemAt: indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if self.isSelectionMode {
+            self.updatedSelect(for: indexPath, isSlected: false)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        self.collectionView(didBeginMultipleSelectionInteractionAt: indexPath)
+    }
+    
+    func collectionViewDidEndMultipleSelectionInteraction(_ collectionView: UICollectionView) {
+        self.collectionViewDidEndMultipleSelectionInteraction()
+    }
+
+}

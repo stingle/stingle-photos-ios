@@ -21,13 +21,18 @@ class STGalleryCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
         }
     }
     
+    override var isSelected: Bool {
+        didSet {
+            self.setSelected(isSelected: self.isSelected)
+        }
+    }
+    
     func configure(model viewItem: STGalleryVC.CellModel?) {
         self.imageView.setImage(viewItem?.image, placeholder: nil)
         self.videoDurationLabel.text = viewItem?.videoDuration
         self.videoInfoBgView.isHidden = viewItem?.videoDuration == nil
         self.icRemoteImageView.isHidden = viewItem?.isRemote ?? false
         self.checkMarkImageView.isHidden = !(viewItem?.selectedMode ?? true)
-        self.setSelected(isSelected: viewItem?.isSelected ?? false)
     }
     
     func setSelected(isSelected: Bool) {
