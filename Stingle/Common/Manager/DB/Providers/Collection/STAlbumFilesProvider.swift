@@ -139,6 +139,12 @@ extension STDataBase {
             return result
         }
         
+        func fetchAll(for albumID: String, identifiers: [String]) -> [STLibrary.AlbumFile] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.identifier)) IN %@", albumID, identifiers)
+            let result = self.fetchObjects(predicate: predicate)
+            return result
+        }
+        
         func fetchAll(for albumID: String, isRemote: Bool) -> [STLibrary.AlbumFile] {
             let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.isRemote)) == %i", albumID, isRemote)
             let result = self.fetchObjects(predicate: predicate)
