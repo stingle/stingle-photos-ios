@@ -182,7 +182,7 @@ class STFilesSelectionViewController<ViewModel: ICollectionDataSourceViewModel>:
     private func configureSelectionMode() {
         self.collectionView.delegate = self
         self.collectionView.allowsSelection = true
-        self.collectionView.allowsMultipleSelection = false
+        self.collectionView.allowsMultipleSelection = true
         if #available(iOS 14.0, *) {
             self.collectionView.allowsMultipleSelectionDuringEditing = true
         }

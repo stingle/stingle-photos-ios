@@ -7,7 +7,7 @@
 
 import UIKit
 import Photos
-import Tatsi
+import PhotosUI
 
 protocol STImagePickerHelperDelegate: UIViewController {
     func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset])
@@ -53,7 +53,6 @@ class STImagePickerHelper: NSObject {
                 }
             }
         }
-        
     }
     
     //MARK: - Private
@@ -82,17 +81,17 @@ class STImagePickerHelper: NSObject {
     
     private func open() {
         DispatchQueue.main.async { [weak self] in
-            self?.openTatsiPickerView()
+            self?.openPickerView()
         }
     }
     
-    private func openTatsiPickerView() {
-        var config = TatsiConfig.default
-        config.supportedMediaTypes = [.video, .image]
-        config.maxNumberOfSelections = 200
-        let pickerViewController = TatsiPickerViewController(config: config)
-        pickerViewController.pickerDelegate = self
-        self.viewController?.present(pickerViewController, animated: true, completion: nil)
+    private func openPickerView() {
+        var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+        config.filter = .any(of: [.images, .videos, .livePhotos])
+        config.selectionLimit = 200
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        self.viewController?.showDetailViewController(picker, sender: nil)
     }
     
     private func checkAndReqauestAuthorization(completion: @escaping (PHAuthorizationStatus) -> Void) {
@@ -108,25 +107,28 @@ class STImagePickerHelper: NSObject {
     
 }
 
-extension STImagePickerHelper: TatsiPickerViewControllerDelegate {
+extension STImagePickerHelper: PHPickerViewControllerDelegate {
     
-    func pickerViewController(_ pickerViewController: TatsiPickerViewController, didPickAssets assets: [PHAsset]) {
-        pickerViewController.dismiss(animated: true, completion: nil)
-        self.viewController?.pickerViewController(self, didPickAssets: assets)
-    }
-    
-    func pickerViewControllerDidCancel(_ pickerViewController: TatsiPickerViewController) {
-        pickerViewController.dismiss(animated: true, completion: nil)
-        self.viewController?.pickerViewControllerDidCancel(self)
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        let identifiers = results.compactMap({$0.assetIdentifier})
+        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+        var result = [PHAsset]()
+        fetchResult.enumerateObjects { asset, index, _ in
+            result.append(asset)
+            if result.count == results.count {
+                self.viewController?.pickerViewController(self, didPickAssets: result)
+            }
+        }
     }
     
 }
 
 extension STImagePickerHelper {
-    
+
     enum ItemType {
         case photo
         case video
     }
-    
+
 }

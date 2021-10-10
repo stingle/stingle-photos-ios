@@ -2763,7 +2763,7 @@
 				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2852,7 +2852,7 @@
 				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2936,7 +2936,7 @@
 				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3020,7 +3020,7 @@
 				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
