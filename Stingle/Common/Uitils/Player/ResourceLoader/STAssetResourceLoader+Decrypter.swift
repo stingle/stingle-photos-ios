@@ -127,6 +127,11 @@ extension STAssetResourceLoader {
             guard end >= start, start < self.receiveData.count else {
                 return
             }
+            
+            //FIXME: Memry worning
+            
+//            print("start", start)
+            
             let range = Range(uncheckedBounds: (Int(start), Int(end)))
             let requestedDataChank = self.receiveData.subdata(in: range)
             dataRequest.respond(with: requestedDataChank)

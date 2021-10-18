@@ -46,22 +46,7 @@ extension STCrypto {
         return resultData
     }
     
-    func encryptData(data: Data, header: STHeader) throws -> Data {
-        let output = OutputStream(toMemory: ())
-        let input = InputStream(data: data)
-        output.open()
-        input.open()
-        let publicKey = try self.readPrivateFile(fileName: Constants.PublicKeyFilename)
-        var bytes = try self.writeHeader(output: output, header: header, publicKey: publicKey)
-        let encryptBytes = try self.encryptData(input: input, output: output, header: header)
-        bytes.append(contentsOf: encryptBytes)
-        input.close()
-        output.close()
-        
-        return Data(bytes)
-    }
-    
-    func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: Int32, publicKey: Bytes? = nil) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
+    func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, publicKey: Bytes? = nil) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
                 
         let fileName = try self.createEncFileName()
         let fileId = try self.createNewFileId()
@@ -69,11 +54,14 @@ extension STCrypto {
         inputThumb.open()
         let thumbUrl = toThumbUrl.appendingPathComponent(fileName)
         guard let outputThumb = OutputStream(toFileAtPath: thumbUrl.path, append: true) else {
+            inputThumb.close()
             throw CryptoError.General.creationFailure
         }
         outputThumb.open()
         
         guard let inputOrigin = InputStream(fileAtPath: oreginalUrl.path) else {
+            inputThumb.close()
+            outputThumb.close()
             throw CryptoError.General.creationFailure
         }
         inputOrigin.open()

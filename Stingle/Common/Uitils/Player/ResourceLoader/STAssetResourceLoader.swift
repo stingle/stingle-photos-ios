@@ -111,7 +111,7 @@ extension STAssetResourceLoader: STAssetResourceLoaderDecrypterDelegate {
     func decrypter(didFinished decrypter: Decrypter) {
         self.dispatchQueue.async(flags: .barrier) { [weak self] in
             if let decrypteIdex = self?.decrypters.firstIndex(where: { $0.request == decrypter.request }) {
-                self?.decrypters[decrypteIdex].cancel()
+                self?.decrypters.remove(at: decrypteIdex)
             }
         }
     }

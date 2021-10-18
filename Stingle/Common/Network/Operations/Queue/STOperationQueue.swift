@@ -7,20 +7,20 @@
 
 import Foundation
 
-protocol INetworkOperationQueue: AnyObject {
-    func operation(didStarted operation: INetworkOperation)
-    func operation(didFinish operation: INetworkOperation, result: Any)
-    func operation(didFinish operation: INetworkOperation, error: IError)
-    func operationWaitUntil(didStarted operation: INetworkOperation)
+protocol IOperationQueue: AnyObject {
+    func operation(didStarted operation: IOperation)
+    func operation(didFinish operation: IOperation, result: Any)
+    func operation(didFinish operation: IOperation, error: IError)
+    func operationWaitUntil(didStarted operation: IOperation)
     var underlyingQueue: DispatchQueue? { get }
 }
 
-class STOperationQueue: INetworkOperationQueue {
+class STOperationQueue: IOperationQueue {
     
     let maxConcurrentOperationCount: Int
     let qualityOfService: QualityOfService
     
-    private var operations = STObserverEvents<INetworkOperation>()
+    private var operations = STObserverEvents<IOperation>()
     
     weak var underlyingQueue: DispatchQueue?
     
@@ -50,26 +50,26 @@ class STOperationQueue: INetworkOperationQueue {
         }
     }
     
-    func allOperations() -> [INetworkOperation] {
+    func allOperations() -> [IOperation] {
         return self.operations.objects
     }
 
     //MARK: - IOperationQueue
     
-    func operation(didStarted operation: INetworkOperation) {
+    func operation(didStarted operation: IOperation) {
         self.operations.addObject(operation)
         self.operationsQueue.addOperation(operation)
     }
     
-    func operationWaitUntil(didStarted operation: INetworkOperation) {
+    func operationWaitUntil(didStarted operation: IOperation) {
         self.operations.addObject(operation)
         self.operationsQueue.addOperations([operation], waitUntilFinished: true)
     }
     
-    func operation(didFinish operation: INetworkOperation, result: Any) {
+    func operation(didFinish operation: IOperation, result: Any) {
     }
     
-    func operation(didFinish operation: INetworkOperation, error: IError) {
+    func operation(didFinish operation: IOperation, error: IError) {
     }
     
 }

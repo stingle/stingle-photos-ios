@@ -68,7 +68,7 @@ extension STFileUploader {
             return file
         }
         
-        func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: Int32, creationDate: Date?, modificationDate: Date?) throws -> STLibrary.File {
+        func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?) throws -> STLibrary.File {
             
             let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(oreginalUrl: oreginalUrl, thumbImage: thumbImageData, fileType: fileType, duration: duration, toUrl: toUrl, toThumbUrl: toThumbUrl, fileSize: fileSize)
             
@@ -124,7 +124,7 @@ extension STFileUploader {
             super.init(asset: asset)
         }
                 
-        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: Int32, creationDate: Date?, modificationDate: Date?) throws -> STLibrary.File {
+        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?) throws -> STLibrary.File {
             
             guard let publicKey = self.album.albumMetadata?.publicKey else {
                 throw STFileUploader.UploaderError.fileNotFound
@@ -153,7 +153,7 @@ private extension PHAsset {
     struct PHAssetDataInfo {
         var url: URL
         var videoDuration: TimeInterval
-        var fileSize: Int32
+        var fileSize: UInt
         var creationDate: Date?
         var modificationDate: Date?
     }
@@ -168,7 +168,7 @@ private extension PHAsset {
     
     func requestGetThumb(completion : @escaping ((_ image: UIImage?) -> Void)) {
         let options = PHImageRequestOptions()
-        options.version = .original
+        options.version = .current
         options.isSynchronous = false
         options.resizeMode = .exact
         options.deliveryMode = .highQualityFormat
@@ -188,18 +188,22 @@ private extension PHAsset {
         }
         
         let options: PHVideoRequestOptions = PHVideoRequestOptions()
-        options.version = .original
+
+        options.version = .current
         options.deliveryMode = .highQualityFormat
+        options.isNetworkAccessAllowed = true
         
         let modificationDate = self.modificationDate
         let creationDate = self.creationDate
+
         
-        Self.phManager.requestAVAsset(forVideo: self, options: options, resultHandler: {(asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) -> Void in
+        Self.phManager.requestAVAsset(forVideo: self, options: options, resultHandler: { (asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) -> Void in
+            
             if let urlAsset = asset as? AVURLAsset, let fileSize = urlAsset.fileSize {
                 let localVideoUrl: URL = urlAsset.url as URL
                 let responseURL: URL = localVideoUrl
                 let videoDuration: TimeInterval = urlAsset.duration.seconds
-                let fileSize: Int32 = Int32(fileSize)
+                let fileSize: UInt = UInt(fileSize)
                 let result = PHAssetDataInfo(url: responseURL,
                                 videoDuration: videoDuration,
                                 fileSize: fileSize,
@@ -219,10 +223,11 @@ private extension PHAsset {
             return
         }
         let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
+        options.isNetworkAccessAllowed = true
         options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData) -> Bool in
             return true
         }
-        
+                
         let modificationDate = self.modificationDate
         let creationDate = self.creationDate
         
@@ -237,7 +242,7 @@ private extension PHAsset {
             let modificationDate: Date? = modificationDate
             
             let attr = try? FileManager.default.attributesOfItem(atPath: responseURL.path)
-            let fileSize = (attr?[FileAttributeKey.size] as? Int32) ?? 0
+            let fileSize = (attr?[FileAttributeKey.size] as? UInt) ?? 0
             
             let result = PHAssetDataInfo(url: responseURL,
                             videoDuration: videoDuration,
@@ -253,9 +258,12 @@ private extension PHAsset {
 
 extension AVURLAsset {
     
-    var fileSize: Int? {
+    var fileSize: UInt? {
         let keys: Set<URLResourceKey> = [.totalFileSizeKey, .fileSizeKey]
         let resourceValues = try? url.resourceValues(forKeys: keys)
-        return resourceValues?.fileSize ?? resourceValues?.totalFileSize
+        guard let size = resourceValues?.fileSize ?? resourceValues?.totalFileSize else {
+            return nil
+        }
+        return UInt(size)
     }
 }

@@ -35,6 +35,7 @@ class STFileUploader {
     private(set) var uploadingFiles = [STLibrary.File]()
     let maxCountUploads = 5
     let maxCountUpdateDB = 5
+        
     
     var isUploading: Bool {
         return !self.uploadingFiles.isEmpty
@@ -118,18 +119,26 @@ class STFileUploader {
     }
     
     private func uploadAllLocalFilesInQueue(files: [STLibrary.File]) {
-        guard self.checkCanUploadFiles() else {
-            return
-        }
-        files.forEach { (file) in
-            if !self.uploadingFiles.contains(where: { file.file == $0.file }) {
-                self.uploadingFiles.append(file)
-                let operation = Operation(file: file, delegate: self)
-                self.operationManager.run(operation: operation, in: self.operationQueue)
+        
+        self.dispatchQueue.async(flags: .barrier) { [weak self] in
+            guard let weakSelf = self, weakSelf.checkCanUploadFiles() else {
+                return
             }
+            var filesCount: Int = .zero
+            files.forEach { (file) in
+                if !weakSelf.uploadingFiles.contains(where: { file.file == $0.file }) {
+                    weakSelf.uploadingFiles.append(file)
+                    let operation = Operation(file: file, delegate: weakSelf)
+                    weakSelf.operationManager.run(operation: operation, in: weakSelf.operationQueue)
+                    filesCount = filesCount + 1
+                }
+            }
+            
+            weakSelf.countAllFiles = weakSelf.countAllFiles + Int64(filesCount)
+            weakSelf.updateProgress(files: [])
+            
         }
-        self.countAllFiles = self.countAllFiles + Int64(files.count)
-        self.updateProgress(files: [])
+        
     }
     
     private func culculateProgress() -> UploaderProgress {
@@ -373,7 +382,7 @@ extension STFileUploader {
         let thumbImage: Data
         let fileType: STFileUploader.FileType
         let duration: TimeInterval
-        var fileSize: Int32
+        var fileSize: UInt
         var creationDate: Date?
         var modificationDate: Date?
     }

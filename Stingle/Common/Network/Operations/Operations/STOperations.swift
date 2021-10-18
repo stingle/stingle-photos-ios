@@ -7,13 +7,13 @@
 
 import Foundation
 
-protocol INetworkOperation: Operation {
+protocol IOperation: Operation {
     func pause()
     func resume()
-    func didStartRun(with delegate: INetworkOperationQueue)
+    func didStartRun(with delegate: IOperationQueue)
 }
 
-class STOperation<T>: Operation, INetworkOperation {
+class STOperation<T>: Operation, IOperation {
 
     enum Status: String {
         case ready  = "isReady"
@@ -43,7 +43,7 @@ class STOperation<T>: Operation, INetworkOperation {
         return self.isCancelled || self.isOperationCanceled || self.isFinished
     }
 
-    private(set) weak var delegate: INetworkOperationQueue?
+    private(set) weak var delegate: IOperationQueue?
 
     init(success: STOperationSuccess?, failure: STOperationFailure?) {
         self.success = success
@@ -137,7 +137,7 @@ class STOperation<T>: Operation, INetworkOperation {
         self.setResume()
     }
 
-    func didStartRun(with delegate: INetworkOperationQueue) {
+    func didStartRun(with delegate: IOperationQueue) {
         guard !self.isRunning else {
             return
         }
@@ -146,7 +146,7 @@ class STOperation<T>: Operation, INetworkOperation {
         delegate.operation(didStarted: self)
     }
     
-    func didStartRunnWaitUntil(with delegate: INetworkOperationQueue) {
+    func didStartRunnWaitUntil(with delegate: IOperationQueue) {
         guard !self.isRunning else {
             return
         }
