@@ -79,13 +79,10 @@ class STAssetResourceLoader: NSObject {
 extension STAssetResourceLoader: AVAssetResourceLoaderDelegate {
    
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
-        self.dispatchQueue.async(flags: .barrier) { [weak self] in
-            if self?.decrypter(for: loadingRequest) == nil, let decrypter = self?.createDecrypter(for: loadingRequest) {
-                self?.decrypters.append(decrypter)
-                decrypter.start()
-            } else {
-                print("")
-            }
+        if self.decrypter(for: loadingRequest) == nil {
+            let decrypter = self.createDecrypter(for: loadingRequest)
+            self.decrypters.append(decrypter)
+            decrypter.start()
         }
         return true
     }
@@ -95,11 +92,9 @@ extension STAssetResourceLoader: AVAssetResourceLoaderDelegate {
     }
     
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
-        self.dispatchQueue.async(flags: .barrier) { [weak self] in
-            if let decrypteIdex = self?.decrypters.firstIndex(where: { $0.request == loadingRequest }) {
-                self?.decrypters[decrypteIdex].cancel()
-                self?.decrypters.remove(at: decrypteIdex)
-            }
+        if let decrypteIdex = self.decrypters.firstIndex(where: { $0.request == loadingRequest }) {
+            self.decrypters[decrypteIdex].cancel()
+            self.decrypters.remove(at: decrypteIdex)
         }
         
     }

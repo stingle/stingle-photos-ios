@@ -87,7 +87,7 @@ class STImagePickerHelper: NSObject {
     
     private func openPickerView() {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-        config.filter = .any(of: [.videos])
+        config.filter = .any(of: [.images, .videos])
         config.selectionLimit = 200
         let picker = PHPickerViewController(configuration: config)
         picker.delegate = self

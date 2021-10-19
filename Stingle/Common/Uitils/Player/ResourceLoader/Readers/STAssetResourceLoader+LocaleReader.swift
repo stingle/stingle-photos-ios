@@ -32,7 +32,7 @@ extension STAssetResourceLoader {
             let endOffset = min(fromOffSet + dataChunkSize, fullDataSize)
             let chankSize = endOffset - fromOffSet
             let isFinished = fromOffSet + dataChunkSize >= startOffSet + length
-            self.fileReader.read(fromOffset: off_t(fromOffSet), length: off_t(chankSize)) { [weak self] dispatchData in
+            self.fileReader.read(fromOffset: off_t(fromOffSet), length: off_t(chankSize), queue: self.queue) { [weak self] dispatchData in
                 guard let weakSelf = self else {
                     return
                 }
@@ -45,7 +45,9 @@ extension STAssetResourceLoader {
                 let isEnded = handler(data)
                 
                 if !isFinished && !isEnded, !weakSelf.isCancelled {
+                    
                     weakSelf.read(startOffSet: startOffSet, fromOffSet: fromOffSet + dataChunkSize, length: length, dataChunkSize: dataChunkSize, fullDataSize: fullDataSize, handler: handler, error: error)
+                    
                 }
             }
         }

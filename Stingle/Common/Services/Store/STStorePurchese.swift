@@ -18,16 +18,12 @@ extension STStore {
         private var success: Complition<SKPaymentTransaction>?
         private var failure: Complition<StoreError>?
                 
-        
-        override init() {
-            super.init()
-            self.paymentQueue.add(self)
-        }
-                
         func buy(product: SKProduct, success: @escaping Complition<SKPaymentTransaction>, failure: @escaping Complition<StoreError>) {
             guard !self.isProcessing else {
                 return
             }
+            
+            self.paymentQueue.add(self)
             self.isProcessing = true
             let payment = SKMutablePayment(product: product)
             self.payment = payment
@@ -36,10 +32,15 @@ extension STStore {
             self.failure = failure
             self.paymentQueue.add(payment)
         }
-        
+                
         //MARK: - Private methods
         
+        func finishTransaction(transactions: [SKPaymentTransaction]) {
+            
+        }
+        
         private func clean() {
+            self.paymentQueue.remove(self)
             self.isProcessing = false
             self.success = nil
             self.failure = nil
