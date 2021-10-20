@@ -33,9 +33,7 @@ class STBillingWorker: STWorker {
                 return
             }
             let requestTransaction = STBillingRequest.TransactionInfo(transactionIdentifier: id, originalTransactionIdentifier: transaction.original?.transactionIdentifier)
-            
             requestTransactions.append(requestTransaction)
-            
         }
         
         let requestBodyData = STBillingRequest.Transactions(transactions: requestTransactions, receiveData: receiptData)
