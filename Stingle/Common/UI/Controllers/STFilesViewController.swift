@@ -132,11 +132,12 @@ extension STFilesViewController: ISyncManagerObserver {
 
 class STFilesSelectionViewController<ViewModel: ICollectionDataSourceViewModel>: STFilesViewController<ViewModel>, UICollectionViewDelegate {
     
-    private(set) var isSelectionMode = false
+    private(set) var isSelectionMode = true
     private(set) var selectionObjectsIdentifiers = Set<String>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setSelectionMode(isSelectionMode: false)
         self.configureSelectionMode()
     }
     
@@ -148,10 +149,16 @@ class STFilesSelectionViewController<ViewModel: ICollectionDataSourceViewModel>:
         }
         self.isSelectionMode = isSelectionMode
         self.selectionObjectsIdentifiers.removeAll()
-        if #available(iOS 14.0, *) {
-            self.collectionView.isEditing = isSelectionMode
-        }
+        
+        self.collectionView.isEditing = isSelectionMode
         self.collectionView.reloadData()
+        
+        if !isSelectionMode {
+            self.collectionView.indexPathsForSelectedItems?.forEach({ (indexPath) in
+                self.collectionView.deselectItem(at: indexPath, animated: false)
+            })
+        }
+
     }
     
     func collectionView(didSelectItemAt indexPath: IndexPath) {
@@ -188,7 +195,7 @@ class STFilesSelectionViewController<ViewModel: ICollectionDataSourceViewModel>:
         }
     }
         
-    //MARK: - UITableViewDelegate
+    //MARK: - UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if self.isSelectionMode {
