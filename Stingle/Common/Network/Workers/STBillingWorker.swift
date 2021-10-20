@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StoreKit
 
 class STBillingWorker: STWorker {
     
@@ -16,12 +17,47 @@ class STBillingWorker: STWorker {
         }
         let request = STBillingRequest.billingInfo(rand: rand)
         self.request(request: request, success: success, failure: failure)
+    }
+    
+    func verifi(transactions: [SKPaymentTransaction], success: @escaping Success<STEmptyResponse>, failure: @escaping Failure) {
+        var requestTransactions = [STBillingRequest.TransactionInfo]()
         
-//        self.requestJSON(request: request) { json in
-//            print("")
-//        }
+        guard let receiptData = self.getReceiptDataString() else {
+            failure(WorkerError.unknown)
+            return
+        }
         
+        for transaction in transactions {
+            guard let id = transaction.transactionIdentifier else {
+                failure(WorkerError.unknown)
+                return
+            }
+            let requestTransaction = STBillingRequest.TransactionInfo(transactionIdentifier: id, originalTransactionIdentifier: transaction.original?.transactionIdentifier)
+            
+            requestTransactions.append(requestTransaction)
+            
+        }
         
+        let requestBodyData = STBillingRequest.Transactions(transactions: requestTransactions, receiveData: receiptData)
+        
+        let request = STBillingRequest.verifi(transactions: requestBodyData)
+        self.request(request: request, success: success, failure: failure)
+    }
+    
+    
+    private func getReceiptDataString() -> String? {
+        if let appStoreReceiptURL = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: appStoreReceiptURL.path) {
+            do {
+                let receiptData = try Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped)
+                let receiptString = receiptData.base64EncodedString(options: [])
+                return receiptString
+            }
+            catch {
+                print("error", error.localizedDescription)
+            }
+        }
+        
+        return nil
     }
     
 }

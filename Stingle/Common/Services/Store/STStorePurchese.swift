@@ -15,6 +15,8 @@ extension STStore {
         private(set) var isProcessing = false
         private(set) var payment: SKPayment?
         
+        private let billingWorker = STBillingWorker()
+                
         private var success: Complition<SKPaymentTransaction>?
         private var failure: Complition<StoreError>?
                 
@@ -35,8 +37,19 @@ extension STStore {
                 
         //MARK: - Private methods
         
-        func finishTransaction(transactions: [SKPaymentTransaction]) {
-            
+        private func finishTransaction(queue: SKPaymentQueue, transactions: [SKPaymentTransaction], currentTransaction: SKPaymentTransaction) {
+            let transactions = transactions.filter( { $0.transactionState == .purchased } )
+            self.billingWorker.verifi(transactions: transactions) { [weak self] result in
+                transactions.forEach { transaction in
+                    self?.paymentQueue.finishTransaction(transaction)
+                }
+                self?.success?(currentTransaction)
+                self?.clean()
+            } failure: { [weak self] error in
+                let error = STStore.StoreError.error(error: error)
+                self?.failure?(error)
+                self?.clean()
+            }
         }
         
         private func clean() {
@@ -58,11 +71,7 @@ extension STStore.Purchese: SKPaymentTransactionObserver {
         }
         switch transaction.transactionState {
         case .purchased:
-            self.paymentQueue.finishTransaction(transaction)
-            DispatchQueue.main.async { [weak self] in
-                self?.success?(transaction)
-                self?.clean()
-            }
+            self.finishTransaction(queue: queue, transactions: transactions, currentTransaction: transaction)
         case .failed:
             self.paymentQueue.finishTransaction(transaction)
             DispatchQueue.main.async { [weak self] in

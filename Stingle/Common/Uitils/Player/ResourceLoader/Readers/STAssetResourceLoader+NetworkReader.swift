@@ -47,7 +47,7 @@ extension STAssetResourceLoader {
         private func didReceiveNewData(_ data: Data, startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, handler: @escaping (Data) -> Bool) {
             self.receiveData.append(data)
             self.receiveCount = self.receiveCount + UInt64(data.count)
-            let currentChankIndex = UInt64(self.receiveData.count) >= dataChunkSize
+            let currentChankIndex = UInt64(self.receiveData.count) / dataChunkSize
             let endIndex = self.receiveCount + startOffSet
             let isEndChank = endIndex >= fullDataSize || currentChankIndex == 1
             if isEndChank {
