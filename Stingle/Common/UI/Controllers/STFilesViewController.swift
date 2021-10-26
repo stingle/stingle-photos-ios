@@ -149,15 +149,13 @@ class STFilesSelectionViewController<ViewModel: ICollectionDataSourceViewModel>:
         }
         self.isSelectionMode = isSelectionMode
         self.selectionObjectsIdentifiers.removeAll()
-        
-        self.collectionView.isEditing = isSelectionMode
-        self.collectionView.reloadData()
-        
         if !isSelectionMode {
             self.collectionView.indexPathsForSelectedItems?.forEach({ (indexPath) in
                 self.collectionView.deselectItem(at: indexPath, animated: false)
             })
         }
+        self.collectionView.isEditing = isSelectionMode
+        self.collectionView.reloadData()
 
     }
     
