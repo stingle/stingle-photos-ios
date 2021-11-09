@@ -80,11 +80,11 @@ protocol INavigationAnimator: UINavigationControllerDelegate, UIViewControllerAn
     var controllerView: UIView? { get }
     var animatorSource: INavigationAnimatorSource? { get }
     var animatorDestination: INavigationAnimatorDestination? { get }
-    var animatorOperation: ATNavigationAnimator.AnimatorOperation { get }
+    var animatorOperation: STNavigationAnimator.AnimatorOperation { get }
     
 }
 
-class ATNavigationAnimator: NSObject {
+class STNavigationAnimator: NSObject {
     
     enum AnimatorOperation {
         case present
@@ -497,7 +497,7 @@ class ATNavigationAnimator: NSObject {
             self.interactiveStartingPoint = gesture.location(in: gesture.view)
             self.interactiveStartingSize = toView.bounds.size
             self.startDismiss()
-            ((self.fromViewController as? INavigationAnimatorDestination)?.navigationAnimator as? ATNavigationAnimator)?.isEnableInteractiveDismiss = false
+            ((self.fromViewController as? INavigationAnimatorDestination)?.navigationAnimator as? STNavigationAnimator)?.isEnableInteractiveDismiss = false
         case .changed:
             let currentPoint = gesture.location(in: gesture.view)
             let direction = toView.bounds.width
@@ -565,7 +565,7 @@ class ATNavigationAnimator: NSObject {
             transitionContext.finishInteractiveTransition()
             self.isInteractiveDismiss = false
             self.isAnimated = false
-            ((self.fromViewController as? INavigationAnimatorDestination)?.navigationAnimator as? ATNavigationAnimator)?.isEnableInteractiveDismiss = true
+            ((self.fromViewController as? INavigationAnimatorDestination)?.navigationAnimator as? STNavigationAnimator)?.isEnableInteractiveDismiss = true
             self.dismissEndAnimation(transitionContext: transitionContext)
         }
     }
@@ -583,13 +583,13 @@ class ATNavigationAnimator: NSObject {
             self.presentEndAnimation(transitionContext: transitionContext, isCompleted: false)
             transitionContext.cancelInteractiveTransition()
             self.isInteractiveDismiss = false
-            ((self.fromViewController as? INavigationAnimatorDestination)?.navigationAnimator as? ATNavigationAnimator)?.isEnableInteractiveDismiss = true
+            ((self.fromViewController as? INavigationAnimatorDestination)?.navigationAnimator as? STNavigationAnimator)?.isEnableInteractiveDismiss = true
         }
     }
     
 }
 
-extension ATNavigationAnimator: INavigationAnimator {
+extension STNavigationAnimator: INavigationAnimator {
         
     func setupTransitioning(for navigationController: UINavigationController, viewController: INavigationAnimatorDestination) {
         navigationController.delegate = self
@@ -613,7 +613,7 @@ extension ATNavigationAnimator: INavigationAnimator {
     
 }
 
-extension ATNavigationAnimator: UIViewControllerTransitioningDelegate {
+extension STNavigationAnimator: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         self.isPresent = true
@@ -627,7 +627,7 @@ extension ATNavigationAnimator: UIViewControllerTransitioningDelegate {
     
 }
 
-extension ATNavigationAnimator: UINavigationControllerDelegate {
+extension STNavigationAnimator: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         if self.isPresent || !self.isInteractiveDismiss {
@@ -648,7 +648,7 @@ extension ATNavigationAnimator: UINavigationControllerDelegate {
     
 }
 
-extension ATNavigationAnimator: UIViewControllerInteractiveTransitioning {
+extension STNavigationAnimator: UIViewControllerInteractiveTransitioning {
     
     func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
         self.transitionContext = transitionContext
@@ -668,7 +668,7 @@ extension ATNavigationAnimator: UIViewControllerInteractiveTransitioning {
     
 }
 
-extension ATNavigationAnimator: UIViewControllerAnimatedTransitioning {
+extension STNavigationAnimator: UIViewControllerAnimatedTransitioning {
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.3
@@ -684,7 +684,7 @@ extension ATNavigationAnimator: UIViewControllerAnimatedTransitioning {
     
 }
 
-extension ATNavigationAnimator: UIGestureRecognizerDelegate {
+extension STNavigationAnimator: UIGestureRecognizerDelegate {
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == self.dismissTapGesture {
