@@ -208,10 +208,8 @@ class ATNavigationAnimator: NSObject {
             return
         }
         
-        let controllerView = ATNavigationContainerView(with: toView, frame:  self.finalFrame(), isDetail: self.isDetail)
-        self.toViewController?.view = controllerView
         self.controllerBackgroundView = bgView
-        bgView.addSubview(controllerView)
+        bgView.addSubview(toView)
         self.setupPresentation()
         self.addBlurViewIfNeedded(transitionContext: transitionContext)
     }
@@ -347,7 +345,8 @@ class ATNavigationAnimator: NSObject {
     //MARK: - Private
     
     private func createBlurEffectView(frame: CGRect) -> UIView {
-        let blurView = ATBlurView.create(frame: frame)
+        let blurView = UIView(frame: frame)//ATBlurView.create(frame: frame)
+        blurView.backgroundColor = .red.withAlphaComponent(0.8)
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         blurView.tag = self.blurEffectViewTag
         blurView.alpha = self.blurEffectViewMinAlpha
@@ -601,16 +600,10 @@ extension ATNavigationAnimator: INavigationAnimator {
     }
     
     var presentingView: UIView? {
-        if let view = self.toViewController?.view as? ATNavigationContainerView {
-            return view.containerViewBgView
-        }
         return self.toViewController?.view
     }
     
     var controllerView: UIView? {
-        if let view = self.toViewController?.view as? ATNavigationContainerView {
-            return view.controllerView
-        }
         return self.toViewController?.view
     }
     
@@ -695,9 +688,9 @@ extension ATNavigationAnimator: UIGestureRecognizerDelegate {
     
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == self.dismissTapGesture {
-            if let containerView = (self.toViewController?.view as? ATNavigationContainerView) {
+            if let containerView = self.toViewController?.view {
                 let location = gestureRecognizer.location(in: gestureRecognizer.view)
-                return !containerView.containerViewBgView.frame.contains(location)
+                return !containerView.frame.contains(location)
             }
             return false
         }
