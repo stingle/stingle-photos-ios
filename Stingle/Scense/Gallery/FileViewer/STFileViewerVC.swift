@@ -503,7 +503,7 @@ extension STFileViewerVC: STFileViewerVMDelegate {
             return
         }
       
-        guard self.viewModel.object(at: currentIndex)?.file != self.currentFile?.file else {
+        guard self.viewModel.object(at: currentIndex)?.file != self.currentFileViewer?.file.file else {
             return
         }
         

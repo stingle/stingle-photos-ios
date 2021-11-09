@@ -14,6 +14,13 @@ class STImageView: UIImageView {
         self.setImage(source: image, placeholder: placeholder, animator: animator, success: success, progress: progress, failure: failure)
     }
     
+    deinit {
+        guard let retryerIdentifier = self.retryerIdentifier else {
+            return
+        }
+        Self.imageRetryer.cancel(operation: retryerIdentifier)
+    }
+    
 }
 
 extension STImageView {
