@@ -55,6 +55,12 @@ class STImagePickerHelper: NSObject {
         }
     }
     
+    func delete(assets: [PHAsset]) {
+        try? PHPhotoLibrary.shared().performChangesAndWait {
+            PHAssetChangeRequest.deleteAssets(assets as NSFastEnumeration)
+        }
+    }
+    
     //MARK: - Private
     
     private func showAuthorizationPermissionAlertMain() {

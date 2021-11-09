@@ -55,6 +55,7 @@
 
 "cancel" = "Cancel";
 "ok" = "Ok";
+"delete" = "Delete";
 "trash" = "Trash";
 "albums" = "Albums";
 "sharing" = "Sharing";
@@ -121,6 +122,9 @@
 "billed_monthly" = "Billed monthly";
 "billed_yearly" = "Billed yearly";
 "yearly" = "Yearly";
+
+"delete_original_files" = "Delete original files?";
+"alert_delete_original_files_message" = "Do you want to delete original files that you have imported";
 
 "buy_now" = "Buy now";
 

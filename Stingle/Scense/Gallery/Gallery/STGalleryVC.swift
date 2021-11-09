@@ -292,6 +292,27 @@ class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
     
     //MARK: - Private actions
     
+    private func showDeleteOriginalFiles(assets: [PHAsset]) {
+        guard !assets.isEmpty else {
+            return
+        }
+        
+        let title = "delete_original_files".localized
+        let message = "alert_delete_original_files_message".localized
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let delete = UIAlertAction(title: "delete".localized, style: .destructive) { [weak self] _ in
+            self?.pickerHelper.delete(assets: assets)
+        }
+        
+        let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
+        alert.addAction(delete)
+        alert.addAction(cancel)
+                
+        self.showDetailViewController(alert, sender: nil)
+    }
+    
     private func showShareFileActionSheet(sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "share".localized, message: nil, preferredStyle: .actionSheet)
         let stinglePhotos = UIAlertAction(title: "share_via_stingle_photos".localized, style: .default) { [weak self] _ in
@@ -355,7 +376,8 @@ extension STGalleryVC: STImagePickerHelperDelegate {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
                     progressView.progress = progressValue
-                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                    let completedUnitCount = min(progress.completedUnitCount + 1, progress.totalUnitCount)
+                    progressView.subTitle = "\(completedUnitCount)/\(progress.totalUnitCount)"
                 }
             }
         }
@@ -365,15 +387,18 @@ extension STGalleryVC: STImagePickerHelperDelegate {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
                     progressView.progress = progressValue
-                    progressView.subTitle = "\(progress.completedUnitCount + 1)/\(progress.totalUnitCount)"
+                    let completedUnitCount = min(progress.completedUnitCount + 1, progress.totalUnitCount)
+                    progressView.subTitle = "\(completedUnitCount)/\(progress.totalUnitCount)"
                 }
             }
         }
         
-        importer.complition = { _ in
-            DispatchQueue.main.async {
+        importer.complition = { [weak self] _ in
+            DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
                 progressView.hide()
-            }
+                self?.showDeleteOriginalFiles(assets: assets)
+            })
+            
         }
         
     }
