@@ -81,7 +81,7 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
             self.selectCurrentRow()
         case .lockApp:
             self.splitMenuViewController?.closeMenu()
-            STApplication.shared.appLocker.lockApp()
+            STApplication.shared.appLocker.lockApp(showBiometricUnlocer: false)
         case .freeUpSpace:
             STApplication.shared.fileSystem.freeUpSpace()
             let title = "alert_free_up_space_title".localized

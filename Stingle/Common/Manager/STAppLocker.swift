@@ -17,12 +17,12 @@ class STAppLocker {
         self.addNotifications()
     }
     
-    func lockApp() {
+    func lockApp(showBiometricUnlocer: Bool) {
         guard STApplication.shared.utils.isLogedIn() else {
             return
         }
         STKeyManagement.key = nil
-        STUnlockAppVC.show()
+        STUnlockAppVC.show(showBiometricUnlocer: showBiometricUnlocer)
     }
         
     //MARK: - Private
@@ -38,7 +38,7 @@ class STAppLocker {
         guard let resignActiveDate = self.resignActiveDate, resignActiveDate.distance(to: Date()) >= timeInterval  else {
             return
         }
-        self.lockApp()
+        self.lockApp(showBiometricUnlocer: true)
     }
      
     @objc private func willResignActive(_ notification: Notification) {

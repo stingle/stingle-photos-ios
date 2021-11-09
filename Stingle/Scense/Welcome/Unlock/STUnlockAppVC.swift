@@ -15,15 +15,26 @@ class STUnlockAppVC: UIViewController {
     @IBOutlet weak var biometricAuthButton: UIButton!
     
     private var currentViewController: UIViewController?
+    
+    private var pickerHelper: STImagePickerHelper!
+    
     private var viewModel = STUnlockAppVM()
+    
+    private var showBiometricUnlocer = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.pickerHelper = STImagePickerHelper(controller: self)
         self.configureUi()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        guard self.showBiometricUnlocer else {
+            return
+        }
+        
         self.unlockApp { [weak self] error in
             guard let error = error else {
                 return
@@ -33,7 +44,11 @@ class STUnlockAppVC: UIViewController {
     }
     
     //MARK: User Action
-
+    
+    @IBAction private func didSelectCameraButton(_ sender: Any) {
+//        self.pickerHelper.openCamera()
+    }
+    
     @IBAction private func didSelectLogOutButton(_ sender: Any) {
         let title = "alert_log_out_title".localized
         let message = "alert_log_out_message".localized
@@ -132,14 +147,19 @@ class STUnlockAppVC: UIViewController {
     
 }
 
+extension STUnlockAppVC: STImagePickerHelperDelegate {
+    
+}
+
 extension STUnlockAppVC {
     
-    class func show() {
+    class func show(showBiometricUnlocer: Bool) {
         let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
         let oldVC = window?.rootViewController
         let storyboard = UIStoryboard(name: "Welcome", bundle: .main)
         let vc = (storyboard.instantiateViewController(withIdentifier: "STUnlockAppVCID") as! STUnlockAppVC)
         vc.currentViewController = oldVC
+        vc.showBiometricUnlocer = showBiometricUnlocer
         window?.rootViewController = vc
     }
     

@@ -211,6 +211,7 @@
 		A0794B9C269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0794B9A269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib */; };
 		A07B45B426C02442003EB470 /* STAppSettings+Advanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */; };
 		A07B45B626C0263A003EB470 /* STAdvancedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B526C0263A003EB470 /* STAdvancedVM.swift */; };
+		A08259C7273B11EA004836A5 /* ATNavigationAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08259C6273B11EA004836A5 /* ATNavigationAnimator.swift */; };
 		A084182325FA589B00DEAC89 /* STTrashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A084182225FA589B00DEAC89 /* STTrashProvider.swift */; };
 		A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1525F5A10800A8BC9C /* STCDContact.swift */; };
 		A086FD2625F5A10900A8BC9C /* STCDAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1625F5A10800A8BC9C /* STCDAlbum.swift */; };
@@ -541,6 +542,7 @@
 		A0794B9A269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STSettingsSwichTableViewCell.xib; sourceTree = "<group>"; };
 		A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Advanced.swift"; sourceTree = "<group>"; };
 		A07B45B526C0263A003EB470 /* STAdvancedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAdvancedVM.swift; sourceTree = "<group>"; };
+		A08259C6273B11EA004836A5 /* ATNavigationAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ATNavigationAnimator.swift; sourceTree = "<group>"; };
 		A084182225FA589B00DEAC89 /* STTrashProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashProvider.swift; sourceTree = "<group>"; };
 		A086FD1525F5A10800A8BC9C /* STCDContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDContact.swift; sourceTree = "<group>"; };
 		A086FD1625F5A10800A8BC9C /* STCDAlbum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDAlbum.swift; sourceTree = "<group>"; };
@@ -1219,6 +1221,7 @@
 		A033D6EF260149E000E6AA83 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A08259C4273B11D2004836A5 /* Animators */,
 				A02203F525EEDC0300D07C98 /* Segue */,
 				A02203F725EEDC0300D07C98 /* Controllers */,
 				A02203F925EEDC0300D07C98 /* Views */,
@@ -1778,6 +1781,22 @@
 				A0794B9A269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib */,
 			);
 			path = Swich;
+			sourceTree = "<group>";
+		};
+		A08259C4273B11D2004836A5 /* Animators */ = {
+			isa = PBXGroup;
+			children = (
+				A08259C5273B11DA004836A5 /* Navigation */,
+			);
+			path = Animators;
+			sourceTree = "<group>";
+		};
+		A08259C5273B11DA004836A5 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				A08259C6273B11EA004836A5 /* ATNavigationAnimator.swift */,
+			);
+			path = Navigation;
 			sourceTree = "<group>";
 		};
 		A086FD9B25F62AEF00A8BC9C /* Providers */ = {
@@ -2595,6 +2614,7 @@
 				A02204AC25EEDC0400D07C98 /* STSignInVM.swift in Sources */,
 				A0D4E82F26C8107800556871 /* STMnemonic.swift in Sources */,
 				A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */,
+				A08259C7273B11EA004836A5 /* ATNavigationAnimator.swift in Sources */,
 				A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */,
 				A0D29CD7262051460083967D /* STFileUploader.swift in Sources */,
 				A0D1A3BC262E0D6E002E326F /* STAlbumFilesVM.swift in Sources */,
