@@ -134,6 +134,11 @@ extension STVideoViewerVC: IFileViewer {
         return self.videoFile
     }
     
+    
+    var animatorSourceView: INavigationAnimatorSourceView? {
+        return self.imageView
+    }
+    
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool) {
         self.playerControllView.alpha = isFullScreen ? .zero : 1
     }

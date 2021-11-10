@@ -77,6 +77,10 @@ extension STPhotoViewerVC: IFileViewer {
         return self.photoFile
     }
     
+    var animatorSourceView: INavigationAnimatorSourceView? {
+        return self.zoomImageView
+    }
+    
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool) {
         self.loadingView.color = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .white : .appText
     }

@@ -51,6 +51,28 @@ extension STImageZoomView: STZoomViewDelegate {
 
 }
 
+extension STImageZoomView: INavigationAnimatorSourceView {
+    
+    func previewContentSizeNavigationAnimator() -> CGSize? {
+        return self.imageView.image?.size
+    }
+    
+    func createPreviewNavigationAnimator() -> UIView {
+        var frame = self.imageView.frame
+        frame = self.convert(frame, from: self.imageView.superview)
+        let result = UIImageView(frame: frame)
+        result.contentMode = .scaleAspectFit
+        result.image = self.imageView.image
+        result.clipsToBounds = self.clipsToBounds
+        return result
+    }
+    
+    func previewContentModeNavigationAnimator() -> STNavigationAnimator.ContentMode {
+        return .fit
+    }
+    
+}
+
 extension STImageZoomView {
     
     class ImageView: STImageView, IZoomContentView {

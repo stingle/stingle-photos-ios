@@ -14,6 +14,8 @@ protocol IFileViewer: UIViewController {
     var fileIndex: Int { get }
     var fileViewerDelegate: IFileViewerDelegate? { get set }
     
+    var animatorSourceView: INavigationAnimatorSourceView? { get }
+    
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool)
     func fileViewer(pauseContent fileViewer: STFileViewerVC)
     
@@ -364,7 +366,7 @@ extension STFileViewerVC: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        guard let currentIndex = self.currentIndex, let vc = self.viewControllers.objects.first(where: { $0.fileIndex == currentIndex }) else {
+        guard scrollView.isDragging, let currentIndex = self.currentIndex, let vc = self.viewControllers.objects.first(where: { $0.fileIndex == currentIndex }) else {
             return
         }
         let org = self.view.convert(vc.view.frame.origin, from: vc.view.superview)
@@ -535,6 +537,18 @@ extension STFileViewerVC: STFilesDownloaderActivityVCDelegate {
         case .saveDevicePhotos:
             self.saveItemsToDevice(downloadeds: decryptDownloadFiles, folderUrl: folderUrl)
         }
+    }
+    
+}
+
+extension STFileViewerVC: INavigationAnimatorDestinationVC {
+    
+    func navigationAnimator(sendnerItem animator: STNavigationAnimator.TransitioningOperation) -> Any? {
+        return self.currentFile
+    }
+    
+    func navigationAnimator(sourceView animator: STNavigationAnimator.TransitioningOperation, sendnerItem: Any?) -> INavigationAnimatorSourceView? {
+        return self.currentFileViewer?.animatorSourceView
     }
     
 }

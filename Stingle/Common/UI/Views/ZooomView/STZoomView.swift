@@ -37,7 +37,7 @@ class STZoomView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
-    private var contentViewFrame: CGRect {
+    var contentViewFrame: CGRect {
         get {
             guard let contentView = self.contentView else {
                 return .zero

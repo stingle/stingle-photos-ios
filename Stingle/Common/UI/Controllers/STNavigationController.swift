@@ -12,6 +12,8 @@ class STNavigationController: UINavigationController {
     
     @IBInspectable var saveInMenuQue: Bool = true
     
+    private var navigationAnimator: STNavigationAnimator?
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationBar.scrollEdgeAppearance = self.navigationBar.standardAppearance
@@ -81,11 +83,15 @@ class STNavigationController: UINavigationController {
 	}
    
 	override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        self.navigationAnimator = STNavigationAnimator()
+        self.delegate = self.navigationAnimator
 		super.pushViewController(viewController, animated: animated)
 		self.updateNavigationBar(for: viewController)
 	}
 	
 	override func popViewController(animated: Bool) -> UIViewController? {
+        self.navigationAnimator = STNavigationAnimator()
+        self.delegate = self.navigationAnimator
 		if self.viewControllers.count - 2 >= 0 {
 			self.updateNavigationBar(for: self.viewControllers[self.viewControllers.count - 2])
 		}
