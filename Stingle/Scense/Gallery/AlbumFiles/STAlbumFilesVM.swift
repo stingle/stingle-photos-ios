@@ -39,8 +39,8 @@ class STAlbumFilesVM {
         self.syncManager.sync()
     }
     
-    func deleteFiles(files: [String], result: @escaping ((IError?) -> Void)) {
-        let files = self.getFiles(fileNames: files)
+    func deleteFiles(identifiers: [String], result: @escaping ((IError?) -> Void)) {
+        let files = self.getFiles(identifiers: identifiers)
         self.albumWorker.deleteAlbumFiles(album: album, files: files) { responce in
             result(nil)
         } failure: { error in
@@ -52,6 +52,12 @@ class STAlbumFilesVM {
         let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: self.album.albumId, fileNames: fileNames)
         return files
     }
+    
+    func getFiles(identifiers: [String]) -> [STLibrary.AlbumFile] {
+        let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: self.album.albumId, identifiers: identifiers)
+        return files
+    }
+    
     
     func getAlbumAction(fileNames: [String]?) throws -> [STAlbumFilesVC.AlbumAction] {
         if !self.album.isOwner {

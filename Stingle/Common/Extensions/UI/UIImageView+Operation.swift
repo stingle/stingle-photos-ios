@@ -22,6 +22,8 @@ extension UIImageView {
     typealias IProgress = (_ progress: Progress) -> Void
     typealias IFailure = (_ error: IError) -> Void
     
+    static let imageRetryer = STApplication.shared.downloaderManager.imageRetryer
+    
     private(set) var retryerIdentifier: String? {
         get {
             return (objc_getAssociatedObject(self, &Self.retryerIdentifier) as? String)
@@ -33,7 +35,7 @@ extension UIImageView {
     func setImage(source: IDownloaderSource?, placeholder: UIImage? = nil, animator: IImageViewDownloadAnimator? = nil, success: ISuccess? = nil, progress: IProgress? = nil, failure: IFailure? = nil, saveOldImage: Bool = false) {
         
         if let retryerIdentifier = self.retryerIdentifier, !saveOldImage {
-            STApplication.shared.downloaderManager.imageRetryer.cancel(operation: retryerIdentifier)
+            Self.imageRetryer.cancel(operation: retryerIdentifier)
             self.retryerIdentifier = nil
         }
         
@@ -43,7 +45,7 @@ extension UIImageView {
         
         if let source = source {
             animator?.imageView(startAnimation: self)
-            self.retryerIdentifier = STApplication.shared.downloaderManager.imageRetryer.download(source: source) { [weak self] (image) in
+            self.retryerIdentifier = Self.imageRetryer.download(source: source) { [weak self] (image) in
                 self?.retryerIdentifier = nil
                 self?.retrySuccess(image: image, animator: animator, success: success)
             } progress: { [weak self] (progress) in

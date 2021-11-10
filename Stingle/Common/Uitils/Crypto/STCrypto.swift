@@ -286,8 +286,7 @@ class STCrypto {
         return headers
     }
 	
-	@discardableResult
-    func encryptData(input: InputStream, output: OutputStream, header: STHeader?) throws -> Bytes {
+    func encryptData(input: InputStream, output: OutputStream, header: STHeader?) throws {
 		guard let header = header, (1...self.bufSize).contains(Int(header.chunkSize)) else {
 			throw CryptoError.Header.incorrectChunkSize
 		}
@@ -295,7 +294,6 @@ class STCrypto {
 		var chunkNumber:UInt64 = 1
 		
 		var buf:Bytes = []
-        var result: Bytes = []
 		var numRead = 0
 		var diff: Int = 0
         
@@ -325,14 +323,10 @@ class STCrypto {
 			numWrite = output.write(authenticatedCipherText, maxLength: authenticatedCipherText.count)
 			assert(numWrite == authenticatedCipherText.count)
 			chunkNumber += UInt64(1)
-            
-            result.append(contentsOf: chunkNonce)
-            result.append(contentsOf: authenticatedCipherText)
-            
+
 		} while (diff == 0)
 		
 		output.close()
-		return result
 	}
 	
 	public func decryptFileAsync(input: InputStream, output: OutputStream, completion: ((Bool, Error?) -> Void)? = nil) {

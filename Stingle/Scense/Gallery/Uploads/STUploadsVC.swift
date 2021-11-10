@@ -55,7 +55,7 @@ class STUploadsVC: STPopoverViewController {
     private func cellModel(for file: STLibrary.File, progress: Progress?) -> CellModel {
         let progress = Float(progress?.fractionCompleted ?? 0)
         let image = STImageView.Image(file: file, isThumb: true)
-        let cellModel =  CellModel(image: image, progress: progress, name: file.file, id: file.file)
+        let cellModel =  CellModel(image: image, progress: progress, name: file.decryptsHeaders.file?.fileName, id: file.file)
         return cellModel
     }
     

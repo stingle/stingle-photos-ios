@@ -10,7 +10,7 @@ import Foundation
 extension STFileUploader {
     
     class Importer {
-        
+                
         struct Progress {
             let totalUnitCount: Int
             let completedUnitCount: Int
@@ -20,6 +20,8 @@ extension STFileUploader {
         typealias Hendler = () -> Void
         typealias Complition = (_ files: [STLibrary.File]) -> Void
         
+        static private var operationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 10, underlyingQueue: nil)
+        
         let uploadFiles: [IUploadFile]
         let dispatchQueue: DispatchQueue
         
@@ -27,6 +29,13 @@ extension STFileUploader {
         var progressHendler: ProgressHendler?
         var complition: Complition?
         
+        private var operationQueue: STOperationQueue {
+            return Self.operationQueue
+        }
+        
+        private var operationManager: STOperationManager {
+            return STOperationManager.shared
+        }
         
         init(uploadFiles: [IUploadFile], dispatchQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
             self.uploadFiles = uploadFiles
@@ -70,9 +79,10 @@ extension STFileUploader {
             
             self.uploadFiles.forEach { uploadFile in
                 
-                uploadFile.requestFile { file in
+                let operation = Operation(uploadFile: uploadFile) { result in
+
                     completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
-                    files.append(file)
+                    files.append(result)
                     let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount)
                     progressHendler(progress)
                     self.progressHendler?(progress)
@@ -84,6 +94,7 @@ extension STFileUploader {
                     }
                     
                 } failure: { error in
+
                     completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
                     let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount)
                     progressHendler(progress)
@@ -94,7 +105,10 @@ extension STFileUploader {
                         complition(dbFiles)
                         self.complition?(dbFiles)
                     }
+                    
                 }
+                
+                self.operationManager.run(operation: operation, in: self.operationQueue)
             }
             
             if totalUnitCount == .zero {
@@ -138,5 +152,27 @@ extension STFileUploader {
     
 }
 
+extension STFileUploader.Importer {
+    
+    class Operation: STOperation<STLibrary.File> {
+        
+        let uploadFile: IUploadFile
 
+        init(uploadFile: IUploadFile, success: @escaping STOperationSuccess, failure: @escaping STOperationFailure) {
+            self.uploadFile = uploadFile
+            super.init(success: success, failure: failure)
+        }
+        
+        override func resume() {
+            super.resume()
+            self.uploadFile.requestFile { [weak self] file in
+                self?.responseSucces(result: file)
+            } failure: { [weak self] error in
+                self?.responseFailed(error: error)
+            }
+        }
+
+    }
+    
+}
 

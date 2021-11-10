@@ -57,7 +57,6 @@ final class STFileReader {
 
     func read(fromOffset: off_t, length: off_t, queue: DispatchQueue = .main, completionHandler: @escaping (DispatchData?) -> Void) {
         if let channel = self.channel {
-            let length = min(off_t(self.fullSize) - fromOffset, length)
             channel.read(offset: fromOffset, length: Int(length), queue: queue, ioHandler: { done, data, error in
                 completionHandler(data)
             })

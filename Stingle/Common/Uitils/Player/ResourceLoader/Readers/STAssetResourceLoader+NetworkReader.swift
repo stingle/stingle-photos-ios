@@ -51,18 +51,24 @@ extension STAssetResourceLoader {
             let endIndex = self.receiveCount + startOffSet
             let isEndChank = endIndex >= fullDataSize || currentChankIndex == 1
             if isEndChank {
+                                
                 let start: UInt64 = .zero
                 let end = min(UInt64(self.receiveData.count), dataChunkSize)
                 let range = Range(uncheckedBounds: (Int(start), Int(end)))
                 let requestedDataChank = self.receiveData.subdata(in: range)
+                
                 let myDataRange = Range(uncheckedBounds: (Int(end), Int(self.receiveData.count)))
                 self.receiveData = self.receiveData.subdata(in: myDataRange)
-                self.queue.async {
+                                
+                self.queue.async { [weak self] in
                     let ended = handler(requestedDataChank)
                     if ended {
-                        self.streamOperation?.cancel()
+                        self?.streamOperation?.cancel()
                     }
+                    
                 }
+                
+                
             }
         }
         

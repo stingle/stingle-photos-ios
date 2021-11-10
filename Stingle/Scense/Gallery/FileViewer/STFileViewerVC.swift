@@ -503,6 +503,9 @@ extension STFileViewerVC: STFileViewerVMDelegate {
             return
         }
       
+        guard self.viewModel.object(at: currentIndex)?.file != self.currentFileViewer?.file.file else {
+            return
+        }
         
         if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex)  {
             self.pageViewController.setViewControllers([vc], direction: .forward, animated: true, completion: nil)

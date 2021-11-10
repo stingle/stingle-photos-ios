@@ -134,7 +134,13 @@ extension STDataBase {
         }
         
         func fetchAll(for albumID: String, fileNames: [String]) -> [STLibrary.AlbumFile] {
-            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.file)) IN %@", albumID, fileNames)
+            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.identifier)) IN %@", albumID, fileNames)
+            let result = self.fetchObjects(predicate: predicate)
+            return result
+        }
+        
+        func fetchAll(for albumID: String, identifiers: [String]) -> [STLibrary.AlbumFile] {
+            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.identifier)) IN %@", albumID, identifiers)
             let result = self.fetchObjects(predicate: predicate)
             return result
         }

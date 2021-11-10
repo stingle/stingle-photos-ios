@@ -10,10 +10,10 @@ import Foundation
 class STOperationManager {
     
     static let shared: STOperationManager = STOperationManager()
-    let defaultQueue = STOperationQueue(qualityOfService: .userInteractive)
-    let uploadQueue = STOperationQueue(qualityOfService: .background)
-    let downloadQueue = STOperationQueue(qualityOfService: .background)
-    let streamQueue = STOperationQueue(qualityOfService: .userInteractive)
+    private let defaultQueue = STOperationQueue(qualityOfService: .userInteractive)
+    private let uploadQueue = STOperationQueue(qualityOfService: .background)
+    private let downloadQueue = STOperationQueue(qualityOfService: .background)
+    private let streamQueue = STOperationQueue(qualityOfService: .userInteractive)
    
     private var othersQueue = [STOperationQueue]()
     
@@ -25,23 +25,23 @@ class STOperationManager {
         return queue
     }
     
-    func run(operation: INetworkOperation) {
+    func run(operation: IOperation) {
         operation.didStartRun(with: self.defaultQueue)
     }
     
-    func runUpload(operation: INetworkOperation) {
+    func runUpload(operation: IOperation) {
         operation.didStartRun(with: self.uploadQueue)
     }
     
-    func runDownload(operation: INetworkOperation) {
+    func runDownload(operation: IOperation) {
         operation.didStartRun(with: self.downloadQueue)
     }
     
-    func runStream(operation: INetworkOperation) {
+    func runStream(operation: IOperation) {
         operation.didStartRun(with: self.streamQueue)
     }
     
-    func run(operation: INetworkOperation, in queue: STOperationQueue) {
+    func run(operation: IOperation, in queue: STOperationQueue) {
         operation.didStartRun(with: queue)
     }
     

@@ -32,6 +32,9 @@ extension STAssetResourceLoader {
         weak var delegate: STAssetResourceLoaderDecrypterDelegate?
         
         private(set) var receiveData = Data()
+        private(set) var isCanceled = false
+        private(set) var isFinished = false
+        private(set) var receiveDataByteCount: UInt64 = .zero
         
         init(header: STHeader, reader: IAssetResourceLoader, request: AVAssetResourceLoadingRequest) {
             self.header = header
@@ -45,6 +48,7 @@ extension STAssetResourceLoader {
         }
         
         func cancel() {
+            self.isCanceled = true
             self.reader.cancel()
         }
         
@@ -102,16 +106,19 @@ extension STAssetResourceLoader {
             }
         }
         
+        var id = UUID().uuidString
+        
+        var requestedOffset: UInt64?
+        
+        
         private func didReceiveNewData(data: Data) {
             self.receiveData.append(data)
             
-            guard let dataRequest = self.request.dataRequest else {
+            guard let dataRequest = self.request.dataRequest, !self.isCanceled, !self.isFinished else {
                 return
             }
-                        
-            let isFinish = self.receiveData.count >= dataRequest.requestedLength
-            
-            var requestedOffset = UInt64(dataRequest.requestedOffset)
+                                    
+            var requestedOffset = self.requestedOffset ?? UInt64(dataRequest.requestedOffset)
             let requestedLength = UInt64(dataRequest.requestedLength)
             var currentOffset = UInt64(dataRequest.currentOffset)
             
@@ -127,15 +134,37 @@ extension STAssetResourceLoader {
             guard end >= start, start < self.receiveData.count else {
                 return
             }
+                        
+            self.receiveDataByteCount = self.receiveDataByteCount + end - start
+            let isFinish = self.receiveDataByteCount >= dataRequest.requestedLength
             let range = Range(uncheckedBounds: (Int(start), Int(end)))
             let requestedDataChank = self.receiveData.subdata(in: range)
+            self.dropReceiveData()
             dataRequest.respond(with: requestedDataChank)
             if isFinish {
                 self.didFinishLoading(error: nil)
             }
         }
         
+        private func dropReceiveData() {
+            guard let dataRequest = self.request.dataRequest, !self.isCanceled else {
+                return
+            }
+            let requestedOffset = self.requestedOffset ?? UInt64(dataRequest.requestedOffset)
+            let currentOffset = UInt64(dataRequest.currentOffset)
+            let diff = currentOffset - requestedOffset
+            let chankCount = UInt64(Double(diff) / Double(self.decryptChankSize))
+            guard chankCount > .zero else {
+                return
+            }
+            let dropIndex = chankCount * self.decryptChankSize
+            let range = Range(uncheckedBounds: (.zero, Int(dropIndex)))
+            self.receiveData = self.receiveData.subdata(in: range)
+            self.requestedOffset = currentOffset
+        }
+        
         private func didFinishLoading(error: Error?) {
+            self.isFinished = true
             if let error = error {
                 self.request.finishLoading(with: LoaderError.error(error: error))
                 print("AssetResourceLoader", error)

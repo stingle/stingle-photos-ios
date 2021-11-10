@@ -15,19 +15,17 @@ extension STStore {
         private(set) var isProcessing = false
         private(set) var payment: SKPayment?
         
+        private let billingWorker = STBillingWorker()
+                
         private var success: Complition<SKPaymentTransaction>?
         private var failure: Complition<StoreError>?
-                
-        
-        override init() {
-            super.init()
-            self.paymentQueue.add(self)
-        }
                 
         func buy(product: SKProduct, success: @escaping Complition<SKPaymentTransaction>, failure: @escaping Complition<StoreError>) {
             guard !self.isProcessing else {
                 return
             }
+            
+            self.paymentQueue.add(self)
             self.isProcessing = true
             let payment = SKMutablePayment(product: product)
             self.payment = payment
@@ -36,10 +34,26 @@ extension STStore {
             self.failure = failure
             self.paymentQueue.add(payment)
         }
-        
+                
         //MARK: - Private methods
         
+        private func finishTransaction(queue: SKPaymentQueue, transactions: [SKPaymentTransaction], currentTransaction: SKPaymentTransaction) {
+            let transactions = transactions.filter( { $0.transactionState == .purchased } )
+            self.billingWorker.verifi(transactions: transactions) { [weak self] result in
+                transactions.forEach { transaction in
+                    self?.paymentQueue.finishTransaction(transaction)
+                }
+                self?.success?(currentTransaction)
+                self?.clean()
+            } failure: { [weak self] error in
+                let error = STStore.StoreError.error(error: error)
+                self?.failure?(error)
+                self?.clean()
+            }
+        }
+        
         private func clean() {
+            self.paymentQueue.remove(self)
             self.isProcessing = false
             self.success = nil
             self.failure = nil
@@ -57,11 +71,7 @@ extension STStore.Purchese: SKPaymentTransactionObserver {
         }
         switch transaction.transactionState {
         case .purchased:
-            self.paymentQueue.finishTransaction(transaction)
-            DispatchQueue.main.async { [weak self] in
-                self?.success?(transaction)
-                self?.clean()
-            }
+            self.finishTransaction(queue: queue, transactions: transactions, currentTransaction: transaction)
         case .failed:
             self.paymentQueue.finishTransaction(transaction)
             DispatchQueue.main.async { [weak self] in
