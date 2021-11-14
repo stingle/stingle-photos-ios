@@ -83,7 +83,6 @@ class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
     @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
     
     private var selectedItem: STLibrary.File?
-    
     private var viewModel = STGalleryVM()
     
     lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
