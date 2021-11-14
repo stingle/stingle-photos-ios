@@ -35,7 +35,7 @@ extension UINavigationBar {
     private func createProgressView() -> UIProgressView {
         var frame = self.bounds
         let height: CGFloat = 5
-        frame.origin.y = frame.height - height
+        frame.origin.y = frame.height
         frame.size.height = height
         let progressView = UIProgressView(frame: frame)
         progressView.tag = Self.progressViewTag

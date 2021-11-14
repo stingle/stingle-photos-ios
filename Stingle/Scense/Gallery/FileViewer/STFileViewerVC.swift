@@ -11,7 +11,7 @@ protocol IFileViewer: UIViewController {
     
     static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer
     var file: STLibrary.File { get }
-    var fileIndex: Int { get }
+    var fileIndex: Int { get set }
     var fileViewerDelegate: IFileViewerDelegate? { get set }
     
     var animatorSourceView: INavigationAnimatorSourceView? { get }
@@ -138,14 +138,6 @@ class STFileViewerVC: UIViewController {
         }
     }
     
-    @objc private func didSwapDown(tap: UIGestureRecognizer) {
-        let transition = CATransition()
-        transition.duration = 0.1
-        transition.type = CATransitionType.fade
-        self.navigationController?.view.layer.add(transition, forKey: kCATransition)
-        self.navigationController?.popViewController(animated: false)
-    }
-    
     private func didSelectMore(action: MoreAction, file: STLibrary.File) {
         self.viewModel.selectMore(action: action, file: file)
     }
@@ -181,10 +173,6 @@ class STFileViewerVC: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didSelectBackground(tap:)))
         tapGesture.delegate = self
         self.view.addGestureRecognizer(tapGesture)
-        
-        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwapDown(tap:)))
-        swipeGesture.direction = .down
-        self.view.addGestureRecognizer(swipeGesture)
     }
     
     private func viewController(for index: Int?) -> IFileViewer? {
@@ -505,7 +493,19 @@ extension STFileViewerVC: STFileViewerVMDelegate {
             return
         }
       
-        guard self.viewModel.object(at: currentIndex)?.file != self.currentFileViewer?.file.file else {
+        guard let file = self.currentFileViewer?.file else {
+            return
+        }
+        
+        guard let index = self.viewModel.index(at: file) else {
+            return
+        }
+        
+        guard index == NSNotFound else {
+            if let currentFileViewer = self.currentFileViewer {
+                currentFileViewer.fileIndex = index
+                self.pageViewController.setViewControllers([currentFileViewer], direction: .forward, animated: false, completion: nil)
+            }
             return
         }
         

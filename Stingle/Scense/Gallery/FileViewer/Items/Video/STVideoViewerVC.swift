@@ -9,10 +9,9 @@ import UIKit
 
 class STVideoViewerVC: UIViewController {
 
-    @IBOutlet weak private var videoView: STVideoView!
+    @IBOutlet weak private var videoView: STVideoImageView!
     @IBOutlet weak private var slider: UISlider!
     @IBOutlet weak private var playerControllView: STGradientView!
-    @IBOutlet weak private var imageView: STImageView!
    
     @IBOutlet weak private var loadingView: UIActivityIndicatorView!
     @IBOutlet weak private var loadingBgView: UIView!
@@ -22,9 +21,9 @@ class STVideoViewerVC: UIViewController {
     @IBOutlet weak private var timeRightLabel: UILabel!
     
     private(set) var videoFile: STLibrary.File!
-    private(set) var fileIndex: Int = .zero
     private var isSliding = false
     private let player = STPlayer()
+    var fileIndex: Int = .zero
     
     private let playerSeekTime: TimeInterval = 15
     
@@ -45,8 +44,8 @@ class STVideoViewerVC: UIViewController {
         self.player.replaceCurrentItem(with: self.file)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         self.player.pause()
     }
     
@@ -95,7 +94,7 @@ class STVideoViewerVC: UIViewController {
     
     private func setImage() {
         let thumb = STImageView.Image(file: self.videoFile, isThumb: true)
-        self.imageView.setImage(source: thumb)
+        self.videoView.setImage(source: thumb)
     }
     
     private func didChangedSildeValue() {
@@ -134,9 +133,8 @@ extension STVideoViewerVC: IFileViewer {
         return self.videoFile
     }
     
-    
     var animatorSourceView: INavigationAnimatorSourceView? {
-        return self.imageView
+        return self.videoView
     }
     
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool) {

@@ -106,7 +106,7 @@ class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
         self.viewModel.sync()
         self.accessoryView.reloadData()
     }
-    
+
     override func createDataSource() -> STCollectionViewDataSource<ViewModel> {
         let dbDataSource = self.viewModel.createDBDataSource()
         let viewModel = ViewModel()

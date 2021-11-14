@@ -148,6 +148,12 @@ class STFilesSelectionViewController<ViewModel: ICollectionDataSourceViewModel>:
             return
         }
         self.isSelectionMode = isSelectionMode
+        
+        
+        self.collectionView.allowsSelection = true
+        self.collectionView.allowsMultipleSelection = false
+        self.collectionView.allowsMultipleSelectionDuringEditing = isSelectionMode
+        
         self.selectionObjectsIdentifiers.removeAll()
         self.collectionView.isEditing = isSelectionMode
         self.collectionView.reloadData()
@@ -180,11 +186,6 @@ class STFilesSelectionViewController<ViewModel: ICollectionDataSourceViewModel>:
     
     private func configureSelectionMode() {
         self.collectionView.delegate = self
-        self.collectionView.allowsSelection = true
-        self.collectionView.allowsMultipleSelection = true
-        if #available(iOS 14.0, *) {
-            self.collectionView.allowsMultipleSelectionDuringEditing = true
-        }
     }
         
     //MARK: - UICollectionViewDelegate

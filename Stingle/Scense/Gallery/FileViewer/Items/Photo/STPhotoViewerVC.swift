@@ -14,10 +14,11 @@ class STPhotoViewerVC: UIViewController {
     
     weak var fileViewerDelegate: IFileViewerDelegate?
     private(set) var photoFile: STLibrary.File!
-    private(set) var fileIndex: Int = .zero
     
     private var isThumbSeted = false
     private var isViewDidAppear = false
+    
+    var fileIndex: Int = .zero
     
     override func viewDidLoad() {
         super.viewDidLoad()

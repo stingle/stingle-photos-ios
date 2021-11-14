@@ -32,6 +32,7 @@ extension STNavigationAnimator {
         override func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
             super.animateTransition(transitionContext: transitionContext)
             self.destinationPreview?.frame = self.finalFrame ?? .zero
+            self.destinationPreview?.layoutIfNeeded()
             self.destinationVC.view.alpha = .zero
         }
         
@@ -84,7 +85,35 @@ extension STNavigationAnimator {
             self.finalFrame = transitionContext.containerView.convert(finalFrame, from: sourceView)
         }
         
-        
     }
     
 }
+
+extension STNavigationAnimator.TransitioningOperationPop: ITransitioningOperationInteractiveDataSource {
+   
+    var animatedPreview: UIView? {
+        return self.destinationPreview
+    }
+    
+    func interactivePop(startTransition interactivePop: STNavigationAnimator.TransitioningOperationInteractivePop, transitionContext: UIViewControllerContextTransitioning) {
+        self.startTransition(transitionContext: transitionContext)
+    }
+    
+    func interactivePop(animateTransition interactivePop: STNavigationAnimator.TransitioningOperationInteractivePop, transitionContext: UIViewControllerContextTransitioning) {
+        self.animateTransition(transitionContext: transitionContext)
+    }
+    
+    func interactivePop(endTransition interactivePop: STNavigationAnimator.TransitioningOperationInteractivePop, transitionContext: UIViewControllerContextTransitioning) {
+        self.endTransition(transitionContext: transitionContext)
+    }
+    
+    func interactivePop(cancelTransition interactivePop: STNavigationAnimator.TransitioningOperationInteractivePop, transitionContext: UIViewControllerContextTransitioning) {
+        self.destinationPreview?.removeFromSuperview()
+        self.sourceView?.isHidden = false
+        self.destinationView?.isHidden = false
+        transitionContext.completeTransition(false)
+    }
+    
+}
+
+

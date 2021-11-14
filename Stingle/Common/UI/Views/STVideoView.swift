@@ -9,6 +9,8 @@ import UIKit
 import AVKit
 
 class STVideoView: UIView {
+    
+    weak private(set) var stPlayer: STPlayer?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -18,6 +20,17 @@ class STVideoView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.setup()
+    }
+    
+    override var contentMode: UIView.ContentMode {
+        didSet {
+            switch self.contentMode {
+            case .scaleToFill, .scaleAspectFill:
+                self.videoGravity = .resizeAspectFill
+            default:
+                self.videoGravity = .resizeAspect
+            }
+        }
     }
         
     override public class var layerClass: Swift.AnyClass {
@@ -63,14 +76,14 @@ class STVideoView: UIView {
         }
     }
     
-    func setPlayer(player: STPlayer) {
-        self.player = player.player
+    func setPlayer(player: STPlayer?) {
+        self.stPlayer = player
+        self.player = player?.player
     }
     
     //MARK: - Private func
     
     private func setup() {
-//        super.layer.backgroundColor = UIColor.clear.cgColor
     }
 
 }

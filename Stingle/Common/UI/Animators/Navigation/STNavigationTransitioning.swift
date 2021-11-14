@@ -7,6 +7,14 @@
 
 import UIKit
 
+protocol STNavigationAnimatorTransitioningOperationDelegate: AnyObject {
+    
+    func transitioningOperation(didStartNavigate transitioningOperation: STNavigationAnimator.TransitioningOperation)
+    func transitioningOperation(didStartAnimate transitioningOperation: STNavigationAnimator.TransitioningOperation)
+    func transitioningOperation(didSEndNavigate transitioningOperation: STNavigationAnimator.TransitioningOperation)
+    
+}
+
 extension STNavigationAnimator {
     
     enum Operation {
@@ -19,7 +27,9 @@ extension STNavigationAnimator {
         let operation: Operation
         let destinationVC: INavigationAnimatorDestinationVC
         let sourceVC: INavigationAnimatorSourceVC
-        let animationTime: TimeInterval = 0.3
+        let animationTime: TimeInterval = 0.35
+        
+        weak var delegate: STNavigationAnimatorTransitioningOperationDelegate?
         
         init(operation: Operation, destinationVC: INavigationAnimatorDestinationVC, sourceVC: INavigationAnimatorSourceVC) {
             self.operation = operation
@@ -34,7 +44,8 @@ extension STNavigationAnimator {
 
         func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
             self.startTransition(transitionContext: transitionContext)
-            UIView.animate(withDuration: self.animationTime) {
+            
+            UIView.animate(withDuration: self.animationTime, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: .curveEaseInOut) {
                 self.animateTransition(transitionContext: transitionContext)
             } completion: { _ in
                 self.endTransition(transitionContext: transitionContext)
@@ -44,16 +55,18 @@ extension STNavigationAnimator {
         //MARK: -  Working
         
         func startTransition(transitionContext: UIViewControllerContextTransitioning) {
-            
+            self.delegate?.transitioningOperation(didStartNavigate: self)
         }
         
         func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
             transitionContext.updateInteractiveTransition(1)
+            self.delegate?.transitioningOperation(didStartAnimate: self)
         }
         
         func endTransition(transitionContext: UIViewControllerContextTransitioning) {
             transitionContext.finishInteractiveTransition()
             transitionContext.completeTransition(true)
+            self.delegate?.transitioningOperation(didSEndNavigate: self)
         }
         
     }
