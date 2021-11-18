@@ -169,7 +169,6 @@ private extension PHAsset {
     func requestGetThumb(completion : @escaping ((_ image: UIImage?) -> Void)) {
         let options = PHImageRequestOptions()
         options.version = .current
-        options.isSynchronous = false
         options.resizeMode = .exact
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = true

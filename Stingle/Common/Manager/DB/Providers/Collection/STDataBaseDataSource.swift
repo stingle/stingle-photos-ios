@@ -119,7 +119,10 @@ extension STDataBase {
         }
         
         func indexPath(forObject model: ManagedModel.Model) -> IndexPath? {
-            guard let managedObjectID = model.managedObjectID, let row = self.snapshotReference?.index(ofItemIdentifier: managedObjectID),  let section = self.snapshotReference?.index(ofSectionIdentifier: managedObjectID) else {
+            guard let managedObjectID = model.managedObjectID else {
+                return nil
+            }
+            guard let sectionIdentifier = self.snapshotReference?.sectionIdentifier(forSectionContainingItemIdentifier: managedObjectID), let itemIdentifiersInSection = self.snapshotReference?.itemIdentifiersInSection(withIdentifier: sectionIdentifier), let row = itemIdentifiersInSection.firstIndex(where: { $0 as? NSObject == managedObjectID }), let section = self.snapshotReference?.index(ofSectionIdentifier: sectionIdentifier) else {
                 return nil
             }
             return IndexPath(row: row, section: section)

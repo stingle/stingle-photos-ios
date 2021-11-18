@@ -15,6 +15,10 @@ class STAlbumFilesCollectionViewCell: UICollectionViewCell, IViewDataSourceCell 
     @IBOutlet weak private var imageView: STImageView!
     @IBOutlet weak private var videoInfoBgView: STView!
     
+    var animatorSourceView: INavigationAnimatorSourceView {
+        return self.imageView
+    }
+    
     override var isHighlighted: Bool {
         didSet {
             self.alpha = self.isHighlighted ? 0.7 : 1

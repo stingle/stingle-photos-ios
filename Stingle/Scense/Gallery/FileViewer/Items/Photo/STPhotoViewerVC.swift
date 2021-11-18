@@ -14,10 +14,11 @@ class STPhotoViewerVC: UIViewController {
     
     weak var fileViewerDelegate: IFileViewerDelegate?
     private(set) var photoFile: STLibrary.File!
-    private(set) var fileIndex: Int = .zero
     
     private var isThumbSeted = false
     private var isViewDidAppear = false
+    
+    var fileIndex: Int = .zero
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +76,10 @@ extension STPhotoViewerVC: IFileViewer {
     
     var file: STLibrary.File {
         return self.photoFile
+    }
+    
+    var animatorSourceView: INavigationAnimatorSourceView? {
+        return self.zoomImageView
     }
     
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool) {

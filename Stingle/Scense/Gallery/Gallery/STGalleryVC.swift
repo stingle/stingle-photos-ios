@@ -82,6 +82,7 @@ class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
     @IBOutlet weak private var syncView: STGallerySyncView!
     @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
     
+    private var selectedItem: STLibrary.File?
     private var viewModel = STGalleryVM()
     
     lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
@@ -104,7 +105,7 @@ class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
         self.viewModel.sync()
         self.accessoryView.reloadData()
     }
-    
+
     override func createDataSource() -> STCollectionViewDataSource<ViewModel> {
         let dbDataSource = self.viewModel.createDBDataSource()
         let viewModel = ViewModel()
@@ -149,11 +150,12 @@ class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
         }
         let sorting = self.viewModel.getSorting()
         let vc = STFileViewerVC.create(galery: sorting, predicate: nil, file: file)
+        self.selectedItem = file
         self.show(vc, sender: nil)
     }
     
     override func collectionView(didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3) 
             self.navigationController?.navigationBar.alpha = 0.7
             self.accessoryView.alpha = 0.7
         }
@@ -526,6 +528,32 @@ extension STGalleryVC: STFilesDownloaderActivityVCDelegate {
         case .saveDevicePhotos:
             self.saveItemsToDevice(downloadeds: decryptDownloadFiles, folderUrl: folderUrl)
         }
+    }
+    
+}
+
+extension STGalleryVC: INavigationAnimatorSourceVC {
+    
+    func navigationAnimator(sendnerItem animator: STNavigationAnimator.TransitioningOperation) -> Any? {
+        return self.selectedItem
+    }
+    
+    func navigationAnimator(sourceView animator: STNavigationAnimator.TransitioningOperation, sendnerItem sendner: Any?) -> INavigationAnimatorSourceView? {
+        
+        guard let selectedItem = sendner as? STLibrary.File, let indexPath = self.dataSource.indexPath(at: selectedItem) else {
+            return nil
+        }
+        
+        if animator.operation == .pop {
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            self.collectionView.layoutIfNeeded()
+        }
+        
+        guard let cell = self.collectionView.cellForItem(at: indexPath) as? STGalleryCollectionViewCell else {
+            return nil
+        }
+        
+        return cell.animatorSourceView
     }
     
 }

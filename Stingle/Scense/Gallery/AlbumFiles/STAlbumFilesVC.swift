@@ -87,6 +87,7 @@ class STAlbumFilesVC: STFilesSelectionViewController<STAlbumFilesVC.ViewModel> {
     @IBOutlet private var albumSettingsButtonItem: UIBarButtonItem!
     @IBOutlet weak private var moreBarButtonItem: UIBarButtonItem!
     
+    private var selectedItem: STLibrary.AlbumFile?
     var album: STLibrary.Album!
     
     private var viewModel: STAlbumFilesVM!
@@ -185,6 +186,7 @@ class STAlbumFilesVC: STFilesSelectionViewController<STAlbumFilesVC.ViewModel> {
         guard !self.isSelectionMode, let file = self.dataSource.object(at: indexPath) else {
             return
         }
+        self.selectedItem = file
         let sorting = self.viewModel.getSorting()
         let vc = STFileViewerVC.create(album: self.album, file: file, sortDescriptorsKeys: sorting)
         self.show(vc, sender: nil)
@@ -634,7 +636,6 @@ extension STAlbumFilesVC: STAlbumFilesVMDelegate {
     
 }
 
-
 extension STAlbumFilesVC {
     
     enum FilesDownloadDecryptAction {
@@ -693,6 +694,32 @@ extension STAlbumFilesVC {
                 return "trashBu"
             }
         }
+    }
+    
+}
+
+extension STAlbumFilesVC: INavigationAnimatorSourceVC {
+    
+    func navigationAnimator(sendnerItem animator: STNavigationAnimator.TransitioningOperation) -> Any? {
+        return self.selectedItem
+    }
+    
+    func navigationAnimator(sourceView animator: STNavigationAnimator.TransitioningOperation, sendnerItem sendner: Any?) -> INavigationAnimatorSourceView? {
+        
+        guard let selectedItem = sendner as? STLibrary.AlbumFile, let indexPath = self.dataSource.indexPath(at: selectedItem) else {
+            return nil
+        }
+        
+        if animator.operation == .pop {
+            self.collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: false)
+            self.collectionView.layoutIfNeeded()
+        }
+        
+        guard let cell = self.collectionView.cellForItem(at: indexPath) as? STAlbumFilesCollectionViewCell else {
+            return nil
+        }
+        
+        return cell.animatorSourceView
     }
     
 }

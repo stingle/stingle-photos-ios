@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="R1P-5n-IQm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="R1P-5n-IQm">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -1114,10 +1114,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fjh-RQ-9fF" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                            </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-Jq-gLv" customClass="STVideoView" customModule="Stingle" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqa-Jq-gLv" customClass="STVideoImageView" customModule="Stingle" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -1229,23 +1226,18 @@
                         <viewLayoutGuide key="safeArea" id="nTy-eq-deQ"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Fjh-RQ-9fF" firstAttribute="top" secondItem="zgX-xQ-N9b" secondAttribute="top" id="1bs-om-7Ax"/>
                             <constraint firstItem="Uqa-Jq-gLv" firstAttribute="leading" secondItem="zgX-xQ-N9b" secondAttribute="leading" id="6Ao-Ps-5gQ"/>
                             <constraint firstAttribute="trailing" secondItem="Vg7-ni-0TF" secondAttribute="trailing" id="6nH-Wd-cb7"/>
                             <constraint firstAttribute="trailing" secondItem="Uqa-Jq-gLv" secondAttribute="trailing" id="84F-pW-1Ha"/>
                             <constraint firstItem="cPn-ey-qMT" firstAttribute="centerY" secondItem="zgX-xQ-N9b" secondAttribute="centerY" id="Kwe-0f-pao"/>
                             <constraint firstItem="cPn-ey-qMT" firstAttribute="centerX" secondItem="zgX-xQ-N9b" secondAttribute="centerX" id="Sxv-3j-gyW"/>
                             <constraint firstItem="Uqa-Jq-gLv" firstAttribute="top" secondItem="zgX-xQ-N9b" secondAttribute="top" id="Tac-x6-L1W"/>
-                            <constraint firstItem="Fjh-RQ-9fF" firstAttribute="leading" secondItem="zgX-xQ-N9b" secondAttribute="leading" id="i6K-ee-AL5"/>
-                            <constraint firstAttribute="bottom" secondItem="Fjh-RQ-9fF" secondAttribute="bottom" id="j2q-bB-OBB"/>
                             <constraint firstItem="Vg7-ni-0TF" firstAttribute="bottom" secondItem="nTy-eq-deQ" secondAttribute="bottom" constant="1.1368683772161603e-13" id="le6-sK-UvE"/>
                             <constraint firstItem="Vg7-ni-0TF" firstAttribute="leading" secondItem="zgX-xQ-N9b" secondAttribute="leading" id="utQ-eg-iRb"/>
-                            <constraint firstAttribute="trailing" secondItem="Fjh-RQ-9fF" secondAttribute="trailing" id="ydw-av-cRk"/>
                             <constraint firstAttribute="bottom" secondItem="Uqa-Jq-gLv" secondAttribute="bottom" id="zN5-xn-xnJ"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="Fjh-RQ-9fF" id="1Te-LK-T2z"/>
                         <outlet property="loadingBgView" destination="cPn-ey-qMT" id="LpN-q7-kdY"/>
                         <outlet property="loadingView" destination="1Ee-jX-pcz" id="knD-4T-4vw"/>
                         <outlet property="playButton" destination="3F8-bZ-zp5" id="K8x-H9-fN1"/>
@@ -1317,7 +1309,7 @@
         <image name="ic_empty_files" width="204.66667175292969" height="200"/>
         <image name="ic_empty_shared_albums" width="197.66667175292969" height="197"/>
         <image name="ic_gallery_min" width="24" height="24"/>
-        <image name="ic_more" width="17" height="17"/>
+        <image name="ic_more" width="13" height="13"/>
         <image name="ic_nav_menu" width="18" height="12"/>
         <image name="ic_open_image_picker" width="74" height="74"/>
         <image name="ic_player_pause" width="22" height="24.666666030883789"/>
