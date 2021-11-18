@@ -155,7 +155,7 @@ class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
     }
     
     override func collectionView(didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3) 
             self.navigationController?.navigationBar.alpha = 0.7
             self.accessoryView.alpha = 0.7
         }
