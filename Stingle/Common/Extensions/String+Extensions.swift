@@ -1,4 +1,6 @@
 import UIKit
+import CryptoKit
+import CommonCrypto
 
 protocol StringPointer {
     var stringValue: String { get }
@@ -36,6 +38,26 @@ extension String {
     var localized: String {
         return String.localized(for: self, replaceValue: "")
     }
+    
+    var localizedCapitalizingedFirstLetter: String {
+        return String.localized(for: self, replaceValue: "")
+    }
+    
+    var capitalizingedFirstLetter: String {
+        guard !self.isEmpty else { return "" }
+        return self.prefix(1).uppercased() + self.lowercased().dropFirst()
+    }
+    
+    var sha512: String? {
+        guard let data = self.data(using: .utf8) else {
+            return nil
+            
+        }
+        let sh512 = SHA512.hash(data: data)
+        let hashString = sh512.compactMap { String(format: "%02x", $0) }.joined()
+        return hashString
+    }
+
 }
 
 

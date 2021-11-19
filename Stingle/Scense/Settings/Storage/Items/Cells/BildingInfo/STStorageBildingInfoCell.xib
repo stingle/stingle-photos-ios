@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="dark"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <accessibilityOverrides dynamicTypePreference="4"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,37 +19,49 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YSW-gD-pSM">
-                        <rect key="frame" x="0.0" y="0.0" width="306" height="106"/>
+                        <rect key="frame" x="0.0" y="0.0" width="306" height="115"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Storage" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="49W-VP-zt1">
-                                <rect key="frame" x="0.0" y="12" width="128" height="21"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                <color key="textColor" name="STText"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="170 MB of 1 GB (16%) used" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Dnp-Pb-rwW">
-                                <rect key="frame" x="0.0" y="53" width="206.5" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" name="STText"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b8X-bd-eC2">
-                                <rect key="frame" x="0.0" y="82" width="306" height="4"/>
-                                <color key="progressTintColor" name="STPrimary"/>
-                            </progressView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="EZy-Wd-aUP">
+                                <rect key="frame" x="0.0" y="12" width="306" height="95"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Storage" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="49W-VP-zt1">
+                                        <rect key="frame" x="0.0" y="0.0" width="128" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                        <color key="textColor" name="STText"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="170 MB of 1 GB (16%) used" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Dnp-Pb-rwW">
+                                        <rect key="frame" x="0.0" y="24.5" width="206.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" name="STText"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b8X-bd-eC2">
+                                        <rect key="frame" x="0.0" y="49" width="306" height="4"/>
+                                        <color key="progressTintColor" name="STPrimary"/>
+                                        <color key="trackTintColor" name="STPrimaryTransparent"/>
+                                    </progressView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="expiry Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="J1W-vN-fOC">
+                                        <rect key="frame" x="0.0" y="57" width="73.5" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" name="STText"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="payment Method" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="wJB-71-pUy">
+                                        <rect key="frame" x="0.0" y="78" width="109.5" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" name="STText"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" name="STBackground"/>
                         <constraints>
-                            <constraint firstItem="b8X-bd-eC2" firstAttribute="top" secondItem="Dnp-Pb-rwW" secondAttribute="bottom" constant="8" id="DaM-TZ-kfw"/>
-                            <constraint firstItem="Dnp-Pb-rwW" firstAttribute="top" secondItem="49W-VP-zt1" secondAttribute="bottom" constant="20" id="Mrb-zs-qMZ"/>
-                            <constraint firstAttribute="bottom" secondItem="b8X-bd-eC2" secondAttribute="bottom" constant="20" id="VdS-nY-c4m"/>
-                            <constraint firstItem="49W-VP-zt1" firstAttribute="top" secondItem="YSW-gD-pSM" secondAttribute="top" constant="12" id="cGM-3E-4mF"/>
-                            <constraint firstItem="Dnp-Pb-rwW" firstAttribute="leading" secondItem="YSW-gD-pSM" secondAttribute="leading" id="cYq-o0-OAz"/>
-                            <constraint firstAttribute="trailing" secondItem="b8X-bd-eC2" secondAttribute="trailing" id="kgp-L4-ePv"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Dnp-Pb-rwW" secondAttribute="trailing" id="kyQ-vR-PlM"/>
-                            <constraint firstItem="b8X-bd-eC2" firstAttribute="leading" secondItem="YSW-gD-pSM" secondAttribute="leading" id="riq-C0-89o"/>
-                            <constraint firstItem="49W-VP-zt1" firstAttribute="leading" secondItem="YSW-gD-pSM" secondAttribute="leading" id="t9N-La-cqK"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="49W-VP-zt1" secondAttribute="trailing" id="yJO-va-bor"/>
+                            <constraint firstAttribute="bottom" secondItem="EZy-Wd-aUP" secondAttribute="bottom" constant="8" id="A96-Na-I3h"/>
+                            <constraint firstItem="EZy-Wd-aUP" firstAttribute="leading" secondItem="YSW-gD-pSM" secondAttribute="leading" id="dW2-NI-ekI"/>
+                            <constraint firstItem="EZy-Wd-aUP" firstAttribute="top" secondItem="YSW-gD-pSM" secondAttribute="top" constant="12" id="i6b-uB-x37"/>
+                            <constraint firstAttribute="trailing" secondItem="EZy-Wd-aUP" secondAttribute="trailing" id="qOO-3c-RRa"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -61,6 +74,8 @@
             </constraints>
             <size key="customSize" width="306" height="182"/>
             <connections>
+                <outlet property="expiryDateLabel" destination="J1W-vN-fOC" id="Wmv-Xq-zg4"/>
+                <outlet property="paymentMethodLabel" destination="wJB-71-pUy" id="MxY-MA-oSr"/>
                 <outlet property="progressView" destination="b8X-bd-eC2" id="uJg-CD-uMb"/>
                 <outlet property="subTitleLabel" destination="Dnp-Pb-rwW" id="9eR-la-4zZ"/>
                 <outlet property="titleLabel" destination="49W-VP-zt1" id="0C6-ZN-eh8"/>
@@ -74,6 +89,9 @@
         </namedColor>
         <namedColor name="STPrimary">
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPrimaryTransparent">
+            <color red="0.71799999475479126" green="0.10999999940395355" blue="0.10999999940395355" alpha="0.20000000298023224" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -28,6 +28,7 @@ extension STStore {
             self.paymentQueue.add(self)
             self.isProcessing = true
             let payment = SKMutablePayment(product: product)
+            payment.applicationUsername = STApplication.shared.dataBase.userProvider.myUser?.userId.sha512
             self.payment = payment
             
             self.success = success

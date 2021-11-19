@@ -40,14 +40,14 @@ class STBillingInfo: Decodable {
     let expiration: String?
     let paymentGw: String?
     let isManual: Bool
-    let spaceQuota: Int
-    let spaceUsed: Int
+    let spaceQuota: Double
+    let spaceUsed: Double
     
     required init(from decoder: Decoder) throws {
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        guard let spaceQuota = Int(try container.decode(String.self, forKey: .spaceQuota)), let spaceUsed = Int(try container.decode(String.self, forKey: .spaceUsed)) else {
+        guard let spaceQuota = Double(try container.decode(String.self, forKey: .spaceQuota)), let spaceUsed = Double(try container.decode(String.self, forKey: .spaceUsed)) else {
             throw STError.unknown
         }
         
@@ -66,6 +66,15 @@ class STBillingInfo: Decodable {
         
         self.spaceUsed = spaceUsed
         self.spaceQuota = spaceQuota
+    }
+    
+    init(plan: Plan, expiration: String?, paymentGw: String?, isManual: Bool, spaceQuota: Double, spaceUsed: Double) {
+        self.plan = plan
+        self.expiration = expiration
+        self.isManual = isManual
+        self.spaceQuota = spaceQuota
+        self.spaceUsed = spaceUsed
+        self.paymentGw = paymentGw
     }
     
 }

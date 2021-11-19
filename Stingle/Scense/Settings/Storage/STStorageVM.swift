@@ -9,7 +9,7 @@ import Foundation
 
 protocol STStorageVMDelegate: AnyObject {
     
-    func storageVM(didUpdateBildingInfo storageVM: STStorageVM)
+    func storageVM(didUpdateData storageVM: STStorageVM, billingInfo: STBillingInfo, products: [STStore.Product])
     
 }
 
@@ -81,23 +81,16 @@ class STStorageVM {
     }
     
     func getBildingInfo(forceGet: Bool, success: @escaping (_ result: STBillingInfo) -> Void, failure: @escaping (_ error: IError) -> Void) {
-        
         if !forceGet, let billingInfo = self.billingInfo {
             success(billingInfo)
             return
         }
-        
         self.billingWorker.getBillingInfo { [weak self] billingInfo in
             self?.billingInfo = billingInfo
             success(billingInfo)
         } failure: { error in
             failure(error)
         }
-
-    }
-        
-    func getBildingInfo() -> STDBInfo {
-        return self.dbInfoProvider.dbInfo
     }
     
     func buy(product identifier: String, complition: @escaping ((_ error: IError?) -> Void))  {
@@ -105,12 +98,29 @@ class STStorageVM {
             complition(STError.unknown)
             return
         }
-        self.store.buy(product: product) { transaction in
-            complition(nil)
+        self.store.buy(product: product) { [weak self] transaction in
+            self?.upateBillingInfo(complition: { error in
+                complition(nil)
+            })
         } failure: { error in
             complition(error)
         }
 
+    }
+    
+    // MARK: - Private
+    
+    private func upateBillingInfo(complition: @escaping ((_ error: IError?) -> Void)) {
+        self.getBildingInfo(forceGet: true) { info in
+            let dbInfoProvider = STApplication.shared.dataBase.dbInfoProvider
+            let dbInfo = dbInfoProvider.dbInfo
+            dbInfo.update(with: "\(info.spaceQuota)", spaceUsed: "\(info.spaceUsed)")
+            dbInfoProvider.update(model: dbInfo)
+            complition(nil)
+        } failure: { error in
+            complition(error)
+        }
+                
     }
     
 }
@@ -118,7 +128,17 @@ class STStorageVM {
 extension STStorageVM: IDataBaseProviderProviderObserver {
     
     func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
-        self.delegate?.storageVM(didUpdateBildingInfo: self)
+        guard let infoProvider = provider as? STDataBase.DBInfoProvider else {
+            return
+        }
+        guard let billingInfo = self.billingInfo, let products = self.products else {
+            return
+        }
+        guard let spaceUsed = infoProvider.dbInfo.spaceUsed, let spaceUsedValue = Double(spaceUsed), let spaceQuota = infoProvider.dbInfo.spaceQuota, let spaceQuotaValue = Double(spaceQuota) else {
+            return
+        }
+        let newBillingInfo = STBillingInfo(plan: billingInfo.plan, expiration: billingInfo.expiration, paymentGw: billingInfo.paymentGw, isManual: billingInfo.isManual, spaceQuota: spaceQuotaValue, spaceUsed: spaceUsedValue)
+        self.delegate?.storageVM(didUpdateData: self, billingInfo: newBillingInfo, products: products)
     }
     
 }

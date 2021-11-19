@@ -578,7 +578,6 @@ extension STAlbumFilesVC: STFilesActionTabBarAccessoryViewDataSource {
             
         }
         return items
-        
     }
     
 }

@@ -24,7 +24,7 @@
 
 "landing_have_an_account" = "Already have an account?";
 
-//MARK: - sign up-in
+//MARK: - Sign up-in
 
 "sign_up_description" = "Please choose your master password. While no limit is put on what you can enter here, it is strongly advised that your password has at least 12 characters and contains lowercase and uppercase letters, digits and special symbols. If your password is not secure enough then your photosvideos may be vulnerable to brute force attacks.";
 
@@ -313,6 +313,10 @@
 
 "forget_password_title" = "Please enter your email address and your recovery phrase. If correct you will able to set a new password for your account.";
 
+//MARK: - Storage
+
+"storage_payment_method" = "Payment method: %@";
+"storage_expiry_date" = "Expiry date: %@";
 
 //MARK: - Time
 

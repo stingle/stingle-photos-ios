@@ -17,8 +17,10 @@ class STStorageVC: UIViewController {
     @IBOutlet weak private var errorMassageLabel: UILabel!
     @IBOutlet weak private var tryAgainButton: STButton!
     
+    private let refreshControl = UIRefreshControl()
+    
     private(set) var sections: [Section]?
-    private(set) var period: ProductGroup.Period = .yearly
+    var period: ProductGroup.Period?
     private(set) var selectedProductID: String?
     
     private(set) var dataSource: UICollectionViewDiffableDataSource<Section, Item>!
@@ -27,6 +29,7 @@ class STStorageVC: UIViewController {
         super.viewDidLoad()
         self.viewModel = STStorageVM(productIdentifiers: ProductGroup.allIdentifiers)
         self.configureLocalized()
+        self.addRefreshControl()
         self.configureLayout()
         self.registerCollectionDataSource()
         self.reloadData(forceGet: false)
@@ -38,6 +41,11 @@ class STStorageVC: UIViewController {
     }
         
     //MARK: - Private methods
+    
+    private func addRefreshControl() {
+        self.refreshControl.addTarget(self, action: #selector(self.refreshControl(didRefresh:)), for: .valueChanged)
+        self.collectionView.addSubview(self.refreshControl)
+    }
     
     private func configureLayout() {
         var contentInset = self.collectionView.contentInset
@@ -149,10 +157,12 @@ class STStorageVC: UIViewController {
             STLoadingView.hide(in: view)
             self?.reload(products: products, billingInfo: billingInfo)
             self?.collectionView.isHidden = false
+            self?.refreshControl.endRefreshing()
         } failure: { [weak self] error in
             self?.collectionView.isHidden = true
             self?.errorView.isHidden = false
             self?.showError(error: error)
+            self?.refreshControl.endRefreshing()
             STLoadingView.hide(in: view)
         }
     }
@@ -191,6 +201,10 @@ class STStorageVC: UIViewController {
         }
     }
     
+    @objc private func refreshControl(didRefresh refreshControl: UIRefreshControl) {
+        self.reloadData(forceGet: true, showLoading: true)
+    }
+    
 }
 
 extension STStorageVC: UICollectionViewDelegate {
@@ -217,8 +231,9 @@ extension STStorageVC: STStorageHeaderViewDelegate {
 
 extension STStorageVC: STStorageVMDelegate {
     
-    func storageVM(didUpdateBildingInfo storageVM: STStorageVM) {
-        self.reloadData(forceGet: true)
+    func storageVM(didUpdateData storageVM: STStorageVM, billingInfo: STBillingInfo, products: [STStore.Product]) {
+        self.reload(products: products, billingInfo: billingInfo)
     }
+    
     
 }
