@@ -117,7 +117,6 @@ extension STMoveAlbumFilesVC {
     
 }
 
-
 class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     
     var moveInfo: MoveInfo!
@@ -142,7 +141,7 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
         super.configureLocalize()
         self.navigationItem.title = "add_or_move_album".localized
         self.deleteFileLabel.text = "delete_original_items_after_adding".localized
-        self.mainGalleryButton.setTitle("main_gallry".localized, for: .normal)
+        self.mainGalleryButton.setTitle("main_gallery".localized, for: .normal)
         self.createNewAlbum.setTitle("create_new_album".localized, for: .normal)
     }
     

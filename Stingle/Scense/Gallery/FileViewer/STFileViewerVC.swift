@@ -384,7 +384,7 @@ extension STFileViewerVC {
             return
         }
         let navVC = self.storyboard?.instantiateViewController(identifier: "goToMoveAlbumFiles") as! UINavigationController
-        (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = .files(files: [file])
+        (navVC.viewControllers.first as? STMoveAlbumFilesVC)?.moveInfo = self.viewModel.moveInfo(for: file)
         self.showDetailViewController(navVC, sender: nil)
     }
     

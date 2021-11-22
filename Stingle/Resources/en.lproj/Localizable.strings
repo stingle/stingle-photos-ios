@@ -77,8 +77,8 @@
 "share" = "Share";
 
 "create_new_album" = "Create new album";
-"main_gallry" = "Main gallry";
-"preparing" = "Prepering";
+"main_gallery" = "Main gallery";
+"preparing" = "Preparing";
 "remove" = "Remove";
 "add_member" = "Add member";
 "members" = "Members";
@@ -264,7 +264,7 @@
 "alert_log_out_message" = "Are you sure you want to log out?";
 
 "alert_free_up_space_title" = "Nothing to delete";
-"alert_free_up_space_message" = "There are backed up files that we can safely delete from your device at this point";
+"alert_free_up_space_message" = "There are no backed up files that we can safely delete from your device at this point";
 
 "enable_backup" = "Enable backup";
 "enable_backup_description" = "Backup your photos and delete Cache videos to the cloud as soon as you take or import theme";

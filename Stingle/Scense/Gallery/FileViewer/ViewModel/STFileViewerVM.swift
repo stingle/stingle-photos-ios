@@ -26,6 +26,8 @@ protocol IFileViewerVM {
     
     func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.File)
     
+    func moveInfo(for file: STLibrary.File) -> STMoveAlbumFilesVC.MoveInfo
+    
 }
 
 extension IFileViewerVM {
@@ -123,6 +125,10 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
         default:
             break
         }
+    }
+    
+    func moveInfo(for file: STLibrary.File) -> STMoveAlbumFilesVC.MoveInfo {
+        return .files(files: [file])
     }
         
 }
