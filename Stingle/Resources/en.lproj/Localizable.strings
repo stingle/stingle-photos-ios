@@ -24,7 +24,7 @@
 
 "landing_have_an_account" = "Already have an account?";
 
-//MARK: - sign up-in
+//MARK: - Sign up-in
 
 "sign_up_description" = "Please choose your master password. While no limit is put on what you can enter here, it is strongly advised that your password has at least 12 characters and contains lowercase and uppercase letters, digits and special symbols. If your password is not secure enough then your photosvideos may be vulnerable to brute force attacks.";
 
@@ -77,8 +77,8 @@
 "share" = "Share";
 
 "create_new_album" = "Create new album";
-"main_gallry" = "Main gallry";
-"preparing" = "Prepering";
+"main_gallery" = "Main gallery";
+"preparing" = "Preparing";
 "remove" = "Remove";
 "add_member" = "Add member";
 "members" = "Members";
@@ -264,7 +264,7 @@
 "alert_log_out_message" = "Are you sure you want to log out?";
 
 "alert_free_up_space_title" = "Nothing to delete";
-"alert_free_up_space_message" = "There are backed up files that we can safely delete from your device at this point";
+"alert_free_up_space_message" = "There are no backed up files that we can safely delete from your device at this point";
 
 "enable_backup" = "Enable backup";
 "enable_backup_description" = "Backup your photos and delete Cache videos to the cloud as soon as you take or import theme";
@@ -313,6 +313,10 @@
 
 "forget_password_title" = "Please enter your email address and your recovery phrase. If correct you will able to set a new password for your account.";
 
+//MARK: - Storage
+
+"storage_payment_method" = "Payment method: %@";
+"storage_expiry_date" = "Expiry date: %@";
 
 //MARK: - Time
 

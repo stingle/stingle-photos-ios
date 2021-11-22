@@ -88,7 +88,6 @@ extension STStorageVC {
             return group
         }
         
-        
         func hash(into hasher: inout Hasher) {
             return self.identifier.hash(into: &hasher)
         }
@@ -198,7 +197,21 @@ extension STStorageVC {
 
 extension STStorageVC {
     
+    private func calculatePeriod(billingInfo: STBillingInfo) {
+        guard self.period == nil else {
+            return
+        }
+        switch billingInfo.plan {
+        case .free:
+            self.period = .yearly
+        case .product(let id):
+            let productGroup = ProductGroup.productGroup(for: id)
+            self.period = productGroup?.period ?? .yearly
+        }
+    }
+    
     func generateSections(products: [STStore.Product], billingInfo: STBillingInfo) -> [Section] {
+        self.calculatePeriod(billingInfo: billingInfo)
         let billingInfoSection = self.generateBillingInfoSection(billingInfo: billingInfo)
         let productsSection = self.generateProductsSection(products: products, billingInfo: billingInfo)
         return [billingInfoSection, productsSection]
@@ -210,8 +223,22 @@ extension STStorageVC {
         let progress: Float = allSpace != 0 ? Float(usedSpace) / Float(allSpace) : 0
         let percent: Int = Int(progress * 100)
         let allSpaceGB = STBytesUnits(mb: Int64(allSpace))
-        let used = String(format: "storage_space_used_info".localized, "\(usedSpace)", allSpaceGB.getReadableUnit(format: ".0f").uppercased(), "\(percent)")
-        let model = STStorageBildingInfoCell.Model(title: "current_storage".localized, used: used, usedProgress: progress)
+        let used = String(format: "storage_space_used_info".localized, "\(Int64(usedSpace))", allSpaceGB.getReadableUnit(format: ".0f").uppercased(), "\(percent)")
+        
+        var paymentMethod: String?
+        if let paymentGw = billingInfo.paymentGw {
+            paymentMethod = String(format: "storage_payment_method".localized, paymentGw.capitalizingedFirstLetter)
+        }
+        
+        var expiryDate: String?
+        if billingInfo.isManual, let expiration = billingInfo.expiration, let expirationTime = TimeInterval(expiration) {
+            let date = Date(timeIntervalSince1970: expirationTime / 1000)
+            let dateStr = STDateManager.shared.dateToString(date: date, withFormate: .dd_mmm_yyyy)
+            expiryDate = String(format: "storage_expiry_date".localized, dateStr)
+        }
+ 
+        let model = STStorageBildingInfoCell.Model(title: "current_storage".localized, used: used, usedProgress: progress, paymentMethod: paymentMethod, expiryDate: expiryDate)
+        
         let item = Item(item: model, reuseIdentifier: .bildingInfo)
         return Section(type: .bildingInfo, herader: nil, items: [item])
     }
@@ -229,7 +256,8 @@ extension STStorageVC {
     
     func generateProductsHeader() -> Item {
         var model: IStorageItemModel!
-        switch self.period {
+        let period = self.period ?? .yearly
+        switch period {
         case .monthly:
             model = STStoragePeriodHeaderView.Model(description: "billed_monthly".localized, period: "yearly".localized, swich: false, info: "yearly_plan_save".localized)
         case .yearly:

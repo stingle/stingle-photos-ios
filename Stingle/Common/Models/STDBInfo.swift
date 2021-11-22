@@ -62,6 +62,11 @@ class STDBInfo: ICDConvertable {
         self.spaceUsed = "\(used.spaceUsed)"
         self.spaceQuota = used.spaceQuota
     }
+    
+    func update(with spaceQuota: String, spaceUsed: String) {
+        self.spaceUsed = spaceUsed
+        self.spaceQuota = spaceQuota
+    }
 
 }
 

@@ -75,4 +75,11 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
         }
     }
     
+    override func moveInfo(for file: STLibrary.File) -> STMoveAlbumFilesVC.MoveInfo {
+        guard let file = file as? STLibrary.AlbumFile else {
+            fatalError("file is incorrect")
+        }
+        return .albumFiles(album: self.album, files: [file])
+    }
+    
 }
