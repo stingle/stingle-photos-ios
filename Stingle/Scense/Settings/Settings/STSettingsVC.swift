@@ -33,7 +33,9 @@ class STSettingsVC: UIViewController {
 //        let `import` = CellItem(image: UIImage(named: "ic_settings_import")!, title: "import".localized, itemType: .import)
         let appearance = CellItem(image: UIImage(named: "ic_settings_appearance")!, title: "appearance".localized, itemType: .appearance)
         let advanced = CellItem(image: UIImage(named: "ic_settings_advanced")!, title: "advanced".localized, itemType: .advanced)
-        self.items = [account, security, backup, appearance, advanced]
+        let about = CellItem(image: UIImage(named: "ic_settings_about")!, title: "about".localized, itemType: .about)
+        
+        self.items = [account, security, backup, appearance, advanced, about]
     }
     
     //MARK: - Collection view Layout
@@ -141,6 +143,7 @@ extension STSettingsVC {
         case `import`
         case appearance
         case advanced
+        case about
         
         var stID: String {
             switch self {
@@ -156,6 +159,8 @@ extension STSettingsVC {
                 return "STAppearanceVCID"
             case .advanced:
                 return "STAdvancedVCID"
+            case .about:
+                return "STAboutVCID"
             }
         }
         

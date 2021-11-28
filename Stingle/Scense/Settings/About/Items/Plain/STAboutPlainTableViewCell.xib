@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="62" id="KGk-i7-Jjw" customClass="STAboutPlainTableViewCell" customModule="Stingle" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="347" height="62"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="347" height="62"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TXQ-sY-JVA">
+                        <rect key="frame" x="16" y="16" width="42.5" height="30"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                        <color key="textColor" name="STText"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R5J-kh-NNh">
+                        <rect key="frame" x="289.5" y="20.5" width="41.5" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" name="STSecondaryText"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U2Y-ce-nw6">
+                        <rect key="frame" x="16" y="61" width="315" height="1"/>
+                        <color key="backgroundColor" systemColor="secondaryLabelColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="e2e-nW-UUg"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="U2Y-ce-nw6" secondAttribute="bottom" id="4uf-Tw-H7p"/>
+                    <constraint firstItem="TXQ-sY-JVA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="6Qs-Bi-RGb"/>
+                    <constraint firstAttribute="trailing" secondItem="U2Y-ce-nw6" secondAttribute="trailing" constant="16" id="KdL-K3-sxW"/>
+                    <constraint firstItem="R5J-kh-NNh" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="TXQ-sY-JVA" secondAttribute="trailing" constant="20" id="WBJ-sx-UMz"/>
+                    <constraint firstAttribute="bottom" secondItem="TXQ-sY-JVA" secondAttribute="bottom" constant="16" id="XuI-qQ-fHR"/>
+                    <constraint firstItem="TXQ-sY-JVA" firstAttribute="width" secondItem="R5J-kh-NNh" secondAttribute="width" priority="250" id="bB5-I9-hgw"/>
+                    <constraint firstItem="U2Y-ce-nw6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="eSm-Mm-Z67"/>
+                    <constraint firstItem="TXQ-sY-JVA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="hEB-LS-00n"/>
+                    <constraint firstAttribute="trailing" secondItem="R5J-kh-NNh" secondAttribute="trailing" constant="16" id="twv-I7-Fg7"/>
+                    <constraint firstItem="R5J-kh-NNh" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="uBI-IO-0I4"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="subTitleLabel" destination="R5J-kh-NNh" id="iW2-cV-vsb"/>
+                <outlet property="tleLabel" destination="TXQ-sY-JVA" id="cVX-1x-OnM"/>
+            </connections>
+            <point key="canvasLocation" x="157.24637681159422" y="89.732142857142847"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="STSecondaryText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

@@ -48,7 +48,7 @@
 
 "service_busy?" = "Service busy";
 
-"storage_space_used_info" = "%@ MB of %@ (%@%%) used";
+"storage_space_used_info" = "%@ of %@ (%@%%) used";
 
 "alert_error_permission_photos_title" = "Not authorized";
 "alert_error_permission_photos_message" = "Stingle haven't permission your photos. Please check your settings";
@@ -125,8 +125,14 @@
 
 "delete_original_files" = "Delete original files?";
 "alert_delete_original_files_message" = "Do you want to delete original files that you have imported";
-
+"about" = "About";
+"version" = "Version";
 "buy_now" = "Buy now";
+"home" = "Home";
+"legal_policies" = "Legal Policies";
+
+"terms_of_use" = "Terms Of Use";
+"privacy_policy" = "Privacy Policy";
 
 "100_gb" = "100 GB";
 "300_gb" = "300 GB";

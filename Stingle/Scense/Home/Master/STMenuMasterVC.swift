@@ -212,8 +212,11 @@ extension STMenuMasterVC {
             let allSpace = Int64(Float(info.spaceQuota ?? "0") ?? 0)
             let progress: Float = allSpace != 0 ? Float(usedSpace) / Float(allSpace) : 0
             let percent: Int = Int(progress * 100)
-            let allSpaceGB = STBytesUnits(mb: allSpace)
-            let used = String(format: "storage_space_used_info".localized, "\(usedSpace)", allSpaceGB.getReadableUnit(format: ".0f").uppercased(), "\(percent)")
+            
+            let allSpaceGB = STBytesUnits(mb: allSpace).getReadableUnit(format: ".0f").uppercased()
+            let usedSpaceGB = STBytesUnits(mb: usedSpace).getReadableUnit(format: ".0f").uppercased()
+            
+            let used = String(format: "storage_space_used_info".localized, usedSpaceGB, allSpaceGB, "\(percent)")
             let header = Header(appName: appName, userEmail: userEmail, used: used, usedProgress: progress)
             return header
         }

@@ -211,3 +211,22 @@ extension STApplication.Utils  {
     }
     
 }
+
+
+extension STApplication {
+    
+    class var appVersion: String? {
+        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+    }
+    
+    class var urlTermsOfUse: URL! {
+        let link = "https://stingle.org/terms/"
+        return URL(string: link)!
+    }
+    
+    class var urlPrivacyPolicy: URL! {
+        let link = "https://stingle.org/privacy/"
+        return URL(string: link)!
+    }
+    
+}

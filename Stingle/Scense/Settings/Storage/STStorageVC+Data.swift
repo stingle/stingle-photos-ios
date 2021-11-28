@@ -194,7 +194,6 @@ extension STStorageVC {
         
 }
 
-
 extension STStorageVC {
     
     private func calculatePeriod(billingInfo: STBillingInfo) {
@@ -222,9 +221,9 @@ extension STStorageVC {
         let allSpace = billingInfo.spaceQuota
         let progress: Float = allSpace != 0 ? Float(usedSpace) / Float(allSpace) : 0
         let percent: Int = Int(progress * 100)
-        let allSpaceGB = STBytesUnits(mb: Int64(allSpace))
-        let used = String(format: "storage_space_used_info".localized, "\(Int64(usedSpace))", allSpaceGB.getReadableUnit(format: ".0f").uppercased(), "\(percent)")
-        
+        let allSpaceGB = STBytesUnits(mb: Int64(allSpace)).getReadableUnit(format: ".0f").uppercased()
+        let usedSpaceGB = STBytesUnits(mb: Int64(usedSpace)).getReadableUnit(format: ".0f").uppercased()
+        let used = String(format: "storage_space_used_info".localized, usedSpaceGB, allSpaceGB, "\(percent)")
         var paymentMethod: String?
         if let paymentGw = billingInfo.paymentGw {
             paymentMethod = String(format: "storage_payment_method".localized, paymentGw.capitalizingedFirstLetter)

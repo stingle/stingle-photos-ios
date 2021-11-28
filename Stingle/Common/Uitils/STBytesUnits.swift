@@ -52,8 +52,10 @@ struct STBytesUnits: Equatable {
             return "\(String(format: format, kilobytes)) kb"
         case 1_024..<(1_024 * 1_024 * 1_024):
             return "\(String(format: format, megabytes)) mb"
-        case (1_024 * 1_024 * 1_024)...Int64.max:
+        case 1_024..<(1_024 * 1_024 * 1_024 * 1_024):
             return "\(String(format: format, gigabytes)) gb"
+        case (1_024 * 1_024 * 1_024 * 1_024)...Int64.max:
+            return "\(String(format: format, gigabytes)) tb"
         default:
             return "\(bytes) bytes"
         }
