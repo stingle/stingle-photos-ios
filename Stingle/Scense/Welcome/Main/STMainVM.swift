@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import netfox
 import UIKit
 
 class STMainVM {
@@ -20,7 +19,6 @@ class STMainVM {
             return
         }
         STNetworkReachableService.shared.start()
-//        NFX.sharedInstance().start()
         UIDevice.current.isBatteryMonitoringEnabled = true
         end(true)
 	}

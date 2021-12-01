@@ -9,6 +9,5 @@ target 'Stingle' do
   pod 'Sodium'
   pod 'Alamofire'
   pod 'KeychainSwift'
-  pod 'netfox'
 
 end

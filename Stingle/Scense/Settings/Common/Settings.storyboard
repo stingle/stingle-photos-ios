@@ -118,6 +118,7 @@
                         <segue destination="iJr-aw-wlH" kind="show" identifier="STImportVCID" id="dmV-uF-BjT"/>
                         <segue destination="Siw-62-mcb" kind="show" identifier="STAppearanceVCID" id="YRu-Vc-KPI"/>
                         <segue destination="CYR-sX-hNO" kind="show" identifier="STBackupVCID" id="C1P-c8-Pli"/>
+                        <segue destination="Dp4-mn-msq" kind="show" identifier="STAboutVCID" id="B6L-vY-ynG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uQP-3T-DEM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -158,6 +159,41 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FPo-Uw-j6T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1688" y="820"/>
+        </scene>
+        <!--AboutVC-->
+        <scene sceneID="xm7-tj-uLj">
+            <objects>
+                <viewController id="Dp4-mn-msq" customClass="STAboutVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0Za-Yn-cnD">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hmz-cS-FRr">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Dp4-mn-msq" id="yrp-1m-CWy"/>
+                                    <outlet property="delegate" destination="Dp4-mn-msq" id="ZNT-XV-UB2"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="eW2-JF-kgw"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="eW2-JF-kgw" firstAttribute="trailing" secondItem="hmz-cS-FRr" secondAttribute="trailing" id="IyM-H0-mQE"/>
+                            <constraint firstItem="hmz-cS-FRr" firstAttribute="top" secondItem="0Za-Yn-cnD" secondAttribute="top" id="WXP-dD-aZc"/>
+                            <constraint firstAttribute="bottom" secondItem="hmz-cS-FRr" secondAttribute="bottom" id="hzM-7Y-e00"/>
+                            <constraint firstItem="hmz-cS-FRr" firstAttribute="leading" secondItem="eW2-JF-kgw" secondAttribute="leading" id="sq1-V0-B3S"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="grZ-ee-uAE"/>
+                    <connections>
+                        <outlet property="tableView" destination="hmz-cS-FRr" id="0M4-f8-sIR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Y0Z-eT-rmh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2477" y="820"/>
         </scene>
         <!--AccountVC-->
         <scene sceneID="8pZ-6G-EeG">

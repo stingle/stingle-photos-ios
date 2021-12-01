@@ -6,6 +6,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,10 +20,10 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YSW-gD-pSM">
-                        <rect key="frame" x="0.0" y="0.0" width="306" height="115"/>
+                        <rect key="frame" x="0.0" y="0.0" width="306" height="112.5"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="EZy-Wd-aUP">
-                                <rect key="frame" x="0.0" y="12" width="306" height="95"/>
+                                <rect key="frame" x="0.0" y="12" width="306" height="92.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Storage" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="49W-VP-zt1">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="20.5"/>
@@ -31,29 +32,33 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="170 MB of 1 GB (16%) used" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Dnp-Pb-rwW">
-                                        <rect key="frame" x="0.0" y="24.5" width="206.5" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" name="STText"/>
+                                        <rect key="frame" x="0.0" y="24.5" width="186" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" systemColor="secondaryLabelColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b8X-bd-eC2">
-                                        <rect key="frame" x="0.0" y="49" width="306" height="4"/>
+                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="b8X-bd-eC2">
+                                        <rect key="frame" x="0.0" y="46.5" width="306" height="4"/>
                                         <color key="progressTintColor" name="STPrimary"/>
                                         <color key="trackTintColor" name="STPrimaryTransparent"/>
                                     </progressView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="expiry Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="J1W-vN-fOC">
-                                        <rect key="frame" x="0.0" y="57" width="73.5" height="17"/>
+                                        <rect key="frame" x="0.0" y="54.5" width="73.5" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" name="STText"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="payment Method" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="wJB-71-pUy">
-                                        <rect key="frame" x="0.0" y="78" width="109.5" height="17"/>
+                                        <rect key="frame" x="0.0" y="75.5" width="109.5" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" name="STText"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="b8X-bd-eC2" secondAttribute="trailing" id="LAn-Pe-TcK"/>
+                                    <constraint firstItem="b8X-bd-eC2" firstAttribute="leading" secondItem="EZy-Wd-aUP" secondAttribute="leading" id="ljR-2c-nvg"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" name="STBackground"/>
@@ -91,10 +96,13 @@
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STPrimaryTransparent">
-            <color red="0.71799999475479126" green="0.10999999940395355" blue="0.10999999940395355" alpha="0.20000000298023224" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.71799999475479126" green="0.10999999940395355" blue="0.10999999940395355" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

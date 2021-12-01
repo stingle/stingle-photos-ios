@@ -1,28 +1,24 @@
 PODS:
   - Alamofire (5.4.4)
   - KeychainSwift (19.0.0)
-  - netfox (1.19.0)
   - Sodium (0.9.1)
 
 DEPENDENCIES:
   - Alamofire
   - KeychainSwift
-  - netfox
   - Sodium
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - KeychainSwift
-    - netfox
     - Sodium
 
 SPEC CHECKSUMS:
   Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
   KeychainSwift: a06190cf933ad46b1e0abc3d77d29c06331715c7
-  netfox: efeec1d23406df6cd605212f09a40957bb5654eb
   Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
 
-PODFILE CHECKSUM: 22965a1c80075e8cc4c9aa0b5b49437e55a66f6f
+PODFILE CHECKSUM: b028f5ccf6e3449f506d4dc66085a7a512748e2d
 
 COCOAPODS: 1.11.2
