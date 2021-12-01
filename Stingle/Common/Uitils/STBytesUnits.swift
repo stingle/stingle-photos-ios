@@ -39,6 +39,10 @@ struct STBytesUnits: Equatable {
         return megabytes / 1_024
     }
     
+    var tetabytes: Double {
+        return gigabytes / 1_024
+    }
+    
     static var zero: STBytesUnits {
         return STBytesUnits(bytes: .zero)
     }
@@ -55,7 +59,7 @@ struct STBytesUnits: Equatable {
         case 1_024..<(1_024 * 1_024 * 1_024 * 1_024):
             return "\(String(format: format, gigabytes)) gb"
         case (1_024 * 1_024 * 1_024 * 1_024)...Int64.max:
-            return "\(String(format: format, gigabytes)) tb"
+            return "\(String(format: format, tetabytes)) tb"
         default:
             return "\(bytes) bytes"
         }
