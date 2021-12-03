@@ -360,6 +360,7 @@
 "error_maching_passwords" = "Password don't match. Please enter the same password twice correctly";
 
 "error_incorrect_phrase" = "Your recovery phrase is incorrect!";
+"error_import_assets" = "Unable to import %@ files. Please allow access to photo library and import again.";
 
 //MARK: - NETWORK
 

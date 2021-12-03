@@ -44,7 +44,7 @@ class STFileViewerVC: UIViewController {
     }()
     
     private lazy var pickerHelper: STImagePickerHelper = {
-        return STImagePickerHelper(controller: self)
+        return STImagePickerHelper(controller: nil)
     }()
     
     private var currentFile: STLibrary.File? {
@@ -552,8 +552,6 @@ extension STFileViewerVC: INavigationAnimatorDestinationVC {
     }
     
 }
-
-extension STFileViewerVC: STImagePickerHelperDelegate {}
 
 extension STFileViewerVC: IFileViewerDelegate {
    

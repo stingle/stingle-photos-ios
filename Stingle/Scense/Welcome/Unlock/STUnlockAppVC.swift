@@ -15,16 +15,12 @@ class STUnlockAppVC: UIViewController {
     @IBOutlet weak var biometricAuthButton: UIButton!
     
     private var currentViewController: UIViewController?
-    
-    private var pickerHelper: STImagePickerHelper!
-    
     private var viewModel = STUnlockAppVM()
     
     private var showBiometricUnlocer = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.pickerHelper = STImagePickerHelper(controller: self)
         self.configureUi()
     }
     
@@ -144,10 +140,6 @@ class STUnlockAppVC: UIViewController {
             completion?(error)
         }
     }
-    
-}
-
-extension STUnlockAppVC: STImagePickerHelperDelegate {
     
 }
 
