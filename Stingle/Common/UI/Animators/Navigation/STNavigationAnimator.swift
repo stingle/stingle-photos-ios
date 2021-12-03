@@ -129,7 +129,7 @@ extension STNavigationAnimator: STNavigationAnimatorTransitioningOperationDelega
         
     }
     
-    func transitioningOperation(didSEndNavigate transitioningOperation: TransitioningOperation) {
+    func transitioningOperation(didSendNavigate transitioningOperation: TransitioningOperation) {
         if transitioningOperation.operation == .push {
             self.addInteractionGesture(viewController: transitioningOperation.destinationVC, transitioningOperation: transitioningOperation)
         }

@@ -11,7 +11,7 @@ protocol STNavigationAnimatorTransitioningOperationDelegate: AnyObject {
     
     func transitioningOperation(didStartNavigate transitioningOperation: STNavigationAnimator.TransitioningOperation)
     func transitioningOperation(didStartAnimate transitioningOperation: STNavigationAnimator.TransitioningOperation)
-    func transitioningOperation(didSEndNavigate transitioningOperation: STNavigationAnimator.TransitioningOperation)
+    func transitioningOperation(didSendNavigate transitioningOperation: STNavigationAnimator.TransitioningOperation)
     
 }
 
@@ -66,7 +66,7 @@ extension STNavigationAnimator {
         func endTransition(transitionContext: UIViewControllerContextTransitioning) {
             transitionContext.finishInteractiveTransition()
             transitionContext.completeTransition(true)
-            self.delegate?.transitioningOperation(didSEndNavigate: self)
+            self.delegate?.transitioningOperation(didSendNavigate: self)
         }
         
     }

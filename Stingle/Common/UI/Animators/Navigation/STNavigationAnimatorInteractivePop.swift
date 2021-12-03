@@ -47,6 +47,7 @@ extension STNavigationAnimator {
         private func addInteractionGesture() {
             let panGesture = InteractionPanGesture(target: self, action: #selector(interactionDismiss(panGesture:)))
             panGesture.userInfo = self
+            panGesture.delegate = self
             self.panGesture = panGesture
             self.destinationVC.view.addGestureRecognizer(panGesture)
         }
@@ -90,7 +91,7 @@ extension STNavigationAnimator {
         
         private func interactionGestureDidCancelled(velocity: CGFloat? = nil) {
             guard let animatedPreview = self.dataSource?.animatedPreview, let translationCenter = self.translationCenter, let transitionContext = self.transitionContext else {
-                print("interactionGestureDidCancelled fffff")
+                print("interactionGestureDidCancelled error")
                 return
             }
             let animationTime = self.dataSource?.animationTime ?? 0.3
@@ -163,7 +164,7 @@ extension STNavigationAnimator {
                 self.isInteractionDismiss = false
             default:
                 self.isInteractionDismiss = false
-                print("interactionDismiss Cancelled fffff")
+                print("interactionDismiss Cancelled error")
                 self.interactionGestureDidCancelled()
                 break
             }
@@ -188,6 +189,25 @@ extension STNavigationAnimator.TransitioningOperationInteractivePop {
     
     fileprivate class InteractionPanGesture: UIPanGestureRecognizer  {
         var userInfo: AnyObject?
+    }
+    
+}
+
+
+extension STNavigationAnimator.TransitioningOperationInteractivePop: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+//        let isPan = otherGestureRecognizer is UIPanGestureRecognizer
+//
+//        if isPan {
+//
+//            var m = otherGestureRecognizer.view
+//
+//            print("")
+//        }
+        
+        return false
     }
     
 }
