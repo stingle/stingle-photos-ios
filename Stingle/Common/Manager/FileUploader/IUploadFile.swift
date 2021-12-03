@@ -87,7 +87,7 @@ extension STFileUploader {
                 return
             }
             self.asset.requestGetThumb { [weak self] (thumb) in
-                guard let thumb = thumb, let thumbData = thumb.pngData() else {
+                guard let thumb = thumb, let thumbData = thumb.jpegData(compressionQuality: 0.7) else {
                     failure(STFileUploader.UploaderError.phAssetNotValid)
                     return
                 }
@@ -143,8 +143,6 @@ extension STFileUploader {
     }
     
 }
-
-
 
 private extension PHAsset {
         

@@ -73,7 +73,7 @@ extension STNavigationAnimator {
         
         private func interactionGestureDidChanged() {
             guard let animatedPreview = self.dataSource?.animatedPreview, let panGesture = self.panGesture else {
-                print("interactionGestureDidChanged fffff")
+                print("interactionGestureDidChanged error")
                 self.interactionGestureDidCancelled(velocity: nil)
                 return
             }
