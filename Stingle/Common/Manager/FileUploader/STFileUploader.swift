@@ -100,6 +100,7 @@ class STFileUploader {
         
         var localFiles = dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
         let localAlbumFiles = dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")
+        let trashPFiles = dataBase.trashProvider.fetchObjects(format: "isRemote == false")
         
         let albumIds: [String] = localAlbumFiles.compactMap( { return $0.albumId } )
         let albums: [STLibrary.Album] = dataBase.albumsProvider.fetch(identifiers: albumIds)
@@ -114,7 +115,10 @@ class STFileUploader {
                 albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)
             }
         }
+        
         localFiles.append(contentsOf: localAlbumFiles)
+        localFiles.append(contentsOf: trashPFiles)
+        
         return localFiles
     }
     
@@ -191,6 +195,8 @@ class STFileUploader {
         if file.isRemote {
             if let albumFile = file as? STLibrary.AlbumFile {
                 STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: true)
+            } else if let trashFile = file as? STLibrary.TrashFile {
+                STApplication.shared.dataBase.trashProvider.update(models: [trashFile], reloadData: true)
             } else {
                 STApplication.shared.dataBase.galleryProvider.update(models: [file], reloadData: true)
             }
