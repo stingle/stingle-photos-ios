@@ -19,7 +19,7 @@ protocol STZoomViewDelegate: AnyObject {
     
 }
 
-class STZoomView: UIView, UIGestureRecognizerDelegate {
+class STZoomView: UIView {
  
     private var isSetupScrollZoomView = false
     private var scrollView: UIScrollView!
@@ -117,14 +117,12 @@ class STZoomView: UIView, UIGestureRecognizerDelegate {
         guard let old = self.oldContentViewSize, let new = self.contentViewSize else {
             return
         }
-        
-        var oldR = old.height != .zero ? old.width / old.height : .zero
-        var newR = new.height != .zero ? new.width / new.height : .zero
-        
-        oldR = round(oldR * 10) / 10.0
-        newR = round(newR * 10) / 10.0
-        
-        if oldR != newR {
+        let oldR = old.height != .zero ? old.width / old.height : .zero
+        let newR = new.height != .zero ? new.width / new.height : .zero
+        var diff = abs(oldR - newR)
+        diff = round(diff * 1000) / 1000.0
+
+        if diff > 0.05 {
             self.resetScrollSizes()
         }
 
@@ -138,7 +136,7 @@ class STZoomView: UIView, UIGestureRecognizerDelegate {
     }
     
     private func addScrollView() {
-        self.scrollView = UIScrollView(frame: self.bounds)
+        self.scrollView = ScrollView(frame: self.bounds)
         self.scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.scrollView.showsVerticalScrollIndicator = false
         self.scrollView.showsHorizontalScrollIndicator = false
@@ -152,6 +150,7 @@ class STZoomView: UIView, UIGestureRecognizerDelegate {
         self.scrollView.maximumZoomScale = self.maximumZoomScale
         self.scrollView.zoomScale = self.scrollView.minimumZoomScale
         self.scrollView.contentInsetAdjustmentBehavior = .never
+        
     }
     
     private func setupTapGesture()  {
@@ -244,7 +243,7 @@ class STZoomView: UIView, UIGestureRecognizerDelegate {
                 self.scrollView.zoomScale = newZoom
                 self.scrollView.minimumZoomScale = scale * self.scrollView.minimumZoomScale
                 self.scrollView.maximumZoomScale = self.maximumZoomScale * scale * self.scrollView.minimumZoomScale
-            }else {
+            } else {
                 self.scrollView.maximumZoomScale = self.maximumZoomScale * scale * self.scrollView.minimumZoomScale
                 self.scrollView.minimumZoomScale = scale * self.scrollView.minimumZoomScale
                 self.scrollView.zoomScale = newZoom
@@ -256,6 +255,18 @@ class STZoomView: UIView, UIGestureRecognizerDelegate {
 
 }
 
+extension STZoomView {
+    
+    class ScrollView: UIScrollView, UIGestureRecognizerDelegate {
+                
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            return self.zoomScale == self.minimumZoomScale
+        }
+        
+    }
+    
+    
+}
 
 extension STZoomView: UIScrollViewDelegate {
     

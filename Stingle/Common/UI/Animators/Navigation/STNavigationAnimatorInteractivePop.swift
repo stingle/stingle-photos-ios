@@ -47,7 +47,6 @@ extension STNavigationAnimator {
         private func addInteractionGesture() {
             let panGesture = InteractionPanGesture(target: self, action: #selector(interactionDismiss(panGesture:)))
             panGesture.userInfo = self
-            panGesture.delegate = self
             self.panGesture = panGesture
             self.destinationVC.view.addGestureRecognizer(panGesture)
         }
@@ -189,25 +188,6 @@ extension STNavigationAnimator.TransitioningOperationInteractivePop {
     
     fileprivate class InteractionPanGesture: UIPanGestureRecognizer  {
         var userInfo: AnyObject?
-    }
-    
-}
-
-
-extension STNavigationAnimator.TransitioningOperationInteractivePop: UIGestureRecognizerDelegate {
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        
-//        let isPan = otherGestureRecognizer is UIPanGestureRecognizer
-//
-//        if isPan {
-//
-//            var m = otherGestureRecognizer.view
-//
-//            print("")
-//        }
-        
-        return false
     }
     
 }
