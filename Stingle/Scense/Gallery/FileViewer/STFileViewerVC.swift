@@ -309,7 +309,7 @@ class STFileViewerVC: UIViewController {
 
 
 extension STFileViewerVC {
-    
+
     static func create(galery sortDescriptorsKeys: [STDataBase.DataSource<STCDFile>.Sort], predicate: NSPredicate?, file: STLibrary.File) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
@@ -445,7 +445,14 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
                 result.append(trash)
             }
         }
-        
+
+        let edit = STFilesActionTabBarAccessoryView.ActionItem(title: "edit", image: nil, tintColor: .blue, handler: { _, _ in
+            let vc = STImageFilterVC.create(photoFile: self.initialFile)
+            self.show(vc, sender: nil)
+        }, identifier: nil)
+
+        result.append(edit)
+
         return result
         
     }

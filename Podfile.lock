@@ -1,24 +1,30 @@
 PODS:
   - Alamofire (5.4.4)
   - KeychainSwift (19.0.0)
+  - MetalPetal/Core (1.23.0)
+  - MetalPetal/Swift (1.23.0):
+    - MetalPetal/Core
   - Sodium (0.9.1)
 
 DEPENDENCIES:
   - Alamofire
   - KeychainSwift
+  - MetalPetal/Swift
   - Sodium
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - KeychainSwift
+    - MetalPetal
     - Sodium
 
 SPEC CHECKSUMS:
   Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
   KeychainSwift: a06190cf933ad46b1e0abc3d77d29c06331715c7
+  MetalPetal: 006266db17a9bc070039828e356fb87bd4696cfa
   Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
 
-PODFILE CHECKSUM: b028f5ccf6e3449f506d4dc66085a7a512748e2d
+PODFILE CHECKSUM: b70ec27df378d9a4916a643f1c50e931ebd647b6
 
 COCOAPODS: 1.11.2
