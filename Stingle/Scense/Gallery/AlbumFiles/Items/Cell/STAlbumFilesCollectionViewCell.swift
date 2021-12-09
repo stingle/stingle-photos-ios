@@ -42,8 +42,9 @@ class STAlbumFilesCollectionViewCell: UICollectionViewCell, ISelectionCollection
         self.videoDurationLabel.text = viewItem?.videoDuration
         self.videoInfoBgView.isHidden = viewItem?.videoDuration == nil
         self.icRemoteImageView.isHidden = viewItem?.isRemote ?? false
-        self.checkMarkImageView.isHidden = !(viewItem?.selectedMode ?? true)
+        
         self.setSelected(isSelected: self.isSelected)
+        self.setSelectedMode(mode: (viewItem?.selectedMode ?? false))
     }
     
     func setSelected(isSelected: Bool) {

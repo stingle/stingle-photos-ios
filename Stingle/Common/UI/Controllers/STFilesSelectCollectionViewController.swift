@@ -29,6 +29,11 @@ class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceView
             return
         }
         self.isSelectionMode = isSelectionMode
+        
+        self.collectionView.indexPathsForSelectedItems?.forEach({ indexPath in
+            self.collectionView.deselectItem(at: indexPath, animated: true)
+        })
+        
         self.collectionView.allowsSelection = true
         self.collectionView.allowsMultipleSelection = false
         self.collectionView.allowsMultipleSelectionDuringEditing = isSelectionMode
@@ -39,6 +44,8 @@ class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceView
         self.collectionView.indexPathsForVisibleItems.forEach { indexPath in
             self.dataSource.cell(for: indexPath)?.setSelectedMode(mode: isSelectionMode)
         }
+        
+        
                 
     }
     

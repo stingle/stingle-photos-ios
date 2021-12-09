@@ -33,12 +33,21 @@ class STTrashCollectionViewCell: UICollectionViewCell, ISelectionCollectionViewC
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.isSelected = false
+        self.setSelected(isSelected: false)
+    }
+    
     func configure(model viewItem: STTrashVC.CellModel?) {
         self.imageView.setImage(viewItem?.image, placeholder: nil)
         self.videoDurationLabel.text = viewItem?.videoDuration
         self.videoInfoBgView.isHidden = viewItem?.videoDuration == nil
         self.icRemoteImageView.isHidden = viewItem?.isRemote ?? false
-        self.checkMarkImageView.isHidden = !(viewItem?.selectedMode ?? true)
+        
+        self.setSelected(isSelected: self.isSelected)
+        self.setSelectedMode(mode: (viewItem?.selectedMode ?? false))
+        
     }
     
     func setSelected(isSelected: Bool) {
