@@ -80,7 +80,7 @@ extension STAlbumFilesVC {
         
 }
 
-class STAlbumFilesVC: STFilesSelectionViewController<STAlbumFilesVC.ViewModel> {
+class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewModel> {
     
     @IBOutlet weak private var addItemButton: UIButton!
     @IBOutlet weak private var selectButtonItem: UIBarButtonItem!

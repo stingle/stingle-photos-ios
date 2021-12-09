@@ -1,0 +1,101 @@
+//
+//  STFilesSelectCollectionViewController.swift
+//  Stingle
+//
+//  Created by Khoren Asatryan on 12/10/21.
+//
+
+import UIKit
+
+protocol ISelectionCollectionViewCell: IViewDataSourceCell {
+    func setSelectedMode(mode: Bool)
+}
+
+class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceViewModel>: STFilesViewController<ViewModel>, UICollectionViewDelegate where ViewModel.Cell: ISelectionCollectionViewCell {
+    
+    private(set) var isSelectionMode = true
+    private(set) var selectionObjectsIdentifiers = Set<String>()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setSelectionMode(isSelectionMode: false)
+        self.configureSelectionMode()
+    }
+    
+    //MARK: - Public methods
+    
+    func setSelectionMode(isSelectionMode: Bool) {
+        guard self.isSelectionMode != isSelectionMode else {
+            return
+        }
+        self.isSelectionMode = isSelectionMode
+        self.collectionView.allowsSelection = true
+        self.collectionView.allowsMultipleSelection = false
+        self.collectionView.allowsMultipleSelectionDuringEditing = isSelectionMode
+        
+        self.selectionObjectsIdentifiers.removeAll()
+        self.collectionView.isEditing = isSelectionMode
+        
+        self.collectionView.indexPathsForVisibleItems.forEach { indexPath in
+            self.dataSource.cell(for: indexPath)?.setSelectedMode(mode: isSelectionMode)
+        }
+                
+    }
+    
+    func collectionView(didSelectItemAt indexPath: IndexPath) {
+        //Implement chid classes
+    }
+    
+    func collectionView(didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        //Implement chid classes
+    }
+    
+    func collectionViewDidEndMultipleSelectionInteraction() {
+        //Implement chid classes
+    }
+    
+    func updatedSelect(for indexPath: IndexPath, isSlected: Bool) {
+        guard let identifier = self.dataSource.object(at: indexPath)?.identifier else {
+            return
+        }
+        if isSlected {
+            self.selectionObjectsIdentifiers.insert(identifier)
+        } else {
+            self.selectionObjectsIdentifiers.remove(identifier)
+        }
+    }
+
+    //MARK: - Private methods
+    
+    private func configureSelectionMode() {
+        self.collectionView.delegate = self
+    }
+        
+    //MARK: - UICollectionViewDelegate
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if self.isSelectionMode {
+            self.updatedSelect(for: indexPath, isSlected: true)
+        }
+        self.collectionView(didSelectItemAt: indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if self.isSelectionMode {
+            self.updatedSelect(for: indexPath, isSlected: false)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        self.collectionView(didBeginMultipleSelectionInteractionAt: indexPath)
+    }
+    
+    func collectionViewDidEndMultipleSelectionInteraction(_ collectionView: UICollectionView) {
+        self.collectionViewDidEndMultipleSelectionInteraction()
+    }
+
+}

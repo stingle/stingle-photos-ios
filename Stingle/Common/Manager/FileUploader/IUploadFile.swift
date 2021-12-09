@@ -221,7 +221,7 @@ private extension PHAsset {
         let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
         options.isNetworkAccessAllowed = true
         options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData) -> Bool in
-            return true
+            return false
         }
                 
         let modificationDate = self.modificationDate

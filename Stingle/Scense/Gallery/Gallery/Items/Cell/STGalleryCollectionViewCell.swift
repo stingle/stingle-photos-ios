@@ -7,8 +7,8 @@
 
 import UIKit
 
-class STGalleryCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
-    
+class STGalleryCollectionViewCell: UICollectionViewCell, ISelectionCollectionViewCell {
+        
     @IBOutlet weak private var icRemoteImageView: UIImageView!
     @IBOutlet weak private var checkMarkImageView: UIImageView!
     @IBOutlet weak private var videoDurationLabel: UILabel!
@@ -49,6 +49,10 @@ class STGalleryCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
     func setSelected(isSelected: Bool) {
         let image = isSelected ? UIImage(named: "ic_mark") : UIImage(named: "ic_un_mark")
         self.checkMarkImageView.image = image
+    }
+    
+    func setSelectedMode(mode: Bool) {
+        self.checkMarkImageView.isHidden = !mode
     }
     
 }

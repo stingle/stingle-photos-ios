@@ -7,8 +7,8 @@
 
 import UIKit
 
-class STTrashCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
-   
+class STTrashCollectionViewCell: UICollectionViewCell, ISelectionCollectionViewCell {
+
     typealias Model = STTrashVC.CellModel
 
     @IBOutlet weak private var icRemoteImageView: UIImageView!
@@ -44,6 +44,10 @@ class STTrashCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
     func setSelected(isSelected: Bool) {
         let image = isSelected ? UIImage(named: "ic_mark") : UIImage(named: "ic_un_mark")
         self.checkMarkImageView.image = image
+    }
+    
+    func setSelectedMode(mode: Bool) {
+        self.checkMarkImageView.isHidden = !mode
     }
     
 }

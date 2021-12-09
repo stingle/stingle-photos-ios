@@ -38,7 +38,7 @@ class STViewDataSource<Model: IManagedObject>: NSObject, IViewDataSource, IProvi
     func indexPath(at object: Model.Model) -> IndexPath? {
         return self.dbDataSource.indexPath(forObject: object)
     }
-    
+        
     //MARK: Internal
     
     func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {}

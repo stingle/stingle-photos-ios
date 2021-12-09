@@ -152,30 +152,40 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
                 return
             }
             weakSelf.delegate?.dataSource(didApplySnapshot: weakSelf)
-            self?.isReloadingCollectionView = false
+            weakSelf.isReloadingCollectionView = false
         }
     }
     
     //MARK: - Public
+    
+    func cellModel(at indexPath: IndexPath) -> Cell.Model? {
+        guard let object = self.object(at: indexPath) else {
+            return nil
+        }
+        let cellModel = self.viewModel.cellModel(for: indexPath, data: object)
+        return cellModel
+    }
     
     func reloadCollection() {
         self.collectionView.reloadData()
     }
     
     func reloadCollectionVisibleCells() {
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(endReloadCollectionVisibleCells), object: nil)
-        guard !self.isReloadingCollectionView else {
-            self.perform(#selector(endReloadCollectionVisibleCells), with: nil, afterDelay: 0.2)
-            return
+        self.collectionView.indexPathsForVisibleItems.forEach { indexPath in
+            if let model = self.cellModel(at: indexPath), let cell = self.collectionView.cellForItem(at: indexPath) as? Cell {
+                cell.configure(model: model)
+            }
         }
-        self.endReloadCollectionVisibleCells()
+    }
+    
+    func cell(for indexPath: IndexPath) -> Cell? {
+        return self.collectionView.cellForItem(at: indexPath) as? Cell
     }
     
     func cellFor(collectionView: UICollectionView, indexPath: IndexPath, data: Any) -> Cell? {
-        guard let object = self.object(at: indexPath) else {
+        guard let cellModel = self.cellModel(at: indexPath) else {
             fatalError("object not found")
         }
-        let cellModel = self.viewModel.cellModel(for: indexPath, data: object)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellModel.identifier.identifier, for: indexPath) as! Cell
         cell.configure(model: cellModel)
         self.delegate?.dataSource(didConfigureCell: self, cell: cell)

@@ -76,7 +76,7 @@ extension STGalleryVC {
         
 }
 
-class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
+class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> {
         
     @IBOutlet weak private var syncBarButtonItem: UIBarButtonItem!
     @IBOutlet weak private var syncView: STGallerySyncView!
