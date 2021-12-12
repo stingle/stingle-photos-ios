@@ -76,6 +76,12 @@ class STFileUploader {
         }
     }
     
+    func cancelUploadIng(for files: [STLibrary.File]) {
+        files.forEach { file in
+            self.cancelUploadIng(for: file)
+        }
+    }
+    
     func cancelUploadIng(for file: STLibrary.File) {
         for operation in self.operationQueue.allOperations() {
             if let operation = operation as? Operation, operation.libraryFile?.identifier == file.identifier {
@@ -214,6 +220,7 @@ extension STFileUploader {
             guard let weakSelf = self else {
                 return
             }
+                        
             weakSelf.observer.forEach { (observer) in
                 observer.fileUploader(didUpdateProgress: weakSelf, uploadInfo: uploadInfo, files: files)
             }
@@ -227,6 +234,7 @@ extension STFileUploader {
             guard let weakSelf = self else {
                 return
             }
+                        
             weakSelf.observer.forEach { (observer) in
                 observer.fileUploader(didEndSucces: weakSelf, file: file, uploadInfo: uploadInfo)
             }
@@ -240,6 +248,7 @@ extension STFileUploader {
             guard let weakSelf = self else {
                 return
             }
+                        
             weakSelf.observer.forEach { (observer) in
                 observer.fileUploader(didEndFailed: weakSelf, file: file, error: error, uploadInfo: uploadInfo)
             }
@@ -362,6 +371,7 @@ extension STFileUploader {
         case fileSystemNotValid
         case wrongStorageSize
         case fileNotFound
+        case canceled
         case error(error: Error)
         
         var message: String {
@@ -374,6 +384,8 @@ extension STFileUploader {
                 return "storage_size_isover".localized
             case .fileNotFound:
                 return "error_data_not_found".localized
+            case .canceled:
+                return "error_canceled".localized
             case .error(let error):
                 if let iError = error as? IError {
                     return iError.message

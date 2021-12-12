@@ -178,6 +178,28 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         }
     }
     
+    func reload(indexPaths: [IndexPath], animating: Bool, completion: (() -> Void)? = nil) {
+        let snapshot = self.dataSourceReference.snapshot()
+        var identifiers = [Any]()
+        indexPaths.forEach { indexPath in
+            if let identifier = self.dataSourceReference.itemIdentifier(for: indexPath) {
+                identifiers.append(identifier)
+            }
+        }
+        snapshot.reloadItems(withIdentifiers: identifiers)
+        self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: animating) {
+            completion?()
+        }
+    }
+    
+    func reload(animating: Bool, completion: (() -> Void)? = nil) {
+        let snapshot = self.dataSourceReference.snapshot()
+        snapshot.reloadItems(withIdentifiers: snapshot.itemIdentifiers)
+        self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: animating) {
+            completion?()
+        }
+    }
+    
     func cell(for indexPath: IndexPath) -> Cell? {
         return self.collectionView.cellForItem(at: indexPath) as? Cell
     }

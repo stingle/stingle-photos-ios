@@ -13,12 +13,11 @@ protocol ISelectionCollectionViewCell: IViewDataSourceCell {
 
 class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceViewModel>: STFilesViewController<ViewModel>, UICollectionViewDelegate where ViewModel.Cell: ISelectionCollectionViewCell {
     
-    private(set) var isSelectionMode = true
+    private(set) var isSelectionMode = false
     private(set) var selectionObjectsIdentifiers = Set<String>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setSelectionMode(isSelectionMode: false)
         self.configureSelectionMode()
     }
     
@@ -29,24 +28,16 @@ class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceView
             return
         }
         self.isSelectionMode = isSelectionMode
-        
-        self.collectionView.indexPathsForSelectedItems?.forEach({ indexPath in
-            self.collectionView.deselectItem(at: indexPath, animated: true)
-        })
-        
-        self.collectionView.allowsSelection = true
-        self.collectionView.allowsMultipleSelection = false
-        self.collectionView.allowsMultipleSelectionDuringEditing = isSelectionMode
-        
         self.selectionObjectsIdentifiers.removeAll()
+        
         self.collectionView.isEditing = isSelectionMode
-        
-        self.collectionView.indexPathsForVisibleItems.forEach { indexPath in
-            self.dataSource.cell(for: indexPath)?.setSelectedMode(mode: isSelectionMode)
+        self.dataSource.reload(animating: true)
+        if !isSelectionMode {
+            self.collectionView.indexPathsForSelectedItems?.forEach( { indexPath in
+                self.collectionView.deselectItem(at: indexPath, animated: true)
+            })
         }
-        
-        
-                
+                        
     }
     
     func collectionView(didSelectItemAt indexPath: IndexPath) {
@@ -76,6 +67,10 @@ class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceView
     
     private func configureSelectionMode() {
         self.collectionView.delegate = self
+        
+        self.collectionView.allowsSelection = true
+        self.collectionView.allowsMultipleSelection = false
+        self.collectionView.allowsMultipleSelectionDuringEditing = true
     }
         
     //MARK: - UICollectionViewDelegate

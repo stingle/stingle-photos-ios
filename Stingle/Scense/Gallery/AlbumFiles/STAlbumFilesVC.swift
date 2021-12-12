@@ -716,7 +716,6 @@ extension STAlbumFilesVC: INavigationAnimatorSourceVC {
     }
     
     func navigationAnimator(sourceView animator: STNavigationAnimator.TransitioningOperation, sendnerItem sendner: Any?) -> INavigationAnimatorSourceView? {
-        
         guard let selectedItem = sendner as? STLibrary.AlbumFile, let indexPath = self.dataSource.indexPath(at: selectedItem) else {
             return nil
         }

@@ -152,7 +152,6 @@ class STFileViewerVC: UIViewController {
             self.toolBar.isHidden = false
             self.toolBar.addSubviewFullContent(view: self.accessoryView)
         }
-        
     }
         
     private func setupTavigationTitle() {

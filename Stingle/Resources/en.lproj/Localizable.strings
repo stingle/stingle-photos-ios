@@ -356,6 +356,7 @@
 "error_incorrect_confirm_password" = "Confirm  passwordnot valid";
 
 "error_data_not_found" = "Data not found";
+"error_canceled" = "Canceled";
 
 "error_maching_passwords" = "Password don't match. Please enter the same password twice correctly";
 
