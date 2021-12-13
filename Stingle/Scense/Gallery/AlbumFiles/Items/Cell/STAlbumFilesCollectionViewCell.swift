@@ -7,8 +7,8 @@
 
 import UIKit
 
-class STAlbumFilesCollectionViewCell: UICollectionViewCell, IViewDataSourceCell {
-
+class STAlbumFilesCollectionViewCell: UICollectionViewCell, ISelectionCollectionViewCell {
+    
     @IBOutlet weak private var checkMarkImageView: UIImageView!
     @IBOutlet weak private var icRemoteImageView: UIImageView!
     @IBOutlet weak private var videoDurationLabel: UILabel!
@@ -42,13 +42,18 @@ class STAlbumFilesCollectionViewCell: UICollectionViewCell, IViewDataSourceCell 
         self.videoDurationLabel.text = viewItem?.videoDuration
         self.videoInfoBgView.isHidden = viewItem?.videoDuration == nil
         self.icRemoteImageView.isHidden = viewItem?.isRemote ?? false
-        self.checkMarkImageView.isHidden = !(viewItem?.selectedMode ?? true)
+        
         self.setSelected(isSelected: self.isSelected)
+        self.setSelectedMode(mode: (viewItem?.selectedMode ?? false))
     }
     
     func setSelected(isSelected: Bool) {
         let image = isSelected ? UIImage(named: "ic_mark") : UIImage(named: "ic_un_mark")
         self.checkMarkImageView.image = image
+    }
+    
+    func setSelectedMode(mode: Bool) {
+        self.checkMarkImageView.isHidden = !mode
     }
     
 }

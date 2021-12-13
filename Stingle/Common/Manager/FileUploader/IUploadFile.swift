@@ -87,7 +87,7 @@ extension STFileUploader {
                 return
             }
             self.asset.requestGetThumb { [weak self] (thumb) in
-                guard let thumb = thumb, let thumbData = thumb.pngData() else {
+                guard let thumb = thumb, let thumbData = thumb.jpegData(compressionQuality: 0.7) else {
                     failure(STFileUploader.UploaderError.phAssetNotValid)
                     return
                 }
@@ -137,14 +137,11 @@ extension STFileUploader {
             let file = try STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, albumId: self.album.albumId, managedObjectID: nil)
             file.updateIfNeeded(albumMetadata: self.album.albumMetadata)
             return file
-            
         }
         
     }
     
 }
-
-
 
 private extension PHAsset {
         
@@ -224,7 +221,7 @@ private extension PHAsset {
         let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
         options.isNetworkAccessAllowed = true
         options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData) -> Bool in
-            return true
+            return false
         }
                 
         let modificationDate = self.modificationDate

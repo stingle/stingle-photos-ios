@@ -80,7 +80,7 @@ extension STAlbumFilesVC {
         
 }
 
-class STAlbumFilesVC: STFilesSelectionViewController<STAlbumFilesVC.ViewModel> {
+class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewModel> {
     
     @IBOutlet weak private var addItemButton: UIButton!
     @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
@@ -461,14 +461,12 @@ class STAlbumFilesVC: STFilesSelectionViewController<STAlbumFilesVC.ViewModel> {
         let shearing = STFilesDownloaderActivityVC.DownloadFiles.albumFiles(album: self.album, files: files)
         STFilesDownloaderActivityVC.showActivity(downloadingFiles: shearing, controller: self.tabBarController ?? self, delegate: self, userInfo: action)
     }
-        
-}
-
-extension STAlbumFilesVC: STImagePickerHelperDelegate {
     
-    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
+    private func `import`(assets: [PHAsset]) {
+        guard !assets.isEmpty else {
+            return
+        }
         let importer = self.viewModel.upload(assets: assets)
-        
         let progressView = STProgressView()
         progressView.title = "importing".localized
         
@@ -503,7 +501,21 @@ extension STAlbumFilesVC: STImagePickerHelperDelegate {
                 self?.showDeleteOriginalFiles(assets: assets)
             })
         }
+    }
         
+}
+
+extension STAlbumFilesVC: STImagePickerHelperDelegate {
+    
+    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset], failedAssetCount: Int) {
+        guard failedAssetCount > .zero else {
+            self.import(assets: assets)
+            return
+        }
+        let message = String(format: "error_import_assets".localized, "\(failedAssetCount)")
+        self.showInfoAlert(title: "warning".localized, message: message, cancel: false) {
+            self.import(assets: assets)
+        }
     }
     
 }
@@ -704,7 +716,6 @@ extension STAlbumFilesVC: INavigationAnimatorSourceVC {
     }
     
     func navigationAnimator(sourceView animator: STNavigationAnimator.TransitioningOperation, sendnerItem sendner: Any?) -> INavigationAnimatorSourceView? {
-        
         guard let selectedItem = sendner as? STLibrary.AlbumFile, let indexPath = self.dataSource.indexPath(at: selectedItem) else {
             return nil
         }

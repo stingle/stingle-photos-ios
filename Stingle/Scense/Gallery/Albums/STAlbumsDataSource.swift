@@ -30,7 +30,7 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
         self.viewModel.delegate = self
         STApplication.shared.dataBase.albumFilesProvider.add(self)
     }
-    
+        
     override func didChangeContent(with snapshot: NSDiffableDataSourceSnapshotReference) {
         self.albumInfoFiles.removeAll()
         super.didChangeContent(with: snapshot)

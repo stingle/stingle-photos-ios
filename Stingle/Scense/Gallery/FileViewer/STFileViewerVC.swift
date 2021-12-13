@@ -44,7 +44,7 @@ class STFileViewerVC: UIViewController {
     }()
     
     private lazy var pickerHelper: STImagePickerHelper = {
-        return STImagePickerHelper(controller: self)
+        return STImagePickerHelper(controller: nil)
     }()
     
     private var currentFile: STLibrary.File? {
@@ -152,7 +152,6 @@ class STFileViewerVC: UIViewController {
             self.toolBar.isHidden = false
             self.toolBar.addSubviewFullContent(view: self.accessoryView)
         }
-        
     }
         
     private func setupTavigationTitle() {
@@ -487,35 +486,32 @@ extension STFileViewerVC: STFileViewerVMDelegate {
         if let initialFile = self.initialFile, self.currentIndex == nil {
             self.currentIndex = self.viewModel.index(at: initialFile)
         }
-        
+
         guard let currentIndex = self.currentIndex else {
             self.navigationController?.popViewController(animated: true)
             return
         }
-      
+
         guard let file = self.currentFileViewer?.file else {
             return
         }
         
-        guard let index = self.viewModel.index(at: file) else {
-            return
-        }
+        let index = self.viewModel.index(at: file)
         
-        guard index == NSNotFound else {
-            if let currentFileViewer = self.currentFileViewer {
-                currentFileViewer.fileIndex = index
+        if index == nil || index == NSNotFound {
+            if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex)  {
+                self.pageViewController.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
+            } else if currentIndex - 1 < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex - 1) {
+                self.currentIndex = currentIndex - 1
+                self.pageViewController.setViewControllers([vc], direction: .reverse, animated: true, completion: nil)
+            } else {
+                self.navigationController?.popViewController(animated: true)
+            }
+        } else if let index = index, let currentFileViewer = self.currentFileViewer {
+            currentFileViewer.fileIndex = index
+            if self.pageViewController.viewControllers?.count != 1 {
                 self.pageViewController.setViewControllers([currentFileViewer], direction: .forward, animated: false, completion: nil)
             }
-            return
-        }
-        
-        if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex)  {
-            self.pageViewController.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
-        } else if currentIndex - 1 < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex - 1) {
-            self.currentIndex = currentIndex - 1
-            self.pageViewController.setViewControllers([vc], direction: .reverse, animated: true, completion: nil)
-        } else {
-            self.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -552,8 +548,6 @@ extension STFileViewerVC: INavigationAnimatorDestinationVC {
     }
     
 }
-
-extension STFileViewerVC: STImagePickerHelperDelegate {}
 
 extension STFileViewerVC: IFileViewerDelegate {
    

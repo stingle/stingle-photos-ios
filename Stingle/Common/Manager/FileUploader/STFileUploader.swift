@@ -76,6 +76,12 @@ class STFileUploader {
         }
     }
     
+    func cancelUploadIng(for files: [STLibrary.File]) {
+        files.forEach { file in
+            self.cancelUploadIng(for: file)
+        }
+    }
+    
     func cancelUploadIng(for file: STLibrary.File) {
         for operation in self.operationQueue.allOperations() {
             if let operation = operation as? Operation, operation.libraryFile?.identifier == file.identifier {
@@ -100,6 +106,7 @@ class STFileUploader {
         
         var localFiles = dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
         let localAlbumFiles = dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")
+        let trashPFiles = dataBase.trashProvider.fetchObjects(format: "isRemote == false")
         
         let albumIds: [String] = localAlbumFiles.compactMap( { return $0.albumId } )
         let albums: [STLibrary.Album] = dataBase.albumsProvider.fetch(identifiers: albumIds)
@@ -114,7 +121,10 @@ class STFileUploader {
                 albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)
             }
         }
+        
         localFiles.append(contentsOf: localAlbumFiles)
+        localFiles.append(contentsOf: trashPFiles)
+        
         return localFiles
     }
     
@@ -191,6 +201,8 @@ class STFileUploader {
         if file.isRemote {
             if let albumFile = file as? STLibrary.AlbumFile {
                 STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: true)
+            } else if let trashFile = file as? STLibrary.TrashFile {
+                STApplication.shared.dataBase.trashProvider.update(models: [trashFile], reloadData: true)
             } else {
                 STApplication.shared.dataBase.galleryProvider.update(models: [file], reloadData: true)
             }
@@ -208,6 +220,7 @@ extension STFileUploader {
             guard let weakSelf = self else {
                 return
             }
+                        
             weakSelf.observer.forEach { (observer) in
                 observer.fileUploader(didUpdateProgress: weakSelf, uploadInfo: uploadInfo, files: files)
             }
@@ -221,6 +234,7 @@ extension STFileUploader {
             guard let weakSelf = self else {
                 return
             }
+                        
             weakSelf.observer.forEach { (observer) in
                 observer.fileUploader(didEndSucces: weakSelf, file: file, uploadInfo: uploadInfo)
             }
@@ -234,6 +248,7 @@ extension STFileUploader {
             guard let weakSelf = self else {
                 return
             }
+                        
             weakSelf.observer.forEach { (observer) in
                 observer.fileUploader(didEndFailed: weakSelf, file: file, error: error, uploadInfo: uploadInfo)
             }
@@ -356,6 +371,7 @@ extension STFileUploader {
         case fileSystemNotValid
         case wrongStorageSize
         case fileNotFound
+        case canceled
         case error(error: Error)
         
         var message: String {
@@ -368,6 +384,8 @@ extension STFileUploader {
                 return "storage_size_isover".localized
             case .fileNotFound:
                 return "error_data_not_found".localized
+            case .canceled:
+                return "error_canceled".localized
             case .error(let error):
                 if let iError = error as? IError {
                     return iError.message
