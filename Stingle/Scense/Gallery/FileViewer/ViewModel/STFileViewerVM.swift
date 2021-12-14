@@ -71,10 +71,7 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
     }
     
     func getIndex(at model: ManagedObject.Model) -> Int? {
-        guard let snapshot = self.snapshot, let managedObjectID = model.managedObjectID else {
-            return .zero
-        }
-        return snapshot.index(ofItemIdentifier: managedObjectID)
+        return self.dataSource.indexPath(forObject: model)?.row
     }
     
     //MARK: - IFileViewerVM

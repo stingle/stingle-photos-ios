@@ -64,7 +64,7 @@ class STNavigationAnimator: NSObject {
         case fit
     }
     
-    private(set) var transitioningOperation: TransitioningOperation?
+    private(set) weak var transitioningOperation: TransitioningOperation?
     private var interactivePops = STObserverEvents<TransitioningOperationInteractivePop>()
     
     private func addInteractionGesture(viewController: INavigationAnimatorDestinationVC, transitioningOperation: TransitioningOperation) {
@@ -129,7 +129,7 @@ extension STNavigationAnimator: STNavigationAnimatorTransitioningOperationDelega
         
     }
     
-    func transitioningOperation(didSEndNavigate transitioningOperation: TransitioningOperation) {
+    func transitioningOperation(didSendNavigate transitioningOperation: TransitioningOperation) {
         if transitioningOperation.operation == .push {
             self.addInteractionGesture(viewController: transitioningOperation.destinationVC, transitioningOperation: transitioningOperation)
         }

@@ -53,6 +53,8 @@ class STFileWorker: STWorker {
         let trashProvider = STApplication.shared.dataBase.trashProvider
         let request = STFilesRequest.delete(files: files)
         
+        STApplication.shared.uploader.cancelUploadIng(for: files)
+        
         self.request(request: request, success: { (response: STEmptyResponse) in
             trashProvider.delete(models: files, reloadData: true)
             STApplication.shared.utils.deleteFilesIfNeeded(files: files)
@@ -71,12 +73,15 @@ class STFileWorker: STWorker {
         let trashProvider = STApplication.shared.dataBase.trashProvider
         let galleryProvider = STApplication.shared.dataBase.galleryProvider
         
+        STApplication.shared.uploader.cancelUploadIng(for: files)
+        
         guard !remoteFiles.isEmpty else {
             trashProvider.delete(models: files, reloadData: true)
             galleryProvider.add(models: files, reloadData: true)
             success?(STEmptyResponse())
             return
         }
+        
         
         let request = STFilesRequest.moveToGalery(files: remoteFiles)
         

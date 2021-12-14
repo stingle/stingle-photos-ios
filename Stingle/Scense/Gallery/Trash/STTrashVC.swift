@@ -77,7 +77,7 @@ extension STTrashVC {
 }
 
 
-class STTrashVC: STFilesSelectionViewController<STTrashVC.ViewModel> {
+class STTrashVC: STFilesSelectCollectionViewController<STTrashVC.ViewModel> {
     
     @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
     

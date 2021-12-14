@@ -76,7 +76,7 @@ extension STGalleryVC {
         
 }
 
-class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
+class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> {
         
     @IBOutlet weak private var syncBarButtonItem: UIBarButtonItem!
     @IBOutlet weak private var syncView: STGallerySyncView!
@@ -360,13 +360,11 @@ class STGalleryVC: STFilesSelectionViewController<STGalleryVC.ViewModel> {
         }
     }
     
-}
-
-extension STGalleryVC: STImagePickerHelperDelegate {
-    
-    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {
+    private func `import`(assets: [PHAsset]) {
+        guard !assets.isEmpty else {
+            return
+        }
         let importer = self.viewModel.upload(assets: assets)
-        
         let progressView = STProgressView()
         progressView.title = "importing".localized
         
@@ -402,7 +400,21 @@ extension STGalleryVC: STImagePickerHelperDelegate {
             })
             
         }
-        
+    }
+    
+}
+
+extension STGalleryVC: STImagePickerHelperDelegate {
+    
+    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset], failedAssetCount: Int) {
+        guard failedAssetCount > .zero else {
+            self.import(assets: assets)
+            return
+        }
+        let message = String(format: "error_import_assets".localized, "\(failedAssetCount)")
+        self.showInfoAlert(title: "warning".localized, message: message, cancel: false) {
+            self.import(assets: assets)
+        }
     }
     
 }

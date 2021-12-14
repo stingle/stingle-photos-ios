@@ -56,6 +56,7 @@ extension STFileUploader {
         override func cancel() {
             super.cancel()
             self.networkOperation?.cancel()
+            self.responseFailed(error: UploaderError.canceled, file: self.libraryFile)
         }
                 
         //MARK: - Private
@@ -91,6 +92,9 @@ extension STFileUploader {
             } progress: { [weak self] (progress) in
                 self?.responseProgress(result: progress, file: file)
             } failure: { [weak self] (error) in
+                guard !error.isCancelled else {
+                    return
+                }
                 self?.responseFailed(error: error, file: file)
             }
         }

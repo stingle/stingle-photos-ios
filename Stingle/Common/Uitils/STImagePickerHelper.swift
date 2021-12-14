@@ -10,7 +10,7 @@ import Photos
 import PhotosUI
 
 protocol STImagePickerHelperDelegate: UIViewController {
-    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset])
+    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset], failedAssetCount: Int)
     func pickerViewControllerDidCancel(_ imagePickerHelper: STImagePickerHelper)
 }
 
@@ -23,7 +23,7 @@ class STImagePickerHelper: NSObject {
     
     weak var viewController: STImagePickerHelperDelegate?
         
-    init(controller: STImagePickerHelperDelegate) {
+    init(controller: STImagePickerHelperDelegate?) {
         self.viewController = controller
     }
     
@@ -122,10 +122,10 @@ extension STImagePickerHelper: PHPickerViewControllerDelegate {
         var result = [PHAsset]()
         fetchResult.enumerateObjects { asset, index, _ in
             result.append(asset)
-            if result.count == results.count {
-                self.viewController?.pickerViewController(self, didPickAssets: result)
-            }
         }
+        
+        let countDiff = results.count - result.count
+        self.viewController?.pickerViewController(self, didPickAssets: result, failedAssetCount: countDiff)
     }
     
 }

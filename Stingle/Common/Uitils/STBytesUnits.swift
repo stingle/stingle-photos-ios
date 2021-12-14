@@ -50,10 +50,8 @@ struct STBytesUnits: Equatable {
     func getReadableUnit(format: String = ".2f") -> String {
         let format = "%" + format
         switch bytes {
-        case 0..<1_024:
-            return "\(bytes) bytes"
-        case 1_024..<(1_024 * 1_024):
-            return "\(String(format: format, kilobytes)) kb"
+        case 0..<(1_024 * 1_024):
+            return "\(Int(megabytes)) mb"
         case 1_024..<(1_024 * 1_024 * 1_024):
             return "\(String(format: format, megabytes)) mb"
         case 1_024..<(1_024 * 1_024 * 1_024 * 1_024):
