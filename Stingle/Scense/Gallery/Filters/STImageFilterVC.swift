@@ -11,6 +11,9 @@ import MetalPetal
 enum STImageFilterType {
     case brightness
     case contrast
+    case saturation
+    case vibrance
+    case exposure
 
     var title: String {
         switch self {
@@ -18,6 +21,12 @@ enum STImageFilterType {
             return "Brightness"
         case .contrast:
             return "Contrast"
+        case .saturation:
+            return "Saturation"
+        case .vibrance:
+            return "Vibrance"
+        case .exposure:
+            return "Exposure"
         }
     }
 }
@@ -27,13 +36,15 @@ class STImageFilter {
     let min: Float
     let max: Float
     var value: Float
-    var filter: MTIUnaryFilter!
 
-    init(type: STImageFilterType, min: Float, max: Float) {
+    let defaultValue: Float
+
+    init(type: STImageFilterType, min: Float, max: Float, defaultValue: Float) {
         self.type = type
         self.min = min
         self.max = max
-        self.value = (min + max) / 2
+        self.defaultValue = defaultValue
+        self.value = defaultValue
     }
 }
 
@@ -41,29 +52,60 @@ class STImageFilterVC: UIViewController {
 
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var slider: UISlider!
-    @IBOutlet weak var imageView: STImageView!
+    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var sliderValueLabel: UILabel!
 
-    private var cgImage: CGImage?
+    private var mtImage: MTIImage?
 
     private var photoFile: STLibrary.File?
 
     private var selectedFilter: STImageFilter!
 
     private var filters = [
-        STImageFilter(type: .brightness, min: 0.0, max: 1.0),
-        STImageFilter(type: .contrast, min: 0.0, max: 1.0),
+        STImageFilter(type: .brightness, min: -0.5, max: 0.5, defaultValue: 0.0),
+        STImageFilter(type: .contrast, min: 0.0, max: 2.0, defaultValue: 1.0),
+        STImageFilter(type: .saturation, min: 0.0, max: 2.0, defaultValue: 1.0),
+        STImageFilter(type: .vibrance, min: -1.0, max: 1.0, defaultValue: 0.0),
+        STImageFilter(type: .exposure, min: -1.0, max: 1.0, defaultValue: 0.0)
     ]
+
+    private var renderContext: MTIContext? = {
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            return nil
+        }
+        return try? MTIContext(device: device)
+    }()
+
+    private func image(from mtImage: MTIImage?) -> UIImage? {
+        guard let mtImage = mtImage, let context = self.renderContext else {
+            return nil
+        }
+        do {
+            let ciImage = try context.makeCIImage(from: mtImage)
+            return UIImage(ciImage: ciImage)
+        } catch {
+            return nil
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let photoFile = photoFile else {
-            self.imageView.setImage(source: nil)
+        guard let photoFile = self.photoFile else {
+            self.imageView.image = nil
             return
         }
-        let source = STImageView.Image(file: photoFile, isThumb: false)
-        self.imageView.setImage(source, placeholder: nil) { result in
-            self.cgImage = result?.cgImage
+
+        guard let source = STImageView.Image(file: photoFile, isThumb: false) else {
+            return
+        }
+        STApplication.shared.downloaderManager.imageRetryer.download(source: source) { result in
+            DispatchQueue.main.async {
+                guard let ciImage = CIImage(image: result) else {
+                    return
+                }
+                self.mtImage = MTIImage(ciImage: ciImage)
+                self.imageView.image = result
+            }
         } progress: { progress in
 
         } failure: { error in
@@ -76,21 +118,31 @@ class STImageFilterVC: UIViewController {
     @IBAction func sliderValueChanged(_ sender: Any) {
         self.selectedFilter.value = self.slider.value
         self.sliderValueLabel.text = "\(self.selectedFilter.value)"
-        guard let cgImage = self.cgImage else {
-            return
-        }
+        var newImage: MTIImage?
         switch self.selectedFilter.type {
         case .brightness:
-            let filter = MTIBrightnessFilter()
-            filter.brightness = self.selectedFilter.value
-            filter.inputImage = MTIImage(cgImage: cgImage)
-            self.imageView.image = self.imageFromMTImage(image: filter.outputImage)
+//            self.mtImage = self.mtImage?.adjusting(brightness: self.selectedFilter.defaultValue)
+//            guard let mtImage = mtImage else {
+//                return
+//            }
+//
+//            let filter = MTICoreImageKernel.image(byProcessing: mtImage, using: CIFilter(name: "CIVibrance")!, outputDimensions: MTITextureDimensions.init(cgSize: mtImage.size))
+            newImage = self.mtImage?.adjusting(brightness: self.selectedFilter.value)
+//            self.imageView.image = self.image(from: newImage)
         case .contrast:
-            let filter = MTIContrastFilter()
-            filter.contrast = self.selectedFilter.value
-            filter.inputImage = MTIImage(cgImage: cgImage)
-            self.imageView.image = self.imageFromMTImage(image: filter.outputImage)
+//            self.mtImage = self.mtImage?.adjusting(contrast: self.selectedFilter.defaultValue)
+            newImage = self.mtImage?.adjusting(contrast: self.selectedFilter.value)
+        case .saturation:
+//            self.mtImage = self.mtImage?.adjusting(saturation: self.selectedFilter.defaultValue)
+            newImage = self.mtImage?.adjusting(saturation: self.selectedFilter.value)
+        case .vibrance:
+//            self.mtImage = self.mtImage?.adjusting(vibrance: self.selectedFilter.defaultValue)
+            newImage = self.mtImage?.adjusting(vibrance: self.selectedFilter.value)
+        case .exposure:
+//            self.mtImage = self.mtImage?.adjusting(exposure: self.selectedFilter.defaultValue)
+            newImage = self.mtImage?.adjusting(exposure: self.selectedFilter.value)
         }
+        self.imageView.image = self.image(from: newImage)
     }
 
     // MARK: - Private methods
@@ -103,22 +155,8 @@ class STImageFilterVC: UIViewController {
         self.slider.maximumValue = filter.max
         self.slider.value = filter.value
         self.pickerView.selectRow(index, inComponent: 0, animated: false)
+        self.sliderValueLabel.text = "\(filter.value)"
         self.selectedFilter = filter
-    }
-
-    private func imageFromMTImage(image: MTIImage?) -> UIImage? {
-        if let device = MTLCreateSystemDefaultDevice(), let outputImage = image {
-            do {
-                let context = try MTIContext(device: device)
-                let filteredImage = try context.makeCGImage(from: outputImage)
-                return UIImage(cgImage: filteredImage)
-            } catch {
-                print(error.localizedDescription)
-                return nil
-            }
-        } else {
-            return nil
-        }
     }
 
 }

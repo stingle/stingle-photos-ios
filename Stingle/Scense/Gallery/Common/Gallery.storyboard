@@ -168,7 +168,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imported photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpb-69-iHJ">
-                                                <rect key="frame" x="71.000000000000014" y="264" width="217.33333333333337" height="17"/>
+                                                <rect key="frame" x="71" y="264" width="217" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -507,7 +507,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imported photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WNU-M5-vNy">
-                                                <rect key="frame" x="71.000000000000014" y="264" width="217.33333333333337" height="17"/>
+                                                <rect key="frame" x="71" y="264" width="217" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -808,7 +808,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imported photos will  appear here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efz-8z-Y4X">
-                                                <rect key="frame" x="71.000000000000014" y="264" width="217.33333333333337" height="17"/>
+                                                <rect key="frame" x="71" y="264" width="217" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" name="STSecondaryText"/>
                                                 <nil key="highlightedColor"/>
@@ -1106,9 +1106,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ygy-36-vNK" customClass="STImageView" customModule="Stingle" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="375" height="494"/>
-                            </imageView>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="CtW-c8-PSy">
                                 <rect key="frame" x="18" y="578" width="339" height="31"/>
                                 <connections>
@@ -1131,26 +1128,29 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hQY-rU-HK7">
+                                <rect key="frame" x="0.0" y="44" width="375" height="494"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="cWP-Ze-4qR"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="ygy-36-vNK" firstAttribute="top" secondItem="cWP-Ze-4qR" secondAttribute="top" id="9nI-gr-Zcp"/>
-                            <constraint firstItem="ygy-36-vNK" firstAttribute="leading" secondItem="cWP-Ze-4qR" secondAttribute="leading" id="DQ7-su-yrR"/>
                             <constraint firstItem="wcD-Nb-TPI" firstAttribute="bottom" secondItem="cWP-Ze-4qR" secondAttribute="bottom" id="DXn-mY-L2f"/>
-                            <constraint firstItem="CtW-c8-PSy" firstAttribute="top" secondItem="ygy-36-vNK" secondAttribute="bottom" constant="40" id="Ecm-Kz-pYj"/>
                             <constraint firstItem="vMY-F8-OHH" firstAttribute="leading" secondItem="CtW-c8-PSy" secondAttribute="leading" id="Kwe-dB-Ak0"/>
                             <constraint firstItem="CtW-c8-PSy" firstAttribute="leading" secondItem="cWP-Ze-4qR" secondAttribute="leading" constant="20" id="NKS-ox-QIa"/>
                             <constraint firstItem="CtW-c8-PSy" firstAttribute="top" secondItem="vMY-F8-OHH" secondAttribute="bottom" constant="10" id="Xtd-lu-PmA"/>
                             <constraint firstItem="wcD-Nb-TPI" firstAttribute="leading" secondItem="xiy-h5-FAX" secondAttribute="leading" id="c2t-oC-Be4"/>
+                            <constraint firstItem="CtW-c8-PSy" firstAttribute="top" secondItem="hQY-rU-HK7" secondAttribute="bottom" constant="40" id="fXl-yb-ja5"/>
                             <constraint firstItem="wcD-Nb-TPI" firstAttribute="trailing" secondItem="cWP-Ze-4qR" secondAttribute="trailing" id="g5W-mW-39G"/>
                             <constraint firstItem="cWP-Ze-4qR" firstAttribute="trailing" secondItem="CtW-c8-PSy" secondAttribute="trailing" constant="20" id="nOP-bG-GhK"/>
                             <constraint firstItem="wcD-Nb-TPI" firstAttribute="top" secondItem="CtW-c8-PSy" secondAttribute="bottom" constant="20" id="p9T-Ai-pRs"/>
-                            <constraint firstItem="cWP-Ze-4qR" firstAttribute="trailing" secondItem="ygy-36-vNK" secondAttribute="trailing" id="tDe-14-yXZ"/>
+                            <constraint firstItem="hQY-rU-HK7" firstAttribute="top" secondItem="cWP-Ze-4qR" secondAttribute="top" id="tTu-eu-4oF"/>
+                            <constraint firstItem="cWP-Ze-4qR" firstAttribute="trailing" secondItem="hQY-rU-HK7" secondAttribute="trailing" id="txN-74-2JC"/>
+                            <constraint firstItem="hQY-rU-HK7" firstAttribute="leading" secondItem="cWP-Ze-4qR" secondAttribute="leading" id="zyp-VH-blJ"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="ygy-36-vNK" id="dYS-e3-Tnj"/>
+                        <outlet property="imageView" destination="hQY-rU-HK7" id="TUT-Kw-Hfv"/>
                         <outlet property="pickerView" destination="wcD-Nb-TPI" id="7Q4-xL-lsM"/>
                         <outlet property="slider" destination="CtW-c8-PSy" id="K0v-Qt-1fM"/>
                         <outlet property="sliderValueLabel" destination="vMY-F8-OHH" id="AUF-oC-et4"/>
@@ -1363,7 +1363,7 @@
         <image name="ic_empty_files" width="204.66667175292969" height="200"/>
         <image name="ic_empty_shared_albums" width="197.66667175292969" height="197"/>
         <image name="ic_gallery_min" width="24" height="24"/>
-        <image name="ic_more" width="17" height="17"/>
+        <image name="ic_more" width="13" height="13"/>
         <image name="ic_nav_menu" width="18" height="12"/>
         <image name="ic_open_image_picker" width="74" height="74"/>
         <image name="ic_player_pause" width="22" height="24.666666030883789"/>
