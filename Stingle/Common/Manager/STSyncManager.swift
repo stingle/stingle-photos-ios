@@ -56,7 +56,10 @@ class STSyncManager {
                 }
                 success?()
                 self?.didEndSync(error: nil)
-                STApplication.shared.uploader.uploadAllLocalFiles()
+                
+                let application = STApplication.shared
+                application.uploader.uploadAllLocalFiles()
+                application.auotImporter.startImport()
             }
         })
     }

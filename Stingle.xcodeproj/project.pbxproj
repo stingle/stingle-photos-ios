@@ -99,7 +99,7 @@
 		A027CE1D26B20DE000829162 /* STAuthWorker+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE1C26B20DE000829162 /* STAuthWorker+User.swift */; };
 		A027CE2526B2139F00829162 /* STChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2426B2139F00829162 /* STChangePasswordVC.swift */; };
 		A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2726B213B300829162 /* STChangePasswordVM.swift */; };
-		A0287EE126D1761D009E002B /* STFileImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0287EE026D1761D009E002B /* STFileImporter.swift */; };
+		A0287EE126D1761D009E002B /* STImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0287EE026D1761D009E002B /* STImporter.swift */; };
 		A02D88A3260BE99C00B82F16 /* SDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D88A2260BE99C00B82F16 /* SDownloader.swift */; };
 		A02D88B0260BEEA800B82F16 /* STDownloaderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02D88AF260BEEA800B82F16 /* STDownloaderManager.swift */; };
 		A02ED2E82603EED800F10D58 /* UIImageView+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02ED2E72603EED800F10D58 /* UIImageView+Operation.swift */; };
@@ -240,6 +240,7 @@
 		A099F4B726302386000D4F86 /* STPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4B626302386000D4F86 /* STPopoverViewController.swift */; };
 		A099F4BC26302B28000D4F86 /* STGallerySyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */; };
 		A099F4C026302F4A000D4F86 /* STCircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4BF26302F4A000D4F86 /* STCircleProgressView.swift */; };
+		A09A95CC276A926B00B25569 /* STFileAutoImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09A95CB276A926B00B25569 /* STFileAutoImporter.swift */; };
 		A09D94462636FD7600268A84 /* STAlbumsSharedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D94452636FD7600268A84 /* STAlbumsSharedVC.swift */; };
 		A09D94492636FD8200268A84 /* STAlbumsSharedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D94482636FD8200268A84 /* STAlbumsSharedVM.swift */; };
 		A09D944E2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D944C2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift */; };
@@ -444,7 +445,7 @@
 		A027CE1C26B20DE000829162 /* STAuthWorker+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAuthWorker+User.swift"; sourceTree = "<group>"; };
 		A027CE2426B2139F00829162 /* STChangePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STChangePasswordVC.swift; sourceTree = "<group>"; };
 		A027CE2726B213B300829162 /* STChangePasswordVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STChangePasswordVM.swift; sourceTree = "<group>"; };
-		A0287EE026D1761D009E002B /* STFileImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileImporter.swift; sourceTree = "<group>"; };
+		A0287EE026D1761D009E002B /* STImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STImporter.swift; sourceTree = "<group>"; };
 		A02D88A2260BE99C00B82F16 /* SDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDownloader.swift; sourceTree = "<group>"; };
 		A02D88AF260BEEA800B82F16 /* STDownloaderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDownloaderManager.swift; sourceTree = "<group>"; };
 		A02ED2E72603EED800F10D58 /* UIImageView+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Operation.swift"; sourceTree = "<group>"; };
@@ -585,6 +586,7 @@
 		A099F4B626302386000D4F86 /* STPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPopoverViewController.swift; sourceTree = "<group>"; };
 		A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGallerySyncView.swift; sourceTree = "<group>"; };
 		A099F4BF26302F4A000D4F86 /* STCircleProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCircleProgressView.swift; sourceTree = "<group>"; };
+		A09A95CB276A926B00B25569 /* STFileAutoImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileAutoImporter.swift; sourceTree = "<group>"; };
 		A09D94452636FD7600268A84 /* STAlbumsSharedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedVC.swift; sourceTree = "<group>"; };
 		A09D94482636FD8200268A84 /* STAlbumsSharedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedVM.swift; sourceTree = "<group>"; };
 		A09D944C2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1329,6 +1331,7 @@
 				A005FAEA25FEC1D600E7D8B0 /* STDateManager.swift */,
 				A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */,
 				A060010B270509050071812C /* STKeyManagement.swift */,
+				A09A95CA276A8ED900B25569 /* Importer */,
 				A013D85C269F7C61007ED786 /* Settings */,
 				A030DB4226015AAC00721EA7 /* FileSystem */,
 				A0D29CD5262051260083967D /* FileUploader */,
@@ -1896,6 +1899,15 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		A09A95CA276A8ED900B25569 /* Importer */ = {
+			isa = PBXGroup;
+			children = (
+				A0287EE026D1761D009E002B /* STImporter.swift */,
+				A09A95CB276A926B00B25569 /* STFileAutoImporter.swift */,
+			);
+			path = Importer;
+			sourceTree = "<group>";
+		};
 		A09D944B2636FDAB00268A84 /* Items */ = {
 			isa = PBXGroup;
 			children = (
@@ -2182,7 +2194,6 @@
 				A0D29CD6262051460083967D /* STFileUploader.swift */,
 				A0D29CDE262081130083967D /* STFileUploaderOperation.swift */,
 				A021A17F264F409600394713 /* IUploadFile.swift */,
-				A0287EE026D1761D009E002B /* STFileImporter.swift */,
 			);
 			path = FileUploader;
 			sourceTree = "<group>";
@@ -2630,6 +2641,7 @@
 				A0F467E025F963CE00BF00AA /* STAlbumsProvider.swift in Sources */,
 				A022049625EEDC0400D07C98 /* UIViewController+Extension.swift in Sources */,
 				A086FD9825F5B2A300A8BC9C /* STUser.swift in Sources */,
+				A09A95CC276A926B00B25569 /* STFileAutoImporter.swift in Sources */,
 				A0794B84269E308600B40FE9 /* STAppearanceVC.swift in Sources */,
 				A005FB0225FF4F5D00E7D8B0 /* STGaleryHeaderView.swift in Sources */,
 				A005FAF525FF4CBB00E7D8B0 /* STGalleryCollectionViewCell.swift in Sources */,
@@ -2738,7 +2750,7 @@
 				A0CFBD8F25F171ED003095BE /* STTabBarViewController.swift in Sources */,
 				A07B45B626C0263A003EB470 /* STAdvancedVM.swift in Sources */,
 				A0C88FE725F3D6CD0061A41D /* STLibraryAlbum.swift in Sources */,
-				A0287EE126D1761D009E002B /* STFileImporter.swift in Sources */,
+				A0287EE126D1761D009E002B /* STImporter.swift in Sources */,
 				A040E21E269A356300003199 /* STGalleryTabBarVC.swift in Sources */,
 				A086FD2625F5A10900A8BC9C /* STCDAlbum.swift in Sources */,
 				A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */,

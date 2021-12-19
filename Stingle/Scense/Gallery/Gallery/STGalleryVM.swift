@@ -24,7 +24,7 @@ class STGalleryVM {
         self.syncManager.sync()
     }
     
-    func upload(assets: [PHAsset]) -> STFileUploader.Importer {
+    func upload(assets: [PHAsset]) -> STImporter.Importer {
         let files = assets.compactMap({ return STFileUploader.FileUploadable(asset: $0) })
         let importer = self.uploader.upload(files: files)
         return importer

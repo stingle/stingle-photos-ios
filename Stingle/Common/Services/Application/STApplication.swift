@@ -31,6 +31,10 @@ class STApplication {
         return STFileUploader()
     }()
     
+    private(set) lazy var auotImporter: STImporter.AuotImporter = {
+        return STImporter.AuotImporter()
+    }()
+    
     private(set) var utils: Utils!
     
     var fileSystem: STFileSystem {

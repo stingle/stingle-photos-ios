@@ -43,6 +43,7 @@ extension STDataBase {
         let sectionNameKeyPath: String?
         let ascending: Bool
         let predicate: NSPredicate?
+        private(set) var isFetching = false
         
         private(set) var snapshotReference: NSDiffableDataSourceSnapshotReference?
         let viewContext: NSManagedObjectContext
@@ -93,6 +94,11 @@ extension STDataBase {
         }
                 
         func object(at indexPath: IndexPath) -> Model? {
+            
+            guard !self.isFetching else {
+                return nil
+            }
+            
             if let model = self.cache.object(forKey: indexPath as NSIndexPath) {
                 return model
             } else {
@@ -106,15 +112,24 @@ extension STDataBase {
         }
         
         func managedModel(at indexPath: IndexPath) -> ManagedModel? {
+            guard !self.isFetching else {
+                return nil
+            }
             let obj = self.controller.object(at: indexPath)
             return obj
         }
         
         func sectionTitle(at secction: Int) -> String? {
+            guard !self.isFetching else {
+                return nil
+            }
             return self.snapshotReference?.sectionIdentifiers[secction] as? String
         }
         
         func indexPath(forObject object: ManagedModel) -> IndexPath? {
+            guard !self.isFetching else {
+                return nil
+            }
             return self.controller.indexPath(forObject: object)
         }
         
@@ -131,6 +146,7 @@ extension STDataBase {
         //MARK: - IProviderDataSource
         
         func reloadData() {
+            self.isFetching = true
             try? self.controller.performFetch()
         }
         
@@ -139,6 +155,7 @@ extension STDataBase {
         func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
             self.cache.removeAllObjects()
             self.snapshotReference = snapshot
+            self.isFetching = false
             self.delegate?.dataSource(self, didChangeContentWith: snapshot)
         }
         

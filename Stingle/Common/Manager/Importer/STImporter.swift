@@ -7,13 +7,14 @@
 
 import Foundation
 
-extension STFileUploader {
+enum STImporter {
     
     class Importer {
                 
         struct Progress {
             let totalUnitCount: Int
             let completedUnitCount: Int
+            let uploadFile: IUploadFile?
         }
         
         typealias ProgressHendler = (_ progress: Progress) -> Void
@@ -73,17 +74,15 @@ extension STFileUploader {
             var completedUnitCount: Int = .zero
             
             startHendler()
-            let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount)
+            let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount, uploadFile: nil)
             self.startHendler?(progress)
             var files = [STLibrary.File]()
             
             self.uploadFiles.forEach { uploadFile in
-                
                 let operation = Operation(uploadFile: uploadFile) { result in
-
                     completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
                     files.append(result)
-                    let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount)
+                    let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount, uploadFile: uploadFile)
                     progressHendler(progress)
                     self.progressHendler?(progress)
                     
@@ -96,7 +95,7 @@ extension STFileUploader {
                 } failure: { error in
 
                     completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
-                    let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount)
+                    let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount, uploadFile: uploadFile)
                     progressHendler(progress)
                     self.progressHendler?(progress)
                     
@@ -118,11 +117,11 @@ extension STFileUploader {
         }
                 
     }
-
+    
 }
 
 
-extension STFileUploader {
+extension STImporter {
     
     class AlbumFileImporter: Importer {
         
@@ -152,7 +151,7 @@ extension STFileUploader {
     
 }
 
-extension STFileUploader.Importer {
+extension STImporter.Importer {
     
     class Operation: STOperation<STLibrary.File> {
         
@@ -170,6 +169,11 @@ extension STFileUploader.Importer {
             } failure: { [weak self] error in
                 self?.responseFailed(error: error)
             }
+        }
+        
+        override func cancel() {
+            super.cancel()
+            self.responseFailed(error: STError.canceled)
         }
 
     }

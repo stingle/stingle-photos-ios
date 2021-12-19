@@ -47,16 +47,16 @@ class STFileUploader {
     }()
     
     @discardableResult
-    func upload(files: [IUploadFile]) -> Importer {
-        let importer = Importer(uploadFiles: files, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+    func upload(files: [IUploadFile]) -> STImporter.Importer {
+        let importer = STImporter.Importer(uploadFiles: files, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
     }
     
     @discardableResult
-    func uploadAlbum(files: [IUploadFile], album: STLibrary.Album) -> Importer {
-        let importer = AlbumFileImporter(uploadFiles: files, album: album, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+    func uploadAlbum(files: [IUploadFile], album: STLibrary.Album) -> STImporter.Importer {
+        let importer = STImporter.AlbumFileImporter(uploadFiles: files, album: album, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
