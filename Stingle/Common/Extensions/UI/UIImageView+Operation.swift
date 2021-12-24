@@ -125,7 +125,7 @@ class STImageDownloadPlainAnimator: IImageViewDownloadAnimator {
             gradientView.backgroundColor = .clear
             gradientView.colors = [color]
             gradientView.tag = Self.animationViewTag
-            gradientView.addFadeAnimation(fromValue: 1, toValue: 0.5, byValue: 0.5)
+//            gradientView.addFadeAnimation(fromValue: 1, toValue: 0.5, byValue: 0.5)
             view.addSubview(gradientView)
         }
     }

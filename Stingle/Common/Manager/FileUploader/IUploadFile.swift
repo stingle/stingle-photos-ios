@@ -189,10 +189,9 @@ private extension PHAsset {
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = true
         
-        let modificationDate = self.modificationDate
-        let creationDate = self.creationDate
+        let modificationDate = self.modificationDate ?? self.creationDate
+        let creationDate = self.creationDate ?? self.modificationDate
 
-        
         Self.phManager.requestAVAsset(forVideo: self, options: options, resultHandler: { (asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) -> Void in
             
             if let urlAsset = asset as? AVURLAsset, let fileSize = urlAsset.fileSize {
@@ -224,8 +223,8 @@ private extension PHAsset {
             return false
         }
                 
-        let modificationDate = self.modificationDate
-        let creationDate = self.creationDate
+        let modificationDate = self.modificationDate ?? self.creationDate
+        let creationDate = self.creationDate ?? self.modificationDate
         
         self.requestContentEditingInput(with: options, completionHandler: {(contentEditingInput: PHContentEditingInput?, info: [AnyHashable : Any]) -> Void in
             guard let contentEditingInput = contentEditingInput, let fullSizeImageURL = contentEditingInput.fullSizeImageURL else {

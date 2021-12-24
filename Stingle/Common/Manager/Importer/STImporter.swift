@@ -21,7 +21,7 @@ enum STImporter {
         typealias Hendler = () -> Void
         typealias Complition = (_ files: [STLibrary.File]) -> Void
         
-        static private var operationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 10, underlyingQueue: nil)
+        static private var operationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 5, underlyingQueue: nil)
         
         let uploadFiles: [IUploadFile]
         let dispatchQueue: DispatchQueue
@@ -147,7 +147,6 @@ extension STImporter {
         }
         
     }
-    
     
 }
 

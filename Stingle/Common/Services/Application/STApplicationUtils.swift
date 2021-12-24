@@ -66,7 +66,7 @@ extension STApplication.Utils {
                 continue
             }
             let dateCreated = file.value.oreginal.date ?? Date()
-            guard let file = try? STLibrary.File(file: file.key, version: "1", headers: headers, dateCreated: dateCreated, dateModified: Date(), isRemote: false, managedObjectID: nil) else {
+            guard let file = try? STLibrary.File(file: file.key, version: "1", headers: headers, dateCreated: dateCreated, dateModified: dateCreated, isRemote: false, managedObjectID: nil) else {
                 continue
             }
             files.append(file)

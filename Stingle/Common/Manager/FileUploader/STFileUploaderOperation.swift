@@ -129,8 +129,6 @@ extension STFileUploader {
             if let fileOreginalUrl = newFileOreginalUrl {
                 STApplication.shared.fileSystem.updateUrlDataSize(url: fileOreginalUrl)
             }
-            
-            
             self.responseSucces(result: file, spaceUsed: spaceUsed)
         }
         

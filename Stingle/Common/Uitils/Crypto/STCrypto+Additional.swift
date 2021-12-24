@@ -68,8 +68,12 @@ extension STCrypto {
         
         let originalUrl = toUrl.appendingPathComponent(fileName)
         guard let outputOrigin = OutputStream(toFileAtPath: originalUrl.path, append: false) else {
+            inputThumb.close()
+            outputThumb.close()
+            inputOrigin.close()
             throw CryptoError.General.creationFailure
         }
+        
         outputOrigin.open()
         defer {
             inputThumb.close()

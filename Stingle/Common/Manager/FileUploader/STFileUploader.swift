@@ -146,7 +146,6 @@ class STFileUploader {
             
             weakSelf.countAllFiles = weakSelf.countAllFiles + Int64(filesCount)
             weakSelf.updateProgress(files: [])
-            
         }
         
     }

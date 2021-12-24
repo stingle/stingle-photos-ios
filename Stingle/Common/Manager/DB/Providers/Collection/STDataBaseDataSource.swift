@@ -104,7 +104,7 @@ extension STDataBase {
             } else {
                 let obj = self.controller.object(at: indexPath)
                 if let result = try? obj.createModel() {
-                    self.cache.setObject(result, forKey: indexPath as NSIndexPath)
+//                    self.cache.setObject(result, forKey: indexPath as NSIndexPath)
                     return result
                 }
             }
