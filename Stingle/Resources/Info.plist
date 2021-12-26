@@ -34,7 +34,7 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>Accessing sample keychain entry</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires access to the photo library.</string>
+	<string>Stingle Photos requires access to your photo library to be able to import, secure, backup and sync them</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
