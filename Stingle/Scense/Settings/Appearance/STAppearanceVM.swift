@@ -10,12 +10,12 @@ import UIKit
 class STAppearanceVM {
     
     lazy var appearance: STAppSettings.Appearance = {
-        return STAppSettings.appearance
+        return STAppSettings.current.appearance
     }()
     
     func updateTheme(theme: STAppSettings.Appearance.Theme) {
         self.appearance.theme = theme
-        STAppSettings.appearance = self.appearance
+        STAppSettings.current.appearance = self.appearance
         
         UIApplication.shared.windows.forEach { window in
             window.overrideUserInterfaceStyle = theme.interfaceStyle

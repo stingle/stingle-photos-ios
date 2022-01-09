@@ -119,6 +119,7 @@
 		A0355C8326A8D094006BE2C4 /* STUnlockAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */; };
 		A03D555C26AC5BF6008705F2 /* STAppLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */; };
 		A03D555E26AC6596008705F2 /* STFileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D555D26AC6596008705F2 /* STFileSystem.swift */; };
+		A03E21E6278397930071A2AF /* STAutoImportDialogTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03E21E5278397930071A2AF /* STAutoImportDialogTableVC.swift */; };
 		A040E21E269A356300003199 /* STGalleryTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A040E21D269A356300003199 /* STGalleryTabBarVC.swift */; };
 		A04219962690983C001FBFBF /* STTrashFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */; };
 		A042199926909E58001FBFBF /* STFileWorker+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = A042199826909E58001FBFBF /* STFileWorker+Download.swift */; };
@@ -128,7 +129,7 @@
 		A04512B82638B0FD00BE0B06 /* STAlbumWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04512B72638B0FD00BE0B06 /* STAlbumWorker.swift */; };
 		A04512BB2638B13400BE0B06 /* STAlbumRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04512BA2638B13400BE0B06 /* STAlbumRequest.swift */; };
 		A04561C026AF652900DDFE53 /* STAccountVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04561BF26AF652900DDFE53 /* STAccountVM.swift */; };
-		A046A80F261FA815005EDB89 /* STImagePickerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A046A80E261FA815005EDB89 /* STImagePickerHelper.swift */; };
+		A046A80F261FA815005EDB89 /* STPHPhotoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A046A80E261FA815005EDB89 /* STPHPhotoHelper.swift */; };
 		A049459C2611CDF4008D5E48 /* STView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A049459B2611CDF4008D5E48 /* STView.swift */; };
 		A04945C92611F77C008D5E48 /* STTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04945C82611F77C008D5E48 /* STTabBar.swift */; };
 		A04A20CF2606AE6400AFE2A2 /* Data+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A20CE2606AE6400AFE2A2 /* Data+Operation.swift */; };
@@ -218,6 +219,8 @@
 		A07B45B426C02442003EB470 /* STAppSettings+Advanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */; };
 		A07B45B626C0263A003EB470 /* STAdvancedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B526C0263A003EB470 /* STAdvancedVM.swift */; };
 		A084182325FA589B00DEAC89 /* STTrashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A084182225FA589B00DEAC89 /* STTrashProvider.swift */; };
+		A08512D1277A5C640006A2DD /* STAutoImportDialogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */; };
+		A08512D3277A6F060006A2DD /* STAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08512D2277A6F060006A2DD /* STAlertViewController.swift */; };
 		A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1525F5A10800A8BC9C /* STCDContact.swift */; };
 		A086FD2625F5A10900A8BC9C /* STCDAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1625F5A10800A8BC9C /* STCDAlbum.swift */; };
 		A086FD2925F5A10900A8BC9C /* STCDFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1925F5A10900A8BC9C /* STCDFile.swift */; };
@@ -236,6 +239,9 @@
 		A08F0C192607D01800E81826 /* STNetworkOperationDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */; };
 		A08F0C1C2607D1C400E81826 /* STOperationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1B2607D1C400E81826 /* STOperationManager.swift */; };
 		A08F0C202607D3B800E81826 /* STJSONNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */; };
+		A08F27A62785ACBC00EF8BE4 /* STAutoImportDialogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27A52785ACBC00EF8BE4 /* STAutoImportDialogVM.swift */; };
+		A08F27A82785AD7700EF8BE4 /* STAppSettings+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27A72785AD7700EF8BE4 /* STAppSettings+Import.swift */; };
+		A08F27AB2785DA6D00EF8BE4 /* STImportVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27AA2785DA6D00EF8BE4 /* STImportVM.swift */; };
 		A09387D526B5F5A4000FCB01 /* STResetPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09387D426B5F5A4000FCB01 /* STResetPassword.swift */; };
 		A099F4B726302386000D4F86 /* STPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4B626302386000D4F86 /* STPopoverViewController.swift */; };
 		A099F4BC26302B28000D4F86 /* STGallerySyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */; };
@@ -465,6 +471,7 @@
 		A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVC.swift; sourceTree = "<group>"; };
 		A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVM.swift; sourceTree = "<group>"; };
 		A03D555D26AC6596008705F2 /* STFileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileSystem.swift; sourceTree = "<group>"; };
+		A03E21E5278397930071A2AF /* STAutoImportDialogTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAutoImportDialogTableVC.swift; sourceTree = "<group>"; };
 		A040E21D269A356300003199 /* STGalleryTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryTabBarVC.swift; sourceTree = "<group>"; };
 		A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashFileViewerVM.swift; sourceTree = "<group>"; };
 		A042199826909E58001FBFBF /* STFileWorker+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STFileWorker+Download.swift"; sourceTree = "<group>"; };
@@ -474,7 +481,7 @@
 		A04512B72638B0FD00BE0B06 /* STAlbumWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumWorker.swift; sourceTree = "<group>"; };
 		A04512BA2638B13400BE0B06 /* STAlbumRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumRequest.swift; sourceTree = "<group>"; };
 		A04561BF26AF652900DDFE53 /* STAccountVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAccountVM.swift; sourceTree = "<group>"; };
-		A046A80E261FA815005EDB89 /* STImagePickerHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STImagePickerHelper.swift; sourceTree = "<group>"; };
+		A046A80E261FA815005EDB89 /* STPHPhotoHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPHPhotoHelper.swift; sourceTree = "<group>"; };
 		A049459B2611CDF4008D5E48 /* STView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STView.swift; sourceTree = "<group>"; };
 		A04945C82611F77C008D5E48 /* STTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTabBar.swift; sourceTree = "<group>"; };
 		A04A20CE2606AE6400AFE2A2 /* Data+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Operation.swift"; sourceTree = "<group>"; wrapsLines = 0; };
@@ -564,6 +571,8 @@
 		A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Advanced.swift"; sourceTree = "<group>"; };
 		A07B45B526C0263A003EB470 /* STAdvancedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAdvancedVM.swift; sourceTree = "<group>"; };
 		A084182225FA589B00DEAC89 /* STTrashProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashProvider.swift; sourceTree = "<group>"; };
+		A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAutoImportDialogVC.swift; sourceTree = "<group>"; };
+		A08512D2277A6F060006A2DD /* STAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlertViewController.swift; sourceTree = "<group>"; };
 		A086FD1525F5A10800A8BC9C /* STCDContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDContact.swift; sourceTree = "<group>"; };
 		A086FD1625F5A10800A8BC9C /* STCDAlbum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDAlbum.swift; sourceTree = "<group>"; };
 		A086FD1925F5A10900A8BC9C /* STCDFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDFile.swift; sourceTree = "<group>"; };
@@ -582,6 +591,9 @@
 		A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkOperationDecodable.swift; sourceTree = "<group>"; };
 		A08F0C1B2607D1C400E81826 /* STOperationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOperationManager.swift; sourceTree = "<group>"; };
 		A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STJSONNetworkOperation.swift; sourceTree = "<group>"; };
+		A08F27A52785ACBC00EF8BE4 /* STAutoImportDialogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAutoImportDialogVM.swift; sourceTree = "<group>"; };
+		A08F27A72785AD7700EF8BE4 /* STAppSettings+Import.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Import.swift"; sourceTree = "<group>"; };
+		A08F27AA2785DA6D00EF8BE4 /* STImportVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STImportVM.swift; sourceTree = "<group>"; };
 		A09387D426B5F5A4000FCB01 /* STResetPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STResetPassword.swift; sourceTree = "<group>"; };
 		A099F4B626302386000D4F86 /* STPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPopoverViewController.swift; sourceTree = "<group>"; };
 		A099F4BB26302B28000D4F86 /* STGallerySyncView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGallerySyncView.swift; sourceTree = "<group>"; };
@@ -827,6 +839,7 @@
 				A0DE2DEF26B8A52A00887D55 /* STAppSettings+Backup.swift */,
 				A01EC21B26B9F146000FF4AC /* STAppSettings+Appearance.swift */,
 				A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */,
+				A08F27A72785AD7700EF8BE4 /* STAppSettings+Import.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -916,6 +929,7 @@
 				A0B267732624D7B30090E4ED /* STFilesViewController.swift */,
 				A072CCE82762ABA10077695F /* STFilesSelectCollectionViewController.swift */,
 				A099F4B626302386000D4F86 /* STPopoverViewController.swift */,
+				A08512D2277A6F060006A2DD /* STAlertViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1231,6 +1245,7 @@
 			children = (
 				A05D2684261B3CD3008E9CF8 /* Master */,
 				A05D2680261B27F5008E9CF8 /* Menu */,
+				A08512CF277A5C400006A2DD /* AutoImport */,
 				A06AF3BD25F0292C00B44A87 /* Common */,
 			);
 			path = Home;
@@ -1310,7 +1325,7 @@
 				A060010F27050BAC0071812C /* STConstants.swift */,
 				A0E1B504266BAAE20063CB40 /* STFileHandle.swift */,
 				A04A3E43265CF1F000F16EF9 /* STFileReader.swift */,
-				A046A80E261FA815005EDB89 /* STImagePickerHelper.swift */,
+				A046A80E261FA815005EDB89 /* STPHPhotoHelper.swift */,
 				A0FF766C26151D86003DEC2B /* STUnfairLock.swift */,
 				A087C46126147DA8006775D2 /* STBytesUnits.swift */,
 				A022042F25EEDC0300D07C98 /* STEnvironment.swift */,
@@ -1348,6 +1363,14 @@
 				A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */,
 			);
 			path = Unlock;
+			sourceTree = "<group>";
+		};
+		A03E21E42783976A0071A2AF /* Items */ = {
+			isa = PBXGroup;
+			children = (
+				A03E21E5278397930071A2AF /* STAutoImportDialogTableVC.swift */,
+			);
+			path = Items;
 			sourceTree = "<group>";
 		};
 		A042199726909E37001FBFBF /* File */ = {
@@ -1738,6 +1761,7 @@
 			isa = PBXGroup;
 			children = (
 				A0794B80269E2F1800B40FE9 /* STImportVC.swift */,
+				A08F27AA2785DA6D00EF8BE4 /* STImportVM.swift */,
 			);
 			path = Import;
 			sourceTree = "<group>";
@@ -1845,6 +1869,16 @@
 				A05006D7273D9627004FE229 /* STNavigationAnimatorInteractivePop.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		A08512CF277A5C400006A2DD /* AutoImport */ = {
+			isa = PBXGroup;
+			children = (
+				A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */,
+				A08F27A52785ACBC00EF8BE4 /* STAutoImportDialogVM.swift */,
+				A03E21E42783976A0071A2AF /* Items */,
+			);
+			path = AutoImport;
 			sourceTree = "<group>";
 		};
 		A086FD9B25F62AEF00A8BC9C /* Providers */ = {
@@ -2501,6 +2535,7 @@
 				A04BD00A26347A8500C5F29F /* STUploadsTableViewCell.swift in Sources */,
 				A0623F3525F41C650018D378 /* STLibraryAlbumFile.swift in Sources */,
 				A05F9DD326A6155C00F9F343 /* STBiometricAuthServices.swift in Sources */,
+				A08512D1277A5C640006A2DD /* STAutoImportDialogVC.swift in Sources */,
 				A0FD3F3B26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift in Sources */,
 				A001E6E6267CD8E900948E50 /* STGaleryFileViewerVM.swift in Sources */,
 				A08F0C202607D3B800E81826 /* STJSONNetworkOperation.swift in Sources */,
@@ -2519,6 +2554,7 @@
 				A032096F26546275000C420B /* STVideoView.swift in Sources */,
 				A00B4C20263D74270085C55E /* STSharedMembersVC.swift in Sources */,
 				A0D29CDF262081130083967D /* STFileUploaderOperation.swift in Sources */,
+				A08F27A82785AD7700EF8BE4 /* STAppSettings+Import.swift in Sources */,
 				A0777811260001B100BA2BDF /* STCrypto+Common.swift in Sources */,
 				A0AAA944261C7D6E009E9F51 /* STBackupPhraseVC.swift in Sources */,
 				A0E999A5263F54E3002FDCC9 /* STContactRequest.swift in Sources */,
@@ -2594,17 +2630,19 @@
 				A086FD2E25F5A10900A8BC9C /* STCDAlbumFile.swift in Sources */,
 				A05006D8273D9627004FE229 /* STNavigationAnimatorInteractivePop.swift in Sources */,
 				A022047A25EEDC0400D07C98 /* IResponse.swift in Sources */,
+				A08F27AB2785DA6D00EF8BE4 /* STImportVM.swift in Sources */,
 				A044ABFD2605427A00BA318F /* STCrypto+Additional.swift in Sources */,
 				A0CFBD9625F17734003095BE /* STSyncWorker.swift in Sources */,
 				A074AE4626460A70004C9E9E /* STMoveAlbumFilesCell.swift in Sources */,
 				A0D1A3B9262E0D3D002E326F /* STAlbumFilesVC.swift in Sources */,
-				A046A80F261FA815005EDB89 /* STImagePickerHelper.swift in Sources */,
+				A046A80F261FA815005EDB89 /* STPHPhotoHelper.swift in Sources */,
 				A02204A325EEDC0400D07C98 /* CurrentPageVC.swift in Sources */,
 				A02204A925EEDC0400D07C98 /* STMainVC.swift in Sources */,
 				A059D1D226C98CCE0045AC61 /* STAuthWorker+CheckRecoveryPhrase.swift in Sources */,
 				A09D94492636FD8200268A84 /* STAlbumsSharedVM.swift in Sources */,
 				A086FD8E25F5AA4300A8BC9C /* STDataBase.swift in Sources */,
 				A0D65DF9269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift in Sources */,
+				A03E21E6278397930071A2AF /* STAutoImportDialogTableVC.swift in Sources */,
 				A0028650260B8121004C0934 /* STDownloaderOperation.swift in Sources */,
 				A05F9DD126A60E6900F9F343 /* STKeyChainService.swift in Sources */,
 				A050C50627066530007587B5 /* STAssetResourceLoader+Decrypter.swift in Sources */,
@@ -2614,6 +2652,7 @@
 				A0DE2DF026B8A52A00887D55 /* STAppSettings+Backup.swift in Sources */,
 				A0F980D32753E89A00DE9958 /* STAboutBaseTableViewCell.swift in Sources */,
 				A00982F526234EAB00559C41 /* STUploadWorker.swift in Sources */,
+				A08F27A62785ACBC00EF8BE4 /* STAutoImportDialogVM.swift in Sources */,
 				A02ED2EB2603FD2200F10D58 /* STImageView.swift in Sources */,
 				A04219962690983C001FBFBF /* STTrashFileViewerVM.swift in Sources */,
 				A075B71E2651BBD000B4E2DF /* STSharedAlbumSettingsVM.swift in Sources */,
@@ -2775,6 +2814,7 @@
 				A024330325F6384C0054BED9 /* STObserverEvents.swift in Sources */,
 				A01747EF260A9C60000D98F0 /* STFileDiskCache.swift in Sources */,
 				A0D8A99125F44B2D005C12F8 /* StingleModel.xcdatamodeld in Sources */,
+				A08512D3277A6F060006A2DD /* STAlertViewController.swift in Sources */,
 				A04512BB2638B13400BE0B06 /* STAlbumRequest.swift in Sources */,
 				A077780125FFF81100BA2BDF /* STGalleryVM.swift in Sources */,
 				A022047E25EEDC0400D07C98 /* STSyncRequest.swift in Sources */,
@@ -2860,7 +2900,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -2950,7 +2990,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -3035,7 +3075,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -3120,7 +3160,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

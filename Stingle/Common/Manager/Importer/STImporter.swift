@@ -21,10 +21,13 @@ enum STImporter {
         typealias Hendler = () -> Void
         typealias Complition = (_ files: [STLibrary.File]) -> Void
         
-        static private var operationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 5, underlyingQueue: nil)
+        
+        static private let importerDispatchQueue = DispatchQueue(label: "Importer.queue", attributes: .concurrent)
+        
+        static private var operationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 5, underlyingQueue: Importer.importerDispatchQueue)
         
         let uploadFiles: [IUploadFile]
-        let dispatchQueue: DispatchQueue
+        let responseQueue: DispatchQueue
         
         var startHendler: ProgressHendler?
         var progressHendler: ProgressHendler?
@@ -38,32 +41,25 @@ enum STImporter {
             return STOperationManager.shared
         }
         
-        init(uploadFiles: [IUploadFile], dispatchQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
+        init(uploadFiles: [IUploadFile], responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
             self.uploadFiles = uploadFiles
-            self.dispatchQueue = dispatchQueue
+            self.responseQueue = responseQueue
             
             defer {
                 self.startImport(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
             }
             
         }
-        
-        func addDB(files: [STLibrary.File]) -> [STLibrary.File] {
-            var galleryFiles = [STLibrary.File]()
-            files.forEach { file in
-                if file.dbSet == .file {
-                    galleryFiles.append(file)
-                }
-            }
-            let dataBase = STApplication.shared.dataBase
-            dataBase.galleryProvider.add(models: galleryFiles, reloadData: true)
-            return galleryFiles
-        }
-        
+                
         //MARK: - Private methods
         
+        fileprivate func addDB(file: STLibrary.File, reloadData: Bool) {
+            let dataBase = STApplication.shared.dataBase
+            dataBase.galleryProvider.add(models: [file], reloadData: reloadData)
+        }
+        
         private func startImport(startHendler:  @escaping Hendler, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
-            self.dispatchQueue.asyncAfter(deadline: .now() + 0.1) {
+            self.responseQueue.asyncAfter(deadline: .now() + 0.1) {
                 self.importFiles(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
             }
         }
@@ -80,42 +76,48 @@ enum STImporter {
             
             self.uploadFiles.forEach { uploadFile in
                 let operation = Operation(uploadFile: uploadFile) { result in
-                    completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
-                    files.append(result)
-                    let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount, uploadFile: uploadFile)
-                    progressHendler(progress)
-                    self.progressHendler?(progress)
-                    
-                    if totalUnitCount == completedUnitCount {
-                        let dbFiles = self.addDB(files: files)
-                        complition(dbFiles)
-                        self.complition?(dbFiles)
+                    self.responseQueue.async(flags: .barrier) {
+                        files.append(result)
+                        completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
+                        let isComplited = totalUnitCount == completedUnitCount
+                        self.addDB(file: result, reloadData: isComplited)
+                        let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount, uploadFile: uploadFile)
+                        progressHendler(progress)
+                        self.progressHendler?(progress)
+                        if isComplited {
+                            complition(files)
+                            self.complition?(files)
+                        }
                     }
                     
                 } failure: { error in
-
-                    completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
-                    let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount, uploadFile: uploadFile)
-                    progressHendler(progress)
-                    self.progressHendler?(progress)
                     
-                    if totalUnitCount == completedUnitCount {
-                        let dbFiles = self.addDB(files: files)
-                        complition(dbFiles)
-                        self.complition?(dbFiles)
+                    self.responseQueue.async(flags: .barrier) {
+                        completedUnitCount = min(completedUnitCount + 1, totalUnitCount)
+                        let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: completedUnitCount, uploadFile: uploadFile)
+                        progressHendler(progress)
+                        self.progressHendler?(progress)
+                        if totalUnitCount == completedUnitCount {
+                            self.complition?(files)
+                        }
                     }
                     
                 }
-                
                 self.operationManager.run(operation: operation, in: self.operationQueue)
             }
             
             if totalUnitCount == .zero {
-                self.complition?([])
-                complition([])
+                self.responseQueue.async {
+                    self.complition?([])
+                    complition([])
+                }
             }
         }
-                
+        
+        func canImport() -> Bool {
+            return false
+        }
+      
     }
     
 }
@@ -127,23 +129,17 @@ extension STImporter {
         
         let album: STLibrary.Album
         
-        init(uploadFiles: [IUploadFile], album: STLibrary.Album, dispatchQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
+        init(uploadFiles: [IUploadFile], album: STLibrary.Album, responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
             self.album = album
-            super.init(uploadFiles: uploadFiles, dispatchQueue: dispatchQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition)
+            super.init(uploadFiles: uploadFiles, responseQueue: responseQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition)
         }
         
-        override func addDB(files: [STLibrary.File]) -> [STLibrary.File] {
-            var albumFiles = [STLibrary.AlbumFile]()
-            files.forEach { file in
-                if let albumFile = file as? STLibrary.AlbumFile  {
-                    albumFiles.append(albumFile)
-                }
+        override fileprivate func addDB(file: STLibrary.File, reloadData: Bool) {
+            guard let albumFile = file as? STLibrary.AlbumFile else {
+                fatalError("files not correct")
             }
-            
             let dataBase = STApplication.shared.dataBase
-            dataBase.addAlbumFiles(albumFiles: albumFiles, album: self.album, reloadData: true)
-            return albumFiles
-            
+            dataBase.addAlbumFiles(albumFiles: [albumFile], album: self.album, reloadData: true)
         }
         
     }
@@ -163,7 +159,7 @@ extension STImporter.Importer {
         
         override func resume() {
             super.resume()
-            self.uploadFile.requestFile { [weak self] file in
+            self.uploadFile.requestFile(in: self.delegate?.underlyingQueue) { [weak self] file in
                 self?.responseSucces(result: file)
             } failure: { [weak self] error in
                 self?.responseFailed(error: error)

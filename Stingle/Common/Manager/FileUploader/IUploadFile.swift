@@ -9,7 +9,7 @@ import Photos
 import UIKit
 
 protocol IUploadFile {
-    func requestFile(success: @escaping (_ file: STLibrary.File) -> Void, failure: @escaping (_ failure: IError ) -> Void)
+    func requestFile(in queue: DispatchQueue?, success: @escaping (_ file: STLibrary.File) -> Void, failure: @escaping (_ failure: IError ) -> Void)
 }
 
 extension STFileUploader {
@@ -22,12 +22,22 @@ extension STFileUploader {
             self.asset = asset
         }
         
-        func requestFile(success: @escaping (STLibrary.File) -> Void, failure: @escaping (IError) -> Void) {
-            self.requestData(success: { [weak self] uploadInfo in
+        func requestFile(in queue: DispatchQueue?, success: @escaping (_ file: STLibrary.File) -> Void, failure: @escaping (_ failure: IError ) -> Void) {
+            
+            self.requestData(in: queue, success: { [weak self] uploadInfo in
                 guard let weakSelf = self else {
                     failure(STFileUploader.UploaderError.fileNotFound)
                     return
                 }
+                
+                let freeDiskUnits = STFileSystem.DiskStatus.freeDiskSpaceUnits
+                let afterImportfreeDiskUnits = STBytesUnits(bytes: freeDiskUnits.bytes - Int64(uploadInfo.fileSize))
+                
+                guard afterImportfreeDiskUnits > STConstants.minFreeDiskUnits else {
+                    failure(STFileUploader.UploaderError.memoryLow)
+                    return
+                }
+                
                 do {
                     let file = try weakSelf.createUploadFile(info: uploadInfo)
                     success(file)
@@ -81,18 +91,21 @@ extension STFileUploader {
             return file
         }
         
-        func requestData(success: @escaping (_ uploadInfo: STFileUploader.UploadFileInfo) -> Void, failure: @escaping (IError) -> Void) {
+        func requestData(in queue: DispatchQueue?, success: @escaping (_ uploadInfo: STFileUploader.UploadFileInfo) -> Void, failure: @escaping (IError) -> Void) {
+                        
             guard let fileType = STFileUploader.FileType(rawValue: self.asset.mediaType.rawValue) else {
                 failure(STFileUploader.UploaderError.phAssetNotValid)
                 return
             }
-            self.asset.requestGetThumb { [weak self] (thumb) in
-                guard let thumb = thumb, let thumbData = thumb.jpegData(compressionQuality: 0.7) else {
+                        
+            self.asset.requestGetURL(in: queue) { [weak self] info in
+                guard let info = info else {
                     failure(STFileUploader.UploaderError.phAssetNotValid)
                     return
                 }
-                self?.asset.requestGetURL(completion: { (info) in
-                    guard let info = info else {
+                
+                self?.asset.requestGetThumb(in: queue, completion: { thumbImage in
+                    guard let thumb = thumbImage, let thumbData = thumb.jpegData(compressionQuality: 0.7) else {
                         failure(STFileUploader.UploaderError.phAssetNotValid)
                         return
                     }
@@ -155,15 +168,15 @@ private extension PHAsset {
         var modificationDate: Date?
     }
 
-    func requestGetURL(completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+    func requestGetURL(in queue: DispatchQueue?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
         if self.mediaType == .image {
-            self.requestGetImageAssetDataInfo(completion: completion)
+            self.requestGetImageAssetDataInfo(in: queue, completion: completion)
         } else if self.mediaType == .video {
-            self.requestGetVideoAssetDataInfo(completion: completion)
+            self.requestGetVideoAssetDataInfo(in: queue, completion: completion)
         }
     }
     
-    func requestGetThumb(completion : @escaping ((_ image: UIImage?) -> Void)) {
+    func requestGetThumb(in queue: DispatchQueue?, completion : @escaping ((_ image: UIImage?) -> Void)) {
         let options = PHImageRequestOptions()
         options.version = .current
         options.resizeMode = .exact
@@ -171,15 +184,35 @@ private extension PHAsset {
         options.isNetworkAccessAllowed = true
         let size = STConstants.thumbSize(for: CGSize(width: self.pixelWidth, height: self.pixelHeight))
         Self.phManager.requestImage(for: self, targetSize: size, contentMode: .aspectFit, options: options) { thumb, info  in
-            completion(thumb)
+            
+            if let queue = queue {
+                queue.async {
+                    completion(thumb)
+                }
+            } else {
+                completion(thumb)
+            }
+           
         }
     }
     
     //MARK: - Private
     
-    private func requestGetVideoAssetDataInfo(completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+    private func requestGetVideoAssetDataInfo(in queue: DispatchQueue?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+        
+        
+        func complet(info: PHAssetDataInfo?) {
+            if let queue = queue {
+                queue.async {
+                    completion(info)
+                }
+            } else {
+                completion(info)
+            }
+        }
+        
         guard self.mediaType == .video else {
-            completion(nil)
+            complet(info: nil)
             return
         }
         
@@ -205,16 +238,27 @@ private extension PHAsset {
                                 creationDate: creationDate,
                                 modificationDate: modificationDate)
                 
-                completion(result)
+                complet(info: result)
             } else {
-                completion(nil)
+                complet(info: nil)
             }
         })
     }
     
-    private func requestGetImageAssetDataInfo(completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+    private func requestGetImageAssetDataInfo(in queue: DispatchQueue?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+        
+        func complet(info: PHAssetDataInfo?) {
+            if let queue = queue {
+                queue.async {
+                    completion(info)
+                }
+            } else {
+                completion(info)
+            }
+        }
+        
         guard self.mediaType == .image else {
-            completion(nil)
+            complet(info: nil)
             return
         }
         let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
@@ -228,7 +272,7 @@ private extension PHAsset {
         
         self.requestContentEditingInput(with: options, completionHandler: {(contentEditingInput: PHContentEditingInput?, info: [AnyHashable : Any]) -> Void in
             guard let contentEditingInput = contentEditingInput, let fullSizeImageURL = contentEditingInput.fullSizeImageURL else {
-                completion(nil)
+                complet(info: nil)
                 return
             }
             let responseURL: URL = fullSizeImageURL
@@ -244,7 +288,7 @@ private extension PHAsset {
                             fileSize: fileSize,
                             creationDate: creationDate,
                             modificationDate: modificationDate)
-            completion(result)
+            complet(info: result)
         })
         
     }

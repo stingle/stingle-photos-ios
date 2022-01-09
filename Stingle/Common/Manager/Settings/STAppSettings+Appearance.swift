@@ -34,6 +34,10 @@ extension STAppSettings {
                 }
             }
         }
+        
+        public static func != (lhs: Self, rhs: Self) -> Bool {
+            return lhs.theme != rhs.theme
+        }
 
     }
         

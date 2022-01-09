@@ -53,7 +53,7 @@ extension STDataBase {
                     if let inserts = try? self.getInsertObjects(with: models) {
                         let insertRequest = NSBatchInsertRequest(entityName: ManagedModel.entityName, objects: inserts.json)
                         insertRequest.resultType = .objectIDs
-                        let _ = try context.execute(insertRequest)
+                         let _ = try context.execute(insertRequest)
                     }
                 } catch {
                     print(error)

@@ -48,7 +48,6 @@ extension STDataBase {
         private(set) var snapshotReference: NSDiffableDataSourceSnapshotReference?
         let viewContext: NSManagedObjectContext
         private var controller: NSFetchedResultsController<ManagedModel>!
-        private let cache = NSCache<NSIndexPath, Model>()
         
         var isSyncing: Bool {
             return STApplication.shared.syncManager.isSyncing
@@ -94,21 +93,12 @@ extension STDataBase {
         }
                 
         func object(at indexPath: IndexPath) -> Model? {
-            
             guard !self.isFetching else {
                 return nil
             }
-            
-            if let model = self.cache.object(forKey: indexPath as NSIndexPath) {
-                return model
-            } else {
-                let obj = self.controller.object(at: indexPath)
-                if let result = try? obj.createModel() {
-//                    self.cache.setObject(result, forKey: indexPath as NSIndexPath)
-                    return result
-                }
-            }
-            return nil
+            let obj = self.controller.object(at: indexPath)
+            let result = try? obj.createModel()
+            return result
         }
         
         func managedModel(at indexPath: IndexPath) -> ManagedModel? {
@@ -153,7 +143,6 @@ extension STDataBase {
         //MARK: - NSFetchedResultsControllerDelegate
         
         func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-            self.cache.removeAllObjects()
             self.snapshotReference = snapshot
             self.isFetching = false
             self.delegate?.dataSource(self, didChangeContentWith: snapshot)

@@ -23,16 +23,18 @@ extension STAlbumFilesVC {
             self.album = album
         }
         
-        func cellModel(for indexPath: IndexPath, data: STLibrary.AlbumFile) -> CellModel {
+        func cellModel(for indexPath: IndexPath, data: STLibrary.AlbumFile?) -> CellModel {
+           
             let image = STImageView.Image(album: self.album, albumFile: data, isThumb: true)
+           
             var videoDurationStr: String? = nil
-            if let duration = data.decryptsHeaders.file?.videoDuration, duration > 0 {
+            if let duration = data?.decryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).timeFormat()
             }
             return CellModel(image: image,
-                             name: data.file,
+                             name: data?.file,
                              videoDuration: videoDurationStr,
-                             isRemote: data.isRemote,
+                             isRemote: data?.isRemote ?? true,
                              selectedMode: self.isSelectedMode)
         }
         
@@ -92,8 +94,8 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
     
     private var viewModel: STAlbumFilesVM!
     
-    private lazy var pickerHelper: STImagePickerHelper = {
-        return STImagePickerHelper(controller: self)
+    private lazy var pickerHelper: STPHPhotoHelper = {
+        return STPHPhotoHelper(controller: self)
     }()
     
     lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
@@ -262,8 +264,8 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         let title = "delete_original_files".localized
         let message = "alert_delete_original_files_message".localized
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let delete = UIAlertAction(title: "delete".localized, style: .destructive) { [weak self] _ in
-            self?.pickerHelper.delete(assets: assets)
+        let delete = UIAlertAction(title: "delete".localized, style: .destructive) { _ in
+            STPHPhotoHelper.delete(assets: assets)
         }
         let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
         alert.addAction(delete)
@@ -286,7 +288,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
             let placeholder = "album_name".localized
             let title = "rename_album".localized
             
-            self.showOkCancelAlert(title: title, message: nil) { [weak self] textField in
+            self.showOkCancelTextAlert(title: title, message: nil) { [weak self] textField in
                 textField.text =  self?.album.albumMetadata?.name
                 textField.placeholder = placeholder
             } handler: { [weak self] newName in
@@ -309,7 +311,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         case .delete:
             let title = String(format: "delete_album_alert_title".localized, album.albumMetadata?.name ?? "")
             let message = String(format: "delete_album_alert_message".localized, album.albumMetadata?.name ?? "")
-            self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
+            self.showOkCancelTextAlert(title: title, message: message, handler: { [weak self] _ in
                 STLoadingView.show(in: loadingView)
                 self?.viewModel.delete { error in
                     didResiveResult(error: error)
@@ -317,7 +319,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
             })
         case .leave:
             STLoadingView.show(in: loadingView)
-            self.showOkCancelAlert(title: "leave".localized, message: "leave_album_alert_message".localized, handler: { [weak self] _ in
+            self.showOkCancelTextAlert(title: "leave".localized, message: "leave_album_alert_message".localized, handler: { [weak self] _ in
                 self?.viewModel.leave { error in
                     didResiveResult(error: error)
                 }
@@ -436,13 +438,14 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
     }
     
     private func saveItemsToDevice(downloadeds: [STFilesDownloaderActivityVM.DecryptDownloadFile], folderUrl: URL?) {
-        var filesSave = [(url: URL, itemType: STImagePickerHelper.ItemType)]()
+        var filesSave = [(url: URL, itemType: STPHPhotoHelper.ItemType)]()
         downloadeds.forEach { file in
-            let type: STImagePickerHelper.ItemType = file.header.fileOreginalType == .image ? .photo : .video
+            let type: STPHPhotoHelper.ItemType = file.header.fileOreginalType == .image ? .photo : .video
             let url = file.url
             filesSave.append((url, type))
         }
-        self.pickerHelper.save(items: filesSave) { [weak self] in
+        
+        STPHPhotoHelper.save(items: filesSave) { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
             }
@@ -507,7 +510,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
 
 extension STAlbumFilesVC: STImagePickerHelperDelegate {
     
-    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset], failedAssetCount: Int) {
+    func pickerViewController(_ imagePickerHelper: STPHPhotoHelper, didPickAssets assets: [PHAsset], failedAssetCount: Int) {
         guard failedAssetCount > .zero else {
             self.import(assets: assets)
             return
@@ -626,7 +629,7 @@ extension STAlbumFilesVC {
         let count = self.selectionObjectsIdentifiers.count
         let title = "delete_files_alert_title".localized
         let message = String(format: "delete_move_files_alert_message".localized, "\(count)")
-        self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
+        self.showOkCancelTextAlert(title: title, message: message, handler: { [weak self] _ in
             self?.deleteSelectedFiles()
         })
     }

@@ -128,7 +128,7 @@ extension STApplication.Utils {
     }
     
     func canUploadFile() -> Bool {
-        let settings = STAppSettings.backup
+        let settings = STAppSettings.current.backup
         guard settings.isEnabled else {
             return false
         }
@@ -170,22 +170,24 @@ extension STApplication.Utils  {
         let key = try? STApplication.shared.crypto.getPrivateKey(password: password)
         STKeyManagement.key = key
         
-        if STAppSettings.security.authentication.unlock {
+        if STAppSettings.current.security.authentication.unlock {
             STBiometricAuthServices().onBiometricAuth(password: password)
         }
     }
     
     func logout() {
         self.logout(appInUnauthorized: false)
+        self.application.auotImporter.logout()
     }
     
     func deleteAccount() {
         self.application.fileSystem.deleteAccount()
         self.application.dataBase.deleteAll()
+        self.application.auotImporter.logout()
         STKeyManagement.signOut()
         STOperationManager.shared.logout()
         STBiometricAuthServices().removeBiometricAuth()
-        STAppSettings.logOut()
+        STAppSettings.current.logOut()
         self.userRemoveHendler?()
         STMainVC.show(appInUnauthorized: false)
     }
@@ -205,7 +207,7 @@ extension STApplication.Utils  {
         STKeyManagement.signOut()
         STOperationManager.shared.logout()
         STBiometricAuthServices().removeBiometricAuth()
-        STAppSettings.logOut()
+        STAppSettings.current.logOut()
         self.userRemoveHendler?()
         STMainVC.show(appInUnauthorized: appInUnauthorized)
     }

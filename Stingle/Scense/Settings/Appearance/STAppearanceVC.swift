@@ -19,9 +19,13 @@ class STAppearanceVC: STSettingsDetailTableVC<STAppearanceVC.SectionType, STAppe
         return self.viewModel.appearance
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.reloadTableData()
+    }
+    
     override func configureLocalized() {
         self.navigationItem.title = "appearance".localized
-        self.reloadTableData()
     }
     
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {

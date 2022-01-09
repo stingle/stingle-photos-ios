@@ -10,25 +10,25 @@ import Photos
 import PhotosUI
 
 protocol STImagePickerHelperDelegate: UIViewController {
-    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset], failedAssetCount: Int)
-    func pickerViewControllerDidCancel(_ imagePickerHelper: STImagePickerHelper)
+    func pickerViewController(_ imagePickerHelper: STPHPhotoHelper, didPickAssets assets: [PHAsset], failedAssetCount: Int)
+    func pickerViewControllerDidCancel(_ imagePickerHelper: STPHPhotoHelper)
 }
 
 extension STImagePickerHelperDelegate {
-    func pickerViewControllerDidCancel(_ imagePickerHelper: STImagePickerHelper) {}
-    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset]) {}
+    func pickerViewControllerDidCancel(_ imagePickerHelper: STPHPhotoHelper) {}
+    func pickerViewController(_ imagePickerHelper: STPHPhotoHelper, didPickAssets assets: [PHAsset]) {}
 }
 
-class STImagePickerHelper: NSObject {
-    
-    weak var viewController: STImagePickerHelperDelegate?
+class STPHPhotoHelper: NSObject {
         
+    weak var viewController: STImagePickerHelperDelegate?
+    
     init(controller: STImagePickerHelperDelegate?) {
         self.viewController = controller
     }
     
     func openPicker() {
-        self.checkAndReqauestAuthorization { (status) in
+        Self.checkAndReqauestAuthorization { (status) in
             switch status {
             case .authorized, .limited:
                 self.open()
@@ -39,28 +39,7 @@ class STImagePickerHelper: NSObject {
             }
         }
     }
-    
-    func save(items: [(url: URL, itemType: ItemType)], completionHandler: @escaping (() -> Void) ) {
-        let library = PHPhotoLibrary.shared()
-        var count = items.count
-        for item in items {
-            library.performChanges {
-                let _ = item.itemType == .photo ? PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: item.url) :  PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: item.url)
-            } completionHandler: { _, error in
-                count = count - 1
-                if count == .zero {
-                    completionHandler()
-                }
-            }
-        }
-    }
-    
-    func delete(assets: [PHAsset]) {
-        try? PHPhotoLibrary.shared().performChangesAndWait {
-            PHAssetChangeRequest.deleteAssets(assets as NSFastEnumeration)
-        }
-    }
-    
+        
     //MARK: - Private
     
     private func showAuthorizationPermissionAlertMain() {
@@ -99,21 +78,10 @@ class STImagePickerHelper: NSObject {
         picker.delegate = self
         self.viewController?.showDetailViewController(picker, sender: nil)
     }
-    
-    private func checkAndReqauestAuthorization(completion: @escaping (PHAuthorizationStatus) -> Void) {
-        let status = PHPhotoLibrary.authorizationStatus()
-        if status == .notDetermined  {
-            PHPhotoLibrary.requestAuthorization({status in
-                completion(status)
-            })
-        } else {
-            completion(status)
-        }
-    }
-    
+        
 }
 
-extension STImagePickerHelper: PHPickerViewControllerDelegate {
+extension STPHPhotoHelper: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
@@ -130,7 +98,53 @@ extension STImagePickerHelper: PHPickerViewControllerDelegate {
     
 }
 
-extension STImagePickerHelper {
+extension STPHPhotoHelper {
+    
+    static fileprivate var authorizationStatus: PHAuthorizationStatus?
+    
+    class func checkAndReqauestAuthorization(queue: DispatchQueue? = nil, completion: @escaping (PHAuthorizationStatus) -> Void) {
+        
+        if let authorizationStatus = self.authorizationStatus {
+            let queue = queue ?? DispatchQueue.main
+            queue.async {
+                completion(authorizationStatus)
+            }
+            return
+        }
+       
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+            let queue = queue ?? DispatchQueue.main
+            self.authorizationStatus = status
+            queue.async {
+                completion(status)
+            }
+        }
+    }
+    
+    class func delete(assets: [PHAsset]) {
+        try? PHPhotoLibrary.shared().performChangesAndWait {
+            PHAssetChangeRequest.deleteAssets(assets as NSFastEnumeration)
+        }
+    }
+    
+    class func save(items: [(url: URL, itemType: ItemType)], completionHandler: @escaping (() -> Void) ) {
+        let library = PHPhotoLibrary.shared()
+        var count = items.count
+        for item in items {
+            library.performChanges {
+                let _ = item.itemType == .photo ? PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: item.url) :  PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: item.url)
+            } completionHandler: { _, error in
+                count = count - 1
+                if count == .zero {
+                    completionHandler()
+                }
+            }
+        }
+    }
+    
+}
+
+extension STPHPhotoHelper {
 
     enum ItemType {
         case photo

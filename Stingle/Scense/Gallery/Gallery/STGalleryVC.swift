@@ -18,16 +18,18 @@ extension STGalleryVC {
         
         var isSelectedMode = false
         
-        func cellModel(for indexPath: IndexPath, data: STLibrary.File) -> CellModel {
+        func cellModel(for indexPath: IndexPath, data: STLibrary.File?) -> CellModel {
+            
             let image = STImageView.Image(file: data, isThumb: true)
+            
             var videoDurationStr: String? = nil
-            if let duration = data.decryptsHeaders.file?.videoDuration, duration > 0 {
+            if let duration = data?.decryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).timeFormat()
             }
             return CellModel(image: image,
-                             name: data.file,
+                             name: data?.file,
                              videoDuration: videoDurationStr,
-                             isRemote: data.isRemote,
+                             isRemote: data?.isRemote ?? true,
                              selectedMode: self.isSelectedMode)
         }
         
@@ -90,8 +92,8 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         return resilt
     }()
     
-    private lazy var pickerHelper: STImagePickerHelper = {
-        return STImagePickerHelper(controller: self)
+    private lazy var pickerHelper: STPHPhotoHelper = {
+        return STPHPhotoHelper(controller: self)
     }()
     
     //MARK: - Override
@@ -275,13 +277,14 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
     }
     
     private func saveItemsToDevice(downloadeds: [STFilesDownloaderActivityVM.DecryptDownloadFile], folderUrl: URL?) {
-        var filesSave = [(url: URL, itemType: STImagePickerHelper.ItemType)]()
+        var filesSave = [(url: URL, itemType: STPHPhotoHelper.ItemType)]()
         downloadeds.forEach { file in
-            let type: STImagePickerHelper.ItemType = file.header.fileOreginalType == .image ? .photo : .video
+            let type: STPHPhotoHelper.ItemType = file.header.fileOreginalType == .image ? .photo : .video
             let url = file.url
             filesSave.append((url, type))
         }
-        self.pickerHelper.save(items: filesSave) { [weak self] in
+        
+        STPHPhotoHelper.save(items: filesSave) { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
             }
@@ -304,8 +307,8 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-        let delete = UIAlertAction(title: "delete".localized, style: .destructive) { [weak self] _ in
-            self?.pickerHelper.delete(assets: assets)
+        let delete = UIAlertAction(title: "delete".localized, style: .destructive) { _ in
+            STPHPhotoHelper.delete(assets: assets)
         }
         
         let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
@@ -406,7 +409,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
 
 extension STGalleryVC: STImagePickerHelperDelegate {
     
-    func pickerViewController(_ imagePickerHelper: STImagePickerHelper, didPickAssets assets: [PHAsset], failedAssetCount: Int) {
+    func pickerViewController(_ imagePickerHelper: STPHPhotoHelper, didPickAssets assets: [PHAsset], failedAssetCount: Int) {
         guard failedAssetCount > .zero else {
             self.import(assets: assets)
             return
@@ -517,7 +520,7 @@ extension STGalleryVC {
         let files = self.getSelectedFiles()
         let title = "delete_files_alert_title".localized
         let message = String(format: "delete_move_files_alert_message".localized, "\(files.count)")
-        self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
+        self.showOkCancelTextAlert(title: title, message: message, handler: { [weak self] _ in
             self?.deleteCurrentFile(files: files)
         })
     }

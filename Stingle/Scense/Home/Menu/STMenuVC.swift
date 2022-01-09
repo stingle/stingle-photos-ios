@@ -49,7 +49,9 @@ class STMenuVC: STSplitViewController {
     
     private func showIsFirstOpensView() {
         self.showBackupPhraseIfNeeded { [weak self] in
-            self?.showBiometricAuthQuestionIfNeeded {}
+            self?.showBiometricAuthQuestionIfNeeded { [weak self] in
+                self?.showAutoImportContollerIfNeeded {}
+            }
         }
     }
     
@@ -67,6 +69,10 @@ class STMenuVC: STSplitViewController {
         self.appPassword = nil
     }
     
+    private func showAutoImportContollerIfNeeded(completion: @escaping (() -> Void)) {
+        STAutoImportDialogVC.showDialog(in: self, completion: completion)
+    }
+    
     private func showBackupPhraseIfNeeded(completion: @escaping (() -> Void)) {
         let isKeyBackedUp = (STApplication.shared.utils.user()?.isKeyBackedUp ?? true)
         guard !isKeyBackedUp, let key = STKeyManagement.key, let mnemonic = try? STMnemonic.mnemonicString(from: key), self.isShowBackupPhrase else {
@@ -80,9 +86,9 @@ class STMenuVC: STSplitViewController {
         
     private func onBiometricAuth(password: String) {
         self.biometricAuthServices.onBiometricAuth(password: password, {
-            var security = STAppSettings.security
+            var security = STAppSettings.current.security
             security.authentication.unlock = true
-            STAppSettings.security = security
+            STAppSettings.current.security = security
         }, failure: nil)
     }
     

@@ -10,12 +10,12 @@ import Foundation
 class STAdvancedVM {
     
     lazy var advanced: STAppSettings.Advanced = {
-        return STAppSettings.advanced
+        return STAppSettings.current.advanced
     }()
     
     func update(cacheSize: STAppSettings.Advanced.CacheSize) {
         self.advanced.cacheSize = cacheSize
-        STAppSettings.advanced = self.advanced
+        STAppSettings.current.advanced = self.advanced
     }
     
     func removeCache() {

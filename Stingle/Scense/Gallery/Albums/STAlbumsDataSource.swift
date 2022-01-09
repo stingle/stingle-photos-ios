@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 protocol STAlbumsDataSourceViewModelDelegate: AnyObject {
-    func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)
+    func viewModel(albumMedadataFor album: STLibrary.Album?) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)
 }
 
 protocol IAlbumsViewModel: ICollectionDataSourceViewModel where CDModel == STCDAlbum {
@@ -45,7 +45,12 @@ extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
         let countFiles: Int
     }
     
-    func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?) {
+    func viewModel(albumMedadataFor album: STLibrary.Album?) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?) {
+        
+        guard let album = album else {
+            return (.zero, nil, nil)
+        }
+        
         var albumInfo: AlbumInfo!
         let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
         if let info = self.albumInfoFiles[album.albumId] {

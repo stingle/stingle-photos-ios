@@ -53,7 +53,7 @@ extension STCrypto {
         let inputThumb = InputStream(data: thumbImage)
         inputThumb.open()
         let thumbUrl = toThumbUrl.appendingPathComponent(fileName)
-        guard let outputThumb = OutputStream(toFileAtPath: thumbUrl.path, append: true) else {
+        guard let outputThumb = OutputStream(toFileAtPath: thumbUrl.path, append: false) else {
             inputThumb.close()
             throw CryptoError.General.creationFailure
         }

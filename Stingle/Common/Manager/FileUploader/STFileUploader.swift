@@ -33,7 +33,7 @@ class STFileUploader {
     private(set) var progresses = [String: Progress]()
     private(set) var uploadedFiles = [STLibrary.File]()
     private(set) var uploadingFiles = [STLibrary.File]()
-    let maxCountUploads = 5
+    let maxCountUploads = 3
     let maxCountUpdateDB = 5
         
     
@@ -48,7 +48,7 @@ class STFileUploader {
     
     @discardableResult
     func upload(files: [IUploadFile]) -> STImporter.Importer {
-        let importer = STImporter.Importer(uploadFiles: files, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+        let importer = STImporter.Importer(uploadFiles: files, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
@@ -56,7 +56,7 @@ class STFileUploader {
     
     @discardableResult
     func uploadAlbum(files: [IUploadFile], album: STLibrary.Album) -> STImporter.Importer {
-        let importer = STImporter.AlbumFileImporter(uploadFiles: files, album: album, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+        let importer = STImporter.AlbumFileImporter(uploadFiles: files, album: album, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
@@ -371,6 +371,7 @@ extension STFileUploader {
         case wrongStorageSize
         case fileNotFound
         case canceled
+        case memoryLow
         case error(error: Error)
         
         var message: String {
@@ -385,6 +386,8 @@ extension STFileUploader {
                 return "error_data_not_found".localized
             case .canceled:
                 return "error_canceled".localized
+            case .memoryLow:
+                return "error_memory_low".localized
             case .error(let error):
                 if let iError = error as? IError {
                     return iError.message

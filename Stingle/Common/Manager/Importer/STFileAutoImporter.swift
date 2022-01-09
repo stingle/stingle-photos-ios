@@ -15,6 +15,10 @@ extension STImporter {
         
         private let dispatchQueue = DispatchQueue(label: "AuotImporter.queue", attributes: .concurrent)
         
+        private var importSettings: STAppSettings.Import {
+            return STAppSettings.current.import
+        }
+        
         lazy private var queue: STOperationQueue = {
             return STOperationManager.shared.createQueue(maxConcurrentOperationCount: 1, underlyingQueue: self.dispatchQueue)
         }()
@@ -23,12 +27,26 @@ extension STImporter {
             set {
                 UserDefaults.standard.set(newValue, forKey: "lastImportDate")
             } get {
-                return UserDefaults.standard.object(forKey: "lastImportDate") as? Date
+                guard let saveDate = (UserDefaults.standard.object(forKey: "lastImportDate") as? Date) else {
+                    let currentData = Date()
+                    let date = (self.importSettings.isImporsExistingFiles || !self.importSettings.isAutoImportEnable) ? nil : currentData
+                    if !self.importSettings.isImporsExistingFiles && self.importSettings.isAutoImportEnable {
+                        UserDefaults.standard.set(currentData, forKey: "lastImportDate")
+                    }
+                    return date
+                }
+                return saveDate
             }
         }
         
-        private var fetchLimit: Int = 1
+        private var fetchLimit: Int = 50
         private var isStarted: Bool = false
+        
+        //MARK: - Public methods
+        
+        init() {
+            STAppSettings.current.addObserver(self)
+        }
         
         func startImport() {
             guard !self.isStarted else {
@@ -38,50 +56,85 @@ extension STImporter {
             self.startImportAssets()
         }
         
-        private func startImportAssets() {
+        func logout() {
+            self.endImportIng()
             self.lastImportDate = nil
+        }
+        
+        //MARK: - Private methods
+        
+        private func startImportAssets() {
             self.startNextImport()
         }
         
-        private func startNextImport() {
-            
-            print("startNextImport")
-            
-            let operation = Operation(success: { [weak self] importCount in
-
-                print("startNextImport ended")
-                if importCount != .zero {
-                    
-                    self?.dispatchQueue.asyncAfter(wallDeadline: .now()) { [weak self] in
-                        self?.startNextImport()
-                    }
-                    
-                    
-                } else {
-                    print("startNextImport ended endedendedendedendedended")
-                }
-                
-            }, failure: { error in
-                
-                print("startNextImport error", error.message)
-                
-            }, progress: { [weak self] progress in
-                if let date = progress.userInfo[.dateKey] as? Date {
-                    self?.lastImportDate = date
-                }
-            }, fromDate: self.lastImportDate, fetchLimit: self.fetchLimit)
-            
-            
-            operation.didStartRun(with: self.queue)
-            
+        private func endImportIng() {
+            self.queue.cancelAllOperations()
+            self.didEndImportIng()
         }
         
-                
+        private func didEndImportIng() {
+            guard self.isStarted else {
+                return
+            }
+            self.isStarted = false
+        }
+        
+        private func startNextImport() {
+            let operation = Operation(success: { [weak self] importCount in
+                if importCount != .zero {
+                    self?.dispatchQueue.asyncAfter(wallDeadline: .now() + 0.5) { [weak self] in
+                        self?.startNextImport()
+                    }
+                } else {
+                    self?.endImportIng()
+                }
+            }, failure: { [weak self] error in
+                self?.endImportIng()
+            }, progress: { [weak self] progress in
+                if let date = progress.userInfo[.dateKey] as? Date {
+                    if let lastImportDate = self?.lastImportDate, date > lastImportDate {
+                        self?.lastImportDate = date
+                    } else if self?.lastImportDate == nil {
+                        self?.lastImportDate = date
+                    }
+                }
+            }, fromDate: self.lastImportDate, fetchLimit: self.fetchLimit)
+                        
+            operation.didStartRun(with: self.queue)
+        }
+             
+    }
+    
+}
+
+extension STImporter.AuotImporter: ISettingsObserver {
+    
+    func appSettings(didChange settings: STAppSettings, import: STAppSettings.Import) {
+        if `import`.isAutoImportEnable {
+            self.startImport()
+        } else {
+            self.endImportIng()
+        }
     }
     
 }
 
 extension STImporter.AuotImporter {
+    
+    enum AuotImporterError: IError {
+       
+        case cantImportFiles
+        case canceled
+        
+        var message: String {
+            switch self {
+            case .cantImportFiles:
+                return "Can't import files"
+            case .canceled:
+                return "error_canceled".localized
+            }
+        }
+    }
             
     class Operation: STOperation<Int?> {
         
@@ -97,10 +150,21 @@ extension STImporter.AuotImporter {
             super.init(success: success, failure: failure, progress: progress)
         }
         
+        //MARK: - override methods
+        
         override func resume() {
             super.resume()
-            self.enumerateObjects()
+            self.canImportFiles { [weak self] canImport in
+                if canImport {
+                    self?.enumerateObjects()
+                } else {
+                    self?.responseFailed(error: AuotImporterError.canceled)
+                }
+            }
         }
+        
+        
+        //MARK: - Private methods
         
         private func enumerateObjects() {
             var uploadables = [STFileUploader.FileUploadable]()
@@ -121,7 +185,7 @@ extension STImporter.AuotImporter {
         private func startImport(uploadables: [STFileUploader.FileUploadable]) {
 
             guard let queue = self.delegate?.underlyingQueue else {
-                self.responseFailed(error: STError.canceled)
+                self.responseFailed(error: AuotImporterError.canceled)
                 return
             }
             
@@ -129,7 +193,7 @@ extension STImporter.AuotImporter {
             var resultDate = self.date
                         
             importer.progressHendler = { [weak self] progress in
-                
+               
                 queue.async {
                     guard let self = self else {
                         return
@@ -148,14 +212,16 @@ extension STImporter.AuotImporter {
                     self.progress.completedUnitCount = Int64(progress.completedUnitCount)
                     self.responseProgress(result: self.progress)
                 }
-                
             }
             
             importer.complition = { [weak self] files in
                 guard let self = self else {
                     return
                 }
-                self.responseSucces(result: files.count)
+                queue.async { [weak self] in
+                    self?.responseSucces(result: files.count)
+                }
+                
             }
             
             self.importer = importer
@@ -168,16 +234,31 @@ extension STImporter.AuotImporter {
             let sortDescriptor = NSSortDescriptor(key: "\(#keyPath(PHAsset.creationDate))", ascending: true)
             options.sortDescriptors = [sortDescriptor]
             options.fetchLimit = self.fetchLimit
-            
+                        
             if let lastImportDate = self.date {
                 let predicate = NSPredicate(format: "\(#keyPath(PHAsset.creationDate)) > %@", lastImportDate as CVarArg)
                 options.predicate = predicate
+            } else {
+                
             }
+            
                         
             let assets = PHAsset.fetchAssets(with: options)
             assets.enumerateObjects({ (asset, index, pointerEnd) in
                 block(asset, index, pointerEnd)
             })
+        }
+        
+        private func canImportFiles(completion: @escaping (Bool) -> Void) {
+            guard STAppSettings.current.import.isAutoImportEnable, let queue = self.delegate?.underlyingQueue  else {
+                completion(false)
+                return
+            }
+            STPHPhotoHelper.checkAndReqauestAuthorization(queue: queue) { status in
+                let settings = STAppSettings.current.import
+                let result = settings.isAutoImportEnable && status == .authorized
+                completion(result)
+            }
         }
         
     }

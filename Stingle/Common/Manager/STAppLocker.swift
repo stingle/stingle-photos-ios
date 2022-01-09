@@ -34,7 +34,7 @@ class STAppLocker {
     }
     
     @objc private func didActivate(_ notification: Notification) {
-        let timeInterval = STAppSettings.security.lockUpApp.timeInterval
+        let timeInterval = STAppSettings.current.security.lockUpApp.timeInterval
         guard let resignActiveDate = self.resignActiveDate, resignActiveDate.distance(to: Date()) >= timeInterval  else {
             return
         }

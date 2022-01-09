@@ -17,7 +17,7 @@ class STMainVC: UIViewController {
         super.viewDidLoad()
 		self.configure()
         
-        let theme = STAppSettings.appearance.theme
+        let theme = STAppSettings.current.appearance.theme
         UIView.animate(withDuration: 0.3) {
             UIApplication.shared.windows.forEach { window in
                 window.overrideUserInterfaceStyle = theme.interfaceStyle

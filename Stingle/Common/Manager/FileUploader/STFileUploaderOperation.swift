@@ -62,7 +62,7 @@ extension STFileUploader {
         //MARK: - Private
         
         private func upload(file: IUploadFile) {
-            file.requestFile { [weak self] file in
+            file.requestFile(in: self.delegate?.underlyingQueue) { [weak self] file in
                 self?.continueOperation(with: file)
             } failure: { [weak self] error in
                 self?.responseFailed(error: error)

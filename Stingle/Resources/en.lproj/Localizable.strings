@@ -75,6 +75,12 @@
 "select_items" = "Select items";
 "next" = "Next";
 "share" = "Share";
+"skip" = "Skip";
+"settings" = "Settings";
+
+"never" = "Never";
+"ask_every_time" = "Ask every time";
+"always" = "Always";
 
 "create_new_album" = "Create new album";
 "main_gallery" = "Main gallery";
@@ -295,6 +301,26 @@
 
 "delete_cache_alert_message" = "Are you sure you want to delete cache?";
 
+"auto_import_description" = "Photos and videos from your device will be automatically, encrypted and backed up to your Stingle Photos account";
+"auto_import_settings" = "Auto import settings";
+"true_on_auto_import" = "True on auto import";
+
+"import_existing_items" = "Import existing items";
+
+"auto_import_info" = "You can turn on or off anytime  in settings";
+"auto_import_error_photos_access" = "To automatically import photos, you must enable access to photos for all photos";
+
+"auto_import_settings" = "Auto import settings";
+
+"enable_auto_import" = "Enable auto import";
+"enable_auto_import_description" = "Automaticallv import photos and videos from vour device";
+
+"delete_original_files_after_import" = "Delete original files after import";
+"delete_original_files_after_import_description" = "Delete original files from the device after successful import";
+
+"manual_import" = "Manual import";
+"manual_import_title" = "Delete original files after manual import";
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";
@@ -357,6 +383,7 @@
 
 "error_data_not_found" = "Data not found";
 "error_canceled" = "Canceled";
+"error_memory_low" = "Device memory is low";
 
 "error_maching_passwords" = "Password don't match. Please enter the same password twice correctly";
 

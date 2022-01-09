@@ -43,8 +43,8 @@ class STFileViewerVC: UIViewController {
         return resilt
     }()
     
-    private lazy var pickerHelper: STImagePickerHelper = {
-        return STImagePickerHelper(controller: nil)
+    private lazy var pickerHelper: STPHPhotoHelper = {
+        return STPHPhotoHelper(controller: nil)
     }()
     
     private var currentFile: STLibrary.File? {
@@ -262,13 +262,14 @@ class STFileViewerVC: UIViewController {
     }
     
     private func saveItemsToDevice(downloadeds: [STFilesDownloaderActivityVM.DecryptDownloadFile], folderUrl: URL?) {
-        var filesSave = [(url: URL, itemType: STImagePickerHelper.ItemType)]()
+        var filesSave = [(url: URL, itemType: STPHPhotoHelper.ItemType)]()
         downloadeds.forEach { file in
-            let type: STImagePickerHelper.ItemType = file.header.fileOreginalType == .image ? .photo : .video
+            let type: STPHPhotoHelper.ItemType = file.header.fileOreginalType == .image ? .photo : .video
             let url = file.url
             filesSave.append((url, type))
         }
-        self.pickerHelper.save(items: filesSave) { [weak self] in
+        
+        STPHPhotoHelper.save(items: filesSave) { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
             }
@@ -401,7 +402,7 @@ extension STFileViewerVC {
         }
         self.currentFileViewer?.fileViewer(pauseContent: self)
         let title = self.viewModel.getDeleteFileMessage(file: file)
-        self.showOkCancelAlert(title: title, message: nil, handler: { [weak self] _ in
+        self.showOkCancelTextAlert(title: title, message: nil, handler: { [weak self] _ in
             self?.deleteCurrentFile()
         })
     }
