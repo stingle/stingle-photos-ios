@@ -267,7 +267,7 @@ class STSplitViewController: UIViewController {
         let screenGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgePan(gestur:)))
         screenGesture.edges = .left
         self.detailView.addGestureRecognizer(screenGesture)
-        screenGesture.isEnabled = false
+//        screenGesture.isEnabled = false
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(screenEdgePan(gestur:)))
         self.maskView.addGestureRecognizer(panGesture)

@@ -163,9 +163,8 @@ extension STPHPhotoHelper {
         }
     }
     
-    class func deleteFiles(albumName: String, completion: @escaping (() -> Void)) {
-                
-        try? PHPhotoLibrary.shared().performChangesAndWait {
+    class func deleteFiles(albumName: String, completion: @escaping ((Bool) -> Void)) {
+        PHPhotoLibrary.shared().performChanges {
             let options = PHFetchOptions()
             let predicate = NSPredicate(format: "\(#keyPath(PHAssetCollection.localizedTitle)) == %@", albumName as CVarArg)
             options.predicate = predicate
@@ -174,9 +173,10 @@ extension STPHPhotoHelper {
                 let assets = PHAsset.fetchAssets(in: album, options: PHFetchOptions())
                 PHAssetChangeRequest.deleteAssets(assets as NSFastEnumeration)
             }
-            completion()
-   
+        } completionHandler: { end, error in
+            completion(end)
         }
+                
     }
     
 }

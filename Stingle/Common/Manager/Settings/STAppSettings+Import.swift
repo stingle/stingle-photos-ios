@@ -21,7 +21,6 @@ extension STAppSettings {
             return result
         }
         
-        
         enum ManualImportDeleteFilesType: String, Codable, CaseIterable {
             case never = "never"
             case askEveryTime = "askEveryTime"

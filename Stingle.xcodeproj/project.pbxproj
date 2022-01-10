@@ -1342,10 +1342,11 @@
 		A033D6F626014B7C00E6AA83 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				A07B5E03278CA345006BE012 /* LockUnlocer */,
 				A087C46C2614A5B8006775D2 /* STSyncManager.swift */,
 				A005FAEA25FEC1D600E7D8B0 /* STDateManager.swift */,
-				A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */,
 				A060010B270509050071812C /* STKeyManagement.swift */,
+				A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */,
 				A09A95CA276A8ED900B25569 /* Importer */,
 				A013D85C269F7C61007ED786 /* Settings */,
 				A030DB4226015AAC00721EA7 /* FileSystem */,
@@ -1849,6 +1850,13 @@
 				A0794B9A269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib */,
 			);
 			path = Swich;
+			sourceTree = "<group>";
+		};
+		A07B5E03278CA345006BE012 /* LockUnlocer */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = LockUnlocer;
 			sourceTree = "<group>";
 		};
 		A08259C4273B11D2004836A5 /* Animators */ = {

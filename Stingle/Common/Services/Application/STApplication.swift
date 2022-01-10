@@ -11,6 +11,9 @@ class STApplication {
     
     static let shared = STApplication()
     
+    let syncManager: STSyncManager = STSyncManager()
+    let appLocker = STAppLocker()
+    
     private(set) lazy var dataBase: STDataBase = {
         return STDataBase()
     }()
@@ -22,11 +25,7 @@ class STApplication {
     private(set) lazy var downloaderManager: STDownloaderManager = {
         return STDownloaderManager()
     }()
-    
-    private(set) lazy var syncManager: STSyncManager = {
-        return STSyncManager()
-    }()
-    
+        
     private(set) lazy var uploader: STFileUploader = {
         return STFileUploader()
     }()
@@ -59,9 +58,7 @@ class STApplication {
         }
         return STFileSystem(userHomeFolderPath: user.homeFolder)
     }()
-    
-    let appLocker = STAppLocker()
-    
+        
     private init() {
         self.utils = Utils { [weak self] in
             self?.myFileSystem = nil

@@ -11,7 +11,7 @@ import UIKit
 extension STCrypto {
     
     func decrypt(fromUrl: URL, toUrl: URL, header: STHeader?, validateHeader: Bool = true) throws {
-        guard let output = OutputStream(url: toUrl, append: true), let input = InputStream(url: fromUrl)  else {
+        guard let output = OutputStream(url: toUrl, append: false), let input = InputStream(url: fromUrl)  else {
             throw CryptoError.General.creationFailure
         }
         defer {

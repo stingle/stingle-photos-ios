@@ -251,14 +251,16 @@ extension STDataBase {
         //MARK: - private
         
         private func reloadData(models: [Model], ids: [NSManagedObjectID], changeType: DataBaseChangeType) {
+            
+            self.dataSources.forEach { (controller) in
+                DispatchQueue.main.async {
+                    controller.reloadData(ids: ids, changeType: changeType)
+                }
+            }
+            
             DispatchQueue.main.async { [weak self] in
-                
                 guard let weakSelf = self, !models.isEmpty else {
                     return
-                }
-                
-                weakSelf.dataSources.forEach { (controller) in
-                    controller.reloadData(ids: ids, changeType: changeType)
                 }
                 
                 switch changeType {

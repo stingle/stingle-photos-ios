@@ -155,6 +155,7 @@ extension STDataBase {
             if self.snapshotReference == snapshot, let invalidIds = self.invalidIds {
                 snapshot.reloadItems(withIdentifiers: invalidIds)
             }
+            self.invalidIds = nil
             self.snapshotReference = snapshot
             self.isFetching = false
             self.delegate?.dataSource(self, didChangeContentWith: snapshot)

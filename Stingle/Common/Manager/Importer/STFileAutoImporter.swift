@@ -41,6 +41,7 @@ extension STImporter {
         
         private var fetchLimit: Int = 50
         private var isStarted: Bool = false
+        private var importFilesCount: Int = .zero
         
         //MARK: - Public methods
         
@@ -66,29 +67,20 @@ extension STImporter {
         //MARK: - Private methods
         
         private func deleteImportedFiles(completion: @escaping (() -> Void)) {
-            
-            self.dispatchQueue.async {
-                completion()
-            }
-            return
-            
             guard STPHPhotoHelper.authorizationStatus != nil, STAppSettings.current.import.isDeleteOriginalFilesAfterAutoImport else {
                 self.dispatchQueue.async {
                     completion()
                 }
                 return
             }
-            
             let albumName = STEnvironment.current.photoLibraryTrashAlbumName
-            STPHPhotoHelper.deleteFiles(albumName: albumName) { [weak self] in
+            STPHPhotoHelper.deleteFiles(albumName: albumName) { [weak self] end in
                 self?.dispatchQueue.async {
                     completion()
                 }
             }
         }
-        
-        
-        
+                
         private func startImportAssets() {
             self.startNextImport()
         }
@@ -98,22 +90,35 @@ extension STImporter {
                 return
             }
             self.queue.cancelAllOperations()
-            self.isStarted = false
-            self.deleteImportedFiles { [weak self] in
-                self?.didEndImportIng()
+            
+            if self.importFilesCount == .zero {
+                self.importFilesCount = .zero
+                self.isStarted = false
+                self.didEndImportIng()
+            } else {
+                self.deleteImportedFiles { [weak self] in
+                    self?.isStarted = false
+                    self?.importFilesCount = .zero
+                    self?.didEndImportIng()
+                }
             }
         }
         
         private func didEndImportIng() {}
         
         private func startNextImport() {
+                        
             let operation = Operation(success: { [weak self] importCount in
+                
+                guard let weakSelf = self else {
+                    return
+                }
+                
                 if importCount != .zero {
-                    self?.dispatchQueue.asyncAfter(wallDeadline: .now() + 0.5) { [weak self] in
-                        self?.startNextImport()
-                    }
+                    weakSelf.startNextImport()
+                    weakSelf.importFilesCount = weakSelf.importFilesCount + (importCount ?? .zero)
                 } else {
-                    self?.endImportIng()
+                    weakSelf.endImportIng()
                 }
             }, failure: { [weak self] error in
                 self?.endImportIng()
