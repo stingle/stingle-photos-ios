@@ -8,21 +8,21 @@
 import Foundation
 
 class STUnlockAppVM {
-        
-    lazy var biometric: STBiometricAuthServices = {
-        return STBiometricAuthServices()
+    
+    lazy var unlocker: STAppLockUnlocker.UnLocker = {
+        return STAppLockUnlocker().unLocker
     }()
     
+    var biometricAuthServicesType: STBiometricAuthServices.ServicesType {
+        return self.unlocker.biometricAuthServicesType
+    }
+    
     var canUnlockAppBiometric: Bool {
-        return self.biometric.canUnlockApp
+        return self.unlocker.canUnlockAppBiometric
     }
     
     func unlockAppBiometric(success: @escaping () -> Void, failure: @escaping (IError?) -> Void) {
-        self.biometric.unlockApp { _ in
-            success()
-        } failure: { error in
-            failure(error)
-        }
+        self.unlocker.unlockAppBiometric(success: success, failure: failure)
     }
     
     func confirmBiometricPassword(password: String?) throws {
@@ -36,12 +36,7 @@ class STUnlockAppVM {
             completion(UnlockAppVMError.passwordIsNil)
             return
         }
-        do {
-            try self.biometric.unlockApp(password: password)
-            completion(nil)
-        } catch {
-            completion(UnlockAppVMError.passwordIncorrect)
-        }
+        self.unlocker.unlockApp(password: password, completion: completion)
     }
     
     func logOutApp() {

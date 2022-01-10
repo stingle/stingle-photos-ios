@@ -104,7 +104,6 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         inset.bottom = 30
         self.collectionView.contentInset = inset
         self.accessoryView.dataSource = self
-        self.viewModel.sync()
         self.accessoryView.reloadData()
     }
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol ISyncManagerObserver: AnyObject {
     func syncManager(didStartSync syncManager: STSyncManager)
@@ -20,18 +21,39 @@ extension ISyncManagerObserver {
 class STSyncManager {
     
     let syncWorker = STSyncWorker()
-    let dataBase = STApplication.shared.dataBase
-    
+    private var isConfigured = false
+    private var dataBase: STDataBase!
+    private var appLockUnlocker: STAppLockUnlocker!
+    private var utils: STApplication.Utils!
+
     private(set) var isSyncing = false
     private let observer = STObserverEvents<ISyncManagerObserver>()
     
+    func configure(dataBase: STDataBase, appLockUnlocker: STAppLockUnlocker, utils: STApplication.Utils) {
+        guard !self.isConfigured else {
+            return
+        }
+                
+        self.isConfigured = true
+        self.dataBase = dataBase
+        self.appLockUnlocker = appLockUnlocker
+        self.utils = utils
+        
+        appLockUnlocker.add(self)
+        
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+                
+        self.sync()
+    }
+    
     func sync(success: (() -> Void)? = nil, failure: ((_ error: IError) -> Void)? = nil) {
-        guard !self.isSyncing else {
+        guard !self.canStartSync() else {
             failure?(SyncError.busy)
             return
         }
         self.didStartSync()
-        STApplication.shared.utils.restoreFilesIfNeeded(reloadDB: true) { [weak self] in
+        self.utils.restoreFilesIfNeeded(reloadDB: true) { [weak self] in
             self?.syncWorker.getUpdates { [weak self] (sync) in
                 self?.startDBSync(sync: sync, success: success, failure: failure)
             } failure: { [weak self] (error) in
@@ -41,6 +63,14 @@ class STSyncManager {
     }
 
     //MARK: - private
+    
+    private func sync() {
+        self.sync(success: nil, failure: nil)
+    }
+    
+    private func canStartSync() -> Bool {
+        return self.isConfigured && !self.isSyncing && UIApplication.shared.applicationState == .active && self.dataBase != nil && self.appLockUnlocker != nil && self.utils != nil && self.utils.isLogedIn() && self.appLockUnlocker.state == .unlocked
+    }
     
     private func startDBSync(sync: STSync, success: (() -> Void)? = nil, failure: ((_ error: IError) -> Void)? = nil)  {
         self.dataBase.sync(sync, finish: { [weak self] error in
@@ -76,6 +106,22 @@ class STSyncManager {
         self.observer.forEach { (lisner) in
             lisner.syncManager(didEndSync: self, with: error)
         }
+    }
+    
+    @objc private func didActivate(_ notification: Notification) {
+        self.sync()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+}
+
+extension STSyncManager: IAppLockUnlockerObserver {
+    
+    func appLockUnlocker(didUnlockApp lockUnlocker: STAppLockUnlocker) {
+        self.sync()
     }
     
 }

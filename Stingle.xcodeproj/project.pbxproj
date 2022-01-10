@@ -117,7 +117,6 @@
 		A033889126E1780200C03FE1 /* STNetworkSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A033889026E1780200C03FE1 /* STNetworkSession.swift */; };
 		A0355C8126A8D084006BE2C4 /* STUnlockAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */; };
 		A0355C8326A8D094006BE2C4 /* STUnlockAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */; };
-		A03D555C26AC5BF6008705F2 /* STAppLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */; };
 		A03D555E26AC6596008705F2 /* STFileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D555D26AC6596008705F2 /* STFileSystem.swift */; };
 		A03E21E6278397930071A2AF /* STAutoImportDialogTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03E21E5278397930071A2AF /* STAutoImportDialogTableVC.swift */; };
 		A040E21E269A356300003199 /* STGalleryTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A040E21D269A356300003199 /* STGalleryTabBarVC.swift */; };
@@ -218,6 +217,7 @@
 		A0794B9C269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0794B9A269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib */; };
 		A07B45B426C02442003EB470 /* STAppSettings+Advanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */; };
 		A07B45B626C0263A003EB470 /* STAdvancedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B526C0263A003EB470 /* STAdvancedVM.swift */; };
+		A07B5E05278CA3BF006BE012 /* STAppLockUnlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B5E04278CA3BE006BE012 /* STAppLockUnlocker.swift */; };
 		A084182325FA589B00DEAC89 /* STTrashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A084182225FA589B00DEAC89 /* STTrashProvider.swift */; };
 		A08512D1277A5C640006A2DD /* STAutoImportDialogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */; };
 		A08512D3277A6F060006A2DD /* STAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08512D2277A6F060006A2DD /* STAlertViewController.swift */; };
@@ -467,7 +467,6 @@
 		A032096E26546275000C420B /* STVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVideoView.swift; sourceTree = "<group>"; };
 		A032097126546602000C420B /* STPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPlayer.swift; sourceTree = "<group>"; };
 		A033889026E1780200C03FE1 /* STNetworkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkSession.swift; sourceTree = "<group>"; };
-		A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAppLocker.swift; sourceTree = "<group>"; };
 		A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVC.swift; sourceTree = "<group>"; };
 		A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVM.swift; sourceTree = "<group>"; };
 		A03D555D26AC6596008705F2 /* STFileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileSystem.swift; sourceTree = "<group>"; };
@@ -570,6 +569,7 @@
 		A0794B9A269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STSettingsSwichTableViewCell.xib; sourceTree = "<group>"; };
 		A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Advanced.swift"; sourceTree = "<group>"; };
 		A07B45B526C0263A003EB470 /* STAdvancedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAdvancedVM.swift; sourceTree = "<group>"; };
+		A07B5E04278CA3BE006BE012 /* STAppLockUnlocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAppLockUnlocker.swift; sourceTree = "<group>"; };
 		A084182225FA589B00DEAC89 /* STTrashProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashProvider.swift; sourceTree = "<group>"; };
 		A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAutoImportDialogVC.swift; sourceTree = "<group>"; };
 		A08512D2277A6F060006A2DD /* STAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlertViewController.swift; sourceTree = "<group>"; };
@@ -1342,11 +1342,10 @@
 		A033D6F626014B7C00E6AA83 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				A07B5E03278CA345006BE012 /* LockUnlocer */,
 				A087C46C2614A5B8006775D2 /* STSyncManager.swift */,
 				A005FAEA25FEC1D600E7D8B0 /* STDateManager.swift */,
 				A060010B270509050071812C /* STKeyManagement.swift */,
-				A0355C7D26A8A8F9006BE2C4 /* STAppLocker.swift */,
+				A07B5E03278CA345006BE012 /* AppLockUnlocker */,
 				A09A95CA276A8ED900B25569 /* Importer */,
 				A013D85C269F7C61007ED786 /* Settings */,
 				A030DB4226015AAC00721EA7 /* FileSystem */,
@@ -1852,11 +1851,12 @@
 			path = Swich;
 			sourceTree = "<group>";
 		};
-		A07B5E03278CA345006BE012 /* LockUnlocer */ = {
+		A07B5E03278CA345006BE012 /* AppLockUnlocker */ = {
 			isa = PBXGroup;
 			children = (
+				A07B5E04278CA3BE006BE012 /* STAppLockUnlocker.swift */,
 			);
-			path = LockUnlocer;
+			path = AppLockUnlocker;
 			sourceTree = "<group>";
 		};
 		A08259C4273B11D2004836A5 /* Animators */ = {
@@ -2724,6 +2724,7 @@
 				A06C56BA26406DFC009D0596 /* STShareAlbumVC.swift in Sources */,
 				A0B267912624FD4A0090E4ED /* STAlbumsVM.swift in Sources */,
 				A077780925FFFEBB00BA2BDF /* STCrypto+Header.swift in Sources */,
+				A07B5E05278CA3BF006BE012 /* STAppLockUnlocker.swift in Sources */,
 				A022049925EEDC0400D07C98 /* String+Extensions.swift in Sources */,
 				A075B7252652A02400B4E2DF /* STAlbumSettingsHeader.swift in Sources */,
 				A0FD3F362670E34F0042EB8D /* STFileWorker.swift in Sources */,
@@ -2803,7 +2804,6 @@
 				A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */,
 				A0B267742624D7B30090E4ED /* STFilesViewController.swift in Sources */,
 				A03D555E26AC6596008705F2 /* STFileSystem.swift in Sources */,
-				A03D555C26AC5BF6008705F2 /* STAppLocker.swift in Sources */,
 				A0D4E83026C8107800556871 /* Chinese.swift in Sources */,
 				A0E9999A263F1DE8002FDCC9 /* STTokenView.swift in Sources */,
 				A0C88FE125F3D36A0061A41D /* STLibraryFile.swift in Sources */,

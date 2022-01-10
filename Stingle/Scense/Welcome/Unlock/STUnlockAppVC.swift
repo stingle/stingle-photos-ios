@@ -96,7 +96,7 @@ class STUnlockAppVC: UIViewController {
     
     private func configureBiometricAuthButton() {
         self.biometricAuthButton.isHidden = !self.viewModel.canUnlockAppBiometric
-        let imageName = self.viewModel.biometric.type == .faceID ? "ic_face_id" : "ic_touch_id"
+        let imageName = self.viewModel.biometricAuthServicesType == .faceID ? "ic_face_id" : "ic_touch_id"
         self.biometricAuthButton.setImage(UIImage(named: imageName), for: .normal)
     }
     

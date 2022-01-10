@@ -12,16 +12,11 @@ class STApplication {
     static let shared = STApplication()
     
     let syncManager: STSyncManager = STSyncManager()
-    let appLocker = STAppLocker()
+    let appLockUnlocker = STAppLockUnlocker()
+    let dataBase = STDataBase()
+    let crypto = STCrypto()
+    private(set) var utils: Utils!
     
-    private(set) lazy var dataBase: STDataBase = {
-        return STDataBase()
-    }()
-    
-    private(set) lazy var crypto: STCrypto = {
-        return STCrypto()
-    }()
-        
     private(set) lazy var downloaderManager: STDownloaderManager = {
         return STDownloaderManager()
     }()
@@ -33,9 +28,7 @@ class STApplication {
     private(set) lazy var auotImporter: STImporter.AuotImporter = {
         return STImporter.AuotImporter()
     }()
-    
-    private(set) var utils: Utils!
-    
+        
     var fileSystem: STFileSystem {
         guard let user = self.dataBase.userProvider.user else {
             fatalError("user not found")
@@ -60,9 +53,16 @@ class STApplication {
     }()
         
     private init() {
+                
         self.utils = Utils { [weak self] in
             self?.myFileSystem = nil
         }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.syncManager.configure(dataBase: weakSelf.dataBase, appLockUnlocker: weakSelf.appLockUnlocker, utils: weakSelf.utils)
+        }
+
     }
     
 }
