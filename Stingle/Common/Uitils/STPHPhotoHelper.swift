@@ -39,6 +39,29 @@ class STPHPhotoHelper: NSObject {
             }
         }
     }
+    
+    func deleteAssetsAfterManualImport(assets: [PHAsset]) {
+        let deleteFilesType = STAppSettings.current.import.manualImportDeleteFilesType
+        switch deleteFilesType {
+        case .never:
+            break
+        case .askEveryTime:
+            let title = "delete_original_files".localized
+            let message = "alert_delete_original_files_message".localized
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let delete = UIAlertAction(title: "delete".localized, style: .destructive) { _ in
+                Self.delete(assets: assets)
+            }
+            
+            let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
+            alert.addAction(delete)
+            alert.addAction(cancel)
+                    
+            self.viewController?.showDetailViewController(alert, sender: nil)
+        case .always:
+            Self.delete(assets: assets)
+        }
+    }
         
     //MARK: - Private
     

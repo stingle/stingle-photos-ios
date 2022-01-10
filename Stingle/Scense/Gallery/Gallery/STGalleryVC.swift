@@ -296,27 +296,6 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
     
     //MARK: - Private actions
     
-    private func showDeleteOriginalFiles(assets: [PHAsset]) {
-        guard !assets.isEmpty else {
-            return
-        }
-        
-        let title = "delete_original_files".localized
-        let message = "alert_delete_original_files_message".localized
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        let delete = UIAlertAction(title: "delete".localized, style: .destructive) { _ in
-            STPHPhotoHelper.delete(assets: assets)
-        }
-        
-        let cancel = UIAlertAction(title: "cancel".localized, style: .cancel)
-        alert.addAction(delete)
-        alert.addAction(cancel)
-                
-        self.showDetailViewController(alert, sender: nil)
-    }
-    
     private func showShareFileActionSheet(sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "share".localized, message: nil, preferredStyle: .actionSheet)
         let stinglePhotos = UIAlertAction(title: "share_via_stingle_photos".localized, style: .default) { [weak self] _ in
@@ -372,6 +351,8 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         
         let view: UIView = self.navigationController?.view ?? self.view
         progressView.show(in: view)
+        
+        var importedAssets = [PHAsset]()
     
         importer.startHendler = { progress in
             let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
@@ -386,6 +367,11 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         
         importer.progressHendler = { progress in
             let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            
+            if let asset = (progress.uploadFile as? STFileUploader.FileUploadable)?.asset {
+                importedAssets.append(asset)
+            }
+            
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
                     progressView.progress = progressValue
@@ -398,7 +384,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         importer.complition = { [weak self] _ in
             DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
                 progressView.hide()
-                self?.showDeleteOriginalFiles(assets: assets)
+                self?.pickerHelper.deleteAssetsAfterManualImport(assets: importedAssets)
             })
             
         }
