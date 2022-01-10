@@ -11,7 +11,7 @@ import UIKit
 extension STDataBase {
     
     class CollectionProvider<ManagedModel: IManagedObject>: DataBaseProvider<ManagedModel> {
-        
+                
         typealias Model = ManagedModel.Model
         let dataSources = STObserverEvents<STDataBase.DataSource<ManagedModel>>()
         
@@ -25,7 +25,7 @@ extension STDataBase {
                 }
                 if let models = models, !models.isEmpty {
                     weakSelf.observerProvider.forEach { observer in
-                        observer.dataBaseProvider(didUpdated: weakSelf, models: models)
+                        observer.dataBaseProvider(didReloaded: weakSelf)
                     }
                 }
             }
@@ -46,23 +46,37 @@ extension STDataBase {
         //MARK: - Methods
         
         func add(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
+            
+            guard !models.isEmpty else {
+                return
+            }
+            
             let context = context ?? self.container.newBackgroundContext()
+            var ids = [NSManagedObjectID]()
             context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
             context.performAndWait {
                 do {
                     if let inserts = try? self.getInsertObjects(with: models) {
                         let insertRequest = NSBatchInsertRequest(entityName: ManagedModel.entityName, objects: inserts.json)
                         insertRequest.resultType = .objectIDs
-                         let _ = try context.execute(insertRequest)
+                        let result = try (context.execute(insertRequest) as? NSBatchInsertResult)?.result as? [NSManagedObjectID]
+                        if let result = result {
+                            ids.append(contentsOf: result)
+                        }
                     }
+                    
+                    if reloadData {
+                        self.reloadData(models: models, ids: ids, changeType: .add)
+                        self.observerProvider.forEach { observer in
+                            observer.dataBaseProvider(didAdded: self, models: models)
+                        }
+                    }
+                    
                 } catch {
                     print(error)
                 }
             }
-            
-            if reloadData {
-                self.reloadData(models: models)
-            }
+           
         }
         
         func delete(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
@@ -71,6 +85,7 @@ extension STDataBase {
             }
             let context = context ?? self.container.newBackgroundContext()
             context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
+            var ids = [NSManagedObjectID]()
             context.performAndWait {
                 do {
                     let cdModes = try self.getObjects(by: models, in: context)
@@ -78,24 +93,58 @@ extension STDataBase {
                         return model.objectID
                     }
                     let deleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
-                    let _ = try? context.execute(deleteRequest)
+                    deleteRequest.resultType = .resultTypeObjectIDs
+                    let result = try (context.execute(deleteRequest) as? NSBatchUpdateResult)?.result as? [NSManagedObjectID]
+                    
+                    if let result = result {
+                        ids.append(contentsOf: result)
+                    }
+                    
+                    if reloadData {
+                        self.reloadData(models: models, ids: ids, changeType: .delete)
+                        self.observerProvider.forEach { observer in
+                            observer.dataBaseProvider(didDeleted: self, models: models)
+                        }
+                    }
+                    
                 } catch {
                 }
-                
             }
             
-            if reloadData {
-                self.reloadData(models: models)
-                self.observerProvider.forEach { observer in
-                    observer.dataBaseProvider(didDeleted: self, models: models)
-                }
-            }
         }
         
         func update(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
             let context = context ?? self.container.newBackgroundContext()
-            self.delete(models: models, reloadData: false, context: context)
-            self.add(models: models, reloadData: reloadData, context: context)
+            
+            context.mergePolicy = NSMergePolicyType.mergeByPropertyStoreTrumpMergePolicyType
+            var ids = [NSManagedObjectID]()
+            
+            context.performAndWait {
+                models.forEach { model in
+                    do {
+                        let batchRequest = NSBatchUpdateRequest(entityName: ManagedModel.entityName)
+                        let predicate = NSPredicate(format: "identifier == %@", model.identifier)
+                        batchRequest.resultType = .updatedObjectIDsResultType
+                        batchRequest.predicate = predicate
+                        batchRequest.propertiesToUpdate = try model.toManagedModelJson()
+                        let result = try (context.execute(batchRequest) as? NSBatchUpdateResult)?.result as? [NSManagedObjectID]
+                        
+                        if let result = result {
+                            ids.append(contentsOf: result)
+                        }
+                        
+                    } catch {
+                        print(error)
+                    }
+                }
+                
+                if reloadData {
+                    self.reloadData(models: models, ids: ids, changeType: .update)
+                }
+                                
+            }
+            
+            
         }
         
         //MARK: - Fetch
@@ -197,6 +246,36 @@ extension STDataBase {
             let dataSource = STDataBase.DataSource<ManagedModel>(sortDescriptorsKeys: sortDescriptorsKeys, viewContext: self.container.viewContext, predicate: predicate, sectionNameKeyPath: sectionNameKeyPath, cacheName: cacheName)
             self.dataSources.addObject(dataSource)
             return dataSource
+        }
+        
+        //MARK: - private
+        
+        private func reloadData(models: [Model], ids: [NSManagedObjectID], changeType: DataBaseChangeType) {
+            DispatchQueue.main.async { [weak self] in
+                
+                guard let weakSelf = self, !models.isEmpty else {
+                    return
+                }
+                
+                weakSelf.dataSources.forEach { (controller) in
+                    controller.reloadData(ids: ids, changeType: changeType)
+                }
+                
+                switch changeType {
+                case .add:
+                    weakSelf.observerProvider.forEach { observer in
+                        observer.dataBaseProvider(didAdded: weakSelf, models: models)
+                    }
+                case .update:
+                    weakSelf.observerProvider.forEach { observer in
+                        observer.dataBaseProvider(didUpdated: weakSelf, models: models)
+                    }
+                case .delete:
+                    weakSelf.observerProvider.forEach { observer in
+                        observer.dataBaseProvider(didDeleted: weakSelf, models: models)
+                    }
+                }
+            }
         }
                 
     }

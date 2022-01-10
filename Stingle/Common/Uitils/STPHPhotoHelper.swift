@@ -100,7 +100,7 @@ extension STPHPhotoHelper: PHPickerViewControllerDelegate {
 
 extension STPHPhotoHelper {
     
-    static fileprivate var authorizationStatus: PHAuthorizationStatus?
+    static private(set) var authorizationStatus: PHAuthorizationStatus?
     
     class func checkAndReqauestAuthorization(queue: DispatchQueue? = nil, completion: @escaping (PHAuthorizationStatus) -> Void) {
         
@@ -127,7 +127,7 @@ extension STPHPhotoHelper {
         }
     }
     
-    class func save(items: [(url: URL, itemType: ItemType)], completionHandler: @escaping (() -> Void) ) {
+    class func save(items: [(url: URL, itemType: ItemType)], completionHandler: @escaping (() -> Void)) {
         let library = PHPhotoLibrary.shared()
         var count = items.count
         for item in items {
@@ -139,6 +139,43 @@ extension STPHPhotoHelper {
                     completionHandler()
                 }
             }
+        }
+    }
+    
+    class func moveToAlbum(albumName: String, assets: [PHAsset], completion: @escaping (() -> Void)) {
+        try? PHPhotoLibrary.shared().performChangesAndWait {
+            
+            let options = PHFetchOptions()
+            let predicate = NSPredicate(format: "\(#keyPath(PHAssetCollection.localizedTitle)) == %@", albumName as CVarArg)
+            options.predicate = predicate
+            
+            let assetCollection = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
+            
+            if let album = assetCollection.firstObject {
+                let changeRequest = PHAssetCollectionChangeRequest(for: album)
+                changeRequest?.addAssets(assets as NSFastEnumeration)
+            } else {
+                let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: albumName)
+                changeRequest.addAssets(assets as NSFastEnumeration)
+            }
+            completion()
+   
+        }
+    }
+    
+    class func deleteFiles(albumName: String, completion: @escaping (() -> Void)) {
+                
+        try? PHPhotoLibrary.shared().performChangesAndWait {
+            let options = PHFetchOptions()
+            let predicate = NSPredicate(format: "\(#keyPath(PHAssetCollection.localizedTitle)) == %@", albumName as CVarArg)
+            options.predicate = predicate
+            let assetCollection = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
+            if let album = assetCollection.firstObject {
+                let assets = PHAsset.fetchAssets(in: album, options: PHFetchOptions())
+                PHAssetChangeRequest.deleteAssets(assets as NSFastEnumeration)
+            }
+            completion()
+   
         }
     }
     

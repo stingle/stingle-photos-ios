@@ -255,6 +255,12 @@ extension STDataBase {
 
 extension STDataBase {
     
+    enum DataBaseChangeType {
+        case add
+        case update
+        case delete
+    }
+    
     enum DataBaseError: IError {
        
         case parsError

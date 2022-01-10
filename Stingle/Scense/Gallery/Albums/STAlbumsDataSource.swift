@@ -105,7 +105,6 @@ extension STAlbumsDataSource: IDataBaseProviderProviderObserver {
         }
     }
     
-    
     func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         if provider === STApplication.shared.dataBase.contactProvider {
             self.contacts = nil

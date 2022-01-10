@@ -220,8 +220,8 @@ class STFileViewerVC: UIViewController {
             return
         }
         let dateManager = STDateManager.shared
-        self.titleView?.title = dateManager.dateToString(date: file.dateModified, withFormate: .mmm_dd_yyyy)
-        self.titleView?.subTitle = dateManager.dateToString(date: file.dateModified, withFormate: .HH_mm)
+        self.titleView?.title = dateManager.dateToString(date: file.dateCreated, withFormate: .mmm_dd_yyyy)
+        self.titleView?.subTitle = dateManager.dateToString(date: file.dateCreated, withFormate: .HH_mm)
         self.accessoryView.reloadData()
     }
     

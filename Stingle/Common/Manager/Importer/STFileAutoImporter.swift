@@ -53,7 +53,9 @@ extension STImporter {
                 return
             }
             self.isStarted = true
-            self.startImportAssets()
+            self.deleteImportedFiles { [weak self] in
+                self?.startImportAssets()
+            }
         }
         
         func logout() {
@@ -63,21 +65,46 @@ extension STImporter {
         
         //MARK: - Private methods
         
+        private func deleteImportedFiles(completion: @escaping (() -> Void)) {
+            
+            self.dispatchQueue.async {
+                completion()
+            }
+            return
+            
+            guard STPHPhotoHelper.authorizationStatus != nil, STAppSettings.current.import.isDeleteOriginalFilesAfterAutoImport else {
+                self.dispatchQueue.async {
+                    completion()
+                }
+                return
+            }
+            
+            let albumName = STEnvironment.current.photoLibraryTrashAlbumName
+            STPHPhotoHelper.deleteFiles(albumName: albumName) { [weak self] in
+                self?.dispatchQueue.async {
+                    completion()
+                }
+            }
+        }
+        
+        
+        
         private func startImportAssets() {
             self.startNextImport()
         }
         
         private func endImportIng() {
-            self.queue.cancelAllOperations()
-            self.didEndImportIng()
-        }
-        
-        private func didEndImportIng() {
             guard self.isStarted else {
                 return
             }
+            self.queue.cancelAllOperations()
             self.isStarted = false
+            self.deleteImportedFiles { [weak self] in
+                self?.didEndImportIng()
+            }
         }
+        
+        private func didEndImportIng() {}
         
         private func startNextImport() {
             let operation = Operation(success: { [weak self] importCount in
@@ -191,16 +218,18 @@ extension STImporter.AuotImporter {
             
             let importer = STApplication.shared.uploader.upload(files: uploadables)
             var resultDate = self.date
+            
+            var importedAssets = [PHAsset]()
                         
             importer.progressHendler = { [weak self] progress in
-               
                 queue.async {
                     guard let self = self else {
                         return
                     }
-                                        
+                    if let asset = (progress.uploadFile as? STFileUploader.FileUploadable)?.asset {
+                        importedAssets.append(asset)
+                    }
                     let currentFileDate = (progress.uploadFile as? STFileUploader.FileUploadable)?.asset.creationDate
-                    
                     if let date = resultDate {
                         let fileDate: Date = currentFileDate ?? date
                         resultDate = max(date, fileDate)
@@ -218,8 +247,18 @@ extension STImporter.AuotImporter {
                 guard let self = self else {
                     return
                 }
-                queue.async { [weak self] in
-                    self?.responseSucces(result: files.count)
+                
+                if STAppSettings.current.import.isDeleteOriginalFilesAfterAutoImport {
+                    let albumName = STEnvironment.current.photoLibraryTrashAlbumName
+                    STPHPhotoHelper.moveToAlbum(albumName: albumName, assets: importedAssets) { [weak self] in
+                        queue.async { [weak self] in
+                            self?.responseSucces(result: files.count)
+                        }
+                    }
+                } else {
+                    queue.async { [weak self] in
+                        self?.responseSucces(result: files.count)
+                    }
                 }
                 
             }
@@ -238,15 +277,12 @@ extension STImporter.AuotImporter {
             if let lastImportDate = self.date {
                 let predicate = NSPredicate(format: "\(#keyPath(PHAsset.creationDate)) > %@", lastImportDate as CVarArg)
                 options.predicate = predicate
-            } else {
-                
             }
-            
-                        
             let assets = PHAsset.fetchAssets(with: options)
             assets.enumerateObjects({ (asset, index, pointerEnd) in
                 block(asset, index, pointerEnd)
             })
+            
         }
         
         private func canImportFiles(completion: @escaping (Bool) -> Void) {

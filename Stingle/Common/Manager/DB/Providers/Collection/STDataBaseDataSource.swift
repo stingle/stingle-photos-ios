@@ -49,6 +49,8 @@ extension STDataBase {
         let viewContext: NSManagedObjectContext
         private var controller: NSFetchedResultsController<ManagedModel>!
         
+        private var invalidIds: [NSManagedObjectID]?
+        
         var isSyncing: Bool {
             return STApplication.shared.syncManager.isSyncing
         }
@@ -137,12 +139,22 @@ extension STDataBase {
         
         func reloadData() {
             self.isFetching = true
+            self.invalidIds = nil
             try? self.controller.performFetch()
         }
         
+        func reloadData(ids: [NSManagedObjectID], changeType: DataBaseChangeType) {
+            self.isFetching = true
+            self.invalidIds = ids
+            try? self.controller.performFetch()
+        }
+                
         //MARK: - NSFetchedResultsControllerDelegate
         
         func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
+            if self.snapshotReference == snapshot, let invalidIds = self.invalidIds {
+                snapshot.reloadItems(withIdentifiers: invalidIds)
+            }
             self.snapshotReference = snapshot
             self.isFetching = false
             self.delegate?.dataSource(self, didChangeContentWith: snapshot)

@@ -35,7 +35,8 @@ class STFileUploader {
     private(set) var uploadingFiles = [STLibrary.File]()
     let maxCountUploads = 3
     let maxCountUpdateDB = 5
-        
+    
+    private(set) var updateDBChanges  = [String: Int]()
     
     var isUploading: Bool {
         return !self.uploadingFiles.isEmpty
@@ -188,15 +189,20 @@ class STFileUploader {
             uploadFiles.append(file)
         }
         
-        if uploadFiles.count > self.maxCountUpdateDB || self.countAllFiles == 0 {
+        if uploadFiles.count >= self.maxCountUpdateDB || self.countAllFiles == 0 {
             uploadFiles.removeAll()
         }
-        
+                        
         self.uploadedFiles = uploadFiles
+        
+//        let uploadFilesCount = uploadFiles.filter({$0.dbSet == file.dbSet}).count
+        
+        let updateDB = updateDB
+        
         guard updateDB else {
             return
         }
-        
+
         if file.isRemote {
             if let albumFile = file as? STLibrary.AlbumFile {
                 STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: true)

@@ -9,6 +9,6 @@ class STConstants {
         let targetSize = CGSize(width: 800, height: 800)
         let scale = min((targetSize.width / originalSize.width), (targetSize.height / originalSize.height))
         return CGSize(width: originalSize.width * scale, height: originalSize.height * scale)
-	}
+	}    
 	
 }

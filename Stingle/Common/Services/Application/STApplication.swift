@@ -49,6 +49,10 @@ class STApplication {
         return result
     }
     
+    var isFileSystemAvailable: Bool {
+        return self.dataBase.userProvider.user != nil
+    }
+    
     private lazy var myFileSystem: STFileSystem? = {
         guard let user = self.dataBase.userProvider.user else {
             fatalError("user not found")
