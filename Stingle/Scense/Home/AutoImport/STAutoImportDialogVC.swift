@@ -11,9 +11,7 @@ class STAutoImportDialogVC: STAlertViewController {
 
     @IBOutlet weak private var contanierView: UIView!
     private var tableViewController: STAutoImportDialogTableVC!
-    
     private var completion: (() -> Void)?
-    
     private var viewModel = ViewModel()
     
     override func presentationController(didSelectBackgroundView presentationController: STAlertPresentationController) {
@@ -40,7 +38,7 @@ class STAutoImportDialogVC: STAlertViewController {
         }
     }
     
-    private func dismiss() {
+    private func dismiss() {   
         self.dismiss(animated: true) { [weak self] in
             self?.completion?()
             self?.completion = nil
@@ -90,7 +88,7 @@ extension STAutoImportDialogVC {
     class func create(completion: @escaping (() -> Void)) -> STAutoImportDialogVC {
         let storyboard = UIStoryboard(name: "Home", bundle: .main)
         let result = storyboard.instantiateViewController(withIdentifier: "STAutoImportDialogVCID") as! STAutoImportDialogVC
-        result.completion = completion
+//        result.completion = completion
         return result
     }
     
@@ -111,7 +109,6 @@ extension STAutoImportDialogVC {
         })
         
         viewController.showOkCancelAlert(title: "warning".localized, message: message, ok: okAction, cancel: cancelAction)
-        
     }
     
     class func showDialog(in viewController: UIViewController, completion: @escaping (() -> Void)) {

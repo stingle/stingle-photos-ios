@@ -50,7 +50,9 @@ class STMenuVC: STSplitViewController {
     private func showIsFirstOpensView() {
         self.showBackupPhraseIfNeeded { [weak self] in
             self?.showBiometricAuthQuestionIfNeeded { [weak self] in
-                self?.showAutoImportContollerIfNeeded {}
+                self?.showAutoImportContollerIfNeeded {
+                    STApplication.shared.syncManager.sync(success: nil, failure: nil)
+                }
             }
         }
     }
@@ -91,6 +93,7 @@ class STMenuVC: STSplitViewController {
             STAppSettings.current.security = security
         }, failure: nil)
     }
+    
     
 }
 

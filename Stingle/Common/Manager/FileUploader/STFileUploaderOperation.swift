@@ -101,6 +101,11 @@ extension STFileUploader {
         
         private func continueOperation(didUpload file: STLibrary.File, spaceUsed: STDBUsed) {
             
+            guard !STApplication.shared.isFileSystemAvailable else {
+                self.responseFailed(error: UploaderError.fileSystemNotValid, file: file)
+                return
+            }
+            
             let oldFileThumbUrl = file.fileThumbUrl
             let oldFileOreginalUrl = file.fileOreginalUrl
             file.isRemote = true

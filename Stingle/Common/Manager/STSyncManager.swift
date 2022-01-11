@@ -42,13 +42,13 @@ class STSyncManager {
         appLockUnlocker.add(self)
         
         let center = NotificationCenter.default
-        center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+        center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
                 
         self.sync()
     }
     
     func sync(success: (() -> Void)? = nil, failure: ((_ error: IError) -> Void)? = nil) {
-        guard !self.canStartSync() else {
+        guard self.canStartSync() else {
             failure?(SyncError.busy)
             return
         }
@@ -79,7 +79,6 @@ class STSyncManager {
                 failure?(error)
                 self?.didEndSync(error: error)
             } else {
-                
                 if let trashDeletes = sync.deletes?.trashDeletes {
                     let deletes = trashDeletes.compactMap( {$0.fileName} )
                     STApplication.shared.utils.deleteFilesIfNeeded(fileNames: deletes)

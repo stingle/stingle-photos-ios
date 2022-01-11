@@ -9,7 +9,7 @@ import UIKit
 
 class STAlertViewController: UIViewController, STAlertPresentationControllerDataSource {
     
-    private(set) var alertPresentationController: STAlertPresentationController?
+    private(set) weak var alertPresentationController: STAlertPresentationController?
         
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)

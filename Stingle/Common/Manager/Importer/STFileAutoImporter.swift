@@ -39,7 +39,7 @@ extension STImporter {
             }
         }
         
-        private var fetchLimit: Int = 50
+        private var fetchLimit: Int = 12
         private var isStarted: Bool = false
         private var importFilesCount: Int = .zero
         
@@ -195,7 +195,6 @@ extension STImporter.AuotImporter {
             }
         }
         
-        
         //MARK: - Private methods
         
         private func enumerateObjects() {
@@ -265,7 +264,6 @@ extension STImporter.AuotImporter {
                         self?.responseSucces(result: files.count)
                     }
                 }
-                
             }
             
             self.importer = importer

@@ -39,7 +39,7 @@ extension STApplication.Utils {
     
     func restoreFilesIfNeeded(reloadDB: Bool, complition: (() -> Void)?) {
         DispatchQueue.global().async { [weak self] in
-            guard let weakSelf = self else {
+            guard let weakSelf = self, weakSelf.isLogedIn() else {
                 complition?()
                 return
             }
@@ -65,6 +65,7 @@ extension STApplication.Utils {
             guard let headers = try? self.application.crypto.generateEncriptedHeaders(oreginalHeader: oreginalHeader, thumbHeader: thumbHeader) else {
                 continue
             }
+            
             let dateCreated = file.value.oreginal.date ?? Date()
             guard let file = try? STLibrary.File(file: file.key, version: "1", headers: headers, dateCreated: dateCreated, dateModified: dateCreated, isRemote: false, managedObjectID: nil) else {
                 continue
@@ -129,7 +130,7 @@ extension STApplication.Utils {
     
     func canUploadFile() -> Bool {
         let settings = STAppSettings.current.backup
-        guard settings.isEnabled else {
+        guard settings.isEnabled, self.isLogedIn() else {
             return false
         }
         if settings.isOnlyWiFi && STNetworkReachableService.shared.networkStatus != .wifi {
@@ -177,15 +178,14 @@ extension STApplication.Utils  {
     
     func logout() {
         self.logout(appInUnauthorized: false)
-        self.application.auotImporter.logout()
     }
     
     func deleteAccount() {
+        STOperationManager.shared.logout()
         self.application.fileSystem.deleteAccount()
         self.application.dataBase.deleteAll()
         self.application.auotImporter.logout()
         STKeyManagement.signOut()
-        STOperationManager.shared.logout()
         STBiometricAuthServices().removeBiometricAuth()
         STAppSettings.current.logOut()
         self.userRemoveHendler?()
@@ -202,10 +202,11 @@ extension STApplication.Utils  {
     //MARK: - private
     
     private func logout(appInUnauthorized: Bool) {
+        STOperationManager.shared.logout()
+        self.application.auotImporter.logout()
         self.application.fileSystem.logOut()
         self.application.dataBase.deleteAll()
         STKeyManagement.signOut()
-        STOperationManager.shared.logout()
         STBiometricAuthServices().removeBiometricAuth()
         STAppSettings.current.logOut()
         self.userRemoveHendler?()

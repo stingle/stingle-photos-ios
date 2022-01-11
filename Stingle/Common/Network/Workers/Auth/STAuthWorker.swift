@@ -95,6 +95,8 @@ class STAuthWorker: STWorker {
 		
         let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId, managedObjectID: nil)
         
+        STFileSystem.remove(userHomeFolderPath: user.homeFolder)
+        
         if isPrivateKeyIsAlreadySaved {
             STKeyManagement.key = try self.crypto.getPrivateKey(password: password)
             STKeyManagement.importServerPublicKey(pbk: login.serverPublicKey)

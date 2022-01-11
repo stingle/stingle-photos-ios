@@ -22,6 +22,9 @@ class STDataBaseContainer {
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.undoManager = nil
         container.viewContext.shouldDeleteInaccessibleFaults = true
+        
+        
+        
         return container
     }()
     
@@ -29,7 +32,14 @@ class STDataBaseContainer {
         return self.container.viewContext
     }
     
-    lazy var backgroundContext = self.newBackgroundContext()
+    lazy var backgroundContext: NSManagedObjectContext = {
+        let background = self.newBackgroundContext()
+        background.automaticallyMergesChangesFromParent = true
+        background.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        background.undoManager = nil
+        background.shouldDeleteInaccessibleFaults = true
+        return background
+    }()
     
     init(modelName: String) {
         self.modelName = modelName
@@ -55,7 +65,7 @@ class STDataBaseContainer {
         }
     }
     
-    func newBackgroundContext() -> NSManagedObjectContext {
+    private func newBackgroundContext() -> NSManagedObjectContext {
         return self.container.newBackgroundContext()
     }
     

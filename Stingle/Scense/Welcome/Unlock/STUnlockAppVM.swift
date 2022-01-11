@@ -10,7 +10,7 @@ import Foundation
 class STUnlockAppVM {
     
     lazy var unlocker: STAppLockUnlocker.UnLocker = {
-        return STAppLockUnlocker().unLocker
+        return STApplication.shared.appLockUnlocker.unLocker
     }()
     
     var biometricAuthServicesType: STBiometricAuthServices.ServicesType {

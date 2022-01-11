@@ -28,7 +28,16 @@ class STAppLockUnlocker {
     let locker = Locker()
     let unLocker = UnLocker()
     
-    private(set) var state = AppLockState.unknown
+    private var myState = AppLockState.unknown
+    
+    var state: AppLockState {
+        switch self.myState {
+        case .unknown:
+            return STKeyManagement.key == nil ? .locked : .unlocked
+        default:
+            return self.myState
+        }
+    }
     
     private let observer = STObserverEvents<IAppLockUnlockerObserver>()
     
@@ -50,7 +59,7 @@ class STAppLockUnlocker {
 extension STAppLockUnlocker: LockerDelegate, UnLockerDelegate {
     
     func appLocker(didLockApp locker: Locker) {
-        self.state = .locked
+        self.myState = .locked
         self.observer.forEach { [weak self] observer in
             DispatchQueue.main.async { [weak self] in
                 guard let weakSelf = self else {
@@ -62,7 +71,7 @@ extension STAppLockUnlocker: LockerDelegate, UnLockerDelegate {
     }
     
     func appUnLocker(didUnlockApp locker: UnLocker) {
-        self.state = .unlocked
+        self.myState = .unlocked
         self.observer.forEach { [weak self] observer in
             DispatchQueue.main.async { [weak self] in
                 guard let weakSelf = self else {
@@ -151,9 +160,9 @@ extension STAppLockUnlocker {
         }
         
         func unlockAppBiometric(success: @escaping () -> Void, failure: @escaping (IError?) -> Void) {
-            self.biometric.unlockApp { _ in
+            self.biometric.unlockApp { [weak self] _ in
                 success()
-                self.appDidUnlocked()
+                self?.appDidUnlocked()
             } failure: { error in
                 failure(error)
             }
@@ -173,7 +182,7 @@ extension STAppLockUnlocker {
             }
         }
         
-        //MARK: -
+        //MARK: - Private
         
         private func appDidUnlocked() {
             self.delegate?.appUnLocker(didUnlockApp: self)

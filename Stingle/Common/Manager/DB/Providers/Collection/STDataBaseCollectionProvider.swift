@@ -51,12 +51,15 @@ extension STDataBase {
                 return
             }
             
-            let context = context ?? self.container.newBackgroundContext()
+            let context = context ?? self.container.backgroundContext
             var ids = [NSManagedObjectID]()
-            context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
-            context.performAndWait {
+            
+            context.performAndWait { [weak self] in
+                
+                guard let weakSelf = self else { return  }
+                
                 do {
-                    if let inserts = try? self.getInsertObjects(with: models) {
+                    if let inserts = try? weakSelf.getInsertObjects(with: models) {
                         let insertRequest = NSBatchInsertRequest(entityName: ManagedModel.entityName, objects: inserts.json)
                         insertRequest.resultType = .objectIDs
                         let result = try (context.execute(insertRequest) as? NSBatchInsertResult)?.result as? [NSManagedObjectID]
@@ -66,10 +69,7 @@ extension STDataBase {
                     }
                     
                     if reloadData {
-                        self.reloadData(models: models, ids: ids, changeType: .add)
-                        self.observerProvider.forEach { observer in
-                            observer.dataBaseProvider(didAdded: self, models: models)
-                        }
+                        weakSelf.reloadData(models: models, ids: ids, changeType: .add)
                     }
                     
                 } catch {
@@ -83,12 +83,14 @@ extension STDataBase {
             guard !models.isEmpty else {
                 return
             }
-            let context = context ?? self.container.newBackgroundContext()
-            context.mergePolicy = NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType
+            let context = context ?? self.container.backgroundContext
             var ids = [NSManagedObjectID]()
-            context.performAndWait {
+            context.performAndWait { [weak self] in
+                
+                guard let weakSelf = self else { return  }
+                
                 do {
-                    let cdModes = try self.getObjects(by: models, in: context)
+                    let cdModes = try weakSelf.getObjects(by: models, in: context)
                     let objectIDs = cdModes.compactMap { (model) -> NSManagedObjectID? in
                         return model.objectID
                     }
@@ -101,10 +103,7 @@ extension STDataBase {
                     }
                     
                     if reloadData {
-                        self.reloadData(models: models, ids: ids, changeType: .delete)
-                        self.observerProvider.forEach { observer in
-                            observer.dataBaseProvider(didDeleted: self, models: models)
-                        }
+                        weakSelf.reloadData(models: models, ids: ids, changeType: .delete)
                     }
                     
                 } catch {
@@ -114,12 +113,12 @@ extension STDataBase {
         }
         
         func update(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
-            let context = context ?? self.container.newBackgroundContext()
-            
-            context.mergePolicy = NSMergePolicyType.mergeByPropertyStoreTrumpMergePolicyType
+           
+            let context = context ?? self.container.backgroundContext
             var ids = [NSManagedObjectID]()
             
-            context.performAndWait {
+            context.performAndWait { [weak self] in
+                guard let weakSelf = self else { return  }
                 models.forEach { model in
                     do {
                         let batchRequest = NSBatchUpdateRequest(entityName: ManagedModel.entityName)
@@ -139,7 +138,7 @@ extension STDataBase {
                 }
                 
                 if reloadData {
-                    self.reloadData(models: models, ids: ids, changeType: .update)
+                    weakSelf.reloadData(models: models, ids: ids, changeType: .update)
                 }
                                 
             }

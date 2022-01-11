@@ -50,6 +50,9 @@ class STOperationManager {
         self.uploadQueue.cancelAllOperations()
         self.downloadQueue.cancelAllOperations()
         self.streamQueue.cancelAllOperations()
+        self.othersQueue.forEach { queue in
+            queue.cancelAllOperations()
+        }
     }
     
 }

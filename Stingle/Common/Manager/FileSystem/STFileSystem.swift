@@ -92,6 +92,36 @@ extension STFileSystem {
         self.remove(file: url)
     }
     
+    class func url(for type: FolderType, userHomeFolderPath: String) -> URL? {
+        
+        let fileManager = FileManager.default
+        
+        guard let cachesDirectory = fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+            return nil
+        }
+        
+        let url = cachesDirectory.appendingPathComponent(userHomeFolderPath).appendingPathComponent(type.stringValue)
+        
+        return url
+    }
+    
+    class func remove(userHomeFolderPath: String) {
+        guard let cacheUrl = self.url(for: .storage(type: .server(type: nil)), userHomeFolderPath: userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
+            return
+        }
+        
+        let fileManager = FileManager.default
+        
+        if fileManager.fileExists(atPath: cacheUrl.path) {
+            try? fileManager.removeItem(at: cacheUrl)
+        }
+        
+        if fileManager.fileExists(atPath: privateKeyUrl.path) {
+            try? fileManager.removeItem(at: privateKeyUrl)
+        }
+
+    }
+        
 }
 
 extension STFileSystem {

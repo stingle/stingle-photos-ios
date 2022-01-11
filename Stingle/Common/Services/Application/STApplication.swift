@@ -15,6 +15,7 @@ class STApplication {
     let appLockUnlocker = STAppLockUnlocker()
     let dataBase = STDataBase()
     let crypto = STCrypto()
+    
     private(set) var utils: Utils!
     
     private(set) lazy var downloaderManager: STDownloaderManager = {
@@ -53,11 +54,9 @@ class STApplication {
     }()
         
     private init() {
-                
         self.utils = Utils { [weak self] in
             self?.myFileSystem = nil
         }
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             guard let weakSelf = self else { return }
             weakSelf.syncManager.configure(dataBase: weakSelf.dataBase, appLockUnlocker: weakSelf.appLockUnlocker, utils: weakSelf.utils)
