@@ -28,6 +28,7 @@ class STSyncManager {
 
     private(set) var isSyncing = false
     private let observer = STObserverEvents<ISyncManagerObserver>()
+    private var isEnteredBackground = false
     
     func configure(dataBase: STDataBase, appLockUnlocker: STAppLockUnlocker, utils: STApplication.Utils) {
         guard !self.isConfigured else {
@@ -43,6 +44,8 @@ class STSyncManager {
         
         let center = NotificationCenter.default
         center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
+        center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        
                 
         self.sync()
     }
@@ -108,7 +111,14 @@ class STSyncManager {
     }
     
     @objc private func didActivate(_ notification: Notification) {
-        self.sync()
+        if self.isEnteredBackground {
+            self.sync()
+        }
+        self.isEnteredBackground = false
+    }
+    
+    @objc private func didEnterBackground(_ notification: Notification) {
+        self.isEnteredBackground = true
     }
     
     deinit {

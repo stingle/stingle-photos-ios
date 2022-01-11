@@ -24,6 +24,9 @@ class STFileSystem {
     init(userHomeFolderPath: String) {
         self.userHomeFolderPath = userHomeFolderPath
         self.creatAllPath()
+        #if DEBUG
+        print("user folder", self.appUrl?.path ?? "")
+        #endif
     }
     
     func logOut() {
