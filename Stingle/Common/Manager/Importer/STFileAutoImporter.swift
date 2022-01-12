@@ -107,15 +107,14 @@ extension STImporter {
         private func didEndImportIng() {}
         
         private func startNextImport() {
-                        
             let operation = Operation(success: { [weak self] importCount in
-                
                 guard let weakSelf = self else {
                     return
                 }
-                
                 if importCount != .zero {
-                    weakSelf.startNextImport()
+                    weakSelf.dispatchQueue.asyncAfter(wallDeadline: .now() + 0.5) { [weak weakSelf] in
+                        weakSelf?.startNextImport()
+                    }
                     weakSelf.importFilesCount = weakSelf.importFilesCount + (importCount ?? .zero)
                 } else {
                     weakSelf.endImportIng()

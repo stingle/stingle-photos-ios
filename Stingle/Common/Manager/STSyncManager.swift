@@ -44,9 +44,8 @@ class STSyncManager {
         
         let center = NotificationCenter.default
         center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
-        center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        center.addObserver(self, selector: #selector(didEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
-                
         self.sync()
     }
     

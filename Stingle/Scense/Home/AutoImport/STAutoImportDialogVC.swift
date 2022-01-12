@@ -88,7 +88,7 @@ extension STAutoImportDialogVC {
     class func create(completion: @escaping (() -> Void)) -> STAutoImportDialogVC {
         let storyboard = UIStoryboard(name: "Home", bundle: .main)
         let result = storyboard.instantiateViewController(withIdentifier: "STAutoImportDialogVCID") as! STAutoImportDialogVC
-//        result.completion = completion
+        result.completion = completion
         return result
     }
     

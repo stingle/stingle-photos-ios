@@ -194,9 +194,7 @@ class STFileUploader {
         }
                         
         self.uploadedFiles = uploadFiles
-        
-//        let uploadFilesCount = uploadFiles.filter({$0.dbSet == file.dbSet}).count
-        
+                
         let updateDB = updateDB
         
         guard updateDB else {
