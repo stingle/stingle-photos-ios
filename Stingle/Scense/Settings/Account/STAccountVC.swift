@@ -26,8 +26,8 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
         self.reloadTableData()
     }
     
-    override func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
-        super.securityCel(didSelectSwich: cell, model: model, isOn: isOn)
+    override func settingsyCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
+        super.settingsyCel(didSelectSwich: cell, model: model, isOn: isOn)
         guard let indexPath = self.tableView.indexPath(for: cell), let identifier = self.cellModel(for: indexPath)?.identifier else {
             return
         }

@@ -321,6 +321,11 @@
 "manual_import" = "Manual import";
 "manual_import_title" = "Delete original files after manual import";
 
+"import_existing_photos_and_videos" = "Import existing photos and videos";
+"import_existing_files_alert_message" = "Are you sure you want to import all existing photos and videos from your library? Depending on you library size this process might take some time.";
+
+
+
 //MARK: - Menu
 
 "menu_gallery" = "Gallery";

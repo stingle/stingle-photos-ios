@@ -83,11 +83,10 @@ class STSyncManager {
             } else {
                 if let trashDeletes = sync.deletes?.trashDeletes {
                     let deletes = trashDeletes.compactMap( {$0.fileName} )
-                    STApplication.shared.utils.deleteFilesIfNeeded(fileNames: deletes)
+                    STApplication.shared.utils.deleteFilesIfNeeded(fileNames: deletes, complition: nil)
                 }
                 success?()
                 self?.didEndSync(error: nil)
-                
                 let application = STApplication.shared
                 application.uploader.uploadAllLocalFiles()
                 application.auotImporter.startImport()

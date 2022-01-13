@@ -29,6 +29,9 @@ class STImportVC: STSettingsDetailTableVC<STImportVC.SectionType, STImportVC.Ite
     }
     
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        guard (self.cellModel(for: indexPath)?.cellModel)?.isEnabled == true else {
+            return false
+        }
         let identifier = self.sections?[indexPath.section].cells[indexPath.row].reusableIdentifier
         return identifier == .detail
     }
@@ -44,14 +47,16 @@ class STImportVC: STSettingsDetailTableVC<STImportVC.SectionType, STImportVC.Ite
                 return
             }
             self.showManualImport(in: detailCell)
+        case .autoImportiExistingFiles:
+            self.showImportManualImportAlert()
         default:
             break
         }
     }
     
-    override func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
+    override func settingsyCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
         
-        super.securityCel(didSelectSwich: cell, model: model, isOn: isOn)
+        super.settingsyCel(didSelectSwich: cell, model: model, isOn: isOn)
         guard let indexPath = self.tableView.indexPath(for: cell), let identifier = self.cellModel(for: indexPath)?.identifier else {
             return
         }
@@ -69,8 +74,12 @@ class STImportVC: STSettingsDetailTableVC<STImportVC.SectionType, STImportVC.Ite
                     self?.updateVisibleCells()
                 })
             }
+        case .autoImportiExistingFiles:
+            break
         case .manualImportDeleteFiles:
             return
+        
+            
         }
     }
     
@@ -128,12 +137,16 @@ class STImportVC: STSettingsDetailTableVC<STImportVC.SectionType, STImportVC.Ite
         let enableImportImage = UIImage(named: "ic_settings_import")!
         let enableImport = STSettingsSwichTableViewCell.Model(image: enableImportImage, title: "enable_auto_import".localized, subTitle: "enable_auto_import_description".localized, isOn: self.import.isAutoImportEnable, isEnabled: true)
         let enableImportCell = CellModel(reusableIdentifier: .swich, identifier: .autoImportEnable, cellModel: enableImport)
-                
+
         let deleteOriginalFilesImage = UIImage(named: "ic_trash")!
         let deleteOriginal = STSettingsSwichTableViewCell.Model(image: deleteOriginalFilesImage, title: "delete_original_files_after_import".localized, subTitle: "delete_original_files_after_import_description".localized, isOn: self.import.isDeleteOriginalFilesAfterAutoImport, isEnabled: self.import.isAutoImportEnable)
         let deleteOriginalCell = CellModel(reusableIdentifier: .swich, identifier: .autoImportDeleteFiles, cellModel: deleteOriginal)
         
-        let section = Section(identifier: .autoImport, header: header, cells: [enableImportCell, deleteOriginalCell])
+        let importExistPhotosImage = UIImage(named: "ic_settings_import_exist")!
+        let importExistPhotos = STSettingsDetailTableViewCell.Model(image: importExistPhotosImage, title: "import_existing_photos_and_videos".localized, subTitle: nil, isEnabled: self.import.isAutoImportEnable)
+        let importExistPhotosCell = CellModel(reusableIdentifier: .detail, identifier: .autoImportiExistingFiles, cellModel: importExistPhotos)
+        
+        let section = Section(identifier: .autoImport, header: header, cells: [enableImportCell, deleteOriginalCell, importExistPhotosCell])
         return section
         
     }
@@ -169,6 +182,16 @@ class STImportVC: STSettingsDetailTableVC<STImportVC.SectionType, STImportVC.Ite
         }
         self.showDetailViewController(alert, sender: nil)
     }
+    
+    private func showImportManualImportAlert() {
+        
+        let ok = {
+            print("okokok")
+        }
+        
+        self.showOkCancelAlert(title: "import".localized, message: "import_existing_files_alert_message".localized, ok: ("ok".localized, ok))
+        
+    }
 
 }
 
@@ -182,7 +205,8 @@ extension STImportVC {
     enum ItemType: Int {
         case autoImportEnable = 0
         case autoImportDeleteFiles = 1
-        case manualImportDeleteFiles = 2
+        case autoImportiExistingFiles = 2
+        case manualImportDeleteFiles = 3
     }
 
 }

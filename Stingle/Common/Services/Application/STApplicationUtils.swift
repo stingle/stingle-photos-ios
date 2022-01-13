@@ -21,14 +21,32 @@ extension STApplication {
             self.userRemoveHendler = userRemoveHendler
         }
         
-        func deleteFilesIfNeeded(files: [STLibrary.File]) {
-            let notExistFiles = self.application.dataBase.filtrNotExistFiles(files: files)
-            self.application.fileSystem.deleteFiles(files: notExistFiles)
+        func deleteFilesIfNeeded(files: [STLibrary.File], complition:(() -> Void)?) {
+            DispatchQueue.global().async { [weak self] in
+                guard let weakSelf = self else { return }
+                let notExistFiles = weakSelf.application.dataBase.filtrNotExistFiles(files: files)
+                weakSelf.application.fileSystem.deleteFiles(files: notExistFiles)
+                
+                if let complition = complition {
+                    DispatchQueue.main.async {
+                        complition()
+                    }
+                }
+                
+            }
         }
         
-        func deleteFilesIfNeeded(fileNames: [String]) {
-            let notExistFiles = self.application.dataBase.filtrNotExistFileNames(fileNames: fileNames)
-            self.application.fileSystem.deleteFiles(for: notExistFiles)
+        func deleteFilesIfNeeded(fileNames: [String], complition:(() -> Void)?) {
+            DispatchQueue.global().async { [weak self] in
+                guard let weakSelf = self else { return }
+                let notExistFiles = weakSelf.application.dataBase.filtrNotExistFileNames(fileNames: fileNames)
+                weakSelf.application.fileSystem.deleteFiles(for: notExistFiles)
+                if let complition = complition {
+                    DispatchQueue.main.async {
+                        complition()
+                    }
+                }
+            }
         }
         
     }

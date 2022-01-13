@@ -71,7 +71,7 @@ class STSecurityVC: STSettingsDetailTableVC<STSecurityVC.SectionType, STSecurity
         return identifier == .detail
     }
     
-    override func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
+    override func settingsyCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
         
         guard let indexPath = self.tableView.indexPath(for: cell), let identifier = self.cellModel(for: indexPath)?.identifier else {
             return
