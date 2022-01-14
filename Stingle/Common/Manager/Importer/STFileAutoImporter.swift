@@ -41,6 +41,8 @@ extension STImporter {
         
         private var fetchLimit: Int = 12
         private var isStarted: Bool = false
+        private var isImporting: Bool = false
+        private var needResetImportDate = false
         private var importFilesCount: Int = .zero
         
         //MARK: - Public methods
@@ -56,6 +58,15 @@ extension STImporter {
             self.isStarted = true
             self.deleteImportedFiles { [weak self] in
                 self?.startImportAssets()
+            }
+        }
+        
+        func resetImportDate() {
+            if self.isImporting {
+                self.needResetImportDate = true
+            } else {
+                self.lastImportDate = nil
+                self.startImport()
             }
         }
         
@@ -82,6 +93,7 @@ extension STImporter {
         }
                 
         private func startImportAssets() {
+            self.isImporting = true
             self.startNextImport()
         }
         
@@ -90,6 +102,12 @@ extension STImporter {
                 return
             }
             self.queue.cancelAllOperations()
+            self.isImporting = false
+            
+            if self.needResetImportDate {
+                self.lastImportDate = nil
+                self.needResetImportDate = false
+            }
             
             if self.importFilesCount == .zero {
                 self.importFilesCount = .zero

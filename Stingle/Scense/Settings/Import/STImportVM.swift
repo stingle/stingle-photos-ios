@@ -48,6 +48,10 @@ extension STImportVC {
             completion(nil)
         }
         
+        func resetImportDate() {
+            STApplication.shared.auotImporter.resetImportDate()
+        }
+        
     }
     
 }

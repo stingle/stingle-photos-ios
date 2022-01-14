@@ -184,13 +184,10 @@ class STImportVC: STSettingsDetailTableVC<STImportVC.SectionType, STImportVC.Ite
     }
     
     private func showImportManualImportAlert() {
-        
-        let ok = {
-            print("okokok")
-        }
-        
-        self.showOkCancelAlert(title: "import".localized, message: "import_existing_files_alert_message".localized, ok: ("ok".localized, ok))
-        
+        let ok: (title: String, handler: (() -> Void)) = ("ok".localized, { [weak self] in
+            self?.viewModel.resetImportDate()
+        })
+        self.showOkCancelAlert(title: "import".localized, message: "import_existing_files_alert_message".localized, ok: ok)
     }
 
 }
