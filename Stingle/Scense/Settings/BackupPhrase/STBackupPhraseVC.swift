@@ -34,7 +34,7 @@ class STBackupPhraseVC: UIViewController {
     
     @IBAction private func didSelectBackupPhraseButton(_ sender: Any) {
         let title = "enter_app_password".localized
-        self.showOkCancelAlert(title: title, message: nil) { textField in
+        self.showOkCancelTextAlert(title: title, message: nil) { textField in
             textField.placeholder = "password".localized
             textField.isSecureTextEntry = true
         } handler: { [weak self] text in

@@ -49,7 +49,7 @@ extension STDataBase {
                 throw STDataBase.DataBaseError.dateNotFound
             }
             
-            let context = self.container.newBackgroundContext()
+            let context = self.container.backgroundContext
             let identifiers = deleteFiles.compactMap { (deleteFile) -> String in
                 return STLibrary.AlbumFile.createIdentifier(albumId: deleteFile.albumId, fileName: deleteFile.file)
             }

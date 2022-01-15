@@ -43,11 +43,13 @@ extension STDataBase {
         let sectionNameKeyPath: String?
         let ascending: Bool
         let predicate: NSPredicate?
+        private(set) var isFetching = false
         
         private(set) var snapshotReference: NSDiffableDataSourceSnapshotReference?
         let viewContext: NSManagedObjectContext
         private var controller: NSFetchedResultsController<ManagedModel>!
-        private let cache = NSCache<NSIndexPath, Model>()
+        
+        private var invalidIds: [NSManagedObjectID]?
         
         var isSyncing: Bool {
             return STApplication.shared.syncManager.isSyncing
@@ -93,28 +95,33 @@ extension STDataBase {
         }
                 
         func object(at indexPath: IndexPath) -> Model? {
-            if let model = self.cache.object(forKey: indexPath as NSIndexPath) {
-                return model
-            } else {
-                let obj = self.controller.object(at: indexPath)
-                if let result = try? obj.createModel() {
-                    self.cache.setObject(result, forKey: indexPath as NSIndexPath)
-                    return result
-                }
+            guard !self.isFetching else {
+                return nil
             }
-            return nil
+            let obj = self.controller.object(at: indexPath)
+            let result = try? obj.createModel()
+            return result
         }
         
         func managedModel(at indexPath: IndexPath) -> ManagedModel? {
+            guard !self.isFetching else {
+                return nil
+            }
             let obj = self.controller.object(at: indexPath)
             return obj
         }
         
         func sectionTitle(at secction: Int) -> String? {
+            guard !self.isFetching else {
+                return nil
+            }
             return self.snapshotReference?.sectionIdentifiers[secction] as? String
         }
         
         func indexPath(forObject object: ManagedModel) -> IndexPath? {
+            guard !self.isFetching else {
+                return nil
+            }
             return self.controller.indexPath(forObject: object)
         }
         
@@ -131,14 +138,26 @@ extension STDataBase {
         //MARK: - IProviderDataSource
         
         func reloadData() {
+            self.isFetching = true
+            self.invalidIds = nil
             try? self.controller.performFetch()
         }
         
+        func reloadData(ids: [NSManagedObjectID], changeType: DataBaseChangeType) {
+            self.isFetching = true
+            self.invalidIds = ids
+            try? self.controller.performFetch()
+        }
+                
         //MARK: - NSFetchedResultsControllerDelegate
         
         func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-            self.cache.removeAllObjects()
+            if self.snapshotReference == snapshot, let invalidIds = self.invalidIds {
+                snapshot.reloadItems(withIdentifiers: invalidIds)
+            }
+            self.invalidIds = nil
             self.snapshotReference = snapshot
+            self.isFetching = false
             self.delegate?.dataSource(self, didChangeContentWith: snapshot)
         }
         

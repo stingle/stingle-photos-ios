@@ -21,14 +21,32 @@ extension STApplication {
             self.userRemoveHendler = userRemoveHendler
         }
         
-        func deleteFilesIfNeeded(files: [STLibrary.File]) {
-            let notExistFiles = self.application.dataBase.filtrNotExistFiles(files: files)
-            self.application.fileSystem.deleteFiles(files: notExistFiles)
+        func deleteFilesIfNeeded(files: [STLibrary.File], complition:(() -> Void)?) {
+            DispatchQueue.global().async { [weak self] in
+                guard let weakSelf = self else { return }
+                let notExistFiles = weakSelf.application.dataBase.filtrNotExistFiles(files: files)
+                weakSelf.application.fileSystem.deleteFiles(files: notExistFiles)
+                
+                if let complition = complition {
+                    DispatchQueue.main.async {
+                        complition()
+                    }
+                }
+                
+            }
         }
         
-        func deleteFilesIfNeeded(fileNames: [String]) {
-            let notExistFiles = self.application.dataBase.filtrNotExistFileNames(fileNames: fileNames)
-            self.application.fileSystem.deleteFiles(for: notExistFiles)
+        func deleteFilesIfNeeded(fileNames: [String], complition:(() -> Void)?) {
+            DispatchQueue.global().async { [weak self] in
+                guard let weakSelf = self else { return }
+                let notExistFiles = weakSelf.application.dataBase.filtrNotExistFileNames(fileNames: fileNames)
+                weakSelf.application.fileSystem.deleteFiles(for: notExistFiles)
+                if let complition = complition {
+                    DispatchQueue.main.async {
+                        complition()
+                    }
+                }
+            }
         }
         
     }
@@ -39,7 +57,7 @@ extension STApplication.Utils {
     
     func restoreFilesIfNeeded(reloadDB: Bool, complition: (() -> Void)?) {
         DispatchQueue.global().async { [weak self] in
-            guard let weakSelf = self else {
+            guard let weakSelf = self, weakSelf.isLogedIn() else {
                 complition?()
                 return
             }
@@ -65,8 +83,9 @@ extension STApplication.Utils {
             guard let headers = try? self.application.crypto.generateEncriptedHeaders(oreginalHeader: oreginalHeader, thumbHeader: thumbHeader) else {
                 continue
             }
+            
             let dateCreated = file.value.oreginal.date ?? Date()
-            guard let file = try? STLibrary.File(file: file.key, version: "1", headers: headers, dateCreated: dateCreated, dateModified: Date(), isRemote: false, managedObjectID: nil) else {
+            guard let file = try? STLibrary.File(file: file.key, version: "1", headers: headers, dateCreated: dateCreated, dateModified: dateCreated, isRemote: false, managedObjectID: nil) else {
                 continue
             }
             files.append(file)
@@ -128,8 +147,8 @@ extension STApplication.Utils {
     }
     
     func canUploadFile() -> Bool {
-        let settings = STAppSettings.backup
-        guard settings.isEnabled else {
+        let settings = STAppSettings.current.backup
+        guard settings.isEnabled, self.isLogedIn() else {
             return false
         }
         if settings.isOnlyWiFi && STNetworkReachableService.shared.networkStatus != .wifi {
@@ -170,7 +189,7 @@ extension STApplication.Utils  {
         let key = try? STApplication.shared.crypto.getPrivateKey(password: password)
         STKeyManagement.key = key
         
-        if STAppSettings.security.authentication.unlock {
+        if STAppSettings.current.security.authentication.unlock {
             STBiometricAuthServices().onBiometricAuth(password: password)
         }
     }
@@ -180,12 +199,13 @@ extension STApplication.Utils  {
     }
     
     func deleteAccount() {
+        STOperationManager.shared.logout()
         self.application.fileSystem.deleteAccount()
         self.application.dataBase.deleteAll()
+        self.application.auotImporter.logout()
         STKeyManagement.signOut()
-        STOperationManager.shared.logout()
         STBiometricAuthServices().removeBiometricAuth()
-        STAppSettings.logOut()
+        STAppSettings.current.logOut()
         self.userRemoveHendler?()
         STMainVC.show(appInUnauthorized: false)
     }
@@ -200,12 +220,13 @@ extension STApplication.Utils  {
     //MARK: - private
     
     private func logout(appInUnauthorized: Bool) {
+        STOperationManager.shared.logout()
+        self.application.auotImporter.logout()
         self.application.fileSystem.logOut()
         self.application.dataBase.deleteAll()
         STKeyManagement.signOut()
-        STOperationManager.shared.logout()
         STBiometricAuthServices().removeBiometricAuth()
-        STAppSettings.logOut()
+        STAppSettings.current.logOut()
         self.userRemoveHendler?()
         STMainVC.show(appInUnauthorized: appInUnauthorized)
     }

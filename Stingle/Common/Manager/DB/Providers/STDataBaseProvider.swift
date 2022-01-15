@@ -15,14 +15,16 @@ protocol IDataBaseProviderProviderObserver {
     func dataBaseProvider(didAdded provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel])
     func dataBaseProvider(didDeleted provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel])
     func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel])
+    
+    func dataBaseProvider(didReloaded provider: IDataBaseProviderProvider)
 }
 
 extension IDataBaseProviderProviderObserver {
     func dataBaseProvider(didAdded provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {}
     func dataBaseProvider(didDeleted provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {}
     func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {}
+    func dataBaseProvider(didReloaded provider: IDataBaseProviderProvider) {}
 }
-
 
 extension STDataBase {
     

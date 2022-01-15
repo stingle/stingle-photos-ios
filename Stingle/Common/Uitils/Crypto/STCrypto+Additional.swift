@@ -11,7 +11,7 @@ import UIKit
 extension STCrypto {
     
     func decrypt(fromUrl: URL, toUrl: URL, header: STHeader?, validateHeader: Bool = true) throws {
-        guard let output = OutputStream(url: toUrl, append: true), let input = InputStream(url: fromUrl)  else {
+        guard let output = OutputStream(url: toUrl, append: false), let input = InputStream(url: fromUrl)  else {
             throw CryptoError.General.creationFailure
         }
         defer {
@@ -53,7 +53,7 @@ extension STCrypto {
         let inputThumb = InputStream(data: thumbImage)
         inputThumb.open()
         let thumbUrl = toThumbUrl.appendingPathComponent(fileName)
-        guard let outputThumb = OutputStream(toFileAtPath: thumbUrl.path, append: true) else {
+        guard let outputThumb = OutputStream(toFileAtPath: thumbUrl.path, append: false) else {
             inputThumb.close()
             throw CryptoError.General.creationFailure
         }
@@ -68,8 +68,12 @@ extension STCrypto {
         
         let originalUrl = toUrl.appendingPathComponent(fileName)
         guard let outputOrigin = OutputStream(toFileAtPath: originalUrl.path, append: false) else {
+            inputThumb.close()
+            outputThumb.close()
+            inputOrigin.close()
             throw CryptoError.General.creationFailure
         }
+        
         outputOrigin.open()
         defer {
             inputThumb.close()

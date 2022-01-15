@@ -75,4 +75,16 @@ struct STBytesUnits: Equatable {
         return lhs.bytes < rhs.bytes
     }
     
+    public static func > (lhs: Self, rhs: Self) -> Bool {
+        return lhs.bytes > rhs.bytes
+    }
+    
+    public static func <= (lhs: Self, rhs: Self) -> Bool {
+        return lhs.bytes <= rhs.bytes
+    }
+    
+    public static func >= (lhs: Self, rhs: Self) -> Bool {
+        return lhs.bytes >= rhs.bytes
+    }
+    
 }

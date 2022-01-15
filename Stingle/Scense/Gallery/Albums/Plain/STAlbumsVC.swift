@@ -49,20 +49,20 @@ extension STAlbumsVC {
             let isEditMode: Bool
         }
                 
-        func cellModel(for indexPath: IndexPath, data: STLibrary.Album) -> CellModel {
+        func cellModel(for indexPath: IndexPath, data: STLibrary.Album?) -> CellModel {
             let metadata = self.delegate?.viewModel(albumMedadataFor: data)
             let placeholder = UIImage(named: "ic_album")
             var image: STImageView.Image?
             
-            switch data.cover {
+            switch data?.cover {
             case ViewModel.imageBlankImageName:
                 break
             default:
-                if let file = metadata?.file {
+                if let file = metadata?.file, let data = data {
                     image = STImageView.Image(album: data, albumFile: file, isThumb: true)
                 }
             }
-            let title = data.albumMetadata?.name
+            let title = data?.albumMetadata?.name
             let subTille = String(format: "items_count".localized, "\(metadata?.countFiles ?? 0)")
             return CellModel(image: image, placeholder: placeholder, title: title, subTille: subTille, isEditMode: self.isEditMode)
         }

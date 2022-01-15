@@ -32,9 +32,7 @@ class STDataBase {
     
     func sync(_ sync: STSync, finish: @escaping (IError?) -> Void) {
         self.didStartSync()
-        let context = self.container.newBackgroundContext()
-        context.automaticallyMergesChangesFromParent = true
-        context.mergePolicy = NSMergePolicyType.mergeByPropertyStoreTrumpMergePolicyType
+        let context = self.container.backgroundContext
         context.performAndWait {
             do {
                 let oldInfo = self.dbInfoProvider.dbInfo
@@ -84,7 +82,7 @@ class STDataBase {
     
     func filtrNotExistFiles(files: [STLibrary.File]) -> [STLibrary.File] {
         
-        let context = self.container.newBackgroundContext()
+        let context = self.container.backgroundContext
         var fileNames = [String]()
         
         files.forEach { file in
@@ -120,7 +118,7 @@ class STDataBase {
     
     func filtrNotExistFileNames(fileNames: [String]) -> [String] {
        
-        let context = self.container.newBackgroundContext()
+        let context = self.container.backgroundContext
         return context.performAndWait {
             
             let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
@@ -254,6 +252,12 @@ extension STDataBase {
 }
 
 extension STDataBase {
+    
+    enum DataBaseChangeType {
+        case add
+        case update
+        case delete
+    }
     
     enum DataBaseError: IError {
        

@@ -63,12 +63,12 @@ extension STMoveAlbumFilesVC {
             }
         }
         
-        func cellModel(for indexPath: IndexPath, data: STLibrary.Album) -> CellModel {
+        func cellModel(for indexPath: IndexPath, data: STLibrary.Album?) -> CellModel {
             let albumInfo = self.delegate?.viewModel(albumMedadataFor: data)
             let placeholder = UIImage(named: "ic_album")
             var image: STImageView.Image?
             
-            switch data.cover {
+            switch data?.cover {
             case ViewModel.imageBlankImageName:
                 break
             default:
@@ -77,8 +77,8 @@ extension STMoveAlbumFilesVC {
                 }
             }
                     
-            let name = data.albumMetadata?.name
-            let isEnabled = (data.permission.allowAdd || data.isOwner) && data.albumId != self.album?.albumId
+            let name = data?.albumMetadata?.name
+            let isEnabled = (data?.permission.allowAdd ?? false || data?.isOwner ?? false) && data?.albumId != self.album?.albumId
             let titles = self.createCellModelInfo(album: data, albumInfo: albumInfo)
             
             return CellModel(image: image,
@@ -90,9 +90,9 @@ extension STMoveAlbumFilesVC {
             
         }
         
-        private func createCellModelInfo(album: STLibrary.Album, albumInfo: (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)?) -> (title: String?, subTitle: String?) {
+        private func createCellModelInfo(album: STLibrary.Album?, albumInfo: (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)?) -> (title: String?, subTitle: String?) {
                         
-            if album.isShared {
+            if album?.isShared ?? false {
                 let contacts = albumInfo?.members ?? []
                 let maxShowedMembersCount = min(3, contacts.count)
                 var members = [String]()

@@ -33,9 +33,10 @@ class STFileUploader {
     private(set) var progresses = [String: Progress]()
     private(set) var uploadedFiles = [STLibrary.File]()
     private(set) var uploadingFiles = [STLibrary.File]()
-    let maxCountUploads = 5
+    let maxCountUploads = 3
     let maxCountUpdateDB = 5
-        
+    
+    private(set) var updateDBChanges  = [String: Int]()
     
     var isUploading: Bool {
         return !self.uploadingFiles.isEmpty
@@ -47,16 +48,16 @@ class STFileUploader {
     }()
     
     @discardableResult
-    func upload(files: [IUploadFile]) -> Importer {
-        let importer = Importer(uploadFiles: files, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+    func upload(files: [IUploadFile]) -> STImporter.Importer {
+        let importer = STImporter.Importer(uploadFiles: files, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
     }
     
     @discardableResult
-    func uploadAlbum(files: [IUploadFile], album: STLibrary.Album) -> Importer {
-        let importer = AlbumFileImporter(uploadFiles: files, album: album, dispatchQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+    func uploadAlbum(files: [IUploadFile], album: STLibrary.Album) -> STImporter.Importer {
+        let importer = STImporter.AlbumFileImporter(uploadFiles: files, album: album, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
@@ -146,7 +147,6 @@ class STFileUploader {
             
             weakSelf.countAllFiles = weakSelf.countAllFiles + Int64(filesCount)
             weakSelf.updateProgress(files: [])
-            
         }
         
     }
@@ -189,15 +189,18 @@ class STFileUploader {
             uploadFiles.append(file)
         }
         
-        if uploadFiles.count > self.maxCountUpdateDB || self.countAllFiles == 0 {
+        if uploadFiles.count >= self.maxCountUpdateDB || self.countAllFiles == 0 {
             uploadFiles.removeAll()
         }
-        
+                        
         self.uploadedFiles = uploadFiles
+                
+        let updateDB = updateDB
+        
         guard updateDB else {
             return
         }
-        
+
         if file.isRemote {
             if let albumFile = file as? STLibrary.AlbumFile {
                 STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: true)
@@ -372,6 +375,7 @@ extension STFileUploader {
         case wrongStorageSize
         case fileNotFound
         case canceled
+        case memoryLow
         case error(error: Error)
         
         var message: String {
@@ -386,6 +390,8 @@ extension STFileUploader {
                 return "error_data_not_found".localized
             case .canceled:
                 return "error_canceled".localized
+            case .memoryLow:
+                return "error_memory_low".localized
             case .error(let error):
                 if let iError = error as? IError {
                     return iError.message

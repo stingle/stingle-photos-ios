@@ -160,7 +160,7 @@ extension STAlbumWorker {
             
             albumFilesProvider.delete(models: files, reloadData: true)
             albumProvider.delete(models: [album], reloadData: true)
-            STApplication.shared.utils.deleteFilesIfNeeded(files: files)
+            STApplication.shared.utils.deleteFilesIfNeeded(files: files, complition: nil)
             
             success(response)
         }, failure: failure)

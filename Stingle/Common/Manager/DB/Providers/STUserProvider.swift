@@ -14,9 +14,8 @@ extension STDataBase {
         fileprivate(set) var myUser: STUser? = nil
                        
         func update(model user: STUser) {
-            let context = self.container.newBackgroundContext()
-            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-            context.undoManager = nil
+            
+            let context = self.container.viewContext
             context.performAndWait {
                 guard let cdUser = self.getUser(context: context) else {
                     STCDUser(model: user, context: context)

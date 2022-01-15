@@ -19,6 +19,10 @@ extension STAppSettings {
             let result = Backup(isEnabled: true, isOnlyWiFi: false, batteryLevel: 0.38)
             return result
         }
+        
+        public static func != (lhs: Self, rhs: Self) -> Bool {
+            return lhs.isEnabled != rhs.isEnabled || lhs.isOnlyWiFi != rhs.isOnlyWiFi || lhs.batteryLevel != rhs.batteryLevel
+        }
 
     }
     

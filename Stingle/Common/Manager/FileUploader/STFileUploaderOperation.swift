@@ -62,7 +62,7 @@ extension STFileUploader {
         //MARK: - Private
         
         private func upload(file: IUploadFile) {
-            file.requestFile { [weak self] file in
+            file.requestFile(in: self.delegate?.underlyingQueue) { [weak self] file in
                 self?.continueOperation(with: file)
             } failure: { [weak self] error in
                 self?.responseFailed(error: error)
@@ -101,6 +101,11 @@ extension STFileUploader {
         
         private func continueOperation(didUpload file: STLibrary.File, spaceUsed: STDBUsed) {
             
+            guard STApplication.shared.isFileSystemAvailable else {
+                self.responseFailed(error: UploaderError.fileSystemNotValid, file: file)
+                return
+            }
+            
             let oldFileThumbUrl = file.fileThumbUrl
             let oldFileOreginalUrl = file.fileOreginalUrl
             file.isRemote = true
@@ -129,8 +134,6 @@ extension STFileUploader {
             if let fileOreginalUrl = newFileOreginalUrl {
                 STApplication.shared.fileSystem.updateUrlDataSize(url: fileOreginalUrl)
             }
-            
-            
             self.responseSucces(result: file, spaceUsed: spaceUsed)
         }
         

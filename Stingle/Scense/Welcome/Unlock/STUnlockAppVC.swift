@@ -48,7 +48,7 @@ class STUnlockAppVC: UIViewController {
     @IBAction private func didSelectLogOutButton(_ sender: Any) {
         let title = "alert_log_out_title".localized
         let message = "alert_log_out_message".localized
-        self.showOkCancelAlert(title: title, message: message, textFieldHandler: nil, handler: { [weak self] _ in
+        self.showOkCancelTextAlert(title: title, message: message, textFieldHandler: nil, handler: { [weak self] _ in
             self?.viewModel.logOutApp()
         }, cancel: nil)
         
@@ -73,7 +73,7 @@ class STUnlockAppVC: UIViewController {
     }
     
     private func showPasswordAlert(completion: @escaping (_ password: String?) -> Void) {
-        self.showOkCancelAlert(title: "confirm_password".localized, message: nil, textFieldHandler: { textField in
+        self.showOkCancelTextAlert(title: "confirm_password".localized, message: nil, textFieldHandler: { textField in
             textField.isSecureTextEntry = true
             textField.placeholder = "password".localized
         }, handler: { password in
@@ -96,7 +96,7 @@ class STUnlockAppVC: UIViewController {
     
     private func configureBiometricAuthButton() {
         self.biometricAuthButton.isHidden = !self.viewModel.canUnlockAppBiometric
-        let imageName = self.viewModel.biometric.type == .faceID ? "ic_face_id" : "ic_touch_id"
+        let imageName = self.viewModel.biometricAuthServicesType == .faceID ? "ic_face_id" : "ic_touch_id"
         self.biometricAuthButton.setImage(UIImage(named: imageName), for: .normal)
     }
     

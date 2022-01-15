@@ -321,7 +321,10 @@ class STCrypto {
 			numWrite = output.write(chunkNonce, maxLength: chunkNonce.count)
 			assert(numWrite == chunkNonce.count)
 			numWrite = output.write(authenticatedCipherText, maxLength: authenticatedCipherText.count)
-			assert(numWrite == authenticatedCipherText.count)
+			
+            if numWrite != authenticatedCipherText.count {
+                throw CryptoError.General.incorrectKeySize
+            }
 			chunkNumber += UInt64(1)
 
 		} while (diff == 0)

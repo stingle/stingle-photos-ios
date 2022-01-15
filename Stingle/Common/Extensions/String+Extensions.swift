@@ -39,6 +39,10 @@ extension String {
         return String.localized(for: self, replaceValue: "")
     }
     
+    var localizedUpper: String {
+        return self.localized.uppercased()
+    }
+    
     var localizedCapitalizingedFirstLetter: String {
         return String.localized(for: self, replaceValue: "")
     }
