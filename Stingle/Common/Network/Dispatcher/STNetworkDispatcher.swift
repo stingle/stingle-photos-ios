@@ -50,6 +50,16 @@ class STNetworkDispatcher {
         self.decoder = decoder
         
         let configuration = URLSessionConfiguration.background(withIdentifier: "STNetworkSession")
+        
+        configuration.isDiscretionary = true
+        configuration.sessionSendsLaunchEvents = true
+        configuration.sharedContainerIdentifier = "group.swiftlee.apps"
+//        configuration.shouldUseExtendedBackgroundIdleMode = true
+//
+//        configuration.waitsForConnectivity = true
+//        configuration.allowsCellularAccess = true
+//        configuration.httpMaximumConnectionsPerHost = 1
+        
         self.networkSession = STNetworkSession(configuration: configuration)
     }
 		
@@ -125,32 +135,36 @@ class STNetworkDispatcher {
     }
     
     func upload<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
-
-        let uploadRequest = self.uploadSession.upload(multipartFormData: { (data) in
-            request.files.forEach { (file) in
-                data.append(file.fileUrl, withName: file.name, fileName: file.fileName, mimeType: file.type)
-            }
-            if let parameters = request.parameters {
-                for parame in parameters {
-                    if  let vData = "\(parame.value)".data(using: .utf8) {
-                        data.append(vData, withName: parame.key)
-                    }
-                }
-            }
-        },  to: request.url, method: request.AFMethod, headers: request.afHeaders).responseDecodable(completionHandler: { (response: AFDataResponse<T>) in
-            switch response.result {
-            case .success(let value):
-                completion(.success(result: value))
-            case .failure(let networkError):
-                let error = NetworkError.error(error: networkError)
-                completion(.failure(error: error))
-            }
-        } ).uploadProgress { (uploadProgress) in
-            progress?(uploadProgress)
-        }
-
-        return Task(request: uploadRequest)
+        return self.uploadBackround(request: request, progress: progress, completion: completion)
     }
+    
+//    func upload<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
+//
+//        let uploadRequest = self.uploadSession.upload(multipartFormData: { (data) in
+//            request.files.forEach { (file) in
+//                data.append(file.fileUrl, withName: file.name, fileName: file.fileName, mimeType: file.type)
+//            }
+//            if let parameters = request.parameters {
+//                for parame in parameters {
+//                    if  let vData = "\(parame.value)".data(using: .utf8) {
+//                        data.append(vData, withName: parame.key)
+//                    }
+//                }
+//            }
+//        },  to: request.url, method: request.AFMethod, headers: request.afHeaders).responseDecodable(completionHandler: { (response: AFDataResponse<T>) in
+//            switch response.result {
+//            case .success(let value):
+//                completion(.success(result: value))
+//            case .failure(let networkError):
+//                let error = NetworkError.error(error: networkError)
+//                completion(.failure(error: error))
+//            }
+//        } ).uploadProgress { (uploadProgress) in
+//            progress?(uploadProgress)
+//        }
+//
+//        return Task(request: uploadRequest)
+//    }
     
     func uploadBackround<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
         let url = URL(string: request.url)!

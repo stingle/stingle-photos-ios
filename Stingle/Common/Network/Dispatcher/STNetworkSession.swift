@@ -21,7 +21,6 @@ class STNetworkSession: NSObject {
         self.serializationQueue = serializationQueue ?? rootQueue
         super.init()
         self.urlSession = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
-                
     }
         
 }
@@ -29,24 +28,11 @@ class STNetworkSession: NSObject {
 extension STNetworkSession {
     
     func upload(request: MultipartFormDataRequest) -> URLSessionUploadTask {
-                
-//        let task = self.urlSession.uploadTask(with: request.asURLRequest(), fromFile: request.fileURL) { data, response, error in
-//
-//            guard let data = data else {
-//                return
-//            }
-//
-//            var js: [String: Any]? = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-//
-//            print("")
-//        }
-        
         let task = self.urlSession.uploadTask(withStreamedRequest: request.asURLRequest())
         self.rootQueue.async(flags: .barrier) { [weak self] in
             self?.requests[task] = request
             task.resume()
         }
-                
         return task
     }
     
@@ -61,6 +47,7 @@ extension STNetworkSession: URLSessionTaskDelegate {
             let inputStream = self?.requests[task]?.inputStream
             
             self?.rootQueue.async {
+//                inputStream?.open()
                 completionHandler(inputStream)
             }
             
@@ -71,8 +58,10 @@ extension STNetworkSession: URLSessionTaskDelegate {
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
-                
-        print("totalBytesExpectedToSend", totalBytesExpectedToSend, totalBytesSent, bytesSent)
+        
+        let requests = self.requests[task]        
+        
+        print("totalBytesExpectedToSend", requests?.bodyBytesCount ?? .zero, totalBytesSent, bytesSent, task.progress.fractionCompleted)
         
     }
     
@@ -87,9 +76,7 @@ extension STNetworkSession: URLSessionTaskDelegate {
 }
 
 protocol IFormDataRequestBodyPart {
-    
-    func writeBodyStream(to outputStream: OutputStream, boundary: String) throws
-    
+    func writeBodyStream(to outputStream: OutputStream, boundary: String) throws -> Int
 }
 
 class MultipartFormDataRequest {
@@ -99,6 +86,9 @@ class MultipartFormDataRequest {
    
     let url: URL
     let headers: [String: String]?
+    
+    private(set) var bodyBytesCount: UInt = .zero
+    private(set) var inputStream: InputStream?
     
     private(set) lazy var directoryURL: URL = {
         let fileManager = FileManager.default
@@ -112,8 +102,6 @@ class MultipartFormDataRequest {
         let fileURL = self.directoryURL.appendingPathComponent(fileName)
         return fileURL
     }()
-    
-    private(set) var inputStream: InputStream?
 
     init(url: URL, headers: [String: String]?) {
         self.url = url
@@ -171,12 +159,13 @@ class MultipartFormDataRequest {
             outputStream.close()
         }
         
-        var part = self.bodyParts
-        part.append(EndField())
+        var parts = self.bodyParts
+        parts.append(EndField())
         
-        for part in part {
+        for part in parts {
             do {
-                try part.writeBodyStream(to: outputStream, boundary: self.boundary)
+                let bytesCount = try part.writeBodyStream(to: outputStream, boundary: self.boundary)
+                self.bodyBytesCount += UInt(bytesCount)
             } catch {
                 throw STNetworkDispatcher.NetworkError.badRequest
             }
@@ -184,6 +173,7 @@ class MultipartFormDataRequest {
         guard let inputStream = InputStream(url: fileURL) else {
             throw STNetworkDispatcher.NetworkError.badRequest
         }
+        
         self.inputStream = inputStream
     }
     
@@ -193,12 +183,11 @@ class MultipartFormDataRequest {
 extension MultipartFormDataRequest {
     
     struct TextField: IFormDataRequestBodyPart {
-        
+                
         let name: String
         let value: String
         
-        func writeBodyStream(to outputStream: OutputStream, boundary: String) throws {
-            
+        func writeBodyStream(to outputStream: OutputStream, boundary: String) throws -> Int {
             var fieldString = "--\(boundary)\r\n"
             fieldString += "Content-Disposition: form-data; name=\"\(self.name)\"\r\n"
             fieldString += "Content-Type: text/plain; charset=ISO-8859-1\r\n"
@@ -209,7 +198,7 @@ extension MultipartFormDataRequest {
             let data = Data(fieldString.utf8)
             var buffer = [UInt8](repeating: 0, count: data.count)
             data.copyBytes(to: &buffer, count: data.count)
-            outputStream.write(buffer, maxLength: data.count)
+            return outputStream.write(buffer, maxLength: data.count)
         }
         
     }
@@ -220,7 +209,7 @@ extension MultipartFormDataRequest {
         let mimeType: String
         let data: Data
         
-        func writeBodyStream(to outputStream: OutputStream, boundary: String) throws {
+        func writeBodyStream(to outputStream: OutputStream, boundary: String) throws -> Int {
             
             var fieldData = Data()
             fieldData.append("--\(boundary)\r\n")
@@ -234,7 +223,7 @@ extension MultipartFormDataRequest {
             
             var buffer = [UInt8](repeating: 0, count: data.count)
             data.copyBytes(to: &buffer, count: data.count)
-            outputStream.write(buffer, maxLength: data.count)
+            return outputStream.write(buffer, maxLength: data.count)
             
         }
     }
@@ -246,12 +235,11 @@ extension MultipartFormDataRequest {
         let mimeType: String
         let fileUrl: URL
         
-        func writeBodyStream(to outputStream: OutputStream, boundary: String) throws {
+        func writeBodyStream(to outputStream: OutputStream, boundary: String) throws -> Int {
             
             guard let inputStream = InputStream(url: self.fileUrl) else {
                 throw STNetworkDispatcher.NetworkError.badRequest
             }
-            
             
             var fieldData = Data()
             fieldData.append("--\(boundary)\r\n")
@@ -261,13 +249,13 @@ extension MultipartFormDataRequest {
             fieldData.append("Content-Type: \(self.mimeType)\r\n")
             fieldData.append("\r\n")
             
+            var resultBytes: Int = .zero
         
             var buffer = [UInt8](repeating: 0, count: fieldData.count)
             fieldData.copyBytes(to: &buffer, count: fieldData.count)
-            outputStream.write(buffer, maxLength: fieldData.count)
+            resultBytes += outputStream.write(buffer, maxLength: fieldData.count)
             
             inputStream.open()
-            
             defer { inputStream.close() }
             
             let streamBufferSize = 1024
@@ -285,7 +273,9 @@ extension MultipartFormDataRequest {
                     if buffer.count != bytesRead {
                         buffer = Array(buffer[0..<bytesRead])
                     }
-                    outputStream.write(buffer, maxLength: buffer.count)
+                    let write = outputStream.write(buffer, maxLength: buffer.count)
+                    resultBytes += write
+                    
                 } else {
                     break
                 }
@@ -296,7 +286,9 @@ extension MultipartFormDataRequest {
             
             var bufferEnd = [UInt8](repeating: 0, count: end.count)
             end.copyBytes(to: &bufferEnd, count: end.count)
-            outputStream.write(bufferEnd, maxLength: end.count)
+            resultBytes += outputStream.write(bufferEnd, maxLength: end.count)
+            
+            return resultBytes
                                 
         }
         
@@ -304,14 +296,14 @@ extension MultipartFormDataRequest {
     
     struct EndField: IFormDataRequestBodyPart {
         
-        func writeBodyStream(to outputStream: OutputStream, boundary: String) throws {
+        func writeBodyStream(to outputStream: OutputStream, boundary: String) throws -> Int {
             var data = Data()
             let fieldData = "\r\n--\(boundary)--\r\n"
             data.append(fieldData)
             
             var buffer = [UInt8](repeating: 0, count: data.count)
             data.copyBytes(to: &buffer, count: data.count)
-            outputStream.write(buffer, maxLength: data.count)
+            return outputStream.write(buffer, maxLength: data.count)
             
         }
         

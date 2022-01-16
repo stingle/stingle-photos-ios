@@ -331,7 +331,6 @@ extension STFileSystem {
             return formatter.string(fromByteCount: bytes) as String
         }
 
-
         //MARK: Get String Value
         class var totalDiskSpaceStr: String {
             get {
