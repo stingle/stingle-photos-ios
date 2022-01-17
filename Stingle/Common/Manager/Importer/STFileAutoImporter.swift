@@ -39,7 +39,7 @@ extension STImporter {
             }
         }
         
-        private var fetchLimit: Int = 12
+        private var fetchLimit: Int = 5
         private var isStarted: Bool = false
         private var isImporting: Bool = false
         private var needResetImportDate = false

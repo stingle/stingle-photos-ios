@@ -152,7 +152,10 @@ extension STDataBase {
         //MARK: - NSFetchedResultsControllerDelegate
         
         func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-            if self.snapshotReference == snapshot, let invalidIds = self.invalidIds {
+            if self.snapshotReference == snapshot, var invalidIds = self.invalidIds {                
+                invalidIds = invalidIds.filter({ element in
+                    return snapshot.itemIdentifiers.first(where: {element == $0 as? NSManagedObjectID}) != nil
+                })
                 snapshot.reloadItems(withIdentifiers: invalidIds)
             }
             self.invalidIds = nil
