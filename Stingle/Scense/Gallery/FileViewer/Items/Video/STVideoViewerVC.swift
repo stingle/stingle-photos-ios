@@ -35,6 +35,7 @@ class STVideoViewerVC: UIViewController {
        
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.player.isMuted = false
         self.slider.value = .zero
         self.loadingBgView.alpha = .zero
         self.player.addObserver(deleagte: self)
