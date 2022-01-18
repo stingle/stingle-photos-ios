@@ -13,11 +13,10 @@ extension STAppSettings {
         
         var isAutoImportEnable: Bool
         var isDeleteOriginalFilesAfterAutoImport: Bool
-        var isImporsExistingFiles: Bool
         var manualImportDeleteFilesType: ManualImportDeleteFilesType
         
         static var `default`: Import {
-            let result = Import(isAutoImportEnable: false, isDeleteOriginalFilesAfterAutoImport: false, isImporsExistingFiles: false, manualImportDeleteFilesType: .askEveryTime)
+            let result = Import(isAutoImportEnable: false, isDeleteOriginalFilesAfterAutoImport: false, manualImportDeleteFilesType: .askEveryTime)
             return result
         }
         

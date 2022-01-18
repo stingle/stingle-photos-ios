@@ -164,16 +164,10 @@ extension STPHPhotoHelper {
             }
         }
     }
-    
+
     class func moveToAlbum(albumName: String, assets: [PHAsset], completion: @escaping (() -> Void)) {
-        try? PHPhotoLibrary.shared().performChangesAndWait {
-            
-            let options = PHFetchOptions()
-            let predicate = NSPredicate(format: "\(#keyPath(PHAssetCollection.localizedTitle)) == %@", albumName as CVarArg)
-            options.predicate = predicate
-            
-            let assetCollection = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
-            
+        PHPhotoLibrary.shared().performChanges {
+            let assetCollection = self.get(album: albumName)
             if let album = assetCollection.firstObject {
                 let changeRequest = PHAssetCollectionChangeRequest(for: album)
                 changeRequest?.addAssets(assets as NSFastEnumeration)
@@ -181,17 +175,25 @@ extension STPHPhotoHelper {
                 let changeRequest = PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: albumName)
                 changeRequest.addAssets(assets as NSFastEnumeration)
             }
+        } completionHandler: { end, error in
             completion()
-   
+        }
+    }
+    
+    class func delete(albumName: String, completion: @escaping ((Bool) -> Void)) {
+        PHPhotoLibrary.shared().performChanges {
+            let assetCollection = self.get(album: albumName)
+            if assetCollection.firstObject != nil {
+                PHAssetCollectionChangeRequest.deleteAssetCollections(assetCollection as NSFastEnumeration)
+            }
+        } completionHandler: { end, error in
+            completion(end)
         }
     }
     
     class func deleteFiles(albumName: String, completion: @escaping ((Bool) -> Void)) {
         PHPhotoLibrary.shared().performChanges {
-            let options = PHFetchOptions()
-            let predicate = NSPredicate(format: "\(#keyPath(PHAssetCollection.localizedTitle)) == %@", albumName as CVarArg)
-            options.predicate = predicate
-            let assetCollection = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
+            let assetCollection = self.get(album: albumName)
             if let album = assetCollection.firstObject {
                 let assets = PHAsset.fetchAssets(in: album, options: PHFetchOptions())
                 PHAssetChangeRequest.deleteAssets(assets as NSFastEnumeration)
@@ -199,8 +201,28 @@ extension STPHPhotoHelper {
         } completionHandler: { end, error in
             completion(end)
         }
-                
     }
+    
+    class func removeFiles(albumName: String, completion: @escaping ((Bool) -> Void)) {
+        PHPhotoLibrary.shared().performChanges {
+            let assetCollection = self.get(album: albumName)
+            if let album = assetCollection.firstObject {
+                let assets = PHAsset.fetchAssets(in: album, options: PHFetchOptions())
+                let changeRequest = PHAssetCollectionChangeRequest(for: album)
+                changeRequest?.removeAssets(assets)
+            }
+        } completionHandler: { end, error in
+            completion(end)
+        }
+    }
+
+    class private func get(album name: String) -> PHFetchResult<PHAssetCollection> {
+        let options = PHFetchOptions()
+        let predicate = NSPredicate(format: "\(#keyPath(PHAssetCollection.localizedTitle)) == %@", name as CVarArg)
+        options.predicate = predicate
+        let assetCollection = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
+        return assetCollection
+    }        
     
 }
 

@@ -25,17 +25,9 @@ extension STImporter {
         
         private var lastImportDate: Date? {
             set {
-                UserDefaults.standard.set(newValue, forKey: "lastImportDate")
+                UserDefaults.standard.set(newValue, forKey: "auotImporter.lastImportDate")
             } get {
-                guard let saveDate = (UserDefaults.standard.object(forKey: "lastImportDate") as? Date) else {
-                    let currentData = Date()
-                    let date = (self.importSettings.isImporsExistingFiles || !self.importSettings.isAutoImportEnable) ? nil : currentData
-                    if !self.importSettings.isImporsExistingFiles && self.importSettings.isAutoImportEnable {
-                        UserDefaults.standard.set(currentData, forKey: "lastImportDate")
-                    }
-                    return date
-                }
-                return saveDate
+                return (UserDefaults.standard.object(forKey: "auotImporter.lastImportDate") as? Date)
             }
         }
         
@@ -70,6 +62,13 @@ extension STImporter {
             }
         }
         
+        func setImpor(existingFiles: Bool) throws {
+            guard !self.isImporting else {
+                throw AuotImporterError.importerIsBusy
+            }
+            self.lastImportDate = existingFiles ? nil : Date()
+        }
+        
         func logout() {
             self.endImportIng()
             self.lastImportDate = nil
@@ -86,8 +85,16 @@ extension STImporter {
             }
             let albumName = STEnvironment.current.photoLibraryTrashAlbumName
             STPHPhotoHelper.deleteFiles(albumName: albumName) { [weak self] end in
-                self?.dispatchQueue.async {
-                    completion()
+                if end == false {
+                    STPHPhotoHelper.removeFiles(albumName: albumName) { _ in
+                        self?.dispatchQueue.async {
+                            completion()
+                        }
+                    }
+                } else {
+                    self?.dispatchQueue.async {
+                        completion()
+                    }
                 }
             }
         }
@@ -174,6 +181,7 @@ extension STImporter.AuotImporter {
        
         case cantImportFiles
         case canceled
+        case importerIsBusy
         
         var message: String {
             switch self {
@@ -181,6 +189,8 @@ extension STImporter.AuotImporter {
                 return "Can't import files"
             case .canceled:
                 return "error_canceled".localized
+            case .importerIsBusy:
+                return "importerIsBusy"
             }
         }
     }
