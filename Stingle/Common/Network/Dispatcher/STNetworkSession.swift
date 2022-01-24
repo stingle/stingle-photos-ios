@@ -11,14 +11,14 @@ import Alamofire
 class STNetworkSession: NSObject {
     
     fileprivate let rootQueue: DispatchQueue
-    fileprivate let serializationQueue: DispatchQueue
     fileprivate var urlSession: URLSession!
     
-    fileprivate var requests = [URLSessionTask: MultipartFormDataRequest]()
+    fileprivate typealias CallBack = (request: MultipartFormDataRequest, completion: (STNetworkDispatcher.Result<Data>) -> Void, progress: (Progress) -> Void, receiveData: Data)
     
-    init(rootQueue: DispatchQueue = DispatchQueue(label: "org.stingle.session.rootQueue"), serializationQueue: DispatchQueue? = nil, configuration: URLSessionConfiguration = .default) {
+    fileprivate var requests = [Int: CallBack]()
+    
+    init(rootQueue: DispatchQueue = DispatchQueue(label: "org.stingle.session.rootQueue"), configuration: URLSessionConfiguration = .default) {
         self.rootQueue = rootQueue
-        self.serializationQueue = serializationQueue ?? rootQueue
         super.init()
         self.urlSession = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
     }
@@ -26,11 +26,13 @@ class STNetworkSession: NSObject {
 }
 
 extension STNetworkSession {
-    
-    func upload(request: MultipartFormDataRequest) -> URLSessionUploadTask {
-        let task = self.urlSession.uploadTask(withStreamedRequest: request.asURLRequest())
+
+    func upload(request: MultipartFormDataRequest, completion: @escaping (STNetworkDispatcher.Result<Data>) -> Void, progress: @escaping (Progress) -> Void) -> URLSessionUploadTask {
+        
+        try! request.build()
+        let task = self.urlSession.uploadTask(with: request.asURLRequest(), fromFile: request.fileURL)
         self.rootQueue.async(flags: .barrier) { [weak self] in
-            self?.requests[task] = request
+            self?.requests[task.taskIdentifier] = CallBack(request, completion, progress, Data())
             task.resume()
         }
         return task
@@ -38,41 +40,54 @@ extension STNetworkSession {
     
 }
 
-extension STNetworkSession: URLSessionTaskDelegate {
-    
-    func urlSession(_ session: URLSession, task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void) {
-        
-        self.rootQueue.async(flags: .barrier) { [weak self] in
-            
-            let inputStream = self?.requests[task]?.inputStream
-            
-            self?.rootQueue.async {
-//                inputStream?.open()
-                completionHandler(inputStream)
-            }
-            
-            
-        }
-                
-        print("")
-    }
+extension STNetworkSession: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
-        
-        let requests = self.requests[task]        
-        
-        print("totalBytesExpectedToSend", requests?.bodyBytesCount ?? .zero, totalBytesSent, bytesSent, task.progress.fractionCompleted)
-        
+        self.rootQueue.async { [weak self] in
+            let requests = self?.requests[task.taskIdentifier]
+            requests?.progress(task.progress)
+        }
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        print("")
+        self.rootQueue.async { [weak self] in
+            guard let requests = self?.requests[task.taskIdentifier] else { return }
+            if let error = error {
+                requests.completion(.failure(error: STNetworkDispatcher.NetworkError.error(error: error)))
+            } else {
+                requests.completion(.success(result: requests.receiveData))
+            }
+            
+            self?.rootQueue.async(flags: .barrier) { [weak self] in
+                requests.request.clean()
+                self?.requests[task.taskIdentifier] = nil
+            }
+        }
     }
     
-    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
-        print("")
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        self.rootQueue.async { [weak self] in
+            self?.requests[dataTask.taskIdentifier]?.receiveData.append(data)
+        }
     }
+
+
+}
+
+extension STNetworkSession {
     
+    class var backroundConfiguration: URLSessionConfiguration {
+        let configuration = URLSessionConfiguration.background(withIdentifier: "group.swiftlee.apps")
+        configuration.isDiscretionary = true
+        configuration.sessionSendsLaunchEvents = true
+        configuration.sharedContainerIdentifier = "group.swiftlee.apps"
+        configuration.shouldUseExtendedBackgroundIdleMode = true
+        configuration.networkServiceType = .background
+        configuration.waitsForConnectivity = true
+        configuration.httpMaximumConnectionsPerHost = 5
+        return configuration
+    }
+        
 }
 
 protocol IFormDataRequestBodyPart {
@@ -88,7 +103,6 @@ class MultipartFormDataRequest {
     let headers: [String: String]?
     
     private(set) var bodyBytesCount: UInt = .zero
-    private(set) var inputStream: InputStream?
     
     private(set) lazy var directoryURL: URL = {
         let fileManager = FileManager.default
@@ -136,7 +150,7 @@ class MultipartFormDataRequest {
         return request
     }
     
-    func build() throws {
+    fileprivate func build() throws {
         
         let fileManager = FileManager.default
         
@@ -144,11 +158,6 @@ class MultipartFormDataRequest {
         let fileURL = self.fileURL
         
         try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
-                
-        if let inputStream = self.inputStream {
-            inputStream.close()
-            try fileManager.removeItem(at: fileURL)
-        }
         
         guard let outputStream = OutputStream(url: fileURL, append: false) else {
             throw STNetworkDispatcher.NetworkError.badRequest
@@ -166,15 +175,23 @@ class MultipartFormDataRequest {
             do {
                 let bytesCount = try part.writeBodyStream(to: outputStream, boundary: self.boundary)
                 self.bodyBytesCount += UInt(bytesCount)
+                
+                let part2 = (part as? FileField)
+                
+                print("heelekl", part2?.mimeType ?? "", part2?.filename ?? "", part2?.name ?? "")
+                
             } catch {
                 throw STNetworkDispatcher.NetworkError.badRequest
             }
         }
-        guard let inputStream = InputStream(url: fileURL) else {
-            throw STNetworkDispatcher.NetworkError.badRequest
+    }
+    
+    fileprivate func clean() {
+        do {
+            try FileManager.default.removeItem(at: self.fileURL)
+        } catch {
+            print(error.localizedDescription)
         }
-        
-        self.inputStream = inputStream
     }
     
     
@@ -204,6 +221,7 @@ extension MultipartFormDataRequest {
     }
     
     struct DataField: IFormDataRequestBodyPart {
+        
         let name: String
         let filename: String
         let mimeType: String
@@ -213,7 +231,6 @@ extension MultipartFormDataRequest {
             
             var fieldData = Data()
             fieldData.append("--\(boundary)\r\n")
-                        
             
             fieldData.append("Content-Disposition: form-data; name=\"\(self.name); filename=\"\(self.filename)\"\r\n")
             fieldData.append("Content-Type: \(self.mimeType)\r\n")
@@ -268,14 +285,9 @@ extension MultipartFormDataRequest {
                 if let streamError = inputStream.streamError {
                     throw AFError.multipartEncodingFailed(reason: .inputStreamReadFailed(error: streamError))
                 }
-
                 if bytesRead > 0 {
-                    if buffer.count != bytesRead {
-                        buffer = Array(buffer[0..<bytesRead])
-                    }
-                    let write = outputStream.write(buffer, maxLength: buffer.count)
+                    let write = outputStream.write(buffer, maxLength: bytesRead)
                     resultBytes += write
-                    
                 } else {
                     break
                 }

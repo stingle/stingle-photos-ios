@@ -16,6 +16,10 @@ enum STUploadFileRequest {
 
 extension STUploadFileRequest: STUploadRequest {
     
+    var isBackground: Bool {
+        return true
+    }
+        
     var files: [STUploadRequestFileInfo] {        
         switch self {
         case .file(let file):

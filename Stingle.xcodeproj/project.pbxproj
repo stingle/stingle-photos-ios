@@ -550,6 +550,7 @@
 		A075B73E2652B2D500B4E2DF /* STSharedAlbumSettingsBaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSharedAlbumSettingsBaseCell.swift; sourceTree = "<group>"; };
 		A076A631273EE6AE00106E87 /* STMat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMat.swift; sourceTree = "<group>"; };
 		A076A633273EFF3F00106E87 /* STVideoImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVideoImageView.swift; sourceTree = "<group>"; };
+		A076FDF8279C910B00EB68F5 /* Stingle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stingle.entitlements; sourceTree = "<group>"; };
 		A076FF3926F8BA4300E95240 /* STStorageVC+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STStorageVC+Data.swift"; sourceTree = "<group>"; };
 		A077780025FFF81100BA2BDF /* STGalleryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryVM.swift; sourceTree = "<group>"; };
 		A077780825FFFEBB00BA2BDF /* STCrypto+Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STCrypto+Header.swift"; sourceTree = "<group>"; };
@@ -882,6 +883,7 @@
 		A02203BF25EED86800D07C98 /* Stingle */ = {
 			isa = PBXGroup;
 			children = (
+				A076FDF8279C910B00EB68F5 /* Stingle.entitlements */,
 				A033D6E1260146C100E6AA83 /* Scense */,
 				A033D6EA2601491B00E6AA83 /* Common */,
 				A02203E425EEDB2500D07C98 /* Resources */,
@@ -2925,6 +2927,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
+				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3015,6 +3018,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
+				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3100,6 +3104,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
+				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3185,6 +3190,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
+				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;

@@ -142,6 +142,7 @@ protocol IStreamRequest: IRequest {
 
 protocol IUploadRequest: IRequest {
     var files: [STUploadRequestFileInfo] { get }
+    var isBackground: Bool { get }
 }
 
 struct STUploadRequestFileInfo {
