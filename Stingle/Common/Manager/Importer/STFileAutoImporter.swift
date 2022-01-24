@@ -13,6 +13,12 @@ extension STImporter {
     
     class AuotImporter {
         
+        enum ImportData {
+            case existingFilesDate
+            case currentDate
+            case coustom(date: Date)
+        }
+        
         private let dispatchQueue = DispatchQueue(label: "AuotImporter.queue", attributes: .concurrent)
         
         private var importSettings: STAppSettings.Import {
@@ -51,6 +57,10 @@ extension STImporter {
             self.deleteImportedFiles { [weak self] in
                 self?.startImportAssets()
             }
+        }
+        
+        func resetImportDate(date: ImportData, startImport: Bool) {
+            
         }
         
         func resetImportDate() {
@@ -132,10 +142,17 @@ extension STImporter {
         private func didEndImportIng() {}
         
         private func startNextImport() {
+           
+            var startImportData = self.lastImportDate
+            
+            
             let operation = Operation(success: { [weak self] importCount in
                 guard let weakSelf = self else {
                     return
                 }
+                
+                weakSelf.lastImportDate = startImportData
+                
                 if importCount != .zero {
                     weakSelf.dispatchQueue.asyncAfter(wallDeadline: .now() + 0.5) { [weak weakSelf] in
                         weakSelf?.startNextImport()
@@ -146,15 +163,17 @@ extension STImporter {
                 }
             }, failure: { [weak self] error in
                 self?.endImportIng()
-            }, progress: { [weak self] progress in
+            }, progress: { progress in
+                
                 if let date = progress.userInfo[.dateKey] as? Date {
-                    if let lastImportDate = self?.lastImportDate, date > lastImportDate {
-                        self?.lastImportDate = date
-                    } else if self?.lastImportDate == nil {
-                        self?.lastImportDate = date
+                    if let lastImportDate = startImportData, date > lastImportDate {
+                        startImportData = date
+                    } else if startImportData == nil {
+                        startImportData = date
                     }
                 }
-            }, fromDate: self.lastImportDate, fetchLimit: self.fetchLimit)
+                
+            }, fromDate: startImportData, fetchLimit: self.fetchLimit)
                         
             operation.didStartRun(with: self.queue)
         }
@@ -287,9 +306,14 @@ extension STImporter.AuotImporter {
                         }
                     }
                 } else {
-                    queue.async { [weak self] in
+                    
+                    queue.asyncAfter(deadline: .now() + 5) {  [weak self] in
                         self?.responseSucces(result: files.count)
                     }
+                    
+//                    queue.async { [weak self] in
+//                        self?.responseSucces(result: files.count)
+//                    }
                 }
             }
             
