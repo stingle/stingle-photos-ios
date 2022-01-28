@@ -48,16 +48,16 @@ class STFileUploader {
     }()
     
     @discardableResult
-    func upload(files: [IUploadFile]) -> STImporter.Importer {
-        let importer = STImporter.Importer(uploadFiles: files, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+    func upload(files: [IImportable]) -> STImporter.Importer {
+        let importer = STImporter.Importer(uploadFiles: files, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files, _ in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
     }
     
     @discardableResult
-    func uploadAlbum(files: [IUploadFile], album: STLibrary.Album) -> STImporter.Importer {
-        let importer = STImporter.AlbumFileImporter(uploadFiles: files, album: album, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files in
+    func uploadAlbum(files: [IImportable], album: STLibrary.Album) -> STImporter.Importer {
+        let importer = STImporter.AlbumFileImporter(uploadFiles: files, album: album, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files, _ in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
@@ -85,7 +85,7 @@ class STFileUploader {
     
     func cancelUploadIng(for file: STLibrary.File) {
         for operation in self.operationQueue.allOperations() {
-            if let operation = operation as? Operation, operation.libraryFile?.identifier == file.identifier {
+            if let operation = operation as? Operation, operation.libraryFile.identifier == file.identifier {
                 operation.cancel()
                 break
             }
@@ -399,16 +399,6 @@ extension STFileUploader {
                 return error.localizedDescription
             }
         }
-    }
-    
-    struct UploadFileInfo {
-        let oreginalUrl: URL
-        let thumbImage: Data
-        let fileType: STFileUploader.FileType
-        let duration: TimeInterval
-        var fileSize: UInt
-        var creationDate: Date?
-        var modificationDate: Date?
     }
     
     struct UploaderProgress {

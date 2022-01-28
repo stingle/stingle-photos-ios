@@ -226,6 +226,138 @@ extension STPHPhotoHelper {
     
 }
 
+
+extension STPHPhotoHelper {
+    
+    struct PHAssetDataInfo {
+        var url: URL
+        var videoDuration: TimeInterval
+        var fileSize: UInt
+        var creationDate: Date?
+        var modificationDate: Date?
+    }
+    
+    typealias AssetProgressHandler = (Double, UnsafeMutablePointer<ObjCBool>?) -> Void
+    
+    private static let phManager = PHImageManager.default()
+
+    class func requestGetURL(asset: PHAsset, progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+        
+        switch asset.mediaType {
+        case .image:
+            self.requestImageAssetInfo(asset: asset, progressHandler: progressHandler, completion: completion)
+        case .video:
+            self.requestVideoAssetInfo(asset: asset, progressHandler: progressHandler, completion: completion)
+        default:
+            fatalError("this case not supported")
+        }
+    }
+    
+    class func requestThumb(asset: PHAsset, progressHandler: AssetProgressHandler?, completion : @escaping ((_ image: UIImage?) -> Void)) {
+        
+        let options = PHImageRequestOptions()
+        options.version = .current
+        options.resizeMode = .exact
+        options.deliveryMode = .highQualityFormat
+        options.isNetworkAccessAllowed = true
+        
+        options.progressHandler = { progressValue, error, stop, info in
+            progressHandler?(progressValue, stop)
+        }
+                
+        let size = STConstants.thumbSize(for: CGSize(width: asset.pixelWidth, height: asset.pixelHeight))
+        self.phManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: options) { thumb, info  in
+            progressHandler?(1, nil)
+            completion(thumb)
+           
+        }
+    }
+    
+    //MARK: - Private
+    
+    private class func requestVideoAssetInfo(asset: PHAsset,  progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+        
+        guard asset.mediaType == .video else {
+            completion(nil)
+            return
+        }
+        
+        let options: PHVideoRequestOptions = PHVideoRequestOptions()
+
+        options.version = .current
+        options.deliveryMode = .highQualityFormat
+        options.isNetworkAccessAllowed = true
+        options.progressHandler = { progress, error, stop, info in
+            progressHandler?(progress, stop)
+        }
+        
+        let modificationDate = asset.modificationDate ?? asset.creationDate
+        let creationDate = asset.creationDate ?? asset.modificationDate
+
+        self.phManager.requestAVAsset(forVideo: asset, options: options, resultHandler: { (asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) -> Void in
+            
+            if let urlAsset = asset as? AVURLAsset, let fileSize = urlAsset.fileSize {
+                let localVideoUrl: URL = urlAsset.url as URL
+                let responseURL: URL = localVideoUrl
+                let videoDuration: TimeInterval = urlAsset.duration.seconds
+                let fileSize: UInt = UInt(fileSize)
+                let result = PHAssetDataInfo(url: responseURL,
+                                videoDuration: videoDuration,
+                                fileSize: fileSize,
+                                creationDate: creationDate,
+                                modificationDate: modificationDate)
+                
+                completion(result)
+            } else {
+                completion(nil)
+            }
+        })
+    }
+    
+    private class func requestImageAssetInfo(asset: PHAsset, progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+        
+        guard asset.mediaType == .image else {
+            completion(nil)
+            return
+        }
+        let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
+        options.isNetworkAccessAllowed = true
+        options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData) -> Bool in
+            return false
+        }
+        
+        options.progressHandler = { progress, stop in
+            progressHandler?(progress, stop)
+        }
+                
+        let modificationDate = asset.modificationDate ?? asset.creationDate
+        let creationDate = asset.creationDate ?? asset.modificationDate
+        
+        asset.requestContentEditingInput(with: options, completionHandler: {(contentEditingInput: PHContentEditingInput?, info: [AnyHashable : Any]) -> Void in
+            guard let contentEditingInput = contentEditingInput, let fullSizeImageURL = contentEditingInput.fullSizeImageURL else {
+                completion(nil)
+                return
+            }
+            let responseURL: URL = fullSizeImageURL
+            let videoDuration: TimeInterval = .zero
+            let creationDate: Date? = creationDate
+            let modificationDate: Date? = modificationDate
+            
+            let attr = try? FileManager.default.attributesOfItem(atPath: responseURL.path)
+            let fileSize = (attr?[FileAttributeKey.size] as? UInt) ?? 0
+            
+            let result = PHAssetDataInfo(url: responseURL,
+                            videoDuration: videoDuration,
+                            fileSize: fileSize,
+                            creationDate: creationDate,
+                            modificationDate: modificationDate)
+            completion(result)
+        })
+        
+    }
+    
+}
+
 extension STPHPhotoHelper {
 
     enum ItemType {

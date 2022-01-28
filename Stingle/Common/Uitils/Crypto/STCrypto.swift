@@ -57,6 +57,8 @@ extension STCrypto {
         static let AlbumIDLen = 32
     }
     
+    typealias ProgressHandler = ((_ progress: Progress, _ stop: inout Bool) -> Void)
+    
 }
 
 class STCrypto {
@@ -250,15 +252,69 @@ class STCrypto {
 		
 		return plainText
 	}
+    
+    @discardableResult
+    public func encryptFile(inputData: Data, outputUrl: URL, filename: String, fileType: Int, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
+        
+        let inputStream = InputStream(data: inputData)
+        let dataLength: UInt = UInt(inputData.count)
+        guard let outputStream = OutputStream(toFileAtPath: outputUrl.path, append: false) else {
+            throw CryptoError.General.creationFailure
+        }
+        
+        inputStream.open()
+        outputStream.open()
+        
+        defer {
+            inputStream.close()
+            outputStream.close()
+        }
+        do {
+            let result = try self.encryptFile(input: inputStream, output: outputStream, filename: filename, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
+            return result
+        } catch {
+            let fileManager = FileManager.default
+            try? fileManager.removeItem(at: outputUrl)
+            throw error
+        }
+    }
+    
+    @discardableResult
+    public func encryptFile(inputUrl: URL, outputUrl: URL, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
+        
+        guard let inputStream = InputStream(fileAtPath: inputUrl.path) else {
+            throw CryptoError.General.creationFailure
+        }
+        
+        guard let outputStream = OutputStream(toFileAtPath: outputUrl.path, append: false) else {
+            throw CryptoError.General.creationFailure
+        }
+        
+        inputStream.open()
+        outputStream.open()
+        
+        defer {
+            inputStream.close()
+            outputStream.close()
+        }
+        do {
+            let result = try self.encryptFile(input: inputStream, output: outputStream, filename: filename, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
+            return result
+        } catch {
+            let fileManager = FileManager.default
+            try? fileManager.removeItem(at: outputUrl)
+            throw error
+        }
+    }
 	
     @discardableResult
-    public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
+    public func encryptFile(input: InputStream, output: OutputStream, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
         
 		let publicKey = try (publicKey ?? self.readPrivateFile(fileName: Constants.PublicKeyFilename))
 		let symmetricKey = self.sodium.keyDerivation.key()
 		let header = try getNewHeader(symmetricKey: symmetricKey, dataSize: dataLength, filename: filename, fileType: fileType, fileId: fileId, videoDuration: videoDuration)
         let encriptedHeader = try self.writeHeader(output: output, header: header, publicKey: publicKey)
-        try self.encryptData(input: input, output: output, header: header)
+        try self.encryptData(input: input, output: output, header: header, progressHandler: progressHandler)
     
         return (header, encriptedHeader)
 	}
@@ -286,8 +342,8 @@ class STCrypto {
         return headers
     }
 	
-    func encryptData(input: InputStream, output: OutputStream, header: STHeader?) throws {
-		guard let header = header, (1...self.bufSize).contains(Int(header.chunkSize)) else {
+    func encryptData(input: InputStream, output: OutputStream, header: STHeader, progressHandler: ProgressHandler? = nil) throws {
+		guard (1...self.bufSize).contains(Int(header.chunkSize)) else {
 			throw CryptoError.Header.incorrectChunkSize
 		}
 		
@@ -296,6 +352,10 @@ class STCrypto {
 		var buf:Bytes = []
 		var numRead = 0
 		var diff: Int = 0
+        
+        let progress = Progress()
+        
+        progress.totalUnitCount = Int64(header.dataSize)
         
         let context = Constants.XCHACHA20POLY1305_IETF_CONTEXT
 		var numWrite: Int = 0
@@ -326,7 +386,14 @@ class STCrypto {
                 throw CryptoError.General.incorrectKeySize
             }
 			chunkNumber += UInt64(1)
-
+            
+            progress.completedUnitCount = progress.completedUnitCount + Int64(numRead)
+            var stop = false
+            progressHandler?(progress, &stop)
+            if stop {
+                throw CryptoError.General.canceled
+            }
+            
 		} while (diff == 0)
 		
 		output.close()

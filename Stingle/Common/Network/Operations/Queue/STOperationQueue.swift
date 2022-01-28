@@ -45,9 +45,7 @@ class STOperationQueue: IOperationQueue {
     }
     
     func cancelAllOperations() {
-        self.operations.forEach { operation in
-            operation.cancel()
-        }
+        self.operationsQueue.cancelAllOperations()
     }
     
     func allOperations() -> [IOperation] {
