@@ -133,33 +133,7 @@ extension STImporter {
                 failure(STFileUploader.UploaderError.phAssetNotValid)
                 return
             }
-            
-            var progressThumb: Double = .zero
-            var progressURL: Double = .zero
-            var dataInfo: STPHPhotoHelper.PHAssetDataInfo?
-            var thumbImageData: Data?
-            var error: IError?
-            
-            let progressTotal = Foundation.Progress()
-            progressTotal.totalUnitCount = 10
-            
-            var isCompled = false
-            
-            func updateProgressIsEnden() -> Bool? {
-                guard !isCompled else {
-                    return true
-                }
-                guard error == nil else {
-                    return true
-                }
-                let allProgress = (progressThumb + progressURL)/2
-                progressTotal.completedUnitCount = Int64(allProgress * 10)
-                
-                var isEnd: Bool? = false
-                progress?(progressTotal, &isEnd)
-                return isEnd
-            }
-            
+
             func compled(error: IError) {
                 if let queue = queue {
                     queue.async {
@@ -179,61 +153,54 @@ extension STImporter {
                     success(uploadInfo)
                 }
             }
+
+            let totalProgress = Progress()
+            totalProgress.totalUnitCount = 10000
+            var myProgressValue = Double.zero
             
-            func compled() {
-                if let error = error {
-                    isCompled = true
-                    compled(error: error)
+            STPHPhotoHelper.requestGetURL(asset: self.asset, progressHandler: { progressValue, stop in
+               
+                myProgressValue = progressValue / 2
+                totalProgress.completedUnitCount = Int64(myProgressValue * Double(totalProgress.totalUnitCount))
+                var isEnd: Bool? = false
+                
+                progress?(totalProgress, &isEnd)
+                if let isEnd = isEnd {
+                    stop?.pointee = ObjCBool(isEnd)
+                }
+            }) { [weak self] info in
+                
+                guard let weakSelf = self, let info = info else {
+                    compled(error: STFileUploader.UploaderError.phAssetNotValid)
                     return
                 }
                 
-                guard let info = dataInfo, let thumbData = thumbImageData else { return }
-                isCompled = true
-                
-                let uploadInfo = UploadFileInfo(oreginalUrl: info.url,
-                                                               thumbImage: thumbData,
-                                                               fileType: fileType,
-                                                               duration: info.videoDuration,
-                                                               fileSize: info.fileSize,
-                                                               creationDate: info.creationDate,
-                                                               modificationDate: info.modificationDate)
-                compled(uploadInfo: uploadInfo)
+                STPHPhotoHelper.requestThumb(asset: weakSelf.asset, progressHandler: { progressValue, stop in
+                    
+                    myProgressValue = 0.5 + progressValue / 2
+                    totalProgress.completedUnitCount = Int64(myProgressValue * Double(totalProgress.totalUnitCount))
+                    var isEnd: Bool? = false
+                    progress?(totalProgress, &isEnd)
+                    if let isEnd = isEnd {
+                        stop?.pointee = ObjCBool(isEnd)
+                    }
+                    
+                }) { image in
+                    guard let image = image, let thumbData = image.jpegData(compressionQuality: 0.7)  else {
+                        compled(error: STFileUploader.UploaderError.phAssetNotValid)
+                        return
+                    }
+                    
+                    let uploadInfo = UploadFileInfo(oreginalUrl: info.url,
+                                                                   thumbImage: thumbData,
+                                                                   fileType: fileType,
+                                                                   duration: info.videoDuration,
+                                                                   fileSize: info.fileSize,
+                                                                   creationDate: info.creationDate,
+                                                                   modificationDate: info.modificationDate)
+                    compled(uploadInfo: uploadInfo)
+                }
             }
-            
-            STPHPhotoHelper.requestGetURL(asset: self.asset) { progress, stop in
-                progressURL = progress
-                
-                if let isEnded = updateProgressIsEnden(), isEnded {
-                    stop?.pointee = ObjCBool(isEnded)
-                }
-                
-            } completion: { info in
-                guard let info = info else {
-                    error = STFileUploader.UploaderError.phAssetNotValid
-                    compled()
-                    return
-                }
-                dataInfo = info
-                compled()
-            }
-            
-            STPHPhotoHelper.requestThumb(asset: self.asset, progressHandler: { progress, stop in
-                progressThumb = progress
-                
-                if let isEnded = updateProgressIsEnden(), isEnded {
-                    stop?.pointee = ObjCBool(isEnded)
-                }
-                
-            }) { thumbImage in
-                guard let thumb = thumbImage, let thumbData = thumb.jpegData(compressionQuality: 0.7) else {
-                    error = STFileUploader.UploaderError.phAssetNotValid
-                    compled()
-                    return
-                }
-                thumbImageData = thumbData
-                compled()
-            }
-           
         }
         
     }

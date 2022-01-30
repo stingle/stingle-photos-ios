@@ -15,6 +15,10 @@ extension STImportVC {
             return STAppSettings.current.import
         }()
         
+        lazy var auotImporter: STImporter.AuotImporter = {
+            return STApplication.shared.auotImporter
+        }()
+        
         func update(autoImportEnable isOn: Bool, completion: @escaping (ImportError?) -> Void) {
             
             guard isOn else {
@@ -27,9 +31,13 @@ extension STImportVC {
             STPHPhotoHelper.checkAndReqauestAuthorization { [weak self] status in
                 guard let weakSelf = self else { return }
                 if status == .authorized {
-                    weakSelf.import.isAutoImportEnable = isOn
-                    STAppSettings.current.import = weakSelf.import
-                    completion(nil)
+                    weakSelf.auotImporter.resetImportDate(date: .currentDate, startImport: false) {
+                        weakSelf.import.isAutoImportEnable = isOn
+                        STAppSettings.current.import = weakSelf.import
+                        DispatchQueue.main.async {
+                            completion(nil)
+                        }
+                    }
                 } else {
                     completion(ImportError.phAuthorizationStatus)
                 }
@@ -49,7 +57,7 @@ extension STImportVC {
         }
         
         func resetImportDate() {
-            STApplication.shared.auotImporter.resetImportDate()
+            self.auotImporter.resetImportDate(date: .setupDate, startImport: true)
         }
         
     }

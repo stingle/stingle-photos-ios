@@ -15,7 +15,7 @@ enum STImporter {
             let totalUnitCount: Int
             let completedUnitCount: Int
             let fractionCompleted: Double
-            let uploadFile: IImportable?
+            let importingFile: IImportable?
         }
         
         typealias ProgressHendler = (_ progress: Progress) -> Void
@@ -31,25 +31,37 @@ enum STImporter {
         private var importedFiles = [STLibrary.File]()
         private var importedImportableFiles = [IImportable]()
         private var totalProgress = [Int: Double]()
+        private var uploadIfNeeded: Bool
         
-        let uploadFiles: [IImportable]
+        let importFiles: [IImportable]
         let responseQueue: DispatchQueue
         
         var startHendler: ProgressHendler?
         var progressHendler: ProgressHendler?
         var complition: Complition?
         
-        private var operationQueue: STOperationQueue {
-            return Self.operationQueue
-        }
+        private var operationQueue: STOperationQueue
         
         private var operationManager: STOperationManager {
             return STOperationManager.shared
         }
         
-        init(uploadFiles: [IImportable], responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
-            self.uploadFiles = uploadFiles
+        init(importFiles: [IImportable], responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
+            self.importFiles = importFiles
             self.responseQueue = responseQueue
+            self.operationQueue = Self.operationQueue
+            self.uploadIfNeeded = false
+            
+            defer {
+                self.startImport(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
+            }
+        }
+        
+        init(importFiles: [IImportable], operationQueue: STOperationQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition, uploadIfNeeded: Bool) {
+            self.importFiles = importFiles
+            self.responseQueue = operationQueue.underlyingQueue ?? Self.importerDispatchQueue
+            self.operationQueue = operationQueue
+            self.uploadIfNeeded = uploadIfNeeded
             
             defer {
                 self.startImport(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
@@ -68,6 +80,7 @@ enum STImporter {
         }
         
         private func startImport(startHendler:  @escaping Hendler, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
+                        
             self.responseQueue.asyncAfter(deadline: .now() + 0.1) {
                 self.importFiles(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
             }
@@ -75,7 +88,7 @@ enum STImporter {
         
         private func importDidSuccess(file: STLibrary.File, importFile: IImportable, operationIndex: Int, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
             
-            let totalUnitCount = self.uploadFiles.count
+            let totalUnitCount = self.importFiles.count
             self.completedUnitCount = self.completedUnitCount + 1
             self.totalProgress[operationIndex] = 1
             self.importedFiles.append(file)
@@ -83,41 +96,48 @@ enum STImporter {
             
             let isEnded = totalUnitCount == self.completedUnitCount
             self.addDB(file: file, reloadData: isEnded)
-            
-//            if self.completedUnitCount == 1 {
-//                self.cancel()
-//            }
-            
+
             if isEnded {
+                if !self.importedFiles.isEmpty, self.uploadIfNeeded {
+                    STApplication.shared.uploader.upload(files: self.importedFiles)
+                }
                 complition(self.importedFiles, self.importedImportableFiles)
                 self.complition?(self.importedFiles, self.importedImportableFiles)
             }
         }
         
         private func importProgress(importFile: IImportable, progress: Foundation.Progress, operationIndex: Int, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
-            let totalUnitCount = self.uploadFiles.count
+            let totalUnitCount = self.importFiles.count
             self.totalProgress[operationIndex] = progress.fractionCompleted
             let fractionCompleted = self.totalProgress.map { $0.value }.reduce(0, +) / Double(totalUnitCount)
-            let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: self.completedUnitCount, fractionCompleted: fractionCompleted, uploadFile: nil)
+            let progress = Progress(totalUnitCount: totalUnitCount, completedUnitCount: self.completedUnitCount, fractionCompleted: fractionCompleted, importingFile: importFile)
             self.progressHendler?(progress)
             progressHendler(progress)
         }
         
         private func importDidFailure(importFile: IImportable, operationIndex: Int, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
-            let totalUnitCount = self.uploadFiles.count
+            let totalUnitCount = self.importFiles.count
             self.completedUnitCount = self.completedUnitCount + 1
             self.totalProgress[operationIndex] = 1
-            self.importedImportableFiles.append(importFile)
             let isEnded = totalUnitCount == self.completedUnitCount
             if isEnded {
+                if !self.importedFiles.isEmpty, self.uploadIfNeeded {
+                    STApplication.shared.uploader.upload(files: self.importedFiles)
+                }
                 complition(self.importedFiles, self.importedImportableFiles)
                 self.complition?(self.importedFiles, self.importedImportableFiles)
             }
         }
         
         private func importFiles(startHendler: @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
+            
+            guard !self.importFiles.isEmpty else {
+                self.complition?([], [])
+                return
+            }
+            
             var operationIndex: Int = .zero
-            self.uploadFiles.forEach { importFile in
+            self.importFiles.forEach { importFile in
                 self.addOperation(importFile: importFile, index: operationIndex, startHendler: startHendler, progressHendler: progressHendler, complition: complition)
                 operationIndex = operationIndex + 1
             }
@@ -158,7 +178,7 @@ extension STImporter {
         
         init(uploadFiles: [IImportable], album: STLibrary.Album, responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
             self.album = album
-            super.init(uploadFiles: uploadFiles, responseQueue: responseQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition)
+            super.init(importFiles: uploadFiles, responseQueue: responseQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition)
         }
         
         override fileprivate func addDB(file: STLibrary.File, reloadData: Bool) {
@@ -179,6 +199,7 @@ extension STImporter.Importer {
         
         let uploadFile: IImportable
         let operationIndex: Int
+        private var isEnded: Bool = false
         
         init(uploadFile: IImportable, operationIndex: Int, success: @escaping STOperationSuccess, failure: @escaping STOperationFailure, progress: STOperationProgress?) {
             self.operationIndex = operationIndex
@@ -188,17 +209,17 @@ extension STImporter.Importer {
         
         override func resume() {
             super.resume()
-            guard !self.isExpired else {
+                        
+            guard !self.isEnded else {
+                self.responseFailed(error: STError.canceled)
+                                
                 return
             }
             self.uploadFile.requestFile(in: self.delegate?.underlyingQueue, progressHandler: { [weak self] progress, stop in
                 guard let weakSelf = self else {
                     return
                 }
-                guard !weakSelf.isCancelled else {
-                    weakSelf.delegate?.underlyingQueue?.async { [weak weakSelf] in
-                        weakSelf?.responseFailed(error: STError.canceled)
-                    }
+                guard !weakSelf.isEnded else {
                     stop = true
                     return
                 }
@@ -213,8 +234,7 @@ extension STImporter.Importer {
         }
         
         override func cancel() {
-            self.responseFailed(error: STError.canceled)
-            super.cancel()
+            self.isEnded = true
         }
 
     }

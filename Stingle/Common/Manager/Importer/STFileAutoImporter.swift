@@ -14,20 +14,36 @@ extension STImporter {
     class AuotImporter {
         
         enum ImportData {
-            case existingFilesDate
+            case setupDate
             case currentDate
             case coustom(date: Date)
+            
+            var date: Date? {
+                switch self {
+                case .setupDate:
+                    return nil
+                case .currentDate:
+                    return Date()
+                case .coustom(let date):
+                    return date
+                }
+            }
         }
         
+        private var fetchLimit: Int = 5
+        private var isStarted: Bool = false
+        private var isImporting: Bool = false
+        private var importFilesCount: Int = .zero
+        private var canSetDate = true
+        private var endImportingCallBack: (() -> Void)?
         private let dispatchQueue = DispatchQueue(label: "AuotImporter.queue", attributes: .concurrent)
+        private var importQueue: STOperationQueue
+        private var autoImportQueue: STOperationQueue
+        private weak var currentOporation: Operation?
         
         private var importSettings: STAppSettings.Import {
             return STAppSettings.current.import
         }
-        
-        lazy private var queue: STOperationQueue = {
-            return STOperationManager.shared.createQueue(maxConcurrentOperationCount: 1, underlyingQueue: self.dispatchQueue)
-        }()
         
         private var lastImportDate: Date? {
             set {
@@ -37,16 +53,11 @@ extension STImporter {
             }
         }
         
-        private var fetchLimit: Int = 5
-        private var isStarted: Bool = false
-        private var isImporting: Bool = false
-        private var importFilesCount: Int = .zero
-        
-        private var endImportingCallBack: (() -> Void)?
-        
         //MARK: - Public methods
         
         init() {
+            self.autoImportQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 1, underlyingQueue: self.dispatchQueue)
+            self.importQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 1, underlyingQueue: self.dispatchQueue)
             STAppSettings.current.addObserver(self)
         }
         
@@ -60,37 +71,31 @@ extension STImporter {
             }
         }
         
-        func resetImportDate(date: ImportData, startImport: Bool) {
-            
-        }
-        
-        func resetImportDate() {
-            
-            self.cancelImporting {
-                print("")
+        func resetImportDate(date: ImportData, startImport: Bool, end: (() -> Void)? = nil) {
+            self.cancelImporting { [weak self] in
+                self?.lastImportDate = date.date
+                if startImport {
+                    self?.startImport()
+                }
+                end?()
             }
-
-        }
-        
-        func setImpor(existingFiles: Bool) throws {
-            guard !self.isImporting else {
-                throw AuotImporterError.importerIsBusy
-            }
-            self.lastImportDate = existingFiles ? nil : Date()
         }
         
         func logout() {
-            self.endImportIng()
-            self.lastImportDate = nil
+            self.resetImportDate(date: .setupDate, startImport: false)
         }
         
         //MARK: - Private methods
         
         private func cancelImporting(end: (() -> Void)?) {
-            self.endImportingCallBack = { [weak self] in
+            if let currentOporation = self.currentOporation {
+                self.endImportingCallBack = {
+                    end?()
+                }
+                currentOporation.cancel()
+            } else {
                 end?()
             }
-            self.queue.cancelAllOperations()
         }
         
         private func deleteImportedFiles(completion: @escaping (() -> Void)) {
@@ -117,7 +122,6 @@ extension STImporter {
         }
                 
         private func startImportAssets() {
-            self.isImporting = true
             self.startNextImport()
         }
         
@@ -125,7 +129,7 @@ extension STImporter {
             guard self.isStarted else {
                 return
             }
-            self.queue.cancelAllOperations()
+            self.autoImportQueue.cancelAllOperations()
             self.isImporting = false
           
             if self.importFilesCount == .zero {
@@ -146,13 +150,23 @@ extension STImporter {
             self.endImportingCallBack = nil
         }
         
+        private func updateDate(date: Date) {
+            guard self.canSetDate else {
+                return
+            }
+            if let lastImportDate = self.lastImportDate, date > lastImportDate {
+                self.lastImportDate = date
+            } else if self.lastImportDate == nil {
+                self.lastImportDate = date
+            }
+        }
+        
         private func startNextImport() {
-            
-            let operation = Operation(success: { [weak self] importCount in
+            self.isImporting = true
+            let operation = Operation(importQueue: self.importQueue, fromDate: self.lastImportDate, fetchLimit: self.fetchLimit) { [weak self] importCount in
                 guard let weakSelf = self else {
                     return
                 }
-                                
                 if importCount != .zero {
                     weakSelf.dispatchQueue.asyncAfter(wallDeadline: .now() + 0.5) { [weak weakSelf] in
                         weakSelf?.startNextImport()
@@ -161,24 +175,16 @@ extension STImporter {
                 } else {
                     weakSelf.endImportIng()
                 }
-            }, failure: { [weak self] error in
+            } failure: { [weak self] error in
                 self?.endImportIng()
-            }, progress: { [weak self] progress in
-                
+            } progress: { [weak self] progress in
                 if let date = progress.userInfo[.dateKey] as? Date {
-                    
-                    if let lastImportDate = self?.lastImportDate, date > lastImportDate {
-                        self?.lastImportDate = date
-                    } else if self?.lastImportDate == nil {
-                        self?.lastImportDate = date
-                    }
+                    self?.updateDate(date: date)
                 }
-                
-            }, fromDate: self.lastImportDate, fetchLimit: self.fetchLimit)
-                        
-            operation.didStartRun(with: self.queue)
+            }
+            self.currentOporation = operation
+            operation.didStartRun(with: self.autoImportQueue)
         }
-             
     }
     
 }
@@ -219,31 +225,31 @@ extension STImporter.AuotImporter {
         
         let date: Date?
         let fetchLimit: Int
-        private var importer: STImporter.Importer?
+        let importQueue: STOperationQueue
+        private weak var importer: STImporter.Importer?
         private var progress: Progress
+        private var isCancel = false
         
-        init(success: STOperationSuccess?, failure: STOperationFailure?,  progress: STOperationProgress?, fromDate: Date?, fetchLimit: Int) {
+        init(importQueue: STOperationQueue, fromDate: Date?, fetchLimit: Int, success: STOperationSuccess?, failure: STOperationFailure?,  progress: STOperationProgress?) {
             self.progress = Progress(totalUnitCount: Int64(fetchLimit))
             self.fetchLimit = fetchLimit
             self.date = fromDate
+            self.importQueue = importQueue
             super.init(success: success, failure: failure, progress: progress)
         }
         
         //MARK: - override methods
         
         override func cancel() {
-            super.cancel()
-            print("Operation", self.uuid, "cancel isExpired =", isExpired, isCancelled, status)
-        }
-        
-        override func responseSucces(result: Int?) {
-            super.responseSucces(result: result)
-            print("Operation", self.uuid, "responseSucces isExpired =", isExpired, isCancelled, status)
-        }
-        
-        override func responseProgress(result: Progress) {
-            super.responseProgress(result: result)
-            print("Operation", self.uuid, "responseProgress isExpired =", isExpired, isCancelled, status)
+            guard !self.isCancel else {
+                return
+            }
+            self.isCancel = true
+            if let importer = self.importer {
+                importer.cancel()
+            } else {
+                self.responseFailed(error: AuotImporterError.canceled)
+            }
         }
         
         override func resume() {
@@ -260,42 +266,48 @@ extension STImporter.AuotImporter {
         //MARK: - Private methods
         
         private func enumerateObjects() {
-            var uploadables = [STImporter.FileUploadable]()
+            var importFiles = [STImporter.FileUploadable]()
             self.enumerateObjects { asset, index, stop in
                 if self.isExpired {
                     stop.pointee = true
                     return
                 }
-                let uploadable = STImporter.FileUploadable(asset: asset)
-                uploadables.append(uploadable)
+                let importFile = STImporter.FileUploadable(asset: asset)
+                importFiles.append(importFile)
             }
             guard !self.isExpired else {
                 return
             }
-            self.startImport(uploadables: uploadables)
+            self.startImport(importFiles: importFiles)
         }
         
-        private func startImport(uploadables: [STImporter.FileUploadable]) {
-
+        private func startImport(importFiles: [STImporter.FileUploadable]) {
+            
             guard let queue = self.delegate?.underlyingQueue else {
                 self.responseFailed(error: AuotImporterError.canceled)
                 return
             }
+           
+            guard !self.isExpired else {
+                queue.async { [weak self] in
+                    self?.responseFailed(error: AuotImporterError.canceled)
+                }
+                return
+            }
             
-            let importer = STApplication.shared.uploader.upload(files: uploadables)
             var resultDate = self.date
-            
             var importedAssets = [PHAsset]()
-                        
-            importer.progressHendler = { [weak self] progress in
-                queue.async {
+            
+            let importer = STImporter.Importer(importFiles: importFiles, operationQueue: self.importQueue, startHendler: {}, progressHendler: { [weak self] progress in
+                                
+                queue.async { [weak self] in
                     guard let weakSelf = self else {
                         return
                     }
-                    if let asset = (progress.uploadFile as? STImporter.FileUploadable)?.asset {
+                    if let asset = (progress.importingFile as? STImporter.FileUploadable)?.asset {
                         importedAssets.append(asset)
                     }
-                    let currentFileDate = (progress.uploadFile as? STImporter.FileUploadable)?.asset.creationDate
+                    let currentFileDate = (progress.importingFile as? STImporter.FileUploadable)?.asset.creationDate
                     if let date = resultDate {
                         let fileDate: Date = currentFileDate ?? date
                         resultDate = max(date, fileDate)
@@ -306,21 +318,21 @@ extension STImporter.AuotImporter {
                     weakSelf.progress.completedUnitCount = Int64(progress.completedUnitCount)
                     weakSelf.responseProgress(result: weakSelf.progress)
                 }
-            }
-            
-            importer.complition = { [weak self] files, _ in
+                
+            }, complition: { [weak self] files, importableFiles in
                 func response(count: Int) {
                     queue.async { [weak self] in
                         guard let weakSelf = self else {
                             return
                         }
-                        if weakSelf.isCancelled {
+                        if weakSelf.isCancel {
                             weakSelf.responseFailed(error: AuotImporterError.canceled)
                         } else {
                             weakSelf.responseSucces(result: count)
                         }
                     }
                 }
+                
                 
                 
                 if STAppSettings.current.import.isDeleteOriginalFilesAfterAutoImport {
@@ -331,7 +343,8 @@ extension STImporter.AuotImporter {
                 } else {
                     response(count: files.count)
                 }
-            }
+                
+            }, uploadIfNeeded: true)
             
             self.importer = importer
         }

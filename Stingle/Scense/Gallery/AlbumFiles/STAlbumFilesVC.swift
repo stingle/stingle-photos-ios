@@ -476,7 +476,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         importer.progressHendler = { progress in
             let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
             
-            if let asset = (progress.uploadFile as? STImporter.FileUploadable)?.asset {
+            if let asset = (progress.importingFile as? STImporter.FileUploadable)?.asset {
                 importedAssets.append(asset)
             }
             

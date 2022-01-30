@@ -49,10 +49,14 @@ class STFileUploader {
     
     @discardableResult
     func upload(files: [IImportable]) -> STImporter.Importer {
-        let importer = STImporter.Importer(uploadFiles: files, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files, _ in
+        let importer = STImporter.Importer(importFiles: files, responseQueue: self.dispatchQueue) {} progressHendler: { progress in } complition: { [weak self] files, _ in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
+    }
+    
+    func upload(files: [STLibrary.File]) {
+        self.uploadAllLocalFilesInQueue(files: files)
     }
     
     @discardableResult
@@ -125,12 +129,10 @@ class STFileUploader {
         
         localFiles.append(contentsOf: localAlbumFiles)
         localFiles.append(contentsOf: trashPFiles)
-        
         return localFiles
     }
     
     private func uploadAllLocalFilesInQueue(files: [STLibrary.File]) {
-        
         self.dispatchQueue.async(flags: .barrier) { [weak self] in
             guard let weakSelf = self, weakSelf.checkCanUploadFiles() else {
                 return

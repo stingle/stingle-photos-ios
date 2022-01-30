@@ -368,7 +368,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         importer.progressHendler = { progress in
             let progressValue = progress.fractionCompleted
                         
-            if let asset = (progress.uploadFile as? STImporter.FileUploadable)?.asset {
+            if let asset = (progress.importingFile as? STImporter.FileUploadable)?.asset {
                 importedAssets.append(asset)
             }
             

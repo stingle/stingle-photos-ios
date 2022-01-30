@@ -62,7 +62,7 @@ extension STCrypto {
         totalProgress.addChild(thumbProgress)
         totalProgress.addChild(originProgress)
                 
-        let thumbHeader = try self.encryptFile(inputData: thumbImage, outputUrl: thumbUrl, filename: orgFileName, fileType: fileType.rawValue, fileId: fileId, videoDuration: duration, publicKey: publicKey, progressHandler: { progress, stop in
+        let thumbHeader = try self.encryptFile(inputData: thumbImage, outputUrl: toThumbUrl, fileName: fileName, originalFileName: orgFileName, fileType: fileType.rawValue, fileId: fileId, videoDuration: duration, publicKey: publicKey, progressHandler: { progress, stop in
             thumbProgress.totalUnitCount = progress.totalUnitCount
             thumbProgress.completedUnitCount = progress.completedUnitCount
             progressHandler?(totalProgress, &stop)
@@ -71,7 +71,7 @@ extension STCrypto {
         let outputURL = toUrl.appendingPathComponent(fileName)
         
         do {
-            let originHeader = try self.encryptFile(inputUrl: oreginalUrl, outputUrl: outputURL, filename: orgFileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey, progressHandler: { progress, stop in
+            let originHeader = try self.encryptFile(inputUrl: oreginalUrl, outputUrl: toUrl, fileName: fileName, originalFileName: orgFileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey, progressHandler: { progress, stop in
                 originProgress.totalUnitCount = progress.totalUnitCount
                 originProgress.completedUnitCount = progress.completedUnitCount
                 progressHandler?(totalProgress, &stop)

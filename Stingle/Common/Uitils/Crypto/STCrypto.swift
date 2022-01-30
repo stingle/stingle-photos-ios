@@ -254,11 +254,15 @@ class STCrypto {
 	}
     
     @discardableResult
-    public func encryptFile(inputData: Data, outputUrl: URL, filename: String, fileType: Int, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
+    public func encryptFile(inputData: Data, outputUrl: URL, fileName: String, originalFileName: String, fileType: Int, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
         
         let inputStream = InputStream(data: inputData)
         let dataLength: UInt = UInt(inputData.count)
-        guard let outputStream = OutputStream(toFileAtPath: outputUrl.path, append: false) else {
+        
+        let fileManager = FileManager.default
+        let tmpPath = fileManager.temporaryDirectory.appendingPathComponent(fileName)
+        
+        guard let outputStream = OutputStream(toFileAtPath: tmpPath.path, append: false) else {
             throw CryptoError.General.creationFailure
         }
         
@@ -269,24 +273,30 @@ class STCrypto {
             inputStream.close()
             outputStream.close()
         }
+        
         do {
-            let result = try self.encryptFile(input: inputStream, output: outputStream, filename: filename, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
+            let result = try self.encryptFile(input: inputStream, output: outputStream, filename: originalFileName, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
+            let oreginlalPath = outputUrl.appendingPathComponent(fileName)
+            
+            try fileManager.moveItem(at: tmpPath, to: oreginlalPath)
             return result
         } catch {
-            let fileManager = FileManager.default
-            try? fileManager.removeItem(at: outputUrl)
+            try? fileManager.removeItem(at: tmpPath)
             throw error
         }
     }
     
     @discardableResult
-    public func encryptFile(inputUrl: URL, outputUrl: URL, filename: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
+    public func encryptFile(inputUrl: URL, outputUrl: URL, fileName: String, originalFileName: String, fileType: Int, dataLength: UInt, fileId: Bytes, videoDuration: UInt32, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (header: STHeader, encriptedHeader: Bytes) {
         
         guard let inputStream = InputStream(fileAtPath: inputUrl.path) else {
             throw CryptoError.General.creationFailure
         }
         
-        guard let outputStream = OutputStream(toFileAtPath: outputUrl.path, append: false) else {
+        let fileManager = FileManager.default
+        let tmpPath = fileManager.temporaryDirectory.appendingPathComponent(fileName)
+        
+        guard let outputStream = OutputStream(toFileAtPath: tmpPath.path, append: false) else {
             throw CryptoError.General.creationFailure
         }
         
@@ -297,12 +307,18 @@ class STCrypto {
             inputStream.close()
             outputStream.close()
         }
+        
         do {
-            let result = try self.encryptFile(input: inputStream, output: outputStream, filename: filename, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
+            let result = try self.encryptFile(input: inputStream, output: outputStream, filename: originalFileName, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
+            
+            let oreginlalPath = outputUrl.appendingPathComponent(fileName)
+            try fileManager.moveItem(at: tmpPath, to: oreginlalPath)
+            
             return result
         } catch {
+            
             let fileManager = FileManager.default
-            try? fileManager.removeItem(at: outputUrl)
+            try? fileManager.removeItem(at: tmpPath)
             throw error
         }
     }

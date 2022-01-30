@@ -41,6 +41,11 @@ class STPHPhotoHelper: NSObject {
     }
     
     func deleteAssetsAfterManualImport(assets: [PHAsset]) {
+        
+        guard !assets.isEmpty else {
+            return
+        }
+        
         let deleteFilesType = STAppSettings.current.import.manualImportDeleteFilesType
         switch deleteFilesType {
         case .never:
@@ -226,7 +231,6 @@ extension STPHPhotoHelper {
     
 }
 
-
 extension STPHPhotoHelper {
     
     struct PHAssetDataInfo {
@@ -260,16 +264,22 @@ extension STPHPhotoHelper {
         options.resizeMode = .exact
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = true
-        
+        var isStoped = false
         options.progressHandler = { progressValue, error, stop, info in
             progressHandler?(progressValue, stop)
+            if isStoped == false {
+                isStoped = stop.pointee.boolValue
+            }
         }
                 
         let size = STConstants.thumbSize(for: CGSize(width: asset.pixelWidth, height: asset.pixelHeight))
         self.phManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: options) { thumb, info  in
             progressHandler?(1, nil)
+            guard !isStoped else {
+                completion(nil)
+                return
+            }
             completion(thumb)
-           
         }
     }
     
@@ -287,8 +297,14 @@ extension STPHPhotoHelper {
         options.version = .current
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = true
+        
+        var isStoped = false
+        
         options.progressHandler = { progress, error, stop, info in
             progressHandler?(progress, stop)
+            if isStoped == false {
+                isStoped = stop.pointee.boolValue
+            }
         }
         
         let modificationDate = asset.modificationDate ?? asset.creationDate
@@ -297,6 +313,12 @@ extension STPHPhotoHelper {
         self.phManager.requestAVAsset(forVideo: asset, options: options, resultHandler: { (asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) -> Void in
             
             if let urlAsset = asset as? AVURLAsset, let fileSize = urlAsset.fileSize {
+                
+                guard !isStoped else {
+                    completion(nil)
+                    return
+                }
+                
                 let localVideoUrl: URL = urlAsset.url as URL
                 let responseURL: URL = localVideoUrl
                 let videoDuration: TimeInterval = urlAsset.duration.seconds
@@ -326,14 +348,24 @@ extension STPHPhotoHelper {
             return false
         }
         
+        var isStoped = false
         options.progressHandler = { progress, stop in
             progressHandler?(progress, stop)
+            if isStoped == false {
+                isStoped = stop.pointee.boolValue
+            }
         }
                 
         let modificationDate = asset.modificationDate ?? asset.creationDate
         let creationDate = asset.creationDate ?? asset.modificationDate
         
         asset.requestContentEditingInput(with: options, completionHandler: {(contentEditingInput: PHContentEditingInput?, info: [AnyHashable : Any]) -> Void in
+            
+            guard !isStoped else {
+                completion(nil)
+                return
+            }
+            
             guard let contentEditingInput = contentEditingInput, let fullSizeImageURL = contentEditingInput.fullSizeImageURL else {
                 completion(nil)
                 return
@@ -345,7 +377,7 @@ extension STPHPhotoHelper {
             
             let attr = try? FileManager.default.attributesOfItem(atPath: responseURL.path)
             let fileSize = (attr?[FileAttributeKey.size] as? UInt) ?? 0
-            
+                        
             let result = PHAssetDataInfo(url: responseURL,
                             videoDuration: videoDuration,
                             fileSize: fileSize,

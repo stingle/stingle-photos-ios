@@ -21,21 +21,19 @@ class STOperationQueue: IOperationQueue {
     let qualityOfService: QualityOfService
     
     private var operations = STObserverEvents<IOperation>()
-    
     weak var underlyingQueue: DispatchQueue?
-    
-    private lazy var operationsQueue: OperationQueue = {
-        let operationQueue = OperationQueue()
-        operationQueue.maxConcurrentOperationCount = self.maxConcurrentOperationCount
-        operationQueue.qualityOfService = self.qualityOfService
-        operationQueue.underlyingQueue = self.underlyingQueue
-        return operationQueue
-    }()
+    private let operationsQueue: OperationQueue
     
     init(maxConcurrentOperationCount: Int = 5, qualityOfService: QualityOfService = .userInitiated, underlyingQueue: DispatchQueue? = nil) {
         self.maxConcurrentOperationCount = maxConcurrentOperationCount
         self.qualityOfService = qualityOfService
         self.underlyingQueue = underlyingQueue
+        
+        let operationsQueue = OperationQueue()
+        operationsQueue.maxConcurrentOperationCount = maxConcurrentOperationCount
+        operationsQueue.qualityOfService = qualityOfService
+        operationsQueue.underlyingQueue = underlyingQueue
+        self.operationsQueue = operationsQueue
     }
     
     //MARK: - Public methods
