@@ -173,10 +173,6 @@ enum STImporter {
             self.operationManager.run(operation: operation, in: self.operationQueue)
             self.operations.insert(operation)
         }
-        
-        deinit {
-            print("")
-        }
       
     }
     
