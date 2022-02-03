@@ -31,7 +31,7 @@ class STPHPhotoHelper: NSObject {
         Self.checkAndReqauestAuthorization { (status) in
             switch status {
             case .authorized, .limited:
-                self.open()
+                self.openPhotoPicker()
                 break
             default:
                 self.showAuthorizationPermissionAlert()
@@ -92,7 +92,7 @@ class STPHPhotoHelper: NSObject {
         }
     }
     
-    private func open() {
+    private func openPhotoPicker() {
         DispatchQueue.main.async { [weak self] in
             self?.openPickerView()
         }
@@ -106,22 +106,33 @@ class STPHPhotoHelper: NSObject {
         picker.delegate = self
         self.viewController?.showDetailViewController(picker, sender: nil)
     }
-        
-}
-
-extension STPHPhotoHelper: PHPickerViewControllerDelegate {
     
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true, completion: nil)
+    private func picker(didFinishPicking results: [PHPickerResult]) {
         let identifiers = results.compactMap({$0.assetIdentifier})
         let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
         var result = [PHAsset]()
         fetchResult.enumerateObjects { asset, index, _ in
             result.append(asset)
         }
-        
         let countDiff = results.count - result.count
-        self.viewController?.pickerViewController(self, didPickAssets: result, failedAssetCount: countDiff)
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.viewController?.pickerViewController(weakSelf, didPickAssets: result, failedAssetCount: countDiff)
+        }
+    }
+        
+}
+
+extension STPHPhotoHelper: PHPickerViewControllerDelegate {
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true) { [weak self] in
+            DispatchQueue.global().async { [weak self] in
+                self?.picker(didFinishPicking: results)
+            }
+        }
     }
     
 }

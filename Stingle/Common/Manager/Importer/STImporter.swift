@@ -24,7 +24,7 @@ enum STImporter {
         
         static private let importerDispatchQueue = DispatchQueue(label: "Importer.queue", attributes: .concurrent)
         
-        static private var operationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 5, underlyingQueue: Importer.importerDispatchQueue)
+        static private var operationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 3, underlyingQueue: Importer.importerDispatchQueue)
         
         private var operations = Set<Operation>()
         private var completedUnitCount: Int = .zero
@@ -86,6 +86,17 @@ enum STImporter {
             }
         }
         
+        private func complitionImport(complition:  @escaping Complition) {
+            self.responseQueue.async(flags: .barrier) {
+                let importedFiles = self.importedFiles
+                let importedImportableFiles = self.importedImportableFiles
+                self.responseQueue.async {
+                    complition(importedFiles, importedImportableFiles)
+                    self.complition?(importedFiles, importedImportableFiles)
+                }
+            }
+        }
+        
         private func importDidSuccess(file: STLibrary.File, importFile: IImportable, operationIndex: Int, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
             
             let totalUnitCount = self.importFiles.count
@@ -101,8 +112,7 @@ enum STImporter {
                 if !self.importedFiles.isEmpty, self.uploadIfNeeded {
                     STApplication.shared.uploader.upload(files: self.importedFiles)
                 }
-                complition(self.importedFiles, self.importedImportableFiles)
-                self.complition?(self.importedFiles, self.importedImportableFiles)
+                self.complitionImport(complition: complition)
             }
         }
         
@@ -124,15 +134,14 @@ enum STImporter {
                 if !self.importedFiles.isEmpty, self.uploadIfNeeded {
                     STApplication.shared.uploader.upload(files: self.importedFiles)
                 }
-                complition(self.importedFiles, self.importedImportableFiles)
-                self.complition?(self.importedFiles, self.importedImportableFiles)
+                self.complitionImport(complition: complition)
             }
         }
         
         private func importFiles(startHendler: @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
             
             guard !self.importFiles.isEmpty else {
-                self.complition?([], [])
+                self.complitionImport(complition: complition)
                 return
             }
             
@@ -163,6 +172,10 @@ enum STImporter {
             })
             self.operationManager.run(operation: operation, in: self.operationQueue)
             self.operations.insert(operation)
+        }
+        
+        deinit {
+            print("")
         }
       
     }
@@ -202,11 +215,12 @@ extension STImporter.Importer {
         private var isEnded: Bool = false
         
         init(uploadFile: IImportable, operationIndex: Int, success: @escaping STOperationSuccess, failure: @escaping STOperationFailure, progress: STOperationProgress?) {
+            
             self.operationIndex = operationIndex
             self.uploadFile = uploadFile
             super.init(success: success, failure: failure, progress: progress)
         }
-        
+                
         override func resume() {
             super.resume()
                         
