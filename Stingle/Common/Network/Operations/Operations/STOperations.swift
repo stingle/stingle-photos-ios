@@ -198,6 +198,7 @@ class STOperation<T>: Operation, IOperation {
     private func setCancel() {
         if self.isExecuting {
             super.cancel()
+            self.status = .canceled
         } else if self.isReady {
             self.success = nil
             self.failure = nil

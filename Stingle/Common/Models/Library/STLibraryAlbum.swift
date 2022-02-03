@@ -114,7 +114,7 @@ extension STLibrary {
             self.managedObjectID = model.objectID
         }
         
-        init(albumId: String, encPrivateKey: String, publicKey: String, metadata: String, isShared: Bool, isHidden: Bool, isOwner: Bool, isLocked: Bool, isRemote: Bool, permissions: String?, members: String?, cover: String?, dateCreated: Date, dateModified: Date, managedObjectID: NSManagedObjectID? = nil) {
+        init(albumId: String, encPrivateKey: String, publicKey: String, metadata: String, isShared: Bool, isHidden: Bool, isOwner: Bool, isLocked: Bool, isRemote: Bool, permissions: String?, members: String?, cover: String?, dateCreated: Date, dateModified: Date, managedObjectID: NSManagedObjectID?) {
             self.albumId = albumId
             self.encPrivateKey = encPrivateKey
             self.publicKey = publicKey
