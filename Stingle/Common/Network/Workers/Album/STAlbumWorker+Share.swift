@@ -135,7 +135,8 @@ extension STAlbumWorker {
                                           members: membersStr,
                                           cover: album.cover,
                                           dateCreated: album.dateCreated,
-                                          dateModified: now)
+                                          dateModified: now,
+                                          managedObjectID: album.managedObjectID)
         
         let request = STAlbumRequest.sharedAlbum(album: sharedAlbum, sharingKeys: sharingKeys)
         
@@ -182,7 +183,8 @@ extension STAlbumWorker {
                                           members: nil,
                                           cover: album.cover,
                                           dateCreated: album.dateCreated,
-                                          dateModified: Date())
+                                          dateModified: Date(),
+                                          managedObjectID: album.managedObjectID)
         
         let request = STAlbumRequest.unshareAlbum(album: album)
         self.request(request: request, success: { (response: STEmptyResponse) in
@@ -208,7 +210,8 @@ extension STAlbumWorker {
                                           members: album.members,
                                           cover: album.cover,
                                           dateCreated: album.dateCreated,
-                                          dateModified: Date())
+                                    dateModified: Date(),
+                                    managedObjectID: album.managedObjectID)
         
         let request = STAlbumRequest.editPermsAlbum(album: album)
         self.request(request: request, success: { (response: STEmptyResponse) in

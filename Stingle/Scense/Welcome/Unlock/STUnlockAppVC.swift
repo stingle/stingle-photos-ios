@@ -42,7 +42,6 @@ class STUnlockAppVC: UIViewController {
     //MARK: User Action
     
     @IBAction private func didSelectCameraButton(_ sender: Any) {
-//        self.pickerHelper.openCamera()
     }
     
     @IBAction private func didSelectLogOutButton(_ sender: Any) {
@@ -51,11 +50,10 @@ class STUnlockAppVC: UIViewController {
         self.showOkCancelTextAlert(title: title, message: message, textFieldHandler: nil, handler: { [weak self] _ in
             self?.viewModel.logOutApp()
         }, cancel: nil)
-        
     }
     
     @IBAction private func didSelectUnlockButton(_ sender: Any) {
-        self.unlockApp { [weak self] error in
+        self.unlockAppPassword { [weak self] error in
             guard let error = error else {
                 return
             }

@@ -29,7 +29,8 @@ class STAlbumWorker: STWorker {
                                         members: album.members,
                                         cover: caver,
                                         dateCreated: album.dateCreated,
-                                        dateModified: Date())
+                                        dateModified: Date(),
+                                        managedObjectID: album.managedObjectID)
             
             albumFilesProvider.update(models: [album], reloadData: true)
             success(response)
@@ -46,18 +47,18 @@ class STAlbumWorker: STWorker {
             
             let metadata = try STApplication.shared.crypto.decryptAlbum(albumPKStr: album.publicKey, encAlbumSKStr: album.encPrivateKey, metadataStr: album.metadata)
             let metadataBytes = try crypto.encryptAlbumMetadata(albumPK: metadata.publicKey, albumName: name)
-            guard let metadata = crypto.bytesToBase64(data: metadataBytes) else {
+            guard let newMetadata = crypto.bytesToBase64(data: metadataBytes) else {
                 failure?(WorkerError.unknown)
                 return
             }
-            let request = STAlbumRequest.rename(album: album, metadata: metadata)
+            let request = STAlbumRequest.rename(album: album, metadata: newMetadata)
             
             self.request(request: request, success: { (response: STEmptyResponse) in
                 let albumProvider = STApplication.shared.dataBase.albumsProvider
-                let album = STLibrary.Album(albumId: album.albumId,
+                let newAlbum = STLibrary.Album(albumId: album.albumId,
                                             encPrivateKey: album.encPrivateKey,
                                             publicKey: album.publicKey,
-                                            metadata: metadata,
+                                            metadata: newMetadata,
                                             isShared: album.isShared,
                                             isHidden: album.isHidden,
                                             isOwner: album.isOwner,
@@ -67,9 +68,10 @@ class STAlbumWorker: STWorker {
                                             members: album.members,
                                             cover: album.cover,
                                             dateCreated: album.dateCreated,
-                                            dateModified: Date())
+                                               dateModified: Date(),
+                                               managedObjectID: album.managedObjectID)
                 
-                albumProvider.update(models: [album], reloadData: true)
+                albumProvider.update(models: [newAlbum], reloadData: true)
                 success(response)
             }, failure: failure)
             

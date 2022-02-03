@@ -48,7 +48,7 @@ class STImportVC: STSettingsDetailTableVC<STImportVC.SectionType, STImportVC.Ite
             }
             self.showManualImport(in: detailCell)
         case .autoImportiExistingFiles:
-            self.showImportManualImportAlert()
+            self.showAutoImportResetDateAlert()
         default:
             break
         }
@@ -183,7 +183,7 @@ class STImportVC: STSettingsDetailTableVC<STImportVC.SectionType, STImportVC.Ite
         self.showDetailViewController(alert, sender: nil)
     }
     
-    private func showImportManualImportAlert() {
+    private func showAutoImportResetDateAlert() {
         let ok: (title: String, handler: (() -> Void)) = ("ok".localized, { [weak self] in
             self?.viewModel.resetImportDate()
         })

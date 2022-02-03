@@ -96,7 +96,7 @@ extension STDataBase {
                     }
                     let deleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
                     deleteRequest.resultType = .resultTypeObjectIDs
-                    let result = try (context.execute(deleteRequest) as? NSBatchUpdateResult)?.result as? [NSManagedObjectID]
+                    let result = try (context.execute(deleteRequest) as? NSBatchDeleteResult)?.result as? [NSManagedObjectID]
                     
                     if let result = result {
                         ids.append(contentsOf: result)
@@ -113,36 +113,32 @@ extension STDataBase {
         }
         
         func update(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
-           
             let context = context ?? self.container.backgroundContext
             var ids = [NSManagedObjectID]()
-            
-            context.performAndWait { [weak self] in
-                guard let weakSelf = self else { return  }
-                models.forEach { model in
-                    do {
-                        let batchRequest = NSBatchUpdateRequest(entityName: ManagedModel.entityName)
-                        let predicate = NSPredicate(format: "identifier == %@", model.identifier)
-                        batchRequest.resultType = .updatedObjectIDsResultType
-                        batchRequest.predicate = predicate
-                        batchRequest.propertiesToUpdate = try model.toManagedModelJson()
-                        let result = try (context.execute(batchRequest) as? NSBatchUpdateResult)?.result as? [NSManagedObjectID]
-                        
-                        if let result = result {
-                            ids.append(contentsOf: result)
+            context.performAndWait {[weak self] in
+                guard let weakSelf = self else { return }
+                do {
+                    let cdModels = try weakSelf.getObjects(by: models, in: context)
+                    cdModels.forEach { cdbject in
+                        if let model = models.first(where: { $0.identifier == cdbject.identifier }) {
+                            ids.append(cdbject.objectID)
+                            cdbject.update(model: model, context: context)
                         }
-                        
-                    } catch {
-                        print(error)
                     }
+                    
+                    if context.hasChanges {
+                        try context.save()
+                    }
+                    
+                    if reloadData {
+                        weakSelf.reloadData(models: models, ids: ids, changeType: .update)
+                    }
+                    
+                } catch {
+                    print(error.localizedDescription)
                 }
                 
-                if reloadData {
-                    weakSelf.reloadData(models: models, ids: ids, changeType: .update)
-                }
-                                
             }
-            
             
         }
         
@@ -250,6 +246,10 @@ extension STDataBase {
         //MARK: - private
         
         private func reloadData(models: [Model], ids: [NSManagedObjectID], changeType: DataBaseChangeType) {
+            
+            guard !ids.isEmpty else {
+                return
+            }
             
             self.dataSources.forEach { (controller) in
                 DispatchQueue.main.async {
