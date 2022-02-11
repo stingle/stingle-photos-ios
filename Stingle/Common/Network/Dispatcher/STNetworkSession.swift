@@ -13,14 +13,20 @@ class STNetworkSession: NSObject {
     fileprivate let rootQueue: DispatchQueue
     fileprivate var urlSession: URLSession!
     
-    fileprivate typealias CallBack = (request: MultipartFormDataRequest, completion: (STNetworkDispatcher.Result<Data>) -> Void, progress: (Progress) -> Void, receiveData: Data)
+    fileprivate typealias CallBack = (request: MultipartFormDataRequest, taskProgress: Progress?, completion: (STNetworkDispatcher.Result<Data>) -> Void, progress: (Progress) -> Void, receiveData: Data)
     
     fileprivate var requests = [Int: CallBack]()
     
-    init(rootQueue: DispatchQueue = DispatchQueue(label: "org.stingle.session.rootQueue"), configuration: URLSessionConfiguration = .default) {
+    init(rootQueue: DispatchQueue = DispatchQueue(label: "org.stingle.session.rootQueue", attributes: .concurrent), configuration: URLSessionConfiguration = .default) {
         self.rootQueue = rootQueue
         super.init()
-        self.urlSession = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        
+        let operationsQueue = OperationQueue()
+        operationsQueue.maxConcurrentOperationCount = 5
+        operationsQueue.qualityOfService = .userInteractive
+        operationsQueue.underlyingQueue = self.rootQueue
+                
+        self.urlSession = URLSession(configuration: configuration, delegate: self, delegateQueue: operationsQueue)
     }
         
 }
@@ -31,8 +37,18 @@ extension STNetworkSession {
         
         try! request.build()
         let task = self.urlSession.uploadTask(with: request.asURLRequest(), fromFile: request.fileURL)
-        self.rootQueue.async(flags: .barrier) { [weak self] in
-            self?.requests[task.taskIdentifier] = CallBack(request, completion, progress, Data())
+        
+        print("task tasktask", task.taskIdentifier)
+        
+        self.rootQueue.async { [weak self] in
+            
+            guard let weakSelf = self else {
+                return
+            }
+           
+            let progressTask = Progress()
+            progressTask.totalUnitCount = Int64(request.bodyBytesCount)
+            weakSelf.requests[task.taskIdentifier] = CallBack(request, progressTask, completion, progress, Data())
             task.resume()
         }
         return task
@@ -43,32 +59,30 @@ extension STNetworkSession {
 extension STNetworkSession: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
-        self.rootQueue.async { [weak self] in
-            let requests = self?.requests[task.taskIdentifier]
-            requests?.progress(task.progress)
+      
+        let requests = self.requests[task.taskIdentifier]
+        if let ppp = requests?.taskProgress {
+            ppp.completedUnitCount = task.countOfBytesSent
+            requests?.progress(ppp)
+            
+            print("task tasktask bytesSent", task.taskIdentifier, ppp.fractionCompleted, bytesSent)
         }
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        self.rootQueue.async { [weak self] in
-            guard let requests = self?.requests[task.taskIdentifier] else { return }
-            if let error = error {
-                requests.completion(.failure(error: STNetworkDispatcher.NetworkError.error(error: error)))
-            } else {
-                requests.completion(.success(result: requests.receiveData))
-            }
-            
-            self?.rootQueue.async(flags: .barrier) { [weak self] in
-                requests.request.clean()
-                self?.requests[task.taskIdentifier] = nil
-            }
+        guard let requests = self.requests[task.taskIdentifier] else { return }
+        
+        if let error = error {
+            requests.completion(.failure(error: STNetworkDispatcher.NetworkError.error(error: error)))
+        } else {
+            requests.completion(.success(result: requests.receiveData))
         }
+        requests.request.clean()
+        self.requests[task.taskIdentifier] = nil
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        self.rootQueue.async { [weak self] in
-            self?.requests[dataTask.taskIdentifier]?.receiveData.append(data)
-        }
+        self.requests[dataTask.taskIdentifier]?.receiveData.append(data)
     }
 
 
@@ -175,11 +189,6 @@ class MultipartFormDataRequest {
             do {
                 let bytesCount = try part.writeBodyStream(to: outputStream, boundary: self.boundary)
                 self.bodyBytesCount += UInt(bytesCount)
-                
-                let part2 = (part as? FileField)
-                
-                print("heelekl", part2?.mimeType ?? "", part2?.filename ?? "", part2?.name ?? "")
-                
             } catch {
                 throw STNetworkDispatcher.NetworkError.badRequest
             }
@@ -210,7 +219,8 @@ extension MultipartFormDataRequest {
             fieldString += "Content-Type: text/plain; charset=ISO-8859-1\r\n"
             fieldString += "Content-Transfer-Encoding: 8bit\r\n"
             fieldString += "\r\n"
-            fieldString += "\(self.value)\r\n"
+            fieldString += "\(self.value)"
+            fieldString += "\r\n"
             
             let data = Data(fieldString.utf8)
             var buffer = [UInt8](repeating: 0, count: data.count)
@@ -228,20 +238,17 @@ extension MultipartFormDataRequest {
         let data: Data
         
         func writeBodyStream(to outputStream: OutputStream, boundary: String) throws -> Int {
-            
             var fieldData = Data()
             fieldData.append("--\(boundary)\r\n")
-            
             fieldData.append("Content-Disposition: form-data; name=\"\(self.name); filename=\"\(self.filename)\"\r\n")
             fieldData.append("Content-Type: \(self.mimeType)\r\n")
             fieldData.append("\r\n")
             fieldData.append(self.data)
             fieldData.append("\r\n")
             
-            var buffer = [UInt8](repeating: 0, count: data.count)
-            data.copyBytes(to: &buffer, count: data.count)
-            return outputStream.write(buffer, maxLength: data.count)
-            
+            var buffer = [UInt8](repeating: 0, count: fieldData.count)
+            fieldData.copyBytes(to: &buffer, count: fieldData.count)
+            return outputStream.write(buffer, maxLength: buffer.count)
         }
     }
     
@@ -260,14 +267,11 @@ extension MultipartFormDataRequest {
             
             var fieldData = Data()
             fieldData.append("--\(boundary)\r\n")
-            
             fieldData.append("Content-Disposition: form-data; name=\"\(self.name)\"; filename=\"\(self.filename)\r\n")
-            
             fieldData.append("Content-Type: \(self.mimeType)\r\n")
             fieldData.append("\r\n")
             
             var resultBytes: Int = .zero
-        
             var buffer = [UInt8](repeating: 0, count: fieldData.count)
             fieldData.copyBytes(to: &buffer, count: fieldData.count)
             resultBytes += outputStream.write(buffer, maxLength: fieldData.count)
@@ -278,10 +282,8 @@ extension MultipartFormDataRequest {
             let streamBufferSize = 1024
             
             while inputStream.hasBytesAvailable {
-                
                 var buffer = [UInt8](repeating: 0, count: streamBufferSize)
                 let bytesRead = inputStream.read(&buffer, maxLength: streamBufferSize)
-
                 if let streamError = inputStream.streamError {
                     throw AFError.multipartEncodingFailed(reason: .inputStreamReadFailed(error: streamError))
                 }
@@ -299,14 +301,29 @@ extension MultipartFormDataRequest {
             var bufferEnd = [UInt8](repeating: 0, count: end.count)
             end.copyBytes(to: &bufferEnd, count: end.count)
             resultBytes += outputStream.write(bufferEnd, maxLength: end.count)
-            
             return resultBytes
-                                
         }
         
     }
     
     struct EndField: IFormDataRequestBodyPart {
+        
+        func writeBodyStream(to outputStream: OutputStream, boundary: String) throws -> Int {
+            var data = Data()
+            let fieldData = "--\(boundary)--\r\n"
+            data.append(fieldData)
+            
+            var buffer = [UInt8](repeating: 0, count: data.count)
+            data.copyBytes(to: &buffer, count: data.count)
+            return outputStream.write(buffer, maxLength: data.count)
+            
+        }
+        
+    }
+    
+    struct StreamField: IFormDataRequestBodyPart {
+        
+        
         
         func writeBodyStream(to outputStream: OutputStream, boundary: String) throws -> Int {
             var data = Data()

@@ -152,6 +152,10 @@ class STNetworkDispatcher {
         return Task(request: uploadRequest)
     }
     
+    func uploadBackround2<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
+        self.upload(request: request, progress: progress, completion: completion)
+    }
+    
     func uploadBackround<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
         let url = URL(string: request.url)!
         let formDataRequest = MultipartFormDataRequest(url: url, headers: request.headers)

@@ -43,7 +43,7 @@ class STFileUploader {
     }
     
     lazy private var operationQueue: STOperationQueue = {
-        let queue = self.operationManager.createQueue(maxConcurrentOperationCount: self.maxCountUploads, qualityOfService: .background, underlyingQueue: dispatchQueue)
+        let queue = self.operationManager.createQueue(maxConcurrentOperationCount: self.maxCountUploads, qualityOfService: .background, underlyingQueue: self.dispatchQueue)
         return queue
     }()
     
