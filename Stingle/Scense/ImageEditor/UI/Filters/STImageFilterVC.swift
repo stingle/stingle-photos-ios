@@ -114,6 +114,7 @@ class STImageFilterVC: UIViewController {
         self.gradientView.layer.mask = self.maskLayer
         self.selectFilter(type: self.selectedFilterType)
         self.reset()
+        self.gradientView.alpha = 0.0
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -129,6 +130,9 @@ class STImageFilterVC: UIViewController {
         self.angleRuler.value = self.selectedFilterValue()
         self.angleRuler.delegate = self
         self.filterCollectionView.selectionDelegate = self
+        UIView.animate(withDuration: 0.1) {
+            self.gradientView.alpha = 1.0
+        }
     }
 
     override func viewDidLayoutSubviews() {
