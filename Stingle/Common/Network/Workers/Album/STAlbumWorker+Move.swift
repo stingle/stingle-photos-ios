@@ -44,7 +44,8 @@ extension STAlbumWorker {
                                                members: toAlbum.members,
                                                cover: toAlbum.cover,
                                                dateCreated: toAlbum.dateCreated,
-                                               dateModified: Date())
+                                               dateModified: Date(),
+                                               managedObjectID: toAlbum.managedObjectID)
 
             albumFilesProvider.add(models: newAlbumFiles, reloadData: reloadDBData)
             albumsProvider.update(models: [updatedAlbum], reloadData: reloadDBData)
@@ -122,7 +123,8 @@ extension STAlbumWorker {
                                                members: toAlbum.members,
                                                cover: toAlbum.cover,
                                                dateCreated: toAlbum.dateCreated,
-                                               dateModified: Date())
+                                               dateModified: Date(),
+                                               managedObjectID: toAlbum.managedObjectID)
             
             albumFilesProvider.add(models: newAlbumFiles, reloadData: reloadDBData)
             albumsProvider.update(models: [updatedAlbum], reloadData: reloadDBData)

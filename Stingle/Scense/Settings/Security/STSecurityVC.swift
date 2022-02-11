@@ -71,7 +71,7 @@ class STSecurityVC: STSettingsDetailTableVC<STSecurityVC.SectionType, STSecurity
         return identifier == .detail
     }
     
-    override func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
+    override func settingsyCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
         
         guard let indexPath = self.tableView.indexPath(for: cell), let identifier = self.cellModel(for: indexPath)?.identifier else {
             return
@@ -149,7 +149,7 @@ class STSecurityVC: STSettingsDetailTableVC<STSecurityVC.SectionType, STSecurity
     
     private func addBiometricAuth(password: String?) {
         guard let password = password, !password.isEmpty else {
-            self.showOkCancelAlert(title: "warning".localized, message: "error_password_not_valed".localized)
+            self.showOkCancelTextAlert(title: "warning".localized, message: "error_password_not_valed".localized)
             return
         }
         let loadingView: UIView =  self.navigationController?.view ?? self.view
@@ -167,7 +167,7 @@ class STSecurityVC: STSettingsDetailTableVC<STSecurityVC.SectionType, STSecurity
     
     private func addBiometricAuth() {
         let title = "enter_app_password".localized
-        self.showOkCancelAlert(title: title, message: nil) { textField in
+        self.showOkCancelTextAlert(title: title, message: nil) { textField in
             textField.placeholder = "password".localized
             textField.isSecureTextEntry = true
         } handler: { [weak self] text in

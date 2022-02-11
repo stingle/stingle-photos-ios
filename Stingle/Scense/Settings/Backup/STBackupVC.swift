@@ -24,7 +24,7 @@ class STBackupVC: STSettingsDetailTableVC<STBackupVC.SectionType, STBackupVC.Ite
         self.reloadTableData()
     }
     
-    override func securityCel(didSlide cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, value: Float) {
+    override func settingsyCel(didSlide cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, value: Float) {
         guard let indexPath = self.tableView.indexPath(for: cell) else {
             return
         }
@@ -45,7 +45,7 @@ class STBackupVC: STSettingsDetailTableVC<STBackupVC.SectionType, STBackupVC.Ite
         }
     }
     
-    override func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
+    override func settingsyCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
         guard let indexPath = self.tableView.indexPath(for: cell), var cellModel = (cell as? STSettingsSwichTableViewCell)?.cellModel else {
             return
         }

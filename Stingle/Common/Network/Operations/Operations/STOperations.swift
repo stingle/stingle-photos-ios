@@ -25,7 +25,7 @@ class STOperation<T>: Operation, IOperation {
     
     typealias STOperationSuccess = (_ result: T) -> Void
     typealias STOperationFailure = (_ error: IError) -> Void
-    typealias STOperationProgress = (_ error: Progress) -> Void
+    typealias STOperationProgress = (_ progress: Progress) -> Void
     typealias STOperationStream = (_ reciveData: Data) -> Void
 
     private var success: STOperationSuccess?
@@ -198,6 +198,7 @@ class STOperation<T>: Operation, IOperation {
     private func setCancel() {
         if self.isExecuting {
             super.cancel()
+            self.status = .canceled
         } else if self.isReady {
             self.success = nil
             self.failure = nil

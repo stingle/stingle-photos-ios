@@ -32,9 +32,7 @@ class STDataBase {
     
     func sync(_ sync: STSync, finish: @escaping (IError?) -> Void) {
         self.didStartSync()
-        let context = self.container.newBackgroundContext()
-        context.automaticallyMergesChangesFromParent = true
-        context.mergePolicy = NSMergePolicyType.mergeByPropertyStoreTrumpMergePolicyType
+        let context = self.container.backgroundContext
         context.performAndWait {
             do {
                 let oldInfo = self.dbInfoProvider.dbInfo
@@ -84,7 +82,7 @@ class STDataBase {
     
     func filtrNotExistFiles(files: [STLibrary.File]) -> [STLibrary.File] {
         
-        let context = self.container.newBackgroundContext()
+        let context = self.container.backgroundContext
         var fileNames = [String]()
         
         files.forEach { file in
@@ -120,7 +118,7 @@ class STDataBase {
     
     func filtrNotExistFileNames(fileNames: [String]) -> [String] {
        
-        let context = self.container.newBackgroundContext()
+        let context = self.container.backgroundContext
         return context.performAndWait {
             
             let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
@@ -200,7 +198,7 @@ class STDataBase {
 extension STDataBase {
     
     func addAlbumFile(albumFile: STLibrary.AlbumFile, reloadData: Bool) {
-        let context = self.container.viewContext
+        let context = self.container.backgroundContext
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
         let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
         guard let album: STLibrary.Album = albumsProvider.fetch(identifiers: [albumFile.albumId], context: context).first else {
@@ -222,12 +220,12 @@ extension STDataBase {
                                        dateModified: Date(),
                                        managedObjectID: album.managedObjectID)
         
-        albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
         albumFilesProvider.add(models: [albumFile], reloadData: reloadData, context: context)
+        albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
     }
     
     func addAlbumFiles(albumFiles: [STLibrary.AlbumFile], album: STLibrary.Album, reloadData: Bool) {
-        let context = self.container.viewContext
+        let context = self.container.backgroundContext
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
         let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
        
@@ -247,13 +245,20 @@ extension STDataBase {
                                        dateModified: Date(),
                                        managedObjectID: album.managedObjectID)
         
-        albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
         albumFilesProvider.add(models: albumFiles, reloadData: reloadData, context: context)
+        albumsProvider.update(models: [newAlbum], reloadData: reloadData, context: context)
+        
     }
     
 }
 
 extension STDataBase {
+    
+    enum DataBaseChangeType {
+        case add
+        case update
+        case delete
+    }
     
     enum DataBaseError: IError {
        

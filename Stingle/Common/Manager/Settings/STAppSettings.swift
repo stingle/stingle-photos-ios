@@ -7,24 +7,50 @@
 
 import Foundation
 
-extension STAppSettings {
+protocol ISettingsObserver: AnyObject {
     
-    fileprivate struct Constance {
+    func appSettings(didChange settings: STAppSettings, isDeleteFilesWhenMoving: Bool)
+    func appSettings(didChange settings: STAppSettings, security: STAppSettings.Security)
+    func appSettings(didChange settings: STAppSettings, backup: STAppSettings.Backup)
+    func appSettings(didChange settings: STAppSettings, appearance: STAppSettings.Appearance)
+    func appSettings(didChange settings: STAppSettings, advanced: STAppSettings.Advanced)
+    func appSettings(didChange settings: STAppSettings, import: STAppSettings.Import)
+  
+}
+
+extension ISettingsObserver {
+    
+    func appSettings(didChange settings: STAppSettings, isDeleteFilesWhenMoving: Bool) {}
+    func appSettings(didChange settings: STAppSettings, security: STAppSettings.Security) {}
+    func appSettings(didChange settings: STAppSettings, backup: STAppSettings.Backup) {}
+    func appSettings(didChange settings: STAppSettings, appearance: STAppSettings.Appearance) {}
+    func appSettings(didChange settings: STAppSettings, advanced: STAppSettings.Advanced) {}
+    func appSettings(didChange settings: STAppSettings, import: STAppSettings.Import) {}
+    
+}
+
+fileprivate extension STAppSettings {
+    
+    struct Constance {
         static let settingsKey = "settings"
         static let isDeleteFilesWhenMoving = "isDeleteFilesWhenMoving"
         static let security = "security"
         static let backup = "backup"
         static let appearance = "appearance"
         static let advanced = "advanced"
+        static let `import` = "import"
     }
     
 }
 
 class STAppSettings {
     
+    static let current: STAppSettings = STAppSettings()
     static private let userDefaults = UserDefaults.standard
-        
-    static var settings: [String: Any] {
+    
+    private var observers = STObserverEvents<ISettingsObserver>()
+            
+    static private var settings: [String: Any] {
         set {
             self.userDefaults.setValue(newValue, forKey: Constance.settingsKey)
         } get {
@@ -32,64 +58,126 @@ class STAppSettings {
         }
     }
     
-    static var isDeleteFilesWhenMoving: Bool {
+    var isDeleteFilesWhenMoving: Bool {
         set {
-            self.settings[Constance.isDeleteFilesWhenMoving] = newValue
+            let oldValue: Bool = self.isDeleteFilesWhenMoving
+            Self.settings[Constance.isDeleteFilesWhenMoving] = newValue
+            if oldValue != newValue {
+                self.observers.forEach { observer in
+                    observer.appSettings(didChange: self, isDeleteFilesWhenMoving: newValue)
+                }
+            }
         } get {
-            return self.settings[Constance.isDeleteFilesWhenMoving] as? Bool ?? true
+            return Self.settings[Constance.isDeleteFilesWhenMoving] as? Bool ?? true
         }
     }
     
-    static var security: Security {
+    var security: Security {
         set {
+            let oldValue = self.security
             let json = newValue.toJson()
-            self.settings[Constance.security] = json
+            Self.settings[Constance.security] = json
+            if oldValue != newValue {
+                self.observers.forEach { observer in
+                    observer.appSettings(didChange: self, security: newValue)
+                }
+            }
         } get {
-            guard let json = self.settings[Constance.security], let result = Security(from: json) else {
+            guard let json = Self.settings[Constance.security], let result = Security(from: json) else {
                 return .default
             }
             return result
         }
     }
     
-    static var backup: Backup {
+    var backup: Backup {
         set {
+            let oldValue = self.backup
             let json = newValue.toJson()
-            self.settings[Constance.backup] = json
+            Self.settings[Constance.backup] = json
+            if oldValue != newValue {
+                self.observers.forEach { observer in
+                    observer.appSettings(didChange: self, backup: newValue)
+                }
+            }
         } get {
-            guard let json = self.settings[Constance.backup], let result = Backup(from: json) else {
+            guard let json = Self.settings[Constance.backup], let result = Backup(from: json) else {
                 return .default
             }
             return result
         }
     }
     
-    static var appearance: Appearance {
+    var appearance: Appearance {
         set {
+            let oldValue = self.appearance
             let json = newValue.toJson()
-            self.settings[Constance.appearance] = json
+            Self.settings[Constance.appearance] = json
+            if oldValue != newValue {
+                self.observers.forEach { observer in
+                    observer.appSettings(didChange: self, appearance: newValue)
+                }
+            }
         } get {
-            guard let json = self.settings[Constance.appearance], let result = Appearance(from: json) else {
+            guard let json = Self.settings[Constance.appearance], let result = Appearance(from: json) else {
                 return .default
             }
             return result
         }
     }
     
-    static var advanced: Advanced {
+    var advanced: Advanced {
         set {
+            let oldValue = self.advanced
             let json = newValue.toJson()
-            self.settings[Constance.advanced] = json
+            Self.settings[Constance.advanced] = json
+            
+            if oldValue != newValue {
+                self.observers.forEach { observer in
+                    observer.appSettings(didChange: self, advanced: newValue)
+                }
+            }
         } get {
-            guard let json = self.settings[Constance.advanced], let result = Advanced(from: json) else {
+            guard let json = Self.settings[Constance.advanced], let result = Advanced(from: json) else {
                 return .default
             }
             return result
         }
     }
     
-    static func logOut() {
-        self.settings = [:]
+    var `import`: Import {
+        set {
+            let oldValue = self.import
+            let json = newValue.toJson()
+            Self.settings[Constance.import] = json
+            
+            if oldValue != newValue {
+                self.observers.forEach { observer in
+                    observer.appSettings(didChange: self, import: newValue)
+                }
+            }
+        } get {
+            guard let json = Self.settings[Constance.import], let result = Import(from: json) else {
+                return .default
+            }
+            return result
+        }
+    }
+    
+    var isExistImportInfo: Bool {
+        return Self.settings[Constance.import] != nil
+    }
+    
+    func addObserver(_ lisner: ISettingsObserver) {
+        self.observers.addObject(lisner)
+    }
+    
+    func removeObserver(_ lisner: ISettingsObserver) {
+        self.observers.removeObject(lisner)
+    }
+    
+    func logOut() {
+        Self.settings = [:]
     }
             
 }

@@ -14,7 +14,7 @@ extension STSettingsSwichTableViewCell {
         let title: String?
         let subTitle: String?
         var isOn: Bool
-        let isEnabled: Bool
+        var isEnabled: Bool
     }
     
 }
@@ -48,7 +48,7 @@ class STSettingsSwichTableViewCell: STSettingsTableViewCell<STSettingsSwichTable
         guard let model =  self.model else {
             return
         }
-        self.delegate?.securityCel(didSelectSwich: self, model: model, isOn: self.swicher.isOn)
+        self.delegate?.settingsyCel(didSelectSwich: self, model: model, isOn: self.swicher.isOn)
     }
     
 }

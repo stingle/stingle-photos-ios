@@ -25,15 +25,7 @@ extension STFileUploader {
         private weak var uploaderOperationDelegate: STFileUploaderOperationDelegate?
         private let uploadWorker = STUploadWorker()
         private weak var networkOperation: STUploadNetworkOperation<STResponse<STDBUsed>>?
-        
-        private(set) var uploadFile: IUploadFile!
-        private(set) var libraryFile: STLibrary.File?
-        
-        init(file: IUploadFile, delegate: STFileUploaderOperationDelegate) {
-            self.uploadFile = file
-            self.uploaderOperationDelegate = delegate
-            super.init(success: nil, failure: nil, progress: nil)
-        }
+        private(set) var libraryFile: STLibrary.File
         
         init(file: STLibrary.File, delegate: STFileUploaderOperationDelegate) {
             self.uploaderOperationDelegate = delegate
@@ -44,13 +36,7 @@ extension STFileUploader {
         override func resume() {
             super.resume()
             self.uploaderOperationDelegate?.fileUploaderOperation(didStart: self)
-            if let file = self.libraryFile {
-                self.upload(file: file)
-            } else if let file = self.uploadFile {
-                self.upload(file: file)
-            } else {
-                self.responseFailed(error: UploaderError.fileNotFound, file: nil)
-            }
+            self.upload(file: self.libraryFile)
         }
         
         override func cancel() {
@@ -60,14 +46,6 @@ extension STFileUploader {
         }
                 
         //MARK: - Private
-        
-        private func upload(file: IUploadFile) {
-            file.requestFile { [weak self] file in
-                self?.continueOperation(with: file)
-            } failure: { [weak self] error in
-                self?.responseFailed(error: error)
-            }
-        }
         
         private func upload(file: STLibrary.File) {
             self.continueOperation(with: file)
@@ -101,6 +79,11 @@ extension STFileUploader {
         
         private func continueOperation(didUpload file: STLibrary.File, spaceUsed: STDBUsed) {
             
+            guard STApplication.shared.isFileSystemAvailable else {
+                self.responseFailed(error: UploaderError.fileSystemNotValid, file: file)
+                return
+            }
+            
             let oldFileThumbUrl = file.fileThumbUrl
             let oldFileOreginalUrl = file.fileOreginalUrl
             file.isRemote = true
@@ -129,8 +112,6 @@ extension STFileUploader {
             if let fileOreginalUrl = newFileOreginalUrl {
                 STApplication.shared.fileSystem.updateUrlDataSize(url: fileOreginalUrl)
             }
-            
-            
             self.responseSucces(result: file, spaceUsed: spaceUsed)
         }
         

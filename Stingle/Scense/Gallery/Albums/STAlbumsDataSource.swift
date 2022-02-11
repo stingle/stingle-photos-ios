@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 protocol STAlbumsDataSourceViewModelDelegate: AnyObject {
-    func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)
+    func viewModel(albumMedadataFor album: STLibrary.Album?) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)
 }
 
 protocol IAlbumsViewModel: ICollectionDataSourceViewModel where CDModel == STCDAlbum {
@@ -45,7 +45,12 @@ extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
         let countFiles: Int
     }
     
-    func viewModel(albumMedadataFor album: STLibrary.Album) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?) {
+    func viewModel(albumMedadataFor album: STLibrary.Album?) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?) {
+        
+        guard let album = album else {
+            return (.zero, nil, nil)
+        }
+        
         var albumInfo: AlbumInfo!
         let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
         if let info = self.albumInfoFiles[album.albumId] {
@@ -84,28 +89,41 @@ extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
 
 extension STAlbumsDataSource: IDataBaseProviderProviderObserver {
     
+    func reloadSnapShot() {
+        guard let snapshot = self.snapshotReference else {
+            return
+        }
+        snapshot.reloadItems(withIdentifiers: snapshot.itemIdentifiers)
+        self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true)
+    }
+    
     func dataBaseProvider(didAdded provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         if provider === STApplication.shared.dataBase.contactProvider {
             self.contacts = nil
+            self.reloadSnapShot()
         } else if provider === STApplication.shared.dataBase.albumFilesProvider {
             self.albumInfoFiles.removeAll()
+            self.reloadSnapShot()
         }
     }
     
     func dataBaseProvider(didDeleted provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         if provider === STApplication.shared.dataBase.contactProvider {
             self.contacts = nil
+            self.reloadSnapShot()
         } else if provider === STApplication.shared.dataBase.albumFilesProvider {
             self.albumInfoFiles.removeAll()
+            self.reloadSnapShot()
         }
     }
-    
     
     func dataBaseProvider(didUpdated provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         if provider === STApplication.shared.dataBase.contactProvider {
             self.contacts = nil
+            self.reloadSnapShot()
         } else if provider === STApplication.shared.dataBase.albumFilesProvider {
             self.albumInfoFiles.removeAll()
+            self.reloadSnapShot()
         }
     }
     

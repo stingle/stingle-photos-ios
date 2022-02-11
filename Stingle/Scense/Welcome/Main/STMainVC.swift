@@ -17,7 +17,7 @@ class STMainVC: UIViewController {
         super.viewDidLoad()
 		self.configure()
         
-        let theme = STAppSettings.appearance.theme
+        let theme = STAppSettings.current.appearance.theme
         UIView.animate(withDuration: 0.3) {
             UIApplication.shared.windows.forEach { window in
                 window.overrideUserInterfaceStyle = theme.interfaceStyle
@@ -74,22 +74,17 @@ extension STMainVC {
         let window =  UIApplication.shared.windows.first(where: { $0.isKeyWindow })
         (vc as? STMainVC)?.appInUnauthorized = appInUnauthorized
         
-        if let rootVC = window?.rootViewController {
-            let segue = STRootWindowSegue(identifier: "STMainVCID", source: rootVC, destination: vc)
-            segue.perform()
-        } else {
-            window?.rootViewController = vc
-            guard let rootWindow = window else {
-                return
-            }
-            if UIView.areAnimationsEnabled {
-                let options: UIView.AnimationOptions = .transitionFlipFromRight
-                let duration: TimeInterval = 0.5
-                UIView.transition(with: rootWindow, duration: duration, options: options, animations: {
-                }, completion:
-                { completed in
-                })
-            }
+        window?.rootViewController = vc
+        guard let rootWindow = window else {
+            return
+        }
+        if UIView.areAnimationsEnabled {
+            let options: UIView.AnimationOptions = .transitionFlipFromRight
+            let duration: TimeInterval = 0.5
+            UIView.transition(with: rootWindow, duration: duration, options: options, animations: {
+            }, completion:
+                                { completed in
+            })
         }
         
     }

@@ -25,8 +25,6 @@ extension STDataBase {
         func update(model info: STDBInfo) {
             self.myDBInfo = info
             let context = self.container.viewContext
-            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-            context.undoManager = nil
             context.performAndWait {
                 guard let cdInfo = self.getInfo(context: context) else {
                     STCDDBInfo(model: info, context: context)

@@ -20,6 +20,7 @@ struct STEnvironment {
     let appName: String
     let bundleIdentifier: String
     let appWebUrl: String = "https://stingle.org"
+    let photoLibraryTrashAlbumName = "Stingle Trash"
     
 	    
 	static let current: STEnvironment = STEnvironment()

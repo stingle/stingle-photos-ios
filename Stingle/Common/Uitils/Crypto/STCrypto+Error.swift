@@ -48,6 +48,7 @@ enum CryptoError: Error {
         case incorrectParameterSize
         case unknown
         case creationFailure
+        case canceled
     }
     
 }

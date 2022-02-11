@@ -20,6 +20,11 @@ extension STAppSettings {
             let result = Security(lockUpApp: .minute, authentication: auth, disallowScreenshots: false)
             return result
         }
+        
+        public static func != (lhs: Self, rhs: Self) -> Bool {
+            return lhs.lockUpApp != rhs.lockUpApp || lhs.authentication != rhs.authentication || lhs.disallowScreenshots != rhs.disallowScreenshots
+        }
+        
     }
     
 }
@@ -82,6 +87,10 @@ extension STAppSettings.Security {
     
     struct BiometricAuthentication: Codable {
         var unlock: Bool
+        
+        public static func != (lhs: Self, rhs: Self) -> Bool {
+            return lhs.unlock != rhs.unlock
+        }
     }
     
 }

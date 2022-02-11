@@ -47,7 +47,7 @@ protocol ICollectionDataSourceViewModel {
     
     typealias Model = CDModel.Model
     
-    func cellModel(for indexPath: IndexPath, data: Model) -> Cell.Model
+    func cellModel(for indexPath: IndexPath, data: Model?) -> Cell.Model
     func headerModel(for indexPath: IndexPath, section: String) -> Header.Model
     
 }
@@ -159,9 +159,7 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     //MARK: - Public
     
     func cellModel(at indexPath: IndexPath) -> Cell.Model? {
-        guard let object = self.object(at: indexPath) else {
-            return nil
-        }
+        let object = self.object(at: indexPath)
         let cellModel = self.viewModel.cellModel(for: indexPath, data: object)
         return cellModel
     }
@@ -208,6 +206,7 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         guard let cellModel = self.cellModel(at: indexPath) else {
             fatalError("object not found")
         }
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellModel.identifier.identifier, for: indexPath) as! Cell
         cell.configure(model: cellModel)
         self.delegate?.dataSource(didConfigureCell: self, cell: cell)

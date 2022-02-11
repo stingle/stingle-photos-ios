@@ -33,7 +33,7 @@ class STSettingsSliderTableViewCell: STSettingsTableViewCell<STSettingsSliderTab
             return
         }
         model.value = self.slider.value
-        self.delegate?.securityCel(didSlide: self, model: model, value: self.slider.value)
+        self.delegate?.settingsyCel(didSlide: self, model: model, value: self.slider.value)
     }
     
     override func configure(model: Model?) {

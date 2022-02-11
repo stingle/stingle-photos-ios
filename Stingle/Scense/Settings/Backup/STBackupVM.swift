@@ -10,22 +10,22 @@ import Foundation
 class STBackupVM {
     
     lazy var backup: STAppSettings.Backup = {
-        return STAppSettings.backup
+        return STAppSettings.current.backup
     }()
     
     func updateBackup(isEnabled: Bool) {
         self.backup.isEnabled = isEnabled
-        STAppSettings.backup = self.backup
+        STAppSettings.current.backup = self.backup
     }
     
     func updateBackup(isOnlyWiFi: Bool) {
         self.backup.isOnlyWiFi = isOnlyWiFi
-        STAppSettings.backup = self.backup
+        STAppSettings.current.backup = self.backup
     }
     
     func updateBackup(batteryLevel: Float) {
         self.backup.batteryLevel = batteryLevel
-        STAppSettings.backup = self.backup
+        STAppSettings.current.backup = self.backup
     }
     
 }
