@@ -238,7 +238,7 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        self.newCollection
+        self.newCollection = newCollection
         self.transitionsView(with: coordinator)
     }
 

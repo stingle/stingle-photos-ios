@@ -29,7 +29,7 @@ class STFileEditVC: UIViewController {
     // TODO: Shahen
 
     @IBAction func cancelButtonAction(_ sender: Any) {
-        self.dismiss()
+        self.delegate?.fileEdit(didSelectCancel: self)
     }
 
     // MARK: - Private methods
@@ -61,12 +61,16 @@ class STFileEditVC: UIViewController {
             return
         }
         vc.delegate = self
-        self.present(vc, animated: false)
-    }
-
-    private func dismiss() {
-        self.dismiss(animated: false)
-        self.delegate?.fileEdit(didSelectCancel: self)
+        self.addChild(vc)
+        vc.didMove(toParent: self)
+        self.view.addSubview(vc.view)
+        vc.view.frame = self.view.frame
+        NSLayoutConstraint.activate([
+            vc.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            vc.view.topAnchor.constraint(equalTo: self.view.topAnchor),
+            vc.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            vc.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
     }
 
 }
@@ -74,11 +78,11 @@ class STFileEditVC: UIViewController {
 extension STFileEditVC: STImageEditorVCDelegate {
 
     func imageEditor(didSelectCancel vc: STImageEditorVC) {
-        self.dismiss()
+        self.delegate?.fileEdit(didSelectCancel: self)
     }
 
     func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage) {
-
+        // TODO: Khoren: Add functionality to upload edited image to server. Also update thumbnail.
     }
 
 }
