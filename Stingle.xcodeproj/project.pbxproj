@@ -350,7 +350,6 @@
 		B31D621827B64B4E00CBEA19 /* UIColor+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61E827B64B4E00CBEA19 /* UIColor+Helper.swift */; };
 		B31D621927B64B4E00CBEA19 /* UIView+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */; };
 		B31D621A27B64B4E00CBEA19 /* HelperExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */; };
-		B31D621B27B64B4E00CBEA19 /* STSizeClassesUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61EC27B64B4E00CBEA19 /* STSizeClassesUtility.swift */; };
 		B31D621C27B64B4E00CBEA19 /* STFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61F127B64B4E00CBEA19 /* STFilterCell.swift */; };
 		B31D621D27B64B4E00CBEA19 /* STFilterCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61F227B64B4E00CBEA19 /* STFilterCollectionView.swift */; };
 		B31D621E27B64B4E00CBEA19 /* STFilterValueSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61F327B64B4E00CBEA19 /* STFilterValueSlider.swift */; };
@@ -739,7 +738,6 @@
 		B31D61E827B64B4E00CBEA19 /* UIColor+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Helper.swift"; sourceTree = "<group>"; };
 		B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helper.swift"; sourceTree = "<group>"; };
 		B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperExtensions.swift; sourceTree = "<group>"; };
-		B31D61EC27B64B4E00CBEA19 /* STSizeClassesUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STSizeClassesUtility.swift; sourceTree = "<group>"; };
 		B31D61F127B64B4E00CBEA19 /* STFilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STFilterCell.swift; sourceTree = "<group>"; };
 		B31D61F227B64B4E00CBEA19 /* STFilterCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STFilterCollectionView.swift; sourceTree = "<group>"; };
 		B31D61F327B64B4E00CBEA19 /* STFilterValueSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STFilterValueSlider.swift; sourceTree = "<group>"; };
@@ -2460,7 +2458,6 @@
 			children = (
 				B31D61E627B64B4E00CBEA19 /* Extensions */,
 				B31D61ED27B64B4E00CBEA19 /* UI */,
-				B31D61EB27B64B4E00CBEA19 /* Utils */,
 				B31D623C27B65ED700CBEA19 /* Common */,
 			);
 			path = ImageEditor;
@@ -2475,14 +2472,6 @@
 				B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		B31D61EB27B64B4E00CBEA19 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				B31D61EC27B64B4E00CBEA19 /* STSizeClassesUtility.swift */,
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 		B31D61ED27B64B4E00CBEA19 /* UI */ = {
@@ -2534,9 +2523,9 @@
 				B31D61FB27B64B4E00CBEA19 /* UI */,
 				B31D61FF27B64B4E00CBEA19 /* CropperProtocols */,
 				B31D620727B64B4E00CBEA19 /* Core */,
-				B31D620B27B64B4E00CBEA19 /* STCropperViewController.swift */,
 				B31D620C27B64B4E00CBEA19 /* ToolBar */,
 				B31D620F27B64B4E00CBEA19 /* Overlay */,
+				B31D620B27B64B4E00CBEA19 /* STCropperViewController.swift */,
 			);
 			path = Cropper;
 			sourceTree = "<group>";
@@ -2835,7 +2824,6 @@
 				A021A17B264F325900394713 /* UINavigationBar+Progress.swift in Sources */,
 				A001E6E9267CD90700948E50 /* STAlbumFileViewerVM.swift in Sources */,
 				A064433E26160BA000D74C46 /* STSplitViewController.swift in Sources */,
-				B31D621B27B64B4E00CBEA19 /* STSizeClassesUtility.swift in Sources */,
 				A05AD2D825FCEAC500ABBA59 /* STDBInfoProvider.swift in Sources */,
 				A075B7302652A22300B4E2DF /* STAlbumSettingsNameCell.swift in Sources */,
 				A00E8C972629D3B70066ED9B /* STCollectionViewDataSource.swift in Sources */,

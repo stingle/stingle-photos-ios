@@ -41,6 +41,8 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
     lazy var angleRuler = STAngleRuler(frame: self.rulerBackgroundView.bounds)
     private var angleRulerValue: CGFloat = 0.0
 
+    private var newCollection: UITraitCollection?
+
     var cropBoxFrame: CGRect {
         get {
             return self.overlayView.cropBoxFrame
@@ -57,7 +59,7 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
         layer.colors = [clear, black, black, clear]
         layer.locations = [0, 0.08, 0.92, 1]
         layer.frame = self.gradientView.bounds
-        if STSizeClassesUtility.isBothCompact(collection: self.traitCollection) || STSizeClassesUtility.isWidthRegular(collection: self.traitCollection) {
+        if self.traitCollection.isBothCompact() || self.traitCollection.isWidthRegular() {
             layer.startPoint = CGPoint(x: 0.5, y: 0.0)
             layer.endPoint = CGPoint(x: 0.5, y: 1.0)
         } else {
@@ -203,7 +205,7 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
         super.viewDidAppear(animated)
         if self.originalImage.size.width < 1 || self.originalImage.size.height < 1 { return }
 
-        if STSizeClassesUtility.isBothCompact(collection: self.traitCollection) || STSizeClassesUtility.isWidthRegular(collection: self.traitCollection) {
+        if self.traitCollection.isBothCompact() || self.traitCollection.isWidthRegular() {
             self.angleRuler.setDirection(direction: .vertical)
             self.aspectRatioView.setScrollDirection(scrollDirection: .vertical)
         } else {
@@ -222,7 +224,7 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.maskLayer.frame = self.gradientView.bounds
-        if STSizeClassesUtility.isBothCompact(collection: self.traitCollection) || STSizeClassesUtility.isWidthRegular(collection: self.traitCollection) {
+        if self.traitCollection.isBothCompact() || self.traitCollection.isWidthRegular() {
             self.aspectRatioView.setScrollDirection(scrollDirection: .vertical)
         } else {
             self.aspectRatioView.setScrollDirection(scrollDirection: .horizontal)
@@ -231,12 +233,13 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        self.transitionsView(to: self.traitCollection, with: coordinator)
+        self.transitionsView(with: coordinator)
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        self.transitionsView(to: newCollection, with: coordinator)
+        self.newCollection
+        self.transitionsView(with: coordinator)
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -460,7 +463,7 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
 
     var contentOffsetBeforTransition: CGPoint?
 
-    private func transitionsView(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+    private func transitionsView(with coordinator: UIViewControllerTransitionCoordinator) {
         guard self.contentOffsetBeforTransition == nil else { return }
         self.contentOffsetBeforTransition = self.scrollView.contentOffset
         let contentSize = self.scrollView.contentSize
@@ -468,16 +471,19 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
         self.scrollViewContainer.isHidden = true
         self.angleRuler.delegate = nil
         coordinator.animate { [weak self] _ in
-            if STSizeClassesUtility.isBothCompact(collection: newCollection) || STSizeClassesUtility.isWidthRegular(collection: newCollection) {
-                self?.maskLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-                self?.maskLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+            guard let self = self else { return }
+            let newCollection = self.newCollection ?? self.traitCollection
+            if newCollection.isBothCompact() || newCollection.isWidthRegular() {
+                self.maskLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+                self.maskLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
             } else {
-                self?.maskLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
-                self?.maskLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+                self.maskLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+                self.maskLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
             }
         } completion: { [weak self] _ in
             guard let self = self else { return }
-            if STSizeClassesUtility.isBothCompact(collection: newCollection) || STSizeClassesUtility.isWidthRegular(collection: newCollection) {
+            let newCollection = self.newCollection ?? self.traitCollection
+            if newCollection.isBothCompact() || newCollection.isWidthRegular() {
                 self.angleRuler.setDirection(direction: .vertical)
             } else {
                 self.angleRuler.setDirection(direction: .horizontal)

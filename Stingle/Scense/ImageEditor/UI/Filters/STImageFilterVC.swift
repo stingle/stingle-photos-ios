@@ -57,6 +57,8 @@ class STImageFilterVC: UIViewController {
     private let noiseReductionFilter = STNoiseReductionFilter()
     private let vignetteFilter = STVignetteFilter()
 
+    private var newCollection: UITraitCollection?
+
     lazy var angleRuler = STAngleRuler(frame: self.rulerBackgroundView.bounds)
 
     private var filters: [IFilter] {
@@ -87,7 +89,7 @@ class STImageFilterVC: UIViewController {
         layer.colors = [clear, black, black, clear]
         layer.locations = [0, 0.08, 0.92, 1]
         layer.frame = self.gradientView.bounds
-        if STSizeClassesUtility.isBothCompact(collection: self.traitCollection) || STSizeClassesUtility.isWidthRegular(collection: self.traitCollection) {
+        if self.traitCollection.isBothCompact() || self.traitCollection.isWidthRegular() {
             layer.startPoint = CGPoint(x: 0.5, y: 0.0)
             layer.endPoint = CGPoint(x: 0.5, y: 1.0)
         } else {
@@ -116,7 +118,7 @@ class STImageFilterVC: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if STSizeClassesUtility.isBothCompact(collection: self.traitCollection) || STSizeClassesUtility.isWidthRegular(collection: self.traitCollection) {
+        if self.traitCollection.isBothCompact() || self.traitCollection.isWidthRegular() {
             self.angleRuler.setDirection(direction: .vertical)
             self.filterCollectionView.setScrollDirection(scrollDirection: .vertical)
         } else {
@@ -132,7 +134,7 @@ class STImageFilterVC: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.maskLayer.frame = self.gradientView.bounds
-        if STSizeClassesUtility.isBothCompact(collection: self.traitCollection) || STSizeClassesUtility.isWidthRegular(collection: self.traitCollection) {
+        if self.traitCollection.isBothCompact() || self.traitCollection.isWidthRegular() {
             self.filterCollectionView.setScrollDirection(scrollDirection: .vertical)
         } else {
             self.filterCollectionView.setScrollDirection(scrollDirection: .horizontal)
@@ -141,12 +143,13 @@ class STImageFilterVC: UIViewController {
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        self.transitionView(to: self.traitCollection, with: coordinator)
+        self.transitionView(with: coordinator)
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        self.transitionView(to: newCollection, with: coordinator)
+        self.newCollection = newCollection
+        self.transitionView(with: coordinator)
     }
 
     func setImage(image: UIImage, applyFilters: Bool = false) {
@@ -298,24 +301,28 @@ class STImageFilterVC: UIViewController {
         return STFilterHelper.rullerValue(for: type, filterValue: value)
     }
 
-    private func transitionView(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+    private func transitionView(with coordinator: UIViewControllerTransitionCoordinator) {
         self.angleRuler.delegate = nil
         coordinator.animate { [weak self] _ in
-            if STSizeClassesUtility.isBothCompact(collection: newCollection) || STSizeClassesUtility.isWidthRegular(collection: newCollection) {
-                self?.maskLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-                self?.maskLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+            guard let self = self else { return }
+            let newCollection = self.newCollection ?? self.traitCollection
+            if newCollection.isBothCompact() || newCollection.isWidthRegular() {
+                self.maskLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+                self.maskLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
             } else {
-                self?.maskLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
-                self?.maskLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+                self.maskLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+                self.maskLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
             }
         } completion: { [weak self] _ in
-            if STSizeClassesUtility.isBothCompact(collection: newCollection) || STSizeClassesUtility.isWidthRegular(collection: newCollection) {
-                self?.angleRuler.setDirection(direction: .vertical)
+            guard let self = self else { return }
+            let newCollection = self.newCollection ?? self.traitCollection
+            if newCollection.isBothCompact() || newCollection.isWidthRegular() {
+                self.angleRuler.setDirection(direction: .vertical)
             } else {
-                self?.angleRuler.setDirection(direction: .horizontal)
+                self.angleRuler.setDirection(direction: .horizontal)
             }
-            self?.angleRuler.value = self?.selectedFilterValue() ?? 0.0
-            self?.angleRuler.delegate = self
+            self.angleRuler.value = self.selectedFilterValue()
+            self.angleRuler.delegate = self
         }
     }
 

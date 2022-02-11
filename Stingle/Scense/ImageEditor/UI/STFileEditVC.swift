@@ -43,11 +43,15 @@ class STFileEditVC: UIViewController {
         }
         self.loadingIndicator.startAnimating()
         STApplication.shared.downloaderManager.imageRetryer.download(source: source, success: { [weak self] image in
-            self?.loadingIndicator.stopAnimating()
-            self?.presentImageEditVC(image: image)
+            DispatchQueue.main.async {
+                self?.loadingIndicator.stopAnimating()
+                self?.presentImageEditVC(image: image)
+            }
         }, progress: nil, failure: { [weak self] error in
-            self?.loadingIndicator.stopAnimating()
-            // TODO: Shahen present error and close view
+            DispatchQueue.main.async {
+                self?.loadingIndicator.stopAnimating()
+                // TODO: Shahen present error and close view
+            }
         })
     }
 

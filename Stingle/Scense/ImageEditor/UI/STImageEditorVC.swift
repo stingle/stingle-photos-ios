@@ -37,6 +37,8 @@ class STImageEditorVC: UIViewController {
     
     private var image: UIImage!
 
+    private var newCollection: UITraitCollection?
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -53,12 +55,13 @@ class STImageEditorVC: UIViewController {
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        self.transitionView(to: self.traitCollection, with: coordinator)
+        self.transitionView(with: coordinator)
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        self.transitionView(to: newCollection, with: coordinator)
+        self.newCollection = newCollection
+        self.transitionView(with: coordinator)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -166,19 +169,19 @@ class STImageEditorVC: UIViewController {
         ])
     }
 
-    private func transitionView(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+    private func transitionView(with coordinator: UIViewControllerTransitionCoordinator) {
         coordinator.animate { _ in
+            let newCollection = self.newCollection ?? self.traitCollection
             let additionalSafeAreaInsets = self.additionalSafeAreaInsets(newCollection: newCollection)
             self.imageFilterVC.additionalSafeAreaInsets = additionalSafeAreaInsets
             self.imageCropRotateVC.additionalSafeAreaInsets = additionalSafeAreaInsets
-        } completion: { _ in
-        }
+        } completion: { _ in }
     }
 
     private func additionalSafeAreaInsets(newCollection: UITraitCollection) -> UIEdgeInsets {
         var additionalSafeAreaInsets = self.additionalSafeAreaInsets
         additionalSafeAreaInsets.top = self.topToolBar.height
-        if STSizeClassesUtility.isCompactRegular(collection: newCollection) {
+        if newCollection.isCompactRegular() {
             additionalSafeAreaInsets.bottom = self.bottomToolBar.height
         } else {
             additionalSafeAreaInsets.left = 100.0 // self.optionsView.frame.maxX

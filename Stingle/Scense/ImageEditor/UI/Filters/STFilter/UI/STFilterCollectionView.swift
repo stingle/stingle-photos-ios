@@ -154,9 +154,9 @@ extension STFilterCollectionView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = self.flowLayout?.scrollDirection == .vertical ? scrollView.contentOffset.y : scrollView.contentOffset.x
         if self.lastContentOffset > offset {
-            self.scrollDirection = STSizeClassesUtility.isWidthRegular(collection: self.traitCollection) ? .down : .right
+            self.scrollDirection = self.traitCollection.isWidthRegular() ? .down : .right
         } else if self.lastContentOffset < offset {
-            self.scrollDirection = STSizeClassesUtility.isWidthRegular(collection: self.traitCollection) ? .up : .left
+            self.scrollDirection = self.traitCollection.isWidthRegular() ? .up : .left
         }
         self.lastContentOffset = scrollView.contentOffset.x
     }
