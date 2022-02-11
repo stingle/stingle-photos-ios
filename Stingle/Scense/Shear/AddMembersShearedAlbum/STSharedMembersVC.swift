@@ -65,6 +65,7 @@ class STSharedMembersVC: UIViewController {
     private func updateLocalizes() {
         self.navigationItem.title = "share_via_stingle_photos".localized
         self.searchController.searchBar.placeholder = "sharch_contact_text_feild_placeholder".localized
+        self.searchController.searchBar.setValue("done".localized, forKey: "cancelButtonText")
        
         switch self.shearedType {
         case .album(let album):

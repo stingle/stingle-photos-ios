@@ -19,16 +19,17 @@ extension STTrashVC {
         
         var isSelectedMode = false
         
-        func cellModel(for indexPath: IndexPath, data: STLibrary.TrashFile) -> STTrashVC.CellModel {
+        func cellModel(for indexPath: IndexPath, data: STLibrary.TrashFile?) -> STTrashVC.CellModel {
+          
             let image = STImageView.Image(file: data, isThumb: true)
             var videoDurationStr: String? = nil
-            if let duration = data.decryptsHeaders.file?.videoDuration, duration > 0 {
+            if let duration = data?.decryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).timeFormat()
             }
             return CellModel(image: image,
-                             name: data.file,
+                             name: data?.file,
                              videoDuration: videoDurationStr,
-                             isRemote: data.isRemote,
+                             isRemote: data?.isRemote ?? true,
                              selectedMode: self.isSelectedMode)
         }
         
@@ -208,7 +209,7 @@ class STTrashVC: STFilesSelectCollectionViewController<STTrashVC.ViewModel> {
         let title = "delete_files_alert_title".localized
         let message = String(format: "delete_files_alert_message".localized, "\(files.count)")
         
-        self.showOkCancelAlert(title: title, message: message, handler:  { [weak self] _ in
+        self.showOkCancelTextAlert(title: title, message: message, handler:  { [weak self] _ in
             STLoadingView.show(in: loadingView)
             self?.viewModel.delete(files: files, completion: { error in
                 STLoadingView.hide(in: loadingView)
@@ -248,7 +249,7 @@ class STTrashVC: STFilesSelectCollectionViewController<STTrashVC.ViewModel> {
         let title = "empty_trash".localized
         let message = "delete_all_files_alert_message".localized
        
-        self.showOkCancelAlert(title: title, message: message, handler:  { [weak self] _ in
+        self.showOkCancelTextAlert(title: title, message: message, handler:  { [weak self] _ in
             STLoadingView.show(in: loadingView)
             self?.viewModel.deleteAll(completion: { error in
                 STLoadingView.hide(in: loadingView)

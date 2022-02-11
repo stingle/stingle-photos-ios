@@ -141,10 +141,10 @@ class STSettingsDetailVC<Section: ISettingsSection>: UIViewController, UITableVi
     
     //MARK: - STSettingsCellDelegate
     
-    func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
+    func settingsyCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
     }
     
-    func securityCel(didSlide cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, value: Float) {
+    func settingsyCel(didSlide cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, value: Float) {
     }
 
 }

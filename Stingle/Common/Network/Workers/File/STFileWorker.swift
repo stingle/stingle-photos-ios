@@ -57,7 +57,7 @@ class STFileWorker: STWorker {
         
         self.request(request: request, success: { (response: STEmptyResponse) in
             trashProvider.delete(models: files, reloadData: true)
-            STApplication.shared.utils.deleteFilesIfNeeded(files: files)
+            STApplication.shared.utils.deleteFilesIfNeeded(files: files, complition: nil)
             success?(response)
         }, failure: failure)
         

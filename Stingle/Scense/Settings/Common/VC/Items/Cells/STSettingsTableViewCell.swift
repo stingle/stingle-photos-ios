@@ -8,6 +8,13 @@
 import UIKit
 
 protocol ISettingsTableViewCellModel {
+    var isEnabled: Bool { get set }
+}
+
+extension ISettingsTableViewCellModel {
+    var isEnabled: Bool {
+        return true
+    }
 }
 
 protocol ISettingsTableViewCell: UITableViewCell {
@@ -17,8 +24,8 @@ protocol ISettingsTableViewCell: UITableViewCell {
 }
 
 protocol STSettingsTableViewCellDelegate: AnyObject {
-    func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool)
-    func securityCel(didSlide cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, value: Float)
+    func settingsyCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool)
+    func settingsyCel(didSlide cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, value: Float)
 }
 
 class STSettingsTableViewCell<Model: ISettingsTableViewCellModel>: UITableViewCell, ISettingsTableViewCell {

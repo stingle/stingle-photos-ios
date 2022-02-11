@@ -111,8 +111,7 @@ extension STCrypto {
         defer {
             metadataByteStream.close()
         }
-        metadataByteStream.write([UInt8(Constants.CurrentFileVersion)],
-                                 maxLength: Constants.CurrentAlbumMedadataVersionLen)
+        metadataByteStream.write([UInt8(Constants.CurrentFileVersion)], maxLength: Constants.CurrentAlbumMedadataVersionLen)
         let albumNameBytes = albumName.bytes
         let count4: UInt32 = UInt32(albumName.count)
         let count: Bytes = STCrypto.toBytes(value: count4)

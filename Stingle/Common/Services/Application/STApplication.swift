@@ -11,28 +11,25 @@ class STApplication {
     
     static let shared = STApplication()
     
-    private(set) lazy var dataBase: STDataBase = {
-        return STDataBase()
-    }()
+    let syncManager: STSyncManager = STSyncManager()
+    let appLockUnlocker = STAppLockUnlocker()
+    let dataBase = STDataBase()
+    let crypto = STCrypto()
     
-    private(set) lazy var crypto: STCrypto = {
-        return STCrypto()
-    }()
-        
+    private(set) var utils: Utils!
+    
     private(set) lazy var downloaderManager: STDownloaderManager = {
         return STDownloaderManager()
     }()
-    
-    private(set) lazy var syncManager: STSyncManager = {
-        return STSyncManager()
-    }()
-    
+        
     private(set) lazy var uploader: STFileUploader = {
         return STFileUploader()
     }()
     
-    private(set) var utils: Utils!
-    
+    private(set) lazy var auotImporter: STImporter.AuotImporter = {
+        return STImporter.AuotImporter()
+    }()
+        
     var fileSystem: STFileSystem {
         guard let user = self.dataBase.userProvider.user else {
             fatalError("user not found")
@@ -45,19 +42,26 @@ class STApplication {
         return result
     }
     
+    var isFileSystemAvailable: Bool {
+        return self.dataBase.userProvider.user != nil
+    }
+    
     private lazy var myFileSystem: STFileSystem? = {
         guard let user = self.dataBase.userProvider.user else {
             fatalError("user not found")
         }
         return STFileSystem(userHomeFolderPath: user.homeFolder)
     }()
-    
-    let appLocker = STAppLocker()
-    
+        
     private init() {
         self.utils = Utils { [weak self] in
             self?.myFileSystem = nil
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.syncManager.configure(dataBase: weakSelf.dataBase, appLockUnlocker: weakSelf.appLockUnlocker, utils: weakSelf.utils)
+        }
+
     }
     
 }

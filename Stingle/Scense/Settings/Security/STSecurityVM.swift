@@ -10,7 +10,7 @@ import Foundation
 class STSecurityVM {
         
     lazy var security: STAppSettings.Security = {
-        return STAppSettings.security
+        return STAppSettings.current.security
     }()
     
     lazy var biometric: STBiometricAuthServices = {
@@ -24,7 +24,7 @@ class STSecurityVM {
     func removeBiometricAuthentication() {
         self.biometric.removeBiometricAuth()
         self.security.authentication.unlock = true
-        STAppSettings.security = self.security
+        STAppSettings.current.security = self.security
     }
     
     func add(biometricAuthentication password: String, completion: @escaping (IError?) -> Void) {
@@ -34,7 +34,7 @@ class STSecurityVM {
             }
             weakSelf.biometric.onBiometricAuth(password: password) {
                 weakSelf.security.authentication.unlock = true
-                STAppSettings.security.authentication.unlock = true
+                STAppSettings.current.security.authentication.unlock = true
                 completion(nil)
             } failure: { error in
                 completion(error)
@@ -44,7 +44,7 @@ class STSecurityVM {
     
     func update(lockUpApp: STAppSettings.Security.LockUpApp) {
         self.security.lockUpApp = lockUpApp
-        STAppSettings.security = self.security
+        STAppSettings.current.security = self.security
     }
     
 }

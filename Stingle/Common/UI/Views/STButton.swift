@@ -73,6 +73,12 @@ import UIKit
         }
     }
     
+    @IBInspectable var textAlignment: Int = 1 {
+        didSet {
+            self.titleLabel?.textAlignment = (.init(rawValue: self.textAlignment) ?? .center)
+        }
+    }
+    
     @IBInspectable var numberOfLines: Int = 1 {
         didSet {
             self.titleLabel?.lineBreakMode = .byWordWrapping

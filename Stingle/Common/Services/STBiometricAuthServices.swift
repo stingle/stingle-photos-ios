@@ -148,7 +148,7 @@ extension STBiometricAuthServices {
         return biometryAvailable ? .available : .notAvailable
     }
     
-    var type: Type {
+    var type: ServicesType {
         let authContext = LAContext()
         switch authContext.biometryType {
         case .none:
@@ -213,7 +213,7 @@ extension STBiometricAuthServices {
         case notAvailable
     }
     
-    enum `Type` {
+    enum ServicesType {
         case none
         case touchID
         case faceID

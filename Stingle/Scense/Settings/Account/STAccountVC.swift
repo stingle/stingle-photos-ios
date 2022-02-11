@@ -26,8 +26,8 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
         self.reloadTableData()
     }
     
-    override func securityCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
-        super.securityCel(didSelectSwich: cell, model: model, isOn: isOn)
+    override func settingsyCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
+        super.settingsyCel(didSelectSwich: cell, model: model, isOn: isOn)
         guard let indexPath = self.tableView.indexPath(for: cell), let identifier = self.cellModel(for: indexPath)?.identifier else {
             return
         }
@@ -63,7 +63,7 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
         case .deleteAccount:
             let title = "delete_account_alert_title".localized
             let message = "delete_account_alert_message".localized
-            self.showOkCancelAlert(title: title, message: message, handler: { [weak self] _ in
+            self.showOkCancelTextAlert(title: title, message: message, handler: { [weak self] _ in
                 self?.deleteAccount()
             })
             
@@ -84,7 +84,7 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
         let title = "remove_backcup_keys_alert_title".localized
         let message = "remove_backcup_keys_alert_message".localized
         let loadingView: UIView =  self.navigationController?.view ?? self.view
-        self.showOkCancelAlert(title: title, message: message, textFieldHandler: nil) { [weak self] _ in
+        self.showOkCancelTextAlert(title: title, message: message, textFieldHandler: nil) { [weak self] _ in
             STLoadingView.show(in: loadingView)
             self?.viewModel.removeBackcupKeys(completion: { error in
                 if let error = error {
@@ -100,7 +100,7 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
     
     private func addBackcupKeys(password: String?) {
         guard let password = password, !password.isEmpty else {
-            self.showOkCancelAlert(title: "warning".localized, message: "error_password_not_valed".localized)
+            self.showOkCancelTextAlert(title: "warning".localized, message: "error_password_not_valed".localized)
             return
         }
         let loadingView: UIView =  self.navigationController?.view ?? self.view
@@ -116,7 +116,7 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
     
     private func addBackcupKeys() {
         let title = "enter_app_password".localized
-        self.showOkCancelAlert(title: title, message: nil) { textField in
+        self.showOkCancelTextAlert(title: title, message: nil) { textField in
             textField.placeholder = "password".localized
             textField.isSecureTextEntry = true
         } handler: { [weak self] text in
@@ -165,7 +165,7 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
     private func deleteAccount(password: String?) {
         
         guard let password = password, !password.isEmpty else {
-            self.showOkCancelAlert(title: "warning".localized, message: "error_password_not_valed".localized)
+            self.showOkCancelTextAlert(title: "warning".localized, message: "error_password_not_valed".localized)
             return
         }
         
@@ -175,7 +175,7 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
             } else {
                 let title = "delete_account_seccoundry_alert_title".localized
                 let message = "delete_account_seccoundry_alert_message".localized
-                self?.showOkCancelAlert(title: title, message: message, textFieldHandler: nil, handler: { _ in
+                self?.showOkCancelTextAlert(title: title, message: message, textFieldHandler: nil, handler: { _ in
                     self?.deleteAccount(password: password)
                 }, cancel: nil)
             }
@@ -184,7 +184,7 @@ class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.
     
     private func deleteAccount() {
         let title = "enter_app_password".localized
-        self.showOkCancelAlert(title: title, message: nil, textFieldHandler: { textField in
+        self.showOkCancelTextAlert(title: title, message: nil, textFieldHandler: { textField in
             textField.placeholder = "password".localized
             textField.isSecureTextEntry = true
         }, handler: { [weak self] text in

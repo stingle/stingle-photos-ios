@@ -14,9 +14,9 @@ class STMoveAlbumFilesVM {
     
     private(set) var isDeleteFilesLastValue: Bool {
         set {
-            STAppSettings.isDeleteFilesWhenMoving = newValue
+            STAppSettings.current.isDeleteFilesWhenMoving = newValue
         } get {
-            return STAppSettings.isDeleteFilesWhenMoving
+            return STAppSettings.current.isDeleteFilesWhenMoving
         }
     }
     

@@ -63,6 +63,9 @@ extension STDownloaderManager {
             self.isRequesting = false
             self.canEditResults = false
             DispatchQueue.global().async { [weak self] in
+                guard self?.isExpired == false else {
+                    return
+                }
                 self?.responseEndSucces(result: result)
             }
         }

@@ -11,7 +11,7 @@ import UIKit
 extension STCrypto {
     
     func decrypt(fromUrl: URL, toUrl: URL, header: STHeader?, validateHeader: Bool = true) throws {
-        guard let output = OutputStream(url: toUrl, append: true), let input = InputStream(url: fromUrl)  else {
+        guard let output = OutputStream(url: toUrl, append: false), let input = InputStream(url: fromUrl)  else {
             throw CryptoError.General.creationFailure
         }
         defer {
@@ -46,49 +46,48 @@ extension STCrypto {
         return resultData
     }
     
-    func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, publicKey: Bytes? = nil) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
+    func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
                 
         let fileName = try self.createEncFileName()
         let fileId = try self.createNewFileId()
-        let inputThumb = InputStream(data: thumbImage)
-        inputThumb.open()
+        
         let thumbUrl = toThumbUrl.appendingPathComponent(fileName)
-        guard let outputThumb = OutputStream(toFileAtPath: thumbUrl.path, append: true) else {
-            inputThumb.close()
-            throw CryptoError.General.creationFailure
-        }
-        outputThumb.open()
-        
-        guard let inputOrigin = InputStream(fileAtPath: oreginalUrl.path) else {
-            inputThumb.close()
-            outputThumb.close()
-            throw CryptoError.General.creationFailure
-        }
-        inputOrigin.open()
-        
-        let originalUrl = toUrl.appendingPathComponent(fileName)
-        guard let outputOrigin = OutputStream(toFileAtPath: originalUrl.path, append: false) else {
-            throw CryptoError.General.creationFailure
-        }
-        outputOrigin.open()
-        defer {
-            inputThumb.close()
-            outputThumb.close()
-            inputOrigin.close()
-            outputOrigin.close()
-        }
-        
         let orgFileName = oreginalUrl.lastPathComponent
+        let duration = UInt32(duration)
         
-        let thumbHeader = try self.encryptFile(input: inputThumb, output: outputThumb, filename: orgFileName, fileType: fileType.rawValue, dataLength: UInt(thumbImage.count), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey)
+        let totalProgress = STMutableProgress()
+        let thumbProgress = Progress()
+        let originProgress = Progress()
         
-        let originHeader = try self.encryptFile(input: inputOrigin, output: outputOrigin, filename: orgFileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey)
+        totalProgress.addChild(thumbProgress)
+        totalProgress.addChild(originProgress)
                 
-        guard let base64Original = self.bytesToBase64Url(data: originHeader.encriptedHeader), let base64Thumb = self.bytesToBase64Url(data: thumbHeader.encriptedHeader) else {
-            throw CryptoError.Header.incorrectHeader
+        let thumbHeader = try self.encryptFile(inputData: thumbImage, outputUrl: toThumbUrl, fileName: fileName, originalFileName: orgFileName, fileType: fileType.rawValue, fileId: fileId, videoDuration: duration, publicKey: publicKey, progressHandler: { progress, stop in
+            thumbProgress.totalUnitCount = progress.totalUnitCount
+            thumbProgress.completedUnitCount = progress.completedUnitCount
+            progressHandler?(totalProgress, &stop)
+        })
+        
+        let outputURL = toUrl.appendingPathComponent(fileName)
+        
+        do {
+            let originHeader = try self.encryptFile(inputUrl: oreginalUrl, outputUrl: toUrl, fileName: fileName, originalFileName: orgFileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey, progressHandler: { progress, stop in
+                originProgress.totalUnitCount = progress.totalUnitCount
+                originProgress.completedUnitCount = progress.completedUnitCount
+                progressHandler?(totalProgress, &stop)
+            })
+            
+            guard let base64Original = self.bytesToBase64Url(data: originHeader.encriptedHeader), let base64Thumb = self.bytesToBase64Url(data: thumbHeader.encriptedHeader) else {
+                try? FileManager.default.removeItem(at: thumbUrl)
+                try? FileManager.default.removeItem(at: outputURL)
+                throw CryptoError.Header.incorrectHeader
+            }
+            let headers = base64Original + "*" + base64Thumb
+            return (fileName, thumbUrl, outputURL, headers)
+        } catch {
+            try? FileManager.default.removeItem(at: thumbUrl)
+            throw error
         }
-        let headers = base64Original + "*" + base64Thumb
-        return (fileName, thumbUrl, originalUrl, headers)
     }
     
     func createEncFileName() throws -> String {
@@ -96,7 +95,6 @@ extension STCrypto {
         guard let randData = crypto.getRandomBytes(lenght: STCrypto.Constants.FileNameLen), let base64Str = crypto.bytesToBase64Url(data: randData) else {
             throw CryptoError.General.creationFailure
         }
-        
         return base64Str.appending(STCrypto.Constants.FileExtension)
     }
     

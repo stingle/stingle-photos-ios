@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -32,7 +32,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P5Z-3z-jmF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1130" y="86"/>
+            <point key="canvasLocation" x="-325" y="100"/>
         </scene>
         <!--Settings-->
         <scene sceneID="67b-OR-HHF">
@@ -123,7 +123,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uQP-3T-DEM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-339.13043478260875" y="85.714285714285708"/>
+            <point key="canvasLocation" x="504" y="100"/>
         </scene>
         <!--Advanced-->
         <scene sceneID="yBt-tC-wHt">
@@ -307,10 +307,29 @@
                     <view key="view" contentMode="scaleToFill" id="y3O-mA-zO6">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Zqp-s1-o8m">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" name="STBackground"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="iJr-aw-wlH" id="3iu-gj-hcy"/>
+                                    <outlet property="delegate" destination="iJr-aw-wlH" id="JDM-jl-Ckw"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Sd8-zv-NCX"/>
                         <color key="backgroundColor" name="STBackground"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Zqp-s1-o8m" secondAttribute="bottom" id="2qs-Us-NYa"/>
+                            <constraint firstAttribute="trailing" secondItem="Zqp-s1-o8m" secondAttribute="trailing" id="Zo6-EG-k52"/>
+                            <constraint firstItem="Zqp-s1-o8m" firstAttribute="leading" secondItem="y3O-mA-zO6" secondAttribute="leading" id="cYl-tj-mdb"/>
+                            <constraint firstItem="Zqp-s1-o8m" firstAttribute="top" secondItem="y3O-mA-zO6" secondAttribute="top" id="nGp-2e-BRT"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="EV9-M4-Lrc"/>
+                    <connections>
+                        <outlet property="tableView" destination="Zqp-s1-o8m" id="jIu-sF-x05"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gBN-Uc-xmB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

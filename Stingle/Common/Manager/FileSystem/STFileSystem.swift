@@ -24,6 +24,9 @@ class STFileSystem {
     init(userHomeFolderPath: String) {
         self.userHomeFolderPath = userHomeFolderPath
         self.creatAllPath()
+        #if DEBUG
+        print("user folder", self.appUrl?.path ?? "")
+        #endif
     }
     
     func logOut() {
@@ -92,6 +95,36 @@ extension STFileSystem {
         self.remove(file: url)
     }
     
+    class func url(for type: FolderType, userHomeFolderPath: String) -> URL? {
+        
+        let fileManager = FileManager.default
+        
+        guard let cachesDirectory = fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+            return nil
+        }
+        
+        let url = cachesDirectory.appendingPathComponent(userHomeFolderPath).appendingPathComponent(type.stringValue)
+        
+        return url
+    }
+    
+    class func remove(userHomeFolderPath: String) {
+        guard let cacheUrl = self.url(for: .storage(type: .server(type: nil)), userHomeFolderPath: userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
+            return
+        }
+        
+        let fileManager = FileManager.default
+        
+        if fileManager.fileExists(atPath: cacheUrl.path) {
+            try? fileManager.removeItem(at: cacheUrl)
+        }
+        
+        if fileManager.fileExists(atPath: privateKeyUrl.path) {
+            try? fileManager.removeItem(at: privateKeyUrl)
+        }
+
+    }
+        
 }
 
 extension STFileSystem {
@@ -223,7 +256,7 @@ extension STFileSystem {
     
     func updateUrlDataSize(url: URL) {
         
-        let megabytes: Double = STAppSettings.advanced.cacheSize.bytesUnits.megabytes
+        let megabytes: Double = STAppSettings.current.advanced.cacheSize.bytesUnits.megabytes
         guard let cacheURL = self.url(for: .storage(type: .server(type: nil))),  url.path.contains(cacheURL.path) else {
             return
         }
@@ -281,6 +314,86 @@ extension STFileSystem {
         }
         
         return result
+    }
+    
+}
+
+extension STFileSystem {
+    
+    class DiskStatus {
+
+        //MARK: Formatter MB only
+        class func MBFormatter(_ bytes: Int64) -> String {
+            let formatter = ByteCountFormatter()
+            formatter.allowedUnits = ByteCountFormatter.Units.useMB
+            formatter.countStyle = ByteCountFormatter.CountStyle.decimal
+            formatter.includesUnit = false
+            return formatter.string(fromByteCount: bytes) as String
+        }
+
+
+        //MARK: Get String Value
+        class var totalDiskSpaceStr: String {
+            get {
+                return ByteCountFormatter.string(fromByteCount: totalDiskSpaceInBytes, countStyle: ByteCountFormatter.CountStyle.binary)
+            }
+        }
+
+        class var freeDiskSpaceStr: String {
+            get {
+                return ByteCountFormatter.string(fromByteCount: freeDiskSpaceInBytes, countStyle: ByteCountFormatter.CountStyle.binary)
+            }
+        }
+
+        class var usedDiskSpaceStr: String {
+            get {
+                return ByteCountFormatter.string(fromByteCount: usedDiskSpaceInBytes, countStyle: ByteCountFormatter.CountStyle.binary)
+            }
+        }
+
+
+        //MARK: Get raw value
+        class var totalDiskSpaceInBytes: Int64 {
+            get {
+                do {
+                    let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
+                    let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.int64Value
+                    return space!
+                } catch {
+                    return 0
+                }
+            }
+        }
+
+        class var freeDiskSpaceInBytes: Int64 {
+            get {
+                do {
+                    let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
+                    let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.int64Value
+                    return freeSpace!
+                } catch {
+                    return 0
+                }
+            }
+        }
+
+        class var usedDiskSpaceInBytes: Int64 {
+            get {
+                let usedSpace = totalDiskSpaceInBytes - freeDiskSpaceInBytes
+                return usedSpace
+            }
+        }
+        
+        class var freeDiskSpaceUnits: STBytesUnits {
+            let freeDiskSpace = self.freeDiskSpaceInBytes
+            return STBytesUnits(bytes: freeDiskSpace)
+        }
+
+        class var usedDiskSpaceUnits: STBytesUnits {
+            let usedDiskSpaceInBytes = self.usedDiskSpaceInBytes
+            return STBytesUnits(bytes: usedDiskSpaceInBytes)
+        }
+
     }
     
 }

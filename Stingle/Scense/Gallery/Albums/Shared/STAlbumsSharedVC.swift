@@ -49,12 +49,12 @@ extension STAlbumsSharedVC {
             let iconIsOwner: UIImage?
         }
                 
-        func cellModel(for indexPath: IndexPath, data: STLibrary.Album) -> CellModel {
+        func cellModel(for indexPath: IndexPath, data: STLibrary.Album?) -> CellModel {
             let metadata = self.delegate?.viewModel(albumMedadataFor: data)
             let placeholder = UIImage(named: "ic_album")
             var image: STImageView.Image?
             
-            switch data.cover {
+            switch data?.cover {
             case ViewModel.imageBlankImageName:
                 break
             default:
@@ -62,7 +62,7 @@ extension STAlbumsSharedVC {
                     image = STImageView.Image(album: data, albumFile: file, isThumb: true)
                 }
             }
-            let title = data.albumMetadata?.name
+            let title = data?.albumMetadata?.name
             let contacts = metadata?.members ?? []
             let maxShowedMembersCount = min(3, contacts.count)
             var members = [String]()
@@ -76,7 +76,9 @@ extension STAlbumsSharedVC {
             let membersStr = members.joined(separator: ",")
             let moreMembersCount = contacts.count - maxShowedMembersCount
             let moreMembers: String? = moreMembersCount == 0 ? nil : String(format: "album_more_members".localized, "\(moreMembersCount)")
-            let iconIsOwner = data.isOwner ? UIImage(named: "ic_alnum_shared_owner") : UIImage(named: "ic_alnum_shared_no_owner")
+            
+            let iconIsOwner = (data?.isOwner ?? true) ? UIImage(named: "ic_alnum_shared_owner") : UIImage(named: "ic_alnum_shared_no_owner")
+            
             return CellModel(image: image, placeholder: placeholder, title: title, members: membersStr, moreMembers: moreMembers, iconIsOwner: iconIsOwner)
         }
     }

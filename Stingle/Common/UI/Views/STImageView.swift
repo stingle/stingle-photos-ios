@@ -41,8 +41,8 @@ extension STImageView {
         private(set) var imageParameters: [String : Any]?
         let header: STHeader
         
-        init?(file: STLibrary.File, isThumb: Bool) {
-            guard let header = isThumb ? file.decryptsHeaders.thumb : file.decryptsHeaders.file, let imageType = ImageType(rawValue: file.dbSet.rawValue) else {
+        init?(file: STLibrary.File?, isThumb: Bool) {
+            guard let file = file, let header = isThumb ? file.decryptsHeaders.thumb : file.decryptsHeaders.file, let imageType = ImageType(rawValue: file.dbSet.rawValue) else {
                 return nil
             }
             self.fileName = file.file
@@ -54,8 +54,8 @@ extension STImageView {
             self.isRemote = file.isRemote           
         }
         
-        init?(album: STLibrary.Album, albumFile: STLibrary.AlbumFile, isThumb: Bool) {
-            guard album.albumId == albumFile.albumId else {
+        init?(album: STLibrary.Album?, albumFile: STLibrary.AlbumFile?, isThumb: Bool) {
+            guard let album = album, let albumFile = albumFile, album.albumId == albumFile.albumId else {
                 return nil
             }
             albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)

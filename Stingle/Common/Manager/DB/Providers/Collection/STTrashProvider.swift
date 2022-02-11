@@ -54,7 +54,7 @@ extension STDataBase {
                 throw STDataBase.DataBaseError.dateNotFound
             }
             
-            let context = self.container.newBackgroundContext()
+            let context = self.container.backgroundContext
             let fileNames = deleteFiles.compactMap { (deleteFile) -> String in
                 return deleteFile.fileName
             }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,23 +23,13 @@
                             <color key="textColor" name="STPrimary"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o0c-Sr-6wG">
-                            <rect key="frame" x="0.0" y="0.0" width="453" height="1"/>
-                            <color key="backgroundColor" name="STSecondaryText"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="gGl-Qo-ZxE"/>
-                            </constraints>
-                        </view>
                     </subviews>
                     <color key="backgroundColor" name="STBackground"/>
                     <constraints>
                         <constraint firstItem="zEm-9H-lhk" firstAttribute="top" secondItem="6KM-fI-p65" secondAttribute="top" priority="250" constant="10" id="4AD-bc-ZsR"/>
-                        <constraint firstItem="o0c-Sr-6wG" firstAttribute="top" secondItem="6KM-fI-p65" secondAttribute="top" id="4U7-il-ubm"/>
                         <constraint firstItem="zEm-9H-lhk" firstAttribute="leading" secondItem="6KM-fI-p65" secondAttribute="leading" constant="30" id="4fY-yP-Lfg"/>
                         <constraint firstItem="zEm-9H-lhk" firstAttribute="centerY" secondItem="6KM-fI-p65" secondAttribute="centerY" id="Don-Ef-zcY"/>
-                        <constraint firstItem="o0c-Sr-6wG" firstAttribute="leading" secondItem="6KM-fI-p65" secondAttribute="leading" id="Sc3-4p-GDl"/>
                         <constraint firstAttribute="bottom" secondItem="zEm-9H-lhk" secondAttribute="bottom" priority="250" constant="10" id="jfo-aS-o2o"/>
-                        <constraint firstAttribute="trailing" secondItem="o0c-Sr-6wG" secondAttribute="trailing" id="vzs-Ee-cGw"/>
                     </constraints>
                 </view>
             </subviews>
@@ -62,9 +52,6 @@
         </namedColor>
         <namedColor name="STPrimary">
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="STSecondaryText">
-            <color red="0.0" green="0.0" blue="0.0" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
