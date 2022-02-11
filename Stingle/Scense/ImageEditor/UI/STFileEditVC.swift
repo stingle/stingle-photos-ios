@@ -29,7 +29,7 @@ class STFileEditVC: UIViewController {
     // TODO: Shahen
 
     @IBAction func cancelButtonAction(_ sender: Any) {
-        self.delegate?.fileEdit(didSelectCancel: self)
+        self.dismiss()
     }
 
     // MARK: - Private methods
@@ -60,7 +60,13 @@ class STFileEditVC: UIViewController {
             self.delegate?.fileEdit(didSelectCancel: self)
             return
         }
+        vc.delegate = self
         self.present(vc, animated: false)
+    }
+
+    private func dismiss() {
+        self.dismiss(animated: false)
+        self.delegate?.fileEdit(didSelectCancel: self)
     }
 
 }
@@ -68,7 +74,7 @@ class STFileEditVC: UIViewController {
 extension STFileEditVC: STImageEditorVCDelegate {
 
     func imageEditor(didSelectCancel vc: STImageEditorVC) {
-        self.delegate?.fileEdit(didSelectCancel: self)
+        self.dismiss()
     }
 
     func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage) {
