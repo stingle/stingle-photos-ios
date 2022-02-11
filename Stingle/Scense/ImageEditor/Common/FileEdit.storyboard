@@ -851,7 +851,9 @@
                     <navigationItem key="navigationItem" id="HYP-dm-Cbm"/>
                     <connections>
                         <outlet property="bottomToolBar" destination="ehE-M1-joc" id="in5-dM-mVF"/>
+                        <outlet property="cancelButton" destination="abG-tb-oJn" id="fGk-oP-dZb"/>
                         <outlet property="cropButton" destination="n0g-jX-seJ" id="qK4-aB-6Cx"/>
+                        <outlet property="doneButton" destination="wbQ-73-fCo" id="TUU-ls-QXz"/>
                         <outlet property="filtersButton" destination="HFU-Eo-BAv" id="qYh-AT-dUV"/>
                         <outlet property="imageCropRotateContentView" destination="CyB-iA-DfP" id="Ru7-ed-VBo"/>
                         <outlet property="imageFiltersContentView" destination="yET-Q0-3jD" id="CFC-mn-Gm4"/>

@@ -41,7 +41,7 @@ class STImageFilterVC: UIViewController {
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 14.0)
-        label.text = "ADJUST"
+        label.text = "editor_adjust".localized.uppercased()
         return label
     }()
 

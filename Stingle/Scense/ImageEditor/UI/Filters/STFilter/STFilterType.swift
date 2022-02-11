@@ -26,31 +26,31 @@ enum STFilterType: Int, CaseIterable {
     var title: String {
         switch self {
         case .brightness:
-            return "BRIGHTNESS"
+            return "editor_brightness".localized.uppercased()
         case .contrast:
-            return "CONTRAST"
+            return "editor_contrast".localized.uppercased()
         case .saturation:
-            return "SATURATION"
+            return "editor_saturation".localized.uppercased()
         case .vibrance:
-            return "VIBRANCE"
+            return "editor_vibrance".localized.uppercased()
         case .exposure:
-            return "EXPOSURE"
+            return "editor_exposuer".localized.uppercased()
         case .highlights:
-            return "HIGHLIGHTS"
+            return "editor_highlights".localized.uppercased()
         case .shadows:
-            return "SHADOWS"
+            return "editor_shadows".localized.uppercased()
         case .whitePoint:
-            return "WHITE POINT"
+            return "editor_white_point".localized.uppercased()
         case .temperature:
-            return "TEMPERATURE"
+            return "editor_remperature".localized.uppercased()
         case .tint:
-            return "TINT"
+            return "editor_tint".localized.uppercased()
         case .sharpness:
-            return "Sharpness"
+            return "editor_sharpness".localized.uppercased()
         case .noiseReduction:
-            return "Noise Reduction"
+            return "editor_noise_reduction".localized.uppercased()
         case .vignette:
-            return "Vignette"
+            return "editor_vignette".localized.uppercased()
         }
     }
 

@@ -402,3 +402,23 @@
 "nework_error_bad_request" = "Bad request to server";
 "nework_error_data_not_found" = "Data not found";
 "nework_error_request_cancelled" = "Request Cancelled";
+
+//MARK: - Editor
+
+"editor_brightness" = "Brightness";
+"editor_contrast" = "Contrast";
+"editor_saturation" = "Saturation";
+"editor_vibrance" = "Vibrance";
+"editor_exposuer" = "Exposuer";
+"editor_highlights" = "Highlights";
+"editor_shadows" = "Shadows";
+"editor_white_point" = "White Point";
+"editor_remperature" = "Temperature";
+"editor_tint" = "Tint";
+"editor_sharpness" = "Sharpness";
+"editor_noise_reduction" = "Noise Reduction";
+"editor_vignette" = "Vignette";
+"editor_adjust" = "Adjust";
+"editor_original" = "Original";
+"editor_freeform" = "Freeform";
+"editor_square" = "Square";

@@ -25,11 +25,11 @@ enum STAspectRatio {
     var description: String {
         switch self {
         case .original:
-            return "ORIGINAL"
+            return "editor_original".localized.uppercased()
         case .freeForm:
-            return "FREEFORM"
+            return "editor_freeform".localized.uppercased()
         case .square:
-            return "SQUARE"
+            return "editor_square".localized.uppercased()
         case let .ratio(width, height):
             return "\(width):\(height)"
         }
@@ -50,11 +50,11 @@ extension STAspectRatio: Codable {
             return
         }
         switch desc {
-        case "ORIGINAL":
+        case "editor_original".localized.uppercased():
             self = .original
-        case "FREEFORM":
+        case "editor_freeform".localized.uppercased():
             self = .freeForm
-        case "SQUARE":
+        case "editor_square".localized.uppercased():
             self = .square
         default:
             let numberStrings = desc.split(separator: ":")

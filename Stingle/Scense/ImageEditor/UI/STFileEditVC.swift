@@ -23,6 +23,7 @@ class STFileEditVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.cancelButton.setTitle("cancel".localized, for: .normal)
         self.loadFile()
     }
 

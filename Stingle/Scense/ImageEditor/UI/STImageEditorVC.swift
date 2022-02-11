@@ -34,7 +34,9 @@ class STImageEditorVC: UIViewController {
     @IBOutlet weak var filtersButton: UIButton!
     @IBOutlet weak var cropButton: UIButton!
     @IBOutlet weak var optionsView: UIStackView!
-    
+    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var doneButton: UIButton!
+
     private var image: UIImage!
 
     private var newCollection: UITraitCollection?
@@ -45,6 +47,8 @@ class STImageEditorVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.cancelButton.setTitle("cancel".localized, for: .normal)
+        self.doneButton.setTitle("done".localized, for: .normal)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 

@@ -26,7 +26,7 @@ protocol IFilter {
 }
 
 class STColorControlsFilter: IFilter {
-    static let brightnessRange = STFilterRange<CGFloat>(min: -0.5, max: 0.5, defaultValue: 0.0)
+    static let brightnessRange = STFilterRange<CGFloat>(min: -0.2, max: 0.2, defaultValue: 0.0)
     static let contrastRange = STFilterRange<CGFloat>(min: 0.0, max: 2.0, defaultValue: 1.0)
     static let saturationRange = STFilterRange<CGFloat>(min: 0.0, max: 2.0, defaultValue: 1.0)
 
