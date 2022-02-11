@@ -443,15 +443,16 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
                     self?.didSelectTrash(sendner: buttonItem)
                 }
                 result.append(trash)
+            case .edit:
+                let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
+                    guard let vc = STImageEditorVC.create(image: UIImage()) else {
+                        return
+                    }
+                    self?.present(vc, animated: true)
+                }
+                result.append(edit)
             }
         }
-
-        let edit = STFilesActionTabBarAccessoryView.ActionItem(title: "edit", image: nil, tintColor: .blue, handler: { _, _ in
-            let vc = STImageFilterVC.create(photoFile: self.initialFile)
-            self.show(vc, sender: nil)
-        }, identifier: nil)
-
-        result.append(edit)
 
         return result
         
@@ -590,6 +591,7 @@ extension STFileViewerVC {
         case move
         case saveToDevice
         case trash
+        case edit
         
         var stringValue: String {
             switch self {
@@ -601,6 +603,8 @@ extension STFileViewerVC {
                 return "saveToDevice"
             case .trash:
                 return "trash"
+            case .edit:
+                return "edit"
             }
         }
         

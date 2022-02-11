@@ -60,6 +60,12 @@ extension STFilesActionTabBarAccessoryView {
             let result = ActionItem(title: "recover_all".localized, image: nil, tintColor: tintColor, handler: handler, identifier: identifier)
             return result
         }
+
+        static func edit(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
+            let image = UIImage(named: "ic_edit")
+            let result = ActionItem(title: nil, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
+            return result
+        }
         
     }
     

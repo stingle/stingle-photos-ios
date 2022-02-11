@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="STCropRotateToolBar" customModule="ImageEditor" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="554" height="44"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e0K-ML-mCS">
+                    <rect key="frame" x="10" y="0.0" width="40" height="44"/>
+                    <color key="tintColor" white="0.71999999999999997" alpha="1" colorSpace="calibratedWhite"/>
+                    <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" image="horizontalFlip"/>
+                    <connections>
+                        <action selector="flipButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="HcP-bF-LZw"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hb5-IE-7Hx">
+                    <rect key="frame" x="60" y="0.0" width="21" height="44"/>
+                    <color key="tintColor" white="0.71999999999999997" alpha="1" colorSpace="calibratedWhite"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" image="rotateRight"/>
+                    <connections>
+                        <action selector="rotateButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="tly-ja-YSl"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="15z-EK-FnQ" customClass="STSelectableButton" customModule="ImageEditor" customModuleProvider="target">
+                    <rect key="frame" x="507" y="0.0" width="37" height="44"/>
+                    <color key="tintColor" white="0.71999999999999997" alpha="1" colorSpace="calibratedWhite"/>
+                    <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" image="aspectratioFill"/>
+                    <connections>
+                        <action selector="aspectRatioButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="GAb-iK-ep1"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="e0K-ML-mCS" secondAttribute="bottom" id="UdB-ap-2Sh"/>
+                <constraint firstAttribute="bottom" secondItem="hb5-IE-7Hx" secondAttribute="bottom" id="YTY-4R-PMw"/>
+                <constraint firstItem="hb5-IE-7Hx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="cno-yy-fV0"/>
+                <constraint firstItem="hb5-IE-7Hx" firstAttribute="leading" secondItem="e0K-ML-mCS" secondAttribute="trailing" constant="10" id="i41-25-ebJ"/>
+                <constraint firstItem="15z-EK-FnQ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="kl7-lJ-wmH"/>
+                <constraint firstItem="e0K-ML-mCS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="qKM-yI-f85"/>
+                <constraint firstAttribute="bottom" secondItem="15z-EK-FnQ" secondAttribute="bottom" id="u3t-ut-tjE"/>
+                <constraint firstAttribute="trailing" secondItem="15z-EK-FnQ" secondAttribute="trailing" constant="10" id="zB6-lp-Ft0"/>
+                <constraint firstItem="e0K-ML-mCS" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="zr7-SD-TrQ"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-82.608695652173921" y="-91.071428571428569"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="aspectratioFill" width="21" height="16.5"/>
+        <image name="horizontalFlip" width="24" height="22"/>
+        <image name="rotateRight" width="21" height="22"/>
+    </resources>
+</document>
