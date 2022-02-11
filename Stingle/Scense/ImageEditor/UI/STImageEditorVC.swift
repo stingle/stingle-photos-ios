@@ -8,8 +8,8 @@
 import UIKit
 
 protocol STImageEditorVCDelegate: AnyObject {
-    func cropperViewDidPressCancel()
-    func cropperViewDidPressDone(image: UIImage)
+    func imageEditor(didSelectCancel vc: STImageEditorVC)
+    func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage)
 }
 
 class STImageEditorVC: UIViewController {
@@ -79,13 +79,13 @@ class STImageEditorVC: UIViewController {
     // MARK: - Actions
 
     @IBAction func cancelButtonAction(_ sender: Any) {
-        self.delegate?.cropperViewDidPressCancel()
+        self.delegate?.imageEditor(didSelectCancel: self)
     }
 
     @IBAction func doneButtonAction(_ sender: Any) {
         let croppedImage = self.croppedImage(image: self.image)
         let image = self.filteredImage(image: croppedImage)
-        self.delegate?.cropperViewDidPressDone(image: image)
+        self.delegate?.imageEditor(didEditImage: self, image: image)
     }
 
     @IBAction func optionButtonAction(_ sender: Any) {
@@ -195,7 +195,7 @@ extension STImageEditorVC {
         if image.size.width < 1 || image.size.height < 1 {
             return nil
         }
-        let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
+        let storyboard = UIStoryboard(name: "FileEdit", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STImageEditorVC")
         vc.modalPresentationStyle = .fullScreen
         vc.image = image

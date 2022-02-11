@@ -380,6 +380,8 @@
 		B31D623627B64B4E00CBEA19 /* STGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621127B64B4E00CBEA19 /* STGrid.swift */; };
 		B31D623727B64B4E00CBEA19 /* STCropBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621227B64B4E00CBEA19 /* STCropBox.swift */; };
 		B31D623927B64B4E00CBEA19 /* STAngleRuler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621627B64B4E00CBEA19 /* STAngleRuler.swift */; };
+		B31D623B27B65D7900CBEA19 /* STFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */; };
+		B31D623E27B65F0500CBEA19 /* FileEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */; };
 		E6A4D89B896332CB7C65B74E /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D06FF69A05EB1AEC50C12C /* Pods_Stingle.framework */; };
 /* End PBXBuildFile section */
 
@@ -767,6 +769,8 @@
 		B31D621127B64B4E00CBEA19 /* STGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STGrid.swift; sourceTree = "<group>"; };
 		B31D621227B64B4E00CBEA19 /* STCropBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropBox.swift; sourceTree = "<group>"; };
 		B31D621627B64B4E00CBEA19 /* STAngleRuler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STAngleRuler.swift; sourceTree = "<group>"; };
+		B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileEditVC.swift; sourceTree = "<group>"; };
+		B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FileEdit.storyboard; sourceTree = "<group>"; };
 		C59B20CC9ED4970F5FE2DBE3 /* Pods-Stingle.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1302,6 +1306,7 @@
 			isa = PBXGroup;
 			children = (
 				A033D6E2260146D000E6AA83 /* Home */,
+				B31D61E527B649D400CBEA19 /* ImageEditor */,
 				A0A9F338261C7678000252F2 /* Gallery */,
 				A0AAA934261C7BFF009E9F51 /* Settings */,
 				A00B4C21263D75090085C55E /* Shear */,
@@ -2066,7 +2071,6 @@
 				A0A9F347261C7992000252F2 /* Trash */,
 				A0B267762624DF3A0090E4ED /* Albums */,
 				A032096426545B1B000C420B /* FileViewer */,
-				B31D61E527B649D400CBEA19 /* ImageEditor */,
 				A04BCFFF2634791C00C5F29F /* Uploads */,
 				A0A9F339261C76B0000252F2 /* Common */,
 			);
@@ -2457,6 +2461,7 @@
 				B31D61E627B64B4E00CBEA19 /* Extensions */,
 				B31D61ED27B64B4E00CBEA19 /* UI */,
 				B31D61EB27B64B4E00CBEA19 /* Utils */,
+				B31D623C27B65ED700CBEA19 /* Common */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
@@ -2487,6 +2492,7 @@
 				B31D61FA27B64B4E00CBEA19 /* Cropper */,
 				B31D621527B64B4E00CBEA19 /* Ruler */,
 				B31D61F927B64B4E00CBEA19 /* STImageEditorVC.swift */,
+				B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -2596,6 +2602,14 @@
 			path = Ruler;
 			sourceTree = "<group>";
 		};
+		B31D623C27B65ED700CBEA19 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2679,6 +2693,7 @@
 				A0794B97269E3EF500B40FE9 /* STSettingsDetailTableViewCell.xib in Resources */,
 				A05D2691261B48A6008E9CF8 /* STMenuMasterHeaderView.xib in Resources */,
 				A075B73B2652A79900B4E2DF /* STAlbumSettingsMemberCell.xib in Resources */,
+				B31D623E27B65F0500CBEA19 /* FileEdit.storyboard in Resources */,
 				A0E9999C263F2CC1002FDCC9 /* STTokenView.xib in Resources */,
 				A022046F25EEDC0400D07C98 /* STLoadingView.xib in Resources */,
 				A0AAA938261C7C1B009E9F51 /* Settings.storyboard in Resources */,
@@ -2828,6 +2843,7 @@
 				A060011027050BAC0071812C /* STConstants.swift in Sources */,
 				A0E999A0263F2E46002FDCC9 /* STTokenCell.swift in Sources */,
 				A0735833268CBF9900F82016 /* STSlider.swift in Sources */,
+				B31D623B27B65D7900CBEA19 /* STFileEditVC.swift in Sources */,
 				A05D2697261B5751008E9CF8 /* STMenuMasterTableViewCell.swift in Sources */,
 				A01EC21C26B9F146000FF4AC /* STAppSettings+Appearance.swift in Sources */,
 				A06942D1260CDE3E009CFD3A /* UIColor+Operation.swift in Sources */,
