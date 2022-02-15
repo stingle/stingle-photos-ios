@@ -422,3 +422,6 @@
 "editor_original" = "Original";
 "editor_freeform" = "Freeform";
 "editor_square" = "Square";
+"editor_resize" = "Resize";
+"editor_width" = "Width";
+"editor_height" = "Height";

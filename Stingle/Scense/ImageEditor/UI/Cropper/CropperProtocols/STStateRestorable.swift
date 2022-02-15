@@ -13,7 +13,7 @@ protocol STStateRestorable {
     func restoreState(_ state: STCropperState, animated: Bool)
 }
 
-extension STStateRestorable where Self: STCropperViewController {
+extension STStateRestorable where Self: STCropperVC {
     func isCurrentlyInState(_ state: STCropperState?) -> Bool {
         guard let state = state else { return false }
         let epsilon: CGFloat = 0.0001

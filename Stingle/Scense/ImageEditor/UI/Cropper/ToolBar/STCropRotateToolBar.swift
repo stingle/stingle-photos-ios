@@ -10,6 +10,7 @@ import UIKit
 protocol STCropRotateToolBarDelegate: AnyObject {
     func flipButtonDidPress()
     func rotateButtonDidPress()
+    func resizeButtonDidPress()
     func aspectRatioButtonDidPress(isSelected: Bool)
 }
 
@@ -28,6 +29,10 @@ class STCropRotateToolBar: UIView {
     @IBAction func aspectRatioButtonAction(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         self.delegate?.aspectRatioButtonDidPress(isSelected: sender.isSelected)
+    }
+
+    @IBAction func resizerButtonAction(_ sender: UIButton) {
+        self.delegate?.resizeButtonDidPress()
     }
     
 }

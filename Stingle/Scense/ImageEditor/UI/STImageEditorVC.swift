@@ -24,7 +24,7 @@ class STImageEditorVC: UIViewController {
     private var selectedOption: Options = .filter
 
     private var imageFilterVC: STImageFilterVC!
-    private var imageCropRotateVC: STCropperViewController!
+    private var imageCropRotateVC: STCropperVC!
 
     @IBOutlet weak var topToolBar: UIView!
     @IBOutlet weak var bottomToolBar: UIView!
@@ -36,6 +36,7 @@ class STImageEditorVC: UIViewController {
     @IBOutlet weak var optionsView: UIStackView!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var resizeView: STResizeView!
 
     private var image: UIImage!
 
@@ -47,8 +48,7 @@ class STImageEditorVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.cancelButton.setTitle("cancel".localized, for: .normal)
-        self.doneButton.setTitle("done".localized, for: .normal)
+        self.configureScreen()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
@@ -74,11 +74,13 @@ class STImageEditorVC: UIViewController {
         if let vc = segue.destination as? STImageFilterVC, segue.identifier == "ImageFilterSegue" {
             self.imageFilterVC = vc
             self.imageFilterVC.setImage(image: self.image)
+            self.imageFilterVC.delegate = self
             self.imageFilterVC.additionalSafeAreaInsets = additionalSafeAreaInsets
         }
-        if let vc = segue.destination as? STCropperViewController, segue.identifier == "ImageCropRotateSegue" {
+        if let vc = segue.destination as? STCropperVC, segue.identifier == "ImageCropRotateSegue" {
             self.imageCropRotateVC = vc
             self.imageCropRotateVC.originalImage = self.image
+            self.imageCropRotateVC.delegate = self
             self.imageCropRotateVC.additionalSafeAreaInsets = additionalSafeAreaInsets
         }
     }
@@ -92,6 +94,7 @@ class STImageEditorVC: UIViewController {
     @IBAction func doneButtonAction(_ sender: Any) {
         let croppedImage = self.croppedImage(image: self.image)
         let image = self.filteredImage(image: croppedImage)
+        self.imageCropRotateVC.originalImage = image
         self.delegate?.imageEditor(didEditImage: self, image: image)
     }
 
@@ -194,6 +197,35 @@ class STImageEditorVC: UIViewController {
         return additionalSafeAreaInsets
     }
 
+    private func configureScreen() {
+        self.cancelButton.setTitle("cancel".localized, for: .normal)
+        self.doneButton.setTitle("done".localized, for: .normal)
+        self.resizeView.imageSize = self.image.size
+        self.resizeView.delegate = self
+    }
+
+}
+
+extension STImageEditorVC: STResizeViewDelegate {
+
+    func resizeView(view: STResizeView, didSelectSize size: CGSize) {
+        view.isHidden = true
+        guard let image = self.image.resize(size: size) else {
+            return
+        }
+        self.image = image
+
+        let croppedImage = self.croppedImage(image: self.image)
+        self.imageFilterVC.setImage(image: croppedImage, applyFilters: true)
+
+        let filteredImage = self.filteredImage(image: self.image)
+        self.imageCropRotateVC.originalImage = filteredImage
+    }
+
+    func resizeView(didSelectCancel view: STResizeView) {
+        view.isHidden = true
+    }
+
 }
 
 extension STImageEditorVC {
@@ -207,6 +239,22 @@ extension STImageEditorVC {
         vc.modalPresentationStyle = .fullScreen
         vc.image = image
         return vc
+    }
+
+}
+
+extension STImageEditorVC: STImageFilterVCDelegate {
+
+    func imageFilter(didSelectResize vc: STImageFilterVC) {
+        self.resizeView.isHidden = false
+    }
+
+}
+
+extension STImageEditorVC: STCropperVCDelegate {
+
+    func cropper(didSelectResize vc: STCropperVC) {
+        self.resizeView.isHidden = false
     }
 
 }

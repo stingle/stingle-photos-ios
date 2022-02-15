@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreImage
+import UIKit
 
 class STFilterRange<T> {
     let min: T
@@ -27,7 +28,7 @@ protocol IFilter {
 
 class STColorControlsFilter: IFilter {
     static let brightnessRange = STFilterRange<CGFloat>(min: -0.2, max: 0.2, defaultValue: 0.0)
-    static let contrastRange = STFilterRange<CGFloat>(min: 0.0, max: 2.0, defaultValue: 1.0)
+    static let contrastRange = STFilterRange<CGFloat>(min: 0.9, max: 1.1, defaultValue: 1.0)
     static let saturationRange = STFilterRange<CGFloat>(min: 0.0, max: 2.0, defaultValue: 1.0)
 
     var brightness: CGFloat?
@@ -69,8 +70,8 @@ class STWhitePointFilter: IFilter {
             return nil
         }
         let filter = CIFilter(name: "CIWhitePointAdjust")
-        let white = CGFloat(value)
-        filter?.setValue(CIColor(red: white, green: white, blue: white, alpha: 1.0), forKey: kCIInputColorKey)
+        let ciColor = CIColor(color: UIColor(white: value, alpha: 1.0))
+        filter?.setValue(ciColor, forKey: kCIInputColorKey)
         return filter
     }
 

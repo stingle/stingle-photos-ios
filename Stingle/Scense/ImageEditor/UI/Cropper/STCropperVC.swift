@@ -1,5 +1,5 @@
 //
-//  STCropperViewController.swift
+//  STCropperVC.swift
 //  ImageEditor
 //
 //  Created by Shahen Antonyan on 1/17/22.
@@ -19,7 +19,11 @@ enum STCropBoxEdge: Int {
     case bottomLeft
 }
 
-class STCropperViewController: UIViewController, STRotatable, STStateRestorable, STFlipable {
+protocol STCropperVCDelegate: AnyObject {
+    func cropper(didSelectResize vc: STCropperVC)
+}
+
+class STCropperVC: UIViewController, STRotatable, STStateRestorable, STFlipable {
 
     @IBOutlet weak var scrollViewContainer: STScrollViewContainer!
     @IBOutlet weak var backgroundView: UIView!
@@ -28,6 +32,8 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
     @IBOutlet weak var rulerBackgroundView: UIView!
     @IBOutlet weak var overlayView: STOverlay!
     @IBOutlet weak var aspectRatioView: STAspectRatioView!
+
+    weak var delegate: STCropperVCDelegate?
 
     private var _topToolBar: STCropRotateToolBar?
     var topToolBar: UIView? {
@@ -510,7 +516,7 @@ class STCropperViewController: UIViewController, STRotatable, STStateRestorable,
 
 // MARK: UIScrollViewDelegate
 
-extension STCropperViewController: UIScrollViewDelegate {
+extension STCropperVC: UIScrollViewDelegate {
 
     func viewForZooming(in _: UIScrollView) -> UIView? {
         return self.imageView
@@ -568,7 +574,7 @@ extension STCropperViewController: UIScrollViewDelegate {
 
 // MARK: UIGestureRecognizerDelegate
 
-extension STCropperViewController: UIGestureRecognizerDelegate {
+extension STCropperVC: UIGestureRecognizerDelegate {
 
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == self.cropBoxPanGesture {
@@ -594,7 +600,7 @@ extension STCropperViewController: UIGestureRecognizerDelegate {
 
 // MARK: AspectRatioPickerDelegate
 
-extension STCropperViewController: STAspectRatioViewDelegate {
+extension STCropperVC: STAspectRatioViewDelegate {
 
     func aspectRatioViewDidSelectedAspectRatio(_ aspectRatio: STAspectRatio) {
         self.setAspectRatio(aspectRatio)
@@ -604,10 +610,10 @@ extension STCropperViewController: STAspectRatioViewDelegate {
 
 // MARK: Add capability from protocols
 
-extension STCropperViewController: STStasisable, STAngleAssist, STCropBoxEdgeDraggable, STAspectRatioSettable {}
+extension STCropperVC: STStasisable, STAngleAssist, STCropBoxEdgeDraggable, STAspectRatioSettable {}
 
 
-extension STCropperViewController: STCropRotateToolBarDelegate {
+extension STCropperVC: STCropRotateToolBarDelegate {
 
     func flipButtonDidPress() {
         self.flip()
@@ -619,6 +625,10 @@ extension STCropperViewController: STCropRotateToolBarDelegate {
         }
     }
 
+    func resizeButtonDidPress() {
+        self.delegate?.cropper(didSelectResize: self)
+    }
+
     func aspectRatioButtonDidPress(isSelected: Bool) {
         UIView.animate(withDuration: 0.2) {
             self.rulerBackgroundView.alpha = isSelected ? 0.0 : 1.0
@@ -628,7 +638,7 @@ extension STCropperViewController: STCropRotateToolBarDelegate {
 
 }
 
-extension STCropperViewController: STAngleRulerDelegate {
+extension STCropperVC: STAngleRulerDelegate {
 
     func angleRuleDidChangeValue(value: CGFloat) {
         self.angleRulerValue = value

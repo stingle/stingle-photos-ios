@@ -372,7 +372,7 @@
 		B31D622F27B64B4E00CBEA19 /* STAspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620827B64B4E00CBEA19 /* STAspectRatio.swift */; };
 		B31D623027B64B4E00CBEA19 /* STCropperState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620927B64B4E00CBEA19 /* STCropperState.swift */; };
 		B31D623127B64B4E00CBEA19 /* STScrollViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620A27B64B4E00CBEA19 /* STScrollViewContainer.swift */; };
-		B31D623227B64B4E00CBEA19 /* STCropperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620B27B64B4E00CBEA19 /* STCropperViewController.swift */; };
+		B31D623227B64B4E00CBEA19 /* STCropperVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620B27B64B4E00CBEA19 /* STCropperVC.swift */; };
 		B31D623327B64B4E00CBEA19 /* STCropRotateToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620D27B64B4E00CBEA19 /* STCropRotateToolBar.swift */; };
 		B31D623427B64B4E00CBEA19 /* STCropRotateToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = B31D620E27B64B4E00CBEA19 /* STCropRotateToolBar.xib */; };
 		B31D623527B64B4E00CBEA19 /* STOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621027B64B4E00CBEA19 /* STOverlay.swift */; };
@@ -381,6 +381,9 @@
 		B31D623927B64B4E00CBEA19 /* STAngleRuler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621627B64B4E00CBEA19 /* STAngleRuler.swift */; };
 		B31D623B27B65D7900CBEA19 /* STFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */; };
 		B31D623E27B65F0500CBEA19 /* FileEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */; };
+		B3A417E327BBDD1600F64CB2 /* STResizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A417E227BBDD1600F64CB2 /* STResizeView.swift */; };
+		B3A417E627BBE72600F64CB2 /* STFilterToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */; };
+		B3A417E827BBE74200F64CB2 /* STFilterToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */; };
 		E6A4D89B896332CB7C65B74E /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D06FF69A05EB1AEC50C12C /* Pods_Stingle.framework */; };
 /* End PBXBuildFile section */
 
@@ -760,7 +763,7 @@
 		B31D620827B64B4E00CBEA19 /* STAspectRatio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STAspectRatio.swift; sourceTree = "<group>"; };
 		B31D620927B64B4E00CBEA19 /* STCropperState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropperState.swift; sourceTree = "<group>"; };
 		B31D620A27B64B4E00CBEA19 /* STScrollViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STScrollViewContainer.swift; sourceTree = "<group>"; };
-		B31D620B27B64B4E00CBEA19 /* STCropperViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropperViewController.swift; sourceTree = "<group>"; };
+		B31D620B27B64B4E00CBEA19 /* STCropperVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropperVC.swift; sourceTree = "<group>"; };
 		B31D620D27B64B4E00CBEA19 /* STCropRotateToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropRotateToolBar.swift; sourceTree = "<group>"; };
 		B31D620E27B64B4E00CBEA19 /* STCropRotateToolBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STCropRotateToolBar.xib; sourceTree = "<group>"; };
 		B31D621027B64B4E00CBEA19 /* STOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STOverlay.swift; sourceTree = "<group>"; };
@@ -769,6 +772,9 @@
 		B31D621627B64B4E00CBEA19 /* STAngleRuler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STAngleRuler.swift; sourceTree = "<group>"; };
 		B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileEditVC.swift; sourceTree = "<group>"; };
 		B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FileEdit.storyboard; sourceTree = "<group>"; };
+		B3A417E227BBDD1600F64CB2 /* STResizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STResizeView.swift; sourceTree = "<group>"; };
+		B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilterToolBar.swift; sourceTree = "<group>"; };
+		B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilterToolBar.xib; sourceTree = "<group>"; };
 		C59B20CC9ED4970F5FE2DBE3 /* Pods-Stingle.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2489,6 +2495,7 @@
 		B31D61EE27B64B4E00CBEA19 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
+				B3A417E427BBE6FD00F64CB2 /* Toolbar */,
 				B31D61EF27B64B4E00CBEA19 /* STFilter */,
 				B31D61F827B64B4E00CBEA19 /* STImageFilterVC.swift */,
 			);
@@ -2525,7 +2532,7 @@
 				B31D620727B64B4E00CBEA19 /* Core */,
 				B31D620C27B64B4E00CBEA19 /* ToolBar */,
 				B31D620F27B64B4E00CBEA19 /* Overlay */,
-				B31D620B27B64B4E00CBEA19 /* STCropperViewController.swift */,
+				B31D620B27B64B4E00CBEA19 /* STCropperVC.swift */,
 			);
 			path = Cropper;
 			sourceTree = "<group>";
@@ -2594,9 +2601,27 @@
 		B31D623C27B65ED700CBEA19 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				B3A417E127BBDD0900F64CB2 /* Views */,
 				B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		B3A417E127BBDD0900F64CB2 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B3A417E227BBDD1600F64CB2 /* STResizeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		B3A417E427BBE6FD00F64CB2 /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */,
+				B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */,
+			);
+			path = Toolbar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2662,6 +2687,7 @@
 				A013D85B269F701D007ED786 /* STSettingsHeaderView.xib in Resources */,
 				A012B48B2700BED5001E79E9 /* STStoragePeriodHeaderView.xib in Resources */,
 				A021014826EFEC8C00BBEF65 /* STStorageBildingInfoCell.xib in Resources */,
+				B3A417E827BBE74200F64CB2 /* STFilterToolBar.xib in Resources */,
 				A0D1A3CB262E10E0002E326F /* STAlbumFilesHeaderView.xib in Resources */,
 				A0B152D42636DB0700D36619 /* Gallery.storyboard in Resources */,
 				A0A9767B263DD78400E391D1 /* STSharedMembersTableViewCell.xib in Resources */,
@@ -2855,6 +2881,7 @@
 				A0F99DC82683662800B0F36F /* STZoomView.swift in Sources */,
 				A0DE2DEB26B89F4500887D55 /* STSettingsSliderTableViewCell.swift in Sources */,
 				A04BD005263479A900C5F29F /* STUploadsVM.swift in Sources */,
+				B3A417E627BBE72600F64CB2 /* STFilterToolBar.swift in Sources */,
 				A02ED2E82603EED800F10D58 /* UIImageView+Operation.swift in Sources */,
 				A013D859269F700A007ED786 /* STSettingsHeaderView.swift in Sources */,
 				A022048825EEDC0400D07C98 /* STWorker.swift in Sources */,
@@ -2876,6 +2903,7 @@
 				A044ABFD2605427A00BA318F /* STCrypto+Additional.swift in Sources */,
 				A0CFBD9625F17734003095BE /* STSyncWorker.swift in Sources */,
 				A074AE4626460A70004C9E9E /* STMoveAlbumFilesCell.swift in Sources */,
+				B3A417E327BBDD1600F64CB2 /* STResizeView.swift in Sources */,
 				A0D1A3B9262E0D3D002E326F /* STAlbumFilesVC.swift in Sources */,
 				A046A80F261FA815005EDB89 /* STPHPhotoHelper.swift in Sources */,
 				A02204A325EEDC0400D07C98 /* CurrentPageVC.swift in Sources */,
@@ -3071,7 +3099,7 @@
 				A02D88B0260BEEA800B82F16 /* STDownloaderManager.swift in Sources */,
 				A0301DDC25FD606D005281EF /* STGalleryVC.swift in Sources */,
 				A0B8090A26ECFE2E0063DA42 /* STStorageVM.swift in Sources */,
-				B31D623227B64B4E00CBEA19 /* STCropperViewController.swift in Sources */,
+				B31D623227B64B4E00CBEA19 /* STCropperVC.swift in Sources */,
 				A0794B7E269E2E3300B40FE9 /* STAccountVC.swift in Sources */,
 				B31D622F27B64B4E00CBEA19 /* STAspectRatio.swift in Sources */,
 				A050C50927066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift in Sources */,

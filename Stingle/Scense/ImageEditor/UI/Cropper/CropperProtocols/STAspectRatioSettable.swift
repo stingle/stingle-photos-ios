@@ -12,7 +12,7 @@ protocol STAspectRatioSettable {
     func setAspectRatioValue(_ aspectRatioValue: CGFloat, animated: Bool)
 }
 
-extension STAspectRatioSettable where Self: STCropperViewController {
+extension STAspectRatioSettable where Self: STCropperVC {
     func setAspectRatio(_ aspectRatio: STAspectRatio, animated: Bool = true) {
         switch aspectRatio {
         case .original:

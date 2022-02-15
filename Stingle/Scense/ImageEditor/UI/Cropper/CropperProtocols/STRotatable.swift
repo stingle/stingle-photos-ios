@@ -9,10 +9,10 @@ import UIKit
 
 protocol STRotatable {
     func setStraightenAngle(_ angle: CGFloat)
-    func rotate90degrees(clockwise: Bool, completion: (() -> Void)?)
+    func rotate90degrees(clockwise: Bool, animation: Bool, completion: (() -> Void)?)
 }
 
-extension STRotatable where Self: STCropperViewController {
+extension STRotatable where Self: STCropperVC {
     func setStraightenAngle(_ angle: CGFloat) {
         self.overlayView.cropBoxFrame = self.overlayView.cropBoxFrame
         self.overlayView.gridLinesAlpha = 1
@@ -51,7 +51,7 @@ extension STRotatable where Self: STCropperViewController {
         self.scrollView.contentOffset = self.safeContentOffsetForScrollView(newContentOffset)
     }
 
-    func rotate90degrees(clockwise: Bool = true, completion: (() -> Void)? = nil) {
+    func rotate90degrees(clockwise: Bool = true, animation: Bool = true, completion: (() -> Void)? = nil) {
         guard let animationContainer = self.scrollView.superview else { return }
 
         // Make sure to cover the entire screen while rotating
@@ -70,8 +70,8 @@ extension STRotatable where Self: STCropperViewController {
         rotatingOverlay.layer.anchorPoint = CGPoint(x: rotatingCropBoxFrame.midX / rotatingOverlay.size.width, y: rotatingCropBoxFrame.midY / rotatingOverlay.size.height)
 
         self.overlayView.isHidden = true
-
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+        let duration = animation ? 0.25 : 0.0
+        UIView.animate(withDuration: duration, delay: 0, options: .curveEaseOut, animations: {
             // rotate scroll view
             if clockwise {
                 self.rotationAngle += CGFloat.pi / 2.0

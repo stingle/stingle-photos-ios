@@ -12,7 +12,7 @@ protocol STCropBoxEdgeDraggable {
     func updateCropBoxFrameWithPanGesturePoint(_ point: CGPoint)
 }
 
-extension STCropBoxEdgeDraggable where Self: STCropperViewController {
+extension STCropBoxEdgeDraggable where Self: STCropperVC {
 
     func nearestCropBoxEdgeForPoint(point: CGPoint) -> STCropBoxEdge {
         var frame = self.overlayView.cropBoxFrame

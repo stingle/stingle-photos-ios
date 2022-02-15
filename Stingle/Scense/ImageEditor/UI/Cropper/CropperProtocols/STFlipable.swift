@@ -11,7 +11,7 @@ protocol STFlipable {
     func flip(directionHorizontal: Bool)
 }
 
-extension STFlipable where Self: STCropperViewController {
+extension STFlipable where Self: STCropperVC {
     func flip(directionHorizontal: Bool = true) {
         let size: CGSize = self.scrollView.contentSize
         let contentOffset = self.scrollView.contentOffset

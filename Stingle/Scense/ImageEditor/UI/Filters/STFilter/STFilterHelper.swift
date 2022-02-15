@@ -28,7 +28,9 @@ class STFilterHelper {
         return value
     }
 
-    class func value(for type: STFilterType, rullerValue: CGFloat) -> CGFloat {
+    class func value(for type: STFilterType, rullerValue: CGFloat) -> CGFloat? {
+//        guard rullerValue != 0.0 else { return nil }
+
         let filterValues = self.filterRange(type: type)
         let (min, _, max) = self.rullerMinMaxValues(for: type)
         let rullerRange = max - min

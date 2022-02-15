@@ -8,6 +8,10 @@
 import UIKit
 import MetalPetal
 
+protocol STImageFilterVCDelegate: AnyObject {
+    func imageFilter(didSelectResize vc: STImageFilterVC)
+}
+
 class STImageFilterVC: UIViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
@@ -17,7 +21,9 @@ class STImageFilterVC: UIViewController {
     @IBOutlet weak var filterCollectionView: STFilterCollectionView!
     @IBOutlet weak var rulerBackgroundView: UIView!
     @IBOutlet weak var gradientView: UIView!
-    
+
+    weak var delegate: STImageFilterVCDelegate?
+
     private var mtImage: MTIImage?
 
     private var image: UIImage? {
@@ -36,14 +42,14 @@ class STImageFilterVC: UIViewController {
         }
     }
 
-    var topToolBar: UIView? = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 14.0)
-        label.text = "editor_adjust".localized.uppercased()
-        return label
-    }()
+    private var _topToolBar: STFilterToolBar?
+    var topToolBar: UIView? {
+        if self._topToolBar == nil {
+            self._topToolBar = UIView.loadView(fromNib: "STFilterToolBar", withType: STFilterToolBar.self)
+            self._topToolBar?.delegate = self
+        }
+        return self._topToolBar
+    }
 
     private var selectedFilterType: STFilterType = .allCases.first ?? .exposure
 
@@ -350,6 +356,14 @@ extension STImageFilterVC: STFilterCollectionViewDelegate {
 
     func filterCollectionValueFor(filter: STFilterType) -> CGFloat {
         return self.filterValue(type: filter)
+    }
+
+}
+
+extension STImageFilterVC: STFilterToolBarDelegate {
+
+    func resizeButtonDidPress() {
+        self.delegate?.imageFilter(didSelectResize: self)
     }
 
 }
