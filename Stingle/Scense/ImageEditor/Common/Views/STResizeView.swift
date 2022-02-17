@@ -44,23 +44,29 @@ class STResizeView: UIView {
     }
 
     @IBAction func widthTextFieldValueChanged(_ sender: Any) {
-        guard let value = self.widthTextField.text, let intValue = Int(value) else {
+        let value = (self.widthTextField.text?.isEmpty ?? true) ? "0" : self.widthTextField.text!
+        guard let intValue = Int(value) else {
             return
         }
         guard let imageSize = self.imageSize else {
             return
         }
-        self.heightTextField.text = "\(Int(imageSize.height / imageSize.width * CGFloat(intValue)))"
+        let height = Int(imageSize.height / imageSize.width * CGFloat(intValue))
+        self.heightTextField.text = "\(height)"
+        self.resizeButton.isEnabled = height != 0 && intValue != 0
     }
 
     @IBAction func heightTextFieldValueChanged(_ sender: Any) {
-        guard let value = self.heightTextField.text, let intValue = Int(value) else {
+        let value = (self.heightTextField.text?.isEmpty ?? true) ? "0" : self.heightTextField.text!
+        guard let intValue = Int(value) else {
             return
         }
         guard let imageSize = self.imageSize else {
             return
         }
-        self.widthTextField.text = "\(Int(imageSize.width / imageSize.height * CGFloat(intValue)))"
+        let width = Int(imageSize.width / imageSize.height * CGFloat(intValue))
+        self.widthTextField.text = "\(width)"
+        self.resizeButton.isEnabled = width != 0 && intValue != 0
     }
 
     @IBAction func resizeButtonAction(_ sender: Any) {
