@@ -30,10 +30,12 @@ class STFileUploader {
     private var totalCompletedUnitCount: Int64 = 0
     private var observer = STObserverEvents<IFileUploaderObserver>()
     
-    private(set) var progresses = [String: Progress]()
     private(set) var uploadedFiles = [STLibrary.File]()
-    private(set) var uploadingFiles = [STLibrary.File]()
-    let maxCountUploads = 5
+    
+    private var progresses = [String: Progress]()
+    private var uploadingFiles = [STLibrary.File]()
+    
+    let maxCountUploads = 3000
     let maxCountUpdateDB = 5
     
     private(set) var updateDBChanges  = [String: Int]()
@@ -43,7 +45,7 @@ class STFileUploader {
     }
     
     lazy private var operationQueue: STOperationQueue = {
-        let queue = self.operationManager.createQueue(maxConcurrentOperationCount: self.maxCountUploads, qualityOfService: .background, underlyingQueue: dispatchQueue)
+        let queue = self.operationManager.createQueue(maxConcurrentOperationCount: self.maxCountUploads, qualityOfService: .background, underlyingQueue: self.dispatchQueue)
         return queue
     }()
     
@@ -53,6 +55,13 @@ class STFileUploader {
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
+    }
+    
+    func getProgress(_ progresses: @escaping(_ progresses: [String: Progress], _ uploadingFiles: [STLibrary.File]) -> Void) {
+        self.dispatchQueue.async { [weak self] in
+            guard let weakSelf = self else { return }
+            progresses(weakSelf.progresses, weakSelf.uploadingFiles)
+        }
     }
     
     func upload(files: [STLibrary.File]) {
@@ -153,28 +162,41 @@ class STFileUploader {
         
     }
     
-    private func culculateProgress() -> UploaderProgress {
-        var total: Int64 = 0
-        var current: Int64 = 0
-        var totalFractionCompleted: Double = .zero
+    private func culculateProgress() -> Double {
         
-        let proccessTotalCompletedUnitCount = self.totalCompletedUnitCount
-        let oldTotalUnitCount = self.totalCompletedUnitCount + self.countAllFiles
-        self.totalCompletedUnitCount = self.countAllFiles == .zero ? .zero : self.totalCompletedUnitCount
-        let totalUnitCount = proccessTotalCompletedUnitCount + self.countAllFiles
-        
-        self.progresses.forEach({
-            total = total + ($0.value.totalUnitCount)
-            current = current + ($0.value.completedUnitCount)
-            let fractionCompleted = total > .zero ? Double(current) / Double(total) : .zero
-            totalFractionCompleted = totalFractionCompleted + fractionCompleted
-        })
-        totalFractionCompleted = totalFractionCompleted + Double(proccessTotalCompletedUnitCount)
-        
-        let fractionCompleted: Double = totalUnitCount == .zero ? .zero: totalFractionCompleted / Double(totalUnitCount)
-        let progress = UploaderProgress(totalUnitCount: total, completedUnitCount: current, fractionCompleted: fractionCompleted, totalCompleted: proccessTotalCompletedUnitCount, count: oldTotalUnitCount)
-        
+        guard !self.progresses.isEmpty else {
+            return .zero
+        }
+        var progress = Double.zero
+        self.progresses.forEach {
+            progress = progress + $0.value.fractionCompleted
+        }
+        progress = progress / Double(self.progresses.count)
         return progress
+        
+//        return UploaderProgress(totalUnitCount: .zero, completedUnitCount: .zero, fractionCompleted: .zero, totalCompleted: .zero, count: .zero)
+//
+//        var total: Int64 = 0
+//        var current: Int64 = 0
+//        var totalFractionCompleted: Double = .zero
+//
+//        let proccessTotalCompletedUnitCount = self.totalCompletedUnitCount
+//        let oldTotalUnitCount = self.totalCompletedUnitCount + self.countAllFiles
+//        self.totalCompletedUnitCount = self.countAllFiles == .zero ? .zero : self.totalCompletedUnitCount
+//        let totalUnitCount = proccessTotalCompletedUnitCount + self.countAllFiles
+//
+//        self.progresses.forEach({
+//            total = total + ($0.value.totalUnitCount)
+//            current = current + ($0.value.completedUnitCount)
+//            let fractionCompleted = total > .zero ? Double(current) / Double(total) : .zero
+//            totalFractionCompleted = totalFractionCompleted + fractionCompleted
+//        })
+//        totalFractionCompleted = totalFractionCompleted + Double(proccessTotalCompletedUnitCount)
+//
+//        let fractionCompleted: Double = totalUnitCount == .zero ? .zero: totalFractionCompleted / Double(totalUnitCount)
+//        let progress = UploaderProgress(totalUnitCount: total, completedUnitCount: current, fractionCompleted: fractionCompleted, totalCompleted: proccessTotalCompletedUnitCount, count: oldTotalUnitCount)
+//
+//        return progress
     }
     
     private func checkCanUploadFiles() -> Bool {
@@ -221,45 +243,26 @@ extension STFileUploader {
     
     private func updateProgress(files: [STLibrary.File]) {
         let uploadInfo = self.generateUploadInfo()
-        DispatchQueue.main.async { [weak self] in
-            guard let weakSelf = self else {
-                return
-            }
-                        
-            weakSelf.observer.forEach { (observer) in
-                observer.fileUploader(didUpdateProgress: weakSelf, uploadInfo: uploadInfo, files: files)
-            }
-            weakSelf.updateProgress(didChange: uploadInfo)
+        self.observer.forEach { (observer) in
+            observer.fileUploader(didUpdateProgress: self, uploadInfo: uploadInfo, files: files)
         }
+        self.updateProgress(didChange: uploadInfo)
     }
         
     private func updateProgress(didEndSucces file: STLibrary.File) {
         let uploadInfo = self.generateUploadInfo()
-        DispatchQueue.main.async { [weak self] in
-            guard let weakSelf = self else {
-                return
-            }
-                        
-            weakSelf.observer.forEach { (observer) in
-                observer.fileUploader(didEndSucces: weakSelf, file: file, uploadInfo: uploadInfo)
-            }
-            weakSelf.updateProgress(didChange: uploadInfo)
+        self.observer.forEach { (observer) in
+            observer.fileUploader(didEndSucces: self, file: file, uploadInfo: uploadInfo)
         }
+        self.updateProgress(didChange: uploadInfo)
     }
     
     private func updateProgress(didEndFailed file: STLibrary.File?, error: IError) {
         let uploadInfo = self.generateUploadInfo()
-        DispatchQueue.main.async { [weak self] in
-            guard let weakSelf = self else {
-                return
-            }
-                        
-            weakSelf.observer.forEach { (observer) in
-                observer.fileUploader(didEndFailed: weakSelf, file: file, error: error, uploadInfo: uploadInfo)
-            }
-            weakSelf.updateProgress(didChange: uploadInfo)
+        self.observer.forEach { (observer) in
+            observer.fileUploader(didEndFailed: self, file: file, error: error, uploadInfo: uploadInfo)
         }
-        
+        self.updateProgress(didChange: uploadInfo)
     }
     
     private func updateProgress(didChange uploadInfo: UploadInfo) {
@@ -274,7 +277,7 @@ extension STFileUploader {
         let progress = self.culculateProgress()
         return UploadInfo(uploadFiles: uploadFiles,
                           progresses: progresses,
-                          progress: progress)
+                          fractionCompleted: progress)
     }
     
 }
@@ -294,7 +297,7 @@ extension STFileUploader: STFileUploaderOperationDelegate {
     }
     
     func fileUploaderOperation(didProgress operation: STFileUploader.Operation, progress: Progress, file: STLibrary.File) {
-        self.dispatchQueue.sync { [weak self] in
+        self.dispatchQueue.async(flags: .barrier) { [weak self] in
             self?.progresses[file.file] = progress
             self?.updateProgress(files: [file])
         }
@@ -333,7 +336,7 @@ extension STFileUploader: STFileUploaderOperationDelegate {
             weakSelf.progresses.removeValue(forKey: file.file)
             
             if let spaceUsed = spaceUsed {
-                DispatchQueue.main.async {
+                weakSelf.dispatchQueue.async {
                     let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
                     dbInfo.update(with: spaceUsed)
                     STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
@@ -361,7 +364,7 @@ extension STFileUploader {
     struct UploadInfo {
         let uploadFiles: [STLibrary.File]
         let progresses: [String: Progress]
-        let progress: UploaderProgress
+        let fractionCompleted: Double
     }
     
     enum FileType: Int {
@@ -402,14 +405,5 @@ extension STFileUploader {
             }
         }
     }
-    
-    struct UploaderProgress {
-        let totalUnitCount: Int64
-        let completedUnitCount: Int64
-        let fractionCompleted: Double
         
-        let totalCompleted: Int64
-        let count: Int64
-    }
-            
 }

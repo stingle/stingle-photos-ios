@@ -163,6 +163,7 @@ extension STImporter {
         
         private func startNextImport() {
             self.isImporting = true
+                        
             let operation = Operation(importQueue: self.importQueue, fromDate: self.lastImportDate, fetchLimit: self.fetchLimit) { [weak self] importCount in
                 guard let weakSelf = self else {
                     return
@@ -307,10 +308,11 @@ extension STImporter.AuotImporter {
                     if let asset = (progress.importingFile as? STImporter.FileUploadable)?.asset {
                         importedAssets.append(asset)
                     }
-                    let currentFileDate = (progress.importingFile as? STImporter.FileUploadable)?.asset.creationDate
+                    let currentFileDate = (progress.importingFile as? STImporter.FileUploadable)?.asset.modificationDate
                     if let date = resultDate {
                         let fileDate: Date = currentFileDate ?? date
                         resultDate = max(date, fileDate)
+                        
                     } else {
                         resultDate = currentFileDate
                     }
@@ -332,9 +334,7 @@ extension STImporter.AuotImporter {
                         }
                     }
                 }
-                
-                
-                
+                                
                 if STAppSettings.current.import.isDeleteOriginalFilesAfterAutoImport {
                     let albumName = STEnvironment.current.photoLibraryTrashAlbumName
                     STPHPhotoHelper.moveToAlbum(albumName: albumName, assets: importedAssets) {
@@ -353,12 +353,12 @@ extension STImporter.AuotImporter {
             let options = PHFetchOptions()
             options.includeHiddenAssets = true
             
-            let sortDescriptor = NSSortDescriptor(key: "\(#keyPath(PHAsset.creationDate))", ascending: true)
+            let sortDescriptor = NSSortDescriptor(key: "\(#keyPath(PHAsset.modificationDate))", ascending: true)
             options.sortDescriptors = [sortDescriptor]
             options.fetchLimit = self.fetchLimit
                         
             if let lastImportDate = self.date {
-                let predicate = NSPredicate(format: "\(#keyPath(PHAsset.creationDate)) > %@", lastImportDate as CVarArg)
+                let predicate = NSPredicate(format: "\(#keyPath(PHAsset.modificationDate)) > %@", lastImportDate as CVarArg)
                 options.predicate = predicate
             }
             let assets = PHAsset.fetchAssets(with: options)

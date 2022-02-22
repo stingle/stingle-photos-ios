@@ -16,12 +16,26 @@ class STUploadNetworkOperation<T: Decodable>: STBaseNetworkOperation<T> {
     }
     
     func startRequest() {
-        
         guard let request = self.request as? IUploadRequest else {
             fatalError("request must be DownloadRequest")
         }
+        if request.isBackground {
+            self.startRequest(background: request)
+        } else {
+            self.startRequest(default: request)
+        }
         
-        self.dataRequest = self.networkDispatcher.upload(request: request) { [weak self] (progress) in
+    }
+    
+    override func resume() {
+        super.resume()
+        self.startRequest()
+    }
+    
+    //
+    
+    private func startRequest(default uploadRequest: IUploadRequest) {
+        self.dataRequest = self.networkDispatcher.upload(request: uploadRequest) { [weak self] (progress) in
             self?.responseProgress(result: progress)
         } completion: { [weak self] (result: Result<T>) in
             switch result {
@@ -31,12 +45,21 @@ class STUploadNetworkOperation<T: Decodable>: STBaseNetworkOperation<T> {
                 self?.responseFailed(error: error)
             }
         }
-        
     }
     
-    override func resume() {
-        super.resume()
-        self.startRequest()
+    private func startRequest(background uploadRequest: IUploadRequest) {
+        
+        self.dataRequest = self.networkDispatcher.uploadBackround(request: uploadRequest) { [weak self] (progress) in
+            self?.responseProgress(result: progress)
+        } completion: { [weak self] (result: Result<T>) in
+            switch result {
+            case .success(let result):
+                self?.responseSucces(result: result)
+            case .failure(let error):
+                self?.responseFailed(error: error)
+            }
+        }
+       
     }
     
 }

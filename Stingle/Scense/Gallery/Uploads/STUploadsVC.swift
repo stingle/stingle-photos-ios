@@ -50,6 +50,7 @@ class STUploadsVC: STPopoverViewController {
         self.emptyMessageLabel.isHidden = !files.isEmpty
         self.tableView.reloadData()
         self.updatePreferredContentSize()
+        
     }
     
     private func cellModel(for file: STLibrary.File, progress: Progress?) -> CellModel {
@@ -79,6 +80,7 @@ extension STUploadsVC: STUploadsVMDelegate {
                 cell?.updateProgress(progress: cellModel.progress)
             }
         }
+        
         
     }
     

@@ -26,29 +26,40 @@ class STUploadsVM {
     }
     
     private func updateFiles(files: [STLibrary.File]) {
-        if self.uploader.uploadingFiles.count != self.uploadFiles.count {
-            self.uploadFiles = self.uploader.uploadingFiles
-            self.progresses = self.uploader.progresses
-            self.didUpdateFiles()
-        } else {
-            self.uploadFiles = self.uploader.uploadingFiles
-            self.progresses = self.uploader.progresses
-            self.didUpdateProgress(files: files)
+        self.uploader.getProgress { [weak self] progresses, uploadingFiles in
+            guard let weakSelf = self else { return }
+            if uploadingFiles.count != weakSelf.uploadFiles.count {
+                weakSelf.uploadFiles = uploadingFiles
+                weakSelf.progresses = progresses
+                weakSelf.didUpdateFiles()
+            } else {
+                weakSelf.uploadFiles = uploadingFiles
+                weakSelf.progresses = progresses
+                weakSelf.didUpdateProgress(files: files)
+            }
+        }
+    }
+        
+    private func didEndUploading(file: STLibrary.File) {
+        self.uploader.getProgress { [weak self] progresses, uploadingFiles in
+            self?.uploadFiles = uploadingFiles
+            self?.progresses = progresses
+            self?.didUpdateFiles()
         }
     }
     
-    private func didEndUploading(file: STLibrary.File) {
-        self.uploadFiles = self.uploader.uploadingFiles
-        self.progresses = self.uploader.progresses
-        self.didUpdateFiles()
-    }
-    
     private func didUpdateFiles() {
-        self.delegate?.uploadsVM(didUpdateFiles: self, uploadFiles: self.uploadFiles, progresses: self.progresses)
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.delegate?.uploadsVM(didUpdateFiles: weakSelf, uploadFiles: weakSelf.uploadFiles, progresses: weakSelf.progresses)
+        }
     }
     
     private func didUpdateProgress(files: [STLibrary.File]) {
-        self.delegate?.uploadsVM(didUpdateProgress: self, for: files)
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.delegate?.uploadsVM(didUpdateProgress: weakSelf, for: files)
+        }
     }
             
 }

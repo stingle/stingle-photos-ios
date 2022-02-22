@@ -26,7 +26,7 @@ class STNetworkDispatcher {
     private var uploadSession: Alamofire.Session!
     private var streamSession: Alamofire.Session!
     private var downloadSession: Alamofire.Session!
-    private var networkSession: STNetworkSession!
+    private var backroundSession: STNetworkSession!
     
     private var decoder: JSONDecoder!
 	
@@ -49,8 +49,8 @@ class STNetworkDispatcher {
         
         self.decoder = decoder
         
-        let configuration = URLSessionConfiguration.background(withIdentifier: "STNetworkSession")
-        self.networkSession = STNetworkSession(configuration: configuration)
+        let configuration = STNetworkSession.backroundConfiguration
+        self.backroundSession = STNetworkSession(configuration: configuration)
     }
 		
 	@discardableResult
@@ -68,21 +68,6 @@ class STNetworkDispatcher {
 		}
 		return Task(request: request)
 	}
-    
-    @discardableResult
-    func requestJSON(request: IRequest, completion: @escaping (Result<Any>) -> Swift.Void) -> INetworkTask? {
-        let request = self.afRequest(request: request, sesion: self.session)
-        request.responseJSON(completionHandler: { (response: AFDataResponse<Any>) in
-            switch response.result {
-            case .success(let value):
-                completion(.success(result: value))
-            case .failure(let networkError):
-                let error = NetworkError.error(error: networkError)
-                completion(.failure(error: error))
-            }
-        })
-        return Task(request: request)
-    }
     
     @discardableResult
     func requestData(request: IRequest, completion: @escaping (Result<Data>) -> Swift.Void) -> INetworkTask? {
@@ -152,9 +137,14 @@ class STNetworkDispatcher {
         return Task(request: uploadRequest)
     }
     
+    func uploadBackround2<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
+        self.upload(request: request, progress: progress, completion: completion)
+    }
+    
     func uploadBackround<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
         let url = URL(string: request.url)!
-        let formDataRequest = MultipartFormDataRequest(url: url, headers: request.headers)
+                
+        let formDataRequest = STNetworkUploadTask.Request(url: url, headers: request.headers)
         request.files.forEach { (file) in
             formDataRequest.addDataField(named: file.name, filename: file.fileName, fileUrl: file.fileUrl, mimeType: file.type)
         }
@@ -163,9 +153,34 @@ class STNetworkDispatcher {
                 formDataRequest.addTextField(named: parame.key, value: "\(parame.value)")
             }
         }
-        try? formDataRequest.build()
-        let task = self.networkSession.upload(request: formDataRequest)
-        return SessionTask(sessionTask: task)
+                
+        let task = self.backroundSession.upload(request: formDataRequest) { [weak self] result in
+            switch result {
+            case .success(let data):
+                do {
+                    let decoder = self?.decoder ?? JSONDecoder()
+                    let result = try decoder.decode(T.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(result: result))
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        let networkError = NetworkError.error(error: error)
+                        completion(.failure(error: networkError))
+                    }
+                }
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    completion(.failure(error: error))
+                }
+            }
+            
+        } progress: { progressTask in
+            progress?(progressTask)
+        }
+        
+        return task
     }
     
     func stream(request: IStreamRequest, queue: DispatchQueue, stream: @escaping (_ chank: Data) -> Swift.Void, completion: @escaping (Result<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)>) -> Swift.Void) -> INetworkTask? {
@@ -228,9 +243,7 @@ class STNetworkDispatcher {
         
         return Task(request: streamRequest)
     }
-    
-    
-        		
+            		
 }
 
 

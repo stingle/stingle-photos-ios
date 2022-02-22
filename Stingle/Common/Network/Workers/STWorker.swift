@@ -47,15 +47,6 @@ class STWorker {
 		}, failure: failure)
 	}
     
-    func requestJSON(request: IRequest, success: Success<Any>?, failure: Failure? = nil) {
-        let operation = STJSONNetworkOperation(request: request) { (json) in
-            success?(json)
-        } failure: { (error) in
-            failure?(error)
-        }
-        self.operationManager.run(operation: operation)
-    }
-    
     func requestData(request: IRequest, success: Success<Data>?, failure: Failure? = nil) {
         let operation = STDataNetworkOperation(request: request) { (data) in
             success?(data)

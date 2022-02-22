@@ -22,6 +22,8 @@
 		A00982F22623449100559C41 /* STUploadFileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00982F12623449100559C41 /* STUploadFileRequest.swift */; };
 		A00982F526234EAB00559C41 /* STUploadWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00982F426234EAB00559C41 /* STUploadWorker.swift */; };
 		A00982F82623747C00559C41 /* STDBUsed.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00982F72623747C00559C41 /* STDBUsed.swift */; };
+		A00ADC0627B94FE70046CA38 /* STNetworkTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00ADC0527B94FE70046CA38 /* STNetworkTask.swift */; };
+		A00ADC0927B954250046CA38 /* STNetworkUploadTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00ADC0827B954250046CA38 /* STNetworkUploadTask.swift */; };
 		A00B4C20263D74270085C55E /* STSharedMembersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00B4C1F263D74270085C55E /* STSharedMembersVC.swift */; };
 		A00B4C24263D75220085C55E /* Shear.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A00B4C23263D75220085C55E /* Shear.storyboard */; };
 		A00C6E5C264865410001662E /* STAlbumWorker+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00C6E5B264865410001662E /* STAlbumWorker+Create.swift */; };
@@ -48,7 +50,6 @@
 		A021A17B264F325900394713 /* UINavigationBar+Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17A264F325900394713 /* UINavigationBar+Progress.swift */; };
 		A021A17E264F361E00394713 /* STGalleryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A021A17D264F361E00394713 /* STGalleryNavigationController.swift */; };
 		A02203C125EED86800D07C98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203C025EED86800D07C98 /* AppDelegate.swift */; };
-		A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203C225EED86800D07C98 /* SceneDelegate.swift */; };
 		A02203CA25EED86800D07C98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A02203C925EED86800D07C98 /* Assets.xcassets */; };
 		A02203EB25EEDB6300D07C98 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A02203EA25EEDB6300D07C98 /* LaunchScreen.storyboard */; };
 		A022046B25EEDC0400D07C98 /* STSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02203F625EEDC0300D07C98 /* STSegue.swift */; };
@@ -113,6 +114,7 @@
 		A032096D26545E6B000C420B /* STVideoViewerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032096C26545E6B000C420B /* STVideoViewerVC.swift */; };
 		A032096F26546275000C420B /* STVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032096E26546275000C420B /* STVideoView.swift */; };
 		A032097226546602000C420B /* STPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032097126546602000C420B /* STPlayer.swift */; };
+		A03245CF27930DAE001F9062 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03245CE27930DAE001F9062 /* SceneDelegate.swift */; };
 		A033889126E1780200C03FE1 /* STNetworkSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A033889026E1780200C03FE1 /* STNetworkSession.swift */; };
 		A0355C8126A8D084006BE2C4 /* STUnlockAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */; };
 		A0355C8326A8D094006BE2C4 /* STUnlockAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */; };
@@ -239,7 +241,7 @@
 		A08F0C152607CD8600E81826 /* STBaseNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C142607CD8600E81826 /* STBaseNetworkOperation.swift */; };
 		A08F0C192607D01800E81826 /* STNetworkOperationDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */; };
 		A08F0C1C2607D1C400E81826 /* STOperationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1B2607D1C400E81826 /* STOperationManager.swift */; };
-		A08F0C202607D3B800E81826 /* STJSONNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */; };
+		A08F0C202607D3B800E81826 /* STDataNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */; };
 		A08F27A62785ACBC00EF8BE4 /* STAutoImportDialogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27A52785ACBC00EF8BE4 /* STAutoImportDialogVM.swift */; };
 		A08F27A82785AD7700EF8BE4 /* STAppSettings+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27A72785AD7700EF8BE4 /* STAppSettings+Import.swift */; };
 		A08F27AB2785DA6D00EF8BE4 /* STImportVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27AA2785DA6D00EF8BE4 /* STImportVM.swift */; };
@@ -371,6 +373,8 @@
 		A00982F12623449100559C41 /* STUploadFileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUploadFileRequest.swift; sourceTree = "<group>"; };
 		A00982F426234EAB00559C41 /* STUploadWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUploadWorker.swift; sourceTree = "<group>"; };
 		A00982F72623747C00559C41 /* STDBUsed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDBUsed.swift; sourceTree = "<group>"; };
+		A00ADC0527B94FE70046CA38 /* STNetworkTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkTask.swift; sourceTree = "<group>"; };
+		A00ADC0827B954250046CA38 /* STNetworkUploadTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkUploadTask.swift; sourceTree = "<group>"; };
 		A00B4C1F263D74270085C55E /* STSharedMembersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSharedMembersVC.swift; sourceTree = "<group>"; };
 		A00B4C23263D75220085C55E /* Shear.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Shear.storyboard; sourceTree = "<group>"; };
 		A00C6E5B264865410001662E /* STAlbumWorker+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAlbumWorker+Create.swift"; sourceTree = "<group>"; };
@@ -398,7 +402,6 @@
 		A021A17D264F361E00394713 /* STGalleryNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryNavigationController.swift; sourceTree = "<group>"; };
 		A02203BD25EED86800D07C98 /* Stingle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stingle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A02203C025EED86800D07C98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A02203C225EED86800D07C98 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A02203C925EED86800D07C98 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A02203CE25EED86800D07C98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A02203EA25EEDB6300D07C98 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -466,6 +469,7 @@
 		A032096C26545E6B000C420B /* STVideoViewerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVideoViewerVC.swift; sourceTree = "<group>"; };
 		A032096E26546275000C420B /* STVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVideoView.swift; sourceTree = "<group>"; };
 		A032097126546602000C420B /* STPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPlayer.swift; sourceTree = "<group>"; };
+		A03245CE27930DAE001F9062 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A033889026E1780200C03FE1 /* STNetworkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkSession.swift; sourceTree = "<group>"; };
 		A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVC.swift; sourceTree = "<group>"; };
 		A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVM.swift; sourceTree = "<group>"; };
@@ -551,6 +555,7 @@
 		A075B73E2652B2D500B4E2DF /* STSharedAlbumSettingsBaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSharedAlbumSettingsBaseCell.swift; sourceTree = "<group>"; };
 		A076A631273EE6AE00106E87 /* STMat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMat.swift; sourceTree = "<group>"; };
 		A076A633273EFF3F00106E87 /* STVideoImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STVideoImageView.swift; sourceTree = "<group>"; };
+		A076FDF8279C910B00EB68F5 /* Stingle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Stingle.entitlements; sourceTree = "<group>"; };
 		A076FF3926F8BA4300E95240 /* STStorageVC+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STStorageVC+Data.swift"; sourceTree = "<group>"; };
 		A077780025FFF81100BA2BDF /* STGalleryVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryVM.swift; sourceTree = "<group>"; };
 		A077780825FFFEBB00BA2BDF /* STCrypto+Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STCrypto+Header.swift"; sourceTree = "<group>"; };
@@ -592,7 +597,7 @@
 		A08F0C142607CD8600E81826 /* STBaseNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBaseNetworkOperation.swift; sourceTree = "<group>"; };
 		A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkOperationDecodable.swift; sourceTree = "<group>"; };
 		A08F0C1B2607D1C400E81826 /* STOperationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOperationManager.swift; sourceTree = "<group>"; };
-		A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STJSONNetworkOperation.swift; sourceTree = "<group>"; };
+		A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDataNetworkOperation.swift; sourceTree = "<group>"; };
 		A08F27A52785ACBC00EF8BE4 /* STAutoImportDialogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAutoImportDialogVM.swift; sourceTree = "<group>"; };
 		A08F27A72785AD7700EF8BE4 /* STAppSettings+Import.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Import.swift"; sourceTree = "<group>"; };
 		A08F27AA2785DA6D00EF8BE4 /* STImportVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STImportVM.swift; sourceTree = "<group>"; };
@@ -768,6 +773,15 @@
 			path = Header;
 			sourceTree = "<group>";
 		};
+		A00ADC0727B9540E0046CA38 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				A00ADC0527B94FE70046CA38 /* STNetworkTask.swift */,
+				A00ADC0827B954250046CA38 /* STNetworkUploadTask.swift */,
+			);
+			path = Tasks;
+			sourceTree = "<group>";
+		};
 		A00B4C1E263D73FE0085C55E /* AddMembersShearedAlbum */ = {
 			isa = PBXGroup;
 			children = (
@@ -884,6 +898,7 @@
 		A02203BF25EED86800D07C98 /* Stingle */ = {
 			isa = PBXGroup;
 			children = (
+				A076FDF8279C910B00EB68F5 /* Stingle.entitlements */,
 				A033D6E1260146C100E6AA83 /* Scense */,
 				A033D6EA2601491B00E6AA83 /* Common */,
 				A02203E425EEDB2500D07C98 /* Resources */,
@@ -909,7 +924,7 @@
 			isa = PBXGroup;
 			children = (
 				A02203C025EED86800D07C98 /* AppDelegate.swift */,
-				A02203C225EED86800D07C98 /* SceneDelegate.swift */,
+				A03245CE27930DAE001F9062 /* SceneDelegate.swift */,
 			);
 			path = RootClasses;
 			sourceTree = "<group>";
@@ -1927,7 +1942,7 @@
 				A0D29CDA262074560083967D /* STOperations.swift */,
 				A08F0C142607CD8600E81826 /* STBaseNetworkOperation.swift */,
 				A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */,
-				A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */,
+				A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */,
 				A08B77F82608D56300EEEC93 /* STDownloadNetworkOperation.swift */,
 				A0D29CE12620818E0083967D /* STUploadNetworkOperation.swift */,
 				A0FD3F3C267141430042EB8D /* STStreamNetworkOperation.swift */,
@@ -2365,6 +2380,7 @@
 				A022041725EEDC0300D07C98 /* STNetworkDispatcher.swift */,
 				A0FD3F3A26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift */,
 				A033889026E1780200C03FE1 /* STNetworkSession.swift */,
+				A00ADC0727B9540E0046CA38 /* Tasks */,
 			);
 			path = Dispatcher;
 			sourceTree = "<group>";
@@ -2549,7 +2565,7 @@
 				A08512D1277A5C640006A2DD /* STAutoImportDialogVC.swift in Sources */,
 				A0FD3F3B26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift in Sources */,
 				A001E6E6267CD8E900948E50 /* STGaleryFileViewerVM.swift in Sources */,
-				A08F0C202607D3B800E81826 /* STJSONNetworkOperation.swift in Sources */,
+				A08F0C202607D3B800E81826 /* STDataNetworkOperation.swift in Sources */,
 				A087C46D2614A5B8006775D2 /* STSyncManager.swift in Sources */,
 				A0C88FE425F3D6360061A41D /* STSync.swift in Sources */,
 				A022048025EEDC0400D07C98 /* STAuthRequest.swift in Sources */,
@@ -2613,6 +2629,7 @@
 				A04EF0FF26F27BD700C3FF31 /* STStorePurchese.swift in Sources */,
 				A022046C25EEDC0400D07C98 /* STNavigationController.swift in Sources */,
 				A022049825EEDC0400D07C98 /* UITextField+Extensions.swift in Sources */,
+				A03245CF27930DAE001F9062 /* SceneDelegate.swift in Sources */,
 				A05661FF2753A1CF006A1295 /* STAboutVM.swift in Sources */,
 				A052FA96263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift in Sources */,
 				A0301DE025FD6C6A005281EF /* ICDConvertable.swift in Sources */,
@@ -2682,6 +2699,7 @@
 				A02D88A3260BE99C00B82F16 /* SDownloader.swift in Sources */,
 				A0B8092C26ED33140063DA42 /* STStorageBaseCell.swift in Sources */,
 				A0821FDD27A1F3DE000A341D /* STMutableProgress.swift in Sources */,
+				A00ADC0627B94FE70046CA38 /* STNetworkTask.swift in Sources */,
 				A022048425EEDC0400D07C98 /* STAuth.swift in Sources */,
 				A022047B25EEDC0400D07C98 /* STResponse.swift in Sources */,
 				A04A20CF2606AE6400AFE2A2 /* Data+Operation.swift in Sources */,
@@ -2712,6 +2730,7 @@
 				A0301DE825FD6D48005281EF /* STDBInfo.swift in Sources */,
 				A05ABFFF26C9A2D700D36F34 /* STTextView.swift in Sources */,
 				A04A3E44265CF1F000F16EF9 /* STFileReader.swift in Sources */,
+				A00ADC0927B954250046CA38 /* STNetworkUploadTask.swift in Sources */,
 				A005FAEB25FEC1D600E7D8B0 /* STDateManager.swift in Sources */,
 				A0D4E83626C81D1900556871 /* STBackupPhraseView.swift in Sources */,
 				A0A7974C264FF42F00917C91 /* STFilesDownloaderActivityVM.swift in Sources */,
@@ -2805,7 +2824,6 @@
 				A0287EE126D1761D009E002B /* STImporter.swift in Sources */,
 				A040E21E269A356300003199 /* STGalleryTabBarVC.swift in Sources */,
 				A086FD2625F5A10900A8BC9C /* STCDAlbum.swift in Sources */,
-				A02203C325EED86800D07C98 /* SceneDelegate.swift in Sources */,
 				A0B267742624D7B30090E4ED /* STFilesViewController.swift in Sources */,
 				A03D555E26AC6596008705F2 /* STFileSystem.swift in Sources */,
 				A0D4E83026C8107800556871 /* Chinese.swift in Sources */,
@@ -2929,7 +2947,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3021,7 +3039,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3108,7 +3126,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3195,7 +3213,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
