@@ -11,7 +11,7 @@ class STOperationManager {
     
     static let shared: STOperationManager = STOperationManager()
     private let defaultQueue = STOperationQueue(qualityOfService: .userInteractive)
-    private let uploadQueue = STOperationQueue(qualityOfService: .background)
+    private let uploadQueue = STOperationQueue(maxConcurrentOperationCount: 4000, qualityOfService: .background)
     private let downloadQueue = STOperationQueue(qualityOfService: .background)
     private let streamQueue = STOperationQueue(qualityOfService: .userInteractive)
    

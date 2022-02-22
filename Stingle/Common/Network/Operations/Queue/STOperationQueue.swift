@@ -19,8 +19,7 @@ class STOperationQueue: IOperationQueue {
     
     let maxConcurrentOperationCount: Int
     let qualityOfService: QualityOfService
-    
-    private var operations = STObserverEvents<IOperation>()
+        
     weak var underlyingQueue: DispatchQueue?
     private let operationsQueue: OperationQueue
     
@@ -47,18 +46,16 @@ class STOperationQueue: IOperationQueue {
     }
     
     func allOperations() -> [IOperation] {
-        return self.operations.objects
+        return self.operationsQueue.operations as! [IOperation]
     }
 
     //MARK: - IOperationQueue
     
     func operation(didStarted operation: IOperation) {
-        self.operations.addObject(operation)
         self.operationsQueue.addOperation(operation)
     }
     
     func operationWaitUntil(didStarted operation: IOperation) {
-        self.operations.addObject(operation)
         self.operationsQueue.addOperations([operation], waitUntilFinished: true)
     }
     

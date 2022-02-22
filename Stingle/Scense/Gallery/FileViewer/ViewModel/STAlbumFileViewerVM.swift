@@ -70,7 +70,6 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
             self.downloadFile(file: file)
         case .setAlbumCover:
             self.albumWorker.setCover(album: self.album, caver: file.file, success: { _ in
-                print("")
             }, failure: nil)
         }
     }

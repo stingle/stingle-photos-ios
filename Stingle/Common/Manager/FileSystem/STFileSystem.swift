@@ -72,6 +72,9 @@ class STFileSystem {
                 try? self.createDirectory(url: url)
             }
         }
+        
+       self.fileManager.clearTmpDirectory()
+        
     }
     
 }
@@ -234,7 +237,6 @@ extension STFileSystem {
         do {
             try self.fileManager.removeItem(at: url)
         } catch {
-            print(error)
         }
     }
     
@@ -330,7 +332,6 @@ extension STFileSystem {
             formatter.includesUnit = false
             return formatter.string(fromByteCount: bytes) as String
         }
-
 
         //MARK: Get String Value
         class var totalDiskSpaceStr: String {
@@ -570,4 +571,20 @@ extension FileManager {
         
     }
 
+}
+
+
+extension FileManager {
+    
+    func clearTmpDirectory() {
+        do {
+            let tmpDirectory = try contentsOfDirectory(atPath: NSTemporaryDirectory())
+            try tmpDirectory.forEach {[unowned self] file in
+                let path = String.init(format: "%@%@", NSTemporaryDirectory(), file)
+                try self.removeItem(atPath: path)
+            }
+        } catch {
+            print(error)
+        }
+    }
 }
