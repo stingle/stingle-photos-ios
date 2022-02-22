@@ -158,7 +158,8 @@ class STNetworkDispatcher {
     
     func uploadBackround<T: Decodable>(request: IUploadRequest, progress: ProgressTask?, completion: @escaping (Result<T>) -> Swift.Void)  -> INetworkTask? {
         let url = URL(string: request.url)!
-        let formDataRequest = MultipartFormDataRequest(url: url, headers: request.headers)
+                
+        let formDataRequest = STNetworkUploadTask.Request(url: url, headers: request.headers)
         request.files.forEach { (file) in
             formDataRequest.addDataField(named: file.name, filename: file.fileName, fileUrl: file.fileUrl, mimeType: file.type)
         }
@@ -191,11 +192,10 @@ class STNetworkDispatcher {
             }
             
         } progress: { progressTask in
-            DispatchQueue.main.async {
-                progress?(progressTask)
-            }
+            progress?(progressTask)
         }
-        return SessionTask(sessionTask: task)
+        
+        return task
     }
     
     func stream(request: IStreamRequest, queue: DispatchQueue, stream: @escaping (_ chank: Data) -> Swift.Void, completion: @escaping (Result<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)>) -> Swift.Void) -> INetworkTask? {
@@ -258,9 +258,7 @@ class STNetworkDispatcher {
         
         return Task(request: streamRequest)
     }
-    
-    
-        		
+            		
 }
 
 

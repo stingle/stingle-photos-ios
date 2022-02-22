@@ -22,6 +22,8 @@
 		A00982F22623449100559C41 /* STUploadFileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00982F12623449100559C41 /* STUploadFileRequest.swift */; };
 		A00982F526234EAB00559C41 /* STUploadWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00982F426234EAB00559C41 /* STUploadWorker.swift */; };
 		A00982F82623747C00559C41 /* STDBUsed.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00982F72623747C00559C41 /* STDBUsed.swift */; };
+		A00ADC0627B94FE70046CA38 /* STNetworkTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00ADC0527B94FE70046CA38 /* STNetworkTask.swift */; };
+		A00ADC0927B954250046CA38 /* STNetworkUploadTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00ADC0827B954250046CA38 /* STNetworkUploadTask.swift */; };
 		A00B4C20263D74270085C55E /* STSharedMembersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00B4C1F263D74270085C55E /* STSharedMembersVC.swift */; };
 		A00B4C24263D75220085C55E /* Shear.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A00B4C23263D75220085C55E /* Shear.storyboard */; };
 		A00C6E5C264865410001662E /* STAlbumWorker+Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00C6E5B264865410001662E /* STAlbumWorker+Create.swift */; };
@@ -371,6 +373,8 @@
 		A00982F12623449100559C41 /* STUploadFileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUploadFileRequest.swift; sourceTree = "<group>"; };
 		A00982F426234EAB00559C41 /* STUploadWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUploadWorker.swift; sourceTree = "<group>"; };
 		A00982F72623747C00559C41 /* STDBUsed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDBUsed.swift; sourceTree = "<group>"; };
+		A00ADC0527B94FE70046CA38 /* STNetworkTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkTask.swift; sourceTree = "<group>"; };
+		A00ADC0827B954250046CA38 /* STNetworkUploadTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkUploadTask.swift; sourceTree = "<group>"; };
 		A00B4C1F263D74270085C55E /* STSharedMembersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSharedMembersVC.swift; sourceTree = "<group>"; };
 		A00B4C23263D75220085C55E /* Shear.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Shear.storyboard; sourceTree = "<group>"; };
 		A00C6E5B264865410001662E /* STAlbumWorker+Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAlbumWorker+Create.swift"; sourceTree = "<group>"; };
@@ -767,6 +771,15 @@
 				A000F691261232C200357953 /* Section */,
 			);
 			path = Header;
+			sourceTree = "<group>";
+		};
+		A00ADC0727B9540E0046CA38 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				A00ADC0527B94FE70046CA38 /* STNetworkTask.swift */,
+				A00ADC0827B954250046CA38 /* STNetworkUploadTask.swift */,
+			);
+			path = Tasks;
 			sourceTree = "<group>";
 		};
 		A00B4C1E263D73FE0085C55E /* AddMembersShearedAlbum */ = {
@@ -2367,6 +2380,7 @@
 				A022041725EEDC0300D07C98 /* STNetworkDispatcher.swift */,
 				A0FD3F3A26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift */,
 				A033889026E1780200C03FE1 /* STNetworkSession.swift */,
+				A00ADC0727B9540E0046CA38 /* Tasks */,
 			);
 			path = Dispatcher;
 			sourceTree = "<group>";
@@ -2685,6 +2699,7 @@
 				A02D88A3260BE99C00B82F16 /* SDownloader.swift in Sources */,
 				A0B8092C26ED33140063DA42 /* STStorageBaseCell.swift in Sources */,
 				A0821FDD27A1F3DE000A341D /* STMutableProgress.swift in Sources */,
+				A00ADC0627B94FE70046CA38 /* STNetworkTask.swift in Sources */,
 				A022048425EEDC0400D07C98 /* STAuth.swift in Sources */,
 				A022047B25EEDC0400D07C98 /* STResponse.swift in Sources */,
 				A04A20CF2606AE6400AFE2A2 /* Data+Operation.swift in Sources */,
@@ -2715,6 +2730,7 @@
 				A0301DE825FD6D48005281EF /* STDBInfo.swift in Sources */,
 				A05ABFFF26C9A2D700D36F34 /* STTextView.swift in Sources */,
 				A04A3E44265CF1F000F16EF9 /* STFileReader.swift in Sources */,
+				A00ADC0927B954250046CA38 /* STNetworkUploadTask.swift in Sources */,
 				A005FAEB25FEC1D600E7D8B0 /* STDateManager.swift in Sources */,
 				A0D4E83626C81D1900556871 /* STBackupPhraseView.swift in Sources */,
 				A0A7974C264FF42F00917C91 /* STFilesDownloaderActivityVM.swift in Sources */,

@@ -165,10 +165,7 @@ extension STCrypto {
                 completionHandler(nil, CryptoError.IO.readFailure)
                 return
             }
-            
-            if data.count == .zero {
-                print(range)
-            }
+
             var chunkIndex = fromOffSetIndex
             let bytes = Bytes(data)
             var result = Bytes()

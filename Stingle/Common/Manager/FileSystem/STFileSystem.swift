@@ -72,6 +72,9 @@ class STFileSystem {
                 try? self.createDirectory(url: url)
             }
         }
+        
+       self.fileManager.clearTmpDirectory()
+        
     }
     
 }
@@ -234,7 +237,6 @@ extension STFileSystem {
         do {
             try self.fileManager.removeItem(at: url)
         } catch {
-            print(error)
         }
     }
     
@@ -569,4 +571,20 @@ extension FileManager {
         
     }
 
+}
+
+
+extension FileManager {
+    
+    func clearTmpDirectory() {
+        do {
+            let tmpDirectory = try contentsOfDirectory(atPath: NSTemporaryDirectory())
+            try tmpDirectory.forEach {[unowned self] file in
+                let path = String.init(format: "%@%@", NSTemporaryDirectory(), file)
+                try self.removeItem(atPath: path)
+            }
+        } catch {
+            print(error)
+        }
+    }
 }

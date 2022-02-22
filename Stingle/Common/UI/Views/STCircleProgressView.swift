@@ -64,9 +64,7 @@ class STCircleProgressView: UIView {
             self.setNeedsDisplay()
         }
     }
-    
-    
-    
+        
     @IBInspectable var image: UIImage? {
         set {
             self.imageView.image = newValue

@@ -36,7 +36,9 @@ extension STDataBase {
                 context.reset()
             }
             self.observerProvider.forEach { obs in
-                obs.dataBaseProvider(didUpdated: self, models: [info])
+                DispatchQueue.main.async {
+                    obs.dataBaseProvider(didUpdated: self, models: [info])
+                }
             }
         }
         
