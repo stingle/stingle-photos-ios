@@ -241,7 +241,7 @@
 		A08F0C152607CD8600E81826 /* STBaseNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C142607CD8600E81826 /* STBaseNetworkOperation.swift */; };
 		A08F0C192607D01800E81826 /* STNetworkOperationDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */; };
 		A08F0C1C2607D1C400E81826 /* STOperationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1B2607D1C400E81826 /* STOperationManager.swift */; };
-		A08F0C202607D3B800E81826 /* STJSONNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */; };
+		A08F0C202607D3B800E81826 /* STDataNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */; };
 		A08F27A62785ACBC00EF8BE4 /* STAutoImportDialogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27A52785ACBC00EF8BE4 /* STAutoImportDialogVM.swift */; };
 		A08F27A82785AD7700EF8BE4 /* STAppSettings+Import.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27A72785AD7700EF8BE4 /* STAppSettings+Import.swift */; };
 		A08F27AB2785DA6D00EF8BE4 /* STImportVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27AA2785DA6D00EF8BE4 /* STImportVM.swift */; };
@@ -597,7 +597,7 @@
 		A08F0C142607CD8600E81826 /* STBaseNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBaseNetworkOperation.swift; sourceTree = "<group>"; };
 		A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkOperationDecodable.swift; sourceTree = "<group>"; };
 		A08F0C1B2607D1C400E81826 /* STOperationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STOperationManager.swift; sourceTree = "<group>"; };
-		A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STJSONNetworkOperation.swift; sourceTree = "<group>"; };
+		A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDataNetworkOperation.swift; sourceTree = "<group>"; };
 		A08F27A52785ACBC00EF8BE4 /* STAutoImportDialogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAutoImportDialogVM.swift; sourceTree = "<group>"; };
 		A08F27A72785AD7700EF8BE4 /* STAppSettings+Import.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Import.swift"; sourceTree = "<group>"; };
 		A08F27AA2785DA6D00EF8BE4 /* STImportVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STImportVM.swift; sourceTree = "<group>"; };
@@ -1942,7 +1942,7 @@
 				A0D29CDA262074560083967D /* STOperations.swift */,
 				A08F0C142607CD8600E81826 /* STBaseNetworkOperation.swift */,
 				A08F0C182607D01800E81826 /* STNetworkOperationDecodable.swift */,
-				A08F0C1F2607D3B800E81826 /* STJSONNetworkOperation.swift */,
+				A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */,
 				A08B77F82608D56300EEEC93 /* STDownloadNetworkOperation.swift */,
 				A0D29CE12620818E0083967D /* STUploadNetworkOperation.swift */,
 				A0FD3F3C267141430042EB8D /* STStreamNetworkOperation.swift */,
@@ -2565,7 +2565,7 @@
 				A08512D1277A5C640006A2DD /* STAutoImportDialogVC.swift in Sources */,
 				A0FD3F3B26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift in Sources */,
 				A001E6E6267CD8E900948E50 /* STGaleryFileViewerVM.swift in Sources */,
-				A08F0C202607D3B800E81826 /* STJSONNetworkOperation.swift in Sources */,
+				A08F0C202607D3B800E81826 /* STDataNetworkOperation.swift in Sources */,
 				A087C46D2614A5B8006775D2 /* STSyncManager.swift in Sources */,
 				A0C88FE425F3D6360061A41D /* STSync.swift in Sources */,
 				A022048025EEDC0400D07C98 /* STAuthRequest.swift in Sources */,

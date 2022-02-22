@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CXM-lh-l29">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CXM-lh-l29">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -670,13 +670,15 @@ may be vulnerable to brute force attacks.</string>
                                     </button>
                                 </subviews>
                             </stackView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvc-yT-KFc" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cvc-yT-KFc" customClass="STButton" customModule="Stingle" customModuleProvider="target">
                                 <rect key="frame" x="314" y="43" width="55" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="6AY-6Y-uAR"/>
+                                </constraints>
                                 <color key="tintColor" name="STPrimary"/>
                                 <inset key="contentEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="camera" catalog="system"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Button" image="camera" catalog="system"/>
                                 <connections>
                                     <action selector="didSelectCameraButton:" destination="wE9-QO-UYB" eventType="touchUpInside" id="IWt-uL-M0A"/>
                                 </connections>
@@ -686,6 +688,9 @@ may be vulnerable to brute force attacks.</string>
                         <color key="backgroundColor" name="STBackground"/>
                         <constraints>
                             <constraint firstItem="pN1-nC-517" firstAttribute="leading" secondItem="4Ie-xh-iYA" secondAttribute="leading" constant="60" id="9WP-B5-dwl"/>
+                            <constraint firstItem="4Ie-xh-iYA" firstAttribute="trailing" secondItem="Cvc-yT-KFc" secondAttribute="trailing" constant="21" id="B4P-xW-KUc"/>
+                            <constraint firstItem="Cvc-yT-KFc" firstAttribute="top" secondItem="ez5-sI-D75" secondAttribute="topMargin" constant="-1" id="Eaf-UG-zVQ"/>
+                            <constraint firstItem="Cvc-yT-KFc" firstAttribute="leading" secondItem="4Ie-xh-iYA" secondAttribute="leading" constant="314" id="Fbn-XT-9Yv"/>
                             <constraint firstItem="FV7-aq-EE7" firstAttribute="centerX" secondItem="4Ie-xh-iYA" secondAttribute="centerX" id="SoK-gs-rRx"/>
                             <constraint firstItem="4Ie-xh-iYA" firstAttribute="bottom" secondItem="FV7-aq-EE7" secondAttribute="bottom" constant="20" id="WFK-2W-WWK"/>
                             <constraint firstItem="4Ie-xh-iYA" firstAttribute="trailing" secondItem="pN1-nC-517" secondAttribute="trailing" constant="60" id="edc-vW-cwg"/>
@@ -1299,6 +1304,9 @@ may be vulnerable to brute force attacks.</string>
         </designable>
         <designable name="C2X-Wc-yRK">
             <size key="intrinsicContentSize" width="58" height="32"/>
+        </designable>
+        <designable name="Cvc-yT-KFc">
+            <size key="intrinsicContentSize" width="102.66666666666667" height="46"/>
         </designable>
         <designable name="GOP-25-xwS">
             <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>

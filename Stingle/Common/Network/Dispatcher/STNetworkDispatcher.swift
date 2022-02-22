@@ -70,21 +70,6 @@ class STNetworkDispatcher {
 	}
     
     @discardableResult
-    func requestJSON(request: IRequest, completion: @escaping (Result<Any>) -> Swift.Void) -> INetworkTask? {
-        let request = self.afRequest(request: request, sesion: self.session)
-        request.responseJSON(completionHandler: { (response: AFDataResponse<Any>) in
-            switch response.result {
-            case .success(let value):
-                completion(.success(result: value))
-            case .failure(let networkError):
-                let error = NetworkError.error(error: networkError)
-                completion(.failure(error: error))
-            }
-        })
-        return Task(request: request)
-    }
-    
-    @discardableResult
     func requestData(request: IRequest, completion: @escaping (Result<Data>) -> Swift.Void) -> INetworkTask? {
         let request = self.afRequest(request: request, sesion: self.session)
         request.responseData { (response) in
