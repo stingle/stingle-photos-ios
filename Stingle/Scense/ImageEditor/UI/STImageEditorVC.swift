@@ -210,9 +210,8 @@ extension STImageEditorVC: STResizeViewDelegate {
 
     func resizeView(view: STResizeView, didSelectSize size: CGSize) {
         view.isHidden = true
-        guard let image = self.image.resize(size: size) else {
-            return
-        }
+        
+        let image = self.image.scaled(newSize: size)
         self.image = image
 
         let croppedImage = self.croppedImage(image: self.image)

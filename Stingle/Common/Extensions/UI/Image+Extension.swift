@@ -48,6 +48,13 @@ extension UIImage {
 		return newImage
 	}
 
+    func scaled(newSize: CGSize) -> UIImage {
+        let image = UIGraphicsImageRenderer(size: newSize).image { _ in
+            self.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+        return image.withRenderingMode(self.renderingMode)
+    }
+
 }
 
 
