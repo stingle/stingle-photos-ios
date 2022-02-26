@@ -14,19 +14,12 @@ protocol IFormDataRequestBodyPart {
     func writeBodyStream(to outputStream: OutputStream, boundary: String, progressHandler: STNetworkUploadTask.Request.ProgressHandler<Int64>) throws
 }
 
-class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask> {
+class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTask.Request> {
     
-    let request: Request
     
     private let progressTask = Progress()
     private var receiveData: Data?
-    
     private var lastResponseDate: Date?
-    
-    init(session: URLSession, queue: DispatchQueue, request: Request, completion: ((STNetworkDispatcher.Result<Data>) -> Void)?, progress: ((Progress) -> Void)?) {
-        self.request = request
-        super.init(session: session, queue: queue, completion: completion, progress: progress)
-    }
     
     override func resumeTask() {
         super.resumeTask()
@@ -51,12 +44,7 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask> {
             } catch {
                 weakSelf.completion(with: .failure(error: .error(error: error)))
             }
-            
-            
         }
-                
-        
-
     }
     
     override func clean() {
@@ -130,7 +118,7 @@ extension STNetworkUploadTask: StreamDelegate {
 
 extension STNetworkUploadTask {
     
-    class Request {
+    class Request: INetworkTaskRequest {
         
         typealias ProgressHandler<T> = ((_ progress: T, _ stop: inout Bool) -> Void)
         

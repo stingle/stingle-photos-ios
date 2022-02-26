@@ -26,10 +26,14 @@ class STAssetResourceLoader: NSObject {
     private let scheme: Scheme
     private let header: STHeader
     private let dispatchQueue = DispatchQueue(label: "Player.Queue", attributes: .concurrent)
-    private let operationManager = STOperationManager.shared
     private let file: STLibrary.File
-    
     private var decrypters = [Decrypter]()
+    
+    lazy var networkSession: STNetworkSession = {
+        let config = URLSessionConfiguration.default
+        let networkSession = STNetworkSession(rootQueue: self.dispatchQueue, configuration: config)
+        return networkSession
+    }()
     
     init(file: STLibrary.File, header: STHeader) {
         guard let url = file.fileOreginalUrl,
@@ -58,7 +62,7 @@ class STAssetResourceLoader: NSObject {
             let fileReader = LocaleReader(url: self.url, queue: self.dispatchQueue)
             return fileReader
         } else {
-            let fileReader = NetworkReader(filename: self.file.file, dbSet: self.file.dbSet, queue: self.dispatchQueue)
+            let fileReader = NetworkReader(filename: self.file.file, dbSet: self.file.dbSet, queue: self.dispatchQueue, networkSession: self.networkSession)
             return fileReader
         }
     }
@@ -84,10 +88,6 @@ extension STAssetResourceLoader: AVAssetResourceLoaderDelegate {
             self.decrypters.append(decrypter)
             decrypter.start()
         }
-        return true
-    }
-    
-    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForRenewalOfRequestedResource renewalRequest: AVAssetResourceRenewalRequest) -> Bool {
         return true
     }
     

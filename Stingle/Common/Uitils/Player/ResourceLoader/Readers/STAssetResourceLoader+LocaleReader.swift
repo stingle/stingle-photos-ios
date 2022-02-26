@@ -59,7 +59,7 @@ extension STAssetResourceLoader {
 
 extension STAssetResourceLoader.LocaleReader: IAssetResourceLoader {
     
-    func startRead(startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, handler: @escaping (Data) -> Bool, error: @escaping (Error) -> Void) {
+    func startRead(startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, request: URLRequest, handler: @escaping (_ chunk: Data) -> Bool, error: @escaping (Error) -> Void) {
         self.read(startOffSet: startOffSet, fromOffSet: startOffSet, length: length, dataChunkSize: dataChunkSize, fullDataSize: fullDataSize, handler: handler, error: error)
     }
     

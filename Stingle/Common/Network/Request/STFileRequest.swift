@@ -71,7 +71,7 @@ enum STFileStreamRequest: IStreamRequest {
     var headers: [String : String]? {
         switch self {
         case .downloadRange(_, let offset, let length):
-            return ["Range": "bytes=\(offset)-\(offset + length)"]
+            return ["Range": "bytes=\(offset)-\(offset + length - 1)"]
         }
     }
     

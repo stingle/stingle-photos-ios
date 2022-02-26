@@ -19,8 +19,12 @@ extension STAssetResourceLoader {
         private var streamOperation: STStreamNetworkOperation?
         private(set) var receiveData = Data()
         private(set) var receiveCount: UInt64 = .zero
+        private let networkSession: STNetworkSession
+        private(set) var request: URLRequest?
+        private var sessionTask: INetworkSessionTask?
         
-        init(filename: String, dbSet: STLibrary.DBSet, queue: DispatchQueue) {
+        init(filename: String, dbSet: STLibrary.DBSet, queue: DispatchQueue, networkSession: STNetworkSession) {
+            self.networkSession = networkSession
             self.filename = filename
             self.dbSet = dbSet
             self.queue = queue
@@ -29,17 +33,24 @@ extension STAssetResourceLoader {
         //MARK: - Private methods
         
         private func read(url: URL, startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, handler: @escaping (Data) -> Bool, failure: @escaping (Error) -> Void) {
-            self.streamOperation = self.fileWorker.stream(url: url, offset: startOffSet, length: length, queue: self.queue) { result in
-            } stream: { [weak self] progress in
-                self?.queue.async(flags: .barrier) { [weak self] in
-                    self?.didReceiveNewData(progress, startOffSet: startOffSet, length: length, dataChunkSize: dataChunkSize, fullDataSize: fullDataSize, handler: handler)
-                }
-            } failure: { error in
-                if !error.isCancelled {
-                    failure(error)
+            var taskRequest: STNetworkDataTask.Request!
+            if let request = self.request {
+                taskRequest = STNetworkDataTask.Request(request: request, offset: startOffSet, length: length, url: url)
+            } else {
+                taskRequest = STNetworkDataTask.Request(offset: startOffSet, length: length, url: url)
+            }
+            self.sessionTask = self.networkSession.dataTask(request: taskRequest) { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    if !error.isCancelled {
+                        failure(error)
+                    }
+                case .success(let data):
+                    self?.queue.async(flags: .barrier) { [weak self] in
+                        self?.didReceiveNewData(data, startOffSet: startOffSet, length: length, dataChunkSize: dataChunkSize, fullDataSize: fullDataSize, handler: handler)
+                    }
                 }
             }
-            
         }
         
         //MARK: - Private
@@ -63,29 +74,25 @@ extension STAssetResourceLoader {
                 self.queue.async { [weak self] in
                     let ended = handler(requestedDataChank)
                     if ended {
-                        self?.streamOperation?.cancel()
+                        self?.sessionTask?.cancel()
                     }
-                    
                 }
-                
-                
             }
         }
         
         deinit {
+            self.sessionTask?.cancel()
             self.streamOperation?.cancel()
         }
         
     }
-    
-        
-}
 
+}
 
 extension STAssetResourceLoader.NetworkReader: IAssetResourceLoader {
     
-    func startRead(startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, handler: @escaping (Data) -> Bool, error: @escaping (Error) -> Void) {
-        
+    func startRead(startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, request: URLRequest, handler: @escaping (_ chunk: Data) -> Bool, error: @escaping (Error) -> Void) {
+        self.request = request
         if let streemUrl = self.streemUrl {
             self.read(url:streemUrl, startOffSet: startOffSet, length: length, dataChunkSize: dataChunkSize, fullDataSize: fullDataSize, handler: handler, failure: error)
         } else {
@@ -98,6 +105,7 @@ extension STAssetResourceLoader.NetworkReader: IAssetResourceLoader {
     
     func cancel() {
         self.streamOperation?.cancel()
+        self.sessionTask?.cancel()
     }
     
 }

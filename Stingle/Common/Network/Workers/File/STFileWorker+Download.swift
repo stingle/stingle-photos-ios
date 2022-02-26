@@ -21,8 +21,6 @@ extension STFileWorker {
             STFileWorker.fileUrlChash.setObject(fileUrl, forKey: key)
             success(responce)
         }, failure: failure)
-        
-        
     }
     
     @discardableResult
