@@ -8,6 +8,7 @@
 import Foundation
 import CoreImage
 import UIKit
+import CoreImage.CIFilterBuiltins
 
 class STFilterRange {
     let min: CGFloat
@@ -162,7 +163,6 @@ class STTemperatureAndTintFilter: IFilter {
         let filter = CIFilter(name: "CITemperatureAndTint")
         var vector = CIVector(x: 6500.0, y: 0)
         if let temperature = self.temperature {
-            print(temperature)
             vector = CIVector(x: temperature, y: vector.y)
         }
         if let tint = self.tint {
@@ -178,48 +178,36 @@ class STTemperatureAndTintFilter: IFilter {
     }
 }
 
-class STSharpnessFilter: IFilter {
-    static let range = STFilterRange(min: 0.0, max: 2.0, defaultValue: 0.0)
+class STNoiseReductionAndSharpnessFilter: IFilter {
+    static let reductionRange = STFilterRange(min: 0.0, max: 1, defaultValue: 0.0)
+    static let sharpnessRange = STFilterRange(min: 0.0, max: 5.0, defaultValue: 0.0)
 
-    var value: CGFloat?
+    var reduction: CGFloat?
+    var sharpness: CGFloat?
 
     var ciFilter: CIFilter? {
-        guard let value = self.value else {
+        guard self.reduction != nil || self.sharpness != nil else {
             return nil
         }
-//        let filter = CIFilter(name: "CICheckerboardGenerator")
-//        filter?.setValue(value, forKey: kCIInputSharpnessKey)
-        return nil//filter
+        let filter = CIFilter(name: "CINoiseReduction")
+        if let reduction = self.reduction {
+            filter?.setValue(reduction, forKey: "inputNoiseLevel")
+        }
+        if let sharpness = self.sharpness {
+            filter?.setValue(sharpness, forKey: "inputSharpness")
+        }
+        return filter
     }
 
     func reset() {
-        self.value = nil
-    }
-
-}
-
-class STNoiseReductionFilter: IFilter {
-    static let range = STFilterRange(min: 0.0, max: 2.0, defaultValue: 0.0)
-
-    var value: CGFloat?
-
-    var ciFilter: CIFilter? {
-        guard let value = self.value else {
-            return nil
-        }
-//        let filter = CIFilter(name: "CINoiseReduction")
-//        filter?.setValue(value, forKey: kCIInputSharpnessKey)
-        return nil//filter
-    }
-
-    func reset() {
-        self.value = nil
+        self.reduction = nil
+        self.sharpness = nil
     }
 
 }
 
 class STVignetteFilter: IFilter {
-    static let range = STFilterRange(min: -1.0, max: 1.0, defaultValue: 0.0)
+    static let range = STFilterRange(min: -2.0, max: 2.0, defaultValue: 0.0)
 
     var value: CGFloat?
 
@@ -227,9 +215,10 @@ class STVignetteFilter: IFilter {
         guard let value = self.value else {
             return nil
         }
-//        let filter = CIFilter(name: "CIVignette")
-//        filter?.setValue(value, forKey: kCIInputIntensityKey)
-        return nil//filter
+        let filter = CIFilter(name: "CIVignette")
+        filter?.setValue(value, forKey: kCIInputIntensityKey)
+        filter?.setValue(1.5, forKey: kCIInputRadiusKey)
+        return filter
     }
 
     func reset() {

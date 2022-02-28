@@ -59,8 +59,7 @@ class STImageFilterVC: UIViewController {
     private let exposureFilter = STExposureFilter()
     private let highlightShadowFilter = STHighlightShadowFilter()
     private let temperatureAndTintFilter = STTemperatureAndTintFilter()
-    private let sharpnessFilter = STSharpnessFilter()
-    private let noiseReductionFilter = STNoiseReductionFilter()
+    private let noiseReductionAndSharpnessFilter = STNoiseReductionAndSharpnessFilter()
     private let vignetteFilter = STVignetteFilter()
 
     private var newCollection: UITraitCollection?
@@ -75,8 +74,7 @@ class STImageFilterVC: UIViewController {
             self.whitePointFilter,
             self.vibranceFilter,
             self.temperatureAndTintFilter,
-            self.sharpnessFilter,
-            self.noiseReductionFilter,
+            self.noiseReductionAndSharpnessFilter,
             self.vignetteFilter
         ]
     }
@@ -249,9 +247,9 @@ class STImageFilterVC: UIViewController {
         case .tint:
             self.temperatureAndTintFilter.tint = value
         case .sharpness:
-            self.sharpnessFilter.value = value
+            self.noiseReductionAndSharpnessFilter.sharpness = value
         case .noiseReduction:
-            self.noiseReductionFilter.value = value
+            self.noiseReductionAndSharpnessFilter.reduction = value
         case .vignette:
             self.vignetteFilter.value = value
         }
@@ -302,9 +300,9 @@ class STImageFilterVC: UIViewController {
         case .tint:
             value = self.temperatureAndTintFilter.tint ?? STTemperatureAndTintFilter.tintRange.defaultValue
         case .sharpness:
-            value = self.sharpnessFilter.value ?? STSharpnessFilter.range.defaultValue
+            value = self.noiseReductionAndSharpnessFilter.sharpness ?? STNoiseReductionAndSharpnessFilter.sharpnessRange.defaultValue
         case .noiseReduction:
-            value = self.noiseReductionFilter.value ?? STNoiseReductionFilter.range.defaultValue
+            value = self.noiseReductionAndSharpnessFilter.reduction ?? STNoiseReductionAndSharpnessFilter.reductionRange.defaultValue
         case .vignette:
             value = self.vignetteFilter.value ?? STVignetteFilter.range.defaultValue
         }

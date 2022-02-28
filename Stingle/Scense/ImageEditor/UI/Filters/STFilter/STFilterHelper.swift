@@ -86,9 +86,9 @@ class STFilterHelper {
         case .tint:
             return STTemperatureAndTintFilter.tintRange
         case .sharpness:
-            return STSharpnessFilter.range
+            return STNoiseReductionAndSharpnessFilter.sharpnessRange
         case .noiseReduction:
-            return STNoiseReductionFilter.range
+            return STNoiseReductionAndSharpnessFilter.reductionRange
         case .vignette:
             return STVignetteFilter.range
         }
