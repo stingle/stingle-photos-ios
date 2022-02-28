@@ -19,57 +19,78 @@ class STFilterHelper {
     }
 
     class func rullerValue(for type: STFilterType, filterValue: CGFloat) -> CGFloat {
-        let filterValues = self.filterRange(type: type)
-        let (min, _, max) = self.rullerMinMaxValues(for: type)
-        let rullerRange = max - min
-        let filterRange = filterValues.max - filterValues.min
-        let step = rullerRange / filterRange 
-        let value = min + (filterValue - filterValues.min) * step
-        return value
+        let filterRange = self.filterRange(type: type)
+        let (min, defaultValue, max) = self.rullerMinMaxValues(for: type)
+        guard filterValue != filterRange.defaultValue else { return defaultValue }
+        switch type {
+        case .temperature:
+            if filterValue > filterRange.defaultValue {
+                let step = (abs(filterRange.min) - abs(filterRange.defaultValue)) / 100.0
+                return (abs(filterValue) - abs(filterRange.defaultValue)) / step
+            } else {
+                let step = (abs(filterRange.defaultValue) - abs(filterRange.max)) / 100.0
+                return (abs(filterRange.defaultValue) - abs(filterValue)) / step
+            }
+        default:
+            let rullerRange = max - min
+            let step = rullerRange / (filterRange.max - filterRange.min)
+            let value = min + (filterValue - filterRange.min) * step
+            return value
+        }
     }
 
     class func value(for type: STFilterType, rullerValue: CGFloat) -> CGFloat? {
-//        guard rullerValue != 0.0 else { return nil }
-
+        let (min, defaultValue, max) = self.rullerMinMaxValues(for: type)
+        guard rullerValue != defaultValue else { return nil }
         let filterValues = self.filterRange(type: type)
-        let (min, _, max) = self.rullerMinMaxValues(for: type)
-        let rullerRange = max - min
-        let filterRange = filterValues.max - filterValues.min
-        let step = filterRange / rullerRange
-        let value = filterValues.min + (rullerValue - min) * step
-        return value
+        switch type {
+        case .temperature:
+            if rullerValue > 0 {
+                let step = (filterValues.max - filterValues.defaultValue) * (rullerValue / 100)
+                return filterValues.defaultValue + step
+            } else {
+                let step = (filterValues.defaultValue - filterValues.min) * abs(rullerValue) / 100
+                return filterValues.defaultValue - step
+            }
+        default:
+            let rullerRange = max - min
+            let filterRange = filterValues.max - filterValues.min
+            let step = filterRange / rullerRange
+            let value = filterValues.min + (rullerValue - min) * step
+            return value
+        }
     }
 
     // MARK: - Private methdos
 
-    private class func filterRange(type: STFilterType) -> (min: CGFloat, max: CGFloat) {
+    private class func filterRange(type: STFilterType) -> STFilterRange {
         switch type {
         case .brightness:
-            return (STColorControlsFilter.brightnessRange.min, STColorControlsFilter.brightnessRange.max)
+            return STColorControlsFilter.brightnessRange
         case .contrast:
-            return (STColorControlsFilter.contrastRange.min, STColorControlsFilter.contrastRange.max)
+            return STColorControlsFilter.contrastRange
         case .saturation:
-            return (STColorControlsFilter.saturationRange.min, STColorControlsFilter.saturationRange.max)
+            return STColorControlsFilter.saturationRange
         case .vibrance:
-            return (STVibranceFilter.range.min, STVibranceFilter.range.max)
+            return STVibranceFilter.range
         case .exposure:
-            return (STExposureFilter.range.min, STExposureFilter.range.max)
+            return STExposureFilter.range
         case .highlights:
-            return (STHighlightShadowFilter.highlightRange.min, STHighlightShadowFilter.highlightRange.max)
+            return STHighlightShadowFilter.highlightRange
         case .shadows:
-            return (STHighlightShadowFilter.shadowRange.min, STHighlightShadowFilter.shadowRange.max)
+            return STHighlightShadowFilter.shadowRange
         case .whitePoint:
-            return (STWhitePointFilter.range.min, STWhitePointFilter.range.max)
+            return STWhitePointFilter.range
         case .temperature:
-            return (STTemperatureAndTintFilter.temperatureRange.min, STTemperatureAndTintFilter.temperatureRange.max)
+            return STTemperatureAndTintFilter.temperatureRange
         case .tint:
-            return (STTemperatureAndTintFilter.tintRange.min, STTemperatureAndTintFilter.tintRange.max)
+            return STTemperatureAndTintFilter.tintRange
         case .sharpness:
-            return (STSharpnessFilter.range.min, STSharpnessFilter.range.max)
+            return STSharpnessFilter.range
         case .noiseReduction:
-            return (STNoiseReductionFilter.range.min, STNoiseReductionFilter.range.max)
+            return STNoiseReductionFilter.range
         case .vignette:
-            return (STVignetteFilter.range.min, STVignetteFilter.range.max)
+            return STVignetteFilter.range
         }
     }
 

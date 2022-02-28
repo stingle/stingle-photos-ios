@@ -9,12 +9,12 @@ import Foundation
 import CoreImage
 import UIKit
 
-class STFilterRange<T> {
-    let min: T
-    let max: T
-    let defaultValue: T
+class STFilterRange {
+    let min: CGFloat
+    let max: CGFloat
+    let defaultValue: CGFloat
 
-    init(min: T, max: T, defaultValue: T) {
+    init(min: CGFloat, max: CGFloat, defaultValue: CGFloat) {
         self.min = min
         self.max = max
         self.defaultValue = defaultValue
@@ -27,9 +27,9 @@ protocol IFilter {
 }
 
 class STColorControlsFilter: IFilter {
-    static let brightnessRange = STFilterRange<CGFloat>(min: -0.2, max: 0.2, defaultValue: 0.0)
-    static let contrastRange = STFilterRange<CGFloat>(min: 0.9, max: 1.1, defaultValue: 1.0)
-    static let saturationRange = STFilterRange<CGFloat>(min: 0.0, max: 2.0, defaultValue: 1.0)
+    static let brightnessRange = STFilterRange(min: -0.2, max: 0.2, defaultValue: 0.0)
+    static let contrastRange = STFilterRange(min: 0.9, max: 1.1, defaultValue: 1.0)
+    static let saturationRange = STFilterRange(min: 0.0, max: 2.0, defaultValue: 1.0)
 
     var brightness: CGFloat?
     var contrast: CGFloat?
@@ -61,7 +61,7 @@ class STColorControlsFilter: IFilter {
 }
 
 class STWhitePointFilter: IFilter {
-    static let range = STFilterRange<CGFloat>(min: 0.0, max: 1.0, defaultValue: 0.5)
+    static let range = STFilterRange(min: 0.0, max: 1.0, defaultValue: 0.5)
 
     var value: CGFloat?
 
@@ -82,7 +82,7 @@ class STWhitePointFilter: IFilter {
 }
 
 class STVibranceFilter: IFilter {
-    static let range = STFilterRange<CGFloat>(min: -1.0, max: 1.0, defaultValue: 0.0)
+    static let range = STFilterRange(min: -1.0, max: 1.0, defaultValue: 0.0)
 
     var value: CGFloat?
 
@@ -102,7 +102,7 @@ class STVibranceFilter: IFilter {
 }
 
 class STExposureFilter: IFilter {
-    static let range = STFilterRange<CGFloat>(min: -1.0, max: 1.0, defaultValue: 0.0)
+    static let range = STFilterRange(min: -1.0, max: 1.0, defaultValue: 0.0)
 
     var value: CGFloat?
 
@@ -122,8 +122,8 @@ class STExposureFilter: IFilter {
 }
 
 class STHighlightShadowFilter: IFilter {
-    static let highlightRange = STFilterRange<CGFloat>(min: 0.0, max: 1.0, defaultValue: 0.5)
-    static let shadowRange = STFilterRange<CGFloat>(min: 0.0, max: 1.0, defaultValue: 0.5)
+    static let highlightRange = STFilterRange(min: 0.0, max: 1.0, defaultValue: 0.5)
+    static let shadowRange = STFilterRange(min: 0.0, max: 1.0, defaultValue: 0.5)
 
     var highlight: CGFloat?
     var shadow: CGFloat?
@@ -149,8 +149,8 @@ class STHighlightShadowFilter: IFilter {
 }
 
 class STTemperatureAndTintFilter: IFilter {
-    static let temperatureRange = STFilterRange<CGFloat>(min: 3500.0, max: 9500.0, defaultValue: 6500.0)
-    static let tintRange = STFilterRange<CGFloat>(min: -100.0, max: 100.0, defaultValue: 0.0)
+    static let temperatureRange = STFilterRange(min: 15000.0, max: 3000.0, defaultValue: 6500.0)
+    static let tintRange = STFilterRange(min: 50.0, max: -50.0, defaultValue: 0.0)
 
     var temperature: CGFloat?
     var tint: CGFloat?
@@ -160,15 +160,15 @@ class STTemperatureAndTintFilter: IFilter {
             return nil
         }
         let filter = CIFilter(name: "CITemperatureAndTint")
-        filter?.setValue(CIVector(x: 6500.0, y: 0.0), forKey: "inputTargetNeutral")
         var vector = CIVector(x: 6500.0, y: 0)
         if let temperature = self.temperature {
+            print(temperature)
             vector = CIVector(x: temperature, y: vector.y)
         }
         if let tint = self.tint {
             vector = CIVector(x: vector.x, y: tint)
         }
-        filter?.setValue(vector, forKey: "inputNeutral")
+        filter?.setValue(vector, forKey: "inputTargetNeutral")
         return filter
     }
 
@@ -179,7 +179,7 @@ class STTemperatureAndTintFilter: IFilter {
 }
 
 class STSharpnessFilter: IFilter {
-    static let range = STFilterRange<CGFloat>(min: 0.0, max: 2.0, defaultValue: 0.0)
+    static let range = STFilterRange(min: 0.0, max: 2.0, defaultValue: 0.0)
 
     var value: CGFloat?
 
@@ -199,7 +199,7 @@ class STSharpnessFilter: IFilter {
 }
 
 class STNoiseReductionFilter: IFilter {
-    static let range = STFilterRange<CGFloat>(min: 0.0, max: 2.0, defaultValue: 0.0)
+    static let range = STFilterRange(min: 0.0, max: 2.0, defaultValue: 0.0)
 
     var value: CGFloat?
 
@@ -219,7 +219,7 @@ class STNoiseReductionFilter: IFilter {
 }
 
 class STVignetteFilter: IFilter {
-    static let range = STFilterRange<CGFloat>(min: -1.0, max: 1.0, defaultValue: 0.0)
+    static let range = STFilterRange(min: -1.0, max: 1.0, defaultValue: 0.0)
 
     var value: CGFloat?
 
