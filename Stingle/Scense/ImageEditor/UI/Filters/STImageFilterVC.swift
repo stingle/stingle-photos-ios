@@ -336,6 +336,14 @@ class STImageFilterVC: UIViewController {
 
 }
 
+extension STImageFilterVC: UIScrollViewDelegate {
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.imageView
+    }
+
+}
+
 extension STImageFilterVC: STAngleRulerDelegate {
 
     func angleRuleDidChangeValue(value: CGFloat) {

@@ -25,7 +25,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="28V-rR-RRv" userLabel="ScrollViewBounds">
                                 <rect key="frame" x="0.0" y="44" width="428" height="700"/>
                                 <subviews>
-                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="V9w-0J-Sdo">
+                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" maximumZoomScale="20" translatesAutoresizingMaskIntoConstraints="NO" id="V9w-0J-Sdo">
                                         <rect key="frame" x="0.0" y="0.0" width="428" height="700"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5Sa-t6-Rh6">
@@ -943,20 +943,20 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="pBd-GY-uks"/>
                                 <exclude reference="onJ-l7-LkR"/>
                                 <exclude reference="pku-OU-h0l"/>
-                                <exclude reference="pBd-GY-uks"/>
                                 <exclude reference="OFC-sd-o12"/>
                                 <exclude reference="rOK-bk-J2M"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="constraints">
+                                <include reference="pBd-GY-uks"/>
                                 <exclude reference="99T-6s-3TY"/>
                                 <exclude reference="VdQ-FV-sMU"/>
                                 <include reference="onJ-l7-LkR"/>
                                 <include reference="pku-OU-h0l"/>
-                                <include reference="pBd-GY-uks"/>
                                 <exclude reference="yxL-KE-fdX"/>
                                 <exclude reference="35C-PJ-Z6s"/>
                                 <exclude reference="I3n-Wv-OxY"/>
