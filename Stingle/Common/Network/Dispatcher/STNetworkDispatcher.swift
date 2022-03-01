@@ -240,12 +240,10 @@ class STNetworkDispatcher {
                 }
             }
         }
-        
         return Task(request: streamRequest)
     }
             		
 }
-
 
 extension STNetworkDispatcher: EventMonitor {
     
