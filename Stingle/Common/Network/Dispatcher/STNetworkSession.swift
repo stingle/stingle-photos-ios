@@ -6,7 +6,10 @@
 //
 
 import Foundation
-import Alamofire
+
+protocol INetworkSessionEvent: AnyObject {
+    func networkSession(networkSession: STNetworkSession, didReceive data: Data)
+}
 
 class STNetworkSession: NSObject {
     
@@ -14,6 +17,8 @@ class STNetworkSession: NSObject {
     fileprivate var urlSession: URLSession!
         
     fileprivate var tasks = [Int: INetworkSessionTask]()
+    
+    weak var sessionEvent: INetworkSessionEvent?
     
     init(rootQueue: DispatchQueue = DispatchQueue(label: "org.stingle.session.rootQueue", attributes: .concurrent), configuration: URLSessionConfiguration = .default) {
         self.rootQueue = rootQueue
@@ -68,6 +73,7 @@ extension STNetworkSession: URLSessionDataDelegate {
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        self.sessionEvent?.networkSession(networkSession: self, didReceive: data)
         self.tasks[dataTask.taskIdentifier]?.urlSession(dataTask: dataTask, didReceive: data)
     }
     

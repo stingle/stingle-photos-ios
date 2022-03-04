@@ -305,16 +305,16 @@ extension STFileSystem {
             return nil
         }
         var result = url.appendingPathComponent("private")
-        if let filePath = filePath {
-            result = result.appendingPathComponent(filePath)
-        }
         
         let fileManager = FileManager.default
-        
         if !fileManager.fileExists(atPath: result.path) {
             try? fileManager.createDirectory(at: result, withIntermediateDirectories: true, attributes: nil)
         }
         
+        if let filePath = filePath {
+            result = result.appendingPathComponent(filePath)
+        }
+                        
         return result
     }
     

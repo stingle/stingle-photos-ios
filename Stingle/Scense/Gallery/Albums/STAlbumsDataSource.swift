@@ -93,27 +93,22 @@ extension STAlbumsDataSource: IDataBaseProviderProviderObserver {
         guard let snapshot = self.snapshotReference else {
             return
         }
-        snapshot.reloadItems(withIdentifiers: snapshot.itemIdentifiers)
         self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true)
     }
     
     func dataBaseProvider(didAdded provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         if provider === STApplication.shared.dataBase.contactProvider {
             self.contacts = nil
-            self.reloadSnapShot()
         } else if provider === STApplication.shared.dataBase.albumFilesProvider {
             self.albumInfoFiles.removeAll()
-            self.reloadSnapShot()
         }
     }
     
     func dataBaseProvider(didDeleted provider: IDataBaseProviderProvider, models: [IDataBaseProviderModel]) {
         if provider === STApplication.shared.dataBase.contactProvider {
             self.contacts = nil
-            self.reloadSnapShot()
         } else if provider === STApplication.shared.dataBase.albumFilesProvider {
             self.albumInfoFiles.removeAll()
-            self.reloadSnapShot()
         }
     }
     

@@ -47,11 +47,12 @@ extension STAuthWorker {
         
         var isReencrypt = false
         do {
-            let newLoginHash = try self.crypto.getPasswordHashForStorage(password: oldPassword)
+            let newLoginHash = try self.crypto.getPasswordHashForStorage(password: newPassword)
             guard let newPasswordHash = newLoginHash["hash"], let newPasswordSalt = newLoginHash["salt"] else {
                 failure?(AuthWorkerError.unknown)
                 return
             }
+            
             try self.crypto.reencryptPrivateKey(oldPassword: oldPassword, newPassword: newPassword)
             isReencrypt = true
             let includePrivateKey = STApplication.shared.utils.user()?.isKeyBackedUp ?? true
@@ -61,16 +62,17 @@ extension STAuthWorker {
             self.request(request: request) { (response: STResetPassword) in
                 STApplication.shared.utils.updateAppPassword(token: response.token, password: newPassword)
                 success?(STEmptyResponse())
+                                
             } failure: { error in
                 try? STApplication.shared.crypto.reencryptPrivateKey(oldPassword: newPassword, newPassword: oldPassword)
                 failure?(error)
             }
             
         } catch {
+            if isReencrypt {
+                try? self.crypto.reencryptPrivateKey(oldPassword: newPassword, newPassword: oldPassword)
+            }
             failure?(WorkerError.error(error: error))
-        }
-        if isReencrypt {
-            try? self.crypto.reencryptPrivateKey(oldPassword: newPassword, newPassword: oldPassword)
         }
         
     }
