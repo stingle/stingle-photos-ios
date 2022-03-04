@@ -112,9 +112,9 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     typealias Cell = ViewModel.Cell
     typealias Header = ViewModel.Header
     
-    private(set) var dataSourceReference: UICollectionViewDiffableDataSourceReference!
+    private(set) var dataSourceReference: UICollectionViewDiffableDataSourceReference?
     private(set) var isReloadingCollectionView = false
-    private(set) weak var collectionView: UICollectionView!
+    private(set) weak var collectionView: UICollectionView?
     
     var viewModel: ViewModel
     weak var delegate: STCollectionViewDataSourceDelegate?
@@ -146,7 +146,7 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         self.isReloadingCollectionView = true
         self.delegate?.dataSource(willApplySnapshot: self)
         super.didChangeContent(with: snapshot)
-        self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: true) { [weak self] in
+        self.dataSourceReference?.applySnapshot(snapshot, animatingDifferences: true) { [weak self] in
             guard let weakSelf = self else {
                 self?.isReloadingCollectionView = false
                 return
@@ -165,41 +165,42 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     }
     
     func reloadCollection() {
-        self.collectionView.reloadData()
+        self.collectionView?.reloadData()
     }
     
     func reloadCollectionVisibleCells() {
-        self.collectionView.indexPathsForVisibleItems.forEach { indexPath in
-            if let model = self.cellModel(at: indexPath), let cell = self.collectionView.cellForItem(at: indexPath) as? Cell {
+        self.collectionView?.indexPathsForVisibleItems.forEach { indexPath in
+            if let model = self.cellModel(at: indexPath), let cell = self.collectionView?.cellForItem(at: indexPath) as? Cell {
                 cell.configure(model: model)
             }
         }
     }
     
     func reload(indexPaths: [IndexPath], animating: Bool, completion: (() -> Void)? = nil) {
-        let snapshot = self.dataSourceReference.snapshot()
+        guard  let snapshot = self.dataSourceReference?.snapshot() else { return }
+        
         var identifiers = [Any]()
         indexPaths.forEach { indexPath in
-            if let identifier = self.dataSourceReference.itemIdentifier(for: indexPath) {
+            if let identifier = self.dataSourceReference?.itemIdentifier(for: indexPath) {
                 identifiers.append(identifier)
             }
         }
         snapshot.reloadItems(withIdentifiers: identifiers)
-        self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: animating) {
+        self.dataSourceReference?.applySnapshot(snapshot, animatingDifferences: animating) {
             completion?()
         }
     }
     
     func reload(animating: Bool, completion: (() -> Void)? = nil) {
-        let snapshot = self.dataSourceReference.snapshot()
+        guard  let snapshot = self.dataSourceReference?.snapshot() else { return }
         snapshot.reloadItems(withIdentifiers: snapshot.itemIdentifiers)
-        self.dataSourceReference.applySnapshot(snapshot, animatingDifferences: animating) {
+        self.dataSourceReference?.applySnapshot(snapshot, animatingDifferences: animating) {
             completion?()
         }
     }
     
     func cell(for indexPath: IndexPath) -> Cell? {
-        return self.collectionView.cellForItem(at: indexPath) as? Cell
+        return self.collectionView?.cellForItem(at: indexPath) as? Cell
     }
     
     func cellFor(collectionView: UICollectionView, indexPath: IndexPath, data: Any) -> Cell? {
@@ -248,14 +249,17 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     
     @discardableResult
     func createDataSourceReference(collectionView: UICollectionView) -> UICollectionViewDiffableDataSourceReference {
-        self.dataSourceReference = UICollectionViewDiffableDataSourceReference(collectionView: collectionView, cellProvider: { [weak self] (collectionView, indexPath, data) -> UICollectionViewCell? in
+                
+        let dataSourceReference = UICollectionViewDiffableDataSourceReference(collectionView: collectionView, cellProvider: { [weak self] (collectionView, indexPath, data) -> UICollectionViewCell? in
             let cell = self?.cellFor(collectionView: collectionView, indexPath: indexPath, data: data)
             return cell
         })
-        self.dataSourceReference.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+        dataSourceReference.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
             return self?.headerFor(collectionView: collectionView, indexPath: indexPath, kind: kind)
         }
-        return self.dataSourceReference
+        
+        self.dataSourceReference = dataSourceReference
+        return dataSourceReference
     }
     
     func generateCollectionLayoutItem() -> NSCollectionLayoutItem {
@@ -264,15 +268,5 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
         resutl.contentInsets = .zero
         return resutl
     }
-    
-    //MARK: - Private
-    
-    @objc private func endReloadCollectionVisibleCells() {
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(endReloadCollectionVisibleCells), object: nil)
-        if let snapshotReference = self.snapshotReference {
-            self.dataSourceReference.applySnapshot(snapshotReference, animatingDifferences: false)
-        }
         
-    }
-    
 }

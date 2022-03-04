@@ -15,7 +15,6 @@ extension STNavigationAnimator {
         private var sourceView: INavigationAnimatorSourceView?
         private var destinationView: INavigationAnimatorSourceView?
         private var destinationPreview: UIView?
-        
         private var finalFrame: CGRect?
         
         init(destinationVC: INavigationAnimatorDestinationVC, sourceVC: INavigationAnimatorSourceVC) {
