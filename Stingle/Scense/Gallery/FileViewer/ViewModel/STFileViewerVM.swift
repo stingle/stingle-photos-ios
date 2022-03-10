@@ -136,7 +136,6 @@ extension STFileViewerVM: IProviderDelegate {
     func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
         self.snapshot = snapshot
         self.delegate?.fileViewerVM(didUpdateedData: self)
-        
     }
 
 }

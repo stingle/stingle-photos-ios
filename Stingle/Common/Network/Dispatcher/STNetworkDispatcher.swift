@@ -51,6 +51,7 @@ class STNetworkDispatcher {
         
         let configuration = STNetworkSession.backroundConfiguration
         self.backroundSession = STNetworkSession(configuration: configuration)
+        self.backroundSession.sessionEvent = self
     }
 		
 	@discardableResult
@@ -240,12 +241,10 @@ class STNetworkDispatcher {
                 }
             }
         }
-        
         return Task(request: streamRequest)
     }
             		
 }
-
 
 extension STNetworkDispatcher: EventMonitor {
     
@@ -263,5 +262,17 @@ extension STNetworkDispatcher: EventMonitor {
         }
         STApplication.shared.utils.networkDispatcher(didReceive: self, logOunt: response)
     }
+    
+}
+
+extension STNetworkDispatcher: INetworkSessionEvent {
+    
+    func networkSession(networkSession: STNetworkSession, didReceive data: Data) {
+        guard let response = STResponse<STLogoutResponse>(from: data) else {
+            return
+        }
+        STApplication.shared.utils.networkDispatcher(didReceive: self, logOunt: response)
+    }
+        
     
 }

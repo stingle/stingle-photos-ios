@@ -46,7 +46,7 @@ extension STMoveAlbumFilesVC {
         
         static let imageBlankImageName = STLibrary.Album.imageBlankImageName
         
-        var delegate: STAlbumsDataSourceViewModelDelegate?
+        weak var delegate: STAlbumsDataSourceViewModelDelegate?
         let moveInfo: MoveInfo!
         let album: STLibrary.Album?
         

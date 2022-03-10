@@ -24,9 +24,7 @@ extension STAlbumFilesVC {
         }
         
         func cellModel(for indexPath: IndexPath, data: STLibrary.AlbumFile?) -> CellModel {
-           
             let image = STImageView.Image(album: self.album, albumFile: data, isThumb: true)
-           
             var videoDurationStr: String? = nil
             if let duration = data?.decryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).timeFormat()

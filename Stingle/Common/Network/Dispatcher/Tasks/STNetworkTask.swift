@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 protocol INetworkSessionTask: INetworkTask {
     var id: String { get }
@@ -16,18 +17,24 @@ protocol INetworkSessionTask: INetworkTask {
     func urlSession(task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void)
 }
 
-class STNetworkTask<UrlTask: URLSessionTask>: NSObject, INetworkSessionTask {
+protocol INetworkTaskRequest {
+    func asURLRequest() -> URLRequest
+}
+
+class STNetworkTask<UrlTask: URLSessionTask, Request: INetworkTaskRequest>: NSObject, INetworkSessionTask {
     
     private var completionTask: ((UrlTask) -> Void)?
     
     private(set) var id = UUID().uuidString
     private(set) var taskState: STNetworkDispatcher.TaskState = .running
-    
+        
+    private(set) var isStarted = false
     private(set) var completion: ((STNetworkDispatcher.Result<Data>) -> Void)?
     private(set) var progress: ((Progress) -> Void)?
-    private(set) var session: URLSession
-    private(set) var isStarted = false
-    private(set) var queue: DispatchQueue
+    
+    let queue: DispatchQueue
+    let session: URLSession
+    let request: Request
     
     var urlTask: UrlTask? {
         didSet {
@@ -37,8 +44,9 @@ class STNetworkTask<UrlTask: URLSessionTask>: NSObject, INetworkSessionTask {
         }
     }
     
-    init(session: URLSession, queue: DispatchQueue, completion: ((STNetworkDispatcher.Result<Data>) -> Void)?, progress: ((Progress) -> Void)?) {
+    init(session: URLSession, request: Request, queue: DispatchQueue, completion: ((STNetworkDispatcher.Result<Data>) -> Void)?, progress: ((Progress) -> Void)?) {
         self.session = session
+        self.request = request
         self.queue = queue
         self.completion = completion
         self.progress = progress
