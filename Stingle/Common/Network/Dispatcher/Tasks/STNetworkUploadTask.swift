@@ -76,11 +76,8 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
     //MARK: - Private methods
     
     private func didBuildProgress(progress: Double) {
-        
         let total: Double = 10000
-        
         let carrent = total * progress
-        
         let pp = Progress()
         
         pp.totalUnitCount = Int64(total)
@@ -175,7 +172,6 @@ extension STNetworkUploadTask {
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.setValue("multipart/form-data; boundary=\(self.boundary)", forHTTPHeaderField: "Content-Type")
-            
             if let headers = self.headers {
                 headers.forEach { header in
                     request.setValue(header.value, forHTTPHeaderField: header.key)
