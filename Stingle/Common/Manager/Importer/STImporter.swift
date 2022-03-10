@@ -195,7 +195,7 @@ extension STImporter {
                 fatalError("files not correct")
             }
             let dataBase = STApplication.shared.dataBase
-            dataBase.addAlbumFiles(albumFiles: [albumFile], album: self.album, reloadData: true)
+            dataBase.addAlbumFiles(albumFiles: [albumFile], album: self.album, reloadData: reloadData)
         }
         
     }

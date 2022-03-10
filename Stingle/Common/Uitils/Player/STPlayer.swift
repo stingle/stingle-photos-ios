@@ -141,7 +141,6 @@ class STPlayer: NSObject {
     }
     
     private func replaceCurrentFile(file: STLibrary.File) {
-        
         guard let fileHeader = file.decryptsHeaders.file else {
             return
         }
@@ -149,7 +148,8 @@ class STPlayer: NSObject {
         self.file = file
         let resourceLoader = STAssetResourceLoader(file: file, header: fileHeader)
         self.assetResourceLoader = resourceLoader
-        let item = AVPlayerItem(asset: resourceLoader.asset, automaticallyLoadedAssetKeys: nil)
+        let assetKeys = ["playable","hasProtectedContent"]
+        let item = AVPlayerItem(asset: resourceLoader.asset, automaticallyLoadedAssetKeys: assetKeys)
         self.player.replaceCurrentItem(with: item)
     }
     

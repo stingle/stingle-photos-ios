@@ -163,7 +163,7 @@ extension STCrypto {
         
         let headers = headersStrs
         let hdrs = headers.split(separator: "*")
-        
+                
         hdrs.enumerated().forEach { (index, hdr) in
             let st = self.base64urlToBase64(base64urlString:String(hdr))
             if let data = self.base64ToByte(encodedStr: st) {

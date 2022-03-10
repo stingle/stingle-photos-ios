@@ -10,14 +10,12 @@ import MobileCoreServices
 import Sodium
 
 protocol IAssetResourceLoader {
-    func startRead(startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, handler: @escaping (_ chunk: Data) -> Bool, error: @escaping (Error) -> Void)
+    func startRead(startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, request: URLRequest, handler: @escaping (_ chunk: Data) -> Bool, error: @escaping (Error) -> Void)
     func cancel()
 }
 
 protocol STAssetResourceLoaderDecrypterDelegate: AnyObject {
-    
     func decrypter(didFinished decrypter: STAssetResourceLoader.Decrypter)
-    
 }
 
 extension STAssetResourceLoader {
@@ -28,13 +26,15 @@ extension STAssetResourceLoader {
         let header: STHeader
         let request: AVAssetResourceLoadingRequest
         let crypto = STApplication.shared.crypto
-        
         weak var delegate: STAssetResourceLoaderDecrypterDelegate?
         
         private(set) var receiveData = Data()
         private(set) var isCanceled = false
         private(set) var isFinished = false
         private(set) var receiveDataByteCount: UInt64 = .zero
+        private(set) var requestedOffset: UInt64?
+        
+        let id = UUID().uuidString
         
         init(header: STHeader, reader: IAssetResourceLoader, request: AVAssetResourceLoadingRequest) {
             self.header = header
@@ -67,7 +67,7 @@ extension STAssetResourceLoader {
             let filename: NSString = self.header.fileName! as NSString
             let pathExtention = filename.pathExtension
             self.request.contentInformationRequest?.contentType = self.mimeTypeForPath(pathExtension: pathExtention)
-            self.request.contentInformationRequest?.isByteRangeAccessSupported = true
+            self.request.contentInformationRequest?.isByteRangeAccessSupported = false
             self.request.contentInformationRequest?.contentLength = Int64(self.header.dataSize)
         }
         
@@ -86,10 +86,9 @@ extension STAssetResourceLoader {
             var endChankIndex = self.dataChankIndex(playerOffSet: requestedOffset + requestedLength) + 1
             endChankIndex = min(self.chankCount, endChankIndex)
             let length = (endChankIndex - startChankIndex) * self.chankSize
-                        
             startIndex = startIndex + self.startOffSetHeader
-                         
-            self.reader.startRead(startOffSet: startIndex, length: length, dataChunkSize: self.chankSize, fullDataSize: self.encrypedDataSize) { [weak self] chunk in
+                                    
+            self.reader.startRead(startOffSet: startIndex, length: length, dataChunkSize: self.chankSize, fullDataSize: self.encrypedDataSize, request: self.request.request) { [weak self] chunk in
                 guard let weakSelf = self else { return true }
                 do {
                     let bytes = try weakSelf.crypto.decryptChunk(chunkData: Bytes(chunk), chunkNumber: startChankIndex + 1, header: weakSelf.header)
@@ -105,12 +104,7 @@ extension STAssetResourceLoader {
                 self?.didFinishLoading(error: error)
             }
         }
-        
-        var id = UUID().uuidString
-        
-        var requestedOffset: UInt64?
-        
-        
+                
         private func didReceiveNewData(data: Data) {
             self.receiveData.append(data)
             
@@ -173,9 +167,7 @@ extension STAssetResourceLoader {
             }
             self.delegate?.decrypter(didFinished: self)
         }
-        
     }
-    
 }
 
 

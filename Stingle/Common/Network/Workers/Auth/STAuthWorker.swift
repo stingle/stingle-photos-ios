@@ -23,15 +23,22 @@ class STAuthWorker: STWorker {
 	}
 		
 	func login(email: String, password: String, success: Success<STUser>? = nil, failure: Failure? = nil) {
+        if let path = STFileSystem.privateKeyUrl() {
+            try? FileManager.default.removeItem(at: path)
+        }
         self.loginRequest(email: email, password: password, isPrivateKeyIsAlreadySaved: false, success: success, failure: failure)
 	}
 	
 	func registerAndLogin(email: String, password: String, includePrivateKey: Bool, success: Success<STUser>? = nil, failure: Failure? = nil) {
+        if let path = STFileSystem.privateKeyUrl() {
+            try? FileManager.default.removeItem(at: path)
+        }
 		self.register(email: email, password: password, includePrivateKey: includePrivateKey, success: { [weak self] (register) in
 			guard let weakSelf = self else {
 				failure?(AuthWorkerError.loginError)
 				return
 			}
+                        
             weakSelf.loginRequest(email: email, password: password, isPrivateKeyIsAlreadySaved: true, success: success, failure: failure)
 		}, failure: failure)
 	}
@@ -42,6 +49,7 @@ class STAuthWorker: STWorker {
     }
     
     func loginRequest(email: String, password: String, isPrivateKeyIsAlreadySaved: Bool, success: Success<STUser>? = nil, failure: Failure? = nil) {
+                
         self.preLogin(email: email, success: { [weak self] (preLogin) in
             guard let weakSelf = self else {
                 failure?(AuthWorkerError.loginError)
@@ -94,14 +102,13 @@ class STAuthWorker: STWorker {
 		let isKeyBackedUp = login.isKeyBackedUp == 1 ? true : false
 		
         let user = STUser(email: email, homeFolder: login.homeFolder, isKeyBackedUp: isKeyBackedUp, token: login.token, userId: login.userId, managedObjectID: nil)
-        
-        STFileSystem.remove(userHomeFolderPath: user.homeFolder)
-        
+                
         if isPrivateKeyIsAlreadySaved {
             STKeyManagement.key = try self.crypto.getPrivateKey(password: password)
             STKeyManagement.importServerPublicKey(pbk: login.serverPublicKey)
             self.userProvider.update(model: user)
         } else if STKeyManagement.key == nil {
+            
             guard true == STKeyManagement.importKeyBundle(keyBundle: login.keyBundle, password: password) else {
                 self.userProvider.deleteAll()
                 STKeyManagement.signOut()

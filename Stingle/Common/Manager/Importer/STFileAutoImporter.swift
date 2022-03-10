@@ -308,7 +308,7 @@ extension STImporter.AuotImporter {
                     if let asset = (progress.importingFile as? STImporter.FileUploadable)?.asset {
                         importedAssets.append(asset)
                     }
-                    let currentFileDate = (progress.importingFile as? STImporter.FileUploadable)?.asset.modificationDate
+                    let currentFileDate = (progress.importingFile as? STImporter.FileUploadable)?.asset.creationDate
                     if let date = resultDate {
                         let fileDate: Date = currentFileDate ?? date
                         resultDate = max(date, fileDate)
@@ -353,12 +353,12 @@ extension STImporter.AuotImporter {
             let options = PHFetchOptions()
             options.includeHiddenAssets = true
             
-            let sortDescriptor = NSSortDescriptor(key: "\(#keyPath(PHAsset.modificationDate))", ascending: true)
+            let sortDescriptor = NSSortDescriptor(key: "\(#keyPath(PHAsset.creationDate))", ascending: true)
             options.sortDescriptors = [sortDescriptor]
             options.fetchLimit = self.fetchLimit
                         
             if let lastImportDate = self.date {
-                let predicate = NSPredicate(format: "\(#keyPath(PHAsset.modificationDate)) > %@", lastImportDate as CVarArg)
+                let predicate = NSPredicate(format: "\(#keyPath(PHAsset.creationDate)) > %@", lastImportDate as CVarArg)
                 options.predicate = predicate
             }
             let assets = PHAsset.fetchAssets(with: options)
