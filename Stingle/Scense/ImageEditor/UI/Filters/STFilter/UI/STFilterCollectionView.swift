@@ -45,9 +45,14 @@ class STFilterCollectionView: UICollectionView {
     }
 
     func setScrollDirection(scrollDirection: UICollectionView.ScrollDirection) {
+        guard self.flowLayout?.scrollDirection != scrollDirection else {
+            return
+        }
         self.flowLayout?.scrollDirection = scrollDirection
-        if let indexPath = self.indexPathsForSelectedItems?.first {
-            self.selectItem(indexPath: indexPath, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+            if let indexPath = self.indexPathsForSelectedItems?.first {
+                self.selectItem(indexPath: indexPath, animated: true)
+            }
         }
     }
 
@@ -78,7 +83,7 @@ class STFilterCollectionView: UICollectionView {
         self.dataSource = self
         self.delegate = self
         self.reloadData()
-        self.selectItem(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+        self.selectItem(indexPath: IndexPath(row: 0, section: 0), animated: false)
     }
 
     private func selectFilter(indexPath: IndexPath, animated: Bool = true) {
