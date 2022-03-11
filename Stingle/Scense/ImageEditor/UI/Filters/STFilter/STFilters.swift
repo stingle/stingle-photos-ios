@@ -29,7 +29,7 @@ protocol IFilter {
 
 class STColorControlsFilter: IFilter {
     static let brightnessRange = STFilterRange(min: -0.2, max: 0.2, defaultValue: 0.0)
-    static let contrastRange = STFilterRange(min: 0.9, max: 1.1, defaultValue: 1.0)
+    static let contrastRange = STFilterRange(min: 0.8, max: 1.2, defaultValue: 1.0)
     static let saturationRange = STFilterRange(min: 0.0, max: 2.0, defaultValue: 1.0)
 
     var brightness: CGFloat?
@@ -123,7 +123,7 @@ class STExposureFilter: IFilter {
 
 class STHighlightShadowFilter: IFilter {
     static let highlightRange = STFilterRange(min: 0.0, max: 1.0, defaultValue: 0.5)
-    static let shadowRange = STFilterRange(min: 0.0, max: 1.0, defaultValue: 0.5)
+    static let shadowRange = STFilterRange(min: -1.0, max: 1.0, defaultValue: 0.0)
 
     var highlight: CGFloat?
     var shadow: CGFloat?
@@ -133,6 +133,7 @@ class STHighlightShadowFilter: IFilter {
             return nil
         }
         let filter = CIFilter.highlightShadowAdjust()
+        filter.radius = 1.5
         if let highlight = self.highlight {
             filter.highlightAmount = Float(highlight)
         }
