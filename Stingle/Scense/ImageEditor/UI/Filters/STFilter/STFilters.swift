@@ -40,15 +40,15 @@ class STColorControlsFilter: IFilter {
         guard self.brightness != nil || self.contrast != nil || self.saturation != nil else {
             return nil
         }
-        let filter = CIFilter(name: "CIColorControls")
+        let filter = CIFilter.colorControls()
         if let brightness = self.brightness {
-            filter?.setValue(brightness, forKey: kCIInputBrightnessKey)
+            filter.brightness = Float(brightness)
         }
         if let contrast = self.contrast {
-            filter?.setValue(contrast, forKey: kCIInputContrastKey)
+            filter.contrast = Float(contrast)
         }
         if let saturation = self.saturation {
-            filter?.setValue(saturation, forKey: "inputSaturation")
+            filter.saturation = Float(saturation)
         }
         return filter
     }
@@ -62,7 +62,7 @@ class STColorControlsFilter: IFilter {
 }
 
 class STWhitePointFilter: IFilter {
-    static let range = STFilterRange(min: 0.0, max: 1.0, defaultValue: 0.5)
+    static let range = STFilterRange(min: 0.5, max: 1.5, defaultValue: 1)
 
     var value: CGFloat?
 
@@ -70,9 +70,8 @@ class STWhitePointFilter: IFilter {
         guard let value = self.value else {
             return nil
         }
-        let filter = CIFilter(name: "CIWhitePointAdjust")
-        let ciColor = CIColor(color: UIColor(white: value, alpha: 1.0))
-        filter?.setValue(ciColor, forKey: kCIInputColorKey)
+        let filter = CIFilter.gammaAdjust()
+        filter.power = Float(value)
         return filter
     }
 
@@ -91,8 +90,8 @@ class STVibranceFilter: IFilter {
         guard let value = self.value else {
             return nil
         }
-        let filter = CIFilter(name: "CIVibrance")
-        filter?.setValue(value, forKey: "inputAmount")
+        let filter = CIFilter.vibrance()
+        filter.amount = Float(value)
         return filter
     }
 
@@ -111,8 +110,8 @@ class STExposureFilter: IFilter {
         guard let value = self.value else {
             return nil
         }
-        let filter = CIFilter(name: "CIExposureAdjust")
-        filter?.setValue(value, forKey: kCIInputEVKey)
+        let filter = CIFilter.exposureAdjust()
+        filter.ev = Float(value)
         return filter
     }
 
@@ -133,12 +132,12 @@ class STHighlightShadowFilter: IFilter {
         guard self.highlight != nil || self.shadow != nil else {
             return nil
         }
-        let filter = CIFilter(name: "CIHighlightShadowAdjust")
+        let filter = CIFilter.highlightShadowAdjust()
         if let highlight = self.highlight {
-            filter?.setValue(highlight, forKey: "inputHighlightAmount")
+            filter.highlightAmount = Float(highlight)
         }
         if let shadow = self.shadow {
-            filter?.setValue(shadow, forKey: "inputShadowAmount")
+            filter.shadowAmount = Float(shadow)
         }
         return filter
     }
@@ -160,7 +159,7 @@ class STTemperatureAndTintFilter: IFilter {
         guard self.temperature != nil || self.tint != nil else {
             return nil
         }
-        let filter = CIFilter(name: "CITemperatureAndTint")
+        let filter = CIFilter.temperatureAndTint()
         var vector = CIVector(x: 6500.0, y: 0)
         if let temperature = self.temperature {
             vector = CIVector(x: temperature, y: vector.y)
@@ -168,7 +167,7 @@ class STTemperatureAndTintFilter: IFilter {
         if let tint = self.tint {
             vector = CIVector(x: vector.x, y: tint)
         }
-        filter?.setValue(vector, forKey: "inputTargetNeutral")
+        filter.targetNeutral = vector
         return filter
     }
 
@@ -189,12 +188,12 @@ class STNoiseReductionAndSharpnessFilter: IFilter {
         guard self.reduction != nil || self.sharpness != nil else {
             return nil
         }
-        let filter = CIFilter(name: "CINoiseReduction")
+        let filter = CIFilter.noiseReduction()
         if let reduction = self.reduction {
-            filter?.setValue(reduction, forKey: "inputNoiseLevel")
+            filter.noiseLevel = Float(reduction)
         }
         if let sharpness = self.sharpness {
-            filter?.setValue(sharpness, forKey: "inputSharpness")
+            filter.sharpness = Float(sharpness)
         }
         return filter
     }
@@ -215,9 +214,9 @@ class STVignetteFilter: IFilter {
         guard let value = self.value else {
             return nil
         }
-        let filter = CIFilter(name: "CIVignette")
-        filter?.setValue(value, forKey: kCIInputIntensityKey)
-        filter?.setValue(1.5, forKey: kCIInputRadiusKey)
+        let filter = CIFilter.vignette()
+        filter.intensity = Float(value)
+        filter.radius = 1.5
         return filter
     }
 
