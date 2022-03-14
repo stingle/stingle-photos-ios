@@ -230,7 +230,7 @@ extension STImageEditorVC: STResizeViewDelegate {
 extension STImageEditorVC {
 
     static func create(image: UIImage) -> STImageEditorVC? {
-        if image.size.width < 1 || image.size.height < 1 {
+        guard let image = self.normalizedImage(image: image), image.size.width > 0, image.size.height > 0 else {
             return nil
         }
         let storyboard = UIStoryboard(name: "FileEdit", bundle: .main)
@@ -238,6 +238,17 @@ extension STImageEditorVC {
         vc.modalPresentationStyle = .fullScreen
         vc.image = image
         return vc
+    }
+
+    private static func normalizedImage(image: UIImage) -> UIImage? {
+        guard image.imageOrientation != .up else {
+            return image
+        }
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        image.draw(in: CGRect(origin: .zero, size: image.size))
+        let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return normalizedImage
     }
 
 }

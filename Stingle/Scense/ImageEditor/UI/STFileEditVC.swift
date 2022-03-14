@@ -36,11 +36,14 @@ class STFileEditVC: UIViewController {
     // MARK: - Private methods
 
     private func loadFile() {
-        guard let source = STImageView.Image.init(file: self.file, isThumb: false) else {
+        guard let source = STImageView.Image(file: self.file, isThumb: false) else {
             assert(false, "Design error:")
             // TODO: Shahen present error than close view
             self.delegate?.fileEdit(didSelectCancel: self)
             return
+        }
+        guard source.header.fileOreginalType == .image else {
+            fatalError("Currently we are not supporting other types of files")
         }
         self.loadingIndicator.startAnimating()
         STApplication.shared.downloaderManager.imageRetryer.download(source: source, success: { [weak self] image in
