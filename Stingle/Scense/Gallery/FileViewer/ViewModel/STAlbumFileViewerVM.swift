@@ -25,7 +25,8 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
         file?.updateIfNeeded(albumMetadata: self.album.albumMetadata)
         return file
     }
-    
+
+    // TODO: Shahen check with Alex when user can edit the file.(Also allow to edit file if file is image).
     override func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
         if self.album.isOwner {
             return STFileViewerVC.ActionType.allCases

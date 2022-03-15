@@ -389,6 +389,7 @@
 "error_data_not_found" = "Data not found";
 "error_canceled" = "Canceled";
 "error_memory_low" = "Device memory is low";
+"error_file_is_unavailable" = "File is unavailable";
 
 "error_maching_passwords" = "Password don't match. Please enter the same password twice correctly";
 

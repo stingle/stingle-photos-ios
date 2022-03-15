@@ -29,9 +29,18 @@ class STGaleryFileViewerVM: STFileViewerVM<STCDFile> {
         }
     }
 
-    // TODO: Shahen check with Alex when user can edit the file.(Also allow to edit file if file is image).
     override func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
-        return STFileViewerVC.ActionType.allCases
+        var allCasesWithoutEdit = STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
+        guard let originalType = file.decryptsHeaders.file?.fileOreginalType else {
+            return allCasesWithoutEdit
+        }
+        switch originalType {
+        case .video:
+            return allCasesWithoutEdit
+        case .image:
+            allCasesWithoutEdit.append(.edit)
+            return allCasesWithoutEdit
+        }
     }
     
 }

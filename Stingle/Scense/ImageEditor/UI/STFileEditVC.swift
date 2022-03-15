@@ -27,8 +27,6 @@ class STFileEditVC: UIViewController {
         self.loadFile()
     }
 
-    // TODO: Shahen
-
     @IBAction func cancelButtonAction(_ sender: Any) {
         self.delegate?.fileEdit(didSelectCancel: self)
     }
@@ -37,9 +35,10 @@ class STFileEditVC: UIViewController {
 
     private func loadFile() {
         guard let source = STImageView.Image(file: self.file, isThumb: false) else {
-            assert(false, "Design error:")
-            // TODO: Shahen present error than close view
-            self.delegate?.fileEdit(didSelectCancel: self)
+            assert(false, "File is unavailable")
+            self.showError(error: STError.fileIsUnavailable) {
+                self.delegate?.fileEdit(didSelectCancel: self)
+            }
             return
         }
         guard source.header.fileOreginalType == .image else {
@@ -54,7 +53,10 @@ class STFileEditVC: UIViewController {
         }, progress: nil, failure: { [weak self] error in
             DispatchQueue.main.async {
                 self?.loadingIndicator.stopAnimating()
-                // TODO: Shahen present error and close view
+                self?.showError(error: STError.fileIsUnavailable) {
+                    guard let self = self else { return }
+                    self.delegate?.fileEdit(didSelectCancel: self)
+                }
             }
         })
     }
