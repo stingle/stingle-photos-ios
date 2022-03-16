@@ -37,8 +37,8 @@ extension UIImage {
 extension UIImage {
 
     private enum Config {
-        static var croppingImageShortSideMaxSize: CGFloat = 1280
-        static var croppingImageLongSideMaxSize: CGFloat = 5120 // 1280 * 4
+        static var croppingImageShortSideMaxSize: CGFloat = 6400
+        static var croppingImageLongSideMaxSize: CGFloat = 10240 // 1280 * 8
     }
 
     func cropped(withCropperState cropperState: STCropperState) -> UIImage? {

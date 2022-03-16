@@ -156,6 +156,8 @@ class STCropperVC: UIViewController, STRotatable, STStateRestorable, STFlipable 
         return pan
     }()
 
+    private(set) var defaultState: STCropperState?
+
     // MARK: Custom UI
 
     let verticalAspectRatios: [STAspectRatio] = [
@@ -225,6 +227,10 @@ class STCropperVC: UIViewController, STRotatable, STStateRestorable, STFlipable 
         self.updateLayout()
 
         self.matchScrollViewAndCropView()
+
+        if self.defaultState == nil {
+            self.defaultState = self.saveState()
+        }
     }
 
     override func viewDidLayoutSubviews() {

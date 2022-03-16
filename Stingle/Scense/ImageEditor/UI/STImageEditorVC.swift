@@ -38,7 +38,20 @@ class STImageEditorVC: UIViewController {
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var resizeView: STResizeView!
 
-    private var image: UIImage!
+    private var image: UIImage! {
+        didSet {
+            let imageSize = self.image.size
+            let maxPreviewImageWidht: CGFloat = 2048.0
+            if imageSize.width > maxPreviewImageWidht {
+                self.previewImage = self.image.scale(to: maxPreviewImageWidht) ?? self.image
+            } else {
+                self.previewImage = self.image
+            }
+        }
+    }
+
+    private var previewImage: UIImage!
+    private var resizedSize: CGSize?
 
     private var newCollection: UITraitCollection?
 
@@ -73,13 +86,13 @@ class STImageEditorVC: UIViewController {
         let additionalSafeAreaInsets = self.additionalSafeAreaInsets(newCollection: self.traitCollection)
         if let vc = segue.destination as? STImageFilterVC, segue.identifier == "ImageFilterSegue" {
             self.imageFilterVC = vc
-            self.imageFilterVC.setImage(image: self.image)
+            self.imageFilterVC.setImage(image: self.previewImage)
             self.imageFilterVC.delegate = self
             self.imageFilterVC.additionalSafeAreaInsets = additionalSafeAreaInsets
         }
         if let vc = segue.destination as? STCropperVC, segue.identifier == "ImageCropRotateSegue" {
             self.imageCropRotateVC = vc
-            self.imageCropRotateVC.originalImage = self.image
+            self.imageCropRotateVC.originalImage = self.previewImage
             self.imageCropRotateVC.delegate = self
             self.imageCropRotateVC.additionalSafeAreaInsets = additionalSafeAreaInsets
         }
@@ -94,8 +107,12 @@ class STImageEditorVC: UIViewController {
     @IBAction func doneButtonAction(_ sender: Any) {
         let croppedImage = self.croppedImage(image: self.image)
         let image = self.filteredImage(image: croppedImage)
-        self.imageCropRotateVC.originalImage = image
-        self.delegate?.imageEditor(didEditImage: self, image: image)
+        if let size = self.resizedSize {
+            let resizedImage = image.scaled(newSize: size)
+            self.delegate?.imageEditor(didEditImage: self, image: resizedImage)
+        } else {
+            self.delegate?.imageEditor(didEditImage: self, image: image)
+        }
     }
 
     @IBAction func optionButtonAction(_ sender: Any) {
@@ -114,6 +131,9 @@ class STImageEditorVC: UIViewController {
     // MARK: - Private methods
 
     private func croppedImage(image: UIImage) -> UIImage {
+        guard !self.imageCropRotateVC.isCurrentlyInState(self.imageCropRotateVC.defaultState) else {
+            return image
+        }
         let state = self.imageCropRotateVC.saveState()
         return image.cropped(withCropperState: state) ?? image
     }
@@ -135,7 +155,7 @@ class STImageEditorVC: UIViewController {
                 self.imageCropRotateContentView.alpha = 0.0
             }
             if syncImage {
-                let croppedImage = self.croppedImage(image: self.image)
+                let croppedImage = self.croppedImage(image: self.previewImage)
                 self.imageFilterVC.setImage(image: croppedImage, applyFilters: true)
             }
         case .crop:
@@ -146,7 +166,7 @@ class STImageEditorVC: UIViewController {
                 self.imageCropRotateContentView.alpha = 1.0
             }
             if syncImage {
-                let filteredImage = self.filteredImage(image: self.image)
+                let filteredImage = self.filteredImage(image: self.previewImage)
                 self.imageCropRotateVC.originalImage = filteredImage
             }
         }
@@ -210,14 +230,18 @@ extension STImageEditorVC: STResizeViewDelegate {
 
     func resizeView(view: STResizeView, didSelectSize size: CGSize) {
         view.isHidden = true
-        
-        let image = self.image.scaled(newSize: size)
-        self.image = image
+        self.resizedSize = size
+        guard self.previewImage.size.width > size.width && self.previewImage.size.height > size.height else {
+            return
+        }
 
-        let croppedImage = self.croppedImage(image: self.image)
+        let image = self.previewImage.scaled(newSize: size)
+        self.previewImage = image
+
+        let croppedImage = self.croppedImage(image: self.previewImage)
         self.imageFilterVC.setImage(image: croppedImage, applyFilters: true)
 
-        let filteredImage = self.filteredImage(image: self.image)
+        let filteredImage = self.filteredImage(image: self.previewImage)
         self.imageCropRotateVC.originalImage = filteredImage
     }
 
