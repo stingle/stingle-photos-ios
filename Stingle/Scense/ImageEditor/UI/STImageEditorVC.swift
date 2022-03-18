@@ -41,7 +41,7 @@ class STImageEditorVC: UIViewController {
     private var image: UIImage! {
         didSet {
             let imageSize = self.image.size
-            let maxPreviewImageWidht: CGFloat = 2048.0
+            let maxPreviewImageWidht: CGFloat = 1024.0
             if imageSize.width > maxPreviewImageWidht {
                 self.previewImage = self.image.scale(to: maxPreviewImageWidht) ?? self.image
             } else {
