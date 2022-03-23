@@ -10,6 +10,7 @@ import MetalPetal
 
 protocol STImageFilterVCDelegate: AnyObject {
     func imageFilter(didSelectResize vc: STImageFilterVC)
+    func imageFilter(didChange vc: STImageFilterVC)
 }
 
 class STImageFilterVC: UIViewController {
@@ -64,7 +65,7 @@ class STImageFilterVC: UIViewController {
 
     private var newCollection: UITraitCollection?
 
-    lazy var angleRuler = STAngleRuler(frame: self.rulerBackgroundView.bounds)
+    private lazy var angleRuler = STAngleRuler(frame: self.rulerBackgroundView.bounds)
 
     private var filters: [IFilter] {
         return [
@@ -102,6 +103,10 @@ class STImageFilterVC: UIViewController {
         }
         return layer
     }()
+
+    var hasChanges: Bool {
+        return self.filters.contains(where: { $0.ciFilter != nil })
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -350,6 +355,10 @@ extension STImageFilterVC: STAngleRulerDelegate {
         self.setSelectedFilterValue(rullerValue: value)
         self.filterCollectionView.setSelectedFilterValue(value: value)
         self.imageView.image = self.filterImage(mtImage: self.mtImage!) ?? self.image
+    }
+
+    func angleRuleDidEndEditing() {
+        self.delegate?.imageFilter(didChange: self)
     }
 
 }

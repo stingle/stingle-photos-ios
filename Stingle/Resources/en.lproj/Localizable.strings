@@ -89,6 +89,7 @@
 "add_member" = "Add member";
 "members" = "Members";
 "save" = "Save";
+"save_as_new_file" = "Save as new file";
 
 "delete_all" = "Delete All";
 "recover_all" = "Recover All";

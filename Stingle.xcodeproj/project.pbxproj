@@ -349,7 +349,6 @@
 		A0FD3F3D267141430042EB8D /* STStreamNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FD3F3C267141430042EB8D /* STStreamNetworkOperation.swift */; };
 		A0FF766D26151D86003DEC2B /* STUnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF766C26151D86003DEC2B /* STUnfairLock.swift */; };
 		B31D621727B64B4E00CBEA19 /* UIImage+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61E727B64B4E00CBEA19 /* UIImage+Helper.swift */; };
-		B31D621827B64B4E00CBEA19 /* UIColor+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61E827B64B4E00CBEA19 /* UIColor+Helper.swift */; };
 		B31D621927B64B4E00CBEA19 /* UIView+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */; };
 		B31D621A27B64B4E00CBEA19 /* HelperExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */; };
 		B31D621C27B64B4E00CBEA19 /* STFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61F127B64B4E00CBEA19 /* STFilterCell.swift */; };
@@ -745,7 +744,6 @@
 		A0FD3F3C267141430042EB8D /* STStreamNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStreamNetworkOperation.swift; sourceTree = "<group>"; };
 		A0FF766C26151D86003DEC2B /* STUnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnfairLock.swift; sourceTree = "<group>"; };
 		B31D61E727B64B4E00CBEA19 /* UIImage+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Helper.swift"; sourceTree = "<group>"; };
-		B31D61E827B64B4E00CBEA19 /* UIColor+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Helper.swift"; sourceTree = "<group>"; };
 		B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helper.swift"; sourceTree = "<group>"; };
 		B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperExtensions.swift; sourceTree = "<group>"; };
 		B31D61F127B64B4E00CBEA19 /* STFilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STFilterCell.swift; sourceTree = "<group>"; };
@@ -2492,7 +2490,6 @@
 			isa = PBXGroup;
 			children = (
 				B31D61E727B64B4E00CBEA19 /* UIImage+Helper.swift */,
-				B31D61E827B64B4E00CBEA19 /* UIColor+Helper.swift */,
 				B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */,
 				B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */,
 			);
@@ -2847,7 +2844,6 @@
 				A060010E27050A290071812C /* UIFont+Operation.swift in Sources */,
 				A049459C2611CDF4008D5E48 /* STView.swift in Sources */,
 				A0B8092526ED06E60063DA42 /* STStoreProducts.swift in Sources */,
-				B31D621827B64B4E00CBEA19 /* UIColor+Helper.swift in Sources */,
 				B31D622C27B64B4E00CBEA19 /* STCropBoxEdgeDraggable.swift in Sources */,
 				A0794B96269E3EF500B40FE9 /* STSettingsDetailTableViewCell.swift in Sources */,
 				A042199926909E58001FBFBF /* STFileWorker+Download.swift in Sources */,

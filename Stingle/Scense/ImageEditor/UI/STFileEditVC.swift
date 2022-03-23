@@ -79,6 +79,14 @@ class STFileEditVC: UIViewController {
         ])
     }
 
+    private func save(image: UIImage) {
+        // TODO: Khoren: Add functionality to upload edited image to server. Also update thumbnail.
+    }
+
+    private func saveAsNewFile(image: UIImage) {
+        // TODO: Khoren: Add functionality to upload edited image to server. Also update thumbnail.
+    }
+
 }
 
 extension STFileEditVC: STImageEditorVCDelegate {
@@ -88,7 +96,22 @@ extension STFileEditVC: STImageEditorVCDelegate {
     }
 
     func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage) {
-        // TODO: Khoren: Add functionality to upload edited image to server. Also update thumbnail.
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let stinglePhotos = UIAlertAction(title: "save".localized, style: .default) { [weak self] _ in
+            self?.save(image: image)
+        }
+        alert.addAction(stinglePhotos)
+        let shareOtherApps = UIAlertAction(title: "save_as_new_file".localized, style: .default) { [weak self] _ in
+            self?.saveAsNewFile(image: image)
+        }
+        alert.addAction(shareOtherApps)
+        let cancelAction = UIAlertAction(title: "cancel".localized, style: .cancel)
+        alert.addAction(cancelAction)
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceRect = vc.doneButton.frame
+            popoverController.sourceView = vc.doneButton
+        }
+        self.showDetailViewController(alert, sender: nil)
     }
 
 }

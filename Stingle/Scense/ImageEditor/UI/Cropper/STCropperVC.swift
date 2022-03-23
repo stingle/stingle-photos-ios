@@ -21,6 +21,7 @@ enum STCropBoxEdge: Int {
 
 protocol STCropperVCDelegate: AnyObject {
     func cropper(didSelectResize vc: STCropperVC)
+    func cropper(didChange vc: STCropperVC)
 }
 
 class STCropperVC: UIViewController, STRotatable, STStateRestorable, STFlipable {
@@ -148,6 +149,10 @@ class STCropperVC: UIViewController, STRotatable, STStateRestorable, STFlipable 
 
     var totalAngle: CGFloat {
         return self.autoHorizontalOrVerticalAngle(self.straightenAngle + self.rotationAngle + self.flipAngle)
+    }
+
+    var hasChanges: Bool {
+        return self.defaultState != nil && !self.isCurrentlyInState(self.defaultState)
     }
 
     lazy var cropBoxPanGesture: UIPanGestureRecognizer = {
@@ -544,6 +549,7 @@ extension STCropperVC: UIScrollViewDelegate {
 
                 self.manualZoomed = true
             }
+            self.delegate?.cropper(didChange: self)
         })
     }
 
@@ -610,6 +616,7 @@ extension STCropperVC: STAspectRatioViewDelegate {
 
     func aspectRatioViewDidSelectedAspectRatio(_ aspectRatio: STAspectRatio) {
         self.setAspectRatio(aspectRatio)
+        self.delegate?.cropper(didChange: self)
     }
 
 }
@@ -623,11 +630,13 @@ extension STCropperVC: STCropRotateToolBarDelegate {
 
     func flipButtonDidPress() {
         self.flip()
+        self.delegate?.cropper(didChange: self)
     }
 
     func rotateButtonDidPress() {
         self.rotate90degrees() {
             self.matchScrollViewAndCropView()
+            self.delegate?.cropper(didChange: self)
         }
     }
 
@@ -661,6 +670,7 @@ extension STCropperVC: STAngleRulerDelegate {
         }, completion: { _ in
             self.scrollViewContainer.isUserInteractionEnabled = true
             self.overlayView.gridLinesCount = 2
+            self.delegate?.cropper(didChange: self)
         })
     }
 

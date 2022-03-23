@@ -12,7 +12,7 @@ class STSelectableButton: UIButton {
     override var isSelected: Bool {
         didSet {
             if self.isSelected {
-                self.tintColor = .stYellow
+                self.tintColor = .appYellow
             } else {
                 self.tintColor = UIColor(white: 0.725, alpha: 1)
             }

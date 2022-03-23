@@ -149,7 +149,7 @@ class STImageEditorVC: UIViewController {
         switch option {
         case .filter:
             UIView.animate(withDuration: 0.2) {
-                self.filtersButton.tintColor = .stYellow
+                self.filtersButton.tintColor = .appYellow
                 self.resultContentView.alpha = 0.0
                 self.imageFiltersContentView.alpha = 1.0
                 self.imageCropRotateContentView.alpha = 0.0
@@ -160,7 +160,7 @@ class STImageEditorVC: UIViewController {
             }
         case .crop:
             UIView.animate(withDuration: 0.2) {
-                self.cropButton.tintColor = .stYellow
+                self.cropButton.tintColor = .appYellow
                 self.resultContentView.alpha = 0.0
                 self.imageFiltersContentView.alpha = 0.0
                 self.imageCropRotateContentView.alpha = 1.0
@@ -222,6 +222,14 @@ class STImageEditorVC: UIViewController {
         self.doneButton.setTitle("done".localized, for: .normal)
         self.resizeView.imageSize = self.image.size
         self.resizeView.delegate = self
+        self.updateDoneButton()
+    }
+
+    private func updateDoneButton() {
+        let isEnabled = self.resizedSize != nil || self.imageFilterVC.hasChanges || self.imageCropRotateVC.hasChanges
+        self.doneButton.isEnabled = isEnabled
+        let color: UIColor = isEnabled ? .appYellow : .gray
+        self.doneButton.setTitleColor(color, for: .normal)
     }
 
 }
@@ -230,7 +238,7 @@ extension STImageEditorVC: STResizeViewDelegate {
 
     func resizeView(view: STResizeView, didSelectSize size: CGSize) {
         view.isHidden = true
-        self.resizedSize = size
+        self.resizedSize = self.image.size.equalTo(size) ? nil : size
         guard self.previewImage.size.width > size.width && self.previewImage.size.height > size.height else {
             return
         }
@@ -283,12 +291,20 @@ extension STImageEditorVC: STImageFilterVCDelegate {
         self.resizeView.isHidden = false
     }
 
+    func imageFilter(didChange vc: STImageFilterVC) {
+        self.updateDoneButton()
+    }
+
 }
 
 extension STImageEditorVC: STCropperVCDelegate {
 
     func cropper(didSelectResize vc: STCropperVC) {
         self.resizeView.isHidden = false
+    }
+
+    func cropper(didChange vc: STCropperVC) {
+        self.updateDoneButton()
     }
 
 }
