@@ -3,7 +3,7 @@ import UIKit
 
 class STConstants {
     
-    static var minFreeDiskUnits: STBytesUnits = STBytesUnits(gb: 2)
+    static var minFreeDiskUnits: STBytesUnits = STBytesUnits(mb: 500)
 	
 	static func thumbSize(for originalSize: CGSize) -> CGSize {
         let targetSize = CGSize(width: 800, height: 800)
