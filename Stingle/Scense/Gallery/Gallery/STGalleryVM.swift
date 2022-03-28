@@ -25,7 +25,7 @@ class STGalleryVM {
     }
     
     func upload(assets: [PHAsset]) -> STImporter.Importer {
-        let files = assets.compactMap({ return STImporter.FileUploadable(asset: $0) })
+        let files = assets.compactMap({ return STImporter.FileImportable(asset: $0) })
         let importer = self.uploader.upload(files: files)
         return importer
     }

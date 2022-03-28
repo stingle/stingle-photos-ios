@@ -53,6 +53,7 @@ enum STImporter {
             self.uploadIfNeeded = false
             
             defer {
+                print("bbbbbbb startImport Importer")
                 self.startImport(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
             }
         }
@@ -64,6 +65,7 @@ enum STImporter {
             self.uploadIfNeeded = uploadIfNeeded
             
             defer {
+                print("bbbbbbb startImport init")
                 self.startImport(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
             }
         }
@@ -173,8 +175,12 @@ enum STImporter {
             self.operationManager.run(operation: operation, in: self.operationQueue)
             self.operations.insert(operation)
         }
+        
+        deinit {
+            print("bbbbbbb startImport deinit")
+        }
       
-    }
+    }    
     
 }
 
@@ -225,6 +231,9 @@ extension STImporter.Importer {
                                 
                 return
             }
+            
+            print("bbbbbbb requestFile")
+            
             self.uploadFile.requestFile(in: self.delegate?.underlyingQueue, progressHandler: { [weak self] progress, stop in
                 guard let weakSelf = self else {
                     return

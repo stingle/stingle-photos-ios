@@ -72,9 +72,7 @@ class STFileSystem {
                 try? self.createDirectory(url: url)
             }
         }
-        
        self.fileManager.clearTmpDirectory()
-        
     }
     
 }

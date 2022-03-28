@@ -139,7 +139,7 @@ class STAlbumFilesVM {
     }
     
     func upload(assets: [PHAsset]) -> STImporter.Importer {
-        let files = assets.compactMap({ return STImporter.AlbumFileUploadable(asset: $0, album: self.album) })
+        let files = assets.compactMap({ return STImporter.AlbumFileImportable(asset: $0, album: self.album) })
         return self.uploader.uploadAlbum(files: files, album: self.album)
     }
     

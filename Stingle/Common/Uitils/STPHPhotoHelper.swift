@@ -245,58 +245,78 @@ extension STPHPhotoHelper {
 extension STPHPhotoHelper {
     
     struct PHAssetDataInfo {
-        var url: URL
-        var videoDuration: TimeInterval
-        var fileSize: UInt
-        var creationDate: Date?
-        var modificationDate: Date?
+        let dataInfo: URL
+        let videoDuration: TimeInterval
+        let fileSize: UInt
+        let creationDate: Date?
+        let modificationDate: Date?
+        let freeBuffer: (() -> Void)?
     }
     
     typealias AssetProgressHandler = (Double, UnsafeMutablePointer<ObjCBool>?) -> Void
     
     private static let phManager = PHImageManager.default()
 
-    class func requestGetURL(asset: PHAsset, progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+    class func requestGetURL(asset: PHAsset, queue: DispatchQueue?, progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+        
+        let queue = queue ?? .main
         
         switch asset.mediaType {
         case .image:
-            self.requestImageAssetInfo(asset: asset, progressHandler: progressHandler, completion: completion)
+            
+            print("bbbbbbb PHPhoto requestGetURL image")
+            
+            self.requestImageAssetInfo(asset: asset, queue: queue, progressHandler: progressHandler, completion: completion)
         case .video:
-            self.requestVideoAssetInfo(asset: asset, progressHandler: progressHandler, completion: completion)
+            
+            print("bbbbbbb PHPhoto requestGetURL VideoAssetInfo")
+            
+            self.requestVideoAssetInfo(asset: asset, queue: queue, progressHandler: progressHandler, completion: completion)
         default:
             fatalError("this case not supported")
         }
     }
     
-    class func requestThumb(asset: PHAsset, progressHandler: AssetProgressHandler?, completion : @escaping ((_ image: UIImage?) -> Void)) {
+    class func requestThumb(asset: PHAsset, queue: DispatchQueue?, progressHandler: AssetProgressHandler?, completion : @escaping ((_ image: UIImage?) -> Void)) {
+        
+        let queue = queue ?? .main
         
         let options = PHImageRequestOptions()
         options.version = .current
-        options.resizeMode = .exact
+        options.resizeMode = .fast
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = true
+        options.isSynchronous = false
         var isStoped = false
         options.progressHandler = { progressValue, error, stop, info in
             progressHandler?(progressValue, stop)
             if isStoped == false {
                 isStoped = stop.pointee.boolValue
             }
+            
+            print("bbbbbbb PHPhoto requestThumb", progressValue, error ?? "")
         }
                 
         let size = STConstants.thumbSize(for: CGSize(width: asset.pixelWidth, height: asset.pixelHeight))
+        
+        
         self.phManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: options) { thumb, info  in
-            progressHandler?(1, nil)
-            guard !isStoped else {
-                completion(nil)
-                return
+            queue.async {
+                progressHandler?(1, nil)
+                guard !isStoped else {
+                    completion(nil)
+                    return
+                }
+                completion(thumb)
+                
+                print("bbbbbbb requestImage sssss")
             }
-            completion(thumb)
         }
     }
     
     //MARK: - Private
     
-    private class func requestVideoAssetInfo(asset: PHAsset,  progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+    private class func requestVideoAssetInfo(asset: PHAsset, queue: DispatchQueue,  progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
         
         guard asset.mediaType == .video else {
             completion(nil)
@@ -304,11 +324,9 @@ extension STPHPhotoHelper {
         }
         
         let options: PHVideoRequestOptions = PHVideoRequestOptions()
-
         options.version = .current
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = true
-        
         var isStoped = false
         
         options.progressHandler = { progress, error, stop, info in
@@ -316,6 +334,8 @@ extension STPHPhotoHelper {
             if isStoped == false {
                 isStoped = stop.pointee.boolValue
             }
+            
+            print("bbbbbbb PHPhoto requestGetURL VideoAssetInfo", progress, error ?? "", isStoped)
         }
         
         let modificationDate = asset.modificationDate ?? asset.creationDate
@@ -323,10 +343,14 @@ extension STPHPhotoHelper {
 
         self.phManager.requestAVAsset(forVideo: asset, options: options, resultHandler: { (asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) -> Void in
             
+            print("bbbbbbb PHPhoto requestGetURL VideoAssetInfo ssss")
+            
             if let urlAsset = asset as? AVURLAsset, let fileSize = urlAsset.fileSize {
                 
                 guard !isStoped else {
-                    completion(nil)
+                    queue.async {
+                        completion(nil)
+                    }
                     return
                 }
                 
@@ -334,25 +358,31 @@ extension STPHPhotoHelper {
                 let responseURL: URL = localVideoUrl
                 let videoDuration: TimeInterval = urlAsset.duration.seconds
                 let fileSize: UInt = UInt(fileSize)
-                let result = PHAssetDataInfo(url: responseURL,
-                                videoDuration: videoDuration,
-                                fileSize: fileSize,
-                                creationDate: creationDate,
-                                modificationDate: modificationDate)
-                
-                completion(result)
+                let result = PHAssetDataInfo(dataInfo: responseURL,
+                                             videoDuration: videoDuration,
+                                             fileSize: fileSize,
+                                             creationDate: creationDate,
+                                             modificationDate: modificationDate, freeBuffer: nil)
+                queue.async {
+                    completion(result)
+                }
             } else {
-                completion(nil)
+                queue.async {
+                    completion(nil)
+                }
             }
         })
     }
     
-    private class func requestImageAssetInfo(asset: PHAsset, progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+    private class func requestContentEditingAssetInfo(asset: PHAsset, queue: DispatchQueue, progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
         
         guard asset.mediaType == .image else {
-            completion(nil)
+            queue.async {
+                completion(nil)
+            }
             return
         }
+        
         let options: PHContentEditingInputRequestOptions = PHContentEditingInputRequestOptions()
         options.isNetworkAccessAllowed = true
         options.canHandleAdjustmentData = {(adjustmeta: PHAdjustmentData) -> Bool in
@@ -369,11 +399,13 @@ extension STPHPhotoHelper {
                 
         let modificationDate = asset.modificationDate ?? asset.creationDate
         let creationDate = asset.creationDate ?? asset.modificationDate
-        
+                
         asset.requestContentEditingInput(with: options, completionHandler: {(contentEditingInput: PHContentEditingInput?, info: [AnyHashable : Any]) -> Void in
             
             guard !isStoped else {
-                completion(nil)
+                queue.async {
+                    completion(nil)
+                }
                 return
             }
             
@@ -389,15 +421,110 @@ extension STPHPhotoHelper {
             let attr = try? FileManager.default.attributesOfItem(atPath: responseURL.path)
             let fileSize = (attr?[FileAttributeKey.size] as? UInt) ?? 0
                         
-            let result = PHAssetDataInfo(url: responseURL,
-                            videoDuration: videoDuration,
-                            fileSize: fileSize,
-                            creationDate: creationDate,
-                            modificationDate: modificationDate)
-            completion(result)
+            let result = PHAssetDataInfo(dataInfo: responseURL,
+                                         videoDuration: videoDuration,
+                                         fileSize: fileSize,
+                                         creationDate: creationDate,
+                                         modificationDate: modificationDate,
+                                        freeBuffer: nil)
+            queue.async {
+                completion(result)
+            }
         })
         
     }
+    
+    private class func requestImageAssetInfo(asset: PHAsset, queue: DispatchQueue, progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
+        
+        print("bbbbbbb PHPhoto requestImageDataAndOrientation start")
+        
+        guard let resource = PHAssetResource.assetResources(for: asset).first else {
+            
+            print("bbbbbbb PHPhoto requestImageDataAndOrientation completion nil")
+            
+            queue.async {
+                completion(nil)
+            }
+            return
+        }
+        
+        let options = PHImageRequestOptions()
+        options.deliveryMode = .highQualityFormat
+        options.resizeMode = .exact
+        options.isNetworkAccessAllowed = true
+        options.version = .current
+        options.isSynchronous = false
+        
+        var isStoped = false
+        options.progressHandler = { progressValue, error, stop, info in
+            progressHandler?(progressValue, stop)
+            if isStoped == false {
+                isStoped = stop.pointee.boolValue
+            }
+            
+            if let error = error {
+                print("bbbbbbb PHPhoto requestImageDataAndOrientation error", error)
+            }
+        }
+                
+        let modificationDate = asset.modificationDate ?? asset.creationDate
+        let creationDate = asset.creationDate ?? asset.modificationDate
+        
+        print("bbbbbbb PHPhoto requestImageDataAndOrientation start 2")
+        
+        self.phManager.requestImageDataAndOrientation(for: asset, options: options) { imageData, param, orientation, info in
+            print("bbbbbbb PHPhoto respomceImageData ", imageData?.count ?? .zero)
+            
+            queue.async {
+                
+                guard let imageData = imageData else {
+                    completion(nil)
+                    return
+                }
+                
+                let fileManager = FileManager.default
+                var url = fileManager.temporaryDirectory
+                url.appendPathComponent("asset.request.image")
+                let uuID = UUID().uuidString
+                url.appendPathComponent(uuID)
+                let removeUrl = url
+                url.appendPathComponent(resource.originalFilename)
+
+                do {
+                    try fileManager.createDirectory(at: removeUrl, withIntermediateDirectories: true, attributes: nil)
+                    try imageData.write(to: url)
+
+                    let responseURL: URL = url
+                    let videoDuration: TimeInterval = .zero
+                    let creationDate: Date? = creationDate
+                    let modificationDate: Date? = modificationDate
+                    let fileSize = UInt(imageData.count)
+
+                    let freeBuffer: (() -> Void)? = {
+                        
+                        print("bbbbbbb PHPhoto rfreeBuffer")
+                        
+                        try? fileManager.removeItem(at: removeUrl)
+                    }
+
+                    let result = PHAssetDataInfo(dataInfo: responseURL,
+                                                 videoDuration: videoDuration,
+                                                 fileSize: fileSize,
+                                                 creationDate: creationDate,
+                                                 modificationDate: modificationDate,
+                                                 freeBuffer: freeBuffer)
+                    completion(result)
+                } catch {
+                    completion(nil)
+                }
+
+            }
+
+        }
+        
+    }
+    
+    
     
 }
 

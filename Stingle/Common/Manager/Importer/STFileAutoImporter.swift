@@ -7,7 +7,13 @@
 
 import Foundation
 import Photos
-import UIKit
+
+protocol IAuotImporterObserver: AnyObject {
+    
+    func auotImporter(didStart auotImporter: STImporter.AuotImporter)
+    func auotImporter(didEnd auotImporter: STImporter.AuotImporter)
+    
+}
 
 extension STImporter {
     
@@ -36,11 +42,12 @@ extension STImporter {
         private var importFilesCount: Int = .zero
         private var canSetDate = true
         private var endImportingCallBack: (() -> Void)?
-        private let dispatchQueue = DispatchQueue(label: "AuotImporter.queue", attributes: .concurrent)
+        private let dispatchQueue = DispatchQueue(label: "AuotImporter.queue")
+        private let observerEvents = STObserverEvents<IAuotImporterObserver>()
         private var importQueue: STOperationQueue
         private var autoImportQueue: STOperationQueue
         private weak var currentOporation: Operation?
-        
+                
         private var importSettings: STAppSettings.Import {
             return STAppSettings.current.import
         }
@@ -65,6 +72,9 @@ extension STImporter {
             guard !self.isStarted else {
                 return
             }
+            self.observerEvents.forEach { observer in
+                observer.auotImporter(didStart: self)
+            }
             self.isStarted = true
             self.deleteImportedFiles { [weak self] in
                 self?.startImportAssets()
@@ -81,13 +91,19 @@ extension STImporter {
             }
         }
         
+        func add(_ listener: IAuotImporterObserver) {
+            self.observerEvents.addObject(listener)
+        }
+        
+        func remove(_ listener: IAuotImporterObserver) {
+            self.observerEvents.removeObject(listener)
+        }
+        
         func logout() {
             self.resetImportDate(date: .setupDate, startImport: false)
         }
         
-        //MARK: - Private methods
-        
-        private func cancelImporting(end: (() -> Void)?) {
+        func cancelImporting(end: (() -> Void)?) {
             if let currentOporation = self.currentOporation {
                 self.endImportingCallBack = {
                     end?()
@@ -97,6 +113,8 @@ extension STImporter {
                 end?()
             }
         }
+        
+        //MARK: - Private methods
         
         private func deleteImportedFiles(completion: @escaping (() -> Void)) {
             guard STPHPhotoHelper.authorizationStatus != nil, STAppSettings.current.import.isDeleteOriginalFilesAfterAutoImport else {
@@ -148,6 +166,9 @@ extension STImporter {
         private func didEndImportIng() {
             self.endImportingCallBack?()
             self.endImportingCallBack = nil
+            self.observerEvents.forEach { observer in
+                observer.auotImporter(didEnd: self)
+            }
         }
         
         private func updateDate(date: Date) {
@@ -192,6 +213,12 @@ extension STImporter {
 
 extension STImporter.AuotImporter: ISettingsObserver {
     
+    var canStartImport: Bool {
+        let application = STApplication.shared
+                
+        return application.utils.isLogedIn() && application.isFileSystemAvailable && STAppSettings.current.import.isAutoImportEnable && application.isFileSystemAvailable
+    }
+        
     func appSettings(didChange settings: STAppSettings, import: STAppSettings.Import) {
         if `import`.isAutoImportEnable {
             self.startImport()
@@ -199,6 +226,7 @@ extension STImporter.AuotImporter: ISettingsObserver {
             self.endImportIng()
         }
     }
+    
     
 }
 
@@ -255,11 +283,14 @@ extension STImporter.AuotImporter {
         
         override func resume() {
             super.resume()
+            print("bbbbbbb resume Operation AuotImporter")
             self.canImportFiles { [weak self] canImport in
                 if canImport {
                     self?.enumerateObjects()
+                    print("bbbbbbb resume enumerateObjects")
                 } else {
                     self?.responseFailed(error: AuotImporterError.canceled)
+                    print("bbbbbbb resume error")
                 }
             }
         }
@@ -267,13 +298,13 @@ extension STImporter.AuotImporter {
         //MARK: - Private methods
         
         private func enumerateObjects() {
-            var importFiles = [STImporter.FileUploadable]()
+            var importFiles = [STImporter.FileImportable]()
             self.enumerateObjects { asset, index, stop in
                 if self.isExpired {
                     stop.pointee = true
                     return
                 }
-                let importFile = STImporter.FileUploadable(asset: asset)
+                let importFile = STImporter.FileImportable(asset: asset)
                 importFiles.append(importFile)
             }
             guard !self.isExpired else {
@@ -282,7 +313,10 @@ extension STImporter.AuotImporter {
             self.startImport(importFiles: importFiles)
         }
         
-        private func startImport(importFiles: [STImporter.FileUploadable]) {
+        private func startImport(importFiles: [STImporter.FileImportable]) {
+            
+            
+            print("bbbbbbb startImport Operation AuotImporter")
             
             guard let queue = self.delegate?.underlyingQueue else {
                 self.responseFailed(error: AuotImporterError.canceled)
@@ -292,6 +326,9 @@ extension STImporter.AuotImporter {
             guard !self.isExpired else {
                 queue.async { [weak self] in
                     self?.responseFailed(error: AuotImporterError.canceled)
+                    
+                    print("bbbbbbb startImport Operation AuotImporter isExpired", self?.isExpired ?? false)
+                    
                 }
                 return
             }
@@ -299,16 +336,19 @@ extension STImporter.AuotImporter {
             var resultDate = self.date
             var importedAssets = [PHAsset]()
             
+            
+            print("bbbbbbb startImport STImporter.Importer")
+            
             let importer = STImporter.Importer(importFiles: importFiles, operationQueue: self.importQueue, startHendler: {}, progressHendler: { [weak self] progress in
                                 
                 queue.async { [weak self] in
                     guard let weakSelf = self else {
                         return
                     }
-                    if let asset = (progress.importingFile as? STImporter.FileUploadable)?.asset {
+                    if let asset = (progress.importingFile as? STImporter.FileImportable)?.asset {
                         importedAssets.append(asset)
                     }
-                    let currentFileDate = (progress.importingFile as? STImporter.FileUploadable)?.asset.creationDate
+                    let currentFileDate = (progress.importingFile as? STImporter.FileImportable)?.asset.creationDate
                     if let date = resultDate {
                         let fileDate: Date = currentFileDate ?? date
                         resultDate = max(date, fileDate)
@@ -376,6 +416,7 @@ extension STImporter.AuotImporter {
             STPHPhotoHelper.checkAndReqauestAuthorization(queue: queue) { status in
                 let settings = STAppSettings.current.import
                 let result = settings.isAutoImportEnable && status == .authorized
+                print("bbbbbbb checkAndReqauestAuthorization")
                 completion(result)
             }
         }

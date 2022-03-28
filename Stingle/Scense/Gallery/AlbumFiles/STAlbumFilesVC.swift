@@ -474,7 +474,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         importer.progressHendler = { progress in
             let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
             
-            if let asset = (progress.importingFile as? STImporter.FileUploadable)?.asset {
+            if let asset = (progress.importingFile as? STImporter.FileImportable)?.asset {
                 importedAssets.append(asset)
             }
             
@@ -489,7 +489,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         
         importer.complition = { [weak self] _, importableFiles in
             var assets = [PHAsset]()
-            (importableFiles as? [STImporter.FileUploadable])?.forEach({assets.append($0.asset)})
+            (importableFiles as? [STImporter.FileImportable])?.forEach({assets.append($0.asset)})
             DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
                 progressView.hide()
                 guard !assets.isEmpty else {

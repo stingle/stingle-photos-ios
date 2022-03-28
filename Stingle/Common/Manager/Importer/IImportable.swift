@@ -10,7 +10,7 @@ import UIKit
 
 protocol IImportable {
             
-    func requestData(in queue: DispatchQueue?, progress: STImporter.ProgressHandler?, success: @escaping (_ uploadInfo: STImporter.UploadFileInfo) -> Void, failure: @escaping (IError) -> Void)
+    func requestData(in queue: DispatchQueue?, progress: STImporter.ProgressHandler?, success: @escaping (_ uploadInfo: STImporter.ImportFileInfo) -> Void, failure: @escaping (IError) -> Void)
     
     func requestFile(in queue: DispatchQueue?, progressHandler: STImporter.ProgressHandler?, success: @escaping (_ file: STLibrary.File) -> Void, failure: @escaping (_ failure: IError ) -> Void)
     
@@ -18,19 +18,20 @@ protocol IImportable {
 
 extension STImporter {
     
-    struct UploadFileInfo {
+    struct ImportFileInfo {
         let oreginalUrl: URL
         let thumbImage: Data
         let fileType: STFileUploader.FileType
         let duration: TimeInterval
-        var fileSize: UInt
-        var creationDate: Date?
-        var modificationDate: Date?
+        let fileSize: UInt
+        let creationDate: Date?
+        let modificationDate: Date?
+        let freeBuffer: (() -> Void)?
     }
     
     typealias ProgressHandler = ((_ progress: Foundation.Progress, _ stop: inout Bool?) -> Void)
     
-    class FileUploadable: IImportable {
+    class FileImportable: IImportable {
         
         let asset: PHAsset
         
@@ -44,12 +45,15 @@ extension STImporter {
             totalProgress.totalUnitCount = 10000
             var progressValue = Double.zero
             
+            print("bbbbbbb requestFile", self.asset.localIdentifier)
+            
             self.requestData(in: queue, progress: { progress, stop in
                 progressValue = progress.fractionCompleted / 4
                 totalProgress.completedUnitCount = Int64(progressValue * Double(totalProgress.totalUnitCount))
                 progressHandler?(totalProgress, &stop)
             }, success: { [weak self] uploadInfo in
                 guard let weakSelf = self else {
+                    uploadInfo.freeBuffer?()
                     failure(STFileUploader.UploaderError.fileNotFound)
                     return
                 }
@@ -57,23 +61,29 @@ extension STImporter {
                 let afterImportfreeDiskUnits = STBytesUnits(bytes: freeDiskUnits.bytes - Int64(uploadInfo.fileSize))
                 
                 guard afterImportfreeDiskUnits > STConstants.minFreeDiskUnits else {
+                    uploadInfo.freeBuffer?()
                     failure(STFileUploader.UploaderError.memoryLow)
                     return
                 }
+                print("bbbbbbb requestData", weakSelf.asset.localIdentifier)
+                
                 do {
                     let file = try weakSelf.createUploadFile(info: uploadInfo, progressHandler: { progress,stop in
                         progressValue = 0.25 + progress.fractionCompleted / (4 / 3)
                         totalProgress.completedUnitCount = Int64(progressValue * Double(totalProgress.totalUnitCount))
                         progressHandler?(totalProgress, &stop)
+                        print("bbbbbbb requestData", weakSelf.asset.localIdentifier, progress.fractionCompleted)
                     })
+                    uploadInfo.freeBuffer?()
                     success(file)
                 } catch {
+                    uploadInfo.freeBuffer?()
                     failure(STFileUploader.UploaderError.error(error: error))
                 }
             }, failure: failure)
         }
 
-        func createUploadFile(info: UploadFileInfo, progressHandler: @escaping ProgressHandler) throws -> STLibrary.File {
+        func createUploadFile(info: ImportFileInfo, progressHandler: @escaping ProgressHandler) throws -> STLibrary.File {
             var fileType: STHeader.FileType!
             switch info.fileType {
             case .image:
@@ -127,7 +137,7 @@ extension STImporter {
             return file
         }
         
-        func requestData(in queue: DispatchQueue?, progress: ProgressHandler?, success: @escaping (_ uploadInfo: UploadFileInfo) -> Void, failure: @escaping (IError) -> Void) {
+        func requestData(in queue: DispatchQueue?, progress: ProgressHandler?, success: @escaping (_ uploadInfo: ImportFileInfo) -> Void, failure: @escaping (IError) -> Void) {
                         
             guard let fileType = STFileUploader.FileType(rawValue: self.asset.mediaType.rawValue) else {
                 failure(STFileUploader.UploaderError.phAssetNotValid)
@@ -144,7 +154,7 @@ extension STImporter {
                 }
             }
             
-            func compled(uploadInfo: UploadFileInfo) {
+            func compled(uploadInfo: ImportFileInfo) {
                 if let queue = queue {
                     queue.async {
                         success(uploadInfo)
@@ -158,7 +168,9 @@ extension STImporter {
             totalProgress.totalUnitCount = 10000
             var myProgressValue = Double.zero
             
-            STPHPhotoHelper.requestGetURL(asset: self.asset, progressHandler: { progressValue, stop in
+            print("bbbbbbb PHPhoto requestGetURL")
+            
+            STPHPhotoHelper.requestGetURL(asset: self.asset, queue: queue, progressHandler: { progressValue, stop in
                
                 myProgressValue = progressValue / 2
                 totalProgress.completedUnitCount = Int64(myProgressValue * Double(totalProgress.totalUnitCount))
@@ -168,14 +180,22 @@ extension STImporter {
                 if let isEnd = isEnd {
                     stop?.pointee = ObjCBool(isEnd)
                 }
+                
+                print("bbbbbbb PHPhoto requestGetURL, progress")
+                
             }) { [weak self] info in
+                
+                
+                print("bbbbbbb PHPhoto requestGetURL, info")
                 
                 guard let weakSelf = self, let info = info else {
                     compled(error: STFileUploader.UploaderError.phAssetNotValid)
                     return
                 }
                 
-                STPHPhotoHelper.requestThumb(asset: weakSelf.asset, progressHandler: { progressValue, stop in
+                print("bbbbbbb PHPhoto requestGetURL, requestThumb")
+                
+                STPHPhotoHelper.requestThumb(asset: weakSelf.asset, queue: queue, progressHandler: { progressValue, stop in
                     
                     myProgressValue = 0.5 + progressValue / 2
                     totalProgress.completedUnitCount = Int64(myProgressValue * Double(totalProgress.totalUnitCount))
@@ -188,16 +208,18 @@ extension STImporter {
                 }) { image in
                     guard let image = image, let thumbData = image.jpegData(compressionQuality: 0.7)  else {
                         compled(error: STFileUploader.UploaderError.phAssetNotValid)
+                        info.freeBuffer?()
                         return
                     }
                     
-                    let uploadInfo = UploadFileInfo(oreginalUrl: info.url,
-                                                                   thumbImage: thumbData,
-                                                                   fileType: fileType,
-                                                                   duration: info.videoDuration,
-                                                                   fileSize: info.fileSize,
-                                                                   creationDate: info.creationDate,
-                                                                   modificationDate: info.modificationDate)
+                    let uploadInfo = ImportFileInfo(oreginalUrl: info.dataInfo,
+                                                                    thumbImage: thumbData,
+                                                                    fileType: fileType,
+                                                                    duration: info.videoDuration,
+                                                                    fileSize: info.fileSize,
+                                                                    creationDate: info.creationDate,
+                                                                    modificationDate: info.modificationDate,
+                                                                    freeBuffer: info.freeBuffer)
                     compled(uploadInfo: uploadInfo)
                 }
             }
@@ -209,7 +231,7 @@ extension STImporter {
 
 extension STImporter {
     
-    class AlbumFileUploadable: FileUploadable {
+    class AlbumFileImportable: FileImportable {
         
         let album: STLibrary.Album
         
