@@ -63,34 +63,34 @@ class STFilterHelper {
 
     // MARK: - Private methdos
 
-    private class func filterRange(type: STFilterType) -> STFilterRange {
+    private class func filterRange(type: STFilterType) -> STFilter.Range {
         switch type {
         case .brightness:
-            return STColorControlsFilter.brightnessRange
+            return STFilter.ColorControls.brightnessRange
         case .contrast:
-            return STColorControlsFilter.contrastRange
+            return STFilter.ColorControls.contrastRange
         case .saturation:
-            return STColorControlsFilter.saturationRange
+            return STFilter.ColorControls.saturationRange
         case .vibrance:
-            return STVibranceFilter.range
+            return STFilter.Vibrance.range
         case .exposure:
-            return STExposureFilter.range
+            return STFilter.Exposure.range
         case .highlights:
-            return STHighlightShadowFilter.highlightRange
+            return STFilter.HighlightShadow.highlightRange
         case .shadows:
-            return STHighlightShadowFilter.shadowRange
+            return STFilter.HighlightShadow.shadowRange
         case .whitePoint:
-            return STWhitePointFilter.range
+            return STFilter.WhitePoint.range
         case .temperature:
-            return STTemperatureAndTintFilter.temperatureRange
+            return STFilter.TemperatureAndTint.temperatureRange
         case .tint:
-            return STTemperatureAndTintFilter.tintRange
+            return STFilter.TemperatureAndTint.tintRange
         case .sharpness:
-            return STNoiseReductionAndSharpnessFilter.sharpnessRange
+            return STFilter.NoiseReductionAndSharpness.sharpnessRange
         case .noiseReduction:
-            return STNoiseReductionAndSharpnessFilter.reductionRange
+            return STFilter.NoiseReductionAndSharpness.reductionRange
         case .vignette:
-            return STVignetteFilter.range
+            return STFilter.Vignette.range
         }
     }
 

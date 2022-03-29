@@ -1,5 +1,5 @@
 //
-//  STAspectRatio.swift
+//  STCropperVC+AspectRatio.swift
 //  ImageEditor
 //
 //  Created by Shahen Antonyan on 01/12/22.
@@ -7,38 +7,42 @@
 
 import Foundation
 
-enum STAspectRatio {
-    case original
-    case freeForm
-    case square
-    case ratio(width: Int, height: Int)
+extension STCropperVC {
+    
+    enum AspectRatio {
+        case original
+        case freeForm
+        case square
+        case ratio(width: Int, height: Int)
 
-    var rotated: STAspectRatio {
-        switch self {
-        case let .ratio(width, height):
-            return .ratio(width: height, height: width)
-        default:
-            return self
+        var rotated: AspectRatio {
+            switch self {
+            case let .ratio(width, height):
+                return .ratio(width: height, height: width)
+            default:
+                return self
+            }
+        }
+
+        var description: String {
+            switch self {
+            case .original:
+                return "editor_original".localized.uppercased()
+            case .freeForm:
+                return "editor_freeform".localized.uppercased()
+            case .square:
+                return "editor_square".localized.uppercased()
+            case let .ratio(width, height):
+                return "\(width):\(height)"
+            }
         }
     }
 
-    var description: String {
-        switch self {
-        case .original:
-            return "editor_original".localized.uppercased()
-        case .freeForm:
-            return "editor_freeform".localized.uppercased()
-        case .square:
-            return "editor_square".localized.uppercased()
-        case let .ratio(width, height):
-            return "\(width):\(height)"
-        }
-    }
 }
 
 // MARK: Codable
 
-extension STAspectRatio: Codable {
+extension STCropperVC.AspectRatio: Codable {
     enum CodingKeys: String, CodingKey {
         case description
     }
@@ -74,8 +78,8 @@ extension STAspectRatio: Codable {
     }
 }
 
-extension STAspectRatio: Equatable {
-    static func == (lhs: STAspectRatio, rhs: STAspectRatio) -> Bool {
+extension STCropperVC.AspectRatio: Equatable {
+    static func == (lhs: STCropperVC.AspectRatio, rhs: STCropperVC.AspectRatio) -> Bool {
         switch (lhs, rhs) {
         case (let .ratio(lhsWidth, lhsHeight), let .ratio(rhsWidth, rhsHeight)):
             return lhsWidth == rhsWidth && lhsHeight == rhsHeight

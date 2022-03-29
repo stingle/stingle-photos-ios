@@ -8,6 +8,7 @@
 import UIKit
 
 extension CGRect {
+    
     init(center: CGPoint, size: CGSize) {
         self.init(x: center.x - size.width / 2.0, y: center.y - size.height / 2.0, width: size.width, height: size.height)
     }
@@ -21,6 +22,7 @@ extension CGRect {
 }
 
 extension CGPoint {
+    
     func isEqual(to other: CGPoint, accuracy epsilon: CGFloat) -> Bool {
         return (abs(x - other.x) <= epsilon) &&
             (abs(y - other.y) <= epsilon)
@@ -28,10 +30,12 @@ extension CGPoint {
 }
 
 extension CGSize {
+    
     func isEqual(to other: CGSize, accuracy epsilon: CGFloat) -> Bool {
         return (abs(width - other.width) <= epsilon) &&
             (abs(height - other.height) <= epsilon)
     }
+    
 }
 
 extension CGFloat {

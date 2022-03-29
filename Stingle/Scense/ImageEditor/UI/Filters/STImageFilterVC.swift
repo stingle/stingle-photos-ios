@@ -54,18 +54,18 @@ class STImageFilterVC: UIViewController {
 
     private var selectedFilterType: STFilterType = .allCases.first ?? .exposure
 
-    private let colorControlsFilter = STColorControlsFilter()
-    private let whitePointFilter = STWhitePointFilter()
-    private let vibranceFilter = STVibranceFilter()
-    private let exposureFilter = STExposureFilter()
-    private let highlightShadowFilter = STHighlightShadowFilter()
-    private let temperatureAndTintFilter = STTemperatureAndTintFilter()
-    private let noiseReductionAndSharpnessFilter = STNoiseReductionAndSharpnessFilter()
-    private let vignetteFilter = STVignetteFilter()
+    private let colorControlsFilter = STFilter.colorControls
+    private let whitePointFilter = STFilter.whitePoint
+    private let vibranceFilter = STFilter.vibrance
+    private let exposureFilter = STFilter.exposure
+    private let highlightShadowFilter = STFilter.highlightShadow
+    private let temperatureAndTintFilter = STFilter.temperatureAndTint
+    private let noiseReductionAndSharpnessFilter = STFilter.noiseReductionAndSharpness
+    private let vignetteFilter = STFilter.vignette
 
     private var newCollection: UITraitCollection?
 
-    private lazy var angleRuler = STAngleRuler(frame: self.rulerBackgroundView.bounds)
+    private lazy var angleRuler = STRulerView(frame: self.rulerBackgroundView.bounds)
 
     private var filters: [IFilter] {
         return [
@@ -285,31 +285,31 @@ class STImageFilterVC: UIViewController {
         var value: CGFloat = 0.0
         switch type {
         case .brightness:
-            value = self.colorControlsFilter.brightness ?? STColorControlsFilter.brightnessRange.defaultValue
+            value = self.colorControlsFilter.brightness ?? STFilter.ColorControls.brightnessRange.defaultValue
         case .contrast:
-            value = self.colorControlsFilter.contrast ?? STColorControlsFilter.contrastRange.defaultValue
+            value = self.colorControlsFilter.contrast ?? STFilter.ColorControls.contrastRange.defaultValue
         case .saturation:
-            value = self.colorControlsFilter.saturation ?? STColorControlsFilter.saturationRange.defaultValue
+            value = self.colorControlsFilter.saturation ?? STFilter.ColorControls.saturationRange.defaultValue
         case .vibrance:
-            value = self.vibranceFilter.value ?? STVibranceFilter.range.defaultValue
+            value = self.vibranceFilter.value ?? STFilter.Vibrance.range.defaultValue
         case .exposure:
-            value = self.exposureFilter.value ?? STExposureFilter.range.defaultValue
+            value = self.exposureFilter.value ?? STFilter.Exposure.range.defaultValue
         case .highlights:
-            value = self.highlightShadowFilter.highlight ?? STHighlightShadowFilter.highlightRange.defaultValue
+            value = self.highlightShadowFilter.highlight ?? STFilter.HighlightShadow.highlightRange.defaultValue
         case .shadows:
-            value = self.highlightShadowFilter.shadow ?? STHighlightShadowFilter.shadowRange.defaultValue
+            value = self.highlightShadowFilter.shadow ?? STFilter.HighlightShadow.shadowRange.defaultValue
         case .whitePoint:
-            value = self.whitePointFilter.value ?? STWhitePointFilter.range.defaultValue
+            value = self.whitePointFilter.value ?? STFilter.WhitePoint.range.defaultValue
         case .temperature:
-            value = self.temperatureAndTintFilter.temperature ?? STTemperatureAndTintFilter.temperatureRange.defaultValue
+            value = self.temperatureAndTintFilter.temperature ?? STFilter.TemperatureAndTint.temperatureRange.defaultValue
         case .tint:
-            value = self.temperatureAndTintFilter.tint ?? STTemperatureAndTintFilter.tintRange.defaultValue
+            value = self.temperatureAndTintFilter.tint ?? STFilter.TemperatureAndTint.tintRange.defaultValue
         case .sharpness:
-            value = self.noiseReductionAndSharpnessFilter.sharpness ?? STNoiseReductionAndSharpnessFilter.sharpnessRange.defaultValue
+            value = self.noiseReductionAndSharpnessFilter.sharpness ?? STFilter.NoiseReductionAndSharpness.sharpnessRange.defaultValue
         case .noiseReduction:
-            value = self.noiseReductionAndSharpnessFilter.reduction ?? STNoiseReductionAndSharpnessFilter.reductionRange.defaultValue
+            value = self.noiseReductionAndSharpnessFilter.reduction ?? STFilter.NoiseReductionAndSharpness.reductionRange.defaultValue
         case .vignette:
-            value = self.vignetteFilter.value ?? STVignetteFilter.range.defaultValue
+            value = self.vignetteFilter.value ?? STFilter.Vignette.range.defaultValue
         }
         return STFilterHelper.rullerValue(for: type, filterValue: value)
     }
@@ -349,7 +349,7 @@ extension STImageFilterVC: UIScrollViewDelegate {
 
 }
 
-extension STImageFilterVC: STAngleRulerDelegate {
+extension STImageFilterVC: STRulerViewDelegate {
 
     func angleRuleDidChangeValue(value: CGFloat) {
         self.setSelectedFilterValue(rullerValue: value)

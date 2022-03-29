@@ -41,7 +41,7 @@ extension UIImage {
         static var croppingImageLongSideMaxSize: CGFloat = 10240 // 1280 * 8
     }
 
-    func cropped(withCropperState cropperState: STCropperState) -> UIImage? {
+    func cropped(withCropperState cropperState: STCropperVC.CropperState) -> UIImage? {
         guard size.width > 1,
               size.height > 1,
               cropperState.viewFrame.width > 1,

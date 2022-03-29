@@ -24,14 +24,14 @@ protocol STCropperVCDelegate: AnyObject {
     func cropper(didChange vc: STCropperVC)
 }
 
-class STCropperVC: UIViewController, STRotatable, STStateRestorable, STFlipable {
+class STCropperVC: UIViewController {
 
-    @IBOutlet weak var scrollViewContainer: STScrollViewContainer!
+    @IBOutlet weak var scrollViewContainer: STCropScrollViewContainer!
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var gradientView: UIView!
     @IBOutlet weak var rulerValueLabel: UILabel!
     @IBOutlet weak var rulerBackgroundView: UIView!
-    @IBOutlet weak var overlayView: STOverlay!
+    @IBOutlet weak var overlayView: STCropOverlay!
     @IBOutlet weak var aspectRatioView: STAspectRatioView!
 
     weak var delegate: STCropperVCDelegate?
@@ -45,7 +45,7 @@ class STCropperVC: UIViewController, STRotatable, STStateRestorable, STFlipable 
         return self._topToolBar
     }
 
-    lazy var angleRuler = STAngleRuler(frame: self.rulerBackgroundView.bounds)
+    lazy var angleRuler = STRulerView(frame: self.rulerBackgroundView.bounds)
     private var angleRulerValue: CGFloat = 0.0
 
     private var newCollection: UITraitCollection?
@@ -161,11 +161,11 @@ class STCropperVC: UIViewController, STRotatable, STStateRestorable, STFlipable 
         return pan
     }()
 
-    private(set) var defaultState: STCropperState?
+    private(set) var defaultState: CropperState?
 
     // MARK: Custom UI
 
-    let verticalAspectRatios: [STAspectRatio] = [
+    let verticalAspectRatios: [AspectRatio] = [
         .original,
         .freeForm,
         .square,
@@ -614,17 +614,12 @@ extension STCropperVC: UIGestureRecognizerDelegate {
 
 extension STCropperVC: STAspectRatioViewDelegate {
 
-    func aspectRatioViewDidSelectedAspectRatio(_ aspectRatio: STAspectRatio) {
+    func aspectRatioViewDidSelectedAspectRatio(_ aspectRatio: AspectRatio) {
         self.setAspectRatio(aspectRatio)
         self.delegate?.cropper(didChange: self)
     }
 
 }
-
-// MARK: Add capability from protocols
-
-extension STCropperVC: STStasisable, STAngleAssist, STCropBoxEdgeDraggable, STAspectRatioSettable {}
-
 
 extension STCropperVC: STCropRotateToolBarDelegate {
 
@@ -653,7 +648,7 @@ extension STCropperVC: STCropRotateToolBarDelegate {
 
 }
 
-extension STCropperVC: STAngleRulerDelegate {
+extension STCropperVC: STRulerViewDelegate {
 
     func angleRuleDidChangeValue(value: CGFloat) {
         self.angleRulerValue = value

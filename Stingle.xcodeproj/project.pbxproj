@@ -289,6 +289,7 @@
 		A0C88FE725F3D6CD0061A41D /* STLibraryAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C88FE625F3D6CD0061A41D /* STLibraryAlbum.swift */; };
 		A0CFBD8F25F171ED003095BE /* STTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CFBD8E25F171ED003095BE /* STTabBarViewController.swift */; };
 		A0CFBD9625F17734003095BE /* STSyncWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CFBD9525F17734003095BE /* STSyncWorker.swift */; };
+		A0D0104727F307BF00628405 /* STCropperVC+Additional.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D0104627F307BF00628405 /* STCropperVC+Additional.swift */; };
 		A0D1A3B9262E0D3D002E326F /* STAlbumFilesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D1A3B8262E0D3D002E326F /* STAlbumFilesVC.swift */; };
 		A0D1A3BC262E0D6E002E326F /* STAlbumFilesVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D1A3BB262E0D6E002E326F /* STAlbumFilesVM.swift */; };
 		A0D1A3C3262E0F9F002E326F /* STAlbumFilesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D1A3C1262E0F9F002E326F /* STAlbumFilesCollectionViewCell.swift */; };
@@ -363,23 +364,16 @@
 		B31D622527B64B4E00CBEA19 /* STAspectRatioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61FC27B64B4E00CBEA19 /* STAspectRatioCell.swift */; };
 		B31D622627B64B4E00CBEA19 /* STAspectRatioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61FD27B64B4E00CBEA19 /* STAspectRatioView.swift */; };
 		B31D622727B64B4E00CBEA19 /* STSelectableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61FE27B64B4E00CBEA19 /* STSelectableButton.swift */; };
-		B31D622827B64B4E00CBEA19 /* STAngleAssist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620027B64B4E00CBEA19 /* STAngleAssist.swift */; };
-		B31D622927B64B4E00CBEA19 /* STRotatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620127B64B4E00CBEA19 /* STRotatable.swift */; };
-		B31D622A27B64B4E00CBEA19 /* STStateRestorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620227B64B4E00CBEA19 /* STStateRestorable.swift */; };
-		B31D622B27B64B4E00CBEA19 /* STFlipable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620327B64B4E00CBEA19 /* STFlipable.swift */; };
-		B31D622C27B64B4E00CBEA19 /* STCropBoxEdgeDraggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620427B64B4E00CBEA19 /* STCropBoxEdgeDraggable.swift */; };
-		B31D622D27B64B4E00CBEA19 /* STStasisable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620527B64B4E00CBEA19 /* STStasisable.swift */; };
-		B31D622E27B64B4E00CBEA19 /* STAspectRatioSettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620627B64B4E00CBEA19 /* STAspectRatioSettable.swift */; };
-		B31D622F27B64B4E00CBEA19 /* STAspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620827B64B4E00CBEA19 /* STAspectRatio.swift */; };
-		B31D623027B64B4E00CBEA19 /* STCropperState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620927B64B4E00CBEA19 /* STCropperState.swift */; };
-		B31D623127B64B4E00CBEA19 /* STScrollViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620A27B64B4E00CBEA19 /* STScrollViewContainer.swift */; };
+		B31D622F27B64B4E00CBEA19 /* STCropperVC+AspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620827B64B4E00CBEA19 /* STCropperVC+AspectRatio.swift */; };
+		B31D623027B64B4E00CBEA19 /* STCropperVC+CropperState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620927B64B4E00CBEA19 /* STCropperVC+CropperState.swift */; };
+		B31D623127B64B4E00CBEA19 /* STCropScrollViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620A27B64B4E00CBEA19 /* STCropScrollViewContainer.swift */; };
 		B31D623227B64B4E00CBEA19 /* STCropperVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620B27B64B4E00CBEA19 /* STCropperVC.swift */; };
 		B31D623327B64B4E00CBEA19 /* STCropRotateToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D620D27B64B4E00CBEA19 /* STCropRotateToolBar.swift */; };
 		B31D623427B64B4E00CBEA19 /* STCropRotateToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = B31D620E27B64B4E00CBEA19 /* STCropRotateToolBar.xib */; };
-		B31D623527B64B4E00CBEA19 /* STOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621027B64B4E00CBEA19 /* STOverlay.swift */; };
-		B31D623627B64B4E00CBEA19 /* STGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621127B64B4E00CBEA19 /* STGrid.swift */; };
+		B31D623527B64B4E00CBEA19 /* STCropOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621027B64B4E00CBEA19 /* STCropOverlay.swift */; };
+		B31D623627B64B4E00CBEA19 /* STCropBox+Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621127B64B4E00CBEA19 /* STCropBox+Grid.swift */; };
 		B31D623727B64B4E00CBEA19 /* STCropBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621227B64B4E00CBEA19 /* STCropBox.swift */; };
-		B31D623927B64B4E00CBEA19 /* STAngleRuler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621627B64B4E00CBEA19 /* STAngleRuler.swift */; };
+		B31D623927B64B4E00CBEA19 /* STRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621627B64B4E00CBEA19 /* STRulerView.swift */; };
 		B31D623B27B65D7900CBEA19 /* STFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */; };
 		B31D623E27B65F0500CBEA19 /* FileEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */; };
 		B372083C27C505E400FA7EFD /* STDataNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */; };
@@ -684,6 +678,7 @@
 		A0C88FE625F3D6CD0061A41D /* STLibraryAlbum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLibraryAlbum.swift; sourceTree = "<group>"; };
 		A0CFBD8E25F171ED003095BE /* STTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTabBarViewController.swift; sourceTree = "<group>"; };
 		A0CFBD9525F17734003095BE /* STSyncWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSyncWorker.swift; sourceTree = "<group>"; };
+		A0D0104627F307BF00628405 /* STCropperVC+Additional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STCropperVC+Additional.swift"; sourceTree = "<group>"; };
 		A0D1A3B8262E0D3D002E326F /* STAlbumFilesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFilesVC.swift; sourceTree = "<group>"; };
 		A0D1A3BB262E0D6E002E326F /* STAlbumFilesVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFilesVM.swift; sourceTree = "<group>"; };
 		A0D1A3C1262E0F9F002E326F /* STAlbumFilesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFilesCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -758,23 +753,16 @@
 		B31D61FC27B64B4E00CBEA19 /* STAspectRatioCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STAspectRatioCell.swift; sourceTree = "<group>"; };
 		B31D61FD27B64B4E00CBEA19 /* STAspectRatioView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STAspectRatioView.swift; sourceTree = "<group>"; };
 		B31D61FE27B64B4E00CBEA19 /* STSelectableButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STSelectableButton.swift; sourceTree = "<group>"; };
-		B31D620027B64B4E00CBEA19 /* STAngleAssist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STAngleAssist.swift; sourceTree = "<group>"; };
-		B31D620127B64B4E00CBEA19 /* STRotatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STRotatable.swift; sourceTree = "<group>"; };
-		B31D620227B64B4E00CBEA19 /* STStateRestorable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STStateRestorable.swift; sourceTree = "<group>"; };
-		B31D620327B64B4E00CBEA19 /* STFlipable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STFlipable.swift; sourceTree = "<group>"; };
-		B31D620427B64B4E00CBEA19 /* STCropBoxEdgeDraggable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropBoxEdgeDraggable.swift; sourceTree = "<group>"; };
-		B31D620527B64B4E00CBEA19 /* STStasisable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STStasisable.swift; sourceTree = "<group>"; };
-		B31D620627B64B4E00CBEA19 /* STAspectRatioSettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STAspectRatioSettable.swift; sourceTree = "<group>"; };
-		B31D620827B64B4E00CBEA19 /* STAspectRatio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STAspectRatio.swift; sourceTree = "<group>"; };
-		B31D620927B64B4E00CBEA19 /* STCropperState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropperState.swift; sourceTree = "<group>"; };
-		B31D620A27B64B4E00CBEA19 /* STScrollViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STScrollViewContainer.swift; sourceTree = "<group>"; };
+		B31D620827B64B4E00CBEA19 /* STCropperVC+AspectRatio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "STCropperVC+AspectRatio.swift"; sourceTree = "<group>"; };
+		B31D620927B64B4E00CBEA19 /* STCropperVC+CropperState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "STCropperVC+CropperState.swift"; sourceTree = "<group>"; };
+		B31D620A27B64B4E00CBEA19 /* STCropScrollViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropScrollViewContainer.swift; sourceTree = "<group>"; };
 		B31D620B27B64B4E00CBEA19 /* STCropperVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropperVC.swift; sourceTree = "<group>"; };
 		B31D620D27B64B4E00CBEA19 /* STCropRotateToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropRotateToolBar.swift; sourceTree = "<group>"; };
 		B31D620E27B64B4E00CBEA19 /* STCropRotateToolBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STCropRotateToolBar.xib; sourceTree = "<group>"; };
-		B31D621027B64B4E00CBEA19 /* STOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STOverlay.swift; sourceTree = "<group>"; };
-		B31D621127B64B4E00CBEA19 /* STGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STGrid.swift; sourceTree = "<group>"; };
+		B31D621027B64B4E00CBEA19 /* STCropOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropOverlay.swift; sourceTree = "<group>"; };
+		B31D621127B64B4E00CBEA19 /* STCropBox+Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "STCropBox+Grid.swift"; sourceTree = "<group>"; };
 		B31D621227B64B4E00CBEA19 /* STCropBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCropBox.swift; sourceTree = "<group>"; };
-		B31D621627B64B4E00CBEA19 /* STAngleRuler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STAngleRuler.swift; sourceTree = "<group>"; };
+		B31D621627B64B4E00CBEA19 /* STRulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STRulerView.swift; sourceTree = "<group>"; };
 		B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileEditVC.swift; sourceTree = "<group>"; };
 		B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FileEdit.storyboard; sourceTree = "<group>"; };
 		B3A417E227BBDD1600F64CB2 /* STResizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STResizeView.swift; sourceTree = "<group>"; };
@@ -1043,6 +1031,7 @@
 				A06942CA260CDA5A009CFD3A /* STGradientView.swift */,
 				A049459B2611CDF4008D5E48 /* STView.swift */,
 				A05ABFFE26C9A2D700D36F34 /* STTextView.swift */,
+				B31D621527B64B4E00CBEA19 /* Ruler */,
 				A0B8E9C126DAA69D002198C5 /* ProgressView */,
 				A059D1D426C99AA70045AC61 /* BackupInputPhraseView */,
 				A0D4E83726C81D3400556871 /* BackupPhraseView */,
@@ -2501,7 +2490,6 @@
 			children = (
 				B31D61EE27B64B4E00CBEA19 /* Filters */,
 				B31D61FA27B64B4E00CBEA19 /* Cropper */,
-				B31D621527B64B4E00CBEA19 /* Ruler */,
 				B31D61F927B64B4E00CBEA19 /* STImageEditorVC.swift */,
 				B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */,
 			);
@@ -2544,11 +2532,11 @@
 			isa = PBXGroup;
 			children = (
 				B31D61FB27B64B4E00CBEA19 /* UI */,
-				B31D61FF27B64B4E00CBEA19 /* CropperProtocols */,
 				B31D620727B64B4E00CBEA19 /* Core */,
 				B31D620C27B64B4E00CBEA19 /* ToolBar */,
 				B31D620F27B64B4E00CBEA19 /* Overlay */,
 				B31D620B27B64B4E00CBEA19 /* STCropperVC.swift */,
+				A0D0104627F307BF00628405 /* STCropperVC+Additional.swift */,
 			);
 			path = Cropper;
 			sourceTree = "<group>";
@@ -2563,26 +2551,12 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
-		B31D61FF27B64B4E00CBEA19 /* CropperProtocols */ = {
-			isa = PBXGroup;
-			children = (
-				B31D620027B64B4E00CBEA19 /* STAngleAssist.swift */,
-				B31D620127B64B4E00CBEA19 /* STRotatable.swift */,
-				B31D620227B64B4E00CBEA19 /* STStateRestorable.swift */,
-				B31D620327B64B4E00CBEA19 /* STFlipable.swift */,
-				B31D620427B64B4E00CBEA19 /* STCropBoxEdgeDraggable.swift */,
-				B31D620527B64B4E00CBEA19 /* STStasisable.swift */,
-				B31D620627B64B4E00CBEA19 /* STAspectRatioSettable.swift */,
-			);
-			path = CropperProtocols;
-			sourceTree = "<group>";
-		};
 		B31D620727B64B4E00CBEA19 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				B31D620827B64B4E00CBEA19 /* STAspectRatio.swift */,
-				B31D620927B64B4E00CBEA19 /* STCropperState.swift */,
-				B31D620A27B64B4E00CBEA19 /* STScrollViewContainer.swift */,
+				B31D620827B64B4E00CBEA19 /* STCropperVC+AspectRatio.swift */,
+				B31D620927B64B4E00CBEA19 /* STCropperVC+CropperState.swift */,
+				B31D620A27B64B4E00CBEA19 /* STCropScrollViewContainer.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2599,9 +2573,9 @@
 		B31D620F27B64B4E00CBEA19 /* Overlay */ = {
 			isa = PBXGroup;
 			children = (
-				B31D621027B64B4E00CBEA19 /* STOverlay.swift */,
-				B31D621127B64B4E00CBEA19 /* STGrid.swift */,
+				B31D621027B64B4E00CBEA19 /* STCropOverlay.swift */,
 				B31D621227B64B4E00CBEA19 /* STCropBox.swift */,
+				B31D621127B64B4E00CBEA19 /* STCropBox+Grid.swift */,
 			);
 			path = Overlay;
 			sourceTree = "<group>";
@@ -2609,7 +2583,7 @@
 		B31D621527B64B4E00CBEA19 /* Ruler */ = {
 			isa = PBXGroup;
 			children = (
-				B31D621627B64B4E00CBEA19 /* STAngleRuler.swift */,
+				B31D621627B64B4E00CBEA19 /* STRulerView.swift */,
 			);
 			path = Ruler;
 			sourceTree = "<group>";
@@ -2811,7 +2785,6 @@
 				A08512D1277A5C640006A2DD /* STAutoImportDialogVC.swift in Sources */,
 				A0FD3F3B26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift in Sources */,
 				A001E6E6267CD8E900948E50 /* STGaleryFileViewerVM.swift in Sources */,
-				B31D622B27B64B4E00CBEA19 /* STFlipable.swift in Sources */,
 				A087C46D2614A5B8006775D2 /* STSyncManager.swift in Sources */,
 				A0C88FE425F3D6360061A41D /* STSync.swift in Sources */,
 				A022048025EEDC0400D07C98 /* STAuthRequest.swift in Sources */,
@@ -2832,7 +2805,7 @@
 				A08F27A82785AD7700EF8BE4 /* STAppSettings+Import.swift in Sources */,
 				A0777811260001B100BA2BDF /* STCrypto+Common.swift in Sources */,
 				A0AAA944261C7D6E009E9F51 /* STBackupPhraseVC.swift in Sources */,
-				B31D623027B64B4E00CBEA19 /* STCropperState.swift in Sources */,
+				B31D623027B64B4E00CBEA19 /* STCropperVC+CropperState.swift in Sources */,
 				A0E999A5263F54E3002FDCC9 /* STContactRequest.swift in Sources */,
 				A005FAFB25FF4D8F00E7D8B0 /* UICollectionView+Operation.swift in Sources */,
 				A0D1A3C3262E0F9F002E326F /* STAlbumFilesCollectionViewCell.swift in Sources */,
@@ -2844,7 +2817,6 @@
 				A060010E27050A290071812C /* UIFont+Operation.swift in Sources */,
 				A049459C2611CDF4008D5E48 /* STView.swift in Sources */,
 				A0B8092526ED06E60063DA42 /* STStoreProducts.swift in Sources */,
-				B31D622C27B64B4E00CBEA19 /* STCropBoxEdgeDraggable.swift in Sources */,
 				A0794B96269E3EF500B40FE9 /* STSettingsDetailTableViewCell.swift in Sources */,
 				A042199926909E58001FBFBF /* STFileWorker+Download.swift in Sources */,
 				A06E424526273FAB00F43826 /* STCrypto+Album.swift in Sources */,
@@ -2854,7 +2826,6 @@
 				A02203C125EED86800D07C98 /* AppDelegate.swift in Sources */,
 				A0FD3F382670F4C40042EB8D /* STFileUrl.swift in Sources */,
 				B31D622427B64B4E00CBEA19 /* STImageEditorVC.swift in Sources */,
-				B31D622827B64B4E00CBEA19 /* STAngleAssist.swift in Sources */,
 				A086FD9125F5AC7200A8BC9C /* STUserProvider.swift in Sources */,
 				A074AE3E26460203004C9E9E /* STMoveAlbumFilesVC.swift in Sources */,
 				A013D85E269F7C81007ED786 /* STAppSettings+Security.swift in Sources */,
@@ -2929,7 +2900,7 @@
 				A0D65DF9269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift in Sources */,
 				A03E21E6278397930071A2AF /* STAutoImportDialogTableVC.swift in Sources */,
 				A0028650260B8121004C0934 /* STDownloaderOperation.swift in Sources */,
-				B31D623527B64B4E00CBEA19 /* STOverlay.swift in Sources */,
+				B31D623527B64B4E00CBEA19 /* STCropOverlay.swift in Sources */,
 				A05F9DD126A60E6900F9F343 /* STKeyChainService.swift in Sources */,
 				A050C50627066530007587B5 /* STAssetResourceLoader+Decrypter.swift in Sources */,
 				A022049425EEDC0400D07C98 /* Date+Operation.swift in Sources */,
@@ -2940,7 +2911,7 @@
 				A00982F526234EAB00559C41 /* STUploadWorker.swift in Sources */,
 				A08F27A62785ACBC00EF8BE4 /* STAutoImportDialogVM.swift in Sources */,
 				A02ED2EB2603FD2200F10D58 /* STImageView.swift in Sources */,
-				B31D623127B64B4E00CBEA19 /* STScrollViewContainer.swift in Sources */,
+				B31D623127B64B4E00CBEA19 /* STCropScrollViewContainer.swift in Sources */,
 				B31D622027B64B4E00CBEA19 /* STFilters.swift in Sources */,
 				A04219962690983C001FBFBF /* STTrashFileViewerVM.swift in Sources */,
 				A075B71E2651BBD000B4E2DF /* STSharedAlbumSettingsVM.swift in Sources */,
@@ -2989,6 +2960,7 @@
 				A05D2686261B3CEE008E9CF8 /* STMenuMasterVC.swift in Sources */,
 				A0794B81269E2F1800B40FE9 /* STImportVC.swift in Sources */,
 				A0301DE825FD6D48005281EF /* STDBInfo.swift in Sources */,
+				A0D0104727F307BF00628405 /* STCropperVC+Additional.swift in Sources */,
 				A05ABFFF26C9A2D700D36F34 /* STTextView.swift in Sources */,
 				A04A3E44265CF1F000F16EF9 /* STFileReader.swift in Sources */,
 				A00ADC0927B954250046CA38 /* STNetworkUploadTask.swift in Sources */,
@@ -3000,7 +2972,7 @@
 				A0F467F625F992F400BF00AA /* STCDTrashFile.swift in Sources */,
 				A012B48A2700BED5001E79E9 /* STStoragePeriodHeaderView.swift in Sources */,
 				A0059E6625F8B70F003ABB56 /* STDataBaseProvider.swift in Sources */,
-				B31D623927B64B4E00CBEA19 /* STAngleRuler.swift in Sources */,
+				B31D623927B64B4E00CBEA19 /* STRulerView.swift in Sources */,
 				A0D4E83126C8107800556871 /* English.swift in Sources */,
 				A0FD3F3D267141430042EB8D /* STStreamNetworkOperation.swift in Sources */,
 				A00E8C932629D38F0066ED9B /* STViewDataSource.swift in Sources */,
@@ -3019,11 +2991,9 @@
 				A0F467E825F98FE900BF00AA /* STLibraryTrashFile.swift in Sources */,
 				A027CE1A26B1FB5A00829162 /* STUserRequest.swift in Sources */,
 				A086FD8A25F5A9ED00A8BC9C /* STApplication.swift in Sources */,
-				B31D622A27B64B4E00CBEA19 /* STStateRestorable.swift in Sources */,
 				A06942CB260CDA5A009CFD3A /* STGradientView.swift in Sources */,
 				A074AE3B26459602004C9E9E /* STAlbumWorker+Share.swift in Sources */,
 				A022049325EEDC0400D07C98 /* STEnvironment.swift in Sources */,
-				B31D622D27B64B4E00CBEA19 /* STStasisable.swift in Sources */,
 				A022046B25EEDC0400D07C98 /* STSegue.swift in Sources */,
 				B31D623727B64B4E00CBEA19 /* STCropBox.swift in Sources */,
 				A0B2678A2624E0FC0090E4ED /* STTrashCollectionViewCell.swift in Sources */,
@@ -3033,7 +3003,6 @@
 				A0F980E02753F00C00DE9958 /* STAboutDetailTableViewCell.swift in Sources */,
 				A0D29CDB262074560083967D /* STOperations.swift in Sources */,
 				B31D622727B64B4E00CBEA19 /* STSelectableButton.swift in Sources */,
-				B31D622E27B64B4E00CBEA19 /* STAspectRatioSettable.swift in Sources */,
 				A0AAA93B261C7C33009E9F51 /* STSettingsVC.swift in Sources */,
 				B31D622627B64B4E00CBEA19 /* STAspectRatioView.swift in Sources */,
 				B31D621727B64B4E00CBEA19 /* UIImage+Helper.swift in Sources */,
@@ -3059,7 +3028,7 @@
 				A0D4E82F26C8107800556871 /* STMnemonic.swift in Sources */,
 				A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */,
 				A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */,
-				B31D623627B64B4E00CBEA19 /* STGrid.swift in Sources */,
+				B31D623627B64B4E00CBEA19 /* STCropBox+Grid.swift in Sources */,
 				A0D29CD7262051460083967D /* STFileUploader.swift in Sources */,
 				A0D1A3BC262E0D6E002E326F /* STAlbumFilesVM.swift in Sources */,
 				A022048925EEDC0400D07C98 /* STAuthWorker.swift in Sources */,
@@ -3076,7 +3045,6 @@
 				B31D622327B64B4E00CBEA19 /* STImageFilterVC.swift in Sources */,
 				A021014C26EFF08E00BBEF65 /* STStorageProductCell.swift in Sources */,
 				A0F1437925FAC67B004C0E87 /* STContactProvider.swift in Sources */,
-				B31D622927B64B4E00CBEA19 /* STRotatable.swift in Sources */,
 				A0B8090426ECF6F30063DA42 /* STBillingWorker.swift in Sources */,
 				A06E423D2627230E00F43826 /* STAlbumsCollectionViewCell.swift in Sources */,
 				A027CE2526B2139F00829162 /* STChangePasswordVC.swift in Sources */,
@@ -3119,7 +3087,7 @@
 				A0B8090A26ECFE2E0063DA42 /* STStorageVM.swift in Sources */,
 				B31D623227B64B4E00CBEA19 /* STCropperVC.swift in Sources */,
 				A0794B7E269E2E3300B40FE9 /* STAccountVC.swift in Sources */,
-				B31D622F27B64B4E00CBEA19 /* STAspectRatio.swift in Sources */,
+				B31D622F27B64B4E00CBEA19 /* STCropperVC+AspectRatio.swift in Sources */,
 				A050C50927066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift in Sources */,
 				A024330325F6384C0054BED9 /* STObserverEvents.swift in Sources */,
 				A01747EF260A9C60000D98F0 /* STFileDiskCache.swift in Sources */,
@@ -3231,7 +3199,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 75XL269LGD;
+				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
@@ -3323,7 +3291,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 75XL269LGD;
+				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
@@ -3410,7 +3378,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 75XL269LGD;
+				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
@@ -3497,7 +3465,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 75XL269LGD;
+				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.7;

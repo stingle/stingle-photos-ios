@@ -21,8 +21,8 @@ class STCropBox: UIView {
         }
     }
 
-    lazy var gridLinesView: STGrid = {
-        let view = STGrid(frame: bounds)
+    lazy var gridLinesView: Grid = {
+        let view = Grid(frame: bounds)
         view.backgroundColor = UIColor.clear
         view.alpha = 0
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight, .flexibleTopMargin, .flexibleBottomMargin, .flexibleBottomMargin, .flexibleRightMargin]

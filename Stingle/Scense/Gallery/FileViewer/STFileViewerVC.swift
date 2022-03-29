@@ -470,7 +470,7 @@ extension STFileViewerVC: STFileEditVCDelegate {
     }
 
     func fileEdit(didEditFile vc: STFileEditVC, file: STLibrary.File) {
-
+        vc.dismiss(animated: true)
     }
 
 }

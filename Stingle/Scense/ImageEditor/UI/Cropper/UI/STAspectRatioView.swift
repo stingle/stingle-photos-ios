@@ -7,25 +7,25 @@
 
 import UIKit
 
-enum Box {
-    case none
-    case vertical
-    case horizontal
-}
-
 protocol STAspectRatioViewDelegate: AnyObject {
-    func aspectRatioViewDidSelectedAspectRatio(_ aspectRatio: STAspectRatio)
+    func aspectRatioViewDidSelectedAspectRatio(_ aspectRatio: STCropperVC.AspectRatio)
 }
 
 class STAspectRatioView: UIView {
+    
+    enum Box {
+        case none
+        case vertical
+        case horizontal
+    }
 
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var horizontalButton: UIButton!
-    @IBOutlet weak var verticalButton: UIButton!
+    @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private weak var horizontalButton: UIButton!
+    @IBOutlet private weak var verticalButton: UIButton!
 
     weak var delegate: STAspectRatioViewDelegate?
 
-    var selectedAspectRatio: STAspectRatio = .freeForm {
+    var selectedAspectRatio: STCropperVC.AspectRatio = .freeForm {
         didSet {
             let buttonIndex = self.aspectRatios.firstIndex(of: self.selectedAspectRatio) ?? 0
             let indexPath = IndexPath(item: buttonIndex, section: 0)
@@ -57,7 +57,7 @@ class STAspectRatioView: UIView {
 
     var rotated: Bool = false
 
-    var aspectRatios: [STAspectRatio] = [
+    var aspectRatios: [STCropperVC.AspectRatio] = [
         .original,
         .freeForm,
         .square,
@@ -87,6 +87,8 @@ class STAspectRatioView: UIView {
         super.awakeFromNib()
         self.setup()
     }
+    
+    // MARK: - Public methods
 
     func setScrollDirection(scrollDirection: UICollectionView.ScrollDirection) {
         self.flowLayout?.scrollDirection = scrollDirection
@@ -111,9 +113,9 @@ class STAspectRatioView: UIView {
         self.delegate?.aspectRatioViewDidSelectedAspectRatio(self.selectedAspectRatio)
     }
 
-    // MARK: - Actions
+    // MARK: - User actions
 
-    @IBAction func horizontalButtonAction(_ sender: Any) {
+    @IBAction private func horizontalButtonAction(_ sender: Any) {
         if self.verticalButton.isSelected {
             self.horizontalButton.isSelected = true
             self.verticalButton.isSelected = false
@@ -122,7 +124,7 @@ class STAspectRatioView: UIView {
         }
     }
 
-    @IBAction func verticalButtonAction(_ sender: Any) {
+    @IBAction private func verticalButtonAction(_ sender: Any) {
         if self.horizontalButton.isSelected {
             self.horizontalButton.isSelected = false
             self.verticalButton.isSelected = true

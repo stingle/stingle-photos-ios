@@ -1,5 +1,5 @@
 //
-//  STScrollViewContainer.swift
+//  STCropScrollViewContainer.swift
 //  ImageEditor
 //
 //  Created by Shahen Antonyan on 01/12/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class STScrollViewContainer: UIView {
+class STCropScrollViewContainer: UIView {
     var scrollView: UIScrollView?
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

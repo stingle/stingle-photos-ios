@@ -1,5 +1,5 @@
 //
-//  STAngleRuler.swift
+//  STRulerView.swift
 //  ImageEditor
 //
 //  Created by Shahen Antonyan on 12/29/21.
@@ -7,16 +7,16 @@
 
 import UIKit
 
-protocol STAngleRulerDelegate: AnyObject {
+protocol STRulerViewDelegate: AnyObject {
     func angleRuleDidChangeValue(value: CGFloat)
     func angleRuleDidEndEditing()
 }
 
-extension STAngleRulerDelegate {
+extension STRulerViewDelegate {
     func angleRuleDidEndEditing() {}
 }
 
-class STAngleRuler: UIControl {
+class STRulerView: UIControl {
 
     enum Direction: Int {
         case horizontal = 0
@@ -32,7 +32,7 @@ class STAngleRuler: UIControl {
         }
     }
 
-    weak var delegate: STAngleRulerDelegate?
+    weak var delegate: STRulerViewDelegate?
 
     var value: CGFloat {
         get {
@@ -274,7 +274,7 @@ class STAngleRuler: UIControl {
 
 }
 
-extension STAngleRuler: UIScrollViewDelegate {
+extension STRulerView: UIScrollViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = self.direction == .vertical ? scrollView.contentOffset.y : scrollView.contentOffset.x

@@ -1,5 +1,5 @@
 //
-//  STOverlay.swift
+//  STCropOverlay.swift
 //  ImageEditor
 //
 //  Created by Shahen Antonyan on 01/12/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class STOverlay: UIView {
+class STCropOverlay: UIView {
 
     var cropBoxAlpha: CGFloat {
         get {

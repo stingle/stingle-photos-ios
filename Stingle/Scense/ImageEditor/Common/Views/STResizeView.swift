@@ -14,12 +14,12 @@ protocol STResizeViewDelegate: AnyObject {
 
 class STResizeView: UIView {
 
-    @IBOutlet weak var resizeButton: UIButton!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var widthLabel: UILabel!
-    @IBOutlet weak var widthTextField: UITextField!
-    @IBOutlet weak var heightLabel: UILabel!
-    @IBOutlet weak var heightTextField: UITextField!
+    @IBOutlet private weak var resizeButton: UIButton!
+    @IBOutlet private weak var cancelButton: UIButton!
+    @IBOutlet private weak var widthLabel: UILabel!
+    @IBOutlet private weak var widthTextField: UITextField!
+    @IBOutlet private weak var heightLabel: UILabel!
+    @IBOutlet private weak var heightTextField: UITextField!
 
     weak var delegate: STResizeViewDelegate?
 
@@ -32,6 +32,8 @@ class STResizeView: UIView {
             self.resizeButton.isEnabled = self.imageSize != nil
         }
     }
+    
+    //MARK: - Override methods
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -42,8 +44,10 @@ class STResizeView: UIView {
         self.widthTextField?.text = self.imageSize == nil ? nil : "\(Int(self.imageSize!.width))"
         self.heightTextField?.text = self.imageSize == nil ? nil : "\(Int(self.imageSize!.height))"
     }
+    
+    //MARK: - User Action
 
-    @IBAction func widthTextFieldValueChanged(_ sender: Any) {
+    @IBAction private func widthTextFieldValueChanged(_ sender: Any) {
         let value = (self.widthTextField.text?.isEmpty ?? true) ? "0" : self.widthTextField.text!
         guard let intValue = Int(value) else {
             return
@@ -56,7 +60,7 @@ class STResizeView: UIView {
         self.resizeButton.isEnabled = height != 0 && intValue != 0
     }
 
-    @IBAction func heightTextFieldValueChanged(_ sender: Any) {
+    @IBAction private func heightTextFieldValueChanged(_ sender: Any) {
         let value = (self.heightTextField.text?.isEmpty ?? true) ? "0" : self.heightTextField.text!
         guard let intValue = Int(value) else {
             return
@@ -69,7 +73,7 @@ class STResizeView: UIView {
         self.resizeButton.isEnabled = width != 0 && intValue != 0
     }
 
-    @IBAction func resizeButtonAction(_ sender: Any) {
+    @IBAction private func resizeButtonAction(_ sender: Any) {
         guard let value = self.widthTextField.text, let widthIntValue = Int(value) else {
             return
         }
@@ -84,7 +88,7 @@ class STResizeView: UIView {
         self.delegate?.resizeView(view: self, didSelectSize: CGSize(width: widthIntValue, height: heightIntValue))
     }
 
-    @IBAction func cancelButtonAction(_ sender: Any) {
+    @IBAction private func cancelButtonAction(_ sender: Any) {
         self.widthTextField.resignFirstResponder()
         self.heightTextField.resignFirstResponder()
         self.delegate?.resizeView(didSelectCancel: self)

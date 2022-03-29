@@ -98,13 +98,13 @@ class STImageEditorVC: UIViewController {
         }
     }
 
-    // MARK: - Actions
+    // MARK: - User actions
 
-    @IBAction func cancelButtonAction(_ sender: Any) {
+    @IBAction private func cancelButtonAction(_ sender: Any) {
         self.delegate?.imageEditor(didSelectCancel: self)
     }
 
-    @IBAction func doneButtonAction(_ sender: Any) {
+    @IBAction private func doneButtonAction(_ sender: Any) {
         let croppedImage = self.croppedImage(image: self.image)
         let image = self.filteredImage(image: croppedImage)
         if let size = self.resizedSize {
@@ -115,7 +115,7 @@ class STImageEditorVC: UIViewController {
         }
     }
 
-    @IBAction func optionButtonAction(_ sender: Any) {
+    @IBAction private func optionButtonAction(_ sender: Any) {
         guard let sender = sender as? UIButton else {
             return
         }
