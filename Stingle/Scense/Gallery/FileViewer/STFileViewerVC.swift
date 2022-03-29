@@ -309,7 +309,7 @@ class STFileViewerVC: UIViewController {
 
 
 extension STFileViewerVC {
-    
+
     static func create(galery sortDescriptorsKeys: [STDataBase.DataSource<STCDFile>.Sort], predicate: NSPredicate?, file: STLibrary.File) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
@@ -443,13 +443,36 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
                     self?.didSelectTrash(sendner: buttonItem)
                 }
                 result.append(trash)
+            case .edit:
+                break
+                // Temporary disabling edit functionality.
+//                let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
+//                    guard let file = self?.currentFile, let vc = STFileEditVC.create(file: file) else {
+//                        return
+//                    }
+//                    vc.delegate = self
+//                    self?.present(vc, animated: true)
+//                }
+//                result.append(edit)
             }
         }
-        
+
         return result
         
     }
     
+}
+
+extension STFileViewerVC: STFileEditVCDelegate {
+
+    func fileEdit(didSelectCancel vc: STFileEditVC) {
+        vc.dismiss(animated: true)
+    }
+
+    func fileEdit(didEditFile vc: STFileEditVC, file: STLibrary.File) {
+        vc.dismiss(animated: true)
+    }
+
 }
 
 extension STFileViewerVC: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
@@ -583,6 +606,7 @@ extension STFileViewerVC {
         case move
         case saveToDevice
         case trash
+        case edit
         
         var stringValue: String {
             switch self {
@@ -594,6 +618,8 @@ extension STFileViewerVC {
                 return "saveToDevice"
             case .trash:
                 return "trash"
+            case .edit:
+                return "edit"
             }
         }
         

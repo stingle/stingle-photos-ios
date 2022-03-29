@@ -89,6 +89,7 @@
 "add_member" = "Add member";
 "members" = "Members";
 "save" = "Save";
+"save_as_new_file" = "Save as new file";
 
 "delete_all" = "Delete All";
 "recover_all" = "Recover All";
@@ -389,6 +390,7 @@
 "error_data_not_found" = "Data not found";
 "error_canceled" = "Canceled";
 "error_memory_low" = "Device memory is low";
+"error_file_is_unavailable" = "File is unavailable";
 
 "error_maching_passwords" = "Password don't match. Please enter the same password twice correctly";
 
@@ -402,3 +404,26 @@
 "nework_error_bad_request" = "Bad request to server";
 "nework_error_data_not_found" = "Data not found";
 "nework_error_request_cancelled" = "Request Cancelled";
+
+//MARK: - Editor
+
+"editor_brightness" = "Brightness";
+"editor_contrast" = "Contrast";
+"editor_saturation" = "Saturation";
+"editor_vibrance" = "Vibrance";
+"editor_exposuer" = "Exposure";
+"editor_highlights" = "Highlights";
+"editor_shadows" = "Shadows";
+"editor_white_point" = "White Point";
+"editor_remperature" = "Warmth";
+"editor_tint" = "Tint";
+"editor_sharpness" = "Sharpness";
+"editor_noise_reduction" = "Noise Reduction";
+"editor_vignette" = "Vignette";
+"editor_adjust" = "Adjust";
+"editor_original" = "Original";
+"editor_freeform" = "Freeform";
+"editor_square" = "Square";
+"editor_resize" = "Resize";
+"editor_width" = "Width";
+"editor_height" = "Height";

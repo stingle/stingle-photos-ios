@@ -34,7 +34,6 @@
       buildConfiguration = "Debug-Dev"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      customLLDBInitFile = "/Users/khorenasatryan/Documents/Workspace/Apps/Github/Alex/Stingle/stingle-photos-ios/Stingle/Resources/Config/Development.xcconfig"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
