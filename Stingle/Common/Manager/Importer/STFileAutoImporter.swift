@@ -163,6 +163,7 @@ extension STImporter {
         
         private func startNextImport() {
             self.isImporting = true
+                        
             let operation = Operation(importQueue: self.importQueue, fromDate: self.lastImportDate, fetchLimit: self.fetchLimit) { [weak self] importCount in
                 guard let weakSelf = self else {
                     return
@@ -311,6 +312,7 @@ extension STImporter.AuotImporter {
                     if let date = resultDate {
                         let fileDate: Date = currentFileDate ?? date
                         resultDate = max(date, fileDate)
+                        
                     } else {
                         resultDate = currentFileDate
                     }
@@ -332,9 +334,7 @@ extension STImporter.AuotImporter {
                         }
                     }
                 }
-                
-                
-                
+                                
                 if STAppSettings.current.import.isDeleteOriginalFilesAfterAutoImport {
                     let albumName = STEnvironment.current.photoLibraryTrashAlbumName
                     STPHPhotoHelper.moveToAlbum(albumName: albumName, assets: importedAssets) {

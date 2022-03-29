@@ -107,14 +107,15 @@ import UIKit
 extension STGallerySyncView: IFileUploaderObserver {
     
     func fileUploader(didChanged uploader: STFileUploader, uploadInfo: STFileUploader.UploadInfo) {
-        let progress = uploadInfo.progress.fractionCompleted
-                
-        if uploadInfo.progresses.isEmpty {
-            self.progress = 0
-        } else {
-            self.progress = CGFloat(progress)
+        DispatchQueue.main.async { [weak self] in
+            let progress = uploadInfo.fractionCompleted
+            if uploadInfo.progresses.isEmpty {
+                self?.progress = 0
+            } else {
+                self?.progress = CGFloat(progress)
+            }
+            self?.updateImage()
         }
-        self.updateImage()
     }
     
 }

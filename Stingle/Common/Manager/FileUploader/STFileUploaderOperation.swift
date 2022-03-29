@@ -64,7 +64,7 @@ extension STFileUploader {
                 self.responseSucces(result: file, spaceUsed: nil)
                 return
             }
-                        
+                    
             self.networkOperation = self.uploadWorker.upload(file: file) { [weak self] (result) in
                 self?.continueOperation(didUpload: file, spaceUsed: result)
             } progress: { [weak self] (progress) in

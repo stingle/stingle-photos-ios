@@ -497,16 +497,18 @@ class STCrypto {
 			
 	@discardableResult
     func savePrivateFile(filename: String, data: Bytes?) throws -> Bool {
-        let path = STFileSystem.privateKeyUrl()//  STApplication.shared.fileSystem.url(for: .private)
+        let path = STFileSystem.privateKeyUrl()
 		guard let fullPath = path?.appendingPathComponent(filename) else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
-		
+        try? FileManager.default.removeItem(at: fullPath)
 		guard let out = OutputStream(url: fullPath, append: false) else {
 			throw CryptoError.IO.writeFailure
 		}
 		out.open()
-		
+        defer {
+            out.close()
+        }
 		guard let data = data else {
 			throw CryptoError.PrivateFile.invalidData
 		}
@@ -514,7 +516,7 @@ class STCrypto {
 		guard data.count == out.write(data, maxLength: data.count) else {
 			throw CryptoError.IO.writeFailure
 		}
-		out.close()
+		
 		return true
 	}
     
@@ -523,7 +525,7 @@ class STCrypto {
     }
 	
     func readPrivateFile(fileName: String) throws -> Bytes {
-        let path = STFileSystem.privateKeyUrl(filePath: fileName) // STApplication.shared.fileSystem.url(for: .private, filePath: fileName)
+        let path = STFileSystem.privateKeyUrl(filePath: fileName)
         guard let fullPath = path else {
 			throw CryptoError.PrivateFile.invalidPath
 		}
