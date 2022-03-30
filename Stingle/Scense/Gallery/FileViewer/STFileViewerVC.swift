@@ -444,16 +444,14 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
                 }
                 result.append(trash)
             case .edit:
-                break
-                // Temporary disabling edit functionality.
-//                let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
-//                    guard let file = self?.currentFile, let vc = STFileEditVC.create(file: file) else {
-//                        return
-//                    }
-//                    vc.delegate = self
-//                    self?.present(vc, animated: true)
-//                }
-//                result.append(edit)
+                let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
+                    guard let file = self?.currentFile, let vc = STFileEditVC.create(file: file) else {
+                        return
+                    }
+                    vc.delegate = self
+                    self?.present(vc, animated: true)
+                }
+                result.append(edit)
             }
         }
 

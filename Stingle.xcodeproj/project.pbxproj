@@ -2469,8 +2469,8 @@
 			isa = PBXGroup;
 			children = (
 				B31D61E627B64B4E00CBEA19 /* Extensions */,
-				B31D61ED27B64B4E00CBEA19 /* UI */,
 				B31D623C27B65ED700CBEA19 /* Common */,
+				B31D61ED27B64B4E00CBEA19 /* UI */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
