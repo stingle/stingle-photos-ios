@@ -376,10 +376,13 @@
 		B31D623927B64B4E00CBEA19 /* STRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621627B64B4E00CBEA19 /* STRulerView.swift */; };
 		B31D623B27B65D7900CBEA19 /* STFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */; };
 		B31D623E27B65F0500CBEA19 /* FileEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */; };
+		B3469B9727F5E8480036C17A /* STGaleryFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9627F5E8480036C17A /* STGaleryFileEditVC.swift */; };
+		B3469B9927F5E8A50036C17A /* STAlbumFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9827F5E8A50036C17A /* STAlbumFileEditVC.swift */; };
 		B372083C27C505E400FA7EFD /* STDataNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */; };
 		B3A417E327BBDD1600F64CB2 /* STResizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A417E227BBDD1600F64CB2 /* STResizeView.swift */; };
 		B3A417E627BBE72600F64CB2 /* STFilterToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */; };
 		B3A417E827BBE74200F64CB2 /* STFilterToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */; };
+		B3A6EC3727F6E5BA000876C6 /* IFileEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */; };
 		E6A4D89B896332CB7C65B74E /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D06FF69A05EB1AEC50C12C /* Pods_Stingle.framework */; };
 /* End PBXBuildFile section */
 
@@ -765,9 +768,12 @@
 		B31D621627B64B4E00CBEA19 /* STRulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STRulerView.swift; sourceTree = "<group>"; };
 		B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileEditVC.swift; sourceTree = "<group>"; };
 		B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FileEdit.storyboard; sourceTree = "<group>"; };
+		B3469B9627F5E8480036C17A /* STGaleryFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGaleryFileEditVC.swift; sourceTree = "<group>"; };
+		B3469B9827F5E8A50036C17A /* STAlbumFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFileEditVC.swift; sourceTree = "<group>"; };
 		B3A417E227BBDD1600F64CB2 /* STResizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STResizeView.swift; sourceTree = "<group>"; };
 		B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilterToolBar.swift; sourceTree = "<group>"; };
 		B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilterToolBar.xib; sourceTree = "<group>"; };
+		B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IFileEditVM.swift; sourceTree = "<group>"; };
 		C59B20CC9ED4970F5FE2DBE3 /* Pods-Stingle.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2468,6 +2474,7 @@
 		B31D61E527B649D400CBEA19 /* ImageEditor */ = {
 			isa = PBXGroup;
 			children = (
+				B3469B9527F5E22C0036C17A /* ViewModel */,
 				B31D61E627B64B4E00CBEA19 /* Extensions */,
 				B31D623C27B65ED700CBEA19 /* Common */,
 				B31D61ED27B64B4E00CBEA19 /* UI */,
@@ -2595,6 +2602,16 @@
 				B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		B3469B9527F5E22C0036C17A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */,
+				B3469B9627F5E8480036C17A /* STGaleryFileEditVC.swift */,
+				B3469B9827F5E8A50036C17A /* STAlbumFileEditVC.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		B3A417E127BBDD0900F64CB2 /* Views */ = {
@@ -2788,6 +2805,7 @@
 				A087C46D2614A5B8006775D2 /* STSyncManager.swift in Sources */,
 				A0C88FE425F3D6360061A41D /* STSync.swift in Sources */,
 				A022048025EEDC0400D07C98 /* STAuthRequest.swift in Sources */,
+				B3469B9727F5E8480036C17A /* STGaleryFileEditVC.swift in Sources */,
 				A001E6EB267CD93200948E50 /* STFileViewerVM.swift in Sources */,
 				A08F0C1C2607D1C400E81826 /* STOperationManager.swift in Sources */,
 				A0DC5E3A2639576300103DE1 /* STButton.swift in Sources */,
@@ -2994,6 +3012,7 @@
 				A06942CB260CDA5A009CFD3A /* STGradientView.swift in Sources */,
 				A074AE3B26459602004C9E9E /* STAlbumWorker+Share.swift in Sources */,
 				A022049325EEDC0400D07C98 /* STEnvironment.swift in Sources */,
+				B3A6EC3727F6E5BA000876C6 /* IFileEditVM.swift in Sources */,
 				A022046B25EEDC0400D07C98 /* STSegue.swift in Sources */,
 				B31D623727B64B4E00CBEA19 /* STCropBox.swift in Sources */,
 				A0B2678A2624E0FC0090E4ED /* STTrashCollectionViewCell.swift in Sources */,
@@ -3005,6 +3024,7 @@
 				B31D622727B64B4E00CBEA19 /* STSelectableButton.swift in Sources */,
 				A0AAA93B261C7C33009E9F51 /* STSettingsVC.swift in Sources */,
 				B31D622627B64B4E00CBEA19 /* STAspectRatioView.swift in Sources */,
+				B3469B9927F5E8A50036C17A /* STAlbumFileEditVC.swift in Sources */,
 				B31D621727B64B4E00CBEA19 /* UIImage+Helper.swift in Sources */,
 				A077780D260000CC00BA2BDF /* STCrypto+PrivateKey.swift in Sources */,
 				A0794B9B269E433D00B40FE9 /* STSettingsSwichTableViewCell.swift in Sources */,
@@ -3199,10 +3219,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
+				DEVELOPMENT_TEAM = 75XL269LGD;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3291,10 +3311,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
+				DEVELOPMENT_TEAM = 75XL269LGD;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3378,10 +3398,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
+				DEVELOPMENT_TEAM = 75XL269LGD;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3465,10 +3485,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
+				DEVELOPMENT_TEAM = 75XL269LGD;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

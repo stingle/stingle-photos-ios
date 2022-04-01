@@ -27,6 +27,8 @@ protocol IFileViewerVM {
     func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.File)
     
     func moveInfo(for file: STLibrary.File) -> STMoveAlbumFilesVC.MoveInfo
+
+    func editVM(for file: STLibrary.File) -> IFileEditVM
     
 }
 
@@ -92,15 +94,15 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
     }
     
     func deleteFile(file: STLibrary.File, completion: @escaping (_ result: IError?) -> Void) {
-        fatalError("thish methot must be implemented chile classe")
+        fatalError("this method must be implemented in chile classes")
     }
     
     func getDeleteFileMessage(file: STLibrary.File) -> String {
-        fatalError("thish method must be implemented in child classes")
+        fatalError("this method must be implemented in child classes")
     }
     
     func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
-        fatalError("thish method must be implemented in child classes")
+        fatalError("this method must be implemented in child classes")
     }
     
     func getMorAction(for file: STLibrary.File) -> [STFileViewerVC.MoreAction] {
@@ -127,7 +129,10 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
     func moveInfo(for file: STLibrary.File) -> STMoveAlbumFilesVC.MoveInfo {
         return .files(files: [file])
     }
-        
+
+    func editVM(for file: STLibrary.File) -> IFileEditVM {
+        fatalError("this method must be implemented in chile classes")
+    }
 }
 
 

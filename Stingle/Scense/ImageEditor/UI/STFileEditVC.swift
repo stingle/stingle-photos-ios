@@ -9,7 +9,7 @@ import UIKit
 
 protocol STFileEditVCDelegate: AnyObject {
     func fileEdit(didSelectCancel vc: STFileEditVC)
-    func fileEdit(didEditFile vc: STFileEditVC, file: STLibrary.File)
+    func fileEdit(didEditFile vc: STFileEditVC, viewModel: IFileEditVM)
 }
 
 class STFileEditVC: UIViewController {
@@ -19,7 +19,11 @@ class STFileEditVC: UIViewController {
 
     weak var delegate: STFileEditVCDelegate?
 
-    private var file: STLibrary.File!
+    private var viewModel: IFileEditVM!
+
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +38,7 @@ class STFileEditVC: UIViewController {
     // MARK: - Private methods
 
     private func loadFile() {
-        guard let source = STImageView.Image(file: self.file, isThumb: false) else {
+        guard let source = STImageView.Image(file: self.viewModel.file, isThumb: false) else {
             assert(false, "File is unavailable")
             self.showError(error: STError.fileIsUnavailable) {
                 self.delegate?.fileEdit(didSelectCancel: self)
@@ -80,11 +84,13 @@ class STFileEditVC: UIViewController {
     }
 
     private func save(image: UIImage) {
-        // TODO: Khoren: Add functionality to upload edited image to server. Also update thumbnail.
+        self.viewModel.save(image: image)
+        self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
     }
 
     private func saveAsNewFile(image: UIImage) {
-        // TODO: Khoren: Add functionality to upload edited image to server. Also update thumbnail.
+        self.viewModel.saveAsNewFile(image: image)
+        self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
     }
 
 }
@@ -118,11 +124,11 @@ extension STFileEditVC: STImageEditorVCDelegate {
 
 extension STFileEditVC {
 
-    static func create(file: STLibrary.File) -> STFileEditVC? {
+    static func create(viewModel: IFileEditVM) -> STFileEditVC {
         let storyboard = UIStoryboard(name: "FileEdit", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileEditVC")
         vc.modalPresentationStyle = .fullScreen
-        vc.file = file
+        vc.viewModel = viewModel
         return vc
     }
 

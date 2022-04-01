@@ -304,9 +304,18 @@ class STFileViewerVC: UIViewController {
         }
         self.showDetailViewController(alert, sender: nil)
     }
-    
-}
 
+    private func didSelectEdit() {
+        guard let file = self.currentFile else {
+            return
+        }
+        let viewModel = self.viewModel.editVM(for: file)
+        let vc = STFileEditVC.create(viewModel: viewModel)
+        vc.delegate = self
+        self.present(vc, animated: true)
+    }
+
+}
 
 extension STFileViewerVC {
 
@@ -445,11 +454,7 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
                 result.append(trash)
             case .edit:
                 let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
-                    guard let file = self?.currentFile, let vc = STFileEditVC.create(file: file) else {
-                        return
-                    }
-                    vc.delegate = self
-                    self?.present(vc, animated: true)
+                    self?.didSelectEdit()
                 }
                 result.append(edit)
             }
@@ -467,7 +472,7 @@ extension STFileViewerVC: STFileEditVCDelegate {
         vc.dismiss(animated: true)
     }
 
-    func fileEdit(didEditFile vc: STFileEditVC, file: STLibrary.File) {
+    func fileEdit(didEditFile vc: STFileEditVC, viewModel: IFileEditVM) {
         vc.dismiss(animated: true)
     }
 

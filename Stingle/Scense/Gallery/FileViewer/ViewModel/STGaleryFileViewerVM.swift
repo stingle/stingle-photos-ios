@@ -42,5 +42,9 @@ class STGaleryFileViewerVM: STFileViewerVM<STCDFile> {
             return allCasesWithoutEdit
         }
     }
-    
+
+    override func editVM(for file: STLibrary.File) -> IFileEditVM {
+        return STGaleryFileEditVC(file: file)
+    }
+
 }

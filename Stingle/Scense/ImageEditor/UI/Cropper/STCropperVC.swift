@@ -259,10 +259,6 @@ class STCropperVC: UIViewController {
         self.transitionsView(with: coordinator)
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
         return .top
     }
