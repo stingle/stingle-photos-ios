@@ -96,11 +96,11 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
     }
     
     func getDeleteFileMessage(file: STLibrary.File) -> String {
-        fatalError("thish methot must be implemented chile classe")
+        fatalError("thish method must be implemented in child classes")
     }
     
     func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
-        fatalError("thish methot must be implemented chile classe")
+        fatalError("thish method must be implemented in child classes")
     }
     
     func getMorAction(for file: STLibrary.File) -> [STFileViewerVC.MoreAction] {

@@ -85,7 +85,7 @@ class STFileUploader {
             guard let weakSelf = self else {
                 return
             }
-            let files = weakSelf.getRemoteFiles()
+            let files = weakSelf.getLocalFiles()
             weakSelf.uploadAllLocalFilesInQueue(files: files)
         }
     }
@@ -115,7 +115,7 @@ class STFileUploader {
     
     // MARK: - private
     
-    private func getRemoteFiles() -> [STLibrary.File] {
+    private func getLocalFiles() -> [STLibrary.File] {
         let dataBase = STApplication.shared.dataBase
         
         var localFiles = dataBase.galleryProvider.fetchObjects(format: "isRemote == false")

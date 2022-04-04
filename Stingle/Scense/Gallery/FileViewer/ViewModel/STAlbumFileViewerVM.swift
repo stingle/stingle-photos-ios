@@ -25,7 +25,7 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
         file?.updateIfNeeded(albumMetadata: self.album.albumMetadata)
         return file
     }
-    
+
     override func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
         if self.album.isOwner {
             return STFileViewerVC.ActionType.allCases

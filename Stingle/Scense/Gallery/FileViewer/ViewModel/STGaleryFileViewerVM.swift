@@ -28,9 +28,19 @@ class STGaleryFileViewerVM: STFileViewerVM<STCDFile> {
             completion(error)
         }
     }
-    
+
     override func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
-        return STFileViewerVC.ActionType.allCases
+        var allCasesWithoutEdit = STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
+        guard let originalType = file.decryptsHeaders.file?.fileOreginalType else {
+            return allCasesWithoutEdit
+        }
+        switch originalType {
+        case .video:
+            return allCasesWithoutEdit
+        case .image:
+            allCasesWithoutEdit.append(.edit)
+            return allCasesWithoutEdit
+        }
     }
     
 }

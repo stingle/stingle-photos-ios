@@ -9,5 +9,6 @@ target 'Stingle' do
   pod 'Sodium'
   pod 'Alamofire'
   pod 'KeychainSwift'
+  pod 'MetalPetal/Swift'
 
 end
