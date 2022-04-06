@@ -286,10 +286,12 @@ class STCropperVC: UIViewController {
                     self.overlayView.gridLinesAlpha = 0
                     self.overlayView.blur = true
                 }, completion: {
+                    self.delegate?.cropper(didChange: self)
                 })
             }
         } else {
             self.updateCropBoxFrameWithPanGesturePoint(point)
+            self.delegate?.cropper(didChange: self)
         }
     }
 
