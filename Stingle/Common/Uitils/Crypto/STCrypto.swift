@@ -258,11 +258,10 @@ class STCrypto {
         
         let inputStream = InputStream(data: inputData)
         let dataLength: UInt = UInt(inputData.count)
-        
-        let fileManager = FileManager.default
-        let tmpPath = fileManager.temporaryDirectory.appendingPathComponent(fileName)
-        
-        guard let outputStream = OutputStream(toFileAtPath: tmpPath.path, append: false) else {
+
+        let outputUrl = outputUrl.appendingPathComponent(fileName)
+
+        guard let outputStream = OutputStream(toFileAtPath: outputUrl.path, append: false) else {
             throw CryptoError.General.creationFailure
         }
         
@@ -273,17 +272,8 @@ class STCrypto {
             inputStream.close()
             outputStream.close()
         }
-        
-        do {
-            let result = try self.encryptFile(input: inputStream, output: outputStream, filename: originalFileName, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
-            let oreginlalPath = outputUrl.appendingPathComponent(fileName)
-            
-            try fileManager.moveItem(at: tmpPath, to: oreginlalPath)
-            return result
-        } catch {
-            try? fileManager.removeItem(at: tmpPath)
-            throw error
-        }
+        let result = try self.encryptFile(input: inputStream, output: outputStream, filename: originalFileName, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
+        return result
     }
     
     @discardableResult
@@ -292,11 +282,10 @@ class STCrypto {
         guard let inputStream = InputStream(fileAtPath: inputUrl.path) else {
             throw CryptoError.General.creationFailure
         }
-        
-        let fileManager = FileManager.default
-        let tmpPath = fileManager.temporaryDirectory.appendingPathComponent(fileName)
-        
-        guard let outputStream = OutputStream(toFileAtPath: tmpPath.path, append: false) else {
+
+        let outputUrl = outputUrl.appendingPathComponent(fileName)
+
+        guard let outputStream = OutputStream(toFileAtPath: outputUrl.path, append: false) else {
             throw CryptoError.General.creationFailure
         }
         
@@ -308,19 +297,8 @@ class STCrypto {
             outputStream.close()
         }
         
-        do {
-            let result = try self.encryptFile(input: inputStream, output: outputStream, filename: originalFileName, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
-            
-            let oreginlalPath = outputUrl.appendingPathComponent(fileName)
-            try fileManager.moveItem(at: tmpPath, to: oreginlalPath)
-            
-            return result
-        } catch {
-            
-            let fileManager = FileManager.default
-            try? fileManager.removeItem(at: tmpPath)
-            throw error
-        }
+        let result = try self.encryptFile(input: inputStream, output: outputStream, filename: originalFileName, fileType: fileType, dataLength: dataLength, fileId: fileId, videoDuration: videoDuration, publicKey: publicKey, progressHandler: progressHandler)
+        return result
     }
 	
     @discardableResult

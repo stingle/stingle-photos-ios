@@ -82,7 +82,7 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
     }
 
     override func editVM(for file: STLibrary.File) -> IFileEditVM {
-        return STAlbumFileEditVC(file: file, album: self.album)
+        return STAlbumFileEditVM(file: file, album: self.album)
     }
 
 }

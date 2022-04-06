@@ -1,5 +1,5 @@
 //
-//  STAlbumFileEditVC.swift
+//  STAlbumFileEditVM.swift
 //  Stingle
 //
 //  Created by Shahen Antonyan on 3/31/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class STAlbumFileEditVC: IFileEditVM {
+class STAlbumFileEditVM: IFileEditVM {
 
     var file: STLibrary.File
     var album: STLibrary.Album!

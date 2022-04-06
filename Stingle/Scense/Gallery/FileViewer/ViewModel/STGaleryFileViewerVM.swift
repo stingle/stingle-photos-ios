@@ -44,7 +44,7 @@ class STGaleryFileViewerVM: STFileViewerVM<STCDFile> {
     }
 
     override func editVM(for file: STLibrary.File) -> IFileEditVM {
-        return STGaleryFileEditVC(file: file)
+        return STGaleryFileEditVM(file: file)
     }
 
 }

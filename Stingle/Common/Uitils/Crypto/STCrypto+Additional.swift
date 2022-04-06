@@ -46,12 +46,23 @@ extension STCrypto {
         return resultData
     }
     
-    func createEncryptedFile(oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
-                
-        let fileName = try self.createEncFileName()
+    func createEncryptedFile(fileName: String? = nil, oreginalUrl: URL, thumbImage: Data, fileType: STHeader.FileType, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, publicKey: Bytes? = nil, progressHandler: ProgressHandler? = nil) throws -> (fileName: String, thumbUrl: URL, originalUrl: URL, headers: String) {
+
+        let fileManager = FileManager.default
+        let uuid = UUID().uuidString
+
+        var tmpDirectory = fileManager.temporaryDirectory
+        tmpDirectory.appendPathComponent(uuid)
+        try fileManager.createDirectory(at: tmpDirectory, withIntermediateDirectories: true)
+
+        var fileName: String! = fileName
+
+        if fileName == nil {
+            fileName = try self.createEncFileName()
+        }
+
         let fileId = try self.createNewFileId()
-        
-        let thumbUrl = toThumbUrl.appendingPathComponent(fileName)
+
         let orgFileName = oreginalUrl.lastPathComponent
         let duration = UInt32(duration)
         
@@ -61,31 +72,48 @@ extension STCrypto {
         
         totalProgress.addChild(thumbProgress)
         totalProgress.addChild(originProgress)
-                
-        let thumbHeader = try self.encryptFile(inputData: thumbImage, outputUrl: toThumbUrl, fileName: fileName, originalFileName: orgFileName, fileType: fileType.rawValue, fileId: fileId, videoDuration: duration, publicKey: publicKey, progressHandler: { progress, stop in
-            thumbProgress.totalUnitCount = progress.totalUnitCount
-            thumbProgress.completedUnitCount = progress.completedUnitCount
-            progressHandler?(totalProgress, &stop)
-        })
-        
-        let outputURL = toUrl.appendingPathComponent(fileName)
-        
+
         do {
-            let originHeader = try self.encryptFile(inputUrl: oreginalUrl, outputUrl: toUrl, fileName: fileName, originalFileName: orgFileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey, progressHandler: { progress, stop in
+            let thumbHeader = try self.encryptFile(inputData: thumbImage, outputUrl: tmpDirectory, fileName: "thumb", originalFileName: orgFileName, fileType: fileType.rawValue, fileId: fileId, videoDuration: duration, publicKey: publicKey, progressHandler: { progress, stop in
+                thumbProgress.totalUnitCount = progress.totalUnitCount
+                thumbProgress.completedUnitCount = progress.completedUnitCount
+                progressHandler?(totalProgress, &stop)
+            })
+
+            let originHeader = try self.encryptFile(inputUrl: oreginalUrl, outputUrl: tmpDirectory, fileName: "file", originalFileName: orgFileName, fileType: fileType.rawValue, dataLength: UInt(fileSize), fileId: fileId, videoDuration: UInt32(duration), publicKey: publicKey, progressHandler: { progress, stop in
                 originProgress.totalUnitCount = progress.totalUnitCount
                 originProgress.completedUnitCount = progress.completedUnitCount
                 progressHandler?(totalProgress, &stop)
             })
-            
+
             guard let base64Original = self.bytesToBase64Url(data: originHeader.encriptedHeader), let base64Thumb = self.bytesToBase64Url(data: thumbHeader.encriptedHeader) else {
-                try? FileManager.default.removeItem(at: thumbUrl)
-                try? FileManager.default.removeItem(at: outputURL)
+                try? fileManager.removeItem(at: tmpDirectory)
                 throw CryptoError.Header.incorrectHeader
             }
             let headers = base64Original + "*" + base64Thumb
+
+            let thumbUrl = toThumbUrl.appendingPathComponent(fileName)
+            let outputURL = toUrl.appendingPathComponent(fileName)
+
+            if fileManager.fileExists(atPath: thumbUrl.path) {
+                try fileManager.removeItem(at: thumbUrl)
+            }
+            if fileManager.fileExists(atPath: outputURL.path) {
+                try fileManager.removeItem(at: outputURL)
+            }
+
+            var fileTmpDirectory = tmpDirectory
+            fileTmpDirectory.appendPathComponent("file")
+
+            var thumbTmpDirectory = tmpDirectory
+            thumbTmpDirectory.appendPathComponent("thumb")
+
+            try fileManager.moveItem(at: thumbTmpDirectory, to: thumbUrl)
+            try fileManager.moveItem(at: fileTmpDirectory, to: outputURL)
+            try fileManager.removeItem(at: tmpDirectory)
             return (fileName, thumbUrl, outputURL, headers)
         } catch {
-            try? FileManager.default.removeItem(at: thumbUrl)
+            try? fileManager.removeItem(at: tmpDirectory)
             throw error
         }
     }

@@ -376,8 +376,8 @@
 		B31D623927B64B4E00CBEA19 /* STRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621627B64B4E00CBEA19 /* STRulerView.swift */; };
 		B31D623B27B65D7900CBEA19 /* STFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */; };
 		B31D623E27B65F0500CBEA19 /* FileEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */; };
-		B3469B9727F5E8480036C17A /* STGaleryFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9627F5E8480036C17A /* STGaleryFileEditVC.swift */; };
-		B3469B9927F5E8A50036C17A /* STAlbumFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9827F5E8A50036C17A /* STAlbumFileEditVC.swift */; };
+		B3469B9727F5E8480036C17A /* STGaleryFileEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9627F5E8480036C17A /* STGaleryFileEditVM.swift */; };
+		B3469B9927F5E8A50036C17A /* STAlbumFileEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9827F5E8A50036C17A /* STAlbumFileEditVM.swift */; };
 		B372083C27C505E400FA7EFD /* STDataNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */; };
 		B3A417E327BBDD1600F64CB2 /* STResizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A417E227BBDD1600F64CB2 /* STResizeView.swift */; };
 		B3A417E627BBE72600F64CB2 /* STFilterToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */; };
@@ -768,8 +768,8 @@
 		B31D621627B64B4E00CBEA19 /* STRulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STRulerView.swift; sourceTree = "<group>"; };
 		B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileEditVC.swift; sourceTree = "<group>"; };
 		B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FileEdit.storyboard; sourceTree = "<group>"; };
-		B3469B9627F5E8480036C17A /* STGaleryFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGaleryFileEditVC.swift; sourceTree = "<group>"; };
-		B3469B9827F5E8A50036C17A /* STAlbumFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFileEditVC.swift; sourceTree = "<group>"; };
+		B3469B9627F5E8480036C17A /* STGaleryFileEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGaleryFileEditVM.swift; sourceTree = "<group>"; };
+		B3469B9827F5E8A50036C17A /* STAlbumFileEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFileEditVM.swift; sourceTree = "<group>"; };
 		B3A417E227BBDD1600F64CB2 /* STResizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STResizeView.swift; sourceTree = "<group>"; };
 		B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilterToolBar.swift; sourceTree = "<group>"; };
 		B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilterToolBar.xib; sourceTree = "<group>"; };
@@ -2608,8 +2608,8 @@
 			isa = PBXGroup;
 			children = (
 				B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */,
-				B3469B9627F5E8480036C17A /* STGaleryFileEditVC.swift */,
-				B3469B9827F5E8A50036C17A /* STAlbumFileEditVC.swift */,
+				B3469B9627F5E8480036C17A /* STGaleryFileEditVM.swift */,
+				B3469B9827F5E8A50036C17A /* STAlbumFileEditVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -2805,7 +2805,7 @@
 				A087C46D2614A5B8006775D2 /* STSyncManager.swift in Sources */,
 				A0C88FE425F3D6360061A41D /* STSync.swift in Sources */,
 				A022048025EEDC0400D07C98 /* STAuthRequest.swift in Sources */,
-				B3469B9727F5E8480036C17A /* STGaleryFileEditVC.swift in Sources */,
+				B3469B9727F5E8480036C17A /* STGaleryFileEditVM.swift in Sources */,
 				A001E6EB267CD93200948E50 /* STFileViewerVM.swift in Sources */,
 				A08F0C1C2607D1C400E81826 /* STOperationManager.swift in Sources */,
 				A0DC5E3A2639576300103DE1 /* STButton.swift in Sources */,
@@ -3024,7 +3024,7 @@
 				B31D622727B64B4E00CBEA19 /* STSelectableButton.swift in Sources */,
 				A0AAA93B261C7C33009E9F51 /* STSettingsVC.swift in Sources */,
 				B31D622627B64B4E00CBEA19 /* STAspectRatioView.swift in Sources */,
-				B3469B9927F5E8A50036C17A /* STAlbumFileEditVC.swift in Sources */,
+				B3469B9927F5E8A50036C17A /* STAlbumFileEditVM.swift in Sources */,
 				B31D621727B64B4E00CBEA19 /* UIImage+Helper.swift in Sources */,
 				A077780D260000CC00BA2BDF /* STCrypto+PrivateKey.swift in Sources */,
 				A0794B9B269E433D00B40FE9 /* STSettingsSwichTableViewCell.swift in Sources */,
