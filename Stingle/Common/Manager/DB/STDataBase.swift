@@ -56,7 +56,7 @@ class STDataBase {
                 return
             }
         }
-        
+                
         self.endSync()
         finish(nil)
     }

@@ -9,9 +9,13 @@ import Foundation
 import CoreData
 
 @objc(STCDTrashFile)
-public class STCDTrashFile: NSManagedObject, IManagedObject {
+public class STCDTrashFile: NSManagedObject {
     
-    func update(model: STLibrary.TrashFile, context: NSManagedObjectContext?) {
+}
+
+extension STCDTrashFile: IManagedSynchObject {
+    
+    func update(model: STLibrary.TrashFile) {
         self.file = model.file
         self.version = model.version
         self.headers = model.headers
@@ -24,5 +28,17 @@ public class STCDTrashFile: NSManagedObject, IManagedObject {
     func createModel() throws -> STLibrary.TrashFile {
         return try STLibrary.TrashFile(model: self)
     }
+    
+    func mastUpdate(with model: STLibrary.TrashFile) -> Bool {
+        guard self.identifier == model.identifier else {
+            return false
+        }
         
+        guard let dateModified = self.dateModified else { return true }
+        let lhsVersion = Int(self.version ?? "") ?? .zero
+        let rhsVersion = Int(model.version) ?? .zero
+        
+        return lhsVersion == rhsVersion ? dateModified < model.dateModified : lhsVersion < rhsVersion
+    }
+    
 }

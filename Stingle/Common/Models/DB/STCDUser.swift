@@ -10,9 +10,14 @@ import Foundation
 import CoreData
 
 @objc(STCDUser)
-public class STCDUser: NSManagedObject, IManagedObject {
+public class STCDUser: NSManagedObject {
     
-    func update(model: STUser, context: NSManagedObjectContext?) {
+    
+}
+
+extension STCDUser: IManagedObject {
+    
+    func update(model: STUser) {
         self.email = model.email
         self.homeFolder = model.homeFolder
         self.isKeyBackedUp = model.isKeyBackedUp
@@ -24,5 +29,5 @@ public class STCDUser: NSManagedObject, IManagedObject {
     func createModel() throws -> STUser {
         return try STUser(model: self)
     }
-
+    
 }

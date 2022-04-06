@@ -122,7 +122,7 @@ extension STDataBase {
                     cdModels.forEach { cdbject in
                         if let model = models.first(where: { $0.identifier == cdbject.identifier }) {
                             ids.append(cdbject.objectID)
-                            cdbject.update(model: model, context: context)
+                            cdbject.update(model: model)
                         }
                     }
                     
@@ -230,7 +230,7 @@ extension STDataBase {
             managedGroup.forEach { (keyValue) in
                 if let key = keyValue.key, let model = modelsGroup[key]?.first {
                     let cdModel = keyValue.value.first
-                    cdModel?.update(model: model, context: context)
+                    cdModel?.update(model: model)
                 }
             }
         }
@@ -284,9 +284,39 @@ extension STDataBase {
 
 extension STDataBase {
     
-    class SyncCollectionProvider<ManagedModel: IManagedObject, DeleteFile: ILibraryDeleteFile>: CollectionProvider<ManagedModel> {
+    class SyncCollectionProvider<ManagedModel: IManagedSynchObject, DeleteFile: ILibraryDeleteFile>: CollectionProvider<ManagedModel>  {
+        
+        //MARK: - Override methods
+        
+        override func getInsertObjects(with files: [STDataBase.CollectionProvider<ManagedModel>.Model]) throws -> (json: [[String : Any]], objIds: [String : STDataBase.CollectionProvider<ManagedModel>.Model], lastDate: Date) {
+            
+            var lastDate: Date? = nil
+            var jsons = [[String : Any]]()
+            var objIds = [String: Model]()
+                        
+            for file in files {
+                if let oldFile = objIds[file.identifier], oldFile > file {
+                    continue
+                }
+                let json = try file.toManagedModelJson()
+                jsons.append(json)
+                objIds[file.identifier] = file
+                let currentLastDate = lastDate ?? file.dateModified
+                if currentLastDate <= file.dateModified {
+                    lastDate = file.dateModified
+                }
+            }
+           
+            guard let myLastDate = lastDate else {
+                throw STDataBase.DataBaseError.dateNotFound
+            }
+            return (jsons, objIds, myLastDate)
+        }
+
+        //MARK: - Internal methods
         
         func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> Date {
+           
             guard let models = models, !models.isEmpty else {
                 return lastDate
             }
@@ -296,15 +326,24 @@ extension STDataBase {
             }
             let insertRequest = NSBatchInsertRequest(entityName: ManagedModel.entityName, objects: inserts.json)
             insertRequest.resultType = .objectIDs
+            
             let resultInset = try context.execute(insertRequest)
             let objectIDs = (resultInset as! NSBatchInsertResult).result as! [NSManagedObjectID]
             try self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, context: context)
+            
             return inserts.lastDate
         }
         
-        func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
-            //Implement in chid classes
-            throw STDataBase.DataBaseError.dateNotFound
+        private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
+            for objectID in insertedObjectIDs {
+                guard let objectCD = context.object(with: objectID) as? ManagedModel, let identifier = objectCD.identifier, let object = objIds[identifier]  else {
+                    continue
+                }
+                if objectCD.mastUpdate(with: object) {
+                    objectCD.update(model: object)
+                }
+            }
+            
         }
                        
         //MARK: - Sync delete

@@ -9,7 +9,7 @@ import CoreData
 
 extension STLibrary {
     
-    class Album: ICDConvertable, Codable {
+    class Album: ICDSinchConvertable, Codable {
                         
         private enum CodingKeys: String, CodingKey {
             case albumId = "albumId"
@@ -176,6 +176,17 @@ extension STLibrary {
 }
 
 extension STLibrary.Album {
+
+    static func > (lhs: STLibrary.Album, rhs: STLibrary.Album) -> Bool {
+        guard lhs.identifier == rhs.identifier else {
+            return false
+        }
+        return lhs.dateModified > rhs.dateModified
+    }
+    
+}
+
+extension STLibrary.Album {
     
     static let imageBlankImageName = "__b__"
     
@@ -228,6 +239,3 @@ extension STLibrary.Album {
     }
     
 }
-
-
-

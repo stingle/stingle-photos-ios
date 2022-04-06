@@ -31,7 +31,7 @@ extension STDataBase {
                     self.container.saveContext(context)
                     return
                 }
-                cdInfo.update(model: info, context: context)
+                cdInfo.update(model: info)
                 self.container.saveContext(context)
                 context.reset()
             }

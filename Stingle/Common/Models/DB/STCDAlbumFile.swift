@@ -10,9 +10,13 @@ import Foundation
 import CoreData
 
 @objc(STCDAlbumFile)
-public class STCDAlbumFile: NSManagedObject, IManagedObject {
+public class STCDAlbumFile: NSManagedObject {
 
-    func update(model: STLibrary.AlbumFile, context: NSManagedObjectContext?) {
+}
+
+extension STCDAlbumFile: IManagedSynchObject {
+    
+    func update(model: STLibrary.AlbumFile) {
         self.file = model.file
         self.version = model.version
         self.headers = model.headers
@@ -27,4 +31,18 @@ public class STCDAlbumFile: NSManagedObject, IManagedObject {
         return try STLibrary.AlbumFile(model: self)
     }
     
+    func mastUpdate(with model: STLibrary.AlbumFile) -> Bool {
+        guard self.identifier == model.identifier else {
+            return false
+        }
+        
+        guard let dateModified = self.dateModified else { return true }
+        let lhsVersion = Int(self.version ?? "") ?? .zero
+        let rhsVersion = Int(model.version) ?? .zero
+        
+        return lhsVersion == rhsVersion ? dateModified < model.dateModified : lhsVersion < rhsVersion
+    }
+    
 }
+
+

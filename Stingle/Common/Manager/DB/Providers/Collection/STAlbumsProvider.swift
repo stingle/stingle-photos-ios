@@ -11,43 +11,6 @@ extension STDataBase {
     
     class AlbumsProvider: SyncCollectionProvider<STCDAlbum, STLibrary.DeleteFile.Album> {
         
-        override func getInsertObjects(with albums: [STLibrary.Album]) throws -> (json: [[String : Any]], objIds: [String: STLibrary.Album], lastDate: Date) {
-            var lastDate: Date? = nil
-            var jsons = [[String : Any]]()
-            var objIds = [String: STLibrary.Album]()
-            
-            try albums.forEach { (album) in
-                let json = try album.toManagedModelJson()
-                jsons.append(json)
-                objIds[album.identifier] = album
-                let currentLastDate = lastDate ?? album.dateModified
-                if currentLastDate <= album.dateModified {
-                    lastDate = album.dateModified
-                }
-            }
-           
-            guard let myLastDate = lastDate else {
-                throw STDataBase.DataBaseError.dateNotFound
-            }
-            
-            return (jsons, objIds, myLastDate)
-        }
-        
-        override func syncUpdateModels(objIds: [String : STLibrary.Album], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
-           
-            let fetchRequest = NSFetchRequest<STCDAlbum>(entityName: STCDAlbum.entityName)
-            let keys: [String] = Array(objIds.keys)
-            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", keys)
-            let items = try context.fetch(fetchRequest)
-            
-            items.forEach { (item) in
-                if let identifier = item.identifier, let model = objIds[identifier] {
-                    item.update(model: model, context: context)
-                }
-                
-            }
-        }
-       
         override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Album], in context: NSManagedObjectContext) throws -> (models: [STCDAlbum], date: Date) {
             guard !deleteFiles.isEmpty else {
                 throw STDataBase.DataBaseError.dateNotFound
@@ -97,7 +60,7 @@ extension STDataBase {
             managedGroup.forEach { (keyValue) in
                 if let key = keyValue.key, let model = modelsGroup[key]?.first {
                     let cdModel = keyValue.value.first
-                    cdModel?.update(model: model, context: context)
+                    cdModel?.update(model: model)
                 }
             }
             

@@ -10,8 +10,8 @@ import CoreData
 
 extension STLibrary {
         
-    class File: Codable, ICDConvertable {
-                
+    class File: Codable, ICDSinchConvertable {
+                        
         private enum CodingKeys: String, CodingKey {
             case file = "file"
             case version = "version"
@@ -89,6 +89,15 @@ extension STLibrary {
         
         func toManagedModelJson() throws -> [String : Any] {
             return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote, "identifier": self.identifier]
+        }
+        
+        static func > (lhs: STLibrary.File, rhs: STLibrary.File) -> Bool {
+            guard lhs.identifier == rhs.identifier else {
+                return false
+            }
+            let lhsVersion = Int(lhs.version) ?? .zero
+            let rhsVersion = Int(rhs.version) ?? .zero
+            return lhsVersion == rhsVersion ? lhs.dateModified > rhs.dateModified : lhsVersion > rhsVersion
         }
         
     }

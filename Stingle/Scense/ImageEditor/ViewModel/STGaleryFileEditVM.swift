@@ -77,6 +77,10 @@ class STGaleryFileEditVM: IFileEditVM {
             }
             let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(fileName: existingFileName, oreginalUrl: filePath, thumbImage: thumbData, fileType: .image, duration: 0.0, toUrl: localOreginalsURL, toThumbUrl: localThumbsURL, fileSize: UInt(data.count))
 
+            if FileManager.default.fileExists(atPath: filePath.path) {
+                try? FileManager.default.removeItem(at: filePath)
+            }
+            
             return encryptedFileInfo
         } catch {
             if FileManager.default.fileExists(atPath: filePath.path) {

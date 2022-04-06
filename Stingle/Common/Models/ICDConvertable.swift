@@ -18,6 +18,7 @@ protocol ICDConvertable: IDataBaseProviderModel, Encodable {
     init(model: ManagedModel) throws
     var managedObjectID: NSManagedObjectID? { get }
     func toManagedModelJson() throws -> [String: Any]
+    
 }
 
 extension ICDConvertable {
@@ -35,17 +36,26 @@ extension ICDConvertable {
     
 }
 
+protocol ICDSinchConvertable: ICDConvertable {
+    
+    var dateModified: Date { get }
+    static func > (lhs: Self, rhs: Self) -> Bool
+    
+}
+
 
 //MARK: - ManagedObject
 
 protocol IManagedObject: NSManagedObject {
     associatedtype Model: ICDConvertable
+    
+    var identifier: String? { get }
+    
     init(model: Model, context: NSManagedObjectContext)
-    func update(model: Model, context: NSManagedObjectContext?)
+    func update(model: Model)
     
     func createModel() throws -> Model
     
-    var identifier: String? { get }
 }
 
 extension IManagedObject {
@@ -53,16 +63,22 @@ extension IManagedObject {
     @discardableResult
     init(model: Model, context: NSManagedObjectContext) {
         self.init(context: context)
-        self.update(model: model, context: context)
+        self.update(model: model)
     }
     
     init(model: Model) {
         self.init()
-        self.update(model: model, context: nil)
+        self.update(model: model)
     }
     
     static var entityName: String {
         return String(describing: self.self)
     }
+    
+}
+
+protocol IManagedSynchObject: IManagedObject   where Model: ICDSinchConvertable {
+    
+    func mastUpdate(with model: Model) -> Bool
     
 }

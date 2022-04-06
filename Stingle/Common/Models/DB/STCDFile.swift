@@ -10,9 +10,14 @@ import Foundation
 import CoreData
 
 @objc(STCDFile)
-public class STCDFile: NSManagedObject, IManagedObject {
+public class STCDFile: NSManagedObject {
    
-    func update(model: STLibrary.File, context: NSManagedObjectContext?) {
+
+}
+
+extension STCDFile: IManagedSynchObject {
+    
+    func update(model: STLibrary.File) {
         self.file = model.file
         self.version = model.version
         self.headers = model.headers
@@ -25,5 +30,17 @@ public class STCDFile: NSManagedObject, IManagedObject {
     func createModel() throws -> STLibrary.File {
         return try STLibrary.File(model: self)
     }
-
+    
+    func mastUpdate(with model: STLibrary.File) -> Bool {
+        guard self.identifier == model.identifier else {
+            return false
+        }
+        
+        guard let dateModified = self.dateModified else { return true }
+        let lhsVersion = Int(self.version ?? "") ?? .zero
+        let rhsVersion = Int(model.version) ?? .zero
+        
+        return lhsVersion == rhsVersion ? dateModified < model.dateModified : lhsVersion < rhsVersion
+    }
+    
 }
