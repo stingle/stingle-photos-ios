@@ -121,7 +121,7 @@ class STVideoViewerVC: UIViewController {
 }
 
 extension STVideoViewerVC: IFileViewer {
-   
+
     static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: STVideoViewerVC = storyboard.instantiateViewController(identifier: "STVodeoViewerVCID")
@@ -144,6 +144,10 @@ extension STVideoViewerVC: IFileViewer {
     
     func fileViewer(pauseContent fileViewer: STFileViewerVC) {
         self.player.pause()
+    }
+
+    func reload(file: STLibrary.File, fileIndex: Int) {
+        self.fileIndex = fileIndex
     }
 
 }

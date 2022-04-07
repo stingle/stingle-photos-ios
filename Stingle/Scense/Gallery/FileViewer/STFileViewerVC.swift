@@ -11,13 +11,14 @@ protocol IFileViewer: UIViewController {
     
     static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer
     var file: STLibrary.File { get }
-    var fileIndex: Int { get set }
+    var fileIndex: Int { get }
     var fileViewerDelegate: IFileViewerDelegate? { get set }
     
     var animatorSourceView: INavigationAnimatorSourceView? { get }
     
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool)
     func fileViewer(pauseContent fileViewer: STFileViewerVC)
+    func reload(file: STLibrary.File, fileIndex: Int)
     
 }
 
@@ -535,7 +536,9 @@ extension STFileViewerVC: STFileViewerVMDelegate {
                 self.navigationController?.popViewController(animated: true)
             }
         } else if let index = index, let currentFileViewer = self.currentFileViewer {
-            currentFileViewer.fileIndex = index
+            guard let newFile = self.viewModel.object(at: index), newFile > file else { return }
+            currentFileViewer.reload(file: newFile, fileIndex: index)
+
             if self.pageViewController.viewControllers?.count != 1 {
                 self.pageViewController.setViewControllers([currentFileViewer], direction: .forward, animated: false, completion: nil)
             }

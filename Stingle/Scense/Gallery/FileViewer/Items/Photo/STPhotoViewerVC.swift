@@ -47,7 +47,7 @@ class STPhotoViewerVC: UIViewController {
             self.setImage(isThumb: false) { }
         }
     }
-    
+
     //MARK: - Private
     
     private func setImage(isThumb: Bool, complition: @escaping (() -> Void)) {
@@ -87,6 +87,15 @@ extension STPhotoViewerVC: IFileViewer {
     }
     
     func fileViewer(pauseContent fileViewer: STFileViewerVC) {}
+
+    func reload(file: STLibrary.File, fileIndex: Int) {
+        self.fileIndex = fileIndex
+        self.photoFile = file
+        guard self.isViewLoaded else {
+            return
+        }
+        self.setImage(isThumb: false, complition: {})
+    }
 
 }
 
