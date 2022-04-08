@@ -11,33 +11,8 @@ extension STDataBase {
     
     class ContactProvider: SyncCollectionProvider<STCDContact, STLibrary.DeleteFile.Contact> {
         
-        override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Contact], in context: NSManagedObjectContext) throws -> (models: [STCDContact], date: Date) {
-           
-            guard !deleteFiles.isEmpty else {
-                throw STDataBase.DataBaseError.dateNotFound
-            }
-            
-            let context = self.container.backgroundContext
-            let contactIds = deleteFiles.compactMap { (deleteFile) -> String in
-                return deleteFile.contactId
-            }
-            let fetchRequest = NSFetchRequest<STCDContact>(entityName: STCDContact.entityName)
-            fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "userId IN %@", contactIds)
-            let deleteingCDItems = try context.fetch(fetchRequest)
-            var deleteItems = [STCDContact]()
-            let groupCDItems = Dictionary(grouping: deleteingCDItems, by: { $0.userId })
-            let defaultDate =  Date.defaultDate
-            var lastDate = defaultDate
-            
-            for delete in deleteFiles {
-                lastDate = max(delete.date, lastDate)
-                let cdModels = groupCDItems[delete.contactId]
-                if let deliteObjects = cdModels?.filter( { $0.dateModified ?? defaultDate <= delete.date} ) {
-                    deleteItems.append(contentsOf: deliteObjects)
-                }
-            }
-            return (deleteItems, lastDate)
+        override var providerType: SyncProviderType {
+            return .contact
         }
         
         override func updateObjects(by models: [STContact], managedModels: [STCDContact], in context: NSManagedObjectContext) {

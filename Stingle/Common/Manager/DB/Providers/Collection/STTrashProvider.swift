@@ -11,34 +11,8 @@ extension STDataBase {
     
     class TrashProvider: SyncCollectionProvider<STCDTrashFile, STLibrary.DeleteFile.Trash> {
         
-        override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Trash], in context: NSManagedObjectContext) throws -> (models: [STCDTrashFile], date: Date) {
-           
-            guard !deleteFiles.isEmpty else {
-                throw STDataBase.DataBaseError.dateNotFound
-            }
-            
-            let context = self.container.backgroundContext
-            let fileNames = deleteFiles.compactMap { (deleteFile) -> String in
-                return deleteFile.fileName
-            }
-            
-            let fetchRequest = NSFetchRequest<STCDTrashFile>(entityName: STCDTrashFile.entityName)
-            fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "file IN %@", fileNames)
-            let deleteingCDItems = try context.fetch(fetchRequest)
-            var deleteItems = [STCDTrashFile]()
-            let groupCDItems = Dictionary(grouping: deleteingCDItems, by: { $0.file })
-            let defaultDate =  Date.defaultDate
-            var lastDate = defaultDate
-            
-            for delete in deleteFiles {
-                lastDate = max(delete.date, lastDate)
-                let cdModels = groupCDItems[delete.fileName]
-                if let deliteObjects = cdModels?.filter( { $0.dateModified ?? defaultDate <= delete.date} ) {
-                    deleteItems.append(contentsOf: deliteObjects)
-                }
-            }
-            return (deleteItems, lastDate)
+        override var providerType: SyncProviderType {
+            return .trash
         }
         
         override func getObjects(by models: [STLibrary.TrashFile], in context: NSManagedObjectContext) throws -> [STCDTrashFile] {

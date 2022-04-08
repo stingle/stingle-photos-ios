@@ -7,7 +7,10 @@
 
 import Foundation
 
-protocol ILibraryDeleteFile: Decodable {}
+protocol ILibraryDeleteFile: Decodable {
+    var identifier: String { get }
+    var date: Date { get }
+}
 
 extension STLibrary {
             
@@ -90,6 +93,10 @@ extension STLibrary.DeleteFile {
         let file: String
         let date: Date
         
+        var identifier: String {
+            return file
+        }
+        
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let dateStr = try container.decode(String.self, forKey: .date)
@@ -102,6 +109,7 @@ extension STLibrary.DeleteFile {
     }
     
     class Trash: ILibraryDeleteFile {
+                
         
         private enum CodingKeys: String, CodingKey {
             case fileName = "file"
@@ -110,6 +118,10 @@ extension STLibrary.DeleteFile {
         
         let fileName: String
         let date: Date
+        
+        var identifier: String {
+            return fileName
+        }
         
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -138,6 +150,10 @@ extension STLibrary.DeleteFile {
         let date: Date
         let albumId: String
         
+        var identifier: String {
+            return albumId
+        }
+        
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let dateStr = try container.decode(String.self, forKey: .date)
@@ -162,6 +178,10 @@ extension STLibrary.DeleteFile {
         let date: Date
         let albumId: String
         
+        var identifier: String {
+            return STLibrary.AlbumFile.createIdentifier(albumId: self.albumId, fileName: self.file)
+        }
+        
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let dateStr = try container.decode(String.self, forKey: .date)
@@ -183,6 +203,10 @@ extension STLibrary.DeleteFile {
         
         let contactId: String
         let date: Date
+        
+        var identifier: String {
+            return self.contactId
+        }
         
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)

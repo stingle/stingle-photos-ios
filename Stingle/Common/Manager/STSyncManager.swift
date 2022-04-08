@@ -75,23 +75,36 @@ class STSyncManager {
     }
     
     private func startDBSync(sync: STSync, success: (() -> Void)? = nil, failure: ((_ error: IError) -> Void)? = nil)  {
-        self.dataBase.sync(sync, finish: { [weak self] error in
-                       
-            if let error = error {
-                failure?(error)
-                self?.didEndSync(error: error)
-            } else {
-                if let trashDeletes = sync.deletes?.trashDeletes {
-                    let deletes = trashDeletes.compactMap( {$0.fileName} )
-                    STApplication.shared.utils.deleteFilesIfNeeded(fileNames: deletes, complition: nil)
-                }
-                success?()
-                self?.didEndSync(error: nil)
-                let application = STApplication.shared
-                application.uploader.uploadAllLocalFiles()
-                application.auotImporter.startImport()
-            }
-        })
+        
+        self.dataBase.sync(sync) { [weak self] in
+            
+            success?()
+            self?.didEndSync(error: nil)
+            let application = STApplication.shared
+            application.uploader.uploadAllLocalFiles()
+            application.auotImporter.startImport()
+            
+        } willFinish: { info in
+                        
+            let gallery = info.gallery.updates.compactMap( { $0.file } )
+            let albumFiles = info.albumFiles.updates.compactMap( { $0.file } )
+            let deletes = info.trash.deletes.compactMap( { $0.file } )
+            let trash = info.trash.updates.compactMap( { $0.file } )
+            
+            var deleteFileNames = [String]()
+            deleteFileNames.append(contentsOf: deletes)
+            deleteFileNames.append(contentsOf: gallery)
+            deleteFileNames.append(contentsOf: albumFiles)
+            deleteFileNames.append(contentsOf: trash)
+            
+            STApplication.shared.utils.deleteFiles(fileNames: deleteFileNames)
+
+        } failure: { [weak self] error in
+            failure?(error)
+            self?.didEndSync(error: error)
+        }
+
+        
     }
     
     private func didStartSync() {

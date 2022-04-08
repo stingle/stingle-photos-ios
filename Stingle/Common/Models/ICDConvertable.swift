@@ -13,12 +13,11 @@ protocol IDataBaseProviderModel: AnyObject {
     var identifier: String { get }
 }
 
-protocol ICDConvertable: IDataBaseProviderModel, Encodable {
+protocol ICDConvertable: IDataBaseProviderModel, Encodable, Hashable {
     associatedtype ManagedModel: IManagedObject
     init(model: ManagedModel) throws
     var managedObjectID: NSManagedObjectID? { get }
     func toManagedModelJson() throws -> [String: Any]
-    
 }
 
 extension ICDConvertable {
@@ -34,9 +33,17 @@ extension ICDConvertable {
         return ManagedModel(model: self as! Self.ManagedModel.Model, context: context)
     }
     
+    func hash(into hasher: inout Hasher) {
+        return self.identifier.hash(into: &hasher)
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
+    
 }
 
-protocol ICDSinchConvertable: ICDConvertable {
+protocol ICDSynchConvertable: ICDConvertable {
     
     var dateModified: Date { get }
     static func > (lhs: Self, rhs: Self) -> Bool
@@ -77,8 +84,9 @@ extension IManagedObject {
     
 }
 
-protocol IManagedSynchObject: IManagedObject   where Model: ICDSinchConvertable {
+protocol IManagedSynchObject: IManagedObject   where Model: ICDSynchConvertable {
     
+    var dateModified: Date? { get }
     func mastUpdate(with model: Model) -> Bool
     
 }

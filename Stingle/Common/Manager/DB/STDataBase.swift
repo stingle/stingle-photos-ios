@@ -10,6 +10,30 @@ import CoreData
 
 class STDataBase {
     
+    enum SyncProviderType {
+        case gallery
+        case trash
+        case albums
+        case albumFiles
+        case contact
+    }
+    
+    struct SyncInfo<T: ICDSynchConvertable> {
+        let inserts: Set<T>
+        let updates: Set<T>
+        let deletes: Set<T>
+    }
+    
+    struct DBSyncInfo {
+        let gallery: SyncInfo<GalleryProvider.Model>
+        let trash: SyncInfo<TrashProvider.Model>
+        let albums: SyncInfo<AlbumsProvider.Model>
+        let albumFiles: SyncInfo<AlbumFilesProvider.Model>
+        let contact: SyncInfo<ContactProvider.Model>
+        let trashRecovers: Set<TrashProvider.Model>
+        let dbInfo: STDBInfo
+    }
+    
     private let container = STDataBaseContainer(modelName: "StingleModel")
     
     let userProvider: UserProvider
@@ -30,35 +54,36 @@ class STDataBase {
         self.dbInfoProvider = DBInfoProvider(container: self.container)
     }
     
-    func sync(_ sync: STSync, finish: @escaping (IError?) -> Void) {
+    func sync(_ sync: STSync, finish: @escaping () -> Void, willFinish: @escaping (DBSyncInfo) -> Void, failure: @escaping (IError) -> Void) {
         self.didStartSync()
         let context = self.container.backgroundContext
-        context.performAndWait {
+        context.performAndWait { [weak self] in
+            guard let weakSelf = self else { return }
             do {
-                let oldInfo = self.dbInfoProvider.dbInfo
-                let info = try self.syncImportFiles(sync: sync, in: context, dbInfo: oldInfo)
+                let oldInfo = weakSelf.dbInfoProvider.dbInfo
+                let synchInfo = try weakSelf.syncImportFiles(sync: sync, in: context, dbInfo: oldInfo)
+                weakSelf.dbInfoProvider.update(model: synchInfo.dbInfo, context: context, notify: false)
                 
                 if context.hasChanges {
                     try context.save()
                 }
+                weakSelf.container.viewContext.reset()
+                willFinish(synchInfo)
                 
-                let deleteTime = try self.deleteFiles(deletes: sync.deletes, in: context, lastDelSeenTime: info.lastDelSeenTime)
-                info.lastDelSeenTime = deleteTime
-                self.dbInfoProvider.update(model: info)
-                
-                if context.hasChanges {
-                    try context.save()
+                DispatchQueue.main.async {
+                    weakSelf.endSync()
+                    finish()
                 }
-                self.container.viewContext.reset()
                 
             } catch {
-                finish(DataBaseError.error(error: error))
+                failure(DataBaseError.error(error: error))
                 return
             }
         }
+        
+        
                 
-        self.endSync()
-        finish(nil)
+        
     }
     
     func deleteAll() {
@@ -154,6 +179,7 @@ class STDataBase {
         self.albumsProvider.finishSync()
         self.trashProvider.finishSync()
         self.contactProvider.finishSync()
+        self.dbInfoProvider.notifyAllUpdates()
     }
     
     private func didStartSync() {
@@ -164,33 +190,54 @@ class STDataBase {
         self.contactProvider.didStartSync()
     }
     
-    private func syncImportFiles(sync: STSync, in context: NSManagedObjectContext, dbInfo: STDBInfo) throws -> STDBInfo {
-        let lastSeenTime = try self.galleryProvider.sync(db: sync.files ?? [], context: context, lastDate: dbInfo.lastSeenTime)
-        let lastAlbumsSeenTime = try self.albumsProvider.sync(db: sync.albums ?? [], context: context, lastDate: dbInfo.lastAlbumsSeenTime)
-        let lastTrashSeenTime = try self.trashProvider.sync(db: sync.trash ?? [], context: context, lastDate: dbInfo.lastTrashSeenTime)
-        let lastAlbumFilesSeenTime = try self.albumFilesProvider.sync(db: sync.albumFiles ?? [], context: context, lastDate: dbInfo.lastAlbumFilesSeenTime)
-        let lastContactsSeenTime = try self.contactProvider.sync(db: sync.contacts ?? [], context: context, lastDate: dbInfo.lastContactsSeenTime)
-                
-        let infon = STDBInfo(lastSeenTime: lastSeenTime,
-                             lastTrashSeenTime: lastTrashSeenTime,
-                             lastAlbumsSeenTime: lastAlbumsSeenTime,
-                             lastAlbumFilesSeenTime: lastAlbumFilesSeenTime,
-                             lastDelSeenTime: nil,
-                             lastContactsSeenTime: lastContactsSeenTime,
+    private func syncImportFiles(sync: STSync, in context: NSManagedObjectContext, dbInfo: STDBInfo) throws -> DBSyncInfo {
+       
+        let gallerySync = try self.galleryProvider.sync(db: sync.files ?? [], context: context, lastDate: dbInfo.lastSeenTime)
+        let albumsSync = try self.albumsProvider.sync(db: sync.albums ?? [], context: context, lastDate: dbInfo.lastAlbumsSeenTime)
+        let trashSync = try self.trashProvider.sync(db: sync.trash ?? [], context: context, lastDate: dbInfo.lastTrashSeenTime)
+        let albumFilesSync = try self.albumFilesProvider.sync(db: sync.albumFiles ?? [], context: context, lastDate: dbInfo.lastAlbumFilesSeenTime)
+        let contactSync = try self.contactProvider.sync(db: sync.contacts ?? [], context: context, lastDate: dbInfo.lastContactsSeenTime)
+        
+        let deletes = try self.deleteFiles(deletes: sync.deletes, in: context, lastDelSeenTime: dbInfo.lastDelSeenTime)
+
+        let infon = STDBInfo(lastSeenTime: gallerySync.lastDate,
+                             lastTrashSeenTime: trashSync.lastDate,
+                             lastAlbumsSeenTime: albumsSync.lastDate,
+                             lastAlbumFilesSeenTime: albumFilesSync.lastDate,
+                             lastDelSeenTime: deletes.lastSeen,
+                             lastContactsSeenTime: contactSync.lastDate,
                              spaceUsed: sync.spaceUsed,
                              spaceQuota: sync.spaceQuota)
-        return infon
+        
+        
+        let galleryInfo = SyncInfo<GalleryProvider.Model>(inserts: gallerySync.insert, updates: gallerySync.updated, deletes: deletes.gallery)
+        let trashInfo = SyncInfo<TrashProvider.Model>(inserts: trashSync.insert, updates: trashSync.updated, deletes: deletes.trashDeletes)
+        let albumsInfo = SyncInfo<AlbumsProvider.Model>(inserts: albumsSync.insert, updates: albumsSync.updated, deletes: deletes.albums)
+        let albumFilesInfo = SyncInfo<AlbumFilesProvider.Model>(inserts: albumFilesSync.insert, updates: albumFilesSync.updated, deletes: deletes.albumFiles)
+        let contact = SyncInfo<ContactProvider.Model>(inserts: contactSync.insert, updates: contactSync.updated, deletes: deletes.contact)
+        
+        let result = DBSyncInfo(gallery: galleryInfo,
+                                trash: trashInfo,
+                                albums: albumsInfo,
+                                albumFiles: albumFilesInfo,
+                                contact: contact,
+                                trashRecovers: deletes.trashRecovers,
+                                dbInfo: infon)
+        
+        return result
     }
     
-    private func deleteFiles(deletes: STLibrary.DeleteFile?, in context: NSManagedObjectContext, lastDelSeenTime: Date) throws -> Date {
-        let lastSeenTimeDelete = try self.galleryProvider.deleteObjects(deletes?.gallery, in: context, lastDate: lastDelSeenTime)
-        let lastAlbumsSeenTimeDelete = try self.albumsProvider.deleteObjects(deletes?.albums, in: context, lastDate: lastDelSeenTime)
-        let lastAlbumFilesSeenTimeDelete = try self.albumFilesProvider.deleteObjects(deletes?.albumFiles, in: context, lastDate: lastDelSeenTime)
-        let lastTrashRecovorsSeenTimeDelete = try self.trashProvider.deleteObjects(deletes?.recovers, in: context, lastDate: lastDelSeenTime)
-        let lastTrashhDeletesSeenTimeDelete = try self.trashProvider.deleteObjects(deletes?.trashDeletes, in: context, lastDate: lastDelSeenTime)
-        let lastContactsSeenTimeDelete = try self.contactProvider.deleteObjects(deletes?.contacts, in: context, lastDate: lastDelSeenTime)
-        let timeDeletes = max(lastSeenTimeDelete, lastAlbumsSeenTimeDelete, lastAlbumFilesSeenTimeDelete, lastTrashRecovorsSeenTimeDelete, lastTrashhDeletesSeenTimeDelete, lastContactsSeenTimeDelete)
-        return timeDeletes
+    private func deleteFiles(deletes: STLibrary.DeleteFile?, in context: NSManagedObjectContext, lastDelSeenTime: Date) throws -> (lastSeen: Date, gallery: Set<GalleryProvider.Model>, trashDeletes: Set<TrashProvider.Model>, albums: Set<AlbumsProvider.Model>, albumFiles: Set<AlbumFilesProvider.Model>, contact: Set<ContactProvider.Model>, trashRecovers: Set<TrashProvider.Model>) {
+        
+        let gallery = try self.galleryProvider.deleteObjects(deletes?.gallery, in: context, lastDate: lastDelSeenTime)
+        let albums = try self.albumsProvider.deleteObjects(deletes?.albums, in: context, lastDate: lastDelSeenTime)
+        let albumFiles = try self.albumFilesProvider.deleteObjects(deletes?.albumFiles, in: context, lastDate: lastDelSeenTime)
+        let trashRecovers = try self.trashProvider.deleteObjects(deletes?.recovers, in: context, lastDate: lastDelSeenTime)
+        let trashDeletes = try self.trashProvider.deleteObjects(deletes?.trashDeletes, in: context, lastDate: lastDelSeenTime)
+        let contact = try self.contactProvider.deleteObjects(deletes?.contacts, in: context, lastDate: lastDelSeenTime)
+        
+        let timeDeletes = max(gallery.lastDate, albums.lastDate, albumFiles.lastDate, trashRecovers.lastDate, trashDeletes.lastDate, contact.lastDate)
+        return (timeDeletes, gallery.deleteds, trashDeletes.deleteds, albums.deleteds, albumFiles.deleteds, contact.deleteds, trashRecovers.deleteds)
     }
         
 }

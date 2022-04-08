@@ -11,35 +11,11 @@ import UIKit
 extension STDataBase {
     
     class GalleryProvider: SyncCollectionProvider<STCDFile, STLibrary.DeleteFile.Gallery> {
-                
-        override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Gallery], in context: NSManagedObjectContext) throws -> (models: [STCDFile], date: Date) {
-           
-            guard !deleteFiles.isEmpty else {
-                throw STDataBase.DataBaseError.dateNotFound
-            }
-            
-            let fileNames = deleteFiles.compactMap { (deleteFile) -> String in
-                return deleteFile.file
-            }
-            
-            let fetchRequest = NSFetchRequest<STCDFile>(entityName: STCDFile.entityName)
-            fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "file IN %@", fileNames)
-            let deleteingCDItems = try context.fetch(fetchRequest)
-            var deleteItems = [STCDFile]()
-            let groupCDItems = Dictionary(grouping: deleteingCDItems, by: { $0.file })
-            let defaultDate =  Date.defaultDate
-            var lastDate = defaultDate
-            
-            for delete in deleteFiles {
-                lastDate = max(delete.date, lastDate)
-                let cdModels = groupCDItems[delete.file]
-                if let deliteObjects = cdModels?.filter( { $0.dateModified ?? defaultDate <= delete.date} ) {
-                    deleteItems.append(contentsOf: deliteObjects)
-                }
-            }
-            return (deleteItems, lastDate)
+        
+        override var providerType: SyncProviderType {
+            return .gallery
         }
+                
         
         override func getObjects(by models: [STLibrary.File], in context: NSManagedObjectContext) throws -> [STCDFile] {
             guard !models.isEmpty else {

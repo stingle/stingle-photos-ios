@@ -9,7 +9,7 @@ import CoreData
 
 extension STLibrary {
     
-    class Album: ICDSinchConvertable, Codable {
+    class Album: ICDSynchConvertable, Codable {
                         
         private enum CodingKeys: String, CodingKey {
             case albumId = "albumId"

@@ -11,35 +11,10 @@ extension STDataBase {
     
     class AlbumsProvider: SyncCollectionProvider<STCDAlbum, STLibrary.DeleteFile.Album> {
         
-        override func getDeleteObjects(_ deleteFiles: [STLibrary.DeleteFile.Album], in context: NSManagedObjectContext) throws -> (models: [STCDAlbum], date: Date) {
-            guard !deleteFiles.isEmpty else {
-                throw STDataBase.DataBaseError.dateNotFound
-            }
-            
-            let context = self.container.backgroundContext
-            let albumIds = deleteFiles.compactMap { (deleteFile) -> String in
-                return deleteFile.albumId
-            }
-            
-            let fetchRequest = NSFetchRequest<STCDAlbum>(entityName: STCDAlbum.entityName)
-            fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "albumId IN %@", albumIds)
-            let deleteingCDItems = try context.fetch(fetchRequest)
-            var deleteItems = [STCDAlbum]()
-            let groupCDItems = Dictionary(grouping: deleteingCDItems, by: { $0.albumId })
-            let defaultDate =  Date.defaultDate
-            var lastDate = defaultDate
-            
-            for delete in deleteFiles {
-                lastDate = max(delete.date, lastDate)
-                let cdModels = groupCDItems[delete.albumId]
-                if let deliteObjects = cdModels?.filter( { $0.dateModified ?? defaultDate <= delete.date} ) {
-                    deleteItems.append(contentsOf: deliteObjects)
-                }
-            }
-            return (deleteItems, lastDate)
+        override var providerType: SyncProviderType {
+            return .albums
         }
-        
+
         override func getObjects(by models: [STLibrary.Album], in context: NSManagedObjectContext) throws -> [STCDAlbum] {
             guard !models.isEmpty else {
                 return []

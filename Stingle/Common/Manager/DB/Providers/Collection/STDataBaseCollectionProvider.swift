@@ -31,7 +31,7 @@ extension STDataBase {
             }
         }
         
-        func getInsertObjects(with files: [Model]) throws -> (json: [[String : Any]], objIds: [String: Model], lastDate: Date) {
+        func getInsertObjects(with files: [Model]) throws -> (json: [[String : Any]], models: Set<Model>, objIds: [String: Model], lastDate: Date) {
             //Implement in chid classes
             throw STDataBase.DataBaseError.dateNotFound
         }
@@ -283,17 +283,27 @@ extension STDataBase {
 }
 
 extension STDataBase {
-    
+        
     class SyncCollectionProvider<ManagedModel: IManagedSynchObject, DeleteFile: ILibraryDeleteFile>: CollectionProvider<ManagedModel>  {
+
+        typealias Model = ManagedModel.Model
+        
+        var providerType: SyncProviderType {
+            get {
+                fatalError("implement childe classes")
+            }
+        }
+        
         
         //MARK: - Override methods
         
-        override func getInsertObjects(with files: [STDataBase.CollectionProvider<ManagedModel>.Model]) throws -> (json: [[String : Any]], objIds: [String : STDataBase.CollectionProvider<ManagedModel>.Model], lastDate: Date) {
+        override func getInsertObjects(with files: [Model]) throws -> (json: [[String : Any]], models: Set<Model>, objIds: [String : Model], lastDate: Date) {
             
             var lastDate: Date? = nil
             var jsons = [[String : Any]]()
             var objIds = [String: Model]()
-                        
+            var setModel = Set<Model>()
+            
             for file in files {
                 if let oldFile = objIds[file.identifier], oldFile > file {
                     continue
@@ -305,67 +315,106 @@ extension STDataBase {
                 if currentLastDate <= file.dateModified {
                     lastDate = file.dateModified
                 }
+                setModel.insert(file)
             }
            
             guard let myLastDate = lastDate else {
                 throw STDataBase.DataBaseError.dateNotFound
             }
-            return (jsons, objIds, myLastDate)
+            return (jsons, setModel, objIds, myLastDate)
         }
 
         //MARK: - Internal methods
         
-        func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> Date {
+        func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, updated: Set<Model>, insert: Set<Model>) {
            
             guard let models = models, !models.isEmpty else {
-                return lastDate
+                return (lastDate, [], [])
             }
             let inserts = try self.getInsertObjects(with: models)
             guard inserts.lastDate >= lastDate, !inserts.json.isEmpty else {
-                return max(lastDate, inserts.lastDate)
+                return (max(lastDate, inserts.lastDate), [], [])
             }
             let insertRequest = NSBatchInsertRequest(entityName: ManagedModel.entityName, objects: inserts.json)
             insertRequest.resultType = .objectIDs
             
             let resultInset = try context.execute(insertRequest)
             let objectIDs = (resultInset as! NSBatchInsertResult).result as! [NSManagedObjectID]
-            try self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, context: context)
             
-            return inserts.lastDate
+            let updatedModes = self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, context: context)
+            let insertModes = inserts.models.symmetricDifference(updatedModes)
+            
+            return (inserts.lastDate, updatedModes, insertModes)
         }
         
-        private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) throws {
+        private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) -> Set<Model> {
+            
+            var updatedModes = Set<Model>()
+            
             for objectID in insertedObjectIDs {
                 guard let objectCD = context.object(with: objectID) as? ManagedModel, let identifier = objectCD.identifier, let object = objIds[identifier]  else {
                     continue
                 }
                 if objectCD.mastUpdate(with: object) {
                     objectCD.update(model: object)
+                    updatedModes.insert(object)
                 }
             }
             
+            return updatedModes
         }
                        
         //MARK: - Sync delete
         
-        func deleteObjects(_ deleteFiles: [DeleteFile]?, in context: NSManagedObjectContext, lastDate: Date) throws -> Date {
+        func deleteObjects(_ deleteFiles: [DeleteFile]?, in context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, deleteds: Set<Model>) {
             guard let deleteFiles = deleteFiles, !deleteFiles.isEmpty else {
-                return lastDate
+                return (lastDate, [])
             }
             let result = try self.getDeleteObjects(deleteFiles, in: context)
             guard result.date >= lastDate, !result.models.isEmpty else {
-                return max(lastDate, result.date)
+                return (max(lastDate, result.date), [])
             }
             let objectIDs = result.models.compactMap { (model) -> NSManagedObjectID? in
                 return model.objectID
             }
             let deleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
             let _ = try context.execute(deleteRequest)
-            return result.date
+            return (result.date, result.deleteds)
         }
         
-        func getDeleteObjects(_ deleteFiles: [DeleteFile], in context: NSManagedObjectContext) throws -> (models: [ManagedModel], date: Date) {
-            throw STDataBase.DataBaseError.dateNotFound
+        func getDeleteObjects(_ deleteFiles: [DeleteFile], in context: NSManagedObjectContext) throws -> (models: [ManagedModel], deleteds: Set<Model>, date: Date) {
+            
+            guard !deleteFiles.isEmpty else {
+                throw STDataBase.DataBaseError.dateNotFound
+            }
+            
+            let fileNames = deleteFiles.compactMap { (deleteFile) -> String in
+                return deleteFile.identifier
+            }
+            
+            var deleteds = Set<Model>()
+            
+            let fetchRequest = NSFetchRequest<ManagedModel>(entityName: ManagedModel.entityName)
+            fetchRequest.includesSubentities = false
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", fileNames)
+            let deleteingCDItems = try context.fetch(fetchRequest)
+            var deleteItems = [ManagedModel]()
+            
+            let groupCDItems = Set<ManagedModel>(deleteingCDItems)
+            let defaultDate =  Date.defaultDate
+            var lastDate = defaultDate
+            
+            for delete in deleteFiles {
+                lastDate = max(delete.date, lastDate)
+                if let deliteCDObject = groupCDItems.first(where: { $0.identifier == delete.identifier && $0.dateModified ?? defaultDate <= delete.date }) {
+                    deleteItems.append(deliteCDObject)
+                    let model = try deliteCDObject.createModel()
+                    deleteds.insert(model)
+                }
+   
+            }
+            return (deleteItems, deleteds, lastDate)
+            
         }
                                 
         func didStartSync() {

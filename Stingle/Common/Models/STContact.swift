@@ -7,7 +7,7 @@
 
 import CoreData
 
-class STContact: Codable, ICDSinchConvertable {
+class STContact: Codable, ICDSynchConvertable {
         
     private enum CodingKeys: String, CodingKey {
         case email = "email"

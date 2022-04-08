@@ -10,7 +10,7 @@ import CoreData
 
 extension STLibrary {
         
-    class File: Codable, ICDSinchConvertable {
+    class File: Codable, ICDSynchConvertable {
                         
         private enum CodingKeys: String, CodingKey {
             case file = "file"
