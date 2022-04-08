@@ -84,13 +84,25 @@ class STFileEditVC: UIViewController {
     }
 
     private func save(image: UIImage) {
-        self.viewModel.save(image: image)
-        self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
+        do {
+            try self.viewModel.save(image: image)
+            self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
+        } catch let error as IError {
+            self.showError(error: error)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
     private func saveAsNewFile(image: UIImage) {
-        self.viewModel.saveAsNewFile(image: image)
-        self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
+        do {
+            try self.viewModel.saveAsNewFile(image: image)
+            self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
+        } catch let error as IError {
+            self.showError(error: error)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
 }

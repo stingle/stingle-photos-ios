@@ -131,6 +131,24 @@ extension STLibrary {
             self.dateModified = dateModified
             self.managedObjectID = managedObjectID
         }
+
+        init(album: STLibrary.Album, albumId: String? = nil, encPrivateKey: String? = nil, publicKey: String? = nil, metadata: String? = nil, isShared: Bool? = nil, isHidden: Bool? = nil, isOwner: Bool? = nil, isLocked: Bool? = nil, isRemote: Bool? = nil, permissions: String? = nil, members: String? = nil, cover: String? = nil, dateCreated: Date? = nil, dateModified: Date? = nil, managedObjectID: NSManagedObjectID? = nil) {
+            self.albumId = albumId ?? album.albumId
+            self.encPrivateKey = encPrivateKey ?? album.encPrivateKey
+            self.publicKey = publicKey ?? album.publicKey
+            self.metadata = metadata ?? album.metadata
+            self.isShared = isShared ?? album.isShared
+            self.isHidden = isHidden ?? album.isHidden
+            self.isOwner = isOwner ?? album.isOwner
+            self.isLocked = isLocked ?? album.isLocked
+            self.isRemote = isRemote ?? album.isRemote
+            self.permissions = permissions ?? album.permissions
+            self.members = members ?? album.members
+            self.cover = cover ?? album.cover
+            self.dateCreated = dateCreated ?? album.dateCreated
+            self.dateModified = dateModified ?? album.dateModified
+            self.managedObjectID = managedObjectID ?? album.managedObjectID
+        }
         
         func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
