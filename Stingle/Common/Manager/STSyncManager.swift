@@ -103,8 +103,6 @@ class STSyncManager {
             failure?(error)
             self?.didEndSync(error: error)
         }
-
-        
     }
     
     private func didStartSync() {

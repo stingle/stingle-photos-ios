@@ -50,7 +50,6 @@ protocol ICDSynchConvertable: ICDConvertable {
     
 }
 
-
 //MARK: - ManagedObject
 
 protocol IManagedObject: NSManagedObject {

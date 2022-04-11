@@ -80,10 +80,6 @@ class STDataBase {
                 return
             }
         }
-        
-        
-                
-        
     }
     
     func deleteAll() {
@@ -208,8 +204,7 @@ class STDataBase {
                              lastContactsSeenTime: contactSync.lastDate,
                              spaceUsed: sync.spaceUsed,
                              spaceQuota: sync.spaceQuota)
-        
-        
+
         let galleryInfo = SyncInfo<GalleryProvider.Model>(inserts: gallerySync.insert, updates: gallerySync.updated, deletes: deletes.gallery)
         let trashInfo = SyncInfo<TrashProvider.Model>(inserts: trashSync.insert, updates: trashSync.updated, deletes: deletes.trashDeletes)
         let albumsInfo = SyncInfo<AlbumsProvider.Model>(inserts: albumsSync.insert, updates: albumsSync.updated, deletes: deletes.albums)

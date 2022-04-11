@@ -293,8 +293,7 @@ extension STDataBase {
                 fatalError("implement childe classes")
             }
         }
-        
-        
+
         //MARK: - Override methods
         
         override func getInsertObjects(with files: [Model]) throws -> (json: [[String : Any]], models: Set<Model>, objIds: [String : Model], lastDate: Date) {
@@ -414,7 +413,6 @@ extension STDataBase {
    
             }
             return (deleteItems, deleteds, lastDate)
-            
         }
                                 
         func didStartSync() {
