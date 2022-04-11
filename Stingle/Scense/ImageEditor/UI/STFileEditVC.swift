@@ -51,8 +51,9 @@ class STFileEditVC: UIViewController {
         self.loadingIndicator.startAnimating()
         STApplication.shared.downloaderManager.imageRetryer.download(source: source, success: { [weak self] image in
             DispatchQueue.main.async {
-                self?.loadingIndicator.stopAnimating()
                 self?.presentImageEditVC(image: image)
+                self?.loadingIndicator.stopAnimating()
+                self?.view.bringSubviewToFront(self!.loadingIndicator)
             }
         }, progress: nil, failure: { [weak self] error in
             DispatchQueue.main.async {
@@ -84,24 +85,26 @@ class STFileEditVC: UIViewController {
     }
 
     private func save(image: UIImage) {
-        do {
-            try self.viewModel.save(image: image)
-            self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
-        } catch let error as IError {
-            self.showError(error: error)
-        } catch {
-            print(error.localizedDescription)
+        self.loadingIndicator.startAnimating()
+        self.viewModel.save(image: image) { [weak self] error in
+            self?.loadingIndicator.stopAnimating()
+            if let error = error {
+                self?.showError(error: error)
+            } else if let self = self {
+                self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
+            }
         }
     }
 
     private func saveAsNewFile(image: UIImage) {
-        do {
-            try self.viewModel.saveAsNewFile(image: image)
-            self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
-        } catch let error as IError {
-            self.showError(error: error)
-        } catch {
-            print(error.localizedDescription)
+        self.loadingIndicator.startAnimating()
+        self.viewModel.saveAsNewFile(image: image) { [weak self] error in
+            self?.loadingIndicator.stopAnimating()
+            if let error = error {
+                self?.showError(error: error)
+            } else if let self = self {
+                self.delegate?.fileEdit(didEditFile: self, viewModel: self.viewModel)
+            }
         }
     }
 

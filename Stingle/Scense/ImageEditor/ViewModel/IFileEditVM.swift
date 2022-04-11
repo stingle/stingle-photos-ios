@@ -8,10 +8,13 @@
 import UIKit
 import Sodium
 
-protocol IFileEditVM {
+protocol IFileEditVM: AnyObject {
     var file: STLibrary.File { get }
     func save(image: UIImage) throws
     func saveAsNewFile(image: UIImage) throws
+
+    func save(image: UIImage, hendler: @escaping (_ error: IError?) -> Void)
+    func saveAsNewFile(image: UIImage, hendler: @escaping (_ error: IError?) -> Void)
 }
 
 extension IFileEditVM {
@@ -48,6 +51,36 @@ extension IFileEditVM {
                 try? FileManager.default.removeItem(at: filePath)
             }
             throw error
+        }
+    }
+
+    func save(image: UIImage, hendler: @escaping (_ error: IError?) -> Void) {
+        DispatchQueue.global().async { [weak self] in
+            do {
+                try self?.save(image: image)
+                DispatchQueue.main.async {
+                    hendler(nil)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    hendler(STError.error(error: error))
+                }
+            }
+        }
+    }
+
+    func saveAsNewFile(image: UIImage, hendler: @escaping (_ error: IError?) -> Void) {
+        DispatchQueue.global().async { [weak self] in
+            do {
+                try self?.saveAsNewFile(image: image)
+                DispatchQueue.main.async {
+                    hendler(nil)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    hendler(STError.error(error: error))
+                }
+            }
         }
     }
 
