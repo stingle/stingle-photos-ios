@@ -44,9 +44,7 @@ extension STImporter {
             let totalProgress = Progress()
             totalProgress.totalUnitCount = 10000
             var progressValue = Double.zero
-            
-            print("bbbbbbb requestFile", self.asset.localIdentifier)
-            
+                        
             self.requestData(in: queue, progress: { progress, stop in
                 progressValue = progress.fractionCompleted / 4
                 totalProgress.completedUnitCount = Int64(progressValue * Double(totalProgress.totalUnitCount))
@@ -65,14 +63,11 @@ extension STImporter {
                     failure(STFileUploader.UploaderError.memoryLow)
                     return
                 }
-                print("bbbbbbb requestData", weakSelf.asset.localIdentifier)
-                
                 do {
                     let file = try weakSelf.createUploadFile(info: uploadInfo, progressHandler: { progress,stop in
                         progressValue = 0.25 + progress.fractionCompleted / (4 / 3)
                         totalProgress.completedUnitCount = Int64(progressValue * Double(totalProgress.totalUnitCount))
                         progressHandler?(totalProgress, &stop)
-                        print("bbbbbbb requestData", weakSelf.asset.localIdentifier, progress.fractionCompleted)
                     })
                     uploadInfo.freeBuffer?()
                     success(file)
@@ -167,9 +162,7 @@ extension STImporter {
             let totalProgress = Progress()
             totalProgress.totalUnitCount = 10000
             var myProgressValue = Double.zero
-            
-            print("bbbbbbb PHPhoto requestGetURL")
-            
+                        
             STPHPhotoHelper.requestGetURL(asset: self.asset, queue: queue, progressHandler: { progressValue, stop in
                
                 myProgressValue = progressValue / 2
@@ -181,20 +174,11 @@ extension STImporter {
                     stop?.pointee = ObjCBool(isEnd)
                 }
                 
-                print("bbbbbbb PHPhoto requestGetURL, progress")
-                
             }) { [weak self] info in
-                
-                
-                print("bbbbbbb PHPhoto requestGetURL, info")
-                
                 guard let weakSelf = self, let info = info else {
                     compled(error: STFileUploader.UploaderError.phAssetNotValid)
                     return
                 }
-                
-                print("bbbbbbb PHPhoto requestGetURL, requestThumb")
-                
                 STPHPhotoHelper.requestThumb(asset: weakSelf.asset, queue: queue, progressHandler: { progressValue, stop in
                     
                     myProgressValue = 0.5 + progressValue / 2

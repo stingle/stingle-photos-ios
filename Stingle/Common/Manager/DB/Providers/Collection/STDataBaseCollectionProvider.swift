@@ -258,6 +258,7 @@ extension STDataBase {
             }
             
             DispatchQueue.main.async { [weak self] in
+                                
                 guard let weakSelf = self, !models.isEmpty else {
                     return
                 }
@@ -281,7 +282,7 @@ extension STDataBase {
                 
     }
 }
-
+ 
 extension STDataBase {
     
     class SyncCollectionProvider<ManagedModel: IManagedObject, DeleteFile: ILibraryDeleteFile>: CollectionProvider<ManagedModel> {

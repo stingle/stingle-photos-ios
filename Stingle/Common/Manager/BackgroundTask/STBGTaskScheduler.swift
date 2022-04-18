@@ -13,6 +13,13 @@ class STBGTaskScheduler {
     
     enum BackgroundIdentifie: String, CaseIterable {
         case autoImport = "org.stingle.photos.auto.import"
+        
+        var dispatchQueue: DispatchQueue {
+            switch self {
+            case .autoImport:
+                return STApplication.shared.auotImporter.dispatchQueue
+            }
+        }
     }
     
     static let shared = STBGTaskScheduler()
@@ -30,8 +37,6 @@ class STBGTaskScheduler {
         self.isStarted = true
         self.register()
     }
-    
-    
     
     //MARK: - Private methods
     
@@ -55,8 +60,7 @@ class STBGTaskScheduler {
     }
     
     private func registerTask(identifie: BackgroundIdentifie) {
-        let que = DispatchQueue(label: "AuotImporter.queue")
-        self.scheduler.register(forTaskWithIdentifier: identifie.rawValue, using: que) { [weak self] task in
+        self.scheduler.register(forTaskWithIdentifier: identifie.rawValue, using: identifie.dispatchQueue) { [weak self] task in
             guard let id = BackgroundIdentifie(rawValue: task.identifier) else { return  }
             let myTask = self?.tasks.first(where: { $0.identifier == id })
             myTask?.resume(task: task)
@@ -73,28 +77,22 @@ class STBGTaskScheduler {
         }
     }
     
-    
     //MARK: - Private notifiication
     
     @objc private func applicationDidBecomeActive() {
-        
         guard UIApplication.shared.applicationState == .active else {
             return
         }
-        
         self.cancelAllTask()
     }
     
     @objc private func appDidEnterBackground() {
-         
         guard UIApplication.shared.applicationState == .background else {
             return
         }
-        
         self.tasks.forEach { task in
             try? task.submit(scheduler: self.scheduler)
         }
-        
     }
         
     deinit {
@@ -197,76 +195,39 @@ extension STBGTaskScheduler {
         override init(identifier: STBGTaskScheduler.BackgroundIdentifie) {
             super.init(identifier: identifier)
             self.autoImporter.add(self)
-            
-            
         }
         
         override func submit(scheduler: BGTaskScheduler) throws {
-                        
             let request = BGProcessingTaskRequest(identifier: self.identifier.rawValue)
             request.requiresNetworkConnectivity = true
             request.requiresExternalPower = true
             request.earliestBeginDate = Date(timeIntervalSinceNow: 3)
-                        
             try scheduler.submit(request)
             self.isStarted = false
-            
         }
         
-        var timer: Timer?
-        
-        
         override func resume(task: BGTask) {
-            print("bbbbbbb resume BGTask")
-            super.resume(task: task)
+            try? self.submit(scheduler: BGTaskScheduler.shared)
             guard !self.isStarted else {
                 return
             }
+            super.resume(task: task)
             self.isStarted = true
-//            guard self.autoImporter.canStartImport else {
-//                self.endTask(isCompleted: true)
-//                return
-//            }
-//            self.autoImporter.startImport()
-            
-            print3("bbbbbbbddddddddd")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                self.print3("bbbbbbbddddddddd")
+            guard self.autoImporter.canStartImport else {
+                self.endTask(isCompleted: true)
+                return
             }
             
-            self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(resume3), userInfo: nil, repeats: true)
-            
-        }
-        
-        var m: Int = .zero
-        
-        
-        @objc func resume3(timer: Timer) {
-            print("ddddddddd", m)
-            m = m + Int(timer.timeInterval)
+            self.autoImporter.startImport()
         }
         
         override func cancel() {
             super.cancel()
-            print("bbbbbbb cancel BGTask")
             self.autoImporter.cancelImporting(end: nil)
         }
         
-        func print3(_ sttring: String) {
-            let date = Date()
-            let calendar = Calendar.current
-
-            let hour = calendar.component(.hour, from: date)
-            let minutes = calendar.component(.minute, from: date)
-            let seconds = calendar.component(.second, from: date)
-            
-            print(hour, minutes, seconds, sttring)
-        }
-        
     }
-    
-    
-    
+        
 }
 
 extension STBGTaskScheduler.AutoImporter: IAuotImporterObserver {

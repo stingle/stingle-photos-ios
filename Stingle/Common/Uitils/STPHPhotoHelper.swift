@@ -263,14 +263,8 @@ extension STPHPhotoHelper {
         
         switch asset.mediaType {
         case .image:
-            
-            print("bbbbbbb PHPhoto requestGetURL image")
-            
             self.requestImageAssetInfo(asset: asset, queue: queue, progressHandler: progressHandler, completion: completion)
         case .video:
-            
-            print("bbbbbbb PHPhoto requestGetURL VideoAssetInfo")
-            
             self.requestVideoAssetInfo(asset: asset, queue: queue, progressHandler: progressHandler, completion: completion)
         default:
             fatalError("this case not supported")
@@ -293,8 +287,6 @@ extension STPHPhotoHelper {
             if isStoped == false {
                 isStoped = stop.pointee.boolValue
             }
-            
-            print("bbbbbbb PHPhoto requestThumb", progressValue, error ?? "")
         }
                 
         let size = STConstants.thumbSize(for: CGSize(width: asset.pixelWidth, height: asset.pixelHeight))
@@ -308,8 +300,6 @@ extension STPHPhotoHelper {
                     return
                 }
                 completion(thumb)
-                
-                print("bbbbbbb requestImage sssss")
             }
         }
     }
@@ -334,17 +324,13 @@ extension STPHPhotoHelper {
             if isStoped == false {
                 isStoped = stop.pointee.boolValue
             }
-            
-            print("bbbbbbb PHPhoto requestGetURL VideoAssetInfo", progress, error ?? "", isStoped)
         }
         
         let modificationDate = asset.modificationDate ?? asset.creationDate
         let creationDate = asset.creationDate ?? asset.modificationDate
 
         self.phManager.requestAVAsset(forVideo: asset, options: options, resultHandler: { (asset: AVAsset?, audioMix: AVAudioMix?, info: [AnyHashable : Any]?) -> Void in
-            
-            print("bbbbbbb PHPhoto requestGetURL VideoAssetInfo ssss")
-            
+                        
             if let urlAsset = asset as? AVURLAsset, let fileSize = urlAsset.fileSize {
                 
                 guard !isStoped else {
@@ -435,13 +421,9 @@ extension STPHPhotoHelper {
     }
     
     private class func requestImageAssetInfo(asset: PHAsset, queue: DispatchQueue, progressHandler: AssetProgressHandler?, completion : @escaping ((_ dataInfo: PHAssetDataInfo?) -> Void)) {
-        
-        print("bbbbbbb PHPhoto requestImageDataAndOrientation start")
-        
+                
         guard let resource = PHAssetResource.assetResources(for: asset).first else {
-            
-            print("bbbbbbb PHPhoto requestImageDataAndOrientation completion nil")
-            
+        
             queue.async {
                 completion(nil)
             }
@@ -461,22 +443,14 @@ extension STPHPhotoHelper {
             if isStoped == false {
                 isStoped = stop.pointee.boolValue
             }
-            
-            if let error = error {
-                print("bbbbbbb PHPhoto requestImageDataAndOrientation error", error)
-            }
         }
                 
         let modificationDate = asset.modificationDate ?? asset.creationDate
         let creationDate = asset.creationDate ?? asset.modificationDate
         
-        print("bbbbbbb PHPhoto requestImageDataAndOrientation start 2")
-        
         self.phManager.requestImageDataAndOrientation(for: asset, options: options) { imageData, param, orientation, info in
-            print("bbbbbbb PHPhoto respomceImageData ", imageData?.count ?? .zero)
             
             queue.async {
-                
                 guard let imageData = imageData else {
                     completion(nil)
                     return
@@ -501,9 +475,6 @@ extension STPHPhotoHelper {
                     let fileSize = UInt(imageData.count)
 
                     let freeBuffer: (() -> Void)? = {
-                        
-                        print("bbbbbbb PHPhoto rfreeBuffer")
-                        
                         try? fileManager.removeItem(at: removeUrl)
                     }
 

@@ -7,6 +7,7 @@
 
 import Foundation
 import Photos
+import UIKit
 
 protocol IAuotImporterObserver: AnyObject {
     
@@ -42,17 +43,18 @@ extension STImporter {
         private var importFilesCount: Int = .zero
         private var canSetDate = true
         private var endImportingCallBack: (() -> Void)?
-        private let dispatchQueue = DispatchQueue(label: "AuotImporter.queue")
+        
         private let observerEvents = STObserverEvents<IAuotImporterObserver>()
         private var importQueue: STOperationQueue
         private var autoImportQueue: STOperationQueue
         private weak var currentOporation: Operation?
-                
+        let dispatchQueue = DispatchQueue(label: "AuotImporter.queue")
+                        
         private var importSettings: STAppSettings.Import {
             return STAppSettings.current.import
         }
         
-        private var lastImportDate: Date? {
+        private(set) var lastImportDate: Date? {
             set {
                 UserDefaults.standard.set(newValue, forKey: "auotImporter.lastImportDate")
             } get {
@@ -72,6 +74,7 @@ extension STImporter {
             guard !self.isStarted else {
                 return
             }
+                        
             self.observerEvents.forEach { observer in
                 observer.auotImporter(didStart: self)
             }
@@ -215,7 +218,6 @@ extension STImporter.AuotImporter: ISettingsObserver {
     
     var canStartImport: Bool {
         let application = STApplication.shared
-                
         return application.utils.isLogedIn() && application.isFileSystemAvailable && STAppSettings.current.import.isAutoImportEnable && application.isFileSystemAvailable
     }
         
@@ -226,7 +228,6 @@ extension STImporter.AuotImporter: ISettingsObserver {
             self.endImportIng()
         }
     }
-    
     
 }
 
@@ -283,14 +284,11 @@ extension STImporter.AuotImporter {
         
         override func resume() {
             super.resume()
-            print("bbbbbbb resume Operation AuotImporter")
             self.canImportFiles { [weak self] canImport in
                 if canImport {
                     self?.enumerateObjects()
-                    print("bbbbbbb resume enumerateObjects")
                 } else {
                     self?.responseFailed(error: AuotImporterError.canceled)
-                    print("bbbbbbb resume error")
                 }
             }
         }
@@ -314,10 +312,6 @@ extension STImporter.AuotImporter {
         }
         
         private func startImport(importFiles: [STImporter.FileImportable]) {
-            
-            
-            print("bbbbbbb startImport Operation AuotImporter")
-            
             guard let queue = self.delegate?.underlyingQueue else {
                 self.responseFailed(error: AuotImporterError.canceled)
                 return
@@ -326,9 +320,6 @@ extension STImporter.AuotImporter {
             guard !self.isExpired else {
                 queue.async { [weak self] in
                     self?.responseFailed(error: AuotImporterError.canceled)
-                    
-                    print("bbbbbbb startImport Operation AuotImporter isExpired", self?.isExpired ?? false)
-                    
                 }
                 return
             }
@@ -336,11 +327,7 @@ extension STImporter.AuotImporter {
             var resultDate = self.date
             var importedAssets = [PHAsset]()
             
-            
-            print("bbbbbbb startImport STImporter.Importer")
-            
             let importer = STImporter.Importer(importFiles: importFiles, operationQueue: self.importQueue, startHendler: {}, progressHendler: { [weak self] progress in
-                                
                 queue.async { [weak self] in
                     guard let weakSelf = self else {
                         return
@@ -385,7 +372,6 @@ extension STImporter.AuotImporter {
                 }
                 
             }, uploadIfNeeded: true)
-            
             self.importer = importer
         }
         
@@ -416,7 +402,6 @@ extension STImporter.AuotImporter {
             STPHPhotoHelper.checkAndReqauestAuthorization(queue: queue) { status in
                 let settings = STAppSettings.current.import
                 let result = settings.isAutoImportEnable && status == .authorized
-                print("bbbbbbb checkAndReqauestAuthorization")
                 completion(result)
             }
         }
