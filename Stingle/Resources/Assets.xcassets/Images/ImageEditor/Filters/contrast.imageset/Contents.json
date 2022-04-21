@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Contrast.png",
+      "filename" : "contrast.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Contrast@2x.png",
+      "filename" : "contrast@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Contrast@3x.png",
+      "filename" : "contrast@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

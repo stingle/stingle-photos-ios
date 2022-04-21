@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Sharpness.png",
+      "filename" : "sharpness.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Sharpness@2x.png",
+      "filename" : "sharpness@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Sharpness@3x.png",
+      "filename" : "sharpness@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Exposure.png",
+      "filename" : "exposure.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Exposure@2x.png",
+      "filename" : "exposure@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Exposure@3x.png",
+      "filename" : "exposure@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Shadows.png",
+      "filename" : "shadows.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Shadows@2x.png",
+      "filename" : "shadows@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Shadows@3x.png",
+      "filename" : "shadows@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

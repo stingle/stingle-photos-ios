@@ -9,7 +9,7 @@ import UIKit
 
 protocol STImageEditorVCDelegate: AnyObject {
     func imageEditor(didSelectCancel vc: STImageEditorVC)
-    func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage)
+    func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage, sender: UIButton)
 }
 
 class STImageEditorVC: UIViewController {
@@ -100,14 +100,14 @@ class STImageEditorVC: UIViewController {
         self.delegate?.imageEditor(didSelectCancel: self)
     }
 
-    @IBAction private func doneButtonAction(_ sender: Any) {
+    @IBAction private func doneButtonAction(_ sender: UIButton) {
         let croppedImage = self.croppedImage(image: self.image)
         let image = self.filteredImage(image: croppedImage)
         if let size = self.resizedSize {
             let resizedImage = image.scaled(newSize: size)
-            self.delegate?.imageEditor(didEditImage: self, image: resizedImage)
+            self.delegate?.imageEditor(didEditImage: self, image: resizedImage, sender: sender)
         } else {
-            self.delegate?.imageEditor(didEditImage: self, image: image)
+            self.delegate?.imageEditor(didEditImage: self, image: image, sender: sender)
         }
     }
 

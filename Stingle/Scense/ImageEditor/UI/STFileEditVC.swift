@@ -116,7 +116,7 @@ extension STFileEditVC: STImageEditorVCDelegate {
         self.delegate?.fileEdit(didSelectCancel: self)
     }
 
-    func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage) {
+    func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage, sender: UIButton) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let stinglePhotos = UIAlertAction(title: "save".localized, style: .default) { [weak self] _ in
             self?.save(image: image)
@@ -129,8 +129,7 @@ extension STFileEditVC: STImageEditorVCDelegate {
         let cancelAction = UIAlertAction(title: "cancel".localized, style: .cancel)
         alert.addAction(cancelAction)
         if let popoverController = alert.popoverPresentationController {
-            popoverController.sourceRect = vc.doneButton.frame
-            popoverController.sourceView = vc.doneButton
+            popoverController.sourceView = sender
         }
         self.showDetailViewController(alert, sender: nil)
     }
