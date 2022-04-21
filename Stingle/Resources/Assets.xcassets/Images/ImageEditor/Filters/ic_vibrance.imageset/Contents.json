@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Britness.png",
+      "filename" : "vibrance.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Britness@2x.png",
+      "filename" : "vibrance@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Britness@3x.png",
+      "filename" : "vibrance@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

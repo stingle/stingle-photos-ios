@@ -193,9 +193,9 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="FnH-sZ-c4Z"/>
                                 <exclude reference="2ZY-aC-xUT"/>
                                 <exclude reference="oCC-Hc-A8T"/>
-                                <exclude reference="FnH-sZ-c4Z"/>
                                 <exclude reference="DBD-Tv-dUU"/>
                                 <exclude reference="Fqi-Ni-HTZ"/>
                                 <exclude reference="l0s-XL-PlF"/>
@@ -228,12 +228,12 @@
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="constraints">
-                                <include reference="2ZY-aC-xUT"/>
-                                <include reference="oCC-Hc-A8T"/>
-                                <exclude reference="yDt-M3-N6u"/>
                                 <include reference="FnH-sZ-c4Z"/>
                                 <exclude reference="lQQ-NK-IIF"/>
                                 <exclude reference="sUs-ZL-A85"/>
+                                <include reference="2ZY-aC-xUT"/>
+                                <include reference="oCC-Hc-A8T"/>
+                                <exclude reference="yDt-M3-N6u"/>
                                 <include reference="Fqi-Ni-HTZ"/>
                                 <exclude reference="yEr-ad-FdK"/>
                             </mask>
@@ -447,22 +447,22 @@
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="98m-sL-cOe"/>
-                                                <exclude reference="AEx-z1-6bN"/>
                                                 <exclude reference="FLE-xv-lYz"/>
                                                 <exclude reference="vIy-3n-hD7"/>
+                                                <exclude reference="98m-sL-cOe"/>
+                                                <exclude reference="AEx-z1-6bN"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
-                                                <exclude reference="2Da-SJ-daL"/>
-                                                <include reference="98m-sL-cOe"/>
-                                                <include reference="AEx-z1-6bN"/>
-                                                <exclude reference="fq1-N9-bGg"/>
                                                 <include reference="FLE-xv-lYz"/>
                                                 <exclude reference="nWQ-gP-Omm"/>
                                                 <exclude reference="psf-9V-SyB"/>
                                                 <include reference="vIy-3n-hD7"/>
+                                                <exclude reference="2Da-SJ-daL"/>
+                                                <include reference="98m-sL-cOe"/>
+                                                <include reference="AEx-z1-6bN"/>
+                                                <exclude reference="fq1-N9-bGg"/>
                                             </mask>
                                         </variation>
                                         <connections>
@@ -884,7 +884,7 @@
                                         <rect key="frame" x="3" y="0.0" width="24" height="24"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="filters"/>
+                                        <state key="normal" image="ic_filters"/>
                                         <connections>
                                             <action selector="optionButtonAction:" destination="oHl-9y-mzy" eventType="touchUpInside" id="zu1-xn-Izk"/>
                                         </connections>
@@ -893,7 +893,7 @@
                                         <rect key="frame" x="3" y="44" width="24" height="24"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="crop"/>
+                                        <state key="normal" image="ic_crop"/>
                                         <connections>
                                             <action selector="optionButtonAction:" destination="oHl-9y-mzy" eventType="touchUpInside" id="pqY-4B-Ubu"/>
                                         </connections>
@@ -1053,8 +1053,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="crop" width="24" height="24"/>
-        <image name="filters" width="24" height="24"/>
+        <image name="ic_crop" width="24" height="24"/>
+        <image name="ic_filters" width="24" height="24"/>
         <namedColor name="STYellow">
             <color red="0.97600001096725464" green="0.83899998664855957" blue="0.28999999165534973" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

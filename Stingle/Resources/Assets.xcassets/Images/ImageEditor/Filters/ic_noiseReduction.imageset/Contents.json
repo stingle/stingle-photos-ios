@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Vignette.png",
+      "filename" : "noiseReduction.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Vignette@2x.png",
+      "filename" : "noiseReduction@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Vignette@3x.png",
+      "filename" : "noiseReduction@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

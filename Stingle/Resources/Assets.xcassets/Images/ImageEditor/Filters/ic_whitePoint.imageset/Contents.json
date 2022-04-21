@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Noise Reduction.png",
+      "filename" : "whitePoint.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Noise Reduction@2x.png",
+      "filename" : "whitePoint@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Noise Reduction@3x.png",
+      "filename" : "whitePoint@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
