@@ -83,9 +83,7 @@ extension IManagedObject {
     
 }
 
-protocol IManagedSynchObject: IManagedObject   where Model: ICDSynchConvertable {
-    
+protocol IManagedSynchObject: IManagedObject where Model: ICDSynchConvertable {
     var dateModified: Date? { get }
-    func mastUpdate(with model: Model) -> Bool
-    
+    func diffStatus(with model: Model) -> STDataBase.ModelDiffStatus
 }

@@ -15,7 +15,7 @@ public class STCDContact: NSManagedObject {
 }
 
 extension STCDContact: IManagedSynchObject {
-    
+
     func update(model: STContact) {
         self.email = model.email
         self.publicKey = model.publicKey
@@ -29,8 +29,16 @@ extension STCDContact: IManagedSynchObject {
         return try STContact(model: self)
     }
     
-    func mastUpdate(with model: STContact) -> Bool {
-        return self.identifier == model.identifier
+    func diffStatus(with model: Model) -> STDataBase.ModelDiffStatus {
+        guard self.identifier == model.identifier else { return .none }
+        guard let dateModified = self.dateModified else { return .low }
+        if dateModified == model.dateModified {
+            return .equal
+        }
+        if dateModified < model.dateModified {
+            return .low
+        }
+        return .high
     }
     
 }

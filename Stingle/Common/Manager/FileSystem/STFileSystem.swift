@@ -203,6 +203,21 @@ extension STFileSystem {
         }
     }
     
+    func moveLocalToRemot(file: STLibrary.File) {
+        if let local = self.fileThumbUrl(fileName: file.file, isRemote: false), let server = self.fileThumbUrl(fileName: file.file, isRemote: true) {
+            try? self.move(file: local, to: server)
+        }
+        if let local = self.fileOreginalUrl(fileName: file.file, isRemote: false), let server = self.fileOreginalUrl(fileName: file.file, isRemote: true) {
+            try? self.move(file: local, to: server)
+        }
+    }
+    
+    func moveLocalToRemot(files: [STLibrary.File]) {
+        files.forEach { file in
+            self.moveLocalToRemot(file: file)
+        }
+    }
+    
     func deleteFiles(files: [STLibrary.File]) {
         for file in files {
             if let oldFileThumbPath = file.fileOreginalUrl?.path {

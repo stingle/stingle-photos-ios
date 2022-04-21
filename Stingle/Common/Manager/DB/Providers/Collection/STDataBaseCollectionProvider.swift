@@ -340,27 +340,38 @@ extension STDataBase {
             let resultInset = try context.execute(insertRequest)
             let objectIDs = (resultInset as! NSBatchInsertResult).result as! [NSManagedObjectID]
             
-            let updatedModes = self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, context: context)
-            let insertModes = inserts.models.symmetricDifference(updatedModes)
-            
-            return (inserts.lastDate, updatedModes, insertModes)
+            let syncModels = self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, context: context)
+            return (inserts.lastDate, syncModels.updated, syncModels.inserted)
         }
         
-        private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) -> Set<Model> {
+        private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) -> (updated: Set<Model>, inserted: Set<Model>) {
             
             var updatedModes = Set<Model>()
+            var insertedModes = Set<Model>()
             
             for objectID in insertedObjectIDs {
                 guard let objectCD = context.object(with: objectID) as? ManagedModel, let identifier = objectCD.identifier, let object = objIds[identifier]  else {
                     continue
                 }
-                if objectCD.mastUpdate(with: object) {
+                let status = objectCD.diffStatus(with: object)
+                switch status {
+                case .none:
+                    continue
+                case .high:
+                    guard let model = try? objectCD.createModel() else {
+                        continue
+                    }
+                    updatedModes.insert(model)
+                case .low:
                     objectCD.update(model: object)
                     updatedModes.insert(object)
+                case .equal:
+                    objectCD.update(model: object)
+                    insertedModes.insert(object)
                 }
             }
             
-            return updatedModes
+            return (updatedModes, insertedModes)
         }
                        
         //MARK: - Sync delete

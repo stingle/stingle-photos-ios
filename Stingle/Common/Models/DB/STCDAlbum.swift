@@ -37,14 +37,16 @@ extension STCDAlbum: IManagedSynchObject {
         return try STLibrary.Album(model: self)
     }
     
-    func mastUpdate(with model: STLibrary.Album) -> Bool {
-        guard self.identifier == model.identifier else {
-            return false
+    func diffStatus(with model: Model) -> STDataBase.ModelDiffStatus {
+        guard self.identifier == model.identifier else { return .none }
+        guard let dateModified = self.dateModified else { return .low }
+        if dateModified == model.dateModified {
+            return .equal
         }
-        guard let dateModified = self.dateModified else {
-            return true
+        if dateModified < model.dateModified {
+            return .low
         }
-        return dateModified < model.dateModified
+        return .high
     }
     
 }

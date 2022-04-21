@@ -31,16 +31,19 @@ extension STCDAlbumFile: IManagedSynchObject {
         return try STLibrary.AlbumFile(model: self)
     }
     
-    func mastUpdate(with model: STLibrary.AlbumFile) -> Bool {
+    func diffStatus(with model: Model) -> STDataBase.ModelDiffStatus {
         guard self.identifier == model.identifier else {
-            return false
+            return .none
         }
-        
-        guard let dateModified = self.dateModified else { return true }
+        guard let dateModified = self.dateModified else { return .low }
         let lhsVersion = Int(self.version ?? "") ?? .zero
         let rhsVersion = Int(model.version) ?? .zero
-        
-        return lhsVersion == rhsVersion ? dateModified < model.dateModified : lhsVersion < rhsVersion
+        if lhsVersion == rhsVersion ? dateModified < model.dateModified : lhsVersion < rhsVersion {
+            return .low
+        } else if lhsVersion == rhsVersion && dateModified == model.dateModified {
+            return .equal
+        }
+        return .high
     }
     
 }

@@ -24,6 +24,13 @@ class STDataBase {
         let deletes: Set<T>
     }
     
+    enum ModelDiffStatus {
+        case none
+        case equal
+        case high
+        case low
+    }
+    
     struct DBSyncInfo {
         let gallery: SyncInfo<GalleryProvider.Model>
         let trash: SyncInfo<TrashProvider.Model>

@@ -61,6 +61,13 @@ extension STApplication {
             self.application.fileSystem.deleteFiles(for: fileNames)
         }
         
+        func moveLocalToRemot(files: [STLibrary.File]) {
+            guard self.application.isFileSystemAvailable else {
+                return
+            }
+            self.application.fileSystem.moveLocalToRemot(files: files)
+        }
+        
     }
         
 }

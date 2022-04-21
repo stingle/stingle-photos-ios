@@ -86,18 +86,26 @@ class STSyncManager {
             
         } willFinish: { info in
                         
-            let gallery = info.gallery.updates.compactMap( { $0.file } )
-            let albumFiles = info.albumFiles.updates.compactMap( { $0.file } )
-            let deletes = info.trash.deletes.compactMap( { $0.file } )
-            let trash = info.trash.updates.compactMap( { $0.file } )
+            let galleryUpdates = info.gallery.updates.compactMap({ $0.isRemote ? $0.file : nil })
+            let albumFilesUpdates = info.albumFiles.updates.compactMap({ $0.isRemote ? $0.file : nil })
+            let trashUpdates = info.trash.updates.compactMap({ $0.isRemote ? $0.file : nil })
             
             var deleteFileNames = [String]()
-            deleteFileNames.append(contentsOf: deletes)
-            deleteFileNames.append(contentsOf: gallery)
-            deleteFileNames.append(contentsOf: albumFiles)
-            deleteFileNames.append(contentsOf: trash)
+            deleteFileNames.append(contentsOf: galleryUpdates)
+            deleteFileNames.append(contentsOf: albumFilesUpdates)
+            deleteFileNames.append(contentsOf: trashUpdates)
             
+            if let deletes = sync.deletes?.trashDeletes {
+                deleteFileNames.append(contentsOf: deletes.compactMap({ $0.fileName }))
+            }
+            
+            var moveFiles = [STLibrary.File]()
+            moveFiles.append(contentsOf: info.gallery.inserts.filter({ $0.isRemote }))
+            moveFiles.append(contentsOf: info.albumFiles.inserts.filter({ $0.isRemote }))
+            moveFiles.append(contentsOf: info.trash.inserts.filter({ $0.isRemote }))
+        
             STApplication.shared.utils.deleteFiles(fileNames: deleteFileNames)
+            STApplication.shared.utils.moveLocalToRemot(files: moveFiles)
 
         } failure: { [weak self] error in
             failure?(error)

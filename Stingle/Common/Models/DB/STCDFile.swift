@@ -31,16 +31,26 @@ extension STCDFile: IManagedSynchObject {
         return try STLibrary.File(model: self)
     }
     
-    func mastUpdate(with model: STLibrary.File) -> Bool {
+    func diffStatus(with model: Model) -> STDataBase.ModelDiffStatus {
         guard self.identifier == model.identifier else {
-            return false
+            return .none
         }
         
-        guard let dateModified = self.dateModified else { return true }
+        guard self.dateModified != nil || self.dateCreated != nil || self.file != nil || self.headers != nil  else {
+            return .low
+        }
+        
         let lhsVersion = Int(self.version ?? "") ?? .zero
         let rhsVersion = Int(model.version) ?? .zero
-        
-        return lhsVersion == rhsVersion ? dateModified < model.dateModified : lhsVersion < rhsVersion
+                
+        if lhsVersion == rhsVersion {
+            return .equal
+        } else if lhsVersion < rhsVersion {
+            return .low
+        } else {
+            return .high
+        }
+       
     }
     
 }
