@@ -336,6 +336,7 @@ class STImageFilterVC: UIViewController {
             }
             self.angleRuler.value = self.selectedFilterValue()
             self.angleRuler.delegate = self
+            self.filterCollectionView.updateSelectedItemPosition()
         }
     }
 
