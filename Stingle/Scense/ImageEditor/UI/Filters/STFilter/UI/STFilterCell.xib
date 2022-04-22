@@ -23,7 +23,7 @@
                             <constraint firstAttribute="width" secondItem="but-ro-uwQ" secondAttribute="height" multiplier="1:1" id="edz-1N-2EG"/>
                         </constraints>
                     </view>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="brightness" translatesAutoresizingMaskIntoConstraints="NO" id="rU1-kb-L6Q">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_brightness" translatesAutoresizingMaskIntoConstraints="NO" id="rU1-kb-L6Q">
                         <rect key="frame" x="2" y="2" width="154" height="122"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -58,6 +58,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="brightness" width="48" height="48"/>
+        <image name="ic_brightness" width="48" height="48"/>
     </resources>
 </document>
