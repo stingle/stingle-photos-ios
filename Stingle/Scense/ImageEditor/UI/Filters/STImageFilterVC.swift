@@ -67,6 +67,8 @@ class STImageFilterVC: UIViewController {
 
     private lazy var angleRuler = STRulerView(frame: self.rulerBackgroundView.bounds)
 
+    private var queue = DispatchQueue(label: "filter.image")
+
     private var filters: [IFilter] {
         return [
             self.exposureFilter,
@@ -260,6 +262,16 @@ class STImageFilterVC: UIViewController {
         }
     }
 
+    private func filterImage(mtImage: MTIImage, completion: @escaping (UIImage?) -> Void) {
+        self.queue.async {
+            let image = self.filterImage(mtImage: mtImage)
+            DispatchQueue.main.async {
+                completion(image)
+            }
+        }
+    }
+    
+
     private func filterImage(mtImage: MTIImage) -> UIImage? {
         var mtFilters = [MTIUnaryFilter]()
         for filter in self.filters {
@@ -355,7 +367,9 @@ extension STImageFilterVC: STRulerViewDelegate {
     func angleRuleDidChangeValue(value: CGFloat) {
         self.setSelectedFilterValue(rullerValue: value)
         self.filterCollectionView.setSelectedFilterValue(value: value)
-        self.imageView.image = self.filterImage(mtImage: self.mtImage!) ?? self.image
+        self.filterImage(mtImage: self.mtImage!) { [weak self] image in
+            self?.imageView.image = image ?? self?.image
+        }
     }
 
     func angleRuleDidEndEditing() {
