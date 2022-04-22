@@ -34,9 +34,10 @@ class STImageEditorVC: UIViewController {
     @IBOutlet weak var filtersButton: UIButton!
     @IBOutlet weak var cropButton: UIButton!
     @IBOutlet weak var optionsView: UIStackView!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var resizeView: STResizeView!
+
+    @IBOutlet var cancelButtons: [UIButton]!
+    @IBOutlet var doneButtons: [UIButton]!
 
     private var image: UIImage! {
         didSet {
@@ -214,8 +215,8 @@ class STImageEditorVC: UIViewController {
     }
 
     private func configureScreen() {
-        self.cancelButton.setTitle("cancel".localized, for: .normal)
-        self.doneButton.setTitle("done".localized, for: .normal)
+        self.cancelButtons.forEach({ $0.setTitle("cancel".localized, for: .normal) })
+        self.doneButtons.forEach({ $0.setTitle("done".localized, for: .normal) })
         self.resizeView.imageSize = self.image.size
         self.resizeView.delegate = self
         self.updateDoneButton()
@@ -223,9 +224,9 @@ class STImageEditorVC: UIViewController {
 
     private func updateDoneButton() {
         let isEnabled = self.resizedSize != nil || self.imageFilterVC.hasChanges || self.imageCropRotateVC.hasChanges
-        self.doneButton.isEnabled = isEnabled
+        self.doneButtons.forEach({ $0.isEnabled = isEnabled })
         let color: UIColor = isEnabled ? .appYellow : .gray
-        self.doneButton.setTitleColor(color, for: .normal)
+        self.doneButtons.forEach({ $0.setTitleColor(color, for: .normal) })
     }
 
 }
@@ -247,6 +248,7 @@ extension STImageEditorVC: STResizeViewDelegate {
 
         let filteredImage = self.filteredImage(image: self.previewImage)
         self.imageCropRotateVC.originalImage = filteredImage
+        self.updateDoneButton()
     }
 
     func resizeView(didSelectCancel view: STResizeView) {

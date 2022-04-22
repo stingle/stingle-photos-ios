@@ -518,6 +518,11 @@ class STCropperVC: UIViewController {
             self.angleRuler.value = self.angleRulerValue
             self.angleRuler.delegate = self
             self.contentOffsetBeforTransition = nil
+
+            self.defaultState?.viewFrame = self.view.frame
+            self.defaultState?.scrollViewBounds = self.scrollView.bounds
+            self.defaultState?.cropBoxFrame = CGRect(center: self.defaultCropBoxCenter, size: self.defaultCropBoxSize)
+            self.defaultState?.scrollViewCenter = self.backgroundView.convert(self.defaultCropBoxCenter, to: self.scrollViewContainer)
         }
     }
 

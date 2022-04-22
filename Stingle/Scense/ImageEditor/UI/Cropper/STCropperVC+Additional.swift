@@ -12,15 +12,15 @@ extension STCropperVC {
     // Make angle in 0 - 360 degrees
     func standardizeAngle(_ angle: CGFloat) -> CGFloat {
         var angle = angle
-        if angle >= 0, angle <= 2 * CGFloat.pi {
+        if angle >= 0, angle < 2 * CGFloat.pi {
             return angle
+        } else if angle == 2 * CGFloat.pi {
+            return 0.0
         } else if angle < 0 {
             angle += 2 * CGFloat.pi
-
             return self.standardizeAngle(angle)
         } else {
             angle -= 2 * CGFloat.pi
-
             return self.standardizeAngle(angle)
         }
     }
@@ -179,19 +179,19 @@ extension STCropperVC {
         guard let state = state else { return false }
         let epsilon: CGFloat = 0.0001
 
-        if state.viewFrame.isEqual(to: view.frame, accuracy: epsilon),
-           state.angle.isEqual(to: totalAngle, accuracy: epsilon),
-           state.rotationAngle.isEqual(to: rotationAngle, accuracy: epsilon),
-           state.straightenAngle.isEqual(to: straightenAngle, accuracy: epsilon),
-           state.flipAngle.isEqual(to: flipAngle, accuracy: epsilon),
-           state.imageOrientationRawValue == imageView.image?.imageOrientation.rawValue ?? 0,
-           state.scrollViewTransform.isEqual(to: scrollView.transform, accuracy: epsilon),
-           state.scrollViewCenter.isEqual(to: scrollView.center, accuracy: epsilon),
-           state.scrollViewBounds.isEqual(to: scrollView.bounds, accuracy: epsilon),
-           state.scrollViewContentOffset.isEqual(to: scrollView.contentOffset, accuracy: epsilon),
-           state.scrollViewMinimumZoomScale.isEqual(to: scrollView.minimumZoomScale, accuracy: epsilon),
-           state.scrollViewMaximumZoomScale.isEqual(to: scrollView.maximumZoomScale, accuracy: epsilon),
-           state.scrollViewZoomScale.isEqual(to: scrollView.zoomScale, accuracy: epsilon),
+        if state.viewFrame.isEqual(to: self.view.frame, accuracy: epsilon),
+           state.angle.isEqual(to: self.totalAngle, accuracy: epsilon),
+           state.rotationAngle.isEqual(to: self.rotationAngle, accuracy: epsilon),
+           state.straightenAngle.isEqual(to: self.straightenAngle, accuracy: epsilon),
+           state.flipAngle.isEqual(to: self.flipAngle, accuracy: epsilon),
+           state.imageOrientationRawValue == self.imageView.image?.imageOrientation.rawValue ?? 0,
+           state.scrollViewTransform.isEqual(to: self.scrollView.transform, accuracy: epsilon),
+           state.scrollViewCenter.isEqual(to: self.scrollView.center, accuracy: epsilon),
+           state.scrollViewBounds.isEqual(to: self.scrollView.bounds, accuracy: epsilon),
+           state.scrollViewContentOffset.isEqual(to: self.scrollView.contentOffset, accuracy: epsilon),
+           state.scrollViewMinimumZoomScale.isEqual(to: self.scrollView.minimumZoomScale, accuracy: epsilon),
+           state.scrollViewMaximumZoomScale.isEqual(to: self.scrollView.maximumZoomScale, accuracy: epsilon),
+           state.scrollViewZoomScale.isEqual(to: self.scrollView.zoomScale, accuracy: epsilon),
            state.cropBoxFrame.isEqual(to: self.overlayView.cropBoxFrame, accuracy: epsilon) {
             return true
         }
