@@ -273,7 +273,6 @@ class STImageFilterVC: UIViewController {
             }
         }
     }
-    
 
     private func filterImage(mtImage: MTIImage) -> UIImage? {
         var mtFilters = [MTIUnaryFilter]()
