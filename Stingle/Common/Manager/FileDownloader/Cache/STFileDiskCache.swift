@@ -45,7 +45,6 @@ extension STDownloaderManager {
             } else {
                 self.storage.setObject(obj, forKey: source.identifier as NSString)
             }
-            
         }
         
         func object(for identifier: String) -> T? {

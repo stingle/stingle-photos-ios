@@ -224,7 +224,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
     
     @IBAction private func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
         if !self.album.isShared {
-            let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+            let storyboard = UIStoryboard(name: "Share", bundle: .main)
             let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
             
             let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
@@ -238,7 +238,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
             
             self.showDetailViewController(vc, sender: nil)
         } else {
-            let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+            let storyboard = UIStoryboard(name: "Share", bundle: .main)
             let vc = (storyboard.instantiateViewController(identifier: "STSharedAlbumSettingsVCID") as! UINavigationController)
             (vc.viewControllers.first as? STSharedAlbumSettingsVC)?.album = self.album
             self.show(vc, sender: nil)
@@ -390,7 +390,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
             return
         }
         let files = self.viewModel.getFiles(fileNames: selectedFileNames)
-        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+        let storyboard = UIStoryboard(name: "Share", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
         
         let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)

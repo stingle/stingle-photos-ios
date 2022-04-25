@@ -27,7 +27,7 @@ class STFilesDownloaderActivityVC: UIViewController {
     private(set) var userInfo: Any?
     
     class func showActivity(downloadingFiles: DownloadFiles, controller: UIViewController, delegate: STFilesDownloaderActivityVCDelegate, userInfo: Any? = nil) {
-        let storyboard = UIStoryboard(name: "Shear", bundle: Bundle.main)
+        let storyboard = UIStoryboard(name: "Share", bundle: Bundle.main)
         let vc = storyboard.instantiateViewController(identifier: "STShareActivityVCID") as! STFilesDownloaderActivityVC
         vc.downloadingFiles = downloadingFiles
         vc.delegate = delegate

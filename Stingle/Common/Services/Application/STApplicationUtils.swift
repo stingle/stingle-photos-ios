@@ -184,7 +184,6 @@ extension STApplication.Utils {
         }
         return true
         #endif
-        
     }
     
 }
@@ -268,5 +267,5 @@ extension STApplication {
         let link = "https://stingle.org/privacy/"
         return URL(string: link)!
     }
-    
+
 }

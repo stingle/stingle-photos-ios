@@ -281,7 +281,7 @@ class STFileViewerVC: UIViewController {
         guard let file = self.currentFile else {
             return
         }
-        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+        let storyboard = UIStoryboard(name: "Share", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
         (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .files(files: [file])
         self.showDetailViewController(vc, sender: nil)

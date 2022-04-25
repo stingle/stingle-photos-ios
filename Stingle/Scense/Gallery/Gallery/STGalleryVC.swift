@@ -244,7 +244,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         guard !files.isEmpty else {
             return
         }
-        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+        let storyboard = UIStoryboard(name: "Share", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
         
         let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)

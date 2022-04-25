@@ -7,9 +7,11 @@
 
 import UIKit
 import Sodium
+import UniformTypeIdentifiers
 
 protocol IFileEditVM: AnyObject {
     var file: STLibrary.File { get }
+    
     func save(image: UIImage) throws
     func saveAsNewFile(image: UIImage) throws
 
@@ -23,15 +25,21 @@ extension IFileEditVM {
         let tmpFolder = FileManager.default.temporaryDirectory
         let size = STConstants.thumbSize(for: CGSize(width: image.size.width, height: image.size.height))
         let thumb = image.scaled(newSize: size)
-        guard let data = image.jpegData(compressionQuality: 1.0), let thumbData = thumb.jpegData(compressionQuality: 0.7) else {
+        let fileExtension = (fileName as NSString).pathExtension
+        guard
+            let type = UTType(filenameExtension: fileExtension),
+            let heicData = self.imageData(image: image, for: type),
+            let thumbData = self.imageData(image: thumb, for: type) else {
             throw STError.fileIsUnavailable
         }
+        let properties = self.fileProperties()
+        let data = properties == nil ? heicData : self.appendingProperties(properties!, imageData: heicData)
         var filePath = tmpFolder.appendingPathComponent("edited.images")
         do {
             try FileManager.default.createDirectory(at: filePath, withIntermediateDirectories: true)
             filePath.appendPathComponent(fileName)
             filePath.deletePathExtension()
-            filePath.appendPathExtension("jpeg")
+            filePath.appendPathExtension(fileExtension)
 
             try data.write(to: filePath)
 
@@ -82,6 +90,63 @@ extension IFileEditVM {
                 }
             }
         }
+    }
+
+    // MARK: - Private methods
+
+    private func appendingProperties(_ properties: CFDictionary, imageData: Data) -> Data {
+        let imageRef: CGImageSource = CGImageSourceCreateWithData((imageData as CFData), nil)!
+        let uti: CFString = CGImageSourceGetType(imageRef)!
+        let dataWithEXIF: NSMutableData = NSMutableData(data: imageData)
+        let destination: CGImageDestination = CGImageDestinationCreateWithData((dataWithEXIF as CFMutableData), uti, 1, nil)!
+
+        CGImageDestinationAddImageFromSource(destination, imageRef, 0, properties)
+        CGImageDestinationFinalize(destination)
+
+        return dataWithEXIF as Data
+    }
+
+    private func imageData(image: UIImage, for type: UTType) -> Data? {
+        var cgImage = image.cgImage
+        if cgImage == nil, let ciImage = image.ciImage {
+            cgImage = CIContext().createCGImage(ciImage, from: ciImage.extent)
+        }
+        if self.isTypeSupported(type: type) {
+            guard
+                let mutableData = CFDataCreateMutable(nil, 0),
+                let destination = CGImageDestinationCreateWithData(mutableData, type.identifier as CFString, 1, nil),
+                let cgImage = cgImage
+            else {
+                return nil
+            }
+            let cgImageOrientation = CGImagePropertyOrientation(image.imageOrientation)
+            CGImageDestinationAddImage(destination, cgImage, [kCGImageDestinationLossyCompressionQuality: 1.0, kCGImagePropertyOrientation: cgImageOrientation.rawValue] as CFDictionary)
+            guard CGImageDestinationFinalize(destination) else {
+                return nil
+            }
+            return mutableData as Data
+        }
+        return image.jpegData(compressionQuality: 1.0)
+    }
+
+    private func fileProperties() -> CFDictionary? {
+        do {
+            guard let url = self.file.fileOreginalUrl else {
+                return nil
+            }
+            let data = try Data(contentsOf: url)
+            let decryptedData = try STApplication.shared.crypto.decryptData(data: data, header: self.file.decryptsHeaders.file)
+            if let source = CGImageSourceCreateWithData(decryptedData as CFData, nil) {
+                return CGImageSourceCopyPropertiesAtIndex(source, 0, nil)
+            }
+            return nil
+        } catch {
+            return nil
+        }
+    }
+
+    private func isTypeSupported(type: UTType) -> Bool {
+        return (CGImageDestinationCopyTypeIdentifiers() as! [String]).contains(type.identifier)
     }
 
 }
