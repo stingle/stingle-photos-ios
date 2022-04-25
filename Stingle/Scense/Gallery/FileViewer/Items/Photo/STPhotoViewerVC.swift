@@ -97,6 +97,10 @@ extension STPhotoViewerVC: IFileViewer {
         self.setImage(isThumb: false, complition: {})
     }
 
+    func reload(fileIndex: Int) {
+        self.fileIndex = fileIndex
+    }
+
 }
 
 extension STPhotoViewerVC: STImageZoomViewDelegate {

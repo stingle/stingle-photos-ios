@@ -19,6 +19,7 @@ protocol IFileViewer: UIViewController {
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool)
     func fileViewer(pauseContent fileViewer: STFileViewerVC)
     func reload(file: STLibrary.File, fileIndex: Int)
+    func reload(fileIndex: Int)
     
 }
 
@@ -527,7 +528,7 @@ extension STFileViewerVC: STFileViewerVMDelegate {
         let index = self.viewModel.index(at: file)
         
         if index == nil || index == NSNotFound {
-            if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex)  {
+            if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex) {
                 self.pageViewController.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
             } else if currentIndex - 1 < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex - 1) {
                 self.currentIndex = currentIndex - 1
@@ -536,9 +537,12 @@ extension STFileViewerVC: STFileViewerVMDelegate {
                 self.navigationController?.popViewController(animated: true)
             }
         } else if let index = index, let currentFileViewer = self.currentFileViewer {
-            guard let newFile = self.viewModel.object(at: index), newFile > file else { return }
-            currentFileViewer.reload(file: newFile, fileIndex: index)
-
+            if let newFile = self.viewModel.object(at: index), newFile > file {
+                currentFileViewer.reload(file: newFile, fileIndex: index)
+            } else {
+                self.currentIndex = index
+                currentFileViewer.reload(fileIndex: index)
+            }
             if self.pageViewController.viewControllers?.count != 1 {
                 self.pageViewController.setViewControllers([currentFileViewer], direction: .forward, animated: false, completion: nil)
             }

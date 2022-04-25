@@ -150,6 +150,10 @@ extension STVideoViewerVC: IFileViewer {
         self.fileIndex = fileIndex
     }
 
+    func reload(fileIndex: Int) {
+        self.fileIndex = fileIndex
+    }
+
 }
 
 extension STVideoViewerVC: IPlayerObservers {
