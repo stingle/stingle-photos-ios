@@ -103,12 +103,14 @@ class STImageEditorVC: UIViewController {
 
     @IBAction private func doneButtonAction(_ sender: UIButton) {
         let croppedImage = self.croppedImage(image: self.image)
-        let image = self.filteredImage(image: croppedImage)
-        if let size = self.resizedSize {
-            let resizedImage = image.scaled(newSize: size)
-            self.delegate?.imageEditor(didEditImage: self, image: resizedImage, sender: sender)
-        } else {
-            self.delegate?.imageEditor(didEditImage: self, image: image, sender: sender)
+        self.filteredImage(image: croppedImage) { [weak self] image in
+            guard let self = self else { return }
+            if let size = self.resizedSize {
+                let resizedImage = image.scaled(newSize: size)
+                self.delegate?.imageEditor(didEditImage: self, image: resizedImage, sender: sender)
+            } else {
+                self.delegate?.imageEditor(didEditImage: self, image: image, sender: sender)
+            }
         }
     }
 
@@ -135,8 +137,8 @@ class STImageEditorVC: UIViewController {
         return image.cropped(withCropperState: state) ?? image
     }
 
-    private func filteredImage(image: UIImage) -> UIImage {
-        return self.imageFilterVC.applyFilters(image: image)
+    private func filteredImage(image: UIImage, completion: @escaping (UIImage) -> Void) {
+        return self.imageFilterVC.applyFilters(image: image, completion: completion)
     }
 
     private func selectOption(option: Options, syncImage: Bool = true) {
@@ -163,8 +165,9 @@ class STImageEditorVC: UIViewController {
                 self.imageCropRotateContentView.alpha = 1.0
             }
             if syncImage {
-                let filteredImage = self.filteredImage(image: self.previewImage)
-                self.imageCropRotateVC.originalImage = filteredImage
+                self.filteredImage(image: self.previewImage) { [weak self] image in
+                    self?.imageCropRotateVC.originalImage = image
+                }
             }
         }
         self.configureTopToolBar()
@@ -246,9 +249,10 @@ extension STImageEditorVC: STResizeViewDelegate {
         let croppedImage = self.croppedImage(image: self.previewImage)
         self.imageFilterVC.setImage(image: croppedImage, applyFilters: true)
 
-        let filteredImage = self.filteredImage(image: self.previewImage)
-        self.imageCropRotateVC.originalImage = filteredImage
-        self.updateDoneButton()
+        self.filteredImage(image: self.previewImage) { [weak self] image in
+            self?.imageCropRotateVC.originalImage = image
+            self?.updateDoneButton()
+        }
     }
 
     func resizeView(didSelectCancel view: STResizeView) {

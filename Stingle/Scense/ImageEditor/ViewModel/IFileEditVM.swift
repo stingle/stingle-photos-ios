@@ -25,9 +25,15 @@ extension IFileEditVM {
         let tmpFolder = FileManager.default.temporaryDirectory
         let size = STConstants.thumbSize(for: CGSize(width: image.size.width, height: image.size.height))
         let thumb = image.scaled(newSize: size)
-        let fileExtension = (fileName as NSString).pathExtension
+        var fileExtension = (fileName as NSString).pathExtension
+        guard var type = UTType(filenameExtension: fileExtension) else {
+            throw STError.fileIsUnavailable
+        }
+        if !self.isTypeSupported(type: type) {
+            type = UTType.jpeg
+            fileExtension = "jpg"
+        }
         guard
-            let type = UTType(filenameExtension: fileExtension),
             let heicData = self.imageData(image: image, for: type),
             let thumbData = self.imageData(image: thumb, for: type) else {
             throw STError.fileIsUnavailable
@@ -48,11 +54,9 @@ extension IFileEditVM {
                 throw STFileUploader.UploaderError.fileSystemNotValid
             }
             let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(fileName: existingFileName, oreginalUrl: filePath, thumbImage: thumbData, fileType: .image, duration: 0.0, toUrl: localOreginalsURL, toThumbUrl: localThumbsURL, fileSize: UInt(data.count), publicKey: publicKey, progressHandler: nil)
-
             if FileManager.default.fileExists(atPath: filePath.path) {
                 try? FileManager.default.removeItem(at: filePath)
             }
-
             return encryptedFileInfo
         } catch {
             if FileManager.default.fileExists(atPath: filePath.path) {
@@ -107,11 +111,11 @@ extension IFileEditVM {
     }
 
     private func imageData(image: UIImage, for type: UTType) -> Data? {
-        var cgImage = image.cgImage
-        if cgImage == nil, let ciImage = image.ciImage {
-            cgImage = CIContext().createCGImage(ciImage, from: ciImage.extent)
-        }
         if self.isTypeSupported(type: type) {
+            var cgImage = image.cgImage
+            if cgImage == nil, let ciImage = image.ciImage {
+                cgImage = CIContext().createCGImage(ciImage, from: ciImage.extent)
+            }
             guard
                 let mutableData = CFDataCreateMutable(nil, 0),
                 let destination = CGImageDestinationCreateWithData(mutableData, type.identifier as CFString, 1, nil),
