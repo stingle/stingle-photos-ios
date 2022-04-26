@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import MetalPetal
 
 protocol STImageFilterVCDelegate: AnyObject {
     func imageFilter(didSelectResize vc: STImageFilterVC)
@@ -25,20 +24,10 @@ class STImageFilterVC: UIViewController {
 
     weak var delegate: STImageFilterVCDelegate?
 
-    private var mtImage: MTIImage?
-
     private var image: UIImage? {
         didSet {
             if self.isViewLoaded {
                 self.imageView.image = self.image
-            }
-            guard let image = self.image else {
-                return
-            }
-            if let ciImage = CIImage(image: image) {
-                self.mtImage = MTIImage(ciImage: ciImage, isOpaque: true).withCachePolicy(.transient)
-            } else if let ciImage = image.ciImage {
-                self.mtImage = MTIImage(ciImage: ciImage, isOpaque: true).withCachePolicy(.transient)
             }
         }
     }
@@ -69,6 +58,8 @@ class STImageFilterVC: UIViewController {
 
     private var queue = DispatchQueue(label: "filter.image")
 
+    private let context = CIContext()
+
     private var filters: [IFilter] {
         return [
             self.exposureFilter,
@@ -80,17 +71,6 @@ class STImageFilterVC: UIViewController {
             self.noiseReductionAndSharpnessFilter,
             self.vignetteFilter
         ]
-    }
-
-    private var _renderContext: MTIContext?
-    private var renderContext: MTIContext? {
-        if self._renderContext == nil {
-            guard let device = MTLCreateSystemDefaultDevice() else {
-                return nil
-            }
-            self._renderContext = try? MTIContext(device: device, options: MTIContextOptions())
-        }
-        return self._renderContext
     }
 
     private lazy var maskLayer: CAGradientLayer = {
@@ -174,10 +154,7 @@ class STImageFilterVC: UIViewController {
     func setImage(image: UIImage, applyFilters: Bool = false) {
         self.image = image
         if applyFilters {
-            guard let mtImage = self.mtImage else {
-                return
-            }
-            self.filterImage(mtImage: mtImage) { [weak self] image in
+            self.filterImage(image: image) { [weak self] image in
                 self?.imageView.image = image ?? self?.image
             }
 
@@ -195,37 +172,12 @@ class STImageFilterVC: UIViewController {
     }
 
     func applyFilters(image: UIImage, completion: @escaping (UIImage) -> Void) {
-        guard let ciImage = CIImage(image: image) else {
-            completion(image)
-            return
-        }
-        let mtImage = MTIImage(ciImage: ciImage, isOpaque: true).withCachePolicy(.transient)
-        self._renderContext?.reclaimResources()
-        self._renderContext = nil
-        self.filterImage(mtImage: mtImage) { filteredImage in
+        self.filterImage(image: image) { filteredImage in
             completion(filteredImage ?? image)
-            self._renderContext?.reclaimResources()
-            self._renderContext = nil
         }
     }
-
-//    private let imageRenderer = PixelBufferPoolBackedImageRenderer()
 
     // MARK: - Private methods
-
-    private func image(from mtImage: MTIImage?) -> UIImage? {
-        guard let mtImage = mtImage, let context = self.renderContext else {
-            return self.image
-        }
-        do {
-//            let cgImage = try self.imageRenderer.render(mtImage, using: context).cgImage
-            let cgImage = try context.makeCGImage(from: mtImage)
-            context.reclaimResources()
-            return UIImage(cgImage: cgImage)
-        } catch {
-            return self.image
-        }
-    }
 
     private func selectFilter(type: STFilterType) {
         self.selectedFilterType = type
@@ -278,54 +230,34 @@ class STImageFilterVC: UIViewController {
         }
     }
 
-    private func filterImage(mtImage: MTIImage, completion: @escaping (UIImage?) -> Void) {
+    private func filterImage(image: UIImage, completion: @escaping (UIImage?) -> Void) {
         self.queue.async { [weak self] in
             autoreleasepool { [weak self] in
                 guard let weakSelf = self else {
                     return
                 }
-                let image = weakSelf.filterImage(mtImage: mtImage)
-                DispatchQueue.main.async {
-                    completion(image)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                        self?.renderContext?.reclaimResources()
+                guard var ciImage = CIImage(image: image) else {
+                    completion(nil)
+                    return
+                }
+                for filter in weakSelf.filters {
+                    guard let ciFilter = filter.ciFilter, filter.hasChange  else {
+                        continue
                     }
+                    ciFilter.setValue(ciImage, forKey: kCIInputImageKey)
+                    guard let newImage = ciFilter.outputImage else { continue }
+                    ciImage = newImage
+                }
+                guard let cgImage = weakSelf.context.createCGImage(ciImage, from: ciImage.extent) else {
+                    completion(nil)
+                    return
+                }
+                let newImage = UIImage(cgImage: cgImage)
+                DispatchQueue.main.async {
+                    completion(newImage)
                 }
             }
         }
-    }
-
-    private func filterImage(mtImage: MTIImage) -> UIImage? {
-//        guard let image = self.image, var ciImage = CIImage(image: image) else {
-//            return nil
-//        }
-//        for filter in self.filters {
-//            guard let ciFilter = filter.ciFilter, filter.hasChange  else {
-//                continue
-//            }
-//            ciFilter.setValue(ciImage, forKey: kCIInputImageKey)
-//            guard let newImage = ciFilter.outputImage else { continue }
-//            ciImage = newImage
-//        }
-//        return UIImage(ciImage: ciImage)
-        var mtFilters = [MTIUnaryFilter]()
-        for filter in self.filters {
-            guard let ciFilter = filter.ciFilter else { continue }
-            let mtFilter = MTICoreImageUnaryFilter()
-            mtFilter.filter = ciFilter
-            mtFilters.append(mtFilter)
-        }
-        guard !mtFilters.isEmpty else {
-            return nil
-        }
-        let newImage = FilterGraph.makeImage { output in
-            mtImage => mtFilters[0]
-            for index in 1..<mtFilters.count {
-                mtFilters[index - 1] => mtFilters[index]
-            }
-            mtFilters.last! => output
-        }
-        return self.image(from: newImage)
     }
 
     private func filterValue(type: STFilterType) -> CGFloat {
@@ -402,8 +334,11 @@ extension STImageFilterVC: STRulerViewDelegate {
     func angleRuleDidChangeValue(value: CGFloat) {
         self.setSelectedFilterValue(rullerValue: value)
         self.filterCollectionView.setSelectedFilterValue(value: value)
-        self.filterImage(mtImage: self.mtImage!) { [weak self] image in
-            self?.imageView.image = image ?? self?.image
+        guard let image = self.image else {
+            return
+        }
+        self.filterImage(image: image) { [weak self] filteredImage in
+            self?.imageView.image = filteredImage ?? image
         }
     }
 
@@ -431,40 +366,4 @@ extension STImageFilterVC: STFilterToolBarDelegate {
         self.delegate?.imageFilter(didSelectResize: self)
     }
 
-}
-
-import VideoToolbox
-
-class PixelBufferPoolBackedImageRenderer {
-    private var pixelBufferPool: MTICVPixelBufferPool?
-    private let renderSemaphore: DispatchSemaphore
-
-    init(renderTaskQueueCapacity: Int = 3) {
-        self.renderSemaphore = DispatchSemaphore(value: renderTaskQueueCapacity)
-    }
-
-    func render(_ image: MTIImage, using context: MTIContext) throws -> (pixelBuffer: CVPixelBuffer, cgImage: CGImage) {
-        let pixelBufferPool: MTICVPixelBufferPool
-        if let pool = self.pixelBufferPool, pool.pixelBufferWidth == image.dimensions.width, pool.pixelBufferHeight == image.dimensions.height {
-            pixelBufferPool = pool
-        } else {
-            pixelBufferPool = try MTICVPixelBufferPool(pixelBufferWidth: Int(image.dimensions.width), pixelBufferHeight: Int(image.dimensions.height), pixelFormatType: kCVPixelFormatType_32BGRA, minimumBufferCount: 30)
-            self.pixelBufferPool = pixelBufferPool
-        }
-        let pixelBuffer = try pixelBufferPool.makePixelBuffer(allocationThreshold: 30)
-
-        self.renderSemaphore.wait()
-        do {
-            try context.startTask(toRender: image, to: pixelBuffer, sRGB: false, completion: { task in
-                self.renderSemaphore.signal()
-            })
-        } catch {
-            self.renderSemaphore.signal()
-            throw error
-        }
-
-        var cgImage: CGImage!
-        VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
-        return (pixelBuffer, cgImage)
-    }
 }

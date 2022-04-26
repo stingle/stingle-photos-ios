@@ -9,6 +9,5 @@ target 'Stingle' do
   pod 'Sodium'
   pod 'Alamofire',     '~> 5.6.1'
   pod 'KeychainSwift',     '~> 20.0.0'
-  pod 'MetalPetal/Swift',     '~> 1.24.1'
 
 end

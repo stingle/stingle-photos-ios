@@ -26,16 +26,12 @@ extension IFileEditVM {
         let size = STConstants.thumbSize(for: CGSize(width: image.size.width, height: image.size.height))
         let thumb = image.scaled(newSize: size)
         var fileExtension = (fileName as NSString).pathExtension
-        guard var type = UTType(filenameExtension: fileExtension) else {
-            throw STError.fileIsUnavailable
-        }
+        var type = UTType(filenameExtension: fileExtension) ?? .jpeg
         if !self.isTypeSupported(type: type) {
-            type = UTType.jpeg
-            fileExtension = "jpg"
+            type = .jpeg
+            fileExtension = type.preferredFilenameExtension ?? "jpeg"
         }
-        guard
-            let heicData = self.imageData(image: image, for: type),
-            let thumbData = self.imageData(image: thumb, for: type) else {
+        guard let heicData = self.imageData(image: image, for: type), let thumbData = self.imageData(image: thumb, for: type) else {
             throw STError.fileIsUnavailable
         }
         let properties = self.fileProperties()
@@ -111,26 +107,23 @@ extension IFileEditVM {
     }
 
     private func imageData(image: UIImage, for type: UTType) -> Data? {
-        if self.isTypeSupported(type: type) {
-            var cgImage = image.cgImage
-            if cgImage == nil, let ciImage = image.ciImage {
-                cgImage = CIContext().createCGImage(ciImage, from: ciImage.extent)
-            }
-            guard
-                let mutableData = CFDataCreateMutable(nil, 0),
-                let destination = CGImageDestinationCreateWithData(mutableData, type.identifier as CFString, 1, nil),
-                let cgImage = cgImage
-            else {
-                return nil
-            }
-            let cgImageOrientation = CGImagePropertyOrientation(image.imageOrientation)
-            CGImageDestinationAddImage(destination, cgImage, [kCGImageDestinationLossyCompressionQuality: 1.0, kCGImagePropertyOrientation: cgImageOrientation.rawValue] as CFDictionary)
-            guard CGImageDestinationFinalize(destination) else {
-                return nil
-            }
-            return mutableData as Data
+        var cgImage = image.cgImage
+        if cgImage == nil, let ciImage = image.ciImage {
+            cgImage = CIContext().createCGImage(ciImage, from: ciImage.extent)
         }
-        return image.jpegData(compressionQuality: 1.0)
+        guard
+            let mutableData = CFDataCreateMutable(nil, 0),
+            let destination = CGImageDestinationCreateWithData(mutableData, type.identifier as CFString, 1, nil),
+            let cgImage = cgImage
+        else {
+            return nil
+        }
+        let cgImageOrientation = CGImagePropertyOrientation(image.imageOrientation)
+        CGImageDestinationAddImage(destination, cgImage, [kCGImageDestinationLossyCompressionQuality: 1.0, kCGImagePropertyOrientation: cgImageOrientation.rawValue] as CFDictionary)
+        guard CGImageDestinationFinalize(destination) else {
+            return nil
+        }
+        return mutableData as Data
     }
 
     private func fileProperties() -> CFDictionary? {
