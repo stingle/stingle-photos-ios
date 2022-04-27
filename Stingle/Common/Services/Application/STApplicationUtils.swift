@@ -32,11 +32,16 @@ extension STApplication {
                         complition()
                     }
                 }
-                
             }
         }
         
         func deleteFilesIfNeeded(fileNames: [String], complition:(() -> Void)?) {
+            
+            guard self.application.isFileSystemAvailable else {
+                complition?()
+                return
+            }
+            
             DispatchQueue.global().async { [weak self] in
                 guard let weakSelf = self else { return }
                 let notExistFiles = weakSelf.application.dataBase.filtrNotExistFileNames(fileNames: fileNames)
@@ -47,6 +52,20 @@ extension STApplication {
                     }
                 }
             }
+        }
+        
+        func deleteFiles(fileNames: [String]) {
+            guard self.application.isFileSystemAvailable else {
+                return
+            }
+            self.application.fileSystem.deleteFiles(for: fileNames)
+        }
+        
+        func moveLocalToRemot(files: [STLibrary.File]) {
+            guard self.application.isFileSystemAvailable else {
+                return
+            }
+            self.application.fileSystem.moveLocalToRemot(files: files)
         }
         
     }
@@ -165,7 +184,6 @@ extension STApplication.Utils {
         }
         return true
         #endif
-        
     }
     
 }
@@ -249,5 +267,5 @@ extension STApplication {
         let link = "https://stingle.org/privacy/"
         return URL(string: link)!
     }
-    
+
 }

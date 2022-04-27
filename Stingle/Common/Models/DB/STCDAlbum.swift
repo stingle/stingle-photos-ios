@@ -10,9 +10,13 @@ import Foundation
 import CoreData
 
 @objc(STCDAlbum)
-public class STCDAlbum: NSManagedObject, IManagedObject {
+public class STCDAlbum: NSManagedObject {
 
-    func update(model: STLibrary.Album, context: NSManagedObjectContext?) {
+}
+
+extension STCDAlbum: IManagedSynchObject {
+    
+    func update(model: STLibrary.Album) {
         self.albumId = model.albumId
         self.encPrivateKey = model.encPrivateKey
         self.publicKey = model.publicKey
@@ -32,5 +36,17 @@ public class STCDAlbum: NSManagedObject, IManagedObject {
     func createModel() throws -> STLibrary.Album {
         return try STLibrary.Album(model: self)
     }
-
+    
+    func diffStatus(with model: Model) -> STDataBase.ModelDiffStatus {
+        guard self.identifier == model.identifier else { return .none }
+        guard let dateModified = self.dateModified else { return .low }
+        if dateModified == model.dateModified {
+            return .equal
+        }
+        if dateModified < model.dateModified {
+            return .low
+        }
+        return .high
+    }
+    
 }

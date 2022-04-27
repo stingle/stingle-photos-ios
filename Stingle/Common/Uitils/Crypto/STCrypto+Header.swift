@@ -120,11 +120,10 @@ extension STCrypto {
             if diff > 0 {
                 buf = self.copyMemoryStartingAtIndex(from: buf, startIndexAtPointer: numRead)
             }
-            let  decryptedData = try self.decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header)
+            let decryptedData = try self.decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header)
             assert(header.chunkSize == decryptedData.count || (diff != 0))
             completionHandler(decryptedData)
             chunkNumber += UInt64(1)
-        
         } while (diff == 0)
         
         return true

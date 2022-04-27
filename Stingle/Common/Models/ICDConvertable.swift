@@ -13,7 +13,7 @@ protocol IDataBaseProviderModel: AnyObject {
     var identifier: String { get }
 }
 
-protocol ICDConvertable: IDataBaseProviderModel, Encodable {
+protocol ICDConvertable: IDataBaseProviderModel, Encodable, Hashable {
     associatedtype ManagedModel: IManagedObject
     init(model: ManagedModel) throws
     var managedObjectID: NSManagedObjectID? { get }
@@ -33,19 +33,35 @@ extension ICDConvertable {
         return ManagedModel(model: self as! Self.ManagedModel.Model, context: context)
     }
     
+    func hash(into hasher: inout Hasher) {
+        return self.identifier.hash(into: &hasher)
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
+    
 }
 
+protocol ICDSynchConvertable: ICDConvertable {
+    
+    var dateModified: Date { get }
+    static func > (lhs: Self, rhs: Self) -> Bool
+    
+}
 
 //MARK: - ManagedObject
 
 protocol IManagedObject: NSManagedObject {
     associatedtype Model: ICDConvertable
+    
+    var identifier: String? { get }
+    
     init(model: Model, context: NSManagedObjectContext)
-    func update(model: Model, context: NSManagedObjectContext?)
+    func update(model: Model)
     
     func createModel() throws -> Model
     
-    var identifier: String? { get }
 }
 
 extension IManagedObject {
@@ -53,16 +69,21 @@ extension IManagedObject {
     @discardableResult
     init(model: Model, context: NSManagedObjectContext) {
         self.init(context: context)
-        self.update(model: model, context: context)
+        self.update(model: model)
     }
     
     init(model: Model) {
         self.init()
-        self.update(model: model, context: nil)
+        self.update(model: model)
     }
     
     static var entityName: String {
         return String(describing: self.self)
     }
     
+}
+
+protocol IManagedSynchObject: IManagedObject where Model: ICDSynchConvertable {
+    var dateModified: Date? { get }
+    func diffStatus(with model: Model) -> STDataBase.ModelDiffStatus
 }

@@ -75,23 +75,42 @@ class STSyncManager {
     }
     
     private func startDBSync(sync: STSync, success: (() -> Void)? = nil, failure: ((_ error: IError) -> Void)? = nil)  {
-        self.dataBase.sync(sync, finish: { [weak self] error in
-                       
-            if let error = error {
-                failure?(error)
-                self?.didEndSync(error: error)
-            } else {
-                if let trashDeletes = sync.deletes?.trashDeletes {
-                    let deletes = trashDeletes.compactMap( {$0.fileName} )
-                    STApplication.shared.utils.deleteFilesIfNeeded(fileNames: deletes, complition: nil)
-                }
-                success?()
-                self?.didEndSync(error: nil)
-                let application = STApplication.shared
-                application.uploader.uploadAllLocalFiles()
-                application.auotImporter.startImport()
+        
+        self.dataBase.sync(sync) { [weak self] in
+            
+            success?()
+            self?.didEndSync(error: nil)
+            let application = STApplication.shared
+            application.uploader.uploadAllLocalFiles()
+            application.auotImporter.startImport()
+            
+        } willFinish: { info in
+                        
+            let galleryUpdates = info.gallery.updates.compactMap({ $0.isRemote ? $0.file : nil })
+            let albumFilesUpdates = info.albumFiles.updates.compactMap({ $0.isRemote ? $0.file : nil })
+            let trashUpdates = info.trash.updates.compactMap({ $0.isRemote ? $0.file : nil })
+            
+            var deleteFileNames = [String]()
+            deleteFileNames.append(contentsOf: galleryUpdates)
+            deleteFileNames.append(contentsOf: albumFilesUpdates)
+            deleteFileNames.append(contentsOf: trashUpdates)
+            
+            if let deletes = sync.deletes?.trashDeletes {
+                deleteFileNames.append(contentsOf: deletes.compactMap({ $0.fileName }))
             }
-        })
+            
+            var moveFiles = [STLibrary.File]()
+            moveFiles.append(contentsOf: info.gallery.inserts.filter({ $0.isRemote }))
+            moveFiles.append(contentsOf: info.albumFiles.inserts.filter({ $0.isRemote }))
+            moveFiles.append(contentsOf: info.trash.inserts.filter({ $0.isRemote }))
+        
+            STApplication.shared.utils.deleteFiles(fileNames: deleteFileNames)
+            STApplication.shared.utils.moveLocalToRemot(files: moveFiles)
+
+        } failure: { [weak self] error in
+            failure?(error)
+            self?.didEndSync(error: error)
+        }
     }
     
     private func didStartSync() {

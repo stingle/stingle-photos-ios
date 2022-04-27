@@ -11,13 +11,15 @@ protocol IFileViewer: UIViewController {
     
     static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer
     var file: STLibrary.File { get }
-    var fileIndex: Int { get set }
+    var fileIndex: Int { get }
     var fileViewerDelegate: IFileViewerDelegate? { get set }
     
     var animatorSourceView: INavigationAnimatorSourceView? { get }
     
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool)
     func fileViewer(pauseContent fileViewer: STFileViewerVC)
+    func reload(file: STLibrary.File, fileIndex: Int)
+    func reload(fileIndex: Int)
     
 }
 
@@ -280,7 +282,7 @@ class STFileViewerVC: UIViewController {
         guard let file = self.currentFile else {
             return
         }
-        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+        let storyboard = UIStoryboard(name: "Share", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
         (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .files(files: [file])
         self.showDetailViewController(vc, sender: nil)
@@ -304,9 +306,18 @@ class STFileViewerVC: UIViewController {
         }
         self.showDetailViewController(alert, sender: nil)
     }
-    
-}
 
+    private func didSelectEdit() {
+        guard let file = self.currentFile else {
+            return
+        }
+        let viewModel = self.viewModel.editVM(for: file)
+        let vc = STFileEditVC.create(viewModel: viewModel)
+        vc.delegate = self
+        self.present(vc, animated: true)
+    }
+
+}
 
 extension STFileViewerVC {
 
@@ -444,16 +455,10 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
                 }
                 result.append(trash)
             case .edit:
-                break
-                // Temporary disabling edit functionality.
-//                let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
-//                    guard let file = self?.currentFile, let vc = STFileEditVC.create(file: file) else {
-//                        return
-//                    }
-//                    vc.delegate = self
-//                    self?.present(vc, animated: true)
-//                }
-//                result.append(edit)
+                let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
+                    self?.didSelectEdit()
+                }
+                result.append(edit)
             }
         }
 
@@ -469,7 +474,7 @@ extension STFileViewerVC: STFileEditVCDelegate {
         vc.dismiss(animated: true)
     }
 
-    func fileEdit(didEditFile vc: STFileEditVC, file: STLibrary.File) {
+    func fileEdit(didEditFile vc: STFileEditVC, viewModel: IFileEditVM) {
         vc.dismiss(animated: true)
     }
 
@@ -523,7 +528,7 @@ extension STFileViewerVC: STFileViewerVMDelegate {
         let index = self.viewModel.index(at: file)
         
         if index == nil || index == NSNotFound {
-            if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex)  {
+            if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex) {
                 self.pageViewController.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
             } else if currentIndex - 1 < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex - 1) {
                 self.currentIndex = currentIndex - 1
@@ -532,7 +537,12 @@ extension STFileViewerVC: STFileViewerVMDelegate {
                 self.navigationController?.popViewController(animated: true)
             }
         } else if let index = index, let currentFileViewer = self.currentFileViewer {
-            currentFileViewer.fileIndex = index
+            if let newFile = self.viewModel.object(at: index), newFile > file {
+                currentFileViewer.reload(file: newFile, fileIndex: index)
+            } else {
+                self.currentIndex = index
+                currentFileViewer.reload(fileIndex: index)
+            }
             if self.pageViewController.viewControllers?.count != 1 {
                 self.pageViewController.setViewControllers([currentFileViewer], direction: .forward, animated: false, completion: nil)
             }

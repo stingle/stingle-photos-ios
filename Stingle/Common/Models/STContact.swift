@@ -7,8 +7,8 @@
 
 import CoreData
 
-class STContact: Codable, ICDConvertable {
-    
+class STContact: Codable, ICDSynchConvertable {
+        
     private enum CodingKeys: String, CodingKey {
         case email = "email"
         case publicKey = "publicKey"
@@ -72,6 +72,13 @@ class STContact: Codable, ICDConvertable {
         json.addIfNeeded(key: "dateModified", value: self.dateModified)
         json.addIfNeeded(key: "identifier", value: self.identifier)
         return json
+    }
+    
+    static func > (lhs: STContact, rhs: STContact) -> Bool {
+        guard lhs.identifier == rhs.identifier else {
+            return false
+        }
+        return lhs.dateModified > rhs.dateModified
     }
     
 }

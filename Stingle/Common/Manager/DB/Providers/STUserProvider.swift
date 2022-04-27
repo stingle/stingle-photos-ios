@@ -22,7 +22,7 @@ extension STDataBase {
                     self.container.saveContext(context)
                     return
                 }
-                cdUser.update(model: user, context: context)
+                cdUser.update(model: user)
                 self.container.saveContext(context)
                 context.reset()
                 self.myUser = nil

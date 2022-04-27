@@ -7,8 +7,7 @@ target 'Stingle' do
   inhibit_all_warnings!
 
   pod 'Sodium'
-  pod 'Alamofire'
-  pod 'KeychainSwift'
-  pod 'MetalPetal/Swift'
+  pod 'Alamofire',     '~> 5.6.1'
+  pod 'KeychainSwift',     '~> 20.0.0'
 
 end
