@@ -44,7 +44,7 @@ class STImageEditorVC: UIViewController {
             let imageSize = self.image.size
             let maxPreviewImageWidht: CGFloat = 1024.0
             if imageSize.width > maxPreviewImageWidht {
-                self.previewImage = self.image.scale(to: maxPreviewImageWidht) ?? self.image
+                self.previewImage = self.image.scale(to: maxPreviewImageWidht)
             } else {
                 self.previewImage = self.image
             }
@@ -232,6 +232,17 @@ class STImageEditorVC: UIViewController {
         self.doneButtons.forEach({ $0.setTitleColor(color, for: .normal) })
     }
 
+    private static func normalizedImage(image: UIImage) -> UIImage? {
+        guard image.imageOrientation != .up else {
+            return image
+        }
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        image.draw(in: CGRect(origin: .zero, size: image.size))
+        let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return normalizedImage
+    }
+
 }
 
 extension STImageEditorVC: STResizeViewDelegate {
@@ -264,7 +275,7 @@ extension STImageEditorVC: STResizeViewDelegate {
 extension STImageEditorVC {
 
     static func create(image: UIImage) -> STImageEditorVC? {
-        guard let image = self.normalizedImage(image: image), image.size.width > 0, image.size.height > 0 else {
+        guard let image = STImageEditorVC.normalizedImage(image: image), image.size.width > 0, image.size.height > 0 else {
             return nil
         }
         let storyboard = UIStoryboard(name: "FileEdit", bundle: .main)
@@ -272,17 +283,6 @@ extension STImageEditorVC {
         vc.modalPresentationStyle = .fullScreen
         vc.image = image
         return vc
-    }
-
-    private static func normalizedImage(image: UIImage) -> UIImage? {
-        guard image.imageOrientation != .up else {
-            return image
-        }
-        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
-        image.draw(in: CGRect(origin: .zero, size: image.size))
-        let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return normalizedImage
     }
 
 }
