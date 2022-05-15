@@ -10,7 +10,7 @@ import CoreData
 extension STLibrary {
     
     class Album: ICDSynchConvertable, Codable {
-                        
+                                
         private enum CodingKeys: String, CodingKey {
             case albumId = "albumId"
             case encPrivateKey = "encPrivateKey"
@@ -168,6 +168,37 @@ extension STLibrary {
             
             try container.encode("\(self.dateCreated.timeIntervalSince1970)", forKey: .dateCreated)
             try container.encode("\(self.dateModified.timeIntervalSince1970)", forKey: .dateModified)
+        }
+        
+        //MARK: - ICDSynchConvertable
+        
+        func diffStatus(with rhs: STCDAlbum) -> STDataBase.ModelDiffStatus {
+            guard self.identifier == rhs.identifier else { return .none }
+            guard let dateModified = rhs.dateModified else { return .high }
+            if dateModified == rhs.dateModified {
+                return .equal
+            }
+            if dateModified < self.dateModified {
+                return .high
+            }
+            return .low
+        }
+        
+        func update(model: STCDAlbum) {
+            model.albumId = self.albumId
+            model.encPrivateKey = self.encPrivateKey
+            model.publicKey = self.publicKey
+            model.metadata = self.metadata
+            model.isShared = self.isShared
+            model.isHidden = self.isHidden
+            model.isOwner = self.isOwner
+            model.permissions = self.permissions
+            model.members = self.members
+            model.isLocked = self.isLocked
+            model.cover = self.cover
+            model.dateCreated = self.dateCreated
+            model.dateModified = self.dateModified
+            model.identifier = self.identifier
         }
         
         func toManagedModelJson() throws -> [String : Any] {

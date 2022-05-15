@@ -9,8 +9,8 @@ import UIKit
 
 protocol IFileViewer: UIViewController {
     
-    static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer
-    var file: STLibrary.File { get }
+    static func create(file: STLibrary.FileBase, fileIndex: Int) -> IFileViewer
+    var file: STLibrary.FileBase { get }
     var fileIndex: Int { get }
     var fileViewerDelegate: IFileViewerDelegate? { get set }
     
@@ -18,7 +18,7 @@ protocol IFileViewer: UIViewController {
     
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool)
     func fileViewer(pauseContent fileViewer: STFileViewerVC)
-    func reload(file: STLibrary.File, fileIndex: Int)
+    func reload(file: STLibrary.FileBase, fileIndex: Int)
     func reload(fileIndex: Int)
     
 }
@@ -36,7 +36,7 @@ class STFileViewerVC: UIViewController {
     private var viewControllers = STObserverEvents<IFileViewer>()
     private var viewerStyle: ViewerStyle = .white
     private weak var titleView: STFileViewerNavigationTitleView?
-    private var initialFile: STLibrary.File?
+    private var initialFile: STLibrary.FileBase?
     
     @IBOutlet weak private var toolBar: UIView!
         
@@ -49,7 +49,7 @@ class STFileViewerVC: UIViewController {
         return STPHPhotoHelper(controller: nil)
     }()
     
-    private var currentFile: STLibrary.File? {
+    private var currentFile: STLibrary.FileBase? {
         guard let currentIndex = self.currentIndex, let file = self.viewModel.object(at: currentIndex) else {
             return nil
         }
@@ -140,7 +140,7 @@ class STFileViewerVC: UIViewController {
         }
     }
     
-    private func didSelectMore(action: MoreAction, file: STLibrary.File) {
+    private func didSelectMore(action: MoreAction, file: STLibrary.FileBase) {
         self.viewModel.selectMore(action: action, file: file)
     }
         
@@ -279,13 +279,17 @@ class STFileViewerVC: UIViewController {
     }
     
     private func didSelectShareViaStinglePhotos() {
-        guard let file = self.currentFile else {
-            return
-        }
-        let storyboard = UIStoryboard(name: "Share", bundle: .main)
-        let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
-        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .files(files: [file])
-        self.showDetailViewController(vc, sender: nil)
+        
+        //TODO: Khoren
+        fatalError("implement this case")
+        
+//        guard let file = self.currentFile else {
+//            return
+//        }
+//        let storyboard = UIStoryboard(name: "Share", bundle: .main)
+//        let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
+//        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .files(files: [file])
+//        self.showDetailViewController(vc, sender: nil)
     }
     
     private func showShareFileActionSheet(sender: UIBarButtonItem) {
@@ -321,7 +325,7 @@ class STFileViewerVC: UIViewController {
 
 extension STFileViewerVC {
 
-    static func create(galery sortDescriptorsKeys: [STDataBase.DataSource<STCDFile>.Sort], predicate: NSPredicate?, file: STLibrary.File) -> STFileViewerVC {
+    static func create(galery sortDescriptorsKeys: [STDataBase.DataSource<STLibrary.GaleryFile>.Sort], predicate: NSPredicate?, file: STLibrary.GaleryFile) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STGaleryFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys, predicate: predicate)
@@ -331,7 +335,7 @@ extension STFileViewerVC {
         return vc
     }
     
-    static func create(album: STLibrary.Album, file: STLibrary.AlbumFile, sortDescriptorsKeys: [STDataBase.DataSource<STCDAlbumFile>.Sort]) -> STFileViewerVC {
+    static func create(album: STLibrary.Album, file: STLibrary.AlbumFile, sortDescriptorsKeys: [STDataBase.DataSource<STLibrary.AlbumFile>.Sort]) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STAlbumFileViewerVM(album: album, sortDescriptorsKeys: sortDescriptorsKeys)
@@ -341,7 +345,7 @@ extension STFileViewerVC {
         return vc
     }
     
-    static func create(trash file: STLibrary.TrashFile, sortDescriptorsKeys: [STDataBase.DataSource<STCDTrashFile>.Sort]) -> STFileViewerVC {
+    static func create(trash file: STLibrary.TrashFile, sortDescriptorsKeys: [STDataBase.DataSource<STLibrary.TrashFile>.Sort]) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STTrashFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys)
@@ -537,6 +541,7 @@ extension STFileViewerVC: STFileViewerVMDelegate {
                 self.navigationController?.popViewController(animated: true)
             }
         } else if let index = index, let currentFileViewer = self.currentFileViewer {
+            
             if let newFile = self.viewModel.object(at: index), newFile > file {
                 currentFileViewer.reload(file: newFile, fileIndex: index)
             } else {
@@ -546,6 +551,7 @@ extension STFileViewerVC: STFileViewerVMDelegate {
             if self.pageViewController.viewControllers?.count != 1 {
                 self.pageViewController.setViewControllers([currentFileViewer], direction: .forward, animated: false, completion: nil)
             }
+            
         }
     }
     

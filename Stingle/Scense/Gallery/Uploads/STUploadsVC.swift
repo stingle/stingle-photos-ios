@@ -53,7 +53,7 @@ class STUploadsVC: STPopoverViewController {
         
     }
     
-    private func cellModel(for file: STLibrary.File, progress: Progress?) -> CellModel {
+    private func cellModel(for file: ILibraryFile, progress: Progress?) -> CellModel {
         let progress = Float(progress?.fractionCompleted ?? 0)
         let image = STImageView.Image(file: file, isThumb: true)
         let cellModel =  CellModel(image: image, progress: progress, name: file.decryptsHeaders.file?.fileName, id: file.file)
@@ -64,11 +64,11 @@ class STUploadsVC: STPopoverViewController {
 
 extension STUploadsVC: STUploadsVMDelegate {
     
-    func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [STLibrary.File], progresses: [String : Progress]) {
+    func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [ILibraryFile], progresses: [String : Progress]) {
         self.reloadSnapshot()
     }
     
-    func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [STLibrary.File]) {
+    func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [ILibraryFile]) {
         let progresses = self.viewModel.progresses
                 
         files.forEach { (file) in

@@ -151,10 +151,6 @@ extension STCrypto {
         return (fileBase64, thumbBase64)
     }
         
-    func getHeaders(file: STLibrary.File, publicKey: Bytes? = nil, privateKey: Bytes? = nil) -> STHeaders  {
-        return self.getHeaders(headersStrs: file.headers, publicKey: publicKey, privateKey: privateKey)
-    }
-    
     func getHeaders(headersStrs: String, publicKey: Bytes? = nil, privateKey: Bytes? = nil) -> STHeaders  {
         
         var fileHeader: STHeader?

@@ -23,7 +23,7 @@ class STSync: Decodable {
     let spaceUsed: String
     let spaceQuota: String
     
-    let files: [STLibrary.File]?
+    let files: [STLibrary.GaleryFile]?
     let albums: [STLibrary.Album]?
     let albumFiles: [STLibrary.AlbumFile]?
     let trash: [STLibrary.TrashFile]?

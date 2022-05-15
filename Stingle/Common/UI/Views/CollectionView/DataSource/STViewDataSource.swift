@@ -11,7 +11,7 @@ protocol IViewDataSource: AnyObject {
     func reloadData()
 }
 
-class STViewDataSource<Model: IManagedObject>: NSObject, IViewDataSource, IProviderDelegate {
+class STViewDataSource<Model: ICDConvertable>: NSObject, IViewDataSource, IProviderDelegate {
     
     var snapshotReference: NSDiffableDataSourceSnapshotReference? {
         return self.dbDataSource.snapshotReference
@@ -31,11 +31,11 @@ class STViewDataSource<Model: IManagedObject>: NSObject, IViewDataSource, IProvi
         self.dbDataSource.reloadData()
     }
     
-    func object(at indexPath: IndexPath) -> Model.Model? {
+    func object(at indexPath: IndexPath) -> Model? {
         return self.dbDataSource.object(at: indexPath)
     }
     
-    func indexPath(at object: Model.Model) -> IndexPath? {
+    func indexPath(at object: Model) -> IndexPath? {
         return self.dbDataSource.indexPath(forObject: object)
     }
         

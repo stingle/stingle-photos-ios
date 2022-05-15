@@ -43,10 +43,8 @@ protocol ICollectionDataSourceViewModel {
 
     associatedtype Header: IViewDataSourceHeader, UICollectionReusableView
     associatedtype Cell: IViewDataSourceCell, UICollectionViewCell
-    associatedtype CDModel: IManagedObject
-    
-    typealias Model = CDModel.Model
-    
+    associatedtype Model: ICDSynchConvertable
+        
     func cellModel(for indexPath: IndexPath, data: Model?) -> Cell.Model
     func headerModel(for indexPath: IndexPath, section: String) -> Header.Model
     
@@ -105,10 +103,9 @@ extension STCollectionViewDataSourceDelegate {
     func dataSource(didConfigureCell dataSource: IViewDataSource, cell: UICollectionViewCell) {}
 }
 
-class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STViewDataSource<ViewModel.CDModel> {
+class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STViewDataSource<ViewModel.Model> {
     
     typealias Model = ViewModel.Model
-    typealias CDModel = ViewModel.CDModel
     typealias Cell = ViewModel.Cell
     typealias Header = ViewModel.Header
     
@@ -119,7 +116,7 @@ class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>: STV
     var viewModel: ViewModel
     weak var delegate: STCollectionViewDataSourceDelegate?
     
-    init(dbDataSource: STDataBase.DataSource<CDModel>, collectionView: UICollectionView, viewModel: ViewModel) {
+    init(dbDataSource: STDataBase.DataSource<Model>, collectionView: UICollectionView, viewModel: ViewModel) {
         self.viewModel = viewModel
         self.collectionView = collectionView
         super.init(dbDataSource: dbDataSource)

@@ -29,10 +29,13 @@ extension STAlbumFilesVC {
             if let duration = data?.decryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).timeFormat()
             }
+            
+            let isRemote = (data?.isRemote ?? false) && (data?.isSynched ?? false)
+            
             return CellModel(image: image,
                              name: data?.file,
                              videoDuration: videoDurationStr,
-                             isRemote: data?.isRemote ?? true,
+                             isRemote: isRemote,
                              selectedMode: self.isSelectedMode)
         }
         
@@ -474,7 +477,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         importer.progressHendler = { progress in
             let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
             
-            if let asset = (progress.importingFile as? STImporter.FileUploadable)?.asset {
+            if let asset = progress.importingFile?.asset {
                 importedAssets.append(asset)
             }
             
@@ -489,7 +492,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         
         importer.complition = { [weak self] _, importableFiles in
             var assets = [PHAsset]()
-            (importableFiles as? [STImporter.FileUploadable])?.forEach({assets.append($0.asset)})
+            (importableFiles).forEach({assets.append($0.asset)})
             DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
                 progressView.hide()
                 guard !assets.isEmpty else {

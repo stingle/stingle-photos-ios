@@ -89,21 +89,21 @@ class STSyncManager {
             let galleryUpdates = info.gallery.updates.compactMap({ $0.isRemote ? $0.file : nil })
             let albumFilesUpdates = info.albumFiles.updates.compactMap({ $0.isRemote ? $0.file : nil })
             let trashUpdates = info.trash.updates.compactMap({ $0.isRemote ? $0.file : nil })
-            
+
             var deleteFileNames = [String]()
             deleteFileNames.append(contentsOf: galleryUpdates)
             deleteFileNames.append(contentsOf: albumFilesUpdates)
             deleteFileNames.append(contentsOf: trashUpdates)
-            
+
             if let deletes = sync.deletes?.trashDeletes {
                 deleteFileNames.append(contentsOf: deletes.compactMap({ $0.fileName }))
             }
-            
-            var moveFiles = [STLibrary.File]()
+
+            var moveFiles = [ILibraryFile]()
             moveFiles.append(contentsOf: info.gallery.inserts.filter({ $0.isRemote }))
             moveFiles.append(contentsOf: info.albumFiles.inserts.filter({ $0.isRemote }))
             moveFiles.append(contentsOf: info.trash.inserts.filter({ $0.isRemote }))
-        
+
             STApplication.shared.utils.deleteFiles(fileNames: deleteFileNames)
             STApplication.shared.utils.moveLocalToRemot(files: moveFiles)
 

@@ -26,10 +26,13 @@ extension STTrashVC {
             if let duration = data?.decryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).timeFormat()
             }
+            
+            let isRemote = (data?.isRemote ?? false) && (data?.isSynched ?? false)
+            
             return CellModel(image: image,
                              name: data?.file,
                              videoDuration: videoDurationStr,
-                             isRemote: data?.isRemote ?? true,
+                             isRemote: isRemote,
                              selectedMode: self.isSelectedMode)
         }
         

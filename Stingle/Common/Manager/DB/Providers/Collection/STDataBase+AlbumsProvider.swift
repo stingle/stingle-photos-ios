@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class AlbumsProvider: SyncCollectionProvider<STCDAlbum, STLibrary.DeleteFile.Album> {
+    class AlbumsProvider: SyncProvider<STLibrary.Album, STLibrary.DeleteFile.Album> {
         
         override var providerType: SyncProviderType {
             return .albums
@@ -33,9 +33,8 @@ extension STDataBase {
             let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
             let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
             managedGroup.forEach { (keyValue) in
-                if let key = keyValue.key, let model = modelsGroup[key]?.first {
-                    let cdModel = keyValue.value.first
-                    cdModel?.update(model: model)
+                if let key = keyValue.key, let model = modelsGroup[key]?.first, let cdModel = keyValue.value.first {
+                    model.update(model: cdModel)
                 }
             }
             

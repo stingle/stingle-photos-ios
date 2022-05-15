@@ -71,17 +71,20 @@ class STDataBase {
                 let synchInfo = try weakSelf.syncImportFiles(sync: sync, in: context, dbInfo: oldInfo)
                 weakSelf.dbInfoProvider.update(model: synchInfo.dbInfo, context: context, notify: false)
                 
-                if context.hasChanges {
-                    try context.save()
+                DispatchQueue.global().async {
+                    willFinish(synchInfo)
+                    DispatchQueue.main.async {
+                        do {
+                            if context.hasChanges {
+                                try context.save()
+                            }
+                            weakSelf.container.viewContext.reset()
+                            weakSelf.endSync()
+                            finish()
+                        } catch  {}
+                    }
                 }
-                weakSelf.container.viewContext.reset()
-                willFinish(synchInfo)
-                
-                DispatchQueue.main.async {
-                    weakSelf.endSync()
-                    finish()
-                }
-                
+ 
             } catch {
                 failure(DataBaseError.error(error: error))
                 return
@@ -108,7 +111,7 @@ class STDataBase {
         self.contactProvider.reloadData()
     }
     
-    func filtrNotExistFiles(files: [STLibrary.File]) -> [STLibrary.File] {
+    func filtrNotExistFiles(files: [ILibraryFile]) -> [ILibraryFile] {
         
         let context = self.container.backgroundContext
         var fileNames = [String]()

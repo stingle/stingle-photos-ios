@@ -67,6 +67,18 @@ class STDBInfo: ICDConvertable {
         self.spaceUsed = spaceUsed
         self.spaceQuota = spaceQuota
     }
+    
+    func update(model: STCDDBInfo) {
+        model.spaceUsed = self.spaceUsed
+        model.spaceQuota = self.spaceQuota
+        model.identifier = self.identifier
+        model.lastAlbumFilesSeenTime = self.lastAlbumFilesSeenTime
+        model.lastAlbumsSeenTime = self.lastAlbumsSeenTime
+        model.lastContactsSeenTime = self.lastContactsSeenTime
+        model.lastDelSeenTime = self.lastDelSeenTime
+        model.lastSeenTime = self.lastSeenTime
+        model.lastTrashSeenTime = self.lastTrashSeenTime
+    }
 
 }
 

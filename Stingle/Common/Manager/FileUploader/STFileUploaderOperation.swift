@@ -8,26 +8,30 @@
 import Foundation
 import UIKit
 
+protocol IFileUploaderOperation: IOperation {
+    var fileIdentifier: String { get }
+}
+
 protocol STFileUploaderOperationDelegate: AnyObject {
     
-    func fileUploaderOperation(didStart operation: STFileUploader.Operation)
-    func fileUploaderOperation(didStartUploading operation: STFileUploader.Operation, file: STLibrary.File)
-    func fileUploaderOperation(didProgress operation: STFileUploader.Operation, progress: Progress, file: STLibrary.File)
-    func fileUploaderOperation(didEndFailed operation: STFileUploader.Operation, error: IError, file: STLibrary.File?)
-    func fileUploaderOperation(didEndSucces operation: STFileUploader.Operation, file: STLibrary.File, spaceUsed: STDBUsed?)
+    func fileUploaderOperation(didStart operation: IFileUploaderOperation)
+    func fileUploaderOperation(didStartUploading operation: IFileUploaderOperation, file: ILibraryFile)
+    func fileUploaderOperation(didProgress operation: IFileUploaderOperation, progress: Progress, file: ILibraryFile)
+    func fileUploaderOperation(didEndFailed operation: IFileUploaderOperation, error: IError, file: ILibraryFile?)
+    func fileUploaderOperation(didEndSucces operation: IFileUploaderOperation, file: ILibraryFile, spaceUsed: STDBUsed?)
     
 }
 
 extension STFileUploader {
     
-    class Operation: STOperation<STLibrary.File> {
+    class Operation<File: STLibrary.FileBase>: STOperation<File> {
         
         private weak var uploaderOperationDelegate: STFileUploaderOperationDelegate?
         private let uploadWorker = STUploadWorker()
         private weak var networkOperation: STUploadNetworkOperation<STResponse<STDBUsed>>?
-        private(set) var libraryFile: STLibrary.File
+        private(set) var libraryFile: File
         
-        init(file: STLibrary.File, delegate: STFileUploaderOperationDelegate) {
+        init(file: File, delegate: STFileUploaderOperationDelegate) {
             self.uploaderOperationDelegate = delegate
             self.libraryFile = file
             super.init(success: nil, failure: nil, progress: nil)
@@ -47,11 +51,11 @@ extension STFileUploader {
                 
         //MARK: - Private
         
-        private func upload(file: STLibrary.File) {
+        private func upload(file: File) {
             self.continueOperation(with: file)
         }
         
-        private func continueOperation(with file: STLibrary.File) {
+        private func continueOperation(with file: File) {
             self.uploaderOperationDelegate?.fileUploaderOperation(didStartUploading: self, file: file)
             let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
             
@@ -77,7 +81,7 @@ extension STFileUploader {
             }
         }
         
-        private func continueOperation(didUpload file: STLibrary.File, spaceUsed: STDBUsed) {
+        private func continueOperation(didUpload file: File, spaceUsed: STDBUsed) {
             
             guard STApplication.shared.isFileSystemAvailable else {
                 self.responseFailed(error: UploaderError.fileSystemNotValid, file: file)
@@ -86,8 +90,9 @@ extension STFileUploader {
             
             let oldFileThumbUrl = file.fileThumbUrl
             let oldFileOreginalUrl = file.fileOreginalUrl
-            file.isRemote = true
             
+            let file = file.copy(isRemote: true, isSynched: true)
+
             let newFileThumbUrl = file.fileThumbUrl
             let newFileOreginalUrl = file.fileOreginalUrl
             
@@ -112,20 +117,20 @@ extension STFileUploader {
             if let fileOreginalUrl = newFileOreginalUrl {
                 STApplication.shared.fileSystem.updateUrlDataSize(url: fileOreginalUrl)
             }
-            self.responseSucces(result: file, spaceUsed: spaceUsed)
+            self.responseSucces(result: file , spaceUsed: spaceUsed)
         }
         
-        private func responseSucces(result: STLibrary.File, spaceUsed: STDBUsed?) {
+        private func responseSucces(result: File, spaceUsed: STDBUsed?) {
             self.uploaderOperationDelegate?.fileUploaderOperation(didEndSucces: self, file: result, spaceUsed: spaceUsed)
             super.responseSucces(result: result)
         }
 
-        private func responseProgress(result: Progress, file: STLibrary.File) {
+        private func responseProgress(result: Progress, file: File) {
             self.uploaderOperationDelegate?.fileUploaderOperation(didProgress: self, progress: result, file: file)
             super.responseProgress(result: result)
         }
 
-        private func responseFailed(error: IError, file: STLibrary.File?) {
+        private func responseFailed(error: IError, file: File?) {
             self.uploaderOperationDelegate?.fileUploaderOperation(didEndFailed: self, error: error, file: file)
             super.responseFailed(error: error)
         }
@@ -134,6 +139,14 @@ extension STFileUploader {
             return STApplication.shared.utils.canUploadFile()
         }
 
+    }
+    
+}
+
+extension STFileUploader.Operation: IFileUploaderOperation {
+    
+    var fileIdentifier: String {
+        return self.libraryFile.identifier
     }
     
 }

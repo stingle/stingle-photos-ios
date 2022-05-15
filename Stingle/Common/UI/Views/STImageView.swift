@@ -41,7 +41,7 @@ extension STImageView {
         private(set) var imageParameters: [String : Any]?
         let header: STHeader
         
-        init?(file: STLibrary.File?, isThumb: Bool) {
+        init?(file: ILibraryFile?, isThumb: Bool) {
             guard let file = file, let header = isThumb ? file.decryptsHeaders.thumb : file.decryptsHeaders.file, let imageType = ImageType(rawValue: file.dbSet.rawValue) else {
                 return nil
             }
@@ -51,7 +51,7 @@ extension STImageView {
             self.isThumb = isThumb
             self.header = header
             self.imageParameters = file.getImageParameters(isThumb: self.isThumb)
-            self.isRemote = file.isRemote           
+            self.isRemote = file.isRemote && file.isSynched
         }
         
         init?(album: STLibrary.Album?, albumFile: STLibrary.AlbumFile?, isThumb: Bool) {
@@ -71,7 +71,6 @@ extension STImageView {
     }
     
 }
-
 
 extension STImageView.Image: IFileRetrySource {
     
@@ -110,23 +109,4 @@ extension STImageView.Image: STDownloadRequest {
         return STNetworkDispatcher.Encoding.body
     }
        
-}
-
-@objc extension STLibrary.File {
-    
-    func getImageParameters(isThumb: Bool) -> [String: String] {
-        let isThumbStr = isThumb ? "1" : "0"
-        return ["file": self.file, "set": "\(self.dbSet.rawValue)", "is_thumb": isThumbStr]
-    }
-    
-}
-
-@objc extension STLibrary.AlbumFile {
-    
-    override func getImageParameters(isThumb: Bool) -> [String : String] {
-        var params = super.getImageParameters(isThumb: isThumb)
-        params["albumId"] = "\(self.albumId)"
-        return params
-    }
-    
 }

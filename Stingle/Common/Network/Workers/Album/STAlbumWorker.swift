@@ -111,7 +111,7 @@ class STAlbumWorker: STWorker {
                 headers[file.file] = newHeader
                 uploader.cancelUploadIng(for: file)
                 
-                if let trashFile = try? STLibrary.TrashFile(file: file.file, version: file.version, headers: newHeader, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: file.isRemote, managedObjectID: nil) {
+                if let trashFile = try? STLibrary.TrashFile(file: file.file, version: file.version, headers: newHeader, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: file.isRemote, isSynched: file.isSynched, managedObjectID: nil) {
                     trahFiles.append(trashFile)
                 }
             }

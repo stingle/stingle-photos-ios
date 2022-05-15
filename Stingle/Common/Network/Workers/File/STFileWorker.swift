@@ -9,7 +9,7 @@ import Foundation
 
 class STFileWorker: STWorker {
     
-    func moveFilesToTrash(files: [STLibrary.File], reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
+    func moveFilesToTrash(files: [STLibrary.GaleryFile], reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
         
         //TODO: - khoren
         
@@ -23,7 +23,7 @@ class STFileWorker: STWorker {
         do {
             var trashFiles = [STLibrary.TrashFile]()
             for file in files {
-                let file = try STLibrary.TrashFile(file: file.file, version: file.version, headers: file.headers, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: file.isRemote, managedObjectID: file.managedObjectID)
+                let file = try STLibrary.TrashFile(file: file.file, version: file.version, headers: file.headers, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: file.isRemote, isSynched: file.isSynched, managedObjectID: file.managedObjectID)
                 trashFiles.append(file)
                 uploader.cancelUploadIng(for: file)
             }
@@ -75,19 +75,22 @@ class STFileWorker: STWorker {
         
         STApplication.shared.uploader.cancelUploadIng(for: files)
         
+        let galleryFiles = files.compactMap({
+            return STLibrary.GaleryFile(fileName: $0.file, version: $0.version, headers: $0.headers, dateCreated: $0.dateCreated, dateModified: $0.dateModified, isRemote: $0.isRemote, isSynched: $0.isSynched, managedObjectID: nil)
+        })
+        
         guard !remoteFiles.isEmpty else {
             trashProvider.delete(models: files, reloadData: true)
-            galleryProvider.add(models: files, reloadData: true)
+            galleryProvider.add(models: galleryFiles, reloadData: true)
             success?(STEmptyResponse())
             return
         }
-        
         
         let request = STFilesRequest.moveToGalery(files: remoteFiles)
         
         self.request(request: request, success: { (response: STEmptyResponse) in
             trashProvider.delete(models: files, reloadData: true)
-            galleryProvider.add(models: files, reloadData: true)
+            galleryProvider.add(models: galleryFiles, reloadData: true)
             success?(response)
         }, failure: failure)
         

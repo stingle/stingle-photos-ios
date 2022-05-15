@@ -9,20 +9,19 @@ import CoreData
 
 extension STDataBase {
     
-    class UserProvider: DataBaseProvider<STCDUser> {
+    class UserProvider: DataBaseProvider<STUser> {
         
         fileprivate(set) var myUser: STUser? = nil
                        
         func update(model user: STUser) {
-            
             let context = self.container.viewContext
             context.performAndWait {
                 guard let cdUser = self.getUser(context: context) else {
-                    STCDUser(model: user, context: context)
+                    user.createCDModel(context: context)
                     self.container.saveContext(context)
                     return
                 }
-                cdUser.update(model: user)
+                user.update(model: cdUser)
                 self.container.saveContext(context)
                 context.reset()
                 self.myUser = nil
@@ -54,7 +53,7 @@ extension STDataBase {
                 
         private func createUserAndSave(context: NSManagedObjectContext, for user: STUser) -> STCDUser {
             return context.performAndWait { () -> STCDUser in
-                let cdUser = STCDUser(model: user, context: context)
+                let cdUser = user.createCDModel(context: context)
                 self.container.saveContext(context)
                 return cdUser
             }

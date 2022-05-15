@@ -9,13 +9,13 @@ import CoreData
 
 extension STDataBase {
     
-    class TrashProvider: SyncCollectionProvider<STCDTrashFile, STLibrary.DeleteFile.Trash> {
+    class TrashProvider: SyncProvider<STLibrary.TrashFile, STLibrary.DeleteFile.Trash> {
         
         override var providerType: SyncProviderType {
             return .trash
         }
         
-        override func getObjects(by models: [STLibrary.TrashFile], in context: NSManagedObjectContext) throws -> [STCDTrashFile] {
+        override func getObjects(by models: [STLibrary.TrashFile], in context: NSManagedObjectContext) throws -> [STDataBase.CollectionProvider<STLibrary.TrashFile>.ManagedObject] {
             guard !models.isEmpty else {
                 return []
             }
@@ -29,13 +29,13 @@ extension STDataBase {
             return cdItems
         }
         
-        override func updateObjects(by models: [STLibrary.TrashFile], managedModels: [STCDTrashFile], in context: NSManagedObjectContext) {
+        
+        override func updateObjects(by models: [STLibrary.TrashFile], managedModels: [STDataBase.CollectionProvider<STLibrary.TrashFile>.ManagedObject], in context: NSManagedObjectContext) throws {
             let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
             let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
             managedGroup.forEach { (keyValue) in
-                if let key = keyValue.key, let model = modelsGroup[key]?.first {
-                    let cdModel = keyValue.value.first
-                    cdModel?.update(model: model)
+                if let key = keyValue.key, let model = modelsGroup[key]?.first, let cdModel = keyValue.value.first {
+                    model.update(model: cdModel)
                 }
             }
         }
@@ -55,5 +55,5 @@ extension STDataBase {
         }
         
     }
-
+    
 }

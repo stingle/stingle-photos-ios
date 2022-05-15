@@ -31,7 +31,7 @@ class STPlayer: NSObject {
     
     let player = AVPlayer()
     
-    private(set) var file: STLibrary.File?
+    private(set) var file: ILibraryFile?
     
     private var assetResourceLoader: STAssetResourceLoader?
     private let dispatchQueue = DispatchQueue(label: "Player.Queue", attributes: .concurrent)
@@ -140,7 +140,7 @@ class STPlayer: NSObject {
         self.didChange(time: time.seconds)
     }
     
-    private func replaceCurrentFile(file: STLibrary.File) {
+    private func replaceCurrentFile(file: ILibraryFile) {
         guard let fileHeader = file.decryptsHeaders.file else {
             return
         }
@@ -198,7 +198,7 @@ extension STPlayer {
         self.player.seek(to: time)
     }
     
-    func replaceCurrentItem(with file: STLibrary.File?) {
+    func replaceCurrentItem(with file: ILibraryFile?) {
         self.file = file
         guard let file = file else {
             self.player.replaceCurrentItem(with: nil)
@@ -207,7 +207,7 @@ extension STPlayer {
         self.replaceCurrentFile(file: file)
     }
     
-    func play(file: STLibrary.File?) {
+    func play(file: ILibraryFile?) {
         self.replaceCurrentItem(with: file)
         self.play()
     }

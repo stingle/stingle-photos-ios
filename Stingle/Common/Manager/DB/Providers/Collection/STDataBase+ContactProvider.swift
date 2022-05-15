@@ -9,24 +9,23 @@ import CoreData
 
 extension STDataBase {
     
-    class ContactProvider: SyncCollectionProvider<STCDContact, STLibrary.DeleteFile.Contact> {
+    class ContactProvider: SyncProvider<STContact, STLibrary.DeleteFile.Contact> {
         
         override var providerType: SyncProviderType {
             return .contact
         }
         
-        override func updateObjects(by models: [STContact], managedModels: [STCDContact], in context: NSManagedObjectContext) {
+        override func updateObjects(by models: [STContact], managedModels: [STDataBase.CollectionProvider<STContact>.ManagedObject], in context: NSManagedObjectContext) throws {
             let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
             let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
             managedGroup.forEach { (keyValue) in
-                if let key = keyValue.key, let model = modelsGroup[key]?.first {
-                    let cdModel = keyValue.value.first
-                    cdModel?.update(model: model)
+                if let key = keyValue.key, let model = modelsGroup[key]?.first, let cdModel = keyValue.value.first {
+                    model.update(model: cdModel)
                 }
             }
         }
         
-        override func getObjects(by models: [STContact], in context: NSManagedObjectContext) throws -> [STCDContact] {
+        override func getObjects(by models: [STContact], in context: NSManagedObjectContext) throws -> [STDataBase.CollectionProvider<STContact>.ManagedObject] {
             guard !models.isEmpty else {
                 return []
             }
@@ -38,9 +37,8 @@ extension STDataBase {
             fetchRequest.predicate = NSPredicate(format: "identifier IN %@", userIds)
             let deleteingCDItems = try context.fetch(fetchRequest)
             return deleteingCDItems
-            
         }
         
     }
-
+    
 }

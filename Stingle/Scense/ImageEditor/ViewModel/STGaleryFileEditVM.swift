@@ -8,10 +8,15 @@
 import UIKit
 
 class STGaleryFileEditVM: IFileEditVM {
-    var file: STLibrary.File
+    
+    let galeryFile: STLibrary.GaleryFile
+    
+    var file: ILibraryFile {
+        return self.galeryFile
+    }
 
-    init(file: STLibrary.File) {
-        self.file = file
+    init(file: STLibrary.GaleryFile) {
+        self.galeryFile = file
     }
 
     func save(image: UIImage) throws {
@@ -21,11 +26,11 @@ class STGaleryFileEditVM: IFileEditVM {
         }
         let encryptedFileInfo = try self.saveNewImage(image: image, fileName: fileName, existingFileName: self.file.file)
         let version = "\((Int(self.file.version) ?? .zero) + 1)"
-        if self.file.isRemote {
+        if self.file.isRemote && self.file.isSynched {
             STApplication.shared.fileSystem.deleteFiles(files: [self.file])
         }
         let dateModified = Date()
-        let file = try STLibrary.File(file: self.file.file, version: version, headers: encryptedFileInfo.headers, dateCreated: self.file.dateCreated, dateModified: dateModified, isRemote: false, managedObjectID: self.file.managedObjectID)
+        let file =  self.galeryFile.copy(version: version, headers: encryptedFileInfo.headers, dateModified: dateModified, isSynched: false)
         STApplication.shared.dataBase.galleryProvider.update(models: [file], reloadData: true)
         STApplication.shared.uploader.upload(files: [file])
     }
@@ -36,9 +41,8 @@ class STGaleryFileEditVM: IFileEditVM {
         }
         let encryptedFileInfo = try self.saveNewImage(image: image, fileName: fileName)
         let version = "\(STCrypto.Constants.CurrentFileVersion)"
-        let dateCreated = Date()
-        let dateModified = Date()
-        let file = try STLibrary.File(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, managedObjectID: nil)
+        let date = Date()
+        let file =  STLibrary.GaleryFile(fileName: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: date, dateModified: date, isRemote: false, isSynched: false, managedObjectID: nil)
         STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: true)
         STApplication.shared.uploader.upload(files: [file])
     }

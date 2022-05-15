@@ -12,7 +12,7 @@ protocol STAlbumsDataSourceViewModelDelegate: AnyObject {
     func viewModel(albumMedadataFor album: STLibrary.Album?) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)
 }
 
-protocol IAlbumsViewModel: ICollectionDataSourceViewModel where CDModel == STCDAlbum {
+protocol IAlbumsViewModel: ICollectionDataSourceViewModel where Model == STLibrary.Album {
     var delegate: STAlbumsDataSourceViewModelDelegate? { get set }
 }
 
@@ -23,7 +23,7 @@ class STAlbumsDataSource<ViewModel: IAlbumsViewModel>: STCollectionViewDataSourc
     
     init(collectionView: UICollectionView, predicate: NSPredicate?, viewModel: ViewModel) {
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
-        let dateModified = STDataBase.DataSource<STCDAlbum>.Sort(key: #keyPath(STCDAlbum.dateModified), ascending: false)
+        let dateModified = STDataBase.DataSource<STLibrary.Album>.Sort(key: #keyPath(STCDAlbum.dateModified), ascending: false)
         let dbDataSource = albumsProvider.createDataSource(sortDescriptorsKeys: [dateModified], sectionNameKeyPath: nil, predicate: predicate, cacheName: nil)
         
         super.init(dbDataSource: dbDataSource, collectionView: collectionView, viewModel: viewModel)

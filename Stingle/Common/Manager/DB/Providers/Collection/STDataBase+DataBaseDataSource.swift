@@ -22,6 +22,7 @@ extension IProviderDelegate {
 
 protocol IProviderDataSource: AnyObject {
     var identifier: String { get }
+    var delegate: IProviderDelegate? { get set }
     func reloadData()
 }
 
@@ -35,9 +36,9 @@ extension IProviderDataSource {
 
 extension STDataBase {
     
-    class DataSource<ManagedModel: IManagedObject>: NSObject, NSFetchedResultsControllerDelegate, IProviderDataSource {
+    class DataSource<Model: ICDConvertable>: NSObject, NSFetchedResultsControllerDelegate, IProviderDataSource {
                         
-        typealias Model = ManagedModel.Model
+        typealias ManagedModel = Model.ManagedModel
         
         let sortDescriptorsKeys: [Sort]
         let sectionNameKeyPath: String?
@@ -99,7 +100,7 @@ extension STDataBase {
                 return nil
             }
             let obj = self.controller.object(at: indexPath)
-            let result = try? obj.createModel()
+            let result = try? Model(model: obj)
             return result
         }
         
@@ -125,7 +126,7 @@ extension STDataBase {
             return self.controller.indexPath(forObject: object)
         }
         
-        func indexPath(forObject model: ManagedModel.Model) -> IndexPath? {
+        func indexPath(forObject model: Model) -> IndexPath? {
             guard let managedObjectID = model.managedObjectID else {
                 return nil
             }

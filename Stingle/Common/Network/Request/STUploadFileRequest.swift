@@ -8,10 +8,9 @@
 import Foundation
 
 enum STUploadFileRequest {
-
-    case file(file: STLibrary.File)
+    case galery(file: STLibrary.GaleryFile)
+    case trash(file: STLibrary.GaleryFile)
     case albumFile(file: STLibrary.AlbumFile)
-    
 }
 
 extension STUploadFileRequest: STUploadRequest {
@@ -22,7 +21,7 @@ extension STUploadFileRequest: STUploadRequest {
         
     var files: [STUploadRequestFileInfo] {        
         switch self {
-        case .file(let file):
+        case .galery(let file), .trash(let file):
             if let fileThumbUrl = file.fileThumbUrl, let fileOreginalUrl = file.fileOreginalUrl  {
                 let thumb = STUploadRequestFileInfo(name: "thumb", fileName: file.file, fileUrl: fileThumbUrl)
                 let file = STUploadRequestFileInfo(name: "file", fileName: file.file, fileUrl: fileOreginalUrl)
@@ -53,7 +52,7 @@ extension STUploadFileRequest: STUploadRequest {
 
     var parameters: [String : Any]? {
         switch self {
-        case .file(let file):
+        case .galery(let file), .trash(let file):
             let folder = "\(file.dbSet.rawValue)"
             let token = self.token ?? ""
             let dateCreated = "\(file.dateCreated.millisecondsSince1970)"
@@ -72,7 +71,7 @@ extension STUploadFileRequest: STUploadRequest {
 
     var encoding: STNetworkDispatcher.Encoding {
         switch self {
-        case .file, .albumFile:
+        case .galery, .albumFile, .trash:
             return .body
         }
     }

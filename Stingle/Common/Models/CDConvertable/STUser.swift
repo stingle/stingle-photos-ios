@@ -8,7 +8,7 @@
 import CoreData
 
 class STUser: ICDConvertable {
-    
+        
     let email: String
     let homeFolder: String
     let isKeyBackedUp: Bool
@@ -54,6 +54,14 @@ class STUser: ICDConvertable {
         self.userId = userId
         self.managedObjectID = model.objectID
     }
-
+    
+    func update(model: STCDUser) {
+        model.email = self.email
+        model.homeFolder = self.homeFolder
+        model.isKeyBackedUp = self.isKeyBackedUp
+        model.token = self.token
+        model.userId = self.userId
+        model.identifier =  self.userId
+    }
 
 }

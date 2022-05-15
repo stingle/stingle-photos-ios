@@ -84,7 +84,7 @@ extension STDownloaderManager {
             }
         }
         
-        func download(files: [STLibrary.File]) {
+        func download(files: [ILibraryFile]) {
             var sources = [FileDownloaderSource]()
             files.forEach { file in
                 if let fileOreginalUrl = file.fileOreginalUrl {
@@ -194,7 +194,7 @@ extension STDownloaderManager {
     }
     
     struct FileDownloaderSource {
-        let file: STLibrary.File
+        let file: ILibraryFile
         let fileSaveUrl: URL
         let isThumb: Bool
     }

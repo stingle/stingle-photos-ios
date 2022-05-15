@@ -18,9 +18,19 @@ protocol ICDConvertable: IDataBaseProviderModel, Encodable, Hashable {
     init(model: ManagedModel) throws
     var managedObjectID: NSManagedObjectID? { get }
     func toManagedModelJson() throws -> [String: Any]
+    @discardableResult
+    func createCDModel(context: NSManagedObjectContext) -> ManagedModel
+    func update(model: ManagedModel)
 }
 
 extension ICDConvertable {
+    
+    @discardableResult
+    func createCDModel(context: NSManagedObjectContext) -> ManagedModel {
+        let cdModel = ManagedModel(context: context)
+        self.update(model: cdModel)
+        return cdModel
+    }
     
     func toManagedModelJson() throws -> [String: Any] {
         guard let json = self.toJson() else {
@@ -28,11 +38,7 @@ extension ICDConvertable {
         }
         return json
     }
-    
-    func createManagedModel(context: NSManagedObjectContext) -> ManagedModel {
-        return ManagedModel(model: self as! Self.ManagedModel.Model, context: context)
-    }
-    
+
     func hash(into hasher: inout Hasher) {
         return self.identifier.hash(into: &hasher)
     }
@@ -44,46 +50,26 @@ extension ICDConvertable {
 }
 
 protocol ICDSynchConvertable: ICDConvertable {
-    
     var dateModified: Date { get }
+    func diffStatus(with rhs: ManagedModel) -> STDataBase.ModelDiffStatus
     static func > (lhs: Self, rhs: Self) -> Bool
-    
 }
 
 //MARK: - ManagedObject
 
 protocol IManagedObject: NSManagedObject {
-    associatedtype Model: ICDConvertable
-    
     var identifier: String? { get }
-    
-    init(model: Model, context: NSManagedObjectContext)
-    func update(model: Model)
-    
-    func createModel() throws -> Model
-    
 }
 
 extension IManagedObject {
-    
-    @discardableResult
-    init(model: Model, context: NSManagedObjectContext) {
-        self.init(context: context)
-        self.update(model: model)
-    }
-    
-    init(model: Model) {
-        self.init()
-        self.update(model: model)
-    }
-    
+        
     static var entityName: String {
         return String(describing: self.self)
     }
     
 }
 
-protocol IManagedSynchObject: IManagedObject where Model: ICDSynchConvertable {
+protocol ISynchManagedObject: IManagedObject {
+    var dateCreated: Date? { get }
     var dateModified: Date? { get }
-    func diffStatus(with model: Model) -> STDataBase.ModelDiffStatus
 }

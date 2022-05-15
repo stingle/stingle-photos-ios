@@ -14,7 +14,8 @@ class STLibrary {
 extension STLibrary {
     
     enum DBSet: Int {
-        case file = 0
+        case none = -1
+        case galery = 0
         case trash = 1
         case album = 2
     }
