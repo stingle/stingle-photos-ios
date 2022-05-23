@@ -7,6 +7,7 @@
 
 import Sodium
 import Clibsodium
+import Foundation
 
 struct STHeaders {
     var file: STHeader?

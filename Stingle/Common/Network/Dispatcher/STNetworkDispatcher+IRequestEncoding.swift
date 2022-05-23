@@ -6,6 +6,7 @@
 //
 
 import Alamofire
+import Foundation
 
 protocol IRequestEncoding: ParameterEncoding {
     func encodeParameters(_ urlRequest: URLRequest, with parameters: [String : Any]?) throws -> URLRequest

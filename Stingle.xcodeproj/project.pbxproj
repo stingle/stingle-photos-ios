@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -218,6 +218,10 @@
 		A07B45B426C02442003EB470 /* STAppSettings+Advanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */; };
 		A07B45B626C0263A003EB470 /* STAdvancedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B526C0263A003EB470 /* STAdvancedVM.swift */; };
 		A07B5E05278CA3BF006BE012 /* STAppLockUnlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B5E04278CA3BE006BE012 /* STAppLockUnlocker.swift */; };
+		A07DF6F9283BC280007E0FB2 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = A07DF6F8283BC280007E0FB2 /* Alamofire */; };
+		A07DF6FC283BC290007E0FB2 /* Clibsodium in Frameworks */ = {isa = PBXBuildFile; productRef = A07DF6FB283BC290007E0FB2 /* Clibsodium */; };
+		A07DF6FE283BC290007E0FB2 /* Sodium in Frameworks */ = {isa = PBXBuildFile; productRef = A07DF6FD283BC290007E0FB2 /* Sodium */; };
+		A07DF701283BC29C007E0FB2 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A07DF700283BC29C007E0FB2 /* KeychainSwift */; };
 		A0821FDD27A1F3DE000A341D /* STMutableProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0821FDC27A1F3DE000A341D /* STMutableProgress.swift */; };
 		A084182325FA589B00DEAC89 /* STDataBase+TrashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A084182225FA589B00DEAC89 /* STDataBase+TrashProvider.swift */; };
 		A08512D1277A5C640006A2DD /* STAutoImportDialogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */; };
@@ -388,16 +392,9 @@
 		B3A417E627BBE72600F64CB2 /* STFilterToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */; };
 		B3A417E827BBE74200F64CB2 /* STFilterToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */; };
 		B3A6EC3727F6E5BA000876C6 /* IFileEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */; };
-		E6A4D89B896332CB7C65B74E /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D06FF69A05EB1AEC50C12C /* Pods_Stingle.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4B13934D59CAFDA38B46D480 /* Pods-Stingle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug.xcconfig"; sourceTree = "<group>"; };
-		50FA1FE79C842492CD04FA7D /* Pods-Stingle.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-dev.xcconfig"; sourceTree = "<group>"; };
-		772B3CF731AB45E4713FA648 /* Pods-Stingle.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-prod.xcconfig"; sourceTree = "<group>"; };
-		78D3FBA18EBF08E7349C48DE /* Pods-Stingle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release.xcconfig"; sourceTree = "<group>"; };
-		85D06FF69A05EB1AEC50C12C /* Pods_Stingle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stingle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9BD6FA0BECCC5A6C76D6C7FC /* Pods-Stingle.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-prod.xcconfig"; sourceTree = "<group>"; };
 		A001E6E5267CD8E900948E50 /* STGaleryFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGaleryFileViewerVM.swift; sourceTree = "<group>"; };
 		A001E6E8267CD90700948E50 /* STAlbumFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFileViewerVM.swift; sourceTree = "<group>"; };
 		A001E6EA267CD93200948E50 /* STFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileViewerVM.swift; sourceTree = "<group>"; };
@@ -785,7 +782,6 @@
 		B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilterToolBar.swift; sourceTree = "<group>"; };
 		B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilterToolBar.xib; sourceTree = "<group>"; };
 		B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IFileEditVM.swift; sourceTree = "<group>"; };
-		C59B20CC9ED4970F5FE2DBE3 /* Pods-Stingle.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -793,7 +789,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6A4D89B896332CB7C65B74E /* Pods_Stingle.framework in Frameworks */,
+				A07DF6F9283BC280007E0FB2 /* Alamofire in Frameworks */,
+				A07DF6FC283BC290007E0FB2 /* Clibsodium in Frameworks */,
+				A07DF701283BC29C007E0FB2 /* KeychainSwift in Frameworks */,
+				A07DF6FE283BC290007E0FB2 /* Sodium in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,7 +802,6 @@
 		73A53619DBCBC97AD1A4990B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				85D06FF69A05EB1AEC50C12C /* Pods_Stingle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -964,7 +962,6 @@
 			children = (
 				A02203BF25EED86800D07C98 /* Stingle */,
 				A02203BE25EED86800D07C98 /* Products */,
-				A272D5165D532FF317889C48 /* Pods */,
 				73A53619DBCBC97AD1A4990B /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -2506,19 +2503,6 @@
 			path = Dispatcher;
 			sourceTree = "<group>";
 		};
-		A272D5165D532FF317889C48 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				4B13934D59CAFDA38B46D480 /* Pods-Stingle.debug.xcconfig */,
-				78D3FBA18EBF08E7349C48DE /* Pods-Stingle.release.xcconfig */,
-				50FA1FE79C842492CD04FA7D /* Pods-Stingle.debug-dev.xcconfig */,
-				9BD6FA0BECCC5A6C76D6C7FC /* Pods-Stingle.debug-prod.xcconfig */,
-				C59B20CC9ED4970F5FE2DBE3 /* Pods-Stingle.release-dev.xcconfig */,
-				772B3CF731AB45E4713FA648 /* Pods-Stingle.release-prod.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		B31D61E527B649D400CBEA19 /* ImageEditor */ = {
 			isa = PBXGroup;
 			children = (
@@ -2686,17 +2670,21 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A02203D125EED86800D07C98 /* Build configuration list for PBXNativeTarget "Stingle" */;
 			buildPhases = (
-				69AC25DD79A02C18261C9F57 /* [CP] Check Pods Manifest.lock */,
 				A02203B925EED86800D07C98 /* Sources */,
 				A02203BA25EED86800D07C98 /* Frameworks */,
 				A02203BB25EED86800D07C98 /* Resources */,
-				3B5ACD5E3ED32CA7CFB2F9D7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Stingle;
+			packageProductDependencies = (
+				A07DF6F8283BC280007E0FB2 /* Alamofire */,
+				A07DF6FB283BC290007E0FB2 /* Clibsodium */,
+				A07DF6FD283BC290007E0FB2 /* Sodium */,
+				A07DF700283BC29C007E0FB2 /* KeychainSwift */,
+			);
 			productName = Stingle;
 			productReference = A02203BD25EED86800D07C98 /* Stingle.app */;
 			productType = "com.apple.product-type.application";
@@ -2725,6 +2713,11 @@
 				Base,
 			);
 			mainGroup = A02203B425EED86800D07C98;
+			packageReferences = (
+				A07DF6F7283BC280007E0FB2 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				A07DF6FA283BC290007E0FB2 /* XCRemoteSwiftPackageReference "swift-sodium" */,
+				A07DF6FF283BC29C007E0FB2 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+			);
 			productRefGroup = A02203BE25EED86800D07C98 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2790,48 +2783,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3B5ACD5E3ED32CA7CFB2F9D7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		69AC25DD79A02C18261C9F57 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Stingle-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A02203B925EED86800D07C98 /* Sources */ = {
@@ -3263,7 +3214,6 @@
 		};
 		A02203D225EED86800D07C98 /* Debug-Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 50FA1FE79C842492CD04FA7D /* Pods-Stingle.debug-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3355,7 +3305,6 @@
 		};
 		A02204FF25EEEB0600D07C98 /* Debug-Prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9BD6FA0BECCC5A6C76D6C7FC /* Pods-Stingle.debug-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3442,7 +3391,6 @@
 		};
 		A022050325EEEB4200D07C98 /* Release-Prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 772B3CF731AB45E4713FA648 /* Pods-Stingle.release-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3529,7 +3477,6 @@
 		};
 		A022051325EEEC4000D07C98 /* Release-Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C59B20CC9ED4970F5FE2DBE3 /* Pods-Stingle.release-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3538,7 +3485,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 75XL269LGD;
+				DEVELOPMENT_TEAM = DK366LFCDT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
@@ -3581,6 +3528,56 @@
 			defaultConfigurationName = "Debug-Dev";
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A07DF6F7283BC280007E0FB2 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		A07DF6FA283BC290007E0FB2 /* XCRemoteSwiftPackageReference "swift-sodium" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jedisct1/swift-sodium";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		A07DF6FF283BC29C007E0FB2 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A07DF6F8283BC280007E0FB2 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A07DF6F7283BC280007E0FB2 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		A07DF6FB283BC290007E0FB2 /* Clibsodium */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A07DF6FA283BC290007E0FB2 /* XCRemoteSwiftPackageReference "swift-sodium" */;
+			productName = Clibsodium;
+		};
+		A07DF6FD283BC290007E0FB2 /* Sodium */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A07DF6FA283BC290007E0FB2 /* XCRemoteSwiftPackageReference "swift-sodium" */;
+			productName = Sodium;
+		};
+		A07DF700283BC29C007E0FB2 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A07DF6FF283BC29C007E0FB2 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		A0D8A98F25F44B2D005C12F8 /* StingleModel.xcdatamodeld */ = {
