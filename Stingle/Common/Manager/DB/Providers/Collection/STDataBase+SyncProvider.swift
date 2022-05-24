@@ -50,7 +50,7 @@ extension STDataBase {
         //MARK: - Internal methods
         
         func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, syncInfo: SyncInfo<Model>) {
-           
+           //Test
             guard let models = models, !models.isEmpty else {
                 return (lastDate, .empty)
             }
