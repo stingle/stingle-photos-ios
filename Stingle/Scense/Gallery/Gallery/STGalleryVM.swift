@@ -32,7 +32,7 @@ class STGalleryVM {
     
     func getFiles(fileNames: [String]) -> [STLibrary.GaleryFile] {
         let galleryProvider = STApplication.shared.dataBase.galleryProvider
-        let files = galleryProvider.fetchAll(for: fileNames)
+        let files = galleryProvider.fetchObjects(fileNames: fileNames)
         return files
     }
     

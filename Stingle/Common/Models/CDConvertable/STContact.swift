@@ -8,7 +8,7 @@
 import CoreData
 
 class STContact: Codable, ICDSynchConvertable {
-            
+                
     private enum CodingKeys: String, CodingKey {
         case email = "email"
         case publicKey = "publicKey"
@@ -63,14 +63,14 @@ class STContact: Codable, ICDSynchConvertable {
         self.managedObjectID = model.objectID
     }
     
-    func diffStatus(with rhs: STCDContact) -> STDataBase.ModelDiffStatus {
+    func diffStatus(with rhs: STCDContact) -> STDataBase.ModelModifyStatus {
         guard self.identifier == rhs.identifier else { return .none }
-        guard let dateModified = rhs.dateModified else { return .high }
+        guard let dateModified = rhs.dateModified else { return .high(type: .upgrade) }
         if dateModified == rhs.dateModified {
             return .equal
         }
         if dateModified < self.dateModified {
-            return .high
+            return .high(type: .upgrade)
         }
         return .low
     }
@@ -83,6 +83,8 @@ class STContact: Codable, ICDSynchConvertable {
         model.dateModified = self.dateModified
         model.identifier = self.identifier
     }
+    
+    func updateLowMode(model: STCDContact) {}
     
     func toManagedModelJson() throws -> [String : Any] {
         var json = [String : Any]()

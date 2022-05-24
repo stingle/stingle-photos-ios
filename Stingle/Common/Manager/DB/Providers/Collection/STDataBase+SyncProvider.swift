@@ -49,14 +49,14 @@ extension STDataBase {
 
         //MARK: - Internal methods
         
-        func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, updated: Set<Model>, insert: Set<Model>) {
+        func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, syncInfo: SyncInfo<Model>) {
            
             guard let models = models, !models.isEmpty else {
-                return (lastDate, [], [])
+                return (lastDate, .empty)
             }
             let inserts = try self.getInsertObjects(with: models)
             guard inserts.lastDate >= lastDate, !inserts.json.isEmpty else {
-                return (max(lastDate, inserts.lastDate), [], [])
+                return (max(lastDate, inserts.lastDate), .empty)
             }
             let insertRequest = NSBatchInsertRequest(entityName: Model.ManagedModel.entityName, objects: inserts.json)
             insertRequest.resultType = .objectIDs
@@ -65,39 +65,9 @@ extension STDataBase {
             let objectIDs = (resultInset as! NSBatchInsertResult).result as! [NSManagedObjectID]
             
             let syncModels = self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, context: context)
-            return (inserts.lastDate, syncModels.updated, syncModels.inserted)
+            return (inserts.lastDate, syncModels)
         }
-        
-        private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) -> (updated: Set<Model>, inserted: Set<Model>) {
-            
-            var updatedModes = Set<Model>()
-            var insertedModes = Set<Model>()
-            
-            for objectID in insertedObjectIDs {
-                guard let objectCD = context.object(with: objectID) as? Model.ManagedModel, let identifier = objectCD.identifier, let object = objIds[identifier]  else {
-                    continue
-                }
-                let status = object.diffStatus(with: objectCD)
-                switch status {
-                case .none:
-                    continue
-                case .high:
-                    guard let model = try? Model(model: objectCD) else {
-                        continue
-                    }
-                    updatedModes.insert(model)
-                case .low:
-                    object.update(model: objectCD)
-                    updatedModes.insert(object)
-                case .equal:
-                    object.update(model: objectCD)
-                    insertedModes.insert(object)
-                }
-            }
-            
-            return (updatedModes, insertedModes)
-        }
-                       
+                               
         //MARK: - Sync delete
         
         func deleteObjects(_ deleteFiles: [DeleteFile]?, in context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, deleteds: Set<Model>) {
@@ -115,8 +85,58 @@ extension STDataBase {
             let _ = try context.execute(deleteRequest)
             return (result.date, result.deleteds)
         }
+                                
+        func didStartSync() {
+            self.dataSources.forEach { (controller) in
+                controller.didStartSync()
+            }
+        }
         
-        func getDeleteObjects(_ deleteFiles: [DeleteFile], in context: NSManagedObjectContext) throws -> (models: [Model.ManagedModel], deleteds: Set<Model>, date: Date) {
+        func finishSync() {
+            self.dataSources.forEach { (controller) in
+                controller.reloadData()
+                controller.didEndSync()
+            }
+        }
+        
+        
+        //MARK: - Private methods
+
+        private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) -> SyncInfo<Model> {
+            
+            var updates = Set<Model>()
+            var upgrade = Set<Model>()
+            var insertedModes = Set<Model>()
+            
+            for objectID in insertedObjectIDs {
+                guard let objectCD = context.object(with: objectID) as? Model.ManagedModel, let identifier = objectCD.identifier, let object = objIds[identifier]  else {
+                    continue
+                }
+                let status = object.diffStatus(with: objectCD)
+                switch status {
+                case .none:
+                    continue
+                case .high(let type):
+                    switch type {
+                    case .update:
+                        updates.insert(object)
+                    case .upgrade:
+                        upgrade.insert(object)
+                    }
+                    object.update(model: objectCD)
+                case .low:
+                    object.updateLowMode(model: objectCD)
+                case .equal:
+                    object.update(model: objectCD)
+                    insertedModes.insert(object)
+                }
+            }
+            
+            let result = SyncInfo(inserts: insertedModes, updates: updates, upgrade: upgrade, deletes: [])
+            return result
+        }
+        
+        private func getDeleteObjects(_ deleteFiles: [DeleteFile], in context: NSManagedObjectContext) throws -> (models: [Model.ManagedModel], deleteds: Set<Model>, date: Date) {
             
             guard !deleteFiles.isEmpty else {
                 throw STDataBase.DataBaseError.dateNotFound
@@ -149,20 +169,24 @@ extension STDataBase {
             }
             return (deleteItems, deleteds, lastDate)
         }
-                                
-        func didStartSync() {
-            self.dataSources.forEach { (controller) in
-                controller.didStartSync()
-            }
-        }
         
-        func finishSync() {
-            self.dataSources.forEach { (controller) in
-                controller.reloadData()
-                controller.didEndSync()
-            }
-        }
     }
-            
+                
 }
 
+extension STDataBase.SyncProvider where Model.ManagedModel: STCDFile  {
+    
+    func fetchObjects(fileNames: [String], context: NSManagedObjectContext? = nil) -> [Model] {
+        let predicate = NSPredicate(format: "\(#keyPath(STCDFile.file)) IN %@", fileNames)
+        return self.fetchObjects(predicate: predicate, context: context)
+    }
+    
+    func getLocalFiles() -> [Model] {
+        let isRemote = NSPredicate(format: "\(#keyPath(STCDFile.isRemote)) == false")
+        let isSynched = NSPredicate(format: "\(#keyPath(STCDFile.isSynched)) == false")
+        let predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [isRemote, isSynched])
+        return self.fetchObjects(predicate: predicate)
+    }
+    
+}
+        

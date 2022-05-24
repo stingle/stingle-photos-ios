@@ -77,7 +77,7 @@ extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
         }
         
         if self.contacts == nil {
-            self.contacts = STApplication.shared.dataBase.contactProvider.fetchAllObjects()
+            self.contacts = STApplication.shared.dataBase.contactProvider.fetchObjects()
         }
         self.albumInfoFiles[album.albumId] = albumInfo
         let members = album.members?.components(separatedBy: ",")

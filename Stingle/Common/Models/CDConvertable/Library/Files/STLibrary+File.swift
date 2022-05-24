@@ -11,7 +11,7 @@ import CoreData
 extension STLibrary {
             
     class File<CDModel: STCDFile>: FileBase, ICDSynchConvertable {
-        
+                
         let managedObjectID: NSManagedObjectID?
                                 
         required init(from decoder: Decoder) throws {
@@ -64,7 +64,9 @@ extension STLibrary {
 
         }
         
-    
+        func updateLowMode(model: CDModel) {
+            model.isRemote = self.isRemote
+        }
         
         //MARK: - ICDSynchConvertable
         
@@ -83,23 +85,29 @@ extension STLibrary {
             model.identifier = self.identifier
         }
         
-        func diffStatus(with rhs: CDModel) -> STDataBase.ModelDiffStatus {
+        func diffStatus(with rhs: CDModel) -> STDataBase.ModelModifyStatus {
             guard self.identifier == rhs.identifier else {
                 return .none
             }
             
-            guard let rhsDateModified = rhs.dateModified else { return .high }
-            let lhsDateModified = self.dateModified
+            guard let rhsDateModified = rhs.dateModified else { return .high(type: .upgrade) }
             
-            let lhsVersion = Int(self.version) ?? .zero
+            let selfDateModified = self.dateModified
+            
+            let selfVersion = Int(self.version) ?? .zero
             let rhsVersion = Int(rhs.version ?? "") ?? .zero
-                        
-            if lhsVersion == rhsVersion ? lhsDateModified < rhsDateModified : lhsVersion < rhsVersion {
+            
+            if selfVersion < rhsVersion {
                 return .low
-            } else if lhsVersion == rhsVersion && lhsDateModified == rhs.dateModified {
-                return .equal
+            } else if selfVersion > rhsVersion {
+                return .high(type: .upgrade)
+            } else if selfDateModified > rhsDateModified {
+                return .high(type: .update)
+            } else if selfDateModified < rhsDateModified {
+                return .low
             }
-            return .high
+            
+            return .equal
         }
                         
         static func > (lhs: STLibrary.File<CDModel>, rhs: STLibrary.File<CDModel>) -> Bool {

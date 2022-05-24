@@ -85,24 +85,24 @@ class STSyncManager {
             application.auotImporter.startImport()
             
         } willFinish: { info in
-                        
-            let galleryUpdates = info.gallery.updates.compactMap({ $0.isRemote ? $0.file : nil })
-            let albumFilesUpdates = info.albumFiles.updates.compactMap({ $0.isRemote ? $0.file : nil })
-            let trashUpdates = info.trash.updates.compactMap({ $0.isRemote ? $0.file : nil })
+            
+            let galleryDelete = info.gallery.upgrade.compactMap({ $0.file })
+            let albumFilesDelete = info.albumFiles.upgrade.compactMap({ $0.file  })
+            let trashDelete = info.trash.upgrade.compactMap({ $0.file })
 
             var deleteFileNames = [String]()
-            deleteFileNames.append(contentsOf: galleryUpdates)
-            deleteFileNames.append(contentsOf: albumFilesUpdates)
-            deleteFileNames.append(contentsOf: trashUpdates)
+            deleteFileNames.append(contentsOf: galleryDelete)
+            deleteFileNames.append(contentsOf: albumFilesDelete)
+            deleteFileNames.append(contentsOf: trashDelete)
 
             if let deletes = sync.deletes?.trashDeletes {
                 deleteFileNames.append(contentsOf: deletes.compactMap({ $0.fileName }))
             }
-
+                                    
             var moveFiles = [ILibraryFile]()
-            moveFiles.append(contentsOf: info.gallery.inserts.filter({ $0.isRemote }))
-            moveFiles.append(contentsOf: info.albumFiles.inserts.filter({ $0.isRemote }))
-            moveFiles.append(contentsOf: info.trash.inserts.filter({ $0.isRemote }))
+            moveFiles.append(contentsOf: Array(info.gallery.updates))
+            moveFiles.append(contentsOf: Array(info.albumFiles.updates))
+            moveFiles.append(contentsOf: Array(info.trash.updates))
 
             STApplication.shared.utils.deleteFiles(fileNames: deleteFileNames)
             STApplication.shared.utils.moveLocalToRemot(files: moveFiles)

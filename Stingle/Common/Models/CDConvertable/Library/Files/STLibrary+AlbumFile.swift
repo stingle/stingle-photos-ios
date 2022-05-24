@@ -90,7 +90,7 @@ extension STLibrary {
             
         }
         
-        override func diffStatus(with rhs: STCDAlbumFile) -> STDataBase.ModelDiffStatus {
+        override func diffStatus(with rhs: STCDAlbumFile) -> STDataBase.ModelModifyStatus {
             guard self.albumId != rhs.albumId else { return .none }
             return super.diffStatus(with: rhs)
         }

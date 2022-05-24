@@ -197,10 +197,34 @@ extension STFileSystem {
         
     }
     
-    func deleteFiles(for fileNames: [String]) {
-        fileNames.forEach { fileName in
-            self.deleteAllData(for: fileName)
+    func deleteFiles(for fileNames: Set<String>, in cacheType: CacheType) {
+        
+        let folder = FolderType.storage(type: cacheType)
+        guard !fileNames.isEmpty, let url = self.url(for: folder), let subpathsArray = self.fileManager.subpaths(atPath: url.path), !subpathsArray.isEmpty else {
+            return
         }
+                
+        let subpaths = Set(subpathsArray)
+        let intersection = fileNames.intersection(subpaths)
+        
+        intersection.forEach { name in
+            let url = url.appendingPathComponent(name)
+            self.remove(file: url)
+        }
+
+    }
+    
+    func deleteFiles(for fileNames: [String]) {
+        let fileNames = Set(fileNames)
+        let localOreginalsType = CacheType.local(type: .oreginals)
+        let localThumbsType = CacheType.local(type: .thumbs)
+        let serverOreginalsType = CacheType.server(type: .oreginals)
+        let serverThumbsType = CacheType.server(type: .thumbs)
+        
+        self.deleteFiles(for: fileNames, in: localOreginalsType)
+        self.deleteFiles(for: fileNames, in: localThumbsType)
+        self.deleteFiles(for: fileNames, in: serverOreginalsType)
+        self.deleteFiles(for: fileNames, in: serverThumbsType)
     }
     
     func moveLocalToRemot(file: ILibraryFile) {

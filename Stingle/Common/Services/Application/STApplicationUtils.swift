@@ -55,7 +55,7 @@ extension STApplication {
         }
         
         func deleteFiles(fileNames: [String]) {
-            guard self.application.isFileSystemAvailable else {
+            guard self.application.isFileSystemAvailable, !fileNames.isEmpty  else {
                 return
             }
             self.application.fileSystem.deleteFiles(for: fileNames)

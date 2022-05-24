@@ -15,45 +15,6 @@ extension STDataBase {
             return .trash
         }
         
-        override func getObjects(by models: [STLibrary.TrashFile], in context: NSManagedObjectContext) throws -> [STDataBase.CollectionProvider<STLibrary.TrashFile>.ManagedObject] {
-            guard !models.isEmpty else {
-                return []
-            }
-            let fileNames = models.compactMap { (deleteFile) -> String in
-                return deleteFile.file
-            }
-            let fetchRequest = NSFetchRequest<STCDTrashFile>(entityName: STCDTrashFile.entityName)
-            fetchRequest.includesSubentities = false
-            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", fileNames)
-            let cdItems = try context.fetch(fetchRequest)
-            return cdItems
-        }
-        
-        
-        override func updateObjects(by models: [STLibrary.TrashFile], managedModels: [STDataBase.CollectionProvider<STLibrary.TrashFile>.ManagedObject], in context: NSManagedObjectContext) throws {
-            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
-            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
-            managedGroup.forEach { (keyValue) in
-                if let key = keyValue.key, let model = modelsGroup[key]?.first, let cdModel = keyValue.value.first {
-                    model.update(model: cdModel)
-                }
-            }
-        }
-        
-        func fetch(fileNames: [String], context: NSManagedObjectContext) -> [STCDTrashFile] {
-            let predicate = NSPredicate(format: "\(#keyPath(STCDTrashFile.file)) IN %@", fileNames)
-            let fetchRequest = NSFetchRequest<STCDTrashFile>(entityName: STCDTrashFile.entityName)
-            fetchRequest.predicate = predicate
-            let cdModels = try? context.fetch(fetchRequest)
-            return cdModels ?? []
-        }
-        
-        func fetchAll(for fileNames: [String]) -> [STLibrary.TrashFile] {
-            let predicate = NSPredicate(format: "\(#keyPath(STCDTrashFile.file)) IN %@", fileNames)
-            let result = self.fetchObjects(predicate: predicate)
-            return result
-        }
-        
     }
     
 }

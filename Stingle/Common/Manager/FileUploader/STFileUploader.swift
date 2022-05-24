@@ -82,7 +82,6 @@ class STFileUploader {
         guard STApplication.shared.utils.canUploadFile() else {
             return
         }
-        
         self.dispatchQueue.async { [weak self] in
             guard let weakSelf = self else {
                 return
@@ -119,13 +118,14 @@ class STFileUploader {
     
     private func getLocalFiles() -> [ILibraryFile] {
         let dataBase = STApplication.shared.dataBase
+                
+        let localGalleryFiles = dataBase.galleryProvider.getLocalFiles()
+        let localAlbumFiles = dataBase.albumFilesProvider.getLocalFiles()
+        let trashFiles = dataBase.trashProvider.getLocalFiles()
         
-        var localFiles: [ILibraryFile] = dataBase.galleryProvider.fetchObjects(format: "isRemote == false")
-        let localAlbumFiles = dataBase.albumFilesProvider.fetchObjects(format: "isRemote == false")
-        let trashPFiles = dataBase.trashProvider.fetchObjects(format: "isRemote == false")
         
         let albumIds: [String] = localAlbumFiles.compactMap( { return $0.albumId } )
-        let albums: [STLibrary.Album] = dataBase.albumsProvider.fetch(identifiers: albumIds)
+        let albums: [STLibrary.Album] = dataBase.albumsProvider.fetchObjects(identifiers: albumIds)
         var albumIdsDic = [String: STLibrary.Album]()
         
         albums.forEach { album in
@@ -137,9 +137,11 @@ class STFileUploader {
                 albumFile.updateIfNeeded(albumMetadata: album.albumMetadata)
             }
         }
-        
+                
+        var localFiles = [ILibraryFile]()
+        localFiles.append(contentsOf: localGalleryFiles)
         localFiles.append(contentsOf: localAlbumFiles)
-        localFiles.append(contentsOf: trashPFiles)
+        localFiles.append(contentsOf: trashFiles)
         return localFiles
     }
     

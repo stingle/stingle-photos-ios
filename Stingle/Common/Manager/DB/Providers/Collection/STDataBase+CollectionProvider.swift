@@ -38,6 +38,28 @@ extension STDataBase {
             throw STDataBase.DataBaseError.dateNotFound
         }
         
+        func getObjects(by models: [Model], in context: NSManagedObjectContext) throws -> [ManagedObject] {
+            guard !models.isEmpty else {
+                return []
+            }
+            let userIds = models.compactMap({ $0.identifier })
+            let fetchRequest = NSFetchRequest<ManagedObject>(entityName: ManagedObject.entityName)
+            fetchRequest.includesSubentities = false
+            fetchRequest.predicate = NSPredicate(format: "identifier IN %@", userIds)
+            let deleteingCDItems = try context.fetch(fetchRequest)
+            return deleteingCDItems
+        }
+        
+        func updateObjects(by models: [Model], managedModels: [ManagedObject], in context: NSManagedObjectContext) throws {
+            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
+            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
+            managedGroup.forEach { (keyValue) in
+                if let key = keyValue.key, let model = modelsGroup[key]?.first, let cdModel = keyValue.value.first {
+                    model.update(model: cdModel)
+                }
+            }
+        }
+                
         //MARK: - DataSource
         
         func createDataSource(sortDescriptorsKeys: [DataSource<Model>.Sort], sectionNameKeyPath: String?, predicate: NSPredicate? = nil, cacheName: String? = nil) -> DataSource<Model> {
@@ -57,7 +79,6 @@ extension STDataBase {
             var ids = [NSManagedObjectID]()
             
             context.performAndWait { [weak self] in
-                
                 guard let weakSelf = self else { return  }
                 
                 do {
@@ -145,97 +166,6 @@ extension STDataBase {
             
         }
         
-        //MARK: - Fetch
-        
-        func fetchObjects(format predicateFormat: String, arguments argList: CVaListPointer, context: NSManagedObjectContext? = nil) -> [Model] {
-            let predicate = NSPredicate(format: predicateFormat, arguments: argList)
-            let cdModels: [ManagedObject] = self.fetch(predicate: predicate, context: context)
-            var results = [Model]()
-            for cdModel in cdModels {
-                if let model = try? Model(model: cdModel)  {
-                    results.append(model)
-                }
-            }
-            return results
-        }
-        
-        func fetchAllObjects(context: NSManagedObjectContext? = nil) -> [Model] {
-            let cdModels: [ManagedObject] = self.fetch(predicate: nil, context: context)
-            var results = [Model]()
-            for cdModel in cdModels {
-                if let model = try? Model(model: cdModel)  {
-                    results.append(model)
-                }
-            }
-            return results
-        }
-        
-        func fetch(identifiers: [String], context: NSManagedObjectContext? = nil) -> [Model] {
-            let predicate = NSPredicate(format: "identifier IN %@", identifiers)
-            let cdModels = self.fetch(predicate: predicate, context: context)
-            var results = [Model]()
-            for cdModel in cdModels {
-                if let model = try? Model(model: cdModel) {
-                    results.append(model)
-                }
-            }
-            return results
-        }
-        
-        func fetchObjects(predicate: NSPredicate?, context: NSManagedObjectContext? = nil) -> [Model] {
-            let cdModels = self.fetch(predicate: predicate, context: context)
-            var results = [Model]()
-            for cdModel in cdModels {
-                if let model = try? Model(model: cdModel) {
-                    results.append(model)
-                }
-            }
-            return results
-        }
-        
-        func fetchObjects(format predicateFormat: String, _ args: CVarArg..., context: NSManagedObjectContext? = nil) -> [Model] {
-            let predicate = NSPredicate(format: predicateFormat, args)
-            return self.fetchObjects(predicate: predicate, context: context)
-        }
-                
-        func fetch(predicate: NSPredicate?, context: NSManagedObjectContext? = nil) -> [ManagedObject] {
-            let context = context ?? self.container.viewContext
-            return context.performAndWait { () -> [ManagedObject] in
-                let fetchRequest = NSFetchRequest<ManagedObject>(entityName: Model.ManagedModel.entityName)
-                fetchRequest.includesSubentities = true
-                fetchRequest.includesPropertyValues = true
-                fetchRequest.predicate = predicate
-                let cdModels = try? context.fetch(fetchRequest)
-                return cdModels ?? []
-            }
-        }
-        
-        func fetch(identifiers: [String], context: NSManagedObjectContext? = nil) -> [ManagedObject] {
-            let predicate = NSPredicate(format: "identifier IN %@", identifiers)
-            return self.fetch(predicate: predicate, context: context)
-        }
-        
-        func fetch(identifiers: [String], context: NSManagedObjectContext) -> [ManagedObject] {
-            let predicate = NSPredicate(format: "identifier IN %@", identifiers)
-            let fetchRequest = NSFetchRequest<Model.ManagedModel>(entityName: Model.ManagedModel.entityName)
-            fetchRequest.predicate = predicate
-            let cdModels = try? context.fetch(fetchRequest)
-            return cdModels ?? []
-        }
-        
-        func getObjects(by models: [Model], in context: NSManagedObjectContext) throws -> [ManagedObject] {
-            throw STDataBase.DataBaseError.dateNotFound
-        }
-        
-        func updateObjects(by models: [Model], managedModels: [ManagedObject], in context: NSManagedObjectContext) throws {
-            let modelsGroup = Dictionary(grouping: models, by: { $0.identifier })
-            let managedGroup = Dictionary(grouping: managedModels, by: { $0.identifier })
-            managedGroup.forEach { (keyValue) in
-                if let key = keyValue.key, let model = modelsGroup[key]?.first, let cdModel = keyValue.value.first {
-                    model.update(model: cdModel)
-                }
-            }
-        }
 
         //MARK: - ICollectionProvider
         
@@ -282,4 +212,39 @@ extension STDataBase {
         }
                 
     }
+}
+
+extension STDataBase.CollectionProvider {
+    
+    func fetch(predicate: NSPredicate?, context: NSManagedObjectContext? = nil) -> [ManagedObject] {
+        let context = context ?? self.container.viewContext
+        return context.performAndWait { () -> [ManagedObject] in
+            let fetchRequest = NSFetchRequest<ManagedObject>(entityName: Model.ManagedModel.entityName)
+            fetchRequest.includesSubentities = true
+            fetchRequest.includesPropertyValues = true
+            fetchRequest.predicate = predicate
+            let cdModels = try? context.fetch(fetchRequest)
+            return cdModels ?? []
+        }
+    }
+
+    func fetch(identifiers: [String], context: NSManagedObjectContext? = nil) -> [ManagedObject] {
+        let predicate = NSPredicate(format: "identifier IN %@", identifiers)
+        return self.fetch(predicate: predicate, context: context)
+    }
+        
+}
+
+extension STDataBase.CollectionProvider {
+    
+    func fetchObjects(predicate: NSPredicate? = nil, context: NSManagedObjectContext? = nil) -> [Model] {
+        let cdModels: [ManagedObject] = self.fetch(predicate: predicate)
+        return cdModels.compactMap({ try? Model(model: $0) })
+    }
+    
+    func fetchObjects(identifiers: [String], context: NSManagedObjectContext? = nil) -> [Model] {
+        let predicate = NSPredicate(format: "identifier IN %@", identifiers)
+        return self.fetchObjects(predicate: predicate, context: context)
+    }
+    
 }

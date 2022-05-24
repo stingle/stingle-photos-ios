@@ -10,7 +10,7 @@ import CoreData
 extension STLibrary {
     
     class Album: ICDSynchConvertable, Codable {
-                                
+                                        
         private enum CodingKeys: String, CodingKey {
             case albumId = "albumId"
             case encPrivateKey = "encPrivateKey"
@@ -172,14 +172,14 @@ extension STLibrary {
         
         //MARK: - ICDSynchConvertable
         
-        func diffStatus(with rhs: STCDAlbum) -> STDataBase.ModelDiffStatus {
+        func diffStatus(with rhs: STCDAlbum) -> STDataBase.ModelModifyStatus {
             guard self.identifier == rhs.identifier else { return .none }
-            guard let dateModified = rhs.dateModified else { return .high }
+            guard let dateModified = rhs.dateModified else { return .high(type: .upgrade) }
             if dateModified == rhs.dateModified {
                 return .equal
             }
             if dateModified < self.dateModified {
-                return .high
+                return .high(type: .upgrade)
             }
             return .low
         }
@@ -200,6 +200,8 @@ extension STLibrary {
             model.dateModified = self.dateModified
             model.identifier = self.identifier
         }
+        
+        func updateLowMode(model: STCDAlbum) {}
         
         func toManagedModelJson() throws -> [String : Any] {
             var json = [String : Any]()

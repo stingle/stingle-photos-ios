@@ -19,15 +19,43 @@ class STDataBase {
     }
     
     struct SyncInfo<T: ICDSynchConvertable> {
+        
         let inserts: Set<T>
         let updates: Set<T>
+        let upgrade: Set<T>
         let deletes: Set<T>
+        
+        init(inserts: Set<T>, updates: Set<T>, upgrade: Set<T>, deletes: Set<T>) {
+            self.inserts = inserts
+            self.updates = updates
+            self.upgrade = upgrade
+            self.deletes = deletes
+        }
+        
+        init(syncInfo: SyncInfo<T>, inserts: Set<T>? = nil, updates: Set<T>? = nil, upgrade: Set<T>? = nil, deletes: Set<T>? = nil) {
+            let inserts = inserts ?? syncInfo.inserts
+            let updates = updates ?? syncInfo.updates
+            let deletes = deletes ?? syncInfo.deletes
+            let upgrade = upgrade ?? syncInfo.upgrade
+            self.init(inserts: inserts, updates: updates, upgrade: upgrade, deletes: deletes)
+        }
+        
+        static var empty: SyncInfo<T> {
+            return SyncInfo(inserts: [], updates: [], upgrade: [], deletes: [])
+        }
+       
     }
     
-    enum ModelDiffStatus {
+    enum ModelModifyStatus {
+        
+        enum ModifyType {
+            case update
+            case upgrade
+        }
+    
         case none
         case equal
-        case high
+        case high(type: ModifyType)
         case low
     }
     
@@ -114,17 +142,17 @@ class STDataBase {
     func filtrNotExistFiles(files: [ILibraryFile]) -> [ILibraryFile] {
         
         let context = self.container.backgroundContext
-        var fileNames = [String]()
+        var identifiers = [String]()
         
         files.forEach { file in
-            fileNames.append(file.file)
+            identifiers.append(file.identifier)
         }
         
         return context.performAndWait {
-                        
-            let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
-            let albumFiles = self.albumFilesProvider.fetch(fileNames: fileNames, context: context)
-            let trashFile = self.trashProvider.fetch(fileNames: fileNames, context: context)
+                                    
+            let galleryFiles = self.galleryProvider.fetchObjects(identifiers: identifiers)
+            let albumFiles = self.albumFilesProvider.fetchObjects(identifiers: identifiers, context: context)
+            let trashFile = self.trashProvider.fetchObjects(identifiers: identifiers, context: context)
            
             let resultFiles = files.filter { file in
                 let galleryContains = galleryFiles.contains(where: { $0.file == file.file })
@@ -152,9 +180,9 @@ class STDataBase {
         let context = self.container.backgroundContext
         return context.performAndWait {
             
-            let galleryFiles = self.galleryProvider.fetch(fileNames: fileNames, context: context)
-            let albumFiles = self.albumFilesProvider.fetch(fileNames: fileNames, context: context)
-            let trashFile = self.trashProvider.fetch(fileNames: fileNames, context: context)
+            let galleryFiles = self.galleryProvider.fetchObjects(fileNames: fileNames, context: context)
+            let albumFiles = self.albumFilesProvider.fetchObjects(fileNames: fileNames, context: context)
+            let trashFile = self.trashProvider.fetchObjects(fileNames: fileNames, context: context)
            
             let resultFiles = fileNames.filter { fileName in
                 let galleryContains = galleryFiles.contains(where: { $0.file == fileName })
@@ -199,11 +227,10 @@ class STDataBase {
     private func syncImportFiles(sync: STSync, in context: NSManagedObjectContext, dbInfo: STDBInfo) throws -> DBSyncInfo {
        
         let gallerySync = try self.galleryProvider.sync(db: sync.files ?? [], context: context, lastDate: dbInfo.lastSeenTime)
-        let albumsSync = try self.albumsProvider.sync(db: sync.albums ?? [], context: context, lastDate: dbInfo.lastAlbumsSeenTime)
         let trashSync = try self.trashProvider.sync(db: sync.trash ?? [], context: context, lastDate: dbInfo.lastTrashSeenTime)
+        let albumsSync = try self.albumsProvider.sync(db: sync.albums ?? [], context: context, lastDate: dbInfo.lastAlbumsSeenTime)
         let albumFilesSync = try self.albumFilesProvider.sync(db: sync.albumFiles ?? [], context: context, lastDate: dbInfo.lastAlbumFilesSeenTime)
         let contactSync = try self.contactProvider.sync(db: sync.contacts ?? [], context: context, lastDate: dbInfo.lastContactsSeenTime)
-        
         let deletes = try self.deleteFiles(deletes: sync.deletes, in: context, lastDelSeenTime: dbInfo.lastDelSeenTime)
 
         let infon = STDBInfo(lastSeenTime: gallerySync.lastDate,
@@ -214,18 +241,18 @@ class STDataBase {
                              lastContactsSeenTime: contactSync.lastDate,
                              spaceUsed: sync.spaceUsed,
                              spaceQuota: sync.spaceQuota)
-
-        let galleryInfo = SyncInfo<GalleryProvider.Model>(inserts: gallerySync.insert, updates: gallerySync.updated, deletes: deletes.gallery)
-        let trashInfo = SyncInfo<TrashProvider.Model>(inserts: trashSync.insert, updates: trashSync.updated, deletes: deletes.trashDeletes)
-        let albumsInfo = SyncInfo<AlbumsProvider.Model>(inserts: albumsSync.insert, updates: albumsSync.updated, deletes: deletes.albums)
-        let albumFilesInfo = SyncInfo<AlbumFilesProvider.Model>(inserts: albumFilesSync.insert, updates: albumFilesSync.updated, deletes: deletes.albumFiles)
-        let contact = SyncInfo<ContactProvider.Model>(inserts: contactSync.insert, updates: contactSync.updated, deletes: deletes.contact)
         
+        let galleryInfo = SyncInfo<GalleryProvider.Model>(syncInfo: gallerySync.syncInfo, deletes: deletes.gallery)
+        let trashInfo = SyncInfo<TrashProvider.Model>(syncInfo: trashSync.syncInfo, deletes: deletes.trashDeletes)
+        let albumsInfo = SyncInfo<AlbumsProvider.Model>(syncInfo: albumsSync.syncInfo, deletes: deletes.albums)
+        let albumFilesInfo = SyncInfo<AlbumFilesProvider.Model>(syncInfo: albumFilesSync.syncInfo, deletes: deletes.albumFiles)
+        let contactInfo = SyncInfo<ContactProvider.Model>(syncInfo: contactSync.syncInfo, deletes: deletes.contact)
+
         let result = DBSyncInfo(gallery: galleryInfo,
                                 trash: trashInfo,
                                 albums: albumsInfo,
                                 albumFiles: albumFilesInfo,
-                                contact: contact,
+                                contact: contactInfo,
                                 trashRecovers: deletes.trashRecovers,
                                 dbInfo: infon)
         
@@ -253,7 +280,7 @@ extension STDataBase {
         let context = self.container.backgroundContext
         let albumsProvider = STApplication.shared.dataBase.albumsProvider
         let albumFilesProvider = STApplication.shared.dataBase.albumFilesProvider
-        guard let album: STLibrary.Album = albumsProvider.fetch(identifiers: [albumFile.albumId], context: context).first else {
+        guard let album: STLibrary.Album = albumsProvider.fetchObjects(identifiers: [albumFile.albumId], context: context).first else {
             return
         }
         let newAlbum = STLibrary.Album(albumId: album.albumId,

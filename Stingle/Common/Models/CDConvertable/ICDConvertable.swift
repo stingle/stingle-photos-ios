@@ -51,8 +51,10 @@ extension ICDConvertable {
 
 protocol ICDSynchConvertable: ICDConvertable {
     var dateModified: Date { get }
-    func diffStatus(with rhs: ManagedModel) -> STDataBase.ModelDiffStatus
+    func diffStatus(with rhs: ManagedModel) -> STDataBase.ModelModifyStatus
     static func > (lhs: Self, rhs: Self) -> Bool
+    
+    func updateLowMode(model: ManagedModel)
 }
 
 //MARK: - ManagedObject

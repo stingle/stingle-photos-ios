@@ -24,7 +24,7 @@ class STTrashVM {
     }
     
     func getFiles(fileNames: [String]) -> [STLibrary.TrashFile] {
-        let files = self.trashProvider.fetchAll(for: fileNames)
+        let files = self.trashProvider.fetchObjects(fileNames: fileNames)
         return files
     }
     
@@ -37,7 +37,7 @@ class STTrashVM {
     }
     
     func deleteAll(completion: @escaping (IError?) -> Void) {
-        let files = self.trashProvider.fetchAllObjects()
+        let files = self.trashProvider.fetchObjects()
         self.fileWorker.deleteFiles(files: files) { _ in
             completion(nil)
         } failure: { error in
@@ -54,7 +54,7 @@ class STTrashVM {
     }
     
     func recoverAll(completion: @escaping (IError?) -> Void) {
-        let files = self.trashProvider.fetchAllObjects()
+        let files = self.trashProvider.fetchObjects()
         self.fileWorker.moveToGalery(files: files) { _ in
             completion(nil)
         } failure: { error in
