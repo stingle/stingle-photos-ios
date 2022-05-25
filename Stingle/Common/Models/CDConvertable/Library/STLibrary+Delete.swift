@@ -39,7 +39,7 @@ extension STLibrary {
         }
         
         private(set) var gallery: [Gallery] = [Gallery]()
-        private(set) var recovers: [Recover] = [Recover]()
+        private(set) var trashRecovers: [Recover] = [Recover]()
         private(set) var trashDeletes: [TrashDelete] = [TrashDelete]()
         private(set) var albums: [Album] = [Album]()
         private(set) var albumFiles: [AlbumFile] = [AlbumFile]()
@@ -61,7 +61,7 @@ extension STLibrary {
                     self.gallery.append(item)
                 case .trashRecover:
                     let item = try containerObject.decode(Recover.self)
-                    self.recovers.append(item)
+                    self.trashRecovers.append(item)
                 case .trashDelete:
                     let item = try containerObject.decode(TrashDelete.self)
                     self.trashDeletes.append(item)
@@ -77,6 +77,7 @@ extension STLibrary {
                 }
             }
         }
+        
     }
     
 }

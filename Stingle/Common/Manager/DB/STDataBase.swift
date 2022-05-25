@@ -65,7 +65,6 @@ class STDataBase {
         let albums: SyncInfo<AlbumsProvider.Model>
         let albumFiles: SyncInfo<AlbumFilesProvider.Model>
         let contact: SyncInfo<ContactProvider.Model>
-        let trashRecovers: Set<TrashProvider.Model>
         let dbInfo: STDBInfo
     }
     
@@ -202,7 +201,6 @@ class STDataBase {
             
             return resultFiles
         }
-        
     }
     
     //MARK: - private func
@@ -225,53 +223,39 @@ class STDataBase {
     }
     
     private func syncImportFiles(sync: STSync, in context: NSManagedObjectContext, dbInfo: STDBInfo) throws -> DBSyncInfo {
-       
-        let gallerySync = try self.galleryProvider.sync(db: sync.files ?? [], context: context, lastDate: dbInfo.lastSeenTime)
-        let trashSync = try self.trashProvider.sync(db: sync.trash ?? [], context: context, lastDate: dbInfo.lastTrashSeenTime)
-        let albumsSync = try self.albumsProvider.sync(db: sync.albums ?? [], context: context, lastDate: dbInfo.lastAlbumsSeenTime)
-        let albumFilesSync = try self.albumFilesProvider.sync(db: sync.albumFiles ?? [], context: context, lastDate: dbInfo.lastAlbumFilesSeenTime)
-        let contactSync = try self.contactProvider.sync(db: sync.contacts ?? [], context: context, lastDate: dbInfo.lastContactsSeenTime)
-        let deletes = try self.deleteFiles(deletes: sync.deletes, in: context, lastDelSeenTime: dbInfo.lastDelSeenTime)
+        
+        var allTrashDeletes: [STLibrary.DeleteFile.Trash] = sync.deletes?.trashRecovers ?? []
+        allTrashDeletes.append(contentsOf: sync.deletes?.trashDeletes ?? [])
 
-        let infon = STDBInfo(lastSeenTime: gallerySync.lastDate,
-                             lastTrashSeenTime: trashSync.lastDate,
-                             lastAlbumsSeenTime: albumsSync.lastDate,
-                             lastAlbumFilesSeenTime: albumFilesSync.lastDate,
-                             lastDelSeenTime: deletes.lastSeen,
-                             lastContactsSeenTime: contactSync.lastDate,
+        let gallerySync = try self.galleryProvider.sync(models: sync.galery, lastSyncDate: dbInfo.lastGallerySeenTime, deleteFile: sync.deletes?.gallery, lastdDeleteDate: dbInfo.lastDelSeenTime, context: context)
+        let albumFilesSync = try self.albumFilesProvider.sync(models: sync.albumFiles, lastSyncDate: dbInfo.lastAlbumFilesSeenTime, deleteFile: sync.deletes?.albumFiles, lastdDeleteDate: dbInfo.lastDelSeenTime, context: context)
+        let trashSync = try self.trashProvider.sync(models: sync.trash, lastSyncDate: dbInfo.lastTrashSeenTime, deleteFile: allTrashDeletes, lastdDeleteDate: dbInfo.lastDelSeenTime, context: context)
+        let albumsSync = try self.albumsProvider.sync(models: sync.albums, lastSyncDate: dbInfo.lastAlbumsSeenTime, deleteFile: sync.deletes?.albums, lastdDeleteDate: dbInfo.lastDelSeenTime, context: context)
+        let contactSync = try self.contactProvider.sync(models: sync.contacts, lastSyncDate: dbInfo.lastContactsSeenTime, deleteFile: sync.deletes?.contacts, lastdDeleteDate: dbInfo.lastDelSeenTime, context: context)
+        
+        let lastDelSeenTime = max(gallerySync.lastDeletedsDate, albumFilesSync.lastDeletedsDate, trashSync.lastDeletedsDate, albumsSync.lastDeletedsDate, contactSync.lastDeletedsDate)
+        
+        
+        let infon = STDBInfo(lastGallerySeenTime: gallerySync.lastSynchDate,
+                             lastTrashSeenTime: trashSync.lastSynchDate,
+                             lastAlbumsSeenTime: albumsSync.lastSynchDate,
+                             lastAlbumFilesSeenTime: albumFilesSync.lastSynchDate,
+                             lastDelSeenTime: lastDelSeenTime,
+                             lastContactsSeenTime: contactSync.lastSynchDate,
                              spaceUsed: sync.spaceUsed,
                              spaceQuota: sync.spaceQuota)
         
-        let galleryInfo = SyncInfo<GalleryProvider.Model>(syncInfo: gallerySync.syncInfo, deletes: deletes.gallery)
-        let trashInfo = SyncInfo<TrashProvider.Model>(syncInfo: trashSync.syncInfo, deletes: deletes.trashDeletes)
-        let albumsInfo = SyncInfo<AlbumsProvider.Model>(syncInfo: albumsSync.syncInfo, deletes: deletes.albums)
-        let albumFilesInfo = SyncInfo<AlbumFilesProvider.Model>(syncInfo: albumFilesSync.syncInfo, deletes: deletes.albumFiles)
-        let contactInfo = SyncInfo<ContactProvider.Model>(syncInfo: contactSync.syncInfo, deletes: deletes.contact)
-
-        let result = DBSyncInfo(gallery: galleryInfo,
-                                trash: trashInfo,
-                                albums: albumsInfo,
-                                albumFiles: albumFilesInfo,
-                                contact: contactInfo,
-                                trashRecovers: deletes.trashRecovers,
+        let result = DBSyncInfo(gallery: gallerySync.syncInfo,
+                                trash: trashSync.syncInfo,
+                                albums: albumsSync.syncInfo,
+                                albumFiles: albumFilesSync.syncInfo,
+                                contact: contactSync.syncInfo,
                                 dbInfo: infon)
         
         return result
+
     }
-    
-    private func deleteFiles(deletes: STLibrary.DeleteFile?, in context: NSManagedObjectContext, lastDelSeenTime: Date) throws -> (lastSeen: Date, gallery: Set<GalleryProvider.Model>, trashDeletes: Set<TrashProvider.Model>, albums: Set<AlbumsProvider.Model>, albumFiles: Set<AlbumFilesProvider.Model>, contact: Set<ContactProvider.Model>, trashRecovers: Set<TrashProvider.Model>) {
-        
-        let gallery = try self.galleryProvider.deleteObjects(deletes?.gallery, in: context, lastDate: lastDelSeenTime)
-        let albums = try self.albumsProvider.deleteObjects(deletes?.albums, in: context, lastDate: lastDelSeenTime)
-        let albumFiles = try self.albumFilesProvider.deleteObjects(deletes?.albumFiles, in: context, lastDate: lastDelSeenTime)
-        let trashRecovers = try self.trashProvider.deleteObjects(deletes?.recovers, in: context, lastDate: lastDelSeenTime)
-        let trashDeletes = try self.trashProvider.deleteObjects(deletes?.trashDeletes, in: context, lastDate: lastDelSeenTime)
-        let contact = try self.contactProvider.deleteObjects(deletes?.contacts, in: context, lastDate: lastDelSeenTime)
-        
-        let timeDeletes = max(gallery.lastDate, albums.lastDate, albumFiles.lastDate, trashRecovers.lastDate, trashDeletes.lastDate, contact.lastDate)
-        return (timeDeletes, gallery.deleteds, trashDeletes.deleteds, albums.deleteds, albumFiles.deleteds, contact.deleteds, trashRecovers.deleteds)
-    }
-        
+   
 }
 
 extension STDataBase {

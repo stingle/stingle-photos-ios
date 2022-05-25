@@ -44,7 +44,7 @@
         <attribute name="lastAlbumsSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lastContactsSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lastDelSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="lastSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastGallerySeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lastTrashSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="spaceQuota" optional="YES" attributeType="String"/>
         <attribute name="spaceUsed" optional="YES" attributeType="String"/>
@@ -86,12 +86,12 @@
     </entity>
     <elements>
         <element name="STCDAlbum" positionX="-42.01171875" positionY="-319.546875" width="128" height="268"/>
-        <element name="STCDDBInfo" positionX="-228.734375" positionY="-323.4453125" width="128" height="178"/>
-        <element name="STCDTrashFile" positionX="-315.72265625" positionY="115.703125" width="128" height="43"/>
         <element name="STCDAlbumFile" positionX="-317.37890625" positionY="20.49609375" width="128" height="58"/>
-        <element name="STCDFile" positionX="-511.72265625" positionY="-24.23828125" width="128" height="163"/>
         <element name="STCDContact" positionX="142.9453125" positionY="-153.08203125" width="128" height="133"/>
+        <element name="STCDDBInfo" positionX="-228.734375" positionY="-323.4453125" width="128" height="28"/>
+        <element name="STCDFile" positionX="-511.72265625" positionY="-24.23828125" width="128" height="163"/>
         <element name="STCDGaleryFile" positionX="-314.44921875" positionY="-50.36328125" width="128" height="43"/>
+        <element name="STCDTrashFile" positionX="-315.72265625" positionY="115.703125" width="128" height="43"/>
         <element name="STCDUser" positionX="147.703125" positionY="-302.9453125" width="128" height="133"/>
     </elements>
 </model>

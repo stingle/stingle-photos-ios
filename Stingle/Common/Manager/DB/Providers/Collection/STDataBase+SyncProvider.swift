@@ -47,9 +47,31 @@ extension STDataBase {
             return (jsons, setModel, objIds, myLastDate)
         }
 
-        //MARK: - Internal methods
+        //MARK: - Public methods
         
-        func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, syncInfo: SyncInfo<Model>) {
+        func sync(models: [Model]?, lastSyncDate: Date, deleteFile: [DeleteFile]?, lastdDeleteDate: Date, context: NSManagedObjectContext) throws -> (syncInfo: SyncInfo<Model>, lastSynchDate: Date, lastDeletedsDate: Date) {
+            let insetrs = try self.sync(db: models, context: context, lastDate: lastSyncDate)
+            let deleteObjectsInfo = try self.deleteObjects(deleteFile, in: context, lastDate: lastdDeleteDate)
+            let resultSyncInfo = SyncInfo(syncInfo: insetrs.syncInfo, deletes: deleteObjectsInfo.deleteds)
+            return (resultSyncInfo, insetrs.lastDate, deleteObjectsInfo.lastDate)
+        }
+                                                
+        func didStartSync() {
+            self.dataSources.forEach { (controller) in
+                controller.didStartSync()
+            }
+        }
+        
+        func finishSync() {
+            self.dataSources.forEach { (controller) in
+                controller.reloadData()
+                controller.didEndSync()
+            }
+        }
+        
+        //MARK: - Private methods
+        
+        private func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, syncInfo: SyncInfo<Model>) {
            //Test
             guard let models = models, !models.isEmpty else {
                 return (lastDate, .empty)
@@ -70,7 +92,7 @@ extension STDataBase {
                                
         //MARK: - Sync delete
         
-        func deleteObjects(_ deleteFiles: [DeleteFile]?, in context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, deleteds: Set<Model>) {
+        private func deleteObjects(_ deleteFiles: [DeleteFile]?, in context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, deleteds: Set<Model>) {
             guard let deleteFiles = deleteFiles, !deleteFiles.isEmpty else {
                 return (lastDate, [])
             }
@@ -85,22 +107,6 @@ extension STDataBase {
             let _ = try context.execute(deleteRequest)
             return (result.date, result.deleteds)
         }
-                                
-        func didStartSync() {
-            self.dataSources.forEach { (controller) in
-                controller.didStartSync()
-            }
-        }
-        
-        func finishSync() {
-            self.dataSources.forEach { (controller) in
-                controller.reloadData()
-                controller.didEndSync()
-            }
-        }
-        
-        
-        //MARK: - Private methods
 
         private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) -> SyncInfo<Model> {
             

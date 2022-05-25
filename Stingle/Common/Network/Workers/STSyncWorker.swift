@@ -19,7 +19,7 @@ class STSyncWorker: STWorker {
                                                lastDelSeenTime: dbInfo.lastDelSeenTimeSeccounds,
                                                lastContactsSeenTime: dbInfo.lastContactsSeenTimeSeccounds)
         
-        print("dbInfo.lastSeenTime", dbInfo.lastSeenTime)
+        print("dbInfo.lastSeenTime", dbInfo.lastGallerySeenTime)
         
         self.request(request: request) { (response: STSync) in
             success?(response)

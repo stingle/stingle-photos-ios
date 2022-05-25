@@ -12,7 +12,7 @@ class STSync: Decodable {
     private enum CodingKeys: String, CodingKey {
         case spaceUsed = "spaceUsed"
         case spaceQuota = "spaceQuota"
-        case files = "files"
+        case galery = "files"
         case albums = "albums"
         case albumFiles = "albumFiles"
         case trash = "trash"
@@ -23,7 +23,7 @@ class STSync: Decodable {
     let spaceUsed: String
     let spaceQuota: String
     
-    let files: [STLibrary.GaleryFile]?
+    let galery: [STLibrary.GaleryFile]?
     let albums: [STLibrary.Album]?
     let albumFiles: [STLibrary.AlbumFile]?
     let trash: [STLibrary.TrashFile]?

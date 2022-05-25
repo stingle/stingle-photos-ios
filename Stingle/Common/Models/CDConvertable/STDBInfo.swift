@@ -10,7 +10,7 @@ import CoreData
 class STDBInfo: ICDConvertable {
         
     private enum CodingKeys: String, CodingKey {
-        case lastSeenTime = "filesST"
+        case lastGallerySeenTime = "filesST"
         case lastTrashSeenTime = "trashST"
         case lastAlbumsSeenTime = "albumsST"
         case lastAlbumFilesSeenTime = "albumFilesST"
@@ -18,7 +18,7 @@ class STDBInfo: ICDConvertable {
         case lastContactsSeenTime = "cntST"
     }
             
-    var lastSeenTime: Date
+    var lastGallerySeenTime: Date
     var lastTrashSeenTime: Date
     var lastAlbumsSeenTime: Date
     var lastAlbumFilesSeenTime: Date
@@ -33,9 +33,9 @@ class STDBInfo: ICDConvertable {
         return ""
     }
        
-    init(lastSeenTime: Date? = nil, lastTrashSeenTime: Date? = nil, lastAlbumsSeenTime: Date? = nil, lastAlbumFilesSeenTime: Date? = nil, lastDelSeenTime: Date? = nil, lastContactsSeenTime: Date? = nil, spaceUsed: String? = nil, spaceQuota: String? = nil, managedObjectID: NSManagedObjectID? = nil) {
+    init(lastGallerySeenTime: Date? = nil, lastTrashSeenTime: Date? = nil, lastAlbumsSeenTime: Date? = nil, lastAlbumFilesSeenTime: Date? = nil, lastDelSeenTime: Date? = nil, lastContactsSeenTime: Date? = nil, spaceUsed: String? = nil, spaceQuota: String? = nil, managedObjectID: NSManagedObjectID? = nil) {
         let defaultDate = Date.defaultDate
-        self.lastSeenTime = lastSeenTime ?? defaultDate
+        self.lastGallerySeenTime = lastGallerySeenTime ?? defaultDate
         self.lastTrashSeenTime = lastTrashSeenTime ?? defaultDate
         self.lastAlbumsSeenTime = lastAlbumsSeenTime ?? defaultDate
         self.lastAlbumFilesSeenTime = lastAlbumFilesSeenTime ?? defaultDate
@@ -47,7 +47,7 @@ class STDBInfo: ICDConvertable {
     }
     
     required convenience init(model: STCDDBInfo) throws {
-        self.init(lastSeenTime: model.lastSeenTime,
+        self.init(lastGallerySeenTime: model.lastGallerySeenTime,
                   lastTrashSeenTime: model.lastTrashSeenTime,
                   lastAlbumsSeenTime: model.lastAlbumsSeenTime,
                   lastAlbumFilesSeenTime: model.lastAlbumFilesSeenTime,
@@ -76,7 +76,7 @@ class STDBInfo: ICDConvertable {
         model.lastAlbumsSeenTime = self.lastAlbumsSeenTime
         model.lastContactsSeenTime = self.lastContactsSeenTime
         model.lastDelSeenTime = self.lastDelSeenTime
-        model.lastSeenTime = self.lastSeenTime
+        model.lastGallerySeenTime = self.lastGallerySeenTime
         model.lastTrashSeenTime = self.lastTrashSeenTime
     }
 
@@ -86,7 +86,7 @@ class STDBInfo: ICDConvertable {
 extension STDBInfo {
     
     var lastSeenTimeSeccounds: UInt64 {
-        return self.lastSeenTime.millisecondsSince1970
+        return self.lastGallerySeenTime.millisecondsSince1970
     }
     
     var lastTrashSeenTimeSeccounds: UInt64 {
