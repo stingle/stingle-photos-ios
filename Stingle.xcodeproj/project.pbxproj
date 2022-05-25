@@ -116,6 +116,8 @@
 		A032097226546602000C420B /* STPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A032097126546602000C420B /* STPlayer.swift */; };
 		A03245CF27930DAE001F9062 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03245CE27930DAE001F9062 /* SceneDelegate.swift */; };
 		A033889126E1780200C03FE1 /* STNetworkSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A033889026E1780200C03FE1 /* STNetworkSession.swift */; };
+		A0355929283E30BA00CDF59D /* StingleModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0355927283E30BA00CDF59D /* StingleModel.xcdatamodeld */; };
+		A0355934283E450100CDF59D /* DBMigrationV0toV1.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = A0355933283E450100CDF59D /* DBMigrationV0toV1.xcmappingmodel */; };
 		A0355C8126A8D084006BE2C4 /* STUnlockAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */; };
 		A0355C8326A8D094006BE2C4 /* STUnlockAppVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */; };
 		A03D555E26AC6596008705F2 /* STFileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03D555D26AC6596008705F2 /* STFileSystem.swift */; };
@@ -307,7 +309,6 @@
 		A0D4E83B26C82BF800556871 /* STBackupPhraseVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D4E83A26C82BF800556871 /* STBackupPhraseVM.swift */; };
 		A0D65DF9269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D65DF8269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift */; };
 		A0D8A98A25F43EF8005C12F8 /* STContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D8A98925F43EF8005C12F8 /* STContact.swift */; };
-		A0D8A99125F44B2D005C12F8 /* StingleModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0D8A98F25F44B2D005C12F8 /* StingleModel.xcdatamodeld */; };
 		A0DC5E3A2639576300103DE1 /* STButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DC5E392639576300103DE1 /* STButton.swift */; };
 		A0DDF5A2273BE3C600368FBF /* STNavigationAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DDF5A1273BE3C600368FBF /* STNavigationAnimator.swift */; };
 		A0DDF5A4273BEBF000368FBF /* STNavigationTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DDF5A3273BEBF000368FBF /* STNavigationTransitioning.swift */; };
@@ -508,6 +509,9 @@
 		A032097126546602000C420B /* STPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STPlayer.swift; sourceTree = "<group>"; };
 		A03245CE27930DAE001F9062 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A033889026E1780200C03FE1 /* STNetworkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkSession.swift; sourceTree = "<group>"; };
+		A0355928283E30BA00CDF59D /* StingleModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StingleModel.xcdatamodel; sourceTree = "<group>"; };
+		A035592A283E30D200CDF59D /* StingleModel_V2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StingleModel_V2.xcdatamodel; sourceTree = "<group>"; };
+		A0355933283E450100CDF59D /* DBMigrationV0toV1.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = DBMigrationV0toV1.xcmappingmodel; sourceTree = "<group>"; };
 		A0355C8026A8D084006BE2C4 /* STUnlockAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVC.swift; sourceTree = "<group>"; };
 		A0355C8226A8D094006BE2C4 /* STUnlockAppVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnlockAppVM.swift; sourceTree = "<group>"; };
 		A03D555D26AC6596008705F2 /* STFileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileSystem.swift; sourceTree = "<group>"; };
@@ -697,7 +701,6 @@
 		A0D4E83A26C82BF800556871 /* STBackupPhraseVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBackupPhraseVM.swift; sourceTree = "<group>"; };
 		A0D65DF8269CFF7F0046FBA9 /* STSettingsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSettingsCollectionViewCell.swift; sourceTree = "<group>"; };
 		A0D8A98925F43EF8005C12F8 /* STContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STContact.swift; sourceTree = "<group>"; };
-		A0D8A99025F44B2D005C12F8 /* StingleModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StingleModel.xcdatamodel; sourceTree = "<group>"; };
 		A0DC5E392639576300103DE1 /* STButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STButton.swift; sourceTree = "<group>"; };
 		A0DDF5A1273BE3C600368FBF /* STNavigationAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNavigationAnimator.swift; sourceTree = "<group>"; };
 		A0DDF5A3273BEBF000368FBF /* STNavigationTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNavigationTransitioning.swift; sourceTree = "<group>"; };
@@ -721,7 +724,6 @@
 		A0E3FFBB2825466C006C8B10 /* STCDAlbumFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDAlbumFile.swift; sourceTree = "<group>"; };
 		A0E3FFBC2825466C006C8B10 /* STCDGaleryFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDGaleryFile.swift; sourceTree = "<group>"; };
 		A0E3FFBD2825466C006C8B10 /* STCDTrashFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDTrashFile.swift; sourceTree = "<group>"; };
-		A0E3FFC228254768006C8B10 /* StingleModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "StingleModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		A0E3FFC32825482C006C8B10 /* STLibrary+GaleryFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STLibrary+GaleryFile.swift"; sourceTree = "<group>"; };
 		A0E4F5AE26CD23F500D8A65A /* STForgetPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STForgetPasswordVC.swift; sourceTree = "<group>"; };
 		A0E4F5B026CD240400D8A65A /* STForgetPasswordVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STForgetPasswordVM.swift; sourceTree = "<group>"; };
@@ -988,12 +990,12 @@
 		A02203E425EEDB2500D07C98 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A0355935283E46E500CDF59D /* DBModel */,
 				A02204F825EEE58400D07C98 /* Config */,
 				A02203F025EEDBD300D07C98 /* RootClasses */,
 				A02203C925EED86800D07C98 /* Assets.xcassets */,
 				A02203CE25EED86800D07C98 /* Info.plist */,
 				A02203EA25EEDB6300D07C98 /* LaunchScreen.storyboard */,
-				A0D8A98F25F44B2D005C12F8 /* StingleModel.xcdatamodeld */,
 				A02204F425EEE12000D07C98 /* Localizable.strings */,
 			);
 			path = Resources;
@@ -1471,6 +1473,15 @@
 				A022041E25EEDC0300D07C98 /* DB */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		A0355935283E46E500CDF59D /* DBModel */ = {
+			isa = PBXGroup;
+			children = (
+				A0355927283E30BA00CDF59D /* StingleModel.xcdatamodeld */,
+				A0355933283E450100CDF59D /* DBMigrationV0toV1.xcmappingmodel */,
+			);
+			path = DBModel;
 			sourceTree = "<group>";
 		};
 		A0355C7F26A8D063006BE2C4 /* Unlock */ = {
@@ -2869,6 +2880,7 @@
 				A050C50427065EB5007587B5 /* STAssetResourceLoader.swift in Sources */,
 				A04EF0FF26F27BD700C3FF31 /* STStorePurchese.swift in Sources */,
 				A022046C25EEDC0400D07C98 /* STNavigationController.swift in Sources */,
+				A0355929283E30BA00CDF59D /* StingleModel.xcdatamodeld in Sources */,
 				A022049825EEDC0400D07C98 /* UITextField+Extensions.swift in Sources */,
 				A03245CF27930DAE001F9062 /* SceneDelegate.swift in Sources */,
 				A05661FF2753A1CF006A1295 /* STAboutVM.swift in Sources */,
@@ -2944,6 +2956,7 @@
 				A0A7974A264FF41F00917C91 /* STFilesDownloaderActivityVC.swift in Sources */,
 				A0D334E6282BA9F5000992FA /* STLibrary+FileBase.swift in Sources */,
 				A02D88A3260BE99C00B82F16 /* SDownloader.swift in Sources */,
+				A0355934283E450100CDF59D /* DBMigrationV0toV1.xcmappingmodel in Sources */,
 				A0B8092C26ED33140063DA42 /* STStorageBaseCell.swift in Sources */,
 				A0821FDD27A1F3DE000A341D /* STMutableProgress.swift in Sources */,
 				A00ADC0627B94FE70046CA38 /* STNetworkTask.swift in Sources */,
@@ -3115,7 +3128,6 @@
 				A050C50927066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift in Sources */,
 				A024330325F6384C0054BED9 /* STObserverEvents.swift in Sources */,
 				A01747EF260A9C60000D98F0 /* STFileDiskCache.swift in Sources */,
-				A0D8A99125F44B2D005C12F8 /* StingleModel.xcdatamodeld in Sources */,
 				A08512D3277A6F060006A2DD /* STAlertViewController.swift in Sources */,
 				A04512BB2638B13400BE0B06 /* STAlbumRequest.swift in Sources */,
 				A077780125FFF81100BA2BDF /* STGalleryVM.swift in Sources */,
@@ -3580,13 +3592,13 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		A0D8A98F25F44B2D005C12F8 /* StingleModel.xcdatamodeld */ = {
+		A0355927283E30BA00CDF59D /* StingleModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				A0E3FFC228254768006C8B10 /* StingleModel 2.xcdatamodel */,
-				A0D8A99025F44B2D005C12F8 /* StingleModel.xcdatamodel */,
+				A035592A283E30D200CDF59D /* StingleModel_V2.xcdatamodel */,
+				A0355928283E30BA00CDF59D /* StingleModel.xcdatamodel */,
 			);
-			currentVersion = A0E3FFC228254768006C8B10 /* StingleModel 2.xcdatamodel */;
+			currentVersion = A035592A283E30D200CDF59D /* StingleModel_V2.xcdatamodel */;
 			path = StingleModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

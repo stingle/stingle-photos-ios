@@ -20,7 +20,7 @@ class STUploadWorker: STWorker {
         case .galery:
             request =  STUploadFileRequest.galery(file: file as! STLibrary.GaleryFile)
         case .trash:
-            request =  STUploadFileRequest.trash(file: file as! STLibrary.GaleryFile)
+            request =  STUploadFileRequest.trash(file: file as! STLibrary.TrashFile)
         case .album:
             request =  STUploadFileRequest.albumFile(file: file as! STLibrary.AlbumFile)
         }
