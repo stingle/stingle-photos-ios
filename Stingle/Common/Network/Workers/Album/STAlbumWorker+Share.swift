@@ -156,7 +156,7 @@ extension STAlbumWorker {
             let dataBase = STApplication.shared.dataBase
             let albumProvider = dataBase.albumsProvider
             let albumFilesProvider = dataBase.albumFilesProvider
-            let files = albumFilesProvider.fetchAll(for: album.albumId)
+            let files = albumFilesProvider.fetchObjects(albumID: album.albumId)
             
             albumFilesProvider.delete(models: files, reloadData: true)
             albumProvider.delete(models: [album], reloadData: true)

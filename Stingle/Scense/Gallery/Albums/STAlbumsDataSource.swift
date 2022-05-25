@@ -56,7 +56,8 @@ extension STAlbumsDataSource: STAlbumsDataSourceViewModelDelegate {
         if let info = self.albumInfoFiles[album.albumId] {
             albumInfo = info
         } else {
-            let albumFiles = albumFilesProvider.fetch(for: album.albumId, sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated)], ascending: false)
+            
+            let albumFiles = albumFilesProvider.fetch(albumID: album.albumId, sortDescriptorsKeys: [#keyPath(STCDAlbumFile.dateCreated)], ascending: false)
             if album.cover == STLibrary.Album.imageBlankImageName {
                 albumInfo = AlbumInfo(albumFile: nil, countFiles: albumFiles.count)
             } else if let cover = album.cover {

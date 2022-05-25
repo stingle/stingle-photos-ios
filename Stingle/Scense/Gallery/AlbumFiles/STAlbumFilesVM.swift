@@ -49,12 +49,12 @@ class STAlbumFilesVM {
     }
     
     func getFiles(fileNames: [String]) -> [STLibrary.AlbumFile] {
-        let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: self.album.albumId, fileNames: fileNames)
+        let files = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(albumID: self.album.albumId, fileNames: fileNames)
         return files
     }
     
     func getFiles(identifiers: [String]) -> [STLibrary.AlbumFile] {
-        let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: self.album.albumId, identifiers: identifiers)
+        let files = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(albumID: self.album.albumId, identifiers: identifiers)
         return files
     }
     

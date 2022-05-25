@@ -7,64 +7,46 @@
 
 import CoreData
 
-extension STDataBase {
+extension STDataBase.SyncProvider where Model.ManagedModel: STCDAlbumFile {
     
-    class AlbumFilesProvider: SyncProvider<STLibrary.AlbumFile, STLibrary.DeleteFile.AlbumFile> {
-        
-        override var providerType: SyncProviderType {
-            return .albumFiles
-        }
-        
-        
-        //MARK: - public
-        
-        func fetch(for albumID: String, fileNames: [String]? = nil, sortDescriptorsKeys: [String], ascending: Bool) -> [STCDAlbumFile] {
-            
-            var predicate: NSPredicate!
-            if let fileNames = fileNames {
-                predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.file)) IN %@", albumID, fileNames)
-            } else {
-                predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", albumID)
-            }
-            let context = self.container.viewContext
-            return context.performAndWait { () -> [STCDAlbumFile] in
-                let fetchRequest = NSFetchRequest<STCDAlbumFile>(entityName: STCDAlbumFile.entityName)
-                fetchRequest.includesPropertyValues = false
-                fetchRequest.predicate = predicate
-                let sortDescriptors = sortDescriptorsKeys.compactMap { (key) -> NSSortDescriptor in
-                    return NSSortDescriptor(key: key, ascending: ascending)
-                }
-                fetchRequest.sortDescriptors = sortDescriptors
-                let cdModels = try? context.fetch(fetchRequest)
-                return cdModels ?? []
-            }
-            
-        }
-        
-        func fetchObjects(for albumID: String) -> [STCDAlbumFile] {
-            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", albumID)
-            let result = self.fetch(predicate: predicate)
-            return result
-        }
-        
-        func fetchAll(for albumID: String) -> [STLibrary.AlbumFile] {
-            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", albumID)
-            let result = self.fetchObjects(predicate: predicate)
-            return result
-        }
-        
-        func fetchAll(for albumID: String, fileNames: [String]) -> [STLibrary.AlbumFile] {
-            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.identifier)) IN %@", albumID, fileNames)
-            let result = self.fetchObjects(predicate: predicate)
-            return result
-        }
-        
-        func fetchAll(for albumID: String, identifiers: [String]) -> [STLibrary.AlbumFile] {
-            let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.identifier)) IN %@", albumID, identifiers)
-            let result = self.fetchObjects(predicate: predicate)
-            return result
-        }
-        
+    func fetchObjects(albumID: String, fileNames: [String], context: NSManagedObjectContext? = nil) -> [Model] {
+        let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.identifier)) IN %@", albumID, fileNames)
+        let result = self.fetchObjects(predicate: predicate)
+        return result
     }
-}
+    
+    func fetchObjects(albumID: String) -> [Model] {
+        let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", albumID)
+        let result = self.fetchObjects(predicate: predicate)
+        return result
+    }
+    
+    func fetchObjects(albumID: String, identifiers: [String]) -> [Model] {
+        let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.identifier)) IN %@", albumID, identifiers)
+        let result = self.fetchObjects(predicate: predicate)
+        return result
+    }
+    
+    func fetch(albumID: String, fileNames: [String]? = nil, sortDescriptorsKeys: [String], ascending: Bool) -> [ManagedObject] {
+        
+        var predicate: NSPredicate!
+        if let fileNames = fileNames {
+            predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@ && \(#keyPath(STCDAlbumFile.file)) IN %@", albumID, fileNames)
+        } else {
+            predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", albumID)
+        }
+        let context = self.container.viewContext
+        return context.performAndWait { () -> [ManagedObject] in
+            let fetchRequest = NSFetchRequest<ManagedObject>(entityName: ManagedObject.entityName)
+            fetchRequest.includesPropertyValues = false
+            fetchRequest.predicate = predicate
+            let sortDescriptors = sortDescriptorsKeys.compactMap { (key) -> NSSortDescriptor in
+                return NSSortDescriptor(key: key, ascending: ascending)
+            }
+            fetchRequest.sortDescriptors = sortDescriptors
+            let cdModels = try? context.fetch(fetchRequest)
+            return cdModels ?? []
+        }
+    }
 
+}

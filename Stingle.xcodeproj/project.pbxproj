@@ -31,6 +31,7 @@
 		A00E8C932629D38F0066ED9B /* STViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00E8C922629D38F0066ED9B /* STViewDataSource.swift */; };
 		A00E8C972629D3B70066ED9B /* STCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00E8C962629D3B70066ED9B /* STCollectionViewDataSource.swift */; };
 		A010C6C8283E5ABB007E0BE3 /* DBMigrationV0toV1.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = A010C6C7283E5ABB007E0BE3 /* DBMigrationV0toV1.xcmappingmodel */; };
+		A010C6CB283E73E1007E0BE3 /* STDataBase+AlbumFilesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A010C6CA283E73E1007E0BE3 /* STDataBase+AlbumFilesProvider.swift */; };
 		A012B48A2700BED5001E79E9 /* STStoragePeriodHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A012B4882700BED5001E79E9 /* STStoragePeriodHeaderView.swift */; };
 		A012B48B2700BED5001E79E9 /* STStoragePeriodHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A012B4892700BED5001E79E9 /* STStoragePeriodHeaderView.xib */; };
 		A012B48D2700D53A001E79E9 /* STStorageProductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A012B48C2700D53A001E79E9 /* STStorageProductCell.xib */; };
@@ -94,7 +95,6 @@
 		A02204F225EEE12000D07C98 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A02204F425EEE12000D07C98 /* Localizable.strings */; };
 		A022553B2709CFD0007888EC /* STAssetResourceLoader+NetworkReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022553A2709CFD0007888EC /* STAssetResourceLoader+NetworkReader.swift */; };
 		A024330325F6384C0054BED9 /* STObserverEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024330225F6384C0054BED9 /* STObserverEvents.swift */; };
-		A024330D25F64B980054BED9 /* STDataBase+GalleryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024330C25F64B980054BED9 /* STDataBase+GalleryProvider.swift */; };
 		A024331925F6B40A0054BED9 /* Codable+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024331825F6B40A0054BED9 /* Codable+Operation.swift */; };
 		A027CE1A26B1FB5A00829162 /* STUserRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE1926B1FB5A00829162 /* STUserRequest.swift */; };
 		A027CE1D26B20DE000829162 /* STAuthWorker+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE1C26B20DE000829162 /* STAuthWorker+User.swift */; };
@@ -225,7 +225,6 @@
 		A07DF6FE283BC290007E0FB2 /* Sodium in Frameworks */ = {isa = PBXBuildFile; productRef = A07DF6FD283BC290007E0FB2 /* Sodium */; };
 		A07DF701283BC29C007E0FB2 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A07DF700283BC29C007E0FB2 /* KeychainSwift */; };
 		A0821FDD27A1F3DE000A341D /* STMutableProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0821FDC27A1F3DE000A341D /* STMutableProgress.swift */; };
-		A084182325FA589B00DEAC89 /* STDataBase+TrashProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A084182225FA589B00DEAC89 /* STDataBase+TrashProvider.swift */; };
 		A08512D1277A5C640006A2DD /* STAutoImportDialogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */; };
 		A08512D3277A6F060006A2DD /* STAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08512D2277A6F060006A2DD /* STAlertViewController.swift */; };
 		A086FD2525F5A10900A8BC9C /* STCDContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = A086FD1525F5A10800A8BC9C /* STCDContact.swift */; };
@@ -341,10 +340,7 @@
 		A0E999A1263F2E46002FDCC9 /* STTokenCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0E9999F263F2E46002FDCC9 /* STTokenCell.xib */; };
 		A0E999A3263F54A5002FDCC9 /* STContactWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E999A2263F54A5002FDCC9 /* STContactWorker.swift */; };
 		A0E999A5263F54E3002FDCC9 /* STContactRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E999A4263F54E3002FDCC9 /* STContactRequest.swift */; };
-		A0F1437925FAC67B004C0E87 /* STDataBase+ContactProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F1437825FAC67B004C0E87 /* STDataBase+ContactProvider.swift */; };
 		A0F146E7260617090091BBC4 /* CompositionalLayout+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F146E6260617090091BBC4 /* CompositionalLayout+Operation.swift */; };
-		A0F467E025F963CE00BF00AA /* STDataBase+AlbumsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F467DF25F963CE00BF00AA /* STDataBase+AlbumsProvider.swift */; };
-		A0F467E425F9776600BF00AA /* STDataBase+AlbumFilesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F467E325F9776600BF00AA /* STDataBase+AlbumFilesProvider.swift */; };
 		A0F980D32753E89A00DE9958 /* STAboutBaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F980D22753E89A00DE9958 /* STAboutBaseTableViewCell.swift */; };
 		A0F980D72753EDAA00DE9958 /* STAboutPlainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F980D52753EDAA00DE9958 /* STAboutPlainTableViewCell.swift */; };
 		A0F980D82753EDAA00DE9958 /* STAboutPlainTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0F980D62753EDAA00DE9958 /* STAboutPlainTableViewCell.xib */; };
@@ -420,6 +416,7 @@
 		A00E8C922629D38F0066ED9B /* STViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STViewDataSource.swift; sourceTree = "<group>"; };
 		A00E8C962629D3B70066ED9B /* STCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A010C6C7283E5ABB007E0BE3 /* DBMigrationV0toV1.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = DBMigrationV0toV1.xcmappingmodel; sourceTree = "<group>"; };
+		A010C6CA283E73E1007E0BE3 /* STDataBase+AlbumFilesProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "STDataBase+AlbumFilesProvider.swift"; sourceTree = "<group>"; };
 		A012B4882700BED5001E79E9 /* STStoragePeriodHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStoragePeriodHeaderView.swift; sourceTree = "<group>"; };
 		A012B4892700BED5001E79E9 /* STStoragePeriodHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STStoragePeriodHeaderView.xib; sourceTree = "<group>"; };
 		A012B48C2700D53A001E79E9 /* STStorageProductCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STStorageProductCell.xib; sourceTree = "<group>"; };
@@ -487,7 +484,6 @@
 		A02204FA25EEE6B500D07C98 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		A022553A2709CFD0007888EC /* STAssetResourceLoader+NetworkReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAssetResourceLoader+NetworkReader.swift"; sourceTree = "<group>"; };
 		A024330225F6384C0054BED9 /* STObserverEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STObserverEvents.swift; sourceTree = "<group>"; };
-		A024330C25F64B980054BED9 /* STDataBase+GalleryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STDataBase+GalleryProvider.swift"; sourceTree = "<group>"; };
 		A024331825F6B40A0054BED9 /* Codable+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Operation.swift"; sourceTree = "<group>"; };
 		A027CE1926B1FB5A00829162 /* STUserRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUserRequest.swift; sourceTree = "<group>"; };
 		A027CE1C26B20DE000829162 /* STAuthWorker+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAuthWorker+User.swift"; sourceTree = "<group>"; };
@@ -616,7 +612,6 @@
 		A07B45B526C0263A003EB470 /* STAdvancedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAdvancedVM.swift; sourceTree = "<group>"; };
 		A07B5E04278CA3BE006BE012 /* STAppLockUnlocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAppLockUnlocker.swift; sourceTree = "<group>"; };
 		A0821FDC27A1F3DE000A341D /* STMutableProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMutableProgress.swift; sourceTree = "<group>"; };
-		A084182225FA589B00DEAC89 /* STDataBase+TrashProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STDataBase+TrashProvider.swift"; sourceTree = "<group>"; };
 		A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAutoImportDialogVC.swift; sourceTree = "<group>"; };
 		A08512D2277A6F060006A2DD /* STAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlertViewController.swift; sourceTree = "<group>"; };
 		A086FD1525F5A10800A8BC9C /* STCDContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDContact.swift; sourceTree = "<group>"; };
@@ -733,10 +728,7 @@
 		A0E9999F263F2E46002FDCC9 /* STTokenCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STTokenCell.xib; sourceTree = "<group>"; };
 		A0E999A2263F54A5002FDCC9 /* STContactWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STContactWorker.swift; sourceTree = "<group>"; };
 		A0E999A4263F54E3002FDCC9 /* STContactRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STContactRequest.swift; sourceTree = "<group>"; };
-		A0F1437825FAC67B004C0E87 /* STDataBase+ContactProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STDataBase+ContactProvider.swift"; sourceTree = "<group>"; };
 		A0F146E6260617090091BBC4 /* CompositionalLayout+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompositionalLayout+Operation.swift"; sourceTree = "<group>"; };
-		A0F467DF25F963CE00BF00AA /* STDataBase+AlbumsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STDataBase+AlbumsProvider.swift"; sourceTree = "<group>"; };
-		A0F467E325F9776600BF00AA /* STDataBase+AlbumFilesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STDataBase+AlbumFilesProvider.swift"; sourceTree = "<group>"; };
 		A0F980D22753E89A00DE9958 /* STAboutBaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAboutBaseTableViewCell.swift; sourceTree = "<group>"; };
 		A0F980D52753EDAA00DE9958 /* STAboutPlainTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAboutPlainTableViewCell.swift; sourceTree = "<group>"; };
 		A0F980D62753EDAA00DE9958 /* STAboutPlainTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STAboutPlainTableViewCell.xib; sourceTree = "<group>"; };
@@ -1597,11 +1589,7 @@
 			children = (
 				A0301DEC25FD6DD4005281EF /* STDataBase+CollectionProvider.swift */,
 				A0E1ECA4282A5A1900616F19 /* STDataBase+SyncProvider.swift */,
-				A024330C25F64B980054BED9 /* STDataBase+GalleryProvider.swift */,
-				A0F467DF25F963CE00BF00AA /* STDataBase+AlbumsProvider.swift */,
-				A0F467E325F9776600BF00AA /* STDataBase+AlbumFilesProvider.swift */,
-				A084182225FA589B00DEAC89 /* STDataBase+TrashProvider.swift */,
-				A0F1437825FAC67B004C0E87 /* STDataBase+ContactProvider.swift */,
+				A010C6CA283E73E1007E0BE3 /* STDataBase+AlbumFilesProvider.swift */,
 				A09DF8872628DA6E00CDDA8E /* STDataBase+DataBaseDataSource.swift */,
 			);
 			path = Collection;
@@ -2804,7 +2792,6 @@
 				A062E0E9264C7FC3000B3595 /* STFileImageRetryer.swift in Sources */,
 				A0D29CE22620818E0083967D /* STUploadNetworkOperation.swift in Sources */,
 				A0A9F34A261C79BE000252F2 /* STTrashVC.swift in Sources */,
-				A024330D25F64B980054BED9 /* STDataBase+GalleryProvider.swift in Sources */,
 				A0DE2DEE26B8A4B200887D55 /* STBackupVM.swift in Sources */,
 				A04BD00A26347A8500C5F29F /* STUploadsTableViewCell.swift in Sources */,
 				A05F9DD326A6155C00F9F343 /* STBiometricAuthServices.swift in Sources */,
@@ -2875,7 +2862,6 @@
 				A05D2697261B5751008E9CF8 /* STMenuMasterTableViewCell.swift in Sources */,
 				A01EC21C26B9F146000FF4AC /* STAppSettings+Appearance.swift in Sources */,
 				A06942D1260CDE3E009CFD3A /* UIColor+Operation.swift in Sources */,
-				A0F467E425F9776600BF00AA /* STDataBase+AlbumFilesProvider.swift in Sources */,
 				A022047725EEDC0400D07C98 /* STCrypto+Extensions.swift in Sources */,
 				A09D94462636FD7600268A84 /* STAlbumsSharedVC.swift in Sources */,
 				A050C50427065EB5007587B5 /* STAssetResourceLoader.swift in Sources */,
@@ -2970,7 +2956,6 @@
 				A0FF766D26151D86003DEC2B /* STUnfairLock.swift in Sources */,
 				A0A97675263DCE5E00E391D1 /* STSharedMembersVM.swift in Sources */,
 				A032096D26545E6B000C420B /* STVideoViewerVC.swift in Sources */,
-				A0F467E025F963CE00BF00AA /* STDataBase+AlbumsProvider.swift in Sources */,
 				A022049625EEDC0400D07C98 /* UIViewController+Extension.swift in Sources */,
 				A086FD9825F5B2A300A8BC9C /* STUser.swift in Sources */,
 				A09A95CC276A926B00B25569 /* STFileAutoImporter.swift in Sources */,
@@ -3054,7 +3039,6 @@
 				A0DDF5A8273BF88900368FBF /* STNavigationAnimatorPush.swift in Sources */,
 				A022047525EEDC0400D07C98 /* STCrypto.swift in Sources */,
 				A0DDF5A2273BE3C600368FBF /* STNavigationAnimator.swift in Sources */,
-				A084182325FA589B00DEAC89 /* STDataBase+TrashProvider.swift in Sources */,
 				A075B72A2652A12E00B4E2DF /* STAlbumSettingsPermissionCell.swift in Sources */,
 				B31D621C27B64B4E00CBEA19 /* STFilterCell.swift in Sources */,
 				A04BD0172634AA2700C5F29F /* STDynamicTableView.swift in Sources */,
@@ -3080,7 +3064,6 @@
 				A0794B8D269E349A00B40FE9 /* STStorageVC.swift in Sources */,
 				B31D622327B64B4E00CBEA19 /* STImageFilterVC.swift in Sources */,
 				A021014C26EFF08E00BBEF65 /* STStorageProductCell.swift in Sources */,
-				A0F1437925FAC67B004C0E87 /* STDataBase+ContactProvider.swift in Sources */,
 				A0B8090426ECF6F30063DA42 /* STBillingWorker.swift in Sources */,
 				A06E423D2627230E00F43826 /* STAlbumsCollectionViewCell.swift in Sources */,
 				A027CE2526B2139F00829162 /* STChangePasswordVC.swift in Sources */,
@@ -3124,6 +3107,7 @@
 				A0B8090A26ECFE2E0063DA42 /* STStorageVM.swift in Sources */,
 				B31D623227B64B4E00CBEA19 /* STCropperVC.swift in Sources */,
 				A0794B7E269E2E3300B40FE9 /* STAccountVC.swift in Sources */,
+				A010C6CB283E73E1007E0BE3 /* STDataBase+AlbumFilesProvider.swift in Sources */,
 				B31D622F27B64B4E00CBEA19 /* STCropperVC+AspectRatio.swift in Sources */,
 				A050C50927066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift in Sources */,
 				A024330325F6384C0054BED9 /* STObserverEvents.swift in Sources */,

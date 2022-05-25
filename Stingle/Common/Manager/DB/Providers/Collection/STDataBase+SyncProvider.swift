@@ -12,10 +12,11 @@ extension STDataBase {
         
     class SyncProvider<Model: ICDSynchConvertable, DeleteFile: ILibraryDeleteFile>: CollectionProvider<Model> where Model.ManagedModel: ISynchManagedObject {
         
-        var providerType: SyncProviderType {
-            get {
-                fatalError("implement childe classes")
-            }
+        let providerType: SyncProviderType
+        
+        init(container: STDataBaseContainer, providerType: SyncProviderType) {
+            self.providerType = providerType
+            super.init(container: container)
         }
 
         //MARK: - Override methods

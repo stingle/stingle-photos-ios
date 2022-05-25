@@ -82,7 +82,7 @@ class STAlbumWorker: STWorker {
     }
                 
     func deleteAlbumWithFiles(album: STLibrary.Album, success: @escaping Success<STEmptyResponse>, failure: Failure?) {
-        let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: album.albumId)
+        let files = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(albumID: album.albumId)
         self.deleteAlbumFiles(album: album, files: files, success: { [weak self] responce in
             self?.deleteAlbum(album: album, success: success, failure: failure)
         }, failure: failure)

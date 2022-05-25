@@ -60,33 +60,36 @@ class STDataBase {
     }
     
     struct DBSyncInfo {
-        let gallery: SyncInfo<GalleryProvider.Model>
-        let trash: SyncInfo<TrashProvider.Model>
-        let albums: SyncInfo<AlbumsProvider.Model>
-        let albumFiles: SyncInfo<AlbumFilesProvider.Model>
-        let contact: SyncInfo<ContactProvider.Model>
+        let gallery: SyncInfo<STLibrary.GaleryFile>
+        let trash: SyncInfo<STLibrary.TrashFile>
+        let albums: SyncInfo<STLibrary.Album>
+        let albumFiles: SyncInfo<STLibrary.AlbumFile>
+        let contact: SyncInfo<STContact>
         let dbInfo: STDBInfo
     }
     
     private let container = STDataBaseContainer(modelName: "StingleModel")
     
     let userProvider: UserProvider
-    let galleryProvider: GalleryProvider
-    let albumsProvider: AlbumsProvider
-    let albumFilesProvider: AlbumFilesProvider
-    let trashProvider: TrashProvider
-    let contactProvider: ContactProvider
     let dbInfoProvider: DBInfoProvider
+    
+    let galleryProvider: SyncProvider<STLibrary.GaleryFile, STLibrary.DeleteFile.Gallery>
+    let albumsProvider: SyncProvider<STLibrary.Album, STLibrary.DeleteFile.Album>
+    let albumFilesProvider: SyncProvider<STLibrary.AlbumFile, STLibrary.DeleteFile.AlbumFile>
+    let trashProvider: SyncProvider<STLibrary.TrashFile, STLibrary.DeleteFile.Trash>
+    let contactProvider: SyncProvider<STContact, STLibrary.DeleteFile.Contact>
+    
     
     init() {
         self.userProvider = UserProvider(container: self.container)
-        self.galleryProvider = GalleryProvider(container: self.container)
-        self.albumsProvider = AlbumsProvider(container: self.container)
-        self.albumFilesProvider = AlbumFilesProvider(container: self.container)
-        self.trashProvider = TrashProvider(container: self.container)
-        self.contactProvider = ContactProvider(container: self.container)
         self.dbInfoProvider = DBInfoProvider(container: self.container)
+        self.galleryProvider = .init(container: self.container, providerType: .gallery)
+        self.albumsProvider = .init(container: self.container, providerType: .albums)
+        self.albumFilesProvider = .init(container: self.container, providerType: .albumFiles)
+        self.trashProvider = .init(container: self.container, providerType: .trash)
+        self.contactProvider = .init(container: self.container, providerType: .contact)
     }
+        
     
     func sync(_ sync: STSync, finish: @escaping () -> Void, willFinish: @escaping (DBSyncInfo) -> Void, failure: @escaping (IError) -> Void) {
         self.didStartSync()
