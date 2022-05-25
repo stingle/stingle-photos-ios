@@ -89,7 +89,6 @@ class STDataBase {
         self.trashProvider = .init(container: self.container, providerType: .trash)
         self.contactProvider = .init(container: self.container, providerType: .contact)
     }
-        
     
     func sync(_ sync: STSync, finish: @escaping () -> Void, willFinish: @escaping (DBSyncInfo) -> Void, failure: @escaping (IError) -> Void) {
         self.didStartSync()
