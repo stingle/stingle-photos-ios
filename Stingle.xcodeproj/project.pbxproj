@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		431E4DC51554E8A98C05573A /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003AC6592036B7A691B442AA /* Pods_Stingle.framework */; };
 		A001E6E6267CD8E900948E50 /* STGaleryFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001E6E5267CD8E900948E50 /* STGaleryFileViewerVM.swift */; };
 		A001E6E9267CD90700948E50 /* STAlbumFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001E6E8267CD90700948E50 /* STAlbumFileViewerVM.swift */; };
 		A001E6EB267CD93200948E50 /* STFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001E6EA267CD93200948E50 /* STFileViewerVM.swift */; };
@@ -254,8 +255,8 @@
 		A09D94492636FD8200268A84 /* STAlbumsSharedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D94482636FD8200268A84 /* STAlbumsSharedVM.swift */; };
 		A09D944E2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D944C2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift */; };
 		A09D944F2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A09D944D2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib */; };
-        A0A2567627DA113F00B2C645 /* STBGTaskScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */; };
 		A09DF8882628DA6E00CDDA8E /* STDataBase+DataBaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09DF8872628DA6E00CDDA8E /* STDataBase+DataBaseDataSource.swift */; };
+		A0A2567627DA113F00B2C645 /* STBGTaskScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */; };
 		A0A7974A264FF41F00917C91 /* STFilesDownloaderActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A79749264FF41F00917C91 /* STFilesDownloaderActivityVC.swift */; };
 		A0A7974C264FF42F00917C91 /* STFilesDownloaderActivityVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A7974B264FF42F00917C91 /* STFilesDownloaderActivityVM.swift */; };
 		A0A97675263DCE5E00E391D1 /* STSharedMembersVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A97674263DCE5E00E391D1 /* STSharedMembersVM.swift */; };
@@ -393,6 +394,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		003AC6592036B7A691B442AA /* Pods_Stingle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stingle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		011E6083499BB61A328BD23D /* Pods-Stingle.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-dev.xcconfig"; sourceTree = "<group>"; };
+		2D93B9E1329131B74B695EC2 /* Pods-Stingle.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-dev.xcconfig"; sourceTree = "<group>"; };
 		A001E6E5267CD8E900948E50 /* STGaleryFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGaleryFileViewerVM.swift; sourceTree = "<group>"; };
 		A001E6E8267CD90700948E50 /* STAlbumFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFileViewerVM.swift; sourceTree = "<group>"; };
 		A001E6EA267CD93200948E50 /* STFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileViewerVM.swift; sourceTree = "<group>"; };
@@ -643,8 +647,8 @@
 		A09D94482636FD8200268A84 /* STAlbumsSharedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedVM.swift; sourceTree = "<group>"; };
 		A09D944C2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedCollectionViewCell.swift; sourceTree = "<group>"; };
 		A09D944D2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STAlbumsSharedCollectionViewCell.xib; sourceTree = "<group>"; };
-        A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBGTaskScheduler.swift; sourceTree = "<group>"; };
 		A09DF8872628DA6E00CDDA8E /* STDataBase+DataBaseDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STDataBase+DataBaseDataSource.swift"; sourceTree = "<group>"; };
+		A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBGTaskScheduler.swift; sourceTree = "<group>"; };
 		A0A79749264FF41F00917C91 /* STFilesDownloaderActivityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesDownloaderActivityVC.swift; sourceTree = "<group>"; };
 		A0A7974B264FF42F00917C91 /* STFilesDownloaderActivityVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesDownloaderActivityVM.swift; sourceTree = "<group>"; };
 		A0A97674263DCE5E00E391D1 /* STSharedMembersVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSharedMembersVM.swift; sourceTree = "<group>"; };
@@ -778,6 +782,8 @@
 		B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilterToolBar.swift; sourceTree = "<group>"; };
 		B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilterToolBar.xib; sourceTree = "<group>"; };
 		B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IFileEditVM.swift; sourceTree = "<group>"; };
+		BF32A3059F7F65A89C060F1F /* Pods-Stingle.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-prod.xcconfig"; sourceTree = "<group>"; };
+		E7F3734B9E0D6793B81BA052 /* Pods-Stingle.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-prod.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -789,15 +795,29 @@
 				A07DF6FC283BC290007E0FB2 /* Clibsodium in Frameworks */,
 				A07DF701283BC29C007E0FB2 /* KeychainSwift in Frameworks */,
 				A07DF6FE283BC290007E0FB2 /* Sodium in Frameworks */,
+				431E4DC51554E8A98C05573A /* Pods_Stingle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		406DBF35971E18E21C49FB8E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2D93B9E1329131B74B695EC2 /* Pods-Stingle.debug-dev.xcconfig */,
+				BF32A3059F7F65A89C060F1F /* Pods-Stingle.debug-prod.xcconfig */,
+				E7F3734B9E0D6793B81BA052 /* Pods-Stingle.release-prod.xcconfig */,
+				011E6083499BB61A328BD23D /* Pods-Stingle.release-dev.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		73A53619DBCBC97AD1A4990B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				003AC6592036B7A691B442AA /* Pods_Stingle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -959,6 +979,7 @@
 				A02203BF25EED86800D07C98 /* Stingle */,
 				A02203BE25EED86800D07C98 /* Products */,
 				73A53619DBCBC97AD1A4990B /* Frameworks */,
+				406DBF35971E18E21C49FB8E /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2424,8 +2445,8 @@
 				A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */,
 			);
 			path = BackgroundTask;
-               sourceTree = "<group>";
-        };
+			sourceTree = "<group>";
+		};
 		A0E3FFB928254610006C8B10 /* Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -2680,9 +2701,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A02203D125EED86800D07C98 /* Build configuration list for PBXNativeTarget "Stingle" */;
 			buildPhases = (
+				85157DF9EF1F4F9055F71EF0 /* [CP] Check Pods Manifest.lock */,
 				A02203B925EED86800D07C98 /* Sources */,
 				A02203BA25EED86800D07C98 /* Frameworks */,
 				A02203BB25EED86800D07C98 /* Resources */,
+				42BBEB8EC2B0F68FF1C0697F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2793,6 +2816,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		42BBEB8EC2B0F68FF1C0697F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		85157DF9EF1F4F9055F71EF0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Stingle-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A02203B925EED86800D07C98 /* Sources */ = {
@@ -3222,6 +3287,7 @@
 		};
 		A02203D225EED86800D07C98 /* Debug-Dev */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D93B9E1329131B74B695EC2 /* Pods-Stingle.debug-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3313,6 +3379,7 @@
 		};
 		A02204FF25EEEB0600D07C98 /* Debug-Prod */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BF32A3059F7F65A89C060F1F /* Pods-Stingle.debug-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3399,6 +3466,7 @@
 		};
 		A022050325EEEB4200D07C98 /* Release-Prod */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E7F3734B9E0D6793B81BA052 /* Pods-Stingle.release-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3485,6 +3553,7 @@
 		};
 		A022051325EEEC4000D07C98 /* Release-Dev */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 011E6083499BB61A328BD23D /* Pods-Stingle.release-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

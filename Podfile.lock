@@ -1,0 +1,48 @@
+PODS:
+  - ImageRecognition (0.1.1):
+    - ImageRecognition/Common (= 0.1.1)
+    - ImageRecognition/TensorFlow (= 0.1.1)
+    - TensorFlowLiteSwift (~> 2.9.1)
+    - TensorFlowLiteSwift/CoreML (~> 2.9.1)
+  - ImageRecognition/Common (0.1.1):
+    - TensorFlowLiteSwift (~> 2.9.1)
+    - TensorFlowLiteSwift/CoreML (~> 2.9.1)
+  - ImageRecognition/TensorFlow (0.1.1):
+    - ImageRecognition/Common
+    - ImageRecognition/TensorFlow/Models (= 0.1.1)
+    - TensorFlowLiteSwift (~> 2.9.1)
+    - TensorFlowLiteSwift/CoreML (~> 2.9.1)
+  - ImageRecognition/TensorFlow/Models (0.1.1):
+    - ImageRecognition/Common
+    - TensorFlowLiteSwift (~> 2.9.1)
+    - TensorFlowLiteSwift/CoreML (~> 2.9.1)
+  - TensorFlowLiteC (2.9.1):
+    - TensorFlowLiteC/Core (= 2.9.1)
+  - TensorFlowLiteC/Core (2.9.1)
+  - TensorFlowLiteC/CoreML (2.9.1):
+    - TensorFlowLiteC/Core
+  - TensorFlowLiteSwift (2.9.1):
+    - TensorFlowLiteSwift/Core (= 2.9.1)
+  - TensorFlowLiteSwift/Core (2.9.1):
+    - TensorFlowLiteC (= 2.9.1)
+  - TensorFlowLiteSwift/CoreML (2.9.1):
+    - TensorFlowLiteC/CoreML (= 2.9.1)
+    - TensorFlowLiteSwift/Core (= 2.9.1)
+
+DEPENDENCIES:
+  - ImageRecognition
+
+SPEC REPOS:
+  trunk:
+    - ImageRecognition
+    - TensorFlowLiteC
+    - TensorFlowLiteSwift
+
+SPEC CHECKSUMS:
+  ImageRecognition: 45639ccd59c2ce1b6200621b299ee1c52ac747de
+  TensorFlowLiteC: 0a765860195fae345ca7398e33b07c80104c4b61
+  TensorFlowLiteSwift: 0b584ad1fac27c0015609056a5ab4e7692bd1af3
+
+PODFILE CHECKSUM: 51cb64cd7067ca0442ee5555f0879979a3b933d0
+
+COCOAPODS: 1.11.3
