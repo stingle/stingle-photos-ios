@@ -102,6 +102,7 @@ class STImageEditorVC: UIViewController {
     }
 
     @IBAction private func doneButtonAction(_ sender: UIButton) {
+        STLoadingView.show(in: self.view)
         let croppedImage = self.croppedImage(image: self.image)
         self.filteredImage(image: croppedImage) { [weak self] image in
             guard let self = self else { return }
@@ -111,6 +112,7 @@ class STImageEditorVC: UIViewController {
             } else {
                 self.delegate?.imageEditor(didEditImage: self, image: image, sender: sender)
             }
+            STLoadingView.hide(in: self.view)
         }
     }
 
