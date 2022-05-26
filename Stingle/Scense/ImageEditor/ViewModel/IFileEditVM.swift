@@ -31,11 +31,15 @@ extension IFileEditVM {
             type = .jpeg
             fileExtension = type.preferredFilenameExtension ?? "jpeg"
         }
-        guard let heicData = self.imageData(image: image, for: type), let thumbData = self.imageData(image: thumb, for: type) else {
+        guard var heicData = self.imageData(image: image, for: type), var thumbData = thumb.jpegData(compressionQuality: 0.7) else {
             throw STError.fileIsUnavailable
         }
-        let properties = self.fileProperties()
-        let data = properties == nil ? heicData : self.appendingProperties(properties!, imageData: heicData)
+        if var properties = self.fileProperties() as? [String: Any] {
+            properties["Orientation"] = 1
+            let cfProperties = properties as CFDictionary
+            heicData = self.appendingProperties(cfProperties, imageData: heicData)
+            thumbData = self.appendingProperties(cfProperties, imageData: thumbData)
+        }
         var filePath = tmpFolder.appendingPathComponent("edited.images")
         do {
             try FileManager.default.createDirectory(at: filePath, withIntermediateDirectories: true)
@@ -43,13 +47,13 @@ extension IFileEditVM {
             filePath.deletePathExtension()
             filePath.appendPathExtension(fileExtension)
 
-            try data.write(to: filePath)
+            try heicData.write(to: filePath)
 
             let fileSystem = STApplication.shared.fileSystem
             guard let localThumbsURL = fileSystem.localThumbsURL, let localOreginalsURL = fileSystem.localOreginalsURL else {
                 throw STFileUploader.UploaderError.fileSystemNotValid
             }
-            let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(fileName: existingFileName, oreginalUrl: filePath, thumbImage: thumbData, fileType: .image, duration: 0.0, toUrl: localOreginalsURL, toThumbUrl: localThumbsURL, fileSize: UInt(data.count), publicKey: publicKey, progressHandler: nil)
+            let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(fileName: existingFileName, oreginalUrl: filePath, thumbImage: thumbData, fileType: .image, duration: 0.0, toUrl: localOreginalsURL, toThumbUrl: localThumbsURL, fileSize: UInt(heicData.count), publicKey: publicKey, progressHandler: nil)
             if FileManager.default.fileExists(atPath: filePath.path) {
                 try? FileManager.default.removeItem(at: filePath)
             }

@@ -252,7 +252,7 @@ class STImageFilterVC: UIViewController {
                     completion(nil)
                     return
                 }
-                let newImage = UIImage(cgImage: cgImage)
+                let newImage = UIImage(cgImage: cgImage, scale: image.scale, orientation: image.imageOrientation)
                 DispatchQueue.main.async {
                     completion(newImage)
                 }

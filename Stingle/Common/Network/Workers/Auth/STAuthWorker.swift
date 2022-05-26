@@ -13,15 +13,6 @@ class STAuthWorker: STWorker {
     let crypto = STApplication.shared.crypto
     private let userProvider = STApplication.shared.dataBase.userProvider
 	
-	func register(email: String, password: String, includePrivateKey: Bool, success: Success<STAuth.Register>? = nil, failure: Failure? = nil) {
-		do {
-			let request = try self.generateSignUpRequest(email: email, password: password, includePrivateKey: includePrivateKey)
-			self.request(request: request, success: success, failure: failure)
-		} catch {
-			failure?(WorkerError.error(error: error))
-		}
-	}
-		
 	func login(email: String, password: String, success: Success<STUser>? = nil, failure: Failure? = nil) {
         if let path = STFileSystem.privateKeyUrl() {
             try? FileManager.default.removeItem(at: path)
@@ -65,6 +56,15 @@ class STAuthWorker: STWorker {
     }
     
 	//MARK: - Private Register
+    
+    private func register(email: String, password: String, includePrivateKey: Bool, success: Success<STAuth.Register>? = nil, failure: Failure? = nil) {
+        do {
+            let request = try self.generateSignUpRequest(email: email, password: password, includePrivateKey: includePrivateKey)
+            self.request(request: request, success: success, failure: failure)
+        } catch {
+            failure?(WorkerError.error(error: error))
+        }
+    }
     	
 	private func generateSignUpRequest(email: String, password: String, includePrivateKey: Bool) throws -> STAuthRequest {
 		do {

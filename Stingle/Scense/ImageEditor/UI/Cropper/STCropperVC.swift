@@ -311,9 +311,9 @@ class STCropperVC: UIViewController {
     }
 
     func photoTranslation() -> CGPoint {
-        let rect = self.imageView.convert(self.imageView.bounds, to: view)
+        let rect = self.imageView.convert(self.imageView.bounds, to: self.scrollViewContainer)
         let point = CGPoint(x: rect.origin.x + rect.size.width / 2, y: rect.origin.y + rect.size.height / 2)
-        let zeroPoint = CGPoint(x: view.frame.width / 2, y: self.defaultCropBoxCenter.y)
+        let zeroPoint = CGPoint(x: self.scrollViewContainer.frame.width / 2, y: self.defaultCropBoxCenter.y - self.scrollViewContainer.frame.minY)
 
         return CGPoint(x: point.x - zeroPoint.x, y: point.y - zeroPoint.y)
     }

@@ -618,7 +618,7 @@
         <scene sceneID="u7B-ti-eby">
             <objects>
                 <viewController storyboardIdentifier="STImageEditorVC" id="oHl-9y-mzy" customClass="STImageEditorVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="B6Z-ea-808">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="B6Z-ea-808">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
