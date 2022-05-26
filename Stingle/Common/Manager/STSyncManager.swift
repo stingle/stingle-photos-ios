@@ -82,7 +82,7 @@ class STSyncManager {
             self?.didEndSync(error: nil)
             let application = STApplication.shared
             application.uploader.uploadAllLocalFiles()
-            application.auotImporter.startImport()
+            application.autoImporter.startImport()
             
         } willFinish: { info in
             

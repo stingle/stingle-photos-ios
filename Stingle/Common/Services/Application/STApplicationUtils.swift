@@ -218,7 +218,7 @@ extension STApplication.Utils  {
         STOperationManager.shared.logout()
         self.application.fileSystem.deleteAccount()
         self.application.dataBase.deleteAll()
-        self.application.auotImporter.logout()
+        self.application.autoImporter.logout()
         STKeyManagement.signOut()
         STBiometricAuthServices().removeBiometricAuth()
         STAppSettings.current.logOut()
@@ -237,7 +237,7 @@ extension STApplication.Utils  {
     
     private func logout(appInUnauthorized: Bool) {
         STOperationManager.shared.logout()
-        self.application.auotImporter.logout()
+        self.application.autoImporter.logout()
         self.application.fileSystem.logOut()
         self.application.dataBase.deleteAll()
         STKeyManagement.signOut()

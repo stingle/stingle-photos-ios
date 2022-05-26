@@ -17,7 +17,7 @@ class STBGTaskScheduler {
         var dispatchQueue: DispatchQueue {
             switch self {
             case .autoImport:
-                return STApplication.shared.auotImporter.dispatchQueue
+                return STApplication.shared.autoImporter.dispatchQueue
             }
         }
     }
@@ -104,11 +104,9 @@ class STBGTaskScheduler {
 extension STBGTaskScheduler: STBGSchedulerTaskDelegate {
     
     func schedulerTask(didCanceled schedulerTask: Task) {
-        print("")
     }
     
     func schedulerTask(didComplet schedulerTask: Task, isCompleted: Bool) {
-        print("")
     }
     
 }
@@ -185,7 +183,7 @@ extension STBGTaskScheduler {
         
         let bgImptortTimeInterval: TimeInterval = 20 * 60
         
-        let autoImporter = STApplication.shared.auotImporter
+        let autoImporter = STApplication.shared.autoImporter
         private(set) var isStarted = false
         
         override init(identifier: STBGTaskScheduler.BackgroundIdentifie) {
@@ -225,13 +223,13 @@ extension STBGTaskScheduler {
         
 }
 
-extension STBGTaskScheduler.AutoImporter: IAuotImporterObserver {
+extension STBGTaskScheduler.AutoImporter: IAutoImporterObserver {
     
-    func auotImporter(didStart auotImporter: STImporter.AuotImporter) {
+    func autoImporter(didStart autoImporter: STImporter.AutoImporter) {
         
     }
     
-    func auotImporter(didEnd auotImporter: STImporter.AuotImporter) {
+    func autoImporter(didEnd autoImporter: STImporter.AutoImporter) {
         guard self.isStarted else {
             return
         }

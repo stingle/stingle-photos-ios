@@ -18,7 +18,7 @@ extension STAutoImportDialogVC {
         private var `import` = STAppSettings.current.import
         
         init() {
-           STApplication.shared.auotImporter.resetImportDate(date: .currentDate, startImport: false)
+           STApplication.shared.autoImporter.resetImportDate(date: .currentDate, startImport: false)
         }
         
         func autoImportDidChange(isOn: Bool, completion: @escaping (ImportDialogError?) -> Void) {
@@ -46,7 +46,7 @@ extension STAutoImportDialogVC {
         }
         
         func didSelectImporsExistingFilesSwichDidChange(isOn: Bool) {
-            STApplication.shared.auotImporter.resetImportDate(date: .setupDate, startImport: false)
+            STApplication.shared.autoImporter.resetImportDate(date: .setupDate, startImport: false)
         }
         
         class func checkAndReqauestAuthorization(completion: @escaping (PHAuthorizationStatus) -> Void) {

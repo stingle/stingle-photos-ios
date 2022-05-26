@@ -26,8 +26,8 @@ class STApplication {
         return STFileUploader()
     }()
     
-    private(set) lazy var auotImporter: STImporter.AuotImporter = {
-        return STImporter.AuotImporter()
+    private(set) lazy var autoImporter: STImporter.AutoImporter = {
+        return STImporter.AutoImporter()
     }()
         
     var fileSystem: STFileSystem {
