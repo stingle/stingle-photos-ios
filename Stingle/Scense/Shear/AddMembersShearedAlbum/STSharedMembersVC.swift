@@ -291,7 +291,7 @@ extension STSharedMembersVC {
     
     enum ShearedType {
         case album(album: STLibrary.Album)
-        case files(files: [STLibrary.File])
+        case files(files: [STLibrary.GaleryFile])
         case albumFiles(album: STLibrary.Album, files: [STLibrary.AlbumFile])
     }
     

@@ -9,7 +9,7 @@ import UIKit
 
 protocol STImageEditorVCDelegate: AnyObject {
     func imageEditor(didSelectCancel vc: STImageEditorVC)
-    func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage)
+    func imageEditor(didEditImage vc: STImageEditorVC, image: UIImage, sender: UIButton)
 }
 
 class STImageEditorVC: UIViewController {
@@ -34,16 +34,17 @@ class STImageEditorVC: UIViewController {
     @IBOutlet weak var filtersButton: UIButton!
     @IBOutlet weak var cropButton: UIButton!
     @IBOutlet weak var optionsView: UIStackView!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var resizeView: STResizeView!
+
+    @IBOutlet var cancelButtons: [UIButton]!
+    @IBOutlet var doneButtons: [UIButton]!
 
     private var image: UIImage! {
         didSet {
             let imageSize = self.image.size
             let maxPreviewImageWidht: CGFloat = 1024.0
             if imageSize.width > maxPreviewImageWidht {
-                self.previewImage = self.image.scale(to: maxPreviewImageWidht) ?? self.image
+                self.previewImage = self.image.scale(to: maxPreviewImageWidht)
             } else {
                 self.previewImage = self.image
             }
@@ -54,10 +55,6 @@ class STImageEditorVC: UIViewController {
     private var resizedSize: CGSize?
 
     private var newCollection: UITraitCollection?
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,14 +101,18 @@ class STImageEditorVC: UIViewController {
         self.delegate?.imageEditor(didSelectCancel: self)
     }
 
-    @IBAction private func doneButtonAction(_ sender: Any) {
+    @IBAction private func doneButtonAction(_ sender: UIButton) {
+        STLoadingView.show(in: self.view)
         let croppedImage = self.croppedImage(image: self.image)
-        let image = self.filteredImage(image: croppedImage)
-        if let size = self.resizedSize {
-            let resizedImage = image.scaled(newSize: size)
-            self.delegate?.imageEditor(didEditImage: self, image: resizedImage)
-        } else {
-            self.delegate?.imageEditor(didEditImage: self, image: image)
+        self.filteredImage(image: croppedImage) { [weak self] image in
+            guard let self = self else { return }
+            if let size = self.resizedSize {
+                let resizedImage = image.scaled(newSize: size)
+                self.delegate?.imageEditor(didEditImage: self, image: resizedImage, sender: sender)
+            } else {
+                self.delegate?.imageEditor(didEditImage: self, image: image, sender: sender)
+            }
+            STLoadingView.hide(in: self.view)
         }
     }
 
@@ -138,8 +139,8 @@ class STImageEditorVC: UIViewController {
         return image.cropped(withCropperState: state) ?? image
     }
 
-    private func filteredImage(image: UIImage) -> UIImage {
-        return self.imageFilterVC.applyFilters(image: image)
+    private func filteredImage(image: UIImage, completion: @escaping (UIImage) -> Void) {
+        return self.imageFilterVC.applyFilters(image: image, completion: completion)
     }
 
     private func selectOption(option: Options, syncImage: Bool = true) {
@@ -166,8 +167,9 @@ class STImageEditorVC: UIViewController {
                 self.imageCropRotateContentView.alpha = 1.0
             }
             if syncImage {
-                let filteredImage = self.filteredImage(image: self.previewImage)
-                self.imageCropRotateVC.originalImage = filteredImage
+                self.filteredImage(image: self.previewImage) { [weak self] image in
+                    self?.imageCropRotateVC.originalImage = image
+                }
             }
         }
         self.configureTopToolBar()
@@ -218,8 +220,8 @@ class STImageEditorVC: UIViewController {
     }
 
     private func configureScreen() {
-        self.cancelButton.setTitle("cancel".localized, for: .normal)
-        self.doneButton.setTitle("done".localized, for: .normal)
+        self.cancelButtons.forEach({ $0.setTitle("cancel".localized, for: .normal) })
+        self.doneButtons.forEach({ $0.setTitle("done".localized, for: .normal) })
         self.resizeView.imageSize = self.image.size
         self.resizeView.delegate = self
         self.updateDoneButton()
@@ -227,9 +229,20 @@ class STImageEditorVC: UIViewController {
 
     private func updateDoneButton() {
         let isEnabled = self.resizedSize != nil || self.imageFilterVC.hasChanges || self.imageCropRotateVC.hasChanges
-        self.doneButton.isEnabled = isEnabled
+        self.doneButtons.forEach({ $0.isEnabled = isEnabled })
         let color: UIColor = isEnabled ? .appYellow : .gray
-        self.doneButton.setTitleColor(color, for: .normal)
+        self.doneButtons.forEach({ $0.setTitleColor(color, for: .normal) })
+    }
+
+    private static func normalizedImage(image: UIImage) -> UIImage? {
+        guard image.imageOrientation != .up else {
+            return image
+        }
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        image.draw(in: CGRect(origin: .zero, size: image.size))
+        let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return normalizedImage
     }
 
 }
@@ -249,8 +262,10 @@ extension STImageEditorVC: STResizeViewDelegate {
         let croppedImage = self.croppedImage(image: self.previewImage)
         self.imageFilterVC.setImage(image: croppedImage, applyFilters: true)
 
-        let filteredImage = self.filteredImage(image: self.previewImage)
-        self.imageCropRotateVC.originalImage = filteredImage
+        self.filteredImage(image: self.previewImage) { [weak self] image in
+            self?.imageCropRotateVC.originalImage = image
+            self?.updateDoneButton()
+        }
     }
 
     func resizeView(didSelectCancel view: STResizeView) {
@@ -262,7 +277,7 @@ extension STImageEditorVC: STResizeViewDelegate {
 extension STImageEditorVC {
 
     static func create(image: UIImage) -> STImageEditorVC? {
-        guard let image = self.normalizedImage(image: image), image.size.width > 0, image.size.height > 0 else {
+        guard let image = STImageEditorVC.normalizedImage(image: image), image.size.width > 0, image.size.height > 0 else {
             return nil
         }
         let storyboard = UIStoryboard(name: "FileEdit", bundle: .main)
@@ -270,17 +285,6 @@ extension STImageEditorVC {
         vc.modalPresentationStyle = .fullScreen
         vc.image = image
         return vc
-    }
-
-    private static func normalizedImage(image: UIImage) -> UIImage? {
-        guard image.imageOrientation != .up else {
-            return image
-        }
-        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
-        image.draw(in: CGRect(origin: .zero, size: image.size))
-        let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return normalizedImage
     }
 
 }

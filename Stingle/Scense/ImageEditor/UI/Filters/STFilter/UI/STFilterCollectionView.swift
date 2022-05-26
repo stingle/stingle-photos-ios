@@ -50,9 +50,13 @@ class STFilterCollectionView: UICollectionView {
         }
         self.flowLayout?.scrollDirection = scrollDirection
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-            if let indexPath = self.indexPathsForSelectedItems?.first {
-                self.selectItem(indexPath: indexPath, animated: true)
-            }
+            self.updateSelectedItemPosition()
+        }
+    }
+
+    func updateSelectedItemPosition() {
+        if let indexPath = self.indexPathsForSelectedItems?.first {
+            self.selectItem(indexPath: indexPath, animated: true)
         }
     }
 

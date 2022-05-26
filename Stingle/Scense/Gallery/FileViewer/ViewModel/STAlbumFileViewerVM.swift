@@ -7,12 +7,12 @@
 
 import Foundation
 
-class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
+class STAlbumFileViewerVM: STFileViewerVM<STLibrary.AlbumFile> {
     
     private let album: STLibrary.Album
     private let albumWorker = STAlbumWorker()
     
-    init(album: STLibrary.Album, sortDescriptorsKeys: [STDataBase.DataSource<STCDAlbumFile>.Sort]) {
+    init(album: STLibrary.Album, sortDescriptorsKeys: [STDataBase.DataSource<STLibrary.AlbumFile>.Sort]) {
         self.album = album
         let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", album.albumId)
         let dataBase = STApplication.shared.dataBase.albumFilesProvider
@@ -25,8 +25,8 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
         file?.updateIfNeeded(albumMetadata: self.album.albumMetadata)
         return file
     }
-
-    override func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
+    
+    override func getAction(for file: STLibrary.AlbumFile) -> [STFileViewerVC.ActionType] {
         if self.album.isOwner {
             return STFileViewerVC.ActionType.allCases
         } else {
@@ -43,12 +43,7 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
         }
     }
     
-    override func deleteFile(file: STLibrary.File, completion: @escaping (_ result: IError?) -> Void) {
-        guard let file = file as? STLibrary.AlbumFile else {
-            completion(nil)
-            return
-        }
-        
+    override func deleteFile(file: STLibrary.AlbumFile, completion: @escaping (_ result: IError?) -> Void) {
         self.albumWorker.deleteAlbumFiles(album: self.album, files: [file]) { _ in
             completion(nil)
         } failure: { error in
@@ -56,15 +51,15 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
         }
     }
     
-    override func getDeleteFileMessage(file: STLibrary.File) -> String {
+    override func getDeleteFileMessage(file: STLibrary.AlbumFile) -> String {
         return "move_trash_file_alert_message".localized
     }
     
-    override func getMorAction(for file: STLibrary.File) -> [STFileViewerVC.MoreAction] {
+    override func getMorAction(for file: STLibrary.AlbumFile) -> [STFileViewerVC.MoreAction] {
         return [.download, .setAlbumCover]
     }
     
-    override func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.File) {
+    override func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.AlbumFile) {
         switch action {
         case .download:
             self.downloadFile(file: file)
@@ -74,11 +69,12 @@ class STAlbumFileViewerVM: STFileViewerVM<STCDAlbumFile> {
         }
     }
     
-    override func moveInfo(for file: STLibrary.File) -> STMoveAlbumFilesVC.MoveInfo {
-        guard let file = file as? STLibrary.AlbumFile else {
-            fatalError("file is incorrect")
-        }
+    override func moveInfo(for file: STLibrary.AlbumFile) -> STMoveAlbumFilesVC.MoveInfo {
         return .albumFiles(album: self.album, files: [file])
     }
-    
+
+    override func editVM(for file: STLibrary.AlbumFile) -> IFileEditVM {
+        return STAlbumFileEditVM(file: file, album: self.album)
+    }
+
 }

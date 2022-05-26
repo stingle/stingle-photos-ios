@@ -155,18 +155,12 @@ extension STBGTaskScheduler {
         }
         
         internal func endTask(isCompleted: Bool) {
-            
             guard self.task != nil else {
                 return
             }
-            
             self.task?.setTaskCompleted(success: isCompleted)
             self.delegate?.schedulerTask(didComplet: self, isCompleted: isCompleted)
             self.task = nil
-        }
-        
-        deinit {
-            print("")
         }
     
     }
@@ -189,6 +183,8 @@ extension STBGTaskScheduler {
     
     class AutoImporter: Task {
         
+        let bgImptortTimeInterval: TimeInterval = 20 * 60
+        
         let autoImporter = STApplication.shared.auotImporter
         private(set) var isStarted = false
         
@@ -201,7 +197,7 @@ extension STBGTaskScheduler {
             let request = BGProcessingTaskRequest(identifier: self.identifier.rawValue)
             request.requiresNetworkConnectivity = true
             request.requiresExternalPower = true
-            request.earliestBeginDate = Date(timeIntervalSinceNow: 3)
+            request.earliestBeginDate = Date(timeIntervalSinceNow: self.bgImptortTimeInterval)
             try scheduler.submit(request)
             self.isStarted = false
         }
@@ -217,7 +213,6 @@ extension STBGTaskScheduler {
                 self.endTask(isCompleted: true)
                 return
             }
-            
             self.autoImporter.startImport()
         }
         
@@ -240,7 +235,8 @@ extension STBGTaskScheduler.AutoImporter: IAuotImporterObserver {
         guard self.isStarted else {
             return
         }
-//        self.endTask(isCompleted: true)
+        self.endTask(isCompleted: true)
+        try? self.submit(scheduler: BGTaskScheduler.shared)
     }
     
 }

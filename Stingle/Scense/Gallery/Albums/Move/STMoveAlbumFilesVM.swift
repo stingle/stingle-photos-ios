@@ -20,7 +20,7 @@ class STMoveAlbumFilesVM {
         }
     }
     
-    func moveToAlbum(toAlbum: STLibrary.Album, files: [STLibrary.File], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
+    func moveToAlbum(toAlbum: STLibrary.Album, files: [STLibrary.GaleryFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
         self.isDeleteFilesLastValue = isDeleteFiles
         let isMoving = self.isDeleteFilesLastValue
         self.albumWorker.moveFiles(files: files, toAlbum: toAlbum, isMoving: isMoving) { _ in

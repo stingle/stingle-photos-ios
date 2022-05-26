@@ -13,7 +13,7 @@ class STPhotoViewerVC: UIViewController {
     @IBOutlet weak private var loadingView: UIActivityIndicatorView!
     
     weak var fileViewerDelegate: IFileViewerDelegate?
-    private(set) var photoFile: STLibrary.File!
+    private(set) var photoFile: STLibrary.FileBase!
     
     private var isThumbSeted = false
     private var isViewDidAppear = false
@@ -47,7 +47,7 @@ class STPhotoViewerVC: UIViewController {
             self.setImage(isThumb: false) { }
         }
     }
-    
+
     //MARK: - Private
     
     private func setImage(isThumb: Bool, complition: @escaping (() -> Void)) {
@@ -66,7 +66,7 @@ class STPhotoViewerVC: UIViewController {
 
 extension STPhotoViewerVC: IFileViewer {
 
-    static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer {
+    static func create(file: STLibrary.FileBase, fileIndex: Int) -> IFileViewer {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: STPhotoViewerVC = storyboard.instantiateViewController(identifier: "STPhotoViewerVCID")
         vc.photoFile = file
@@ -74,7 +74,7 @@ extension STPhotoViewerVC: IFileViewer {
         return vc
     }
     
-    var file: STLibrary.File {
+    var file: STLibrary.FileBase {
         return self.photoFile
     }
     
@@ -87,6 +87,19 @@ extension STPhotoViewerVC: IFileViewer {
     }
     
     func fileViewer(pauseContent fileViewer: STFileViewerVC) {}
+
+    func reload(file: STLibrary.FileBase, fileIndex: Int) {
+        self.fileIndex = fileIndex
+        self.photoFile = file
+        guard self.isViewLoaded else {
+            return
+        }
+        self.setImage(isThumb: false, complition: {})
+    }
+
+    func reload(fileIndex: Int) {
+        self.fileIndex = fileIndex
+    }
 
 }
 

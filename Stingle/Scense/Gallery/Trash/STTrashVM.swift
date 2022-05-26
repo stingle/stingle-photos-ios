@@ -13,7 +13,7 @@ class STTrashVM {
     private let fileWorker = STFileWorker()
     private let trashProvider = STApplication.shared.dataBase.trashProvider
     
-    func createDBDataSource() -> STDataBase.DataSource<STCDTrashFile> {
+    func createDBDataSource() -> STDataBase.DataSource<STLibrary.TrashFile> {
         let trashProvider = STApplication.shared.dataBase.trashProvider
         let sorting = self.getSorting()
         return trashProvider.createDataSource(sortDescriptorsKeys: sorting, sectionNameKeyPath: #keyPath(STCDTrashFile.day))
@@ -24,7 +24,7 @@ class STTrashVM {
     }
     
     func getFiles(fileNames: [String]) -> [STLibrary.TrashFile] {
-        let files = self.trashProvider.fetchAll(for: fileNames)
+        let files = self.trashProvider.fetchObjects(fileNames: fileNames)
         return files
     }
     
@@ -37,7 +37,7 @@ class STTrashVM {
     }
     
     func deleteAll(completion: @escaping (IError?) -> Void) {
-        let files = self.trashProvider.fetchAllObjects()
+        let files = self.trashProvider.fetchObjects()
         self.fileWorker.deleteFiles(files: files) { _ in
             completion(nil)
         } failure: { error in
@@ -54,7 +54,7 @@ class STTrashVM {
     }
     
     func recoverAll(completion: @escaping (IError?) -> Void) {
-        let files = self.trashProvider.fetchAllObjects()
+        let files = self.trashProvider.fetchObjects()
         self.fileWorker.moveToGalery(files: files) { _ in
             completion(nil)
         } failure: { error in
@@ -62,20 +62,11 @@ class STTrashVM {
         }
     }
     
-    func getSorting() -> [STDataBase.DataSource<STCDTrashFile>.Sort] {
-        let dateCreated = STDataBase.DataSource<STCDTrashFile>.Sort(key: #keyPath(STCDTrashFile.dateCreated), ascending: nil)
-        let dateModified = STDataBase.DataSource<STCDTrashFile>.Sort(key: #keyPath(STCDTrashFile.dateModified), ascending: false)
-        let file = STDataBase.DataSource<STCDTrashFile>.Sort(key: #keyPath(STCDTrashFile.file), ascending: false)
+    func getSorting() -> [STDataBase.DataSource<STLibrary.TrashFile>.Sort] {
+        let dateCreated = STDataBase.DataSource<STLibrary.TrashFile>.Sort(key: #keyPath(STCDTrashFile.dateCreated), ascending: nil)
+        let dateModified = STDataBase.DataSource<STLibrary.TrashFile>.Sort(key: #keyPath(STCDTrashFile.dateModified), ascending: false)
+        let file = STDataBase.DataSource<STLibrary.TrashFile>.Sort(key: #keyPath(STCDTrashFile.file), ascending: false)
         return [dateCreated, dateModified, file]
-    }
-    
-}
-
-extension STCDTrashFile {
-    
-    @objc var day: String {
-        let str = STDateManager.shared.dateToString(date: self.dateCreated, withFormate: .mmm_dd_yyyy)
-        return str
     }
     
 }

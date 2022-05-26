@@ -26,7 +26,7 @@ class STAssetResourceLoader: NSObject {
     private let scheme: Scheme
     private let header: STHeader
     private let dispatchQueue = DispatchQueue(label: "Player.Queue", attributes: .concurrent)
-    private let file: STLibrary.File
+    private let file: ILibraryFile
     private var decrypters = [Decrypter]()
     
     lazy var networkSession: STNetworkSession = {
@@ -35,7 +35,7 @@ class STAssetResourceLoader: NSObject {
         return networkSession
     }()
     
-    init(file: STLibrary.File, header: STHeader) {
+    init(file: ILibraryFile, header: STHeader) {
         guard let url = file.fileOreginalUrl,
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let scheme = components.scheme,

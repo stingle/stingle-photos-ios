@@ -57,31 +57,31 @@ enum STFilterType: Int, CaseIterable {
     var iconName: String {
         switch self {
         case .brightness:
-            return "brightness"
+            return "ic_brightness"
         case .contrast:
-            return "contrast"
+            return "ic_contrast"
         case .saturation:
-            return "saturation"
+            return "ic_saturation"
         case .vibrance:
-            return "vibrance"
+            return "ic_vibrance"
         case .exposure:
-            return "exposure"
+            return "ic_exposure"
         case .highlights:
-            return "highlights"
+            return "ic_highlights"
         case .shadows:
-            return "shadows"
+            return "ic_shadows"
         case .whitePoint:
-            return "whitePoint"
+            return "ic_whitePoint"
         case .temperature:
-            return "temperature"
+            return "ic_temperature"
         case .tint:
-            return "tint"
+            return "ic_tint"
         case .sharpness:
-            return "sharpness"
+            return "ic_sharpness"
         case .noiseReduction:
-            return "noiseReduction"
+            return "ic_noiseReduction"
         case .vignette:
-            return "vignette"
+            return "ic_vignette"
         }
     }
 

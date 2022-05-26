@@ -195,13 +195,52 @@ extension STFileSystem {
         
     }
     
+    func deleteFiles(for fileNames: Set<String>, in cacheType: CacheType) {
+        
+        let folder = FolderType.storage(type: cacheType)
+        guard !fileNames.isEmpty, let url = self.url(for: folder), let subpathsArray = self.fileManager.subpaths(atPath: url.path), !subpathsArray.isEmpty else {
+            return
+        }
+                
+        let subpaths = Set(subpathsArray)
+        let intersection = fileNames.intersection(subpaths)
+        
+        intersection.forEach { name in
+            let url = url.appendingPathComponent(name)
+            self.remove(file: url)
+        }
+
+    }
+    
     func deleteFiles(for fileNames: [String]) {
-        fileNames.forEach { fileName in
-            self.deleteAllData(for: fileName)
+        let fileNames = Set(fileNames)
+        let localOreginalsType = CacheType.local(type: .oreginals)
+        let localThumbsType = CacheType.local(type: .thumbs)
+        let serverOreginalsType = CacheType.server(type: .oreginals)
+        let serverThumbsType = CacheType.server(type: .thumbs)
+        
+        self.deleteFiles(for: fileNames, in: localOreginalsType)
+        self.deleteFiles(for: fileNames, in: localThumbsType)
+        self.deleteFiles(for: fileNames, in: serverOreginalsType)
+        self.deleteFiles(for: fileNames, in: serverThumbsType)
+    }
+    
+    func moveLocalToRemot(file: ILibraryFile) {
+        if let local = self.fileThumbUrl(fileName: file.file, isRemote: false), let server = self.fileThumbUrl(fileName: file.file, isRemote: true) {
+            try? self.move(file: local, to: server)
+        }
+        if let local = self.fileOreginalUrl(fileName: file.file, isRemote: false), let server = self.fileOreginalUrl(fileName: file.file, isRemote: true) {
+            try? self.move(file: local, to: server)
         }
     }
     
-    func deleteFiles(files: [STLibrary.File]) {
+    func moveLocalToRemot(files: [ILibraryFile]) {
+        files.forEach { file in
+            self.moveLocalToRemot(file: file)
+        }
+    }
+    
+    func deleteFiles(files: [ILibraryFile]) {
         for file in files {
             if let oldFileThumbPath = file.fileOreginalUrl?.path {
                 try? self.fileManager.removeItem(atPath: oldFileThumbPath)
@@ -213,7 +252,7 @@ extension STFileSystem {
         }
     }
     
-    func isExistFile(file: STLibrary.File, isThumb: Bool) -> Bool {
+    func isExistFile(file: ILibraryFile, isThumb: Bool) -> Bool {
         guard let url = isThumb ? file.fileThumbUrl : file.fileOreginalUrl else {
             return false
         }

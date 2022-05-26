@@ -29,10 +29,13 @@ extension STAlbumFilesVC {
             if let duration = data?.decryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).timeFormat()
             }
+            
+            let isRemote = (data?.isRemote ?? false) && (data?.isSynched ?? false)
+            
             return CellModel(image: image,
                              name: data?.file,
                              videoDuration: videoDurationStr,
-                             isRemote: data?.isRemote ?? true,
+                             isRemote: isRemote,
                              selectedMode: self.isSelectedMode)
         }
         
@@ -224,7 +227,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
     
     @IBAction private func didSelectAlbumSettingsButton(_ sender: UIBarButtonItem) {
         if !self.album.isShared {
-            let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+            let storyboard = UIStoryboard(name: "Share", bundle: .main)
             let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
             
             let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
@@ -238,7 +241,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
             
             self.showDetailViewController(vc, sender: nil)
         } else {
-            let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+            let storyboard = UIStoryboard(name: "Share", bundle: .main)
             let vc = (storyboard.instantiateViewController(identifier: "STSharedAlbumSettingsVCID") as! UINavigationController)
             (vc.viewControllers.first as? STSharedAlbumSettingsVC)?.album = self.album
             self.show(vc, sender: nil)
@@ -390,7 +393,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
             return
         }
         let files = self.viewModel.getFiles(fileNames: selectedFileNames)
-        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+        let storyboard = UIStoryboard(name: "Share", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
         
         let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
@@ -474,7 +477,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         importer.progressHendler = { progress in
             let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
             
-            if let asset = (progress.importingFile as? STImporter.FileImportable)?.asset {
+            if let asset = progress.importingFile?.asset {
                 importedAssets.append(asset)
             }
             
@@ -489,7 +492,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         
         importer.complition = { [weak self] _, importableFiles in
             var assets = [PHAsset]()
-            (importableFiles as? [STImporter.FileImportable])?.forEach({assets.append($0.asset)})
+            (importableFiles).forEach({assets.append($0.asset)})
             DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
                 progressView.hide()
                 guard !assets.isEmpty else {

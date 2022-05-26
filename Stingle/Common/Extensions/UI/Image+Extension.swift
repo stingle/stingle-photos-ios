@@ -36,23 +36,19 @@ extension UIImage {
 		return newImage
 	}
 	
-	func scale(to width: CGFloat) -> UIImage? {
-		let scale =  width / CGFloat(size.width)
-		let h = size.height * scale
-		let w = size.width * scale
-		let newRect = CGRect(x: 0, y: 0, width: w, height: h)
-		UIGraphicsBeginImageContext(newRect.size)
-		UIImage(cgImage: cgImage!).draw(in: newRect)
-		let newImage = UIGraphicsGetImageFromCurrentImageContext()
-		UIGraphicsEndImageContext()
-		return newImage
+	func scale(to width: CGFloat) -> UIImage {
+        let scale =  width / CGFloat(self.size.width)
+        let h = self.size.height * scale
+        let w = self.size.width * scale
+        return self.scaled(newSize: CGSize(width: w, height: h))
 	}
 
     func scaled(newSize: CGSize) -> UIImage {
-        let image = UIGraphicsImageRenderer(size: newSize).image { _ in
-            self.draw(in: CGRect(origin: .zero, size: newSize))
-        }
-        return image.withRenderingMode(self.renderingMode)
+        UIGraphicsBeginImageContext(newSize)
+        self.draw(in: CGRect(origin: .zero, size: newSize))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage ?? self
     }
 
 }

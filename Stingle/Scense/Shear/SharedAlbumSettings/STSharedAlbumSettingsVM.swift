@@ -28,7 +28,7 @@ class STSharedAlbumSettingsVM {
     }
     
     func getContacts(contactsIds: [String]) -> [STContact] {
-        let result: [STContact] = self.contactProvider.fetch(identifiers: contactsIds)
+        let result: [STContact] = self.contactProvider.fetchObjects(identifiers: contactsIds)
         return result
     }
     
@@ -43,7 +43,7 @@ class STSharedAlbumSettingsVM {
             return []
         }
         members = members.filter( { $0 != myUser.userId} )
-        return STApplication.shared.dataBase.contactProvider.fetch(identifiers: members)
+        return STApplication.shared.dataBase.contactProvider.fetchObjects(identifiers: members)
     }
     
     func removeMember(memberID: String, result: @escaping (_ result: IError?) -> Void) {

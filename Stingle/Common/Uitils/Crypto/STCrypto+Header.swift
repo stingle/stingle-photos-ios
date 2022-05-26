@@ -7,6 +7,7 @@
 
 import Sodium
 import Clibsodium
+import Foundation
 
 struct STHeaders {
     var file: STHeader?
@@ -120,11 +121,10 @@ extension STCrypto {
             if diff > 0 {
                 buf = self.copyMemoryStartingAtIndex(from: buf, startIndexAtPointer: numRead)
             }
-            let  decryptedData = try self.decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header)
+            let decryptedData = try self.decryptChunk(chunkData: buf, chunkNumber: chunkNumber, header: header)
             assert(header.chunkSize == decryptedData.count || (diff != 0))
             completionHandler(decryptedData)
             chunkNumber += UInt64(1)
-        
         } while (diff == 0)
         
         return true
@@ -152,10 +152,6 @@ extension STCrypto {
         return (fileBase64, thumbBase64)
     }
         
-    func getHeaders(file: STLibrary.File, publicKey: Bytes? = nil, privateKey: Bytes? = nil) -> STHeaders  {
-        return self.getHeaders(headersStrs: file.headers, publicKey: publicKey, privateKey: privateKey)
-    }
-    
     func getHeaders(headersStrs: String, publicKey: Bytes? = nil, privateKey: Bytes? = nil) -> STHeaders  {
         
         var fileHeader: STHeader?

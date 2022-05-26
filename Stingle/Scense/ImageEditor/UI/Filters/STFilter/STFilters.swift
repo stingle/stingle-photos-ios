@@ -10,29 +10,43 @@ import CoreImage
 import UIKit
 import CoreImage.CIFilterBuiltins
 
-
-
 protocol IFilter {
     var ciFilter: CIFilter? { get }
+    var hasChange: Bool { get }
     func reset()
 }
 
-class STFilter: IFilter {
-    
-    class Range {
-        let min: CGFloat
-        let max: CGFloat
-        let defaultValue: CGFloat
-
-        init(min: CGFloat, max: CGFloat, defaultValue: CGFloat) {
-            self.min = min
-            self.max = max
-            self.defaultValue = defaultValue
+class STFilter<Filter: CIFilter>: IFilter {
+            
+    var ciFilter: CIFilter? {
+        get {
+            guard self.hasChange else {
+                return nil
+            }
+            if let filter = self.filter {
+                self.update(filter: filter)
+                return filter
+            } else {
+                let filter = self.createFilter()
+                self.update(filter: filter)
+                self.filter = filter
+                return filter
+            }
         }
     }
     
-    var ciFilter: CIFilter? {
-        return nil
+    var hasChange: Bool {
+        fatalError()
+    }
+    
+    private var filter: Filter?
+    
+    func createFilter() -> Filter {
+        fatalError()
+    }
+    
+    func update(filter: Filter) {
+        fatalError()
     }
     
     func reset() {
@@ -47,20 +61,21 @@ extension STFilter {
         return ColorControls()
     }
     
-    class ColorControls: STFilter {
-        static let brightnessRange = STFilter.Range(min: -0.2, max: 0.2, defaultValue: 0.0)
-        static let contrastRange = STFilter.Range(min: 0.8, max: 1.2, defaultValue: 1.0)
-        static let saturationRange = STFilter.Range(min: 0.0, max: 2.0, defaultValue: 1.0)
-
+    class ColorControls: STFilter<CIFilter & CIColorControls> {
+                
         var brightness: CGFloat?
         var contrast: CGFloat?
         var saturation: CGFloat?
-
-        override var ciFilter: CIFilter? {
-            guard self.brightness != nil || self.contrast != nil || self.saturation != nil else {
-                return nil
-            }
-            let filter = CIFilter.colorControls()
+        
+        override var hasChange: Bool {
+            return self.brightness != nil || self.contrast != nil || self.saturation != nil
+        }
+        
+        override func createFilter() -> (CIFilter & CIColorControls) {
+            return CIFilter.colorControls()
+        }
+        
+        override func update(filter: CIFilter & CIColorControls) {
             if let brightness = self.brightness {
                 filter.brightness = Float(brightness)
             }
@@ -70,7 +85,6 @@ extension STFilter {
             if let saturation = self.saturation {
                 filter.saturation = Float(saturation)
             }
-            return filter
         }
 
         override func reset() {
@@ -89,20 +103,25 @@ extension STFilter {
         return WhitePoint()
     }
     
-    class WhitePoint: STFilter {
-        static let range = STFilter.Range(min: 0.5, max: 1.5, defaultValue: 1)
+    class WhitePoint: STFilter<CIFilter & CIGammaAdjust> {
 
         var value: CGFloat?
-
-        override var ciFilter: CIFilter? {
-            guard let value = self.value else {
-                return nil
-            }
-            let filter = CIFilter.gammaAdjust()
-            filter.power = Float(value)
-            return filter
+        
+        override var hasChange: Bool {
+            return self.value != nil
         }
 
+        override func createFilter() -> (CIFilter & CIGammaAdjust) {
+            let filter = CIFilter.gammaAdjust()
+            return filter
+        }
+        
+        override func update(filter: CIFilter & CIGammaAdjust) {
+            if let value = self.value {
+                filter.power = Float(value)
+            }
+        }
+        
         override func reset() {
             self.value = nil
         }
@@ -117,18 +136,22 @@ extension STFilter {
         return Vibrance()
     }
 
-    class Vibrance: STFilter {
-        static let range = STFilter.Range(min: -1.0, max: 1.0, defaultValue: 0.0)
+    class Vibrance: STFilter<CIFilter & CIVibrance> {
 
         var value: CGFloat?
-
-        override var ciFilter: CIFilter? {
-            guard let value = self.value else {
-                return nil
+        
+        override var hasChange: Bool {
+            return self.value != nil
+        }
+        
+        override func createFilter() -> CIFilter & CIVibrance {
+            return CIFilter.vibrance()
+        }
+        
+        override func update(filter: CIFilter & CIVibrance) {
+            if let value = self.value {
+                filter.amount = Float(value)
             }
-            let filter = CIFilter.vibrance()
-            filter.amount = Float(value)
-            return filter
         }
 
         override func reset() {
@@ -144,18 +167,22 @@ extension STFilter {
         return Exposure()
     }
 
-    class Exposure: STFilter {
-        static let range = STFilter.Range(min: -1.0, max: 1.0, defaultValue: 0.0)
-
+    class Exposure: STFilter<CIFilter & CIExposureAdjust> {
+        
         var value: CGFloat?
-
-        override var ciFilter: CIFilter? {
-            guard let value = self.value else {
-                return nil
+        
+        override var hasChange: Bool {
+            return self.value != nil
+        }
+        
+        override func createFilter() -> CIFilter & CIExposureAdjust {
+            return CIFilter.exposureAdjust()
+        }
+        
+        override func update(filter: CIFilter & CIExposureAdjust) {
+            if let value = self.value {
+                filter.ev = Float(value)
             }
-            let filter = CIFilter.exposureAdjust()
-            filter.ev = Float(value)
-            return filter
         }
 
         override func reset() {
@@ -172,26 +199,28 @@ extension STFilter {
         return HighlightShadow()
     }
 
-    class HighlightShadow: STFilter {
-        static let highlightRange = STFilter.Range(min: 0.0, max: 1.0, defaultValue: 0.5)
-        static let shadowRange = STFilter.Range(min: -1.0, max: 1.0, defaultValue: 0.0)
+    class HighlightShadow: STFilter<CIFilter & CIHighlightShadowAdjust> {
 
         var highlight: CGFloat?
         var shadow: CGFloat?
-
-        override var ciFilter: CIFilter? {
-            guard self.highlight != nil || self.shadow != nil else {
-                return nil
-            }
+        
+        override var hasChange: Bool {
+            return self.highlight != nil || self.shadow != nil
+        }
+        
+        override func createFilter() -> CIFilter & CIHighlightShadowAdjust {
             let filter = CIFilter.highlightShadowAdjust()
             filter.radius = 1.5
+            return filter
+        }
+        
+        override func update(filter: CIFilter & CIHighlightShadowAdjust) {
             if let highlight = self.highlight {
                 filter.highlightAmount = Float(highlight)
             }
             if let shadow = self.shadow {
                 filter.shadowAmount = Float(shadow)
             }
-            return filter
         }
 
         override func reset() {
@@ -208,18 +237,20 @@ extension STFilter {
         return TemperatureAndTint()
     }
 
-    class TemperatureAndTint: STFilter {
-        static let temperatureRange = STFilter.Range(min: 15000.0, max: 3000.0, defaultValue: 6500.0)
-        static let tintRange = STFilter.Range(min: 50.0, max: -50.0, defaultValue: 0.0)
-
+    class TemperatureAndTint: STFilter<CIFilter & CITemperatureAndTint> {
+        
         var temperature: CGFloat?
         var tint: CGFloat?
-
-        override var ciFilter: CIFilter? {
-            guard self.temperature != nil || self.tint != nil else {
-                return nil
-            }
-            let filter = CIFilter.temperatureAndTint()
+        
+        override var hasChange: Bool {
+            return self.temperature != nil || self.tint != nil
+        }
+        
+        override func createFilter() -> CIFilter & CITemperatureAndTint {
+            return CIFilter.temperatureAndTint()
+        }
+        
+        override func update(filter: CIFilter & CITemperatureAndTint) {
             var vector = CIVector(x: 6500.0, y: 0)
             if let temperature = self.temperature {
                 vector = CIVector(x: temperature, y: vector.y)
@@ -228,7 +259,6 @@ extension STFilter {
                 vector = CIVector(x: vector.x, y: tint)
             }
             filter.targetNeutral = vector
-            return filter
         }
 
         override func reset() {
@@ -245,25 +275,26 @@ extension STFilter {
         return NoiseReductionAndSharpness()
     }
 
-    class NoiseReductionAndSharpness: STFilter {
-        static let reductionRange = STFilter.Range(min: 0.0, max: 1, defaultValue: 0.0)
-        static let sharpnessRange = STFilter.Range(min: 0.0, max: 5.0, defaultValue: 0.0)
+    class NoiseReductionAndSharpness: STFilter<CIFilter & CINoiseReduction> {
 
         var reduction: CGFloat?
         var sharpness: CGFloat?
-
-        override var ciFilter: CIFilter? {
-            guard self.reduction != nil || self.sharpness != nil else {
-                return nil
-            }
-            let filter = CIFilter.noiseReduction()
+        
+        override var hasChange: Bool {
+            return self.reduction != nil || self.sharpness != nil
+        }
+        
+        override func createFilter() -> CIFilter & CINoiseReduction {
+            return CIFilter.noiseReduction()
+        }
+        
+        override func update(filter: CIFilter & CINoiseReduction) {
             if let reduction = self.reduction {
                 filter.noiseLevel = Float(reduction)
             }
             if let sharpness = self.sharpness {
                 filter.sharpness = Float(sharpness)
             }
-            return filter
         }
 
         override func reset() {
@@ -281,21 +312,26 @@ extension STFilter {
         return Vignette()
     }
 
-    class Vignette: STFilter {
-        static let range = STFilter.Range(min: -2.0, max: 2.0, defaultValue: 0.0)
+    class Vignette: STFilter<CIFilter & CIVignette> {
 
         var value: CGFloat?
-
-        override var ciFilter: CIFilter? {
-            guard let value = self.value else {
-                return nil
-            }
+        
+        override var hasChange: Bool {
+            return self.value != nil
+        }
+        
+        override func createFilter() -> CIFilter & CIVignette {
             let filter = CIFilter.vignette()
-            filter.intensity = Float(value)
             filter.radius = 1.5
             return filter
         }
 
+        override func update(filter: CIFilter & CIVignette) {
+            if let value = self.value {
+                filter.intensity = Float(value)
+            }
+        }
+        
         override func reset() {
             self.value = nil
         }

@@ -63,8 +63,7 @@ extension STAlbumWorker {
         }, failure: failure)
     }
     
-    
-    func createSharedAlbum(name: String, files: [STLibrary.File], contacts: [STContact], permitions: STLibrary.Album.Permission, success: Success<STLibrary.Album>?, failure: Failure?) {
+    func createSharedAlbum(name: String, files: [STLibrary.GaleryFile], contacts: [STContact], permitions: STLibrary.Album.Permission, success: Success<STLibrary.Album>?, failure: Failure?) {
                         
         self.createAlbum(name: name, reloadDBData: true, success: { [weak self] album in
             self?.moveFiles(files: files, toAlbum: album, isMoving: false, success: { [weak self] _ in
@@ -157,7 +156,7 @@ extension STAlbumWorker {
             let dataBase = STApplication.shared.dataBase
             let albumProvider = dataBase.albumsProvider
             let albumFilesProvider = dataBase.albumFilesProvider
-            let files = albumFilesProvider.fetchAll(for: album.albumId)
+            let files = albumFilesProvider.fetchObjects(albumID: album.albumId)
             
             albumFilesProvider.delete(models: files, reloadData: true)
             albumProvider.delete(models: [album], reloadData: true)

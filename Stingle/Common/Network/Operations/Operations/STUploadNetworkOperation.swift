@@ -31,9 +31,7 @@ class STUploadNetworkOperation<T: Decodable>: STBaseNetworkOperation<T> {
         super.resume()
         self.startRequest()
     }
-    
-    //
-    
+        
     private func startRequest(default uploadRequest: IUploadRequest) {
         self.dataRequest = self.networkDispatcher.upload(request: uploadRequest) { [weak self] (progress) in
             self?.responseProgress(result: progress)

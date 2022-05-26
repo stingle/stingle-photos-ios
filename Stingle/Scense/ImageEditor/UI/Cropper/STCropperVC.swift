@@ -259,10 +259,6 @@ class STCropperVC: UIViewController {
         self.transitionsView(with: coordinator)
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
         return .top
     }
@@ -290,10 +286,12 @@ class STCropperVC: UIViewController {
                     self.overlayView.gridLinesAlpha = 0
                     self.overlayView.blur = true
                 }, completion: {
+                    self.delegate?.cropper(didChange: self)
                 })
             }
         } else {
             self.updateCropBoxFrameWithPanGesturePoint(point)
+            self.delegate?.cropper(didChange: self)
         }
     }
 
@@ -313,9 +311,9 @@ class STCropperVC: UIViewController {
     }
 
     func photoTranslation() -> CGPoint {
-        let rect = self.imageView.convert(self.imageView.bounds, to: view)
+        let rect = self.imageView.convert(self.imageView.bounds, to: self.scrollViewContainer)
         let point = CGPoint(x: rect.origin.x + rect.size.width / 2, y: rect.origin.y + rect.size.height / 2)
-        let zeroPoint = CGPoint(x: view.frame.width / 2, y: self.defaultCropBoxCenter.y)
+        let zeroPoint = CGPoint(x: self.scrollViewContainer.frame.width / 2, y: self.defaultCropBoxCenter.y - self.scrollViewContainer.frame.minY)
 
         return CGPoint(x: point.x - zeroPoint.x, y: point.y - zeroPoint.y)
     }
@@ -520,6 +518,11 @@ class STCropperVC: UIViewController {
             self.angleRuler.value = self.angleRulerValue
             self.angleRuler.delegate = self
             self.contentOffsetBeforTransition = nil
+
+            self.defaultState?.viewFrame = self.view.frame
+            self.defaultState?.scrollViewBounds = self.scrollView.bounds
+            self.defaultState?.cropBoxFrame = CGRect(center: self.defaultCropBoxCenter, size: self.defaultCropBoxSize)
+            self.defaultState?.scrollViewCenter = self.backgroundView.convert(self.defaultCropBoxCenter, to: self.scrollViewContainer)
         }
     }
 

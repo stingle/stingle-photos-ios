@@ -10,10 +10,8 @@ import Photos
 import UIKit
 
 protocol IAuotImporterObserver: AnyObject {
-    
     func auotImporter(didStart auotImporter: STImporter.AuotImporter)
     func auotImporter(didEnd auotImporter: STImporter.AuotImporter)
-    
 }
 
 extension STImporter {
@@ -256,7 +254,7 @@ extension STImporter.AuotImporter {
         let date: Date?
         let fetchLimit: Int
         let importQueue: STOperationQueue
-        private weak var importer: STImporter.Importer?
+        private weak var importer: STImporter.GaleryFileImporter?
         private var progress: Progress
         private var isCancel = false
         
@@ -296,13 +294,13 @@ extension STImporter.AuotImporter {
         //MARK: - Private methods
         
         private func enumerateObjects() {
-            var importFiles = [STImporter.FileImportable]()
+            var importFiles = [STImporter.GaleryFileImportable]()
             self.enumerateObjects { asset, index, stop in
                 if self.isExpired {
                     stop.pointee = true
                     return
                 }
-                let importFile = STImporter.FileImportable(asset: asset)
+                let importFile = STImporter.GaleryFileImportable(asset: asset)
                 importFiles.append(importFile)
             }
             guard !self.isExpired else {
@@ -311,7 +309,8 @@ extension STImporter.AuotImporter {
             self.startImport(importFiles: importFiles)
         }
         
-        private func startImport(importFiles: [STImporter.FileImportable]) {
+        private func startImport(importFiles: [STImporter.GaleryFileImportable]) {
+            
             guard let queue = self.delegate?.underlyingQueue else {
                 self.responseFailed(error: AuotImporterError.canceled)
                 return
@@ -327,15 +326,16 @@ extension STImporter.AuotImporter {
             var resultDate = self.date
             var importedAssets = [PHAsset]()
             
-            let importer = STImporter.Importer(importFiles: importFiles, operationQueue: self.importQueue, startHendler: {}, progressHendler: { [weak self] progress in
+            let importer = STImporter.GaleryFileImporter(importFiles: importFiles, operationQueue: self.importQueue, startHendler: {}, progressHendler: { [weak self] progress in
+                                
                 queue.async { [weak self] in
                     guard let weakSelf = self else {
                         return
                     }
-                    if let asset = (progress.importingFile as? STImporter.FileImportable)?.asset {
+                    if let asset = progress.importingFile?.asset {
                         importedAssets.append(asset)
                     }
-                    let currentFileDate = (progress.importingFile as? STImporter.FileImportable)?.asset.creationDate
+                    let currentFileDate = progress.importingFile?.asset.creationDate
                     if let date = resultDate {
                         let fileDate: Date = currentFileDate ?? date
                         resultDate = max(date, fileDate)

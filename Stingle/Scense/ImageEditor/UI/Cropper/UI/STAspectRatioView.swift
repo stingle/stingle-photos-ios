@@ -155,7 +155,7 @@ class STAspectRatioView: UIView {
         let normalBackgroundImage = normalColorImage.resizableImage(withCapInsets: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
         let selectedColorImage = UIImage(color: UIColor(white: 0.56, alpha: 1), size: CGSize(width: 10, height: 10))
         let selectedBackgroundImage = selectedColorImage.resizableImage(withCapInsets: UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3))
-        let checkmark = UIImage(named: "checkmark")?.withRenderingMode(.alwaysTemplate)
+        let checkmark = UIImage(named: "ic_checkmark")?.withRenderingMode(.alwaysTemplate)
 
         self.horizontalButton.tintColor = .black
         self.horizontalButton.layer.borderColor = UIColor(white: 0.56, alpha: 1).cgColor

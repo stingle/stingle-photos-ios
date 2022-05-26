@@ -8,7 +8,7 @@
 import Foundation
 
 enum STFilesRequest {
-    case moveToTrash(files: [STLibrary.File])
+    case moveToTrash(files: [STLibrary.GaleryFile])
     case delete(files: [STLibrary.TrashFile])
     case moveToGalery(files: [STLibrary.TrashFile])
 }
@@ -19,7 +19,7 @@ extension STFilesRequest: IEncryptedRequest {
         switch self {
         case .moveToTrash(let files):
             var params = [String: Any]()
-            params["setFrom"] = "\(STLibrary.DBSet.file.rawValue)"
+            params["setFrom"] = "\(STLibrary.DBSet.galery.rawValue)"
             params["setTo"] = "\(STLibrary.DBSet.trash.rawValue)"
             params["isMoving"] = "1"
             params["count"] = "\(files.count)"
@@ -44,7 +44,7 @@ extension STFilesRequest: IEncryptedRequest {
         case .moveToGalery(let files):
             var params = [String: Any]()
             params["setFrom"] = "\(STLibrary.DBSet.trash.rawValue)"
-            params["setTo"] = "\(STLibrary.DBSet.file.rawValue)"
+            params["setTo"] = "\(STLibrary.DBSet.galery.rawValue)"
             params["isMoving"] = "1"
             params["count"] = "\(files.count)"
             for (index, file) in files.enumerated() {

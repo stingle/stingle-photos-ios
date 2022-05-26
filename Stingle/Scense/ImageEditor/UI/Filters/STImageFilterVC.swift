@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import MetalPetal
 
 protocol STImageFilterVCDelegate: AnyObject {
     func imageFilter(didSelectResize vc: STImageFilterVC)
@@ -25,20 +24,10 @@ class STImageFilterVC: UIViewController {
 
     weak var delegate: STImageFilterVCDelegate?
 
-    private var mtImage: MTIImage?
-
     private var image: UIImage? {
         didSet {
             if self.isViewLoaded {
                 self.imageView.image = self.image
-            }
-            guard let image = self.image else {
-                return
-            }
-            if let ciImage = CIImage(image: image) {
-                self.mtImage = MTIImage(ciImage: ciImage, isOpaque: true)
-            } else if let ciImage = image.ciImage {
-                self.mtImage = MTIImage(ciImage: ciImage, isOpaque: true)
             }
         }
     }
@@ -67,6 +56,10 @@ class STImageFilterVC: UIViewController {
 
     private lazy var angleRuler = STRulerView(frame: self.rulerBackgroundView.bounds)
 
+    private var queue = DispatchQueue(label: "filter.image")
+
+    private let context = CIContext()
+
     private var filters: [IFilter] {
         return [
             self.exposureFilter,
@@ -79,13 +72,6 @@ class STImageFilterVC: UIViewController {
             self.vignetteFilter
         ]
     }
-
-    private lazy var renderContext: MTIContext? = {
-        guard let device = MTLCreateSystemDefaultDevice() else {
-            return nil
-        }
-        return try? MTIContext(device: device)
-    }()
 
     private lazy var maskLayer: CAGradientLayer = {
         let layer = CAGradientLayer()
@@ -105,7 +91,7 @@ class STImageFilterVC: UIViewController {
     }()
 
     var hasChanges: Bool {
-        return self.filters.contains(where: { $0.ciFilter != nil })
+        return self.filters.contains(where: { $0.hasChange })
     }
 
     override func viewDidLoad() {
@@ -168,10 +154,10 @@ class STImageFilterVC: UIViewController {
     func setImage(image: UIImage, applyFilters: Bool = false) {
         self.image = image
         if applyFilters {
-            guard let mtImage = self.mtImage else {
-                return
+            self.filterImage(image: image) { [weak self] image in
+                self?.imageView.image = image ?? self?.image
             }
-            self.imageView.image = self.filterImage(mtImage: mtImage) ?? self.image
+
         }
     }
 
@@ -185,29 +171,13 @@ class STImageFilterVC: UIViewController {
         self.filterCollectionView.setSelectedFilterValue(value: value)
     }
 
-    func applyFilters(image: UIImage) -> UIImage {
-        guard let ciImage = CIImage(image: image) else {
-            return image
+    func applyFilters(image: UIImage, completion: @escaping (UIImage) -> Void) {
+        self.filterImage(image: image) { filteredImage in
+            completion(filteredImage ?? image)
         }
-        let mtImage = MTIImage(ciImage: ciImage, isOpaque: true)
-        return self.filterImage(mtImage: mtImage) ?? image
     }
 
     // MARK: - Private methods
-
-    private func image(from mtImage: MTIImage?) -> UIImage? {
-        guard let mtImage = mtImage, let context = self.renderContext else {
-            return self.image
-        }
-        do {
-            let ciImage = try context.makeCIImage(from: mtImage)
-            let context = CIContext()
-            let cgImage = context.createCGImage(ciImage, from: ciImage.extent)!
-            return UIImage(cgImage: cgImage)
-        } catch {
-            return self.image
-        }
-    }
 
     private func selectFilter(type: STFilterType) {
         self.selectedFilterType = type
@@ -260,56 +230,65 @@ class STImageFilterVC: UIViewController {
         }
     }
 
-    private func filterImage(mtImage: MTIImage) -> UIImage? {
-        var mtFilters = [MTIUnaryFilter]()
-        for filter in self.filters {
-            guard let ciFilter = filter.ciFilter else { continue }
-            let mtFilter = MTICoreImageUnaryFilter()
-            mtFilter.filter = ciFilter
-            mtFilters.append(mtFilter)
-        }
-        guard !mtFilters.isEmpty else {
-            return nil
-        }
-        let newImage = FilterGraph.makeImage { output in
-            mtImage => mtFilters[0]
-            for index in 1..<mtFilters.count {
-                mtFilters[index - 1] => mtFilters[index]
+    private func filterImage(image: UIImage, completion: @escaping (UIImage?) -> Void) {
+        self.queue.async { [weak self] in
+            autoreleasepool { [weak self] in
+                guard let weakSelf = self else {
+                    return
+                }
+                guard var ciImage = CIImage(image: image) else {
+                    completion(nil)
+                    return
+                }
+                for filter in weakSelf.filters {
+                    guard let ciFilter = filter.ciFilter, filter.hasChange  else {
+                        continue
+                    }
+                    ciFilter.setValue(ciImage, forKey: kCIInputImageKey)
+                    guard let newImage = ciFilter.outputImage else { continue }
+                    ciImage = newImage
+                }
+                guard let cgImage = weakSelf.context.createCGImage(ciImage, from: ciImage.extent) else {
+                    completion(nil)
+                    return
+                }
+                let newImage = UIImage(cgImage: cgImage, scale: image.scale, orientation: image.imageOrientation)
+                DispatchQueue.main.async {
+                    completion(newImage)
+                }
             }
-            mtFilters.last! => output
         }
-        return self.image(from: newImage)
     }
 
     private func filterValue(type: STFilterType) -> CGFloat {
         var value: CGFloat = 0.0
         switch type {
         case .brightness:
-            value = self.colorControlsFilter.brightness ?? STFilter.ColorControls.brightnessRange.defaultValue
+            value = self.colorControlsFilter.brightness ?? STFilterHelper.Constance.ColorControls().brightnessRange.defaultValue
         case .contrast:
-            value = self.colorControlsFilter.contrast ?? STFilter.ColorControls.contrastRange.defaultValue
+            value = self.colorControlsFilter.contrast ?? STFilterHelper.Constance.ColorControls().contrastRange.defaultValue
         case .saturation:
-            value = self.colorControlsFilter.saturation ?? STFilter.ColorControls.saturationRange.defaultValue
+            value = self.colorControlsFilter.saturation ?? STFilterHelper.Constance.ColorControls().saturationRange.defaultValue
         case .vibrance:
-            value = self.vibranceFilter.value ?? STFilter.Vibrance.range.defaultValue
+            value = self.vibranceFilter.value ?? STFilterHelper.Constance.Vibrance().range.defaultValue
         case .exposure:
-            value = self.exposureFilter.value ?? STFilter.Exposure.range.defaultValue
+            value = self.exposureFilter.value ?? STFilterHelper.Constance.Exposure().range.defaultValue
         case .highlights:
-            value = self.highlightShadowFilter.highlight ?? STFilter.HighlightShadow.highlightRange.defaultValue
+            value = self.highlightShadowFilter.highlight ?? STFilterHelper.Constance.HighlightShadow().highlightRange.defaultValue
         case .shadows:
-            value = self.highlightShadowFilter.shadow ?? STFilter.HighlightShadow.shadowRange.defaultValue
+            value = self.highlightShadowFilter.shadow ?? STFilterHelper.Constance.HighlightShadow().shadowRange.defaultValue
         case .whitePoint:
-            value = self.whitePointFilter.value ?? STFilter.WhitePoint.range.defaultValue
+            value = self.whitePointFilter.value ?? STFilterHelper.Constance.WhitePoint().range.defaultValue
         case .temperature:
-            value = self.temperatureAndTintFilter.temperature ?? STFilter.TemperatureAndTint.temperatureRange.defaultValue
+            value = self.temperatureAndTintFilter.temperature ?? STFilterHelper.Constance.TemperatureAndTint().temperatureRange.defaultValue
         case .tint:
-            value = self.temperatureAndTintFilter.tint ?? STFilter.TemperatureAndTint.tintRange.defaultValue
+            value = self.temperatureAndTintFilter.tint ?? STFilterHelper.Constance.TemperatureAndTint().tintRange.defaultValue
         case .sharpness:
-            value = self.noiseReductionAndSharpnessFilter.sharpness ?? STFilter.NoiseReductionAndSharpness.sharpnessRange.defaultValue
+            value = self.noiseReductionAndSharpnessFilter.sharpness ?? STFilterHelper.Constance.NoiseReductionAndSharpness().sharpnessRange.defaultValue
         case .noiseReduction:
-            value = self.noiseReductionAndSharpnessFilter.reduction ?? STFilter.NoiseReductionAndSharpness.reductionRange.defaultValue
+            value = self.noiseReductionAndSharpnessFilter.reduction ?? STFilterHelper.Constance.NoiseReductionAndSharpness().reductionRange.defaultValue
         case .vignette:
-            value = self.vignetteFilter.value ?? STFilter.Vignette.range.defaultValue
+            value = self.vignetteFilter.value ?? STFilterHelper.Constance.Vignette().range.defaultValue
         }
         return STFilterHelper.rullerValue(for: type, filterValue: value)
     }
@@ -336,6 +315,7 @@ class STImageFilterVC: UIViewController {
             }
             self.angleRuler.value = self.selectedFilterValue()
             self.angleRuler.delegate = self
+            self.filterCollectionView.updateSelectedItemPosition()
         }
     }
 
@@ -354,7 +334,12 @@ extension STImageFilterVC: STRulerViewDelegate {
     func angleRuleDidChangeValue(value: CGFloat) {
         self.setSelectedFilterValue(rullerValue: value)
         self.filterCollectionView.setSelectedFilterValue(value: value)
-        self.imageView.image = self.filterImage(mtImage: self.mtImage!) ?? self.image
+        guard let image = self.image else {
+            return
+        }
+        self.filterImage(image: image) { [weak self] filteredImage in
+            self?.imageView.image = filteredImage ?? image
+        }
     }
 
     func angleRuleDidEndEditing() {

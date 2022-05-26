@@ -29,7 +29,7 @@ class STAlbumFilesVM {
         self.albumProvider.add(self)
     }
     
-    func createDBDataSource() -> STDataBase.DataSource<STCDAlbumFile> {
+    func createDBDataSource() -> STDataBase.DataSource<STLibrary.AlbumFile> {
         let predicate = NSPredicate(format: "\(#keyPath(STCDAlbumFile.albumId)) == %@", self.album.albumId)
         let soring = self.getSorting()
         return self.albumFilesProvider.createDataSource(sortDescriptorsKeys: soring, sectionNameKeyPath: #keyPath(STCDAlbumFile.day), predicate: predicate, cacheName: nil)
@@ -49,12 +49,12 @@ class STAlbumFilesVM {
     }
     
     func getFiles(fileNames: [String]) -> [STLibrary.AlbumFile] {
-        let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: self.album.albumId, fileNames: fileNames)
+        let files = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(albumID: self.album.albumId, fileNames: fileNames)
         return files
     }
     
     func getFiles(identifiers: [String]) -> [STLibrary.AlbumFile] {
-        let files = STApplication.shared.dataBase.albumFilesProvider.fetchAll(for: self.album.albumId, identifiers: identifiers)
+        let files = STApplication.shared.dataBase.albumFilesProvider.fetchObjects(albumID: self.album.albumId, identifiers: identifiers)
         return files
     }
     
@@ -138,7 +138,7 @@ class STAlbumFilesVM {
         STApplication.shared.downloaderManager.fileDownloader.download(files: files)
     }
     
-    func upload(assets: [PHAsset]) -> STImporter.Importer {
+    func upload(assets: [PHAsset]) -> STImporter.AlbumFileImporter {
         let files = assets.compactMap({ return STImporter.AlbumFileImportable(asset: $0, album: self.album) })
         return self.uploader.uploadAlbum(files: files, album: self.album)
     }
@@ -147,10 +147,10 @@ class STAlbumFilesVM {
         STApplication.shared.fileSystem.remove(file: url)
     }
     
-    func getSorting() -> [STDataBase.DataSource<STCDAlbumFile>.Sort] {
-        let dateCreated = STDataBase.DataSource<STCDAlbumFile>.Sort(key: #keyPath(STCDAlbumFile.dateCreated), ascending: nil)
-        let dateModified = STDataBase.DataSource<STCDAlbumFile>.Sort(key: #keyPath(STCDAlbumFile.dateModified), ascending: false)
-        let file = STDataBase.DataSource<STCDAlbumFile>.Sort(key: #keyPath(STCDAlbumFile.file), ascending: false)
+    func getSorting() -> [STDataBase.DataSource<STLibrary.AlbumFile>.Sort] {
+        let dateCreated = STDataBase.DataSource<STLibrary.AlbumFile>.Sort(key: #keyPath(STCDAlbumFile.dateCreated), ascending: nil)
+        let dateModified = STDataBase.DataSource<STLibrary.AlbumFile>.Sort(key: #keyPath(STCDAlbumFile.dateModified), ascending: false)
+        let file = STDataBase.DataSource<STLibrary.AlbumFile>.Sort(key: #keyPath(STCDAlbumFile.file), ascending: false)
         return [dateCreated, dateModified, file]
     }
     
@@ -196,14 +196,3 @@ extension STAlbumFilesVM {
     }
     
 }
-
-
-extension STCDAlbumFile {
-    
-    @objc var day: String {
-        let str = STDateManager.shared.dateToString(date: self.dateCreated, withFormate: .mmm_dd_yyyy)
-        return str
-    }
-    
-}
-

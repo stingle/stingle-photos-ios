@@ -6,7 +6,7 @@
 //
 
 import Sodium
-import Clibsodium
+import Foundation
 
 extension STCrypto {
     
