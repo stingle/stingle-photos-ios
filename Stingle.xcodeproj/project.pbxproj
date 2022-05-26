@@ -254,6 +254,7 @@
 		A09D94492636FD8200268A84 /* STAlbumsSharedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D94482636FD8200268A84 /* STAlbumsSharedVM.swift */; };
 		A09D944E2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D944C2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift */; };
 		A09D944F2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A09D944D2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib */; };
+        A0A2567627DA113F00B2C645 /* STBGTaskScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */; };
 		A09DF8882628DA6E00CDDA8E /* STDataBase+DataBaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09DF8872628DA6E00CDDA8E /* STDataBase+DataBaseDataSource.swift */; };
 		A0A7974A264FF41F00917C91 /* STFilesDownloaderActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A79749264FF41F00917C91 /* STFilesDownloaderActivityVC.swift */; };
 		A0A7974C264FF42F00917C91 /* STFilesDownloaderActivityVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A7974B264FF42F00917C91 /* STFilesDownloaderActivityVM.swift */; };
@@ -642,6 +643,7 @@
 		A09D94482636FD8200268A84 /* STAlbumsSharedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedVM.swift; sourceTree = "<group>"; };
 		A09D944C2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumsSharedCollectionViewCell.swift; sourceTree = "<group>"; };
 		A09D944D2636FE1B00268A84 /* STAlbumsSharedCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STAlbumsSharedCollectionViewCell.xib; sourceTree = "<group>"; };
+        A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBGTaskScheduler.swift; sourceTree = "<group>"; };
 		A09DF8872628DA6E00CDDA8E /* STDataBase+DataBaseDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STDataBase+DataBaseDataSource.swift"; sourceTree = "<group>"; };
 		A0A79749264FF41F00917C91 /* STFilesDownloaderActivityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesDownloaderActivityVC.swift; sourceTree = "<group>"; };
 		A0A7974B264FF42F00917C91 /* STFilesDownloaderActivityVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesDownloaderActivityVM.swift; sourceTree = "<group>"; };
@@ -1463,6 +1465,7 @@
 				A0D29CD5262051260083967D /* FileUploader */,
 				A078F78E2608A915005F40E4 /* FileDownloader */,
 				A022041E25EEDC0300D07C98 /* DB */,
+				A0E0B15227DA10DA00C02C8D /* BackgroundTask */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -2415,6 +2418,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		A0E0B15227DA10DA00C02C8D /* BackgroundTask */ = {
+			isa = PBXGroup;
+			children = (
+				A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */,
+			);
+			path = BackgroundTask;
+               sourceTree = "<group>";
+        };
 		A0E3FFB928254610006C8B10 /* Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -3100,6 +3111,7 @@
 				A0B8090826ECFAE30063DA42 /* STBillingInfo.swift in Sources */,
 				A021A17E264F361E00394713 /* STGalleryNavigationController.swift in Sources */,
 				A0B8092326ED06BE0063DA42 /* STStore.swift in Sources */,
+				A0A2567627DA113F00B2C645 /* STBGTaskScheduler.swift in Sources */,
 				A021014726EFEC8C00BBEF65 /* STStorageBildingInfoCell.swift in Sources */,
 				A02D88B0260BEEA800B82F16 /* STDownloaderManager.swift in Sources */,
 				A0E3FFBE2825466C006C8B10 /* STCDFile.swift in Sources */,

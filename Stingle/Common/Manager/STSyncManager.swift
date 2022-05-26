@@ -43,7 +43,7 @@ class STSyncManager {
         appLockUnlocker.add(self)
         
         let center = NotificationCenter.default
-        center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
+        center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
         center.addObserver(self, selector: #selector(didEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
         self.sync()
@@ -82,7 +82,7 @@ class STSyncManager {
             self?.didEndSync(error: nil)
             let application = STApplication.shared
             application.uploader.uploadAllLocalFiles()
-            application.auotImporter.startImport()
+            application.autoImporter.startImport()
             
         } willFinish: { info in
             
@@ -129,7 +129,9 @@ class STSyncManager {
     
     @objc private func didActivate(_ notification: Notification) {
         if self.isEnteredBackground {
-            self.sync()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                self?.sync()
+            }
         }
         self.isEnteredBackground = false
     }
@@ -147,7 +149,9 @@ class STSyncManager {
 extension STSyncManager: IAppLockUnlockerObserver {
     
     func appLockUnlocker(didUnlockApp lockUnlocker: STAppLockUnlocker) {
-        self.sync()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.sync()
+        }
     }
     
 }

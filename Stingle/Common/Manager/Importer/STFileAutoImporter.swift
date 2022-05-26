@@ -9,9 +9,14 @@ import Foundation
 import Photos
 import UIKit
 
+protocol IAutoImporterObserver: AnyObject {
+    func autoImporter(didStart autoImporter: STImporter.AutoImporter)
+    func autoImporter(didEnd autoImporter: STImporter.AutoImporter)
+}
+
 extension STImporter {
     
-    class AuotImporter {
+    class AutoImporter {
         
         enum ImportData {
             case setupDate
@@ -36,16 +41,18 @@ extension STImporter {
         private var importFilesCount: Int = .zero
         private var canSetDate = true
         private var endImportingCallBack: (() -> Void)?
-        private let dispatchQueue = DispatchQueue(label: "AuotImporter.queue", attributes: .concurrent)
+        
+        private let observerEvents = STObserverEvents<IAutoImporterObserver>()
         private var importQueue: STOperationQueue
         private var autoImportQueue: STOperationQueue
         private weak var currentOporation: Operation?
-        
+        let dispatchQueue = DispatchQueue(label: "AutoImporter.queue")
+                        
         private var importSettings: STAppSettings.Import {
             return STAppSettings.current.import
         }
         
-        private var lastImportDate: Date? {
+        private(set) var lastImportDate: Date? {
             set {
                 UserDefaults.standard.set(newValue, forKey: "auotImporter.lastImportDate")
             } get {
@@ -65,6 +72,10 @@ extension STImporter {
             guard !self.isStarted else {
                 return
             }
+                        
+            self.observerEvents.forEach { observer in
+                observer.autoImporter(didStart: self)
+            }
             self.isStarted = true
             self.deleteImportedFiles { [weak self] in
                 self?.startImportAssets()
@@ -81,13 +92,19 @@ extension STImporter {
             }
         }
         
+        func add(_ listener: IAutoImporterObserver) {
+            self.observerEvents.addObject(listener)
+        }
+        
+        func remove(_ listener: IAutoImporterObserver) {
+            self.observerEvents.removeObject(listener)
+        }
+        
         func logout() {
             self.resetImportDate(date: .setupDate, startImport: false)
         }
         
-        //MARK: - Private methods
-        
-        private func cancelImporting(end: (() -> Void)?) {
+        func cancelImporting(end: (() -> Void)?) {
             if let currentOporation = self.currentOporation {
                 self.endImportingCallBack = {
                     end?()
@@ -97,6 +114,8 @@ extension STImporter {
                 end?()
             }
         }
+        
+        //MARK: - Private methods
         
         private func deleteImportedFiles(completion: @escaping (() -> Void)) {
             guard STPHPhotoHelper.authorizationStatus != nil, STAppSettings.current.import.isDeleteOriginalFilesAfterAutoImport else {
@@ -148,6 +167,9 @@ extension STImporter {
         private func didEndImportIng() {
             self.endImportingCallBack?()
             self.endImportingCallBack = nil
+            self.observerEvents.forEach { observer in
+                observer.autoImporter(didEnd: self)
+            }
         }
         
         private func updateDate(date: Date) {
@@ -190,8 +212,13 @@ extension STImporter {
     
 }
 
-extension STImporter.AuotImporter: ISettingsObserver {
+extension STImporter.AutoImporter: ISettingsObserver {
     
+    var canStartImport: Bool {
+        let application = STApplication.shared
+        return application.utils.isLogedIn() && application.isFileSystemAvailable && STAppSettings.current.import.isAutoImportEnable && application.isFileSystemAvailable
+    }
+        
     func appSettings(didChange settings: STAppSettings, import: STAppSettings.Import) {
         if `import`.isAutoImportEnable {
             self.startImport()
@@ -202,9 +229,9 @@ extension STImporter.AuotImporter: ISettingsObserver {
     
 }
 
-extension STImporter.AuotImporter {
+extension STImporter.AutoImporter {
     
-    enum AuotImporterError: IError {
+    enum AutoImporterError: IError {
        
         case cantImportFiles
         case canceled
@@ -249,7 +276,7 @@ extension STImporter.AuotImporter {
             if let importer = self.importer {
                 importer.cancel()
             } else {
-                self.responseFailed(error: AuotImporterError.canceled)
+                self.responseFailed(error: AutoImporterError.canceled)
             }
         }
         
@@ -259,7 +286,7 @@ extension STImporter.AuotImporter {
                 if canImport {
                     self?.enumerateObjects()
                 } else {
-                    self?.responseFailed(error: AuotImporterError.canceled)
+                    self?.responseFailed(error: AutoImporterError.canceled)
                 }
             }
         }
@@ -285,13 +312,13 @@ extension STImporter.AuotImporter {
         private func startImport(importFiles: [STImporter.GaleryFileImportable]) {
             
             guard let queue = self.delegate?.underlyingQueue else {
-                self.responseFailed(error: AuotImporterError.canceled)
+                self.responseFailed(error: AutoImporterError.canceled)
                 return
             }
            
             guard !self.isExpired else {
                 queue.async { [weak self] in
-                    self?.responseFailed(error: AuotImporterError.canceled)
+                    self?.responseFailed(error: AutoImporterError.canceled)
                 }
                 return
             }
@@ -328,7 +355,7 @@ extension STImporter.AuotImporter {
                             return
                         }
                         if weakSelf.isCancel {
-                            weakSelf.responseFailed(error: AuotImporterError.canceled)
+                            weakSelf.responseFailed(error: AutoImporterError.canceled)
                         } else {
                             weakSelf.responseSucces(result: count)
                         }
@@ -345,7 +372,6 @@ extension STImporter.AuotImporter {
                 }
                 
             }, uploadIfNeeded: true)
-            
             self.importer = importer
         }
         

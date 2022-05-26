@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum STImporter {
     
@@ -173,7 +174,7 @@ enum STImporter {
             self.operations.insert(operation)
         }
       
-    }
+    }    
     
 }
 
@@ -231,6 +232,7 @@ extension STImporter.Importer {
                                 
                 return
             }
+                        
             self.uploadFile.requestFile(in: self.delegate?.underlyingQueue, progressHandler: { [weak self] progress, stop in
                 guard let weakSelf = self else {
                     return

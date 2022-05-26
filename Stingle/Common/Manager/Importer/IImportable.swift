@@ -12,14 +12,15 @@ protocol IImportable { }
 
 extension STImporter {
     
-    struct UploadFileInfo {
+    struct ImportFileInfo {
         let oreginalUrl: URL
         let thumbImage: Data
         let fileType: STFileUploader.FileType
         let duration: TimeInterval
-        var fileSize: UInt
-        var creationDate: Date?
-        var modificationDate: Date?
+        let fileSize: UInt
+        let creationDate: Date?
+        let modificationDate: Date?
+        let freeBuffer: (() -> Void)?
     }
     
     typealias ProgressHandler = ((_ progress: Foundation.Progress, _ stop: inout Bool?) -> Void)
@@ -37,7 +38,7 @@ extension STImporter {
             let totalProgress = Progress()
             totalProgress.totalUnitCount = 10000
             var progressValue = Double.zero
-            
+           
             self.requestData(in: queue, progress: { progress, stop in
                 progressValue = progress.fractionCompleted / 4
                 totalProgress.completedUnitCount = Int64(progressValue * Double(totalProgress.totalUnitCount))
@@ -67,7 +68,7 @@ extension STImporter {
             }, failure: failure)
         }
 
-        func createUploadFile(info: UploadFileInfo, progressHandler: @escaping ProgressHandler) throws -> File {
+        func createUploadFile(info: ImportFileInfo, progressHandler: @escaping ProgressHandler) throws -> File {
             
             var fileType: STHeader.FileType!
             switch info.fileType {
@@ -104,12 +105,10 @@ extension STImporter {
         }
         
         func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, progressHandler: @escaping ProgressHandler) throws -> File {
-            
             fatalError("implement childe classes")
-           
         }
         
-        func requestData(in queue: DispatchQueue?, progress: ProgressHandler?, success: @escaping (_ uploadInfo: UploadFileInfo) -> Void, failure: @escaping (IError) -> Void) {
+        func requestData(in queue: DispatchQueue?, progress: ProgressHandler?, success: @escaping (_ uploadInfo: ImportFileInfo) -> Void, failure: @escaping (IError) -> Void) {
                         
             guard let fileType = STFileUploader.FileType(rawValue: self.asset.mediaType.rawValue) else {
                 failure(STFileUploader.UploaderError.phAssetNotValid)
@@ -126,7 +125,7 @@ extension STImporter {
                 }
             }
             
-            func compled(uploadInfo: UploadFileInfo) {
+            func compled(uploadInfo: ImportFileInfo) {
                 if let queue = queue {
                     queue.async {
                         success(uploadInfo)
@@ -139,8 +138,7 @@ extension STImporter {
             let totalProgress = Progress()
             totalProgress.totalUnitCount = 10000
             var myProgressValue = Double.zero
-            
-            STPHPhotoHelper.requestGetURL(asset: self.asset, progressHandler: { progressValue, stop in
+            STPHPhotoHelper.requestGetURL(asset: self.asset, queue: queue, progressHandler: { progressValue, stop in
                
                 myProgressValue = progressValue / 2
                 totalProgress.completedUnitCount = Int64(myProgressValue * Double(totalProgress.totalUnitCount))
@@ -157,7 +155,7 @@ extension STImporter {
                     return
                 }
                 
-                STPHPhotoHelper.requestThumb(asset: weakSelf.asset, progressHandler: { progressValue, stop in
+                STPHPhotoHelper.requestThumb(asset: weakSelf.asset, queue: queue, progressHandler: { progressValue, stop in
                     
                     myProgressValue = 0.5 + progressValue / 2
                     totalProgress.completedUnitCount = Int64(myProgressValue * Double(totalProgress.totalUnitCount))
@@ -173,14 +171,15 @@ extension STImporter {
                         return
                     }
                     
-                    let uploadInfo = UploadFileInfo(oreginalUrl: info.url,
-                                                                   thumbImage: thumbData,
-                                                                   fileType: fileType,
-                                                                   duration: info.videoDuration,
-                                                                   fileSize: info.fileSize,
-                                                                   creationDate: info.creationDate,
-                                                                   modificationDate: info.modificationDate)
-                    compled(uploadInfo: uploadInfo)
+                    let importFileInfo = ImportFileInfo(oreginalUrl: info.dataInfo,
+                                                                    thumbImage: thumbData,
+                                                                    fileType: fileType,
+                                                                    duration: info.videoDuration,
+                                                                    fileSize: info.fileSize,
+                                                                    creationDate: info.creationDate,
+                                                                    modificationDate: info.modificationDate,
+                                                                    freeBuffer: info.freeBuffer)
+                    compled(uploadInfo: importFileInfo)
                 }
             }
         }
