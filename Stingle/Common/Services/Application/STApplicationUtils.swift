@@ -21,7 +21,7 @@ extension STApplication {
             self.userRemoveHendler = userRemoveHendler
         }
         
-        func deleteFilesIfNeeded(files: [STLibrary.File], complition:(() -> Void)?) {
+        func deleteFilesIfNeeded(files: [ILibraryFile], complition:(() -> Void)?) {
             DispatchQueue.global().async { [weak self] in
                 guard let weakSelf = self else { return }
                 let notExistFiles = weakSelf.application.dataBase.filtrNotExistFiles(files: files)
@@ -55,13 +55,13 @@ extension STApplication {
         }
         
         func deleteFiles(fileNames: [String]) {
-            guard self.application.isFileSystemAvailable else {
+            guard self.application.isFileSystemAvailable, !fileNames.isEmpty  else {
                 return
             }
             self.application.fileSystem.deleteFiles(for: fileNames)
         }
         
-        func moveLocalToRemot(files: [STLibrary.File]) {
+        func moveLocalToRemot(files: [ILibraryFile]) {
             guard self.application.isFileSystemAvailable else {
                 return
             }
@@ -87,9 +87,9 @@ extension STApplication.Utils {
         }
     }
     
-    private func generateGalleryFiles(from systemFiles: [String: (oreginal: (url: URL, date: Date?), thumb: (url: URL, date: Date?))]) -> [STLibrary.File] {
+    private func generateGalleryFiles(from systemFiles: [String: (oreginal: (url: URL, date: Date?), thumb: (url: URL, date: Date?))]) -> [STLibrary.GaleryFile] {
         
-        var files = [STLibrary.File]()
+        var files = [STLibrary.GaleryFile]()
         
         for file in systemFiles {
             let oreginalUrl = file.value.oreginal.url
@@ -104,9 +104,7 @@ extension STApplication.Utils {
             }
             
             let dateCreated = file.value.oreginal.date ?? Date()
-            guard let file = try? STLibrary.File(file: file.key, version: "1", headers: headers, dateCreated: dateCreated, dateModified: dateCreated, isRemote: false, managedObjectID: nil) else {
-                continue
-            }
+            let file = STLibrary.GaleryFile(fileName: file.key, version: "1", headers: headers, dateCreated: dateCreated, dateModified: dateCreated, isRemote: false, isSynched: false, managedObjectID: nil)
             files.append(file)
         }
         

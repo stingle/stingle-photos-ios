@@ -8,8 +8,8 @@
 import Foundation
 
 protocol STUploadsVMDelegate: AnyObject {
-    func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [STLibrary.File], progresses: [String: Progress])
-    func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [STLibrary.File])
+    func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [ILibraryFile], progresses: [String: Progress])
+    func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [ILibraryFile])
 }
 
 class STUploadsVM {
@@ -18,14 +18,14 @@ class STUploadsVM {
     private let uploader = STApplication.shared.uploader
     
     private(set) var progresses = [String: Progress]()
-    private(set) var uploadFiles = [STLibrary.File]()
+    private(set) var uploadFiles = [ILibraryFile]()
     
     init() {
         self.updateFiles(files: [])
         self.uploader.addListener(self)
     }
     
-    private func updateFiles(files: [STLibrary.File]) {
+    private func updateFiles(files: [ILibraryFile]) {
         self.uploader.getProgress { [weak self] progresses, uploadingFiles in
             guard let weakSelf = self else { return }
             if uploadingFiles.count != weakSelf.uploadFiles.count {
@@ -40,7 +40,7 @@ class STUploadsVM {
         }
     }
         
-    private func didEndUploading(file: STLibrary.File) {
+    private func didEndUploading(file: ILibraryFile) {
         self.uploader.getProgress { [weak self] progresses, uploadingFiles in
             self?.uploadFiles = uploadingFiles
             self?.progresses = progresses
@@ -55,7 +55,7 @@ class STUploadsVM {
         }
     }
     
-    private func didUpdateProgress(files: [STLibrary.File]) {
+    private func didUpdateProgress(files: [ILibraryFile]) {
         DispatchQueue.main.async { [weak self] in
             guard let weakSelf = self else { return }
             weakSelf.delegate?.uploadsVM(didUpdateProgress: weakSelf, for: files)
@@ -66,15 +66,15 @@ class STUploadsVM {
 
 extension STUploadsVM: IFileUploaderObserver {
     
-    func fileUploader(didUpdateProgress uploader: STFileUploader, uploadInfo: STFileUploader.UploadInfo, files: [STLibrary.File]) {
+    func fileUploader(didUpdateProgress uploader: STFileUploader, uploadInfo: STFileUploader.UploadInfo, files: [ILibraryFile]) {
         self.updateFiles(files: files)
     }
     
-    func fileUploader(didEndSucces uploader: STFileUploader, file: STLibrary.File, uploadInfo: STFileUploader.UploadInfo) {
+    func fileUploader(didEndSucces uploader: STFileUploader, file: ILibraryFile, uploadInfo: STFileUploader.UploadInfo) {
         self.didEndUploading(file: file)
     }
     
-    func fileUploader(didEndFailed uploader: STFileUploader, file: STLibrary.File?, error: IError, uploadInfo: STFileUploader.UploadInfo) {
+    func fileUploader(didEndFailed uploader: STFileUploader, file: ILibraryFile?, error: IError, uploadInfo: STFileUploader.UploadInfo) {
         guard let file = file else {
             return
         }

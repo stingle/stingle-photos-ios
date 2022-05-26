@@ -50,12 +50,7 @@ class STFilesDownloaderActivityVC: UIViewController {
             }
         })
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-    }
-        
+ 
     //MARK: - User acctions
     
     @IBAction private func didSelectCancelButton(_ sender: Any) {
@@ -112,7 +107,7 @@ class STFilesDownloaderActivityVC: UIViewController {
 extension STFilesDownloaderActivityVC {
     
     enum DownloadFiles {
-        case files(files: [STLibrary.File])
+        case files(files: [ILibraryFile])
         case albumFiles(album: STLibrary.Album, files: [STLibrary.AlbumFile])
     }
     

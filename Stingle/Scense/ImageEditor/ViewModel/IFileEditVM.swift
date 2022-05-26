@@ -10,7 +10,7 @@ import Sodium
 import UniformTypeIdentifiers
 
 protocol IFileEditVM: AnyObject {
-    var file: STLibrary.File { get }
+    var file: ILibraryFile { get }
     
     func save(image: UIImage) throws
     func saveAsNewFile(image: UIImage) throws

@@ -6,14 +6,19 @@
 //
 
 import UIKit
+import CoreData
 
 class STAlbumFileEditVM: IFileEditVM {
+    
+    let albumFile: STLibrary.AlbumFile
+    let album: STLibrary.Album!
+    
+    var file: ILibraryFile {
+        return self.albumFile
+    }
 
-    var file: STLibrary.File
-    var album: STLibrary.Album!
-
-    init(file: STLibrary.File, album: STLibrary.Album) {
-        self.file = file
+    init(file: STLibrary.AlbumFile, album: STLibrary.Album) {
+        self.albumFile = file
         self.album = album
     }
 
@@ -24,11 +29,12 @@ class STAlbumFileEditVM: IFileEditVM {
         }
         let encryptedFileInfo = try self.saveNewImage(image: image, fileName: fileName, existingFileName: self.file.file, publicKey: publicKey)
         let version = "\((Int(self.file.version) ?? .zero) + 1)"
-        if self.file.isRemote {
+        if self.file.isRemote && self.file.isSynched {
             STApplication.shared.fileSystem.deleteFiles(files: [self.file])
         }
         let dateModified = Date()
-        let file = try STLibrary.AlbumFile(file: self.file.file, version: version, headers: encryptedFileInfo.headers, dateCreated: self.file.dateCreated, dateModified: dateModified, isRemote: false, albumId: self.album.albumId, managedObjectID: nil)
+        
+        let file = self.albumFile.copy(version: version, headers: encryptedFileInfo.headers, dateModified: dateModified, isSynched: false)
         STApplication.shared.dataBase.albumFilesProvider.update(models: [file], reloadData: true)
         let updatedAlbum = STLibrary.Album(album: self.album, dateModified: Date())
         STApplication.shared.dataBase.albumsProvider.update(models: [updatedAlbum], reloadData: true)
@@ -42,9 +48,10 @@ class STAlbumFileEditVM: IFileEditVM {
         }
         let encryptedFileInfo = try self.saveNewImage(image: image, fileName: fileName, publicKey: publicKey)
         let version = "\(STCrypto.Constants.CurrentFileVersion)"
-        let dateCreated = Date()
-        let dateModified = Date()
-        let file = try STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, albumId: self.album.albumId, managedObjectID: nil)
+        let date = Date()
+        
+        let file = STLibrary.AlbumFile(file: self.file.file, version: version, headers: encryptedFileInfo.headers, dateCreated: date, dateModified: date, isRemote: false, isSynched: false, albumId: self.albumFile.albumId, managedObjectID: nil)
+        
         STApplication.shared.dataBase.albumFilesProvider.add(models: [file], reloadData: true)
         let updatedAlbum = STLibrary.Album(album: self.album, dateModified: Date())
         STApplication.shared.dataBase.albumsProvider.update(models: [updatedAlbum], reloadData: true)

@@ -12,44 +12,31 @@ protocol IFileViewerVM {
     var delegate: STFileViewerVMDelegate? { get set }
     var countOfItems: Int { get }
     
-    func object(at index: Int) -> STLibrary.File?
-    func index(at file: STLibrary.File) -> Int?
+    func object(at index: Int) -> STLibrary.FileBase?
+    func index(at file: STLibrary.FileBase) -> Int?
     
-    func deleteFile(file: STLibrary.File, completion: @escaping (_ result: IError?) -> Void)
+    func deleteFile(file: STLibrary.FileBase, completion: @escaping (_ result: IError?) -> Void)
     
-    func getDeleteFileMessage(file: STLibrary.File) -> String
+    func getDeleteFileMessage(file: STLibrary.FileBase) -> String
     func removeFileSystemFolder(url: URL)
-    func downloadFile(file: STLibrary.File)
+    func downloadFile(file: STLibrary.FileBase)
     
-    func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType]
-    func getMorAction(for file: STLibrary.File) -> [STFileViewerVC.MoreAction]
+    func getAction(for file: STLibrary.FileBase) -> [STFileViewerVC.ActionType]
+    func getMorAction(for file: STLibrary.FileBase) -> [STFileViewerVC.MoreAction]
     
-    func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.File)
+    func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.FileBase)
+    func moveInfo(for file: STLibrary.FileBase) -> STMoveAlbumFilesVC.MoveInfo
+    func editVM(for file: STLibrary.FileBase) -> IFileEditVM
     
-    func moveInfo(for file: STLibrary.File) -> STMoveAlbumFilesVC.MoveInfo
-
-    func editVM(for file: STLibrary.File) -> IFileEditVM
-    
-}
-
-extension IFileViewerVM {
-    
-    func object(at index: Int) -> STLibrary.File? {
-        return nil
-    }
-    
-    func index(at file: STLibrary.File) -> Int? {
-        return nil
-    }
 }
 
 protocol STFileViewerVMDelegate: AnyObject {
     func fileViewerVM(didUpdateedData fileViewerVM: IFileViewerVM)
 }
 
-class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
-    
-    private let dataSource: STDataBase.DataSource<ManagedObject>
+class STFileViewerVM<File: STLibrary.FileBase> where File: ICDSynchConvertable {
+        
+    private let dataSource: STDataBase.DataSource<File>
     private var snapshot: NSDiffableDataSourceSnapshotReference?
     
     weak var delegate: STFileViewerVMDelegate? {
@@ -58,12 +45,12 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
         }
     }
     
-    init(dataSource: STDataBase.DataSource<ManagedObject>) {
+    init(dataSource: STDataBase.DataSource<File>) {
         self.dataSource = dataSource
         self.dataSource.delegate = self
     }
     
-    func getObject(at index: Int) -> ManagedObject.Model? {
+    func getObject(at index: Int) -> File? {
         guard index < self.countOfItems, index >= .zero else {
             return nil
         }
@@ -72,18 +59,18 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
         return result
     }
     
-    func getIndex(at model: ManagedObject.Model) -> Int? {
+    func getIndex(at model: File) -> Int? {
         return self.dataSource.indexPath(forObject: model)?.row
     }
     
     //MARK: - IFileViewerVM
     
-    func object(at index: Int) -> STLibrary.File? {
-        return self.getObject(at: index) as? STLibrary.File
+    func object(at index: Int) -> File? {
+        return self.getObject(at: index)
     }
     
-    func index(at file: STLibrary.File) -> Int? {
-        return self.getIndex(at: file as! ManagedObject.Model)
+    func index(at file: File) -> Int? {
+        return self.getIndex(at: file)
     }
     
     var countOfItems: Int {
@@ -93,19 +80,19 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
         return snapshot.numberOfItems(inSection: section)
     }
     
-    func deleteFile(file: STLibrary.File, completion: @escaping (_ result: IError?) -> Void) {
+    func deleteFile(file: File, completion: @escaping (_ result: IError?) -> Void) {
         fatalError("this method must be implemented in chile classes")
     }
     
-    func getDeleteFileMessage(file: STLibrary.File) -> String {
+    func getDeleteFileMessage(file: File) -> String {
         fatalError("this method must be implemented in child classes")
     }
     
-    func getAction(for file: STLibrary.File) -> [STFileViewerVC.ActionType] {
+    func getAction(for file: File) -> [STFileViewerVC.ActionType] {
         fatalError("this method must be implemented in child classes")
     }
     
-    func getMorAction(for file: STLibrary.File) -> [STFileViewerVC.MoreAction] {
+    func getMorAction(for file: File) -> [STFileViewerVC.MoreAction] {
         return [.download]
     }
     
@@ -113,11 +100,11 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
         STApplication.shared.fileSystem.remove(file: url)
     }
     
-    func downloadFile(file: STLibrary.File) {
+    func downloadFile(file: File) {
         STApplication.shared.downloaderManager.fileDownloader.download(files: [file])
     }
     
-    func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.File) {
+    func selectMore(action: STFileViewerVC.MoreAction, file: File) {
         switch action {
         case .download:
             self.downloadFile(file: file)
@@ -126,15 +113,14 @@ class STFileViewerVM<ManagedObject: IManagedObject>: IFileViewerVM {
         }
     }
     
-    func moveInfo(for file: STLibrary.File) -> STMoveAlbumFilesVC.MoveInfo {
-        return .files(files: [file])
+    func moveInfo(for file: File) -> STMoveAlbumFilesVC.MoveInfo {
+        fatalError("this method must be implemented in chile classes")
     }
 
-    func editVM(for file: STLibrary.File) -> IFileEditVM {
+    func editVM(for file: File) -> IFileEditVM {
         fatalError("this method must be implemented in chile classes")
     }
 }
-
 
 extension STFileViewerVM: IProviderDelegate {
         
@@ -144,3 +130,49 @@ extension STFileViewerVM: IProviderDelegate {
     }
 
 }
+
+extension STFileViewerVM: IFileViewerVM {
+    
+    func object(at index: Int) -> STLibrary.FileBase? {
+        let obj: File? = self.object(at: index)
+        return obj
+    }
+    
+    func index(at file: STLibrary.FileBase) -> Int? {
+        return self.index(at: file as! File)
+    }
+    
+    func deleteFile(file: STLibrary.FileBase, completion: @escaping (IError?) -> Void) {
+        return self.deleteFile(file: file as! File, completion: completion)
+    }
+
+    func getDeleteFileMessage(file: STLibrary.FileBase) -> String {
+        return self.getDeleteFileMessage(file: file as! File)
+    }
+
+    func downloadFile(file: STLibrary.FileBase) {
+        return self.downloadFile(file: file as! File)
+    }
+
+    func getAction(for file: STLibrary.FileBase) -> [STFileViewerVC.ActionType] {
+        return self.getAction(for: file as! File)
+    }
+
+    func getMorAction(for file: STLibrary.FileBase) -> [STFileViewerVC.MoreAction] {
+        return self.getMorAction(for: file as! File)
+    }
+
+    func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.FileBase) {
+        return self.selectMore(action: action, file: file as! File)
+    }
+
+    func moveInfo(for file: STLibrary.FileBase) -> STMoveAlbumFilesVC.MoveInfo {
+        return self.moveInfo(for: file as! File)
+    }
+
+    func editVM(for file: STLibrary.FileBase) -> IFileEditVM {
+        return self.editVM(for: file as! File)
+    }
+    
+}
+

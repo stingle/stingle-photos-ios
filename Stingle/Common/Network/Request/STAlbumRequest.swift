@@ -10,7 +10,7 @@ import Foundation
 enum STAlbumRequest {
     
     case create(album: STLibrary.Album)
-    case moveFile(fromSet: STLibrary.DBSet, toSet: STLibrary.DBSet, albumIdFrom: String?, albumIdTo: String?, isMoving: Bool, headers: [String: String], files: [STLibrary.File])
+    case moveFile(fromSet: STLibrary.DBSet, toSet: STLibrary.DBSet, albumIdFrom: String?, albumIdTo: String?, isMoving: Bool, headers: [String: String], files: [ILibraryFile])
     case deleteAlbum(albumID: String)
     case sharedAlbum(album: STLibrary.Album, sharingKeys: [String: String])
     case setCover(album: STLibrary.Album, caver: String?)
