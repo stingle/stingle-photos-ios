@@ -161,7 +161,7 @@ extension STAssetResourceLoader {
             self.isFinished = true
             if let error = error {
                 self.request.finishLoading(with: LoaderError.error(error: error))
-                print("AssetResourceLoader", error)
+                STLogger.log(error: error)
             } else {
                 self.request.finishLoading()
             }

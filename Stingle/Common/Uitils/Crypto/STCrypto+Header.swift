@@ -177,7 +177,7 @@ extension STCrypto {
                         break
                     }
                 } catch {
-                    print(error)
+                    STLogger.log(error: error)
                 }
                 input.close()
             }

@@ -35,7 +35,7 @@ class STFileUploader {
     private var progresses = [String: Progress]()
     private var uploadingFiles = [ILibraryFile]()
     
-    let maxCountUploads = 3000
+    let maxCountUploads = 100
     let maxCountUpdateDB = 5
     
     private(set) var updateDBChanges  = [String: Int]()

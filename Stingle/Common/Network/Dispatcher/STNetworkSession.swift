@@ -86,9 +86,12 @@ extension STNetworkSession: URLSessionDataDelegate {
 extension STNetworkSession {
     
     class var backroundConfiguration: URLSessionConfiguration {
-        let configuration = URLSessionConfiguration.background(withIdentifier: "group.swiftlee.apps")
-        configuration.httpMaximumConnectionsPerHost = 10
-        configuration.sessionSendsLaunchEvents = false
+        let appBundleName = Bundle.main.bundleURL.lastPathComponent.lowercased().replacingOccurrences(of: " ", with: ".")
+        let sessionIdentifier: String = "com.networking.\(appBundleName)"
+        let configuration = URLSessionConfiguration.background(withIdentifier: sessionIdentifier)
+        configuration.isDiscretionary = true
+        configuration.sessionSendsLaunchEvents = true
+        configuration.urlCache = nil
         return configuration
     }
         

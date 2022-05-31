@@ -30,7 +30,7 @@ final class STFileReader {
         }
         guard let path = (self.fileURL.path as NSString).utf8String else { return false }
         self.channel = DispatchIO(type: .random, path: path, oflag: 0, mode: 0, queue: .main, cleanupHandler: { error in
-            print("Closed a channel with status: \(error)")
+            STLogger.log(info: "Closed a channel with status: \(error)")
         })
         self.channel?.setLimit(lowWater: .max)
         return true

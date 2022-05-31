@@ -73,7 +73,7 @@ extension STDataBase {
         //MARK: - Private methods
         
         private func sync(db models: [Model]?, context: NSManagedObjectContext, lastDate: Date) throws -> (lastDate: Date, syncInfo: SyncInfo<Model>) {
-           //Test
+
             guard let models = models, !models.isEmpty else {
                 return (lastDate, .empty)
             }
@@ -81,13 +81,17 @@ extension STDataBase {
             guard inserts.lastDate >= lastDate, !inserts.json.isEmpty else {
                 return (max(lastDate, inserts.lastDate), .empty)
             }
+            
+            let identifiers: Set<String> = Set(inserts.objIds.keys)
+            let existObjects = self.fetch(identifiers: identifiers, context: context)
+            
             let insertRequest = NSBatchInsertRequest(entityName: Model.ManagedModel.entityName, objects: inserts.json)
             insertRequest.resultType = .objectIDs
             
             let resultInset = try context.execute(insertRequest)
             let objectIDs = (resultInset as! NSBatchInsertResult).result as! [NSManagedObjectID]
-            
-            let syncModels = self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, context: context)
+                        
+            let syncModels = self.syncUpdateModels(objIds: inserts.objIds, insertedObjectIDs: objectIDs, oldObjects: existObjects, context: context)
             return (inserts.lastDate, syncModels)
         }
                                
@@ -109,14 +113,14 @@ extension STDataBase {
             return (result.date, result.deleteds)
         }
 
-        private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], context: NSManagedObjectContext) -> SyncInfo<Model> {
+        private func syncUpdateModels(objIds: [String: Model], insertedObjectIDs: [NSManagedObjectID], oldObjects: [Model.ManagedModel], context: NSManagedObjectContext) -> SyncInfo<Model> {
             
             var updates = Set<Model>()
             var upgrade = Set<Model>()
             var insertedModes = Set<Model>()
             
-            for objectID in insertedObjectIDs {
-                guard let objectCD = context.object(with: objectID) as? Model.ManagedModel, let identifier = objectCD.identifier, let object = objIds[identifier]  else {
+            for objectCD in oldObjects {
+                guard let identifier = objectCD.identifier, let object = objIds[identifier]  else {
                     continue
                 }
                 let status = object.diffStatus(with: objectCD)
@@ -137,6 +141,14 @@ extension STDataBase {
                     object.update(model: objectCD)
                     insertedModes.insert(object)
                 }
+                
+            }
+                        
+            for objectID in insertedObjectIDs {
+                guard let objectCD = context.object(with: objectID) as? Model.ManagedModel, let identifier = objectCD.identifier, let object = objIds[identifier]  else {
+                    continue
+                }
+                insertedModes.insert(object)
             }
             
             let result = SyncInfo(inserts: insertedModes, updates: updates, upgrade: upgrade, deletes: [])

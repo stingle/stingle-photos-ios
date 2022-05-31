@@ -126,7 +126,7 @@ extension STFilesDownloaderActivityVM: STFileDownloaderObserver {
             let file = DecryptDownloadFile(header: decryptHeader, url: decryptURL)
             self.decryptFileURLs.append(file)
         } catch {
-            print(error)
+            STLogger.log(error: error)
         }
     }
     

@@ -51,7 +51,7 @@ class STBillingWorker: STWorker {
                 return receiptString
             }
             catch {
-                print("error", error.localizedDescription)
+                STLogger.log(error: error)
             }
         }
         

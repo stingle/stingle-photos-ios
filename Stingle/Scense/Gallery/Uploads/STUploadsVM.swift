@@ -49,6 +49,13 @@ class STUploadsVM {
     }
     
     private func didUpdateFiles() {
+        
+        self.uploadFiles = self.uploadFiles.sorted { f, s in
+            let fP = self.progresses[f.identifier]?.fractionCompleted ?? .zero
+            let sP = self.progresses[s.identifier]?.fractionCompleted ?? .zero
+            return fP > sP
+        }
+        
         DispatchQueue.main.async { [weak self] in
             guard let weakSelf = self else { return }
             weakSelf.delegate?.uploadsVM(didUpdateFiles: weakSelf, uploadFiles: weakSelf.uploadFiles, progresses: weakSelf.progresses)
