@@ -91,14 +91,20 @@ import UIKit
     private func updateImage() {
         if self.syncManager.isSyncing {
             self.circleProgressView.startAnimating()
-        } else if self.uploader.isUploading {
-            let image = UIImage(named: "ic_sync_nav_uploading")
-            self.circleProgressView.image = image
-            self.circleProgressView.stopAnimating()
         } else {
-            let image = UIImage(named: "ic_sync_nav_completed")
-            self.circleProgressView.image = image
-            self.circleProgressView.stopAnimating()
+            self.uploader.isProgress { [weak self] isProgress in
+                DispatchQueue.main.async {
+                    if isProgress {
+                        let image = UIImage(named: "ic_sync_nav_uploading")
+                        self?.circleProgressView.image = image
+                        self?.circleProgressView.stopAnimating()
+                    } else {
+                        let image = UIImage(named: "ic_sync_nav_completed")
+                        self?.circleProgressView.image = image
+                        self?.circleProgressView.stopAnimating()
+                    }
+                }
+            }
         }
     }
     

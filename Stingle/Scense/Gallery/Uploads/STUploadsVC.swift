@@ -16,11 +16,13 @@ class STUploadsVC: STPopoverViewController {
     
     private var cellModels = [CellModel]()
     
+    private var diffableDataSource: UITableViewDiffableDataSource<Int, CellModel>?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.registrTableView()
         self.viewModel = STUploadsVM()
-        self.reloadSnapshot()
+        self.reloadSnapshot(uploadFiles: [], progresses: [:])
         self.viewModel.delegate = self
         self.emptyMessageLabel.text = "have_not_any_uploading_item".localized
     }
@@ -36,21 +38,34 @@ class STUploadsVC: STPopoverViewController {
     //MARK: - Private
     
     private func registrTableView() {
+        
+        let cellID = "STUploadsTableViewCellID"
         let nib = UINib(nibName: "STUploadsTableViewCell", bundle: .main)
-        self.tableView.register(nib, forCellReuseIdentifier: "STUploadsTableViewCellID")
+        self.tableView.register(nib, forCellReuseIdentifier: cellID)
+        self.diffableDataSource = UITableViewDiffableDataSource<Int, CellModel>(tableView: self.tableView, cellProvider: { tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+            (cell as? STUploadsTableViewCell)?.configure(model: item)
+            return cell
+        })
+        self.tableView.dataSource = self.diffableDataSource
     }
     
-    private func reloadSnapshot() {
-        let files = self.viewModel.uploadFiles
-        let progresses = self.viewModel.progresses
+    private func reloadSnapshot(uploadFiles: [ILibraryFile], progresses: [String : Progress], animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
+        let files = uploadFiles
+        let progresses = progresses
         self.cellModels = files.compactMap { (file) -> CellModel in
             let cellModel = self.cellModel(for: file, progress: progresses[file.file])
             return cellModel
         }
-        self.emptyMessageLabel.isHidden = !files.isEmpty
-        self.tableView.reloadData()
-        self.updatePreferredContentSize()
         
+        var snapshot = NSDiffableDataSourceSnapshot<Int, CellModel>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(self.cellModels, toSection: 0)
+        
+        self.diffableDataSource?.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+                
+        self.emptyMessageLabel.isHidden = !files.isEmpty
+        self.updatePreferredContentSize()
     }
     
     private func cellModel(for file: ILibraryFile, progress: Progress?) -> CellModel {
@@ -64,13 +79,12 @@ class STUploadsVC: STPopoverViewController {
 
 extension STUploadsVC: STUploadsVMDelegate {
     
-    func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [ILibraryFile], progresses: [String : Progress]) {
-        self.reloadSnapshot()
+    func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [ILibraryFile], progresses: [String: Progress]) {
+        self.reloadSnapshot(uploadFiles: uploadFiles, progresses: progresses)
     }
     
-    func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [ILibraryFile]) {
-        let progresses = self.viewModel.progresses
-                
+    func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [ILibraryFile], uploadFiles: [ILibraryFile], progresses: [String: Progress]) {
+        
         files.forEach { (file) in
             if let index = self.cellModels.firstIndex(where: {$0.id == file.file}) {
                 let cellModel = self.cellModel(for: file, progress: progresses[file.file])
@@ -81,9 +95,22 @@ extension STUploadsVC: STUploadsVMDelegate {
             }
         }
         
-        
+//        self.reloadSnapshot(uploadFiles: uploadFiles, progresses: progresses, animatingDifferences: true) { [weak self] in
+//            guard let weakSelf = self else { return }
+//            files.forEach { (file) in
+//                if let index = weakSelf.cellModels.firstIndex(where: {$0.id == file.file}) {
+//                    let cellModel = weakSelf.cellModel(for: file, progress: progresses[file.file])
+//                    let indexPath = IndexPath(row: index, section: 0)
+//                    let cell = weakSelf.tableView.cellForRow(at: indexPath) as? STUploadsTableViewCell
+//                    weakSelf.cellModels[index] = cellModel
+//                    cell?.updateProgress(progress: cellModel.progress)
+//                }
+//            }
+//
+//        }
+
     }
-    
+        
 }
 
 extension STUploadsVC: UITableViewDataSource {
@@ -112,7 +139,7 @@ extension STUploadsVC {
         let id: String
         
         func hash(into hasher: inout Hasher) {
-            return self.id.hash(into: &hasher)
+            self.id.hash(into: &hasher)
         }
         
         static func == (lhs: STUploadsVC.CellModel, rhs: STUploadsVC.CellModel) -> Bool {

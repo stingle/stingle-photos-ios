@@ -38,10 +38,10 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
                 task.earliestBeginDate = Date()
                 weakSelf.urlTask = task
                 task.resume()
+                task.progress.startedDate = Date()
             } catch {
                 weakSelf.completion(with: .failure(error: .error(error: error)))
             }
-            
         }
     }
     
@@ -52,9 +52,10 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
     
     override func didSendBodyData(bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         super.didSendBodyData(bytesSent: bytesSent, totalBytesSent: totalBytesSent, totalBytesExpectedToSend: totalBytesExpectedToSend)
-        self.progressTask.totalUnitCount = self.request.totalUnitCount
-        self.progressTask.completedUnitCount = totalBytesSent
-        self.progress?(self.progressTask)
+        guard let progress = self.urlTask?.progress else {
+            return
+        }
+        self.progress?(progress)
     }
     
     override func didCompleteWithError(error: Error?) {
@@ -73,13 +74,12 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
     
     //MARK: - Private methods
     
-    private func didBuildProgress(progress: Double) {
-        let total: Double = 10000
-        let carrent = total * progress
+    private func didBuildProgress(totalUnitCount: Int64, completedUnitCount: Int64) {
+        
         let pp = Progress()
         
-        pp.totalUnitCount = Int64(total)
-        pp.completedUnitCount = Int64(carrent)
+        pp.totalUnitCount = totalUnitCount
+        pp.completedUnitCount = .zero
         
         guard let date = self.lastResponseDate else {
             self.progress?(pp)
@@ -103,10 +103,6 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
         self.urlTask = task
         task.resume()
     }
-    
-}
-
-extension STNetworkUploadTask: StreamDelegate {
     
 }
 
@@ -177,7 +173,7 @@ extension STNetworkUploadTask {
             return request
         }
         
-        fileprivate func build(progressHandler: ProgressHandler<Double>) throws {
+        fileprivate func build(progressHandler: ProgressHandler<(totalUnitCount: Int64, completedUnitCount: Int64)>) throws {
             
             guard !self.isBuilded else {
                 throw STNetworkDispatcher.NetworkError.badRequest
@@ -221,8 +217,7 @@ extension STNetworkUploadTask {
                     try part.writeBodyStream(to: outputStream, boundary: self.boundary, progressHandler: { writed, stop in
                         currentWritedCount = writed
                         let processWrited = writedCount + writed
-                        let process = Double(processWrited) / Double(fullDataSize)
-                        progressHandler(process, &stop)
+                        progressHandler((fullDataSize, processWrited), &stop)
                     })
                     writedCount = writedCount + currentWritedCount
                 } catch {

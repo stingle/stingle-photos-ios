@@ -15,7 +15,6 @@ class STNetworkSession: NSObject {
     
     fileprivate let rootQueue: DispatchQueue
     fileprivate var urlSession: URLSession!
-        
     fileprivate var tasks = [Int: INetworkSessionTask]()
     
     weak var sessionEvent: INetworkSessionEvent?
@@ -25,11 +24,19 @@ class STNetworkSession: NSObject {
         super.init()
         
         let operationsQueue = OperationQueue()
-        operationsQueue.maxConcurrentOperationCount = 1
+        operationsQueue.maxConcurrentOperationCount = 10
         operationsQueue.qualityOfService = .userInteractive
         operationsQueue.underlyingQueue = self.rootQueue
                         
         self.urlSession = URLSession(configuration: configuration, delegate: self, delegateQueue: operationsQueue)
+        self.urlSession.getAllTasks { [weak self] tasks in
+            for task in tasks {
+                guard self?.tasks[task.taskIdentifier] == nil else {
+                    continue
+                }
+                task.cancel()
+            }
+        }
     }
         
 }
@@ -62,7 +69,9 @@ extension STNetworkSession {
 extension STNetworkSession: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
-        self.tasks[task.taskIdentifier]?.urlSession(task: task, didSendBodyData: bytesSent, totalBytesSent: totalBytesSent, totalBytesExpectedToSend: totalBytesExpectedToSend)
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.tasks[task.taskIdentifier]?.urlSession(task: task, didSendBodyData: bytesSent, totalBytesSent: totalBytesSent, totalBytesExpectedToSend: totalBytesExpectedToSend)
+        }
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
@@ -74,13 +83,26 @@ extension STNetworkSession: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         self.sessionEvent?.networkSession(networkSession: self, didReceive: data)
-        self.tasks[dataTask.taskIdentifier]?.urlSession(dataTask: dataTask, didReceive: data)
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.tasks[dataTask.taskIdentifier]?.urlSession(dataTask: dataTask, didReceive: data)
+        }
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void) {
-        self.tasks[task.taskIdentifier]?.urlSession(task: task, needNewBodyStream: completionHandler)
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.tasks[task.taskIdentifier]?.urlSession(task: task, needNewBodyStream: completionHandler)
+        }
     }
-
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, willBeginDelayedRequest request: URLRequest, completionHandler: @escaping (URLSession.DelayedRequestDisposition, URLRequest?) -> Void) {
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            if self?.tasks[task.taskIdentifier] == nil {
+                completionHandler(.cancel, request)
+            } else {
+                completionHandler(.continueLoading, request)
+            }
+        }
+    }
 }
 
 extension STNetworkSession {
@@ -92,6 +114,7 @@ extension STNetworkSession {
         configuration.isDiscretionary = true
         configuration.sessionSendsLaunchEvents = true
         configuration.urlCache = nil
+        configuration.httpMaximumConnectionsPerHost = 7
         return configuration
     }
         

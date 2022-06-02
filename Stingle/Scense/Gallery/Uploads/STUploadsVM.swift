@@ -9,7 +9,7 @@ import Foundation
 
 protocol STUploadsVMDelegate: AnyObject {
     func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [ILibraryFile], progresses: [String: Progress])
-    func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [ILibraryFile])
+    func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [ILibraryFile], uploadFiles: [ILibraryFile], progresses: [String: Progress])
 }
 
 class STUploadsVM {
@@ -17,8 +17,8 @@ class STUploadsVM {
     weak var delegate: STUploadsVMDelegate?
     private let uploader = STApplication.shared.uploader
     
-    private(set) var progresses = [String: Progress]()
-    private(set) var uploadFiles = [ILibraryFile]()
+    private var progresses = [String: Progress]()
+    private var uploadFiles = [ILibraryFile]()
     
     init() {
         self.updateFiles(files: [])
@@ -28,64 +28,74 @@ class STUploadsVM {
     private func updateFiles(files: [ILibraryFile]) {
         self.uploader.getProgress { [weak self] progresses, uploadingFiles in
             guard let weakSelf = self else { return }
-            if uploadingFiles.count != weakSelf.uploadFiles.count {
-                weakSelf.uploadFiles = uploadingFiles
-                weakSelf.progresses = progresses
-                weakSelf.didUpdateFiles()
-            } else {
-                weakSelf.uploadFiles = uploadingFiles
-                weakSelf.progresses = progresses
-                weakSelf.didUpdateProgress(files: files)
-            }
-        }
-    }
-        
-    private func didEndUploading(file: ILibraryFile) {
-        self.uploader.getProgress { [weak self] progresses, uploadingFiles in
-            self?.uploadFiles = uploadingFiles
-            self?.progresses = progresses
-            self?.didUpdateFiles()
+            weakSelf.update(progresses: progresses, files: uploadingFiles)
+            weakSelf.didUpdateFiles(uploadFiles: weakSelf.uploadFiles, progresses: weakSelf.progresses)
         }
     }
     
-    private func didUpdateFiles() {
-        
-        self.uploadFiles = self.uploadFiles.sorted { f, s in
-            let fP = self.progresses[f.identifier]?.fractionCompleted ?? .zero
-            let sP = self.progresses[s.identifier]?.fractionCompleted ?? .zero
-            return fP > sP
+    private func progressFiles(files: [ILibraryFile]) {
+        self.uploader.getProgress { [weak self] progresses, uploadingFiles in
+            guard let weakSelf = self else { return }
+            let hasChanges = weakSelf.update(progresses: progresses, files: uploadingFiles)
+            if hasChanges {
+                weakSelf.didUpdateFiles(uploadFiles: weakSelf.uploadFiles, progresses: weakSelf.progresses)
+            } else {
+                weakSelf.didUpdateProgress(files: files, uploadFiles: weakSelf.uploadFiles, progresses: weakSelf.progresses)
+            }
         }
+    }
+    
+    @discardableResult
+    private func update(progresses: [String: Progress], files: [ILibraryFile]) -> Bool {
+        var hasChanges = false
+        self.uploadFiles = files.sorted(by: { file1, file2 in
+            let d1 = progresses[file1.identifier]?.startedDate?.timeIntervalSinceNow ?? .zero
+            let d2 = progresses[file2.identifier]?.startedDate?.timeIntervalSinceNow ?? .zero
+            if !hasChanges {
+                if (self.progresses[file1.identifier] !=  progresses[file1.identifier]) || (self.progresses[file2.identifier] != progresses[file2.identifier]) {
+                    hasChanges = true
+                }
+            }
+            if d1 == d2 {
+                return false
+            }
+            return d1 < d2
+        })
         
+        self.progresses = progresses
+        return hasChanges
+    }
+
+    private func didUpdateFiles(uploadFiles: [ILibraryFile], progresses: [String: Progress]) {
         DispatchQueue.main.async { [weak self] in
             guard let weakSelf = self else { return }
             weakSelf.delegate?.uploadsVM(didUpdateFiles: weakSelf, uploadFiles: weakSelf.uploadFiles, progresses: weakSelf.progresses)
         }
     }
     
-    private func didUpdateProgress(files: [ILibraryFile]) {
+    private func didUpdateProgress(files: [ILibraryFile], uploadFiles: [ILibraryFile], progresses: [String: Progress]) {
         DispatchQueue.main.async { [weak self] in
             guard let weakSelf = self else { return }
-            weakSelf.delegate?.uploadsVM(didUpdateProgress: weakSelf, for: files)
+            weakSelf.delegate?.uploadsVM(didUpdateProgress: weakSelf, for: files, uploadFiles: uploadFiles, progresses: progresses)
         }
     }
-            
 }
 
 extension STUploadsVM: IFileUploaderObserver {
     
     func fileUploader(didUpdateProgress uploader: STFileUploader, uploadInfo: STFileUploader.UploadInfo, files: [ILibraryFile]) {
-        self.updateFiles(files: files)
+        self.progressFiles(files: files)
     }
     
     func fileUploader(didEndSucces uploader: STFileUploader, file: ILibraryFile, uploadInfo: STFileUploader.UploadInfo) {
-        self.didEndUploading(file: file)
+        self.updateFiles(files: [file])
     }
     
     func fileUploader(didEndFailed uploader: STFileUploader, file: ILibraryFile?, error: IError, uploadInfo: STFileUploader.UploadInfo) {
         guard let file = file else {
             return
         }
-        self.didEndUploading(file: file)
+        self.updateFiles(files: [file])
     }
     
 }
