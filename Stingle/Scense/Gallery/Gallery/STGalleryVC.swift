@@ -155,6 +155,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
     }
     
     override func collectionView(didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        super.collectionView(didBeginMultipleSelectionInteractionAt: indexPath)
         UIView.animate(withDuration: 0.3) {
             self.navigationController?.navigationBar.alpha = 0.7
             self.accessoryView.alpha = 0.7
@@ -162,6 +163,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
     }
     
     override func collectionViewDidEndMultipleSelectionInteraction() {
+        super.collectionViewDidEndMultipleSelectionInteraction()
         UIView.animate(withDuration: 0.3) {
             self.navigationController?.navigationBar.alpha = 1
             self.accessoryView.alpha = 1

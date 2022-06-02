@@ -13,9 +13,7 @@ class STUploadsVC: STPopoverViewController {
     @IBOutlet weak var emptyMessageLabel: UILabel!
     
     private var viewModel: STUploadsVM!
-    
     private var cellModels = [CellModel]()
-    
     private var diffableDataSource: UITableViewDiffableDataSource<Int, CellModel>?
     
     override func viewDidLoad() {
@@ -94,20 +92,6 @@ extension STUploadsVC: STUploadsVMDelegate {
                 cell?.updateProgress(progress: cellModel.progress)
             }
         }
-        
-//        self.reloadSnapshot(uploadFiles: uploadFiles, progresses: progresses, animatingDifferences: true) { [weak self] in
-//            guard let weakSelf = self else { return }
-//            files.forEach { (file) in
-//                if let index = weakSelf.cellModels.firstIndex(where: {$0.id == file.file}) {
-//                    let cellModel = weakSelf.cellModel(for: file, progress: progresses[file.file])
-//                    let indexPath = IndexPath(row: index, section: 0)
-//                    let cell = weakSelf.tableView.cellForRow(at: indexPath) as? STUploadsTableViewCell
-//                    weakSelf.cellModels[index] = cellModel
-//                    cell?.updateProgress(progress: cellModel.progress)
-//                }
-//            }
-//
-//        }
 
     }
         

@@ -106,6 +106,11 @@ class STFileViewerVC: UIViewController {
         }
     }
     
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        super.pressesBegan(presses, with: event)
+        presses.first?.key.flatMap{ self.onKeyPressed($0) }
+    }
+    
     //MARK: - User action
     
     @IBAction private func didSelectMoreButton(_ sender: UIBarButtonItem) {
@@ -142,6 +147,15 @@ class STFileViewerVC: UIViewController {
     
     private func didSelectMore(action: MoreAction, file: STLibrary.FileBase) {
         self.viewModel.selectMore(action: action, file: file)
+    }
+    
+    private func onKeyPressed(_ key: UIKey) {
+        switch key.keyCode {
+        case .keyboardSpacebar:
+            self.navigationController?.popViewController(animated: true)
+        default:
+            break
+        }
     }
         
     //MARK: - Private methods
