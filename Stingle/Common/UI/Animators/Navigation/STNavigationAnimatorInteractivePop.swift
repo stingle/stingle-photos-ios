@@ -48,6 +48,7 @@ extension STNavigationAnimator {
         private func addInteractionGesture() {
             let panGesture = InteractionPanGesture(target: self, action: #selector(interactionDismiss(panGesture:)))
             panGesture.userInfo = self
+            panGesture.allowedScrollTypesMask = .continuous
             self.panGesture = panGesture
             self.destinationVC.view.addGestureRecognizer(panGesture)
         }

@@ -33,12 +33,15 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
             do {
                 try weakSelf.request.build { [weak weakSelf] progress, stop in
                     stop = weakSelf?.isCanceled ?? true
+                    if !stop {
+                        weakSelf?.didBuildProgress(totalUnitCount: progress.totalUnitCount, completedUnitCount: progress.completedUnitCount)
+                    }
                 }
                 let task = weakSelf.session.uploadTask(with: weakSelf.request.asURLRequest(), fromFile: weakSelf.request.fileURL)
                 task.earliestBeginDate = Date()
                 weakSelf.urlTask = task
-                task.resume()
                 task.progress.startedDate = Date()
+                task.resume()
             } catch {
                 weakSelf.completion(with: .failure(error: .error(error: error)))
             }
@@ -77,7 +80,6 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
     private func didBuildProgress(totalUnitCount: Int64, completedUnitCount: Int64) {
         
         let pp = Progress()
-        
         pp.totalUnitCount = totalUnitCount
         pp.completedUnitCount = .zero
         

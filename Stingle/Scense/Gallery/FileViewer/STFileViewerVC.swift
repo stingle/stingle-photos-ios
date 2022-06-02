@@ -145,6 +145,8 @@ class STFileViewerVC: UIViewController {
         }
     }
     
+    //MARK: - Private methods
+    
     private func didSelectMore(action: MoreAction, file: STLibrary.FileBase) {
         self.viewModel.selectMore(action: action, file: file)
     }
@@ -153,13 +155,31 @@ class STFileViewerVC: UIViewController {
         switch key.keyCode {
         case .keyboardSpacebar:
             self.navigationController?.popViewController(animated: true)
+        case .keyboardRightArrow:
+            self.swapToRight(animated: false)
+        case .keyboardLeftArrow:
+            self.swapToLeft(animated: false)
         default:
             break
         }
     }
-        
-    //MARK: - Private methods
-        
+            
+    private func swapToRight(animated: Bool) {
+        guard let currentIndex = self.currentIndex, let vc = self.viewController(for: (currentIndex + 1)) else {
+            return
+        }
+        self.pageViewController.setViewControllers([vc], direction: .forward, animated: animated, completion: nil)
+        self.currentIndex = currentIndex + 1
+    }
+    
+    private func swapToLeft(animated: Bool) {
+        guard let currentIndex = self.currentIndex, let vc = self.viewController(for: (currentIndex - 1)) else {
+            return
+        }
+        self.pageViewController.setViewControllers([vc], direction: .reverse, animated: animated, completion: nil)
+        self.currentIndex = currentIndex - 1
+    }
+            
     private func configureAccessoryView() {
         if let tabBarController = self.tabBarController {
             self.toolBar.isHidden = true
@@ -223,7 +243,6 @@ class STFileViewerVC: UIViewController {
             self.tabBarController?.tabBar.alpha = 1
             self.viewerStyle = .white
         }
-        
         self.splitMenuViewController?.setNeedsStatusBarAppearanceUpdate()
         self.viewControllers.forEach({ $0.fileViewer(didChangeViewerStyle: self, isFullScreen: self.viewerStyle == .balck)})
     }
@@ -293,17 +312,13 @@ class STFileViewerVC: UIViewController {
     }
     
     private func didSelectShareViaStinglePhotos() {
-        
-        //TODO: Khoren
-        fatalError("implement this case")
-        
-//        guard let file = self.currentFile else {
-//            return
-//        }
-//        let storyboard = UIStoryboard(name: "Share", bundle: .main)
-//        let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
-//        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .files(files: [file])
-//        self.showDetailViewController(vc, sender: nil)
+        guard let file = self.currentFile else {
+            return
+        }
+        let storyboard = UIStoryboard(name: "Share", bundle: .main)
+        let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
+        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = self.viewModel.getShearedType(for: file)
+        self.showDetailViewController(vc, sender: nil)
     }
     
     private func showShareFileActionSheet(sender: UIBarButtonItem) {

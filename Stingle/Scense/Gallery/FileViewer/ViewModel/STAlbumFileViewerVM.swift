@@ -76,5 +76,9 @@ class STAlbumFileViewerVM: STFileViewerVM<STLibrary.AlbumFile> {
     override func editVM(for file: STLibrary.AlbumFile) -> IFileEditVM {
         return STAlbumFileEditVM(file: file, album: self.album)
     }
+    
+    override func getShearedType(for file: STLibrary.AlbumFile) -> STSharedMembersVC.ShearedType {
+        return .albumFiles(album: self.album, files: [file])
+    }
 
 }

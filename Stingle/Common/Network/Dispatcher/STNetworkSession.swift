@@ -113,8 +113,6 @@ extension STNetworkSession {
         let configuration = URLSessionConfiguration.background(withIdentifier: sessionIdentifier)
         configuration.isDiscretionary = true
         configuration.sessionSendsLaunchEvents = true
-        configuration.urlCache = nil
-        configuration.httpMaximumConnectionsPerHost = 7
         return configuration
     }
         

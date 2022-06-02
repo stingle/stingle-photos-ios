@@ -23,6 +23,7 @@ protocol IFileViewerVM {
     
     func getAction(for file: STLibrary.FileBase) -> [STFileViewerVC.ActionType]
     func getMorAction(for file: STLibrary.FileBase) -> [STFileViewerVC.MoreAction]
+    func getShearedType(for file: STLibrary.FileBase) -> STSharedMembersVC.ShearedType
     
     func selectMore(action: STFileViewerVC.MoreAction, file: STLibrary.FileBase)
     func moveInfo(for file: STLibrary.FileBase) -> STMoveAlbumFilesVC.MoveInfo
@@ -96,6 +97,10 @@ class STFileViewerVM<File: STLibrary.FileBase> where File: ICDSynchConvertable {
         return [.download]
     }
     
+    func getShearedType(for file: File) -> STSharedMembersVC.ShearedType {
+        fatalError("this method must be implemented in child classes")
+    }
+    
     func removeFileSystemFolder(url: URL) {
         STApplication.shared.fileSystem.remove(file: url)
     }
@@ -132,7 +137,7 @@ extension STFileViewerVM: IProviderDelegate {
 }
 
 extension STFileViewerVM: IFileViewerVM {
-    
+        
     func object(at index: Int) -> STLibrary.FileBase? {
         let obj: File? = self.object(at: index)
         return obj
@@ -172,6 +177,10 @@ extension STFileViewerVM: IFileViewerVM {
 
     func editVM(for file: STLibrary.FileBase) -> IFileEditVM {
         return self.editVM(for: file as! File)
+    }
+    
+    func getShearedType(for file: STLibrary.FileBase) -> STSharedMembersVC.ShearedType {
+        return self.getShearedType(for: file as! File)
     }
     
 }
