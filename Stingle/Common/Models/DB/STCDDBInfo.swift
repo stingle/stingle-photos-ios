@@ -7,9 +7,5 @@
 //
 
 import Foundation
-import CoreData
 
-@objc(STCDDBInfo)
-public class STCDDBInfo: NSManagedObject, IManagedObject {
-    
-}
+extension STCDDBInfo: IManagedObject {}

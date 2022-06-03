@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="STCDAlbum" representedClassName="STCDAlbum" syncable="YES" codeGenerationType="class">
+        <attribute name="albumId" optional="YES" attributeType="String"/>
+        <attribute name="cover" optional="YES" attributeType="String"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dateModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="encPrivateKey" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="isHidden" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isLocked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isOwner" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isRemote" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isShared" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="members" optional="YES" attributeType="String"/>
+        <attribute name="metadata" optional="YES" attributeType="String"/>
+        <attribute name="permissions" optional="YES" attributeType="String"/>
+        <attribute name="publicKey" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="STCDAlbumFile" representedClassName="STCDAlbumFile" parentEntity="STCDFile" syncable="YES" codeGenerationType="class">
+        <attribute name="albumId" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="STCDContact" representedClassName="STCDContact" syncable="YES" codeGenerationType="class">
+        <attribute name="dateModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dateUsed" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="identifier" optional="YES" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="publicKey" optional="YES" attributeType="String"/>
+        <attribute name="userId" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="STCDDBInfo" representedClassName="STCDDBInfo" syncable="YES" codeGenerationType="class">
+        <attribute name="identifier" optional="YES" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="lastAlbumFilesSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastAlbumsSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastContactsSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastDelSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastGallerySeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastTrashSeenTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="spaceQuota" optional="YES" attributeType="String"/>
+        <attribute name="spaceUsed" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="STCDFile" representedClassName="STCDFile" syncable="YES" codeGenerationType="class">
+        <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dateModified" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="file" optional="YES" attributeType="String"/>
+        <attribute name="headers" optional="YES" attributeType="String"/>
+        <attribute name="identifier" optional="YES" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="isRemote" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isSynched" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="version" optional="YES" attributeType="String"/>
+        <relationship name="searchIndexes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="STCDFileSearchIndex" inverseName="file" inverseEntity="STCDFileSearchIndex"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="STCDFileSearchIndex" representedClassName="STCDFileSearchIndex" syncable="YES" codeGenerationType="class">
+        <attribute name="dateModified" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="fileName" attributeType="String"/>
+        <attribute name="identifier" attributeType="String"/>
+        <attribute name="isProc" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <relationship name="file" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="STCDFile" inverseName="searchIndexes" inverseEntity="STCDFile"/>
+    </entity>
+    <entity name="STCDGaleryFile" representedClassName="STCDGaleryFile" parentEntity="STCDFile" syncable="YES" codeGenerationType="class"/>
+    <entity name="STCDTrashFile" representedClassName="STCDTrashFile" parentEntity="STCDFile" syncable="YES" codeGenerationType="class"/>
+    <entity name="STCDUser" representedClassName="STCDUser" syncable="YES" codeGenerationType="class">
+        <attribute name="email" attributeType="String"/>
+        <attribute name="homeFolder" attributeType="String"/>
+        <attribute name="identifier" optional="YES" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="isKeyBackedUp" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="token" attributeType="String"/>
+        <attribute name="userId" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="STCDAlbum" positionX="209.9495239257812" positionY="-2.276885986328125" width="128" height="254"/>
+        <element name="STCDAlbumFile" positionX="38.33984375" positionY="-170.3734893798828" width="128" height="44"/>
+        <element name="STCDContact" positionX="364.7306518554688" positionY="-169.4540863037109" width="128" height="119"/>
+        <element name="STCDDBInfo" positionX="39.90753173828125" positionY="34.14346313476562" width="128" height="164"/>
+        <element name="STCDFile" positionX="-159.2324829101562" positionY="-174.6141052246094" width="128" height="164"/>
+        <element name="STCDFileSearchIndex" positionX="-169.9898071289062" positionY="161.1258850097656" width="128" height="104"/>
+        <element name="STCDGaleryFile" positionX="41.93560791015625" positionY="-95.69352722167969" width="128" height="29"/>
+        <element name="STCDTrashFile" positionX="43.81707763671875" positionY="-27.04373168945312" width="128" height="29"/>
+        <element name="STCDUser" positionX="206.0977783203125" positionY="-170.3188781738281" width="128" height="119"/>
+    </elements>
+</model>

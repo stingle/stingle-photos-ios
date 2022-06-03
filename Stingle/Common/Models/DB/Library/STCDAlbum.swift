@@ -7,9 +7,5 @@
 //
 
 import Foundation
-import CoreData
 
-@objc(STCDAlbum)
-public class STCDAlbum: NSManagedObject, ISynchManagedObject {
-
-}
+extension STCDAlbum: ISynchManagedObject {}

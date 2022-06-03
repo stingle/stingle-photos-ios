@@ -7,9 +7,5 @@
 //
 
 import Foundation
-import CoreData
 
-@objc(STCDUser)
-public class STCDUser: NSManagedObject, IManagedObject {
-        
-}
+extension STCDUser: IManagedObject {}

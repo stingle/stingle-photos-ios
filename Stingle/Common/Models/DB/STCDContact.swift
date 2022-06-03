@@ -7,10 +7,8 @@
 //
 
 import Foundation
-import CoreData
 
-@objc(STCDContact)
-public class STCDContact: NSManagedObject, ISynchManagedObject {
+extension STCDContact: ISynchManagedObject {
     
     var dateCreated: Date? {
         return self.dateUsed

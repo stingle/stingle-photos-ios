@@ -7,10 +7,5 @@
 //
 
 import Foundation
-import CoreData
 
-@objc(STCDFile)
-public class STCDFile: NSManagedObject, ISynchManagedObject {
-    
-
-}
+extension STCDFile: ISynchManagedObject {}
