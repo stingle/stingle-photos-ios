@@ -20,6 +20,7 @@ extension STImporter {
         let fileSize: UInt
         let creationDate: Date?
         let modificationDate: Date?
+        let searchInfo: [STLibrary.SearchIndex]?
         let freeBuffer: (() -> Void)?
     }
     
@@ -99,12 +100,13 @@ extension STImporter {
                                            fileSize: info.fileSize,
                                            creationDate: info.creationDate,
                                            modificationDate: info.modificationDate,
+                                           searchInfo: info.searchInfo,
                                            progressHandler: progressHandler)
             
             return file
         }
         
-        func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, progressHandler: @escaping ProgressHandler) throws -> File {
+        func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, searchInfo: [STLibrary.SearchIndex]?, progressHandler: @escaping ProgressHandler) throws -> File {
             fatalError("implement childe classes")
         }
         
@@ -149,14 +151,13 @@ extension STImporter {
                     stop?.pointee = ObjCBool(isEnd)
                 }
             }) { [weak self] info in
-                
                 guard let weakSelf = self, let info = info else {
                     compled(error: STFileUploader.UploaderError.phAssetNotValid)
                     return
                 }
-                
+
                 STPHPhotoHelper.requestThumb(asset: weakSelf.asset, queue: queue, progressHandler: { progressValue, stop in
-                    
+
                     myProgressValue = 0.5 + progressValue / 2
                     totalProgress.completedUnitCount = Int64(myProgressValue * Double(totalProgress.totalUnitCount))
                     var isEnd: Bool? = false
@@ -164,22 +165,32 @@ extension STImporter {
                     if let isEnd = isEnd {
                         stop?.pointee = ObjCBool(isEnd)
                     }
-                    
+
                 }) { image in
                     guard let image = image, let thumbData = image.jpegData(compressionQuality: 0.7)  else {
                         compled(error: STFileUploader.UploaderError.phAssetNotValid)
                         return
                     }
-                    
-                    let importFileInfo = ImportFileInfo(oreginalUrl: info.dataInfo,
-                                                                    thumbImage: thumbData,
-                                                                    fileType: fileType,
-                                                                    duration: info.videoDuration,
-                                                                    fileSize: info.fileSize,
-                                                                    creationDate: info.creationDate,
-                                                                    modificationDate: info.modificationDate,
-                                                                    freeBuffer: info.freeBuffer)
-                    compled(uploadInfo: importFileInfo)
+                    let completion: STImageRecognition.Completion = { searchInfos in
+                        let importFileInfo = ImportFileInfo(oreginalUrl: info.dataInfo,
+                                                            thumbImage: thumbData,
+                                                            fileType: fileType,
+                                                            duration: info.videoDuration,
+                                                            fileSize: info.fileSize,
+                                                            creationDate: info.creationDate,
+                                                            modificationDate: info.modificationDate,
+                                                            searchInfo: searchInfos,
+                                                            freeBuffer: info.freeBuffer)
+                        compled(uploadInfo: importFileInfo)
+                    }
+                    switch weakSelf.asset.mediaType {
+                    case .image:
+                        STImageRecognition.shared.processImage(url: info.dataInfo, completion: completion)
+                    case .video:
+                        STImageRecognition.shared.processVideo(url: info.dataInfo, completion: completion)
+                    default:
+                        completion(nil)
+                    }
                 }
             }
         }
@@ -192,7 +203,7 @@ extension STImporter {
     
     class GaleryFileImportable: ImportableFile<STLibrary.GaleryFile> {
         
-        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.GaleryFile {
+        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, searchInfo: [STLibrary.SearchIndex]?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.GaleryFile {
             
             let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(oreginalUrl: oreginalUrl, thumbImage: thumbImageData, fileType: fileType, duration: duration, toUrl: toUrl, toThumbUrl: toThumbUrl, fileSize: fileSize, progressHandler: { progress, stop in
                 var isEnded: Bool?
@@ -207,6 +218,8 @@ extension STImporter {
             let dateModified = modificationDate ?? Date()
 
             let file = STLibrary.GaleryFile(fileName: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, isSynched: false, managedObjectID: nil)
+            searchInfo?.forEach({ $0.fileName = file.file })
+            file.searchIndexes = searchInfo
             return file
         }
         
@@ -221,7 +234,7 @@ extension STImporter {
             super.init(asset: asset)
         }
         
-        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.AlbumFile {
+        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, searchInfo: [STLibrary.SearchIndex]?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.AlbumFile {
             
             guard let publicKey = self.album.albumMetadata?.publicKey else {
                 throw STFileUploader.UploaderError.fileNotFound
@@ -240,6 +253,8 @@ extension STImporter {
             let dateModified = modificationDate ?? Date()
 
             let file = STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, isSynched: false, albumId: self.album.albumId, managedObjectID: nil)
+            searchInfo?.forEach({ $0.fileName = file.file })
+            file.searchIndexes = searchInfo
             file.updateIfNeeded(albumMetadata: self.album.albumMetadata)
             return file
         }

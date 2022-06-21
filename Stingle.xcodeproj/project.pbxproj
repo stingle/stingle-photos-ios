@@ -380,6 +380,7 @@
 		B31D623927B64B4E00CBEA19 /* STRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621627B64B4E00CBEA19 /* STRulerView.swift */; };
 		B31D623B27B65D7900CBEA19 /* STFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */; };
 		B31D623E27B65F0500CBEA19 /* FileEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */; };
+		B3351F322850D436003C83AA /* STImageRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3351F312850D436003C83AA /* STImageRecognition.swift */; };
 		B3469B9727F5E8480036C17A /* STGaleryFileEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9627F5E8480036C17A /* STGaleryFileEditVM.swift */; };
 		B3469B9927F5E8A50036C17A /* STAlbumFileEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9827F5E8A50036C17A /* STAlbumFileEditVM.swift */; };
 		B372083C27C505E400FA7EFD /* STDataNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */; };
@@ -769,6 +770,7 @@
 		B31D621627B64B4E00CBEA19 /* STRulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STRulerView.swift; sourceTree = "<group>"; };
 		B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileEditVC.swift; sourceTree = "<group>"; };
 		B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FileEdit.storyboard; sourceTree = "<group>"; };
+		B3351F312850D436003C83AA /* STImageRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STImageRecognition.swift; sourceTree = "<group>"; };
 		B3469B9627F5E8480036C17A /* STGaleryFileEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGaleryFileEditVM.swift; sourceTree = "<group>"; };
 		B3469B9827F5E8A50036C17A /* STAlbumFileEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFileEditVM.swift; sourceTree = "<group>"; };
 		B3920697284A1F2A00B18538 /* StingleModel_V3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = StingleModel_V3.xcdatamodel; sourceTree = "<group>"; };
@@ -1386,6 +1388,7 @@
 		A033D6EA2601491B00E6AA83 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				B3351F302850D417003C83AA /* ImageRecognition */,
 				A033D6F626014B7C00E6AA83 /* Manager */,
 				A033D6F526014AE100E6AA83 /* Uitils */,
 				A033D6F326014A8700E6AA83 /* Models */,
@@ -2658,6 +2661,14 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		B3351F302850D417003C83AA /* ImageRecognition */ = {
+			isa = PBXGroup;
+			children = (
+				B3351F312850D436003C83AA /* STImageRecognition.swift */,
+			);
+			path = ImageRecognition;
+			sourceTree = "<group>";
+		};
 		B3469B9527F5E22C0036C17A /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -2991,6 +3002,7 @@
 				A00982F526234EAB00559C41 /* STUploadWorker.swift in Sources */,
 				A08F27A62785ACBC00EF8BE4 /* STAutoImportDialogVM.swift in Sources */,
 				A02ED2EB2603FD2200F10D58 /* STImageView.swift in Sources */,
+				B3351F322850D436003C83AA /* STImageRecognition.swift in Sources */,
 				B31D623127B64B4E00CBEA19 /* STCropScrollViewContainer.swift in Sources */,
 				B31D622027B64B4E00CBEA19 /* STFilters.swift in Sources */,
 				A04219962690983C001FBFBF /* STTrashFileViewerVM.swift in Sources */,

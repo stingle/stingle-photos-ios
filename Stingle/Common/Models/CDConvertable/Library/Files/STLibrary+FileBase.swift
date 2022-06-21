@@ -29,6 +29,33 @@ protocol ILibraryFile {
 }
 
 extension STLibrary {
+
+    class SearchIndex {
+        let identifier: String
+        let isProc: Bool
+        let dateModified: Date
+
+        var fileName: String = ""
+
+        init(identifier: String, isProc: Bool, dateModified: Date) {
+            self.identifier = identifier
+            self.isProc = isProc
+            self.dateModified = dateModified
+        }
+
+        func toManagedModelJson() -> [String : Any] {
+            var json = [String : Any]()
+            json.addIfNeeded(key: "fileName", value: self.fileName)
+            json.addIfNeeded(key: "identifier", value: self.identifier)
+            json.addIfNeeded(key: "isProc", value: self.isProc)
+            json.addIfNeeded(key: "dateModified", value: self.dateModified)
+            return json
+        }
+
+    }
+}
+
+extension STLibrary {
     
     class FileBase: Codable, ILibraryFile {
         
@@ -47,6 +74,8 @@ extension STLibrary {
         let dateModified: Date
         let isRemote: Bool
         let isSynched: Bool
+
+        var searchIndexes: [SearchIndex]? = nil
         
         var identifier: String {
             return self.file

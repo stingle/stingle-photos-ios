@@ -1,18 +1,18 @@
 PODS:
-  - ImageRecognition (0.1.1):
-    - ImageRecognition/Common (= 0.1.1)
-    - ImageRecognition/TensorFlow (= 0.1.1)
+  - ImageRecognition (0.2.1):
+    - ImageRecognition/Common (= 0.2.1)
+    - ImageRecognition/TensorFlow (= 0.2.1)
     - TensorFlowLiteSwift (~> 2.9.1)
     - TensorFlowLiteSwift/CoreML (~> 2.9.1)
-  - ImageRecognition/Common (0.1.1):
+  - ImageRecognition/Common (0.2.1):
     - TensorFlowLiteSwift (~> 2.9.1)
     - TensorFlowLiteSwift/CoreML (~> 2.9.1)
-  - ImageRecognition/TensorFlow (0.1.1):
+  - ImageRecognition/TensorFlow (0.2.1):
     - ImageRecognition/Common
-    - ImageRecognition/TensorFlow/Models (= 0.1.1)
+    - ImageRecognition/TensorFlow/Models (= 0.2.1)
     - TensorFlowLiteSwift (~> 2.9.1)
     - TensorFlowLiteSwift/CoreML (~> 2.9.1)
-  - ImageRecognition/TensorFlow/Models (0.1.1):
+  - ImageRecognition/TensorFlow/Models (0.2.1):
     - ImageRecognition/Common
     - TensorFlowLiteSwift (~> 2.9.1)
     - TensorFlowLiteSwift/CoreML (~> 2.9.1)
@@ -39,7 +39,7 @@ SPEC REPOS:
     - TensorFlowLiteSwift
 
 SPEC CHECKSUMS:
-  ImageRecognition: 45639ccd59c2ce1b6200621b299ee1c52ac747de
+  ImageRecognition: 438122cd4fcf91450f50f4194a0f16cc28b92976
   TensorFlowLiteC: 0a765860195fae345ca7398e33b07c80104c4b61
   TensorFlowLiteSwift: 0b584ad1fac27c0015609056a5ab4e7692bd1af3
 

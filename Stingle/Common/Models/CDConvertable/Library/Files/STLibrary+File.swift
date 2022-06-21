@@ -71,7 +71,11 @@ extension STLibrary {
         //MARK: - ICDSynchConvertable
         
         func toManagedModelJson() throws -> [String : Any] {
-            return ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote, "identifier": self.identifier, "isSynched": self.isSynched]
+            var json: [String: Any] = ["file": self.file, "version": self.version, "headers": self.headers, "dateCreated": self.dateCreated, "dateModified": self.dateModified, "isRemote": isRemote, "identifier": self.identifier, "isSynched": self.isSynched]
+            if let searchIndexes = self.searchIndexes?.map({ $0.toManagedModelJson() }) {
+                json["searchIndexes"] = searchIndexes
+            }
+            return json
         }
         
         func update(model: CDModel) {
