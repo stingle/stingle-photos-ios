@@ -29,14 +29,6 @@ class STNetworkSession: NSObject {
         operationsQueue.underlyingQueue = self.rootQueue
                         
         self.urlSession = URLSession(configuration: configuration, delegate: self, delegateQueue: operationsQueue)
-        self.urlSession.getAllTasks { [weak self] tasks in
-            for task in tasks {
-                guard self?.tasks[task.taskIdentifier] == nil else {
-                    continue
-                }
-                task.cancel()
-            }
-        }
     }
         
 }
@@ -94,15 +86,6 @@ extension STNetworkSession: URLSessionDataDelegate {
         }
     }
     
-    func urlSession(_ session: URLSession, task: URLSessionTask, willBeginDelayedRequest request: URLRequest, completionHandler: @escaping (URLSession.DelayedRequestDisposition, URLRequest?) -> Void) {
-        self.rootQueue.async(flags: .barrier) { [weak self] in
-            if self?.tasks[task.taskIdentifier] == nil {
-                completionHandler(.cancel, request)
-            } else {
-                completionHandler(.continueLoading, request)
-            }
-        }
-    }
 }
 
 extension STNetworkSession {
