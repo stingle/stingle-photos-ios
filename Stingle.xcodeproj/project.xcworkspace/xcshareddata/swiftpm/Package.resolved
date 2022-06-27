@@ -6,7 +6,7 @@
       "location" : "https://github.com/Alamofire/Alamofire",
       "state" : {
         "branch" : "master",
-        "revision" : "53a24e871675e389c0d18bdd29e4944ef25f0654"
+        "revision" : "8a9e280b160bbe82b725596d5934572be17389fe"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/jedisct1/swift-sodium",
       "state" : {
         "branch" : "master",
-        "revision" : "862e9adf1af82384b46b6c11cd22aa4e7dc0c901"
+        "revision" : "54d520eb1c0a3d54bfa3175b5310c13fab15bea8"
       }
     }
   ],

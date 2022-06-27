@@ -79,7 +79,6 @@ class STDataBase {
     let trashProvider: SyncProvider<STLibrary.TrashFile, STLibrary.DeleteFile.Trash>
     let contactProvider: SyncProvider<STContact, STLibrary.DeleteFile.Contact>
     
-    
     init() {
         self.userProvider = UserProvider(container: self.container)
         self.dbInfoProvider = DBInfoProvider(container: self.container)
@@ -93,6 +92,7 @@ class STDataBase {
     func sync(_ sync: STSync, finish: @escaping () -> Void, willFinish: @escaping (DBSyncInfo) -> Void, failure: @escaping (IError) -> Void) {
         self.didStartSync()
         let context = self.container.backgroundContext
+        
         context.performAndWait { [weak self] in
             guard let weakSelf = self else { return }
             do {
@@ -103,22 +103,28 @@ class STDataBase {
                 DispatchQueue.global().async {
                     willFinish(synchInfo)
                     DispatchQueue.main.async {
-                        do {
-                            if context.hasChanges {
+                        context.performAndWait {
+                            do {
                                 try context.save()
+                                weakSelf.endSync()
+                                finish()
+                            } catch {
+                                failure(DataBaseError.error(error: error))
+                                STLogger.log(error: error)
                             }
-                            weakSelf.container.viewContext.reset()
-                            weakSelf.endSync()
-                            finish()
-                        } catch  {}
+                        }
+
+
                     }
                 }
- 
+                                 
             } catch {
                 failure(DataBaseError.error(error: error))
                 return
             }
         }
+        
+       
     }
     
     func deleteAll() {

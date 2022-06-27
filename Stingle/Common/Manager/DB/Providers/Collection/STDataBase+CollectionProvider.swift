@@ -91,13 +91,12 @@ extension STDataBase {
                             ids.append(contentsOf: result)
                         }
                     }
-                    
                     if reloadData {
                         weakSelf.reloadData(models: models, ids: ids, changeType: .add)
                     }
                     
                 } catch {
-                    print(error)
+                    STLogger.log(error: error)
                 }
             }
            
@@ -159,7 +158,7 @@ extension STDataBase {
                     }
                     
                 } catch {
-                    print(error.localizedDescription)
+                    STLogger.log(error: error)
                 }
                 
             }
@@ -217,7 +216,7 @@ extension STDataBase {
 extension STDataBase.CollectionProvider {
     
     func fetch(predicate: NSPredicate?, context: NSManagedObjectContext? = nil) -> [ManagedObject] {
-        let context = context ?? self.container.viewContext
+        let context = context ?? self.container.backgroundContext
         return context.performAndWait { () -> [ManagedObject] in
             let fetchRequest = NSFetchRequest<ManagedObject>(entityName: Model.ManagedModel.entityName)
             fetchRequest.includesSubentities = true
@@ -229,6 +228,11 @@ extension STDataBase.CollectionProvider {
     }
 
     func fetch(identifiers: [String], context: NSManagedObjectContext? = nil) -> [ManagedObject] {
+        let predicate = NSPredicate(format: "identifier IN %@", identifiers)
+        return self.fetch(predicate: predicate, context: context)
+    }
+    
+    func fetch(identifiers: Set<String>, context: NSManagedObjectContext? = nil) -> [ManagedObject] {
         let predicate = NSPredicate(format: "identifier IN %@", identifiers)
         return self.fetch(predicate: predicate, context: context)
     }

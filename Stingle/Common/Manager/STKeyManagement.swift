@@ -22,7 +22,7 @@ class STKeyManagement {
         do {
             try self.crypto.importServerPublicKey(pbk: pbkData)
         } catch {
-            print(error)
+            STLogger.log(error: error)
         }
     }
     
@@ -33,7 +33,7 @@ class STKeyManagement {
         do {
             try self.crypto.importKeyBundle(keys: keyBundleBytes, password: password)
         } catch {
-            print(error)
+            STLogger.log(error: error)
             return false
         }
         return true

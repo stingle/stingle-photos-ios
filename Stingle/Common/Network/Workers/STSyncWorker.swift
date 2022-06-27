@@ -18,9 +18,6 @@ class STSyncWorker: STWorker {
                                                lastAlbumFilesSeenTime: dbInfo.lastAlbumFilesSeenTimeSeccounds,
                                                lastDelSeenTime: dbInfo.lastDelSeenTimeSeccounds,
                                                lastContactsSeenTime: dbInfo.lastContactsSeenTimeSeccounds)
-        
-        print("dbInfo.lastSeenTime", dbInfo.lastGallerySeenTime)
-        
         self.request(request: request) { (response: STSync) in
             success?(response)
         } failure: { (error) in
