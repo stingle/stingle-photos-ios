@@ -15,7 +15,7 @@ extension Encodable {
             let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
             return json
         } catch {
-            print(error)
+            STLogger.log(error: error)
         }
         return nil
     }
@@ -27,7 +27,7 @@ extension Encodable {
             let result = String(data: data, encoding: .utf8)
             return result
         } catch {
-            print(error)
+            STLogger.log(error: error)
         }
         return nil
     }

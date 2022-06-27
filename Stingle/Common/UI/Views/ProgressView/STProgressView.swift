@@ -23,11 +23,6 @@ class STProgressView: UIView {
     
     var subTitle: String? {
         set {
-            
-            if !Thread.isMainThread {
-                print("")
-            }
-            
             self.subTitleLabel.text = newValue
         } get {
             return self.subTitleLabel.text

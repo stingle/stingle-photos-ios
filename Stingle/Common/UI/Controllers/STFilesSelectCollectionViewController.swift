@@ -37,7 +37,6 @@ class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceView
                 self.collectionView.deselectItem(at: indexPath, animated: true)
             })
         }
-                        
     }
     
     func collectionView(didSelectItemAt indexPath: IndexPath) {
@@ -45,7 +44,7 @@ class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceView
     }
     
     func collectionView(didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
-        //Implement chid classes
+        self.setSelectionMode(isSelectionMode: true)
     }
     
     func collectionViewDidEndMultipleSelectionInteraction() {
@@ -67,7 +66,6 @@ class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceView
     
     private func configureSelectionMode() {
         self.collectionView.delegate = self
-        
         self.collectionView.allowsSelection = true
         self.collectionView.allowsMultipleSelection = false
         self.collectionView.allowsMultipleSelectionDuringEditing = true
@@ -89,7 +87,12 @@ class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceView
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldBeginMultipleSelectionInteractionAt indexPath: IndexPath) -> Bool {
-        return true
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone, .mac:
+            return true
+        default:
+            return self.isSelectionMode
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {

@@ -16,7 +16,6 @@ protocol IFormDataRequestBodyPart {
 
 class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTask.Request> {
     
-    
     private let progressTask = Progress()
     private var receiveData: Data?
     private var lastResponseDate: Date?
@@ -27,20 +26,22 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
             return
         }
                 
-        DispatchQueue.global().async { [weak self] in
+        self.queue.async(flags: .barrier) { [weak self] in
             guard let weakSelf = self else {
                 return
             }
             do {
                 try weakSelf.request.build { [weak weakSelf] progress, stop in
                     stop = weakSelf?.isCanceled ?? true
+                    if !stop {
+                        weakSelf?.didBuildProgress(totalUnitCount: progress.totalUnitCount, completedUnitCount: progress.completedUnitCount)
+                    }
                 }
-                weakSelf.queue.async {
-                    let task = weakSelf.session.uploadTask(with: weakSelf.request.asURLRequest(), fromFile: weakSelf.request.fileURL)
-                    weakSelf.urlTask = task
-                    task.resume()
-                }
-                
+                let task = weakSelf.session.uploadTask(with: weakSelf.request.asURLRequest(), fromFile: weakSelf.request.fileURL)
+                task.earliestBeginDate = Date()
+                weakSelf.urlTask = task
+                task.progress.startedDate = Date()
+                task.resume()
             } catch {
                 weakSelf.completion(with: .failure(error: .error(error: error)))
             }
@@ -54,9 +55,10 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
     
     override func didSendBodyData(bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
         super.didSendBodyData(bytesSent: bytesSent, totalBytesSent: totalBytesSent, totalBytesExpectedToSend: totalBytesExpectedToSend)
-        self.progressTask.totalUnitCount = self.request.totalUnitCount
-        self.progressTask.completedUnitCount = totalBytesSent
-        self.progress?(self.progressTask)
+        guard let progress = self.urlTask?.progress else {
+            return
+        }
+        self.progress?(progress)
     }
     
     override func didCompleteWithError(error: Error?) {
@@ -75,13 +77,11 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
     
     //MARK: - Private methods
     
-    private func didBuildProgress(progress: Double) {
-        let total: Double = 10000
-        let carrent = total * progress
-        let pp = Progress()
+    private func didBuildProgress(totalUnitCount: Int64, completedUnitCount: Int64) {
         
-        pp.totalUnitCount = Int64(total)
-        pp.completedUnitCount = Int64(carrent)
+        let pp = Progress()
+        pp.totalUnitCount = totalUnitCount
+        pp.completedUnitCount = .zero
         
         guard let date = self.lastResponseDate else {
             self.progress?(pp)
@@ -95,7 +95,6 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
             self.progress?(pp)
             self.lastResponseDate = currentDate
         }
-        
     }
     
     private func didBuildRequest() {
@@ -106,10 +105,6 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
         self.urlTask = task
         task.resume()
     }
-    
-}
-
-extension STNetworkUploadTask: StreamDelegate {
     
 }
 
@@ -180,11 +175,21 @@ extension STNetworkUploadTask {
             return request
         }
         
-        fileprivate func build(progressHandler: ProgressHandler<Double>) throws {
+        fileprivate func build(progressHandler: ProgressHandler<(totalUnitCount: Int64, completedUnitCount: Int64)>) throws {
             
             guard !self.isBuilded else {
                 throw STNetworkDispatcher.NetworkError.badRequest
             }
+            
+            let fullDataSize = self.totalUnitCount
+            
+            let freeDiskUnits = STFileSystem.DiskStatus.freeDiskSpaceUnits
+            let afterImportfreeDiskUnits = STBytesUnits(bytes: freeDiskUnits.bytes - fullDataSize)
+            
+            guard afterImportfreeDiskUnits > STConstants.minFreeDiskUnits else {
+                throw STFileUploader.UploaderError.memoryLow
+            }
+            
             self.isBuilded = true
                         
             let fileManager = FileManager.default
@@ -207,29 +212,27 @@ extension STNetworkUploadTask {
             parts.append(EndField())
                         
             var writedCount = Int64.zero
-            let fullDataSize = self.totalUnitCount
+            
             for part in parts {
                 var currentWritedCount = Int64.zero
                 do {
                     try part.writeBodyStream(to: outputStream, boundary: self.boundary, progressHandler: { writed, stop in
                         currentWritedCount = writed
                         let processWrited = writedCount + writed
-                        let process = Double(processWrited) / Double(fullDataSize)
-                        progressHandler(process, &stop)
+                        progressHandler((fullDataSize, processWrited), &stop)
                     })
                     writedCount = writedCount + currentWritedCount
                 } catch {
                     throw STNetworkDispatcher.NetworkError.badRequest
                 }
             }
-            
         }
         
         fileprivate func clean() {
             do {
                 try FileManager.default.removeItem(at: self.fileURL)
             } catch {
-                print(error.localizedDescription)
+                STLogger.log(error: error)
             }
         }
         
@@ -271,9 +274,7 @@ extension STNetworkUploadTask.Request {
             fieldString += "\r\n"
             
             let data = Data(fieldString.utf8)
-            var buffer = [UInt8](repeating: 0, count: data.count)
-            data.copyBytes(to: &buffer, count: data.count)
-            
+            let buffer = [UInt8](data)
             let count = outputStream.write(buffer, maxLength: buffer.count)
             var stop = false
             progressHandler(Int64(count), &stop)
@@ -317,9 +318,7 @@ extension STNetworkUploadTask.Request {
             fieldData.append(self.data)
             fieldData.append("\r\n")
             
-            var buffer = [UInt8](repeating: 0, count: fieldData.count)
-            fieldData.copyBytes(to: &buffer, count: fieldData.count)
-            
+            let buffer = [UInt8](fieldData)
             let count = outputStream.write(buffer, maxLength: buffer.count)
             var stop = false
             progressHandler(Int64(count), &stop)
@@ -372,9 +371,8 @@ extension STNetworkUploadTask.Request {
             fieldData.append("Content-Type: \(self.mimeType)\r\n")
             fieldData.append("\r\n")
             
-            var buffer = [UInt8](repeating: 0, count: fieldData.count)
-            fieldData.copyBytes(to: &buffer, count: fieldData.count)
-            var count = outputStream.write(buffer, maxLength: fieldData.count)
+            let buffer = [UInt8](fieldData)
+            var count = outputStream.write(buffer, maxLength: buffer.count)
             
             writeCount = writeCount + Int64(count)
             progressHandler(writeCount, &stop)
@@ -386,15 +384,16 @@ extension STNetworkUploadTask.Request {
             defer { inputStream.close() }
             
             let streamBufferSize = 1024 * 1024
+            var inputBuffer = [UInt8](repeating: 0, count: streamBufferSize)
+            
             while inputStream.hasBytesAvailable {
-                var buffer = [UInt8](repeating: 0, count: streamBufferSize)
-                let bytesRead = inputStream.read(&buffer, maxLength: streamBufferSize)
+                let bytesRead = inputStream.read(&inputBuffer, maxLength: streamBufferSize)
                 if let streamError = inputStream.streamError {
                     throw STNetworkDispatcher.NetworkError.error(error: streamError)
                 }
                 if bytesRead > 0 {
-                    let count2 = outputStream.write(buffer, maxLength: bytesRead)
-                    writeCount = writeCount + Int64(count2)
+                    let currentWriteCount = outputStream.write(inputBuffer, maxLength: bytesRead)
+                    writeCount = writeCount + Int64(currentWriteCount)
                     progressHandler(writeCount, &stop)
                     guard !stop else {
                         throw STNetworkDispatcher.NetworkError.cancelled
@@ -407,8 +406,7 @@ extension STNetworkUploadTask.Request {
                      
             var end = Data()
             end.append("\r\n")
-            var bufferEnd = [UInt8](repeating: 0, count: end.count)
-            end.copyBytes(to: &bufferEnd, count: end.count)
+            let bufferEnd = [UInt8](end)
             count = outputStream.write(bufferEnd, maxLength: end.count)
             writeCount = writeCount + Int64(count)
             progressHandler(writeCount, &stop)
@@ -440,8 +438,7 @@ extension STNetworkUploadTask.Request {
             let fieldData = "--\(boundary)--\r\n"
             data.append(fieldData)
             
-            var buffer = [UInt8](repeating: 0, count: data.count)
-            data.copyBytes(to: &buffer, count: data.count)
+            let buffer = [UInt8](data)
             let writeCount = outputStream.write(buffer, maxLength: data.count)
             var stop = false
             progressHandler(Int64(writeCount), &stop)

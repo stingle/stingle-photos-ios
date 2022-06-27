@@ -218,23 +218,19 @@ extension STBGTaskScheduler {
             super.cancel()
             self.autoImporter.cancelImporting(end: nil)
         }
-        
     }
         
 }
 
 extension STBGTaskScheduler.AutoImporter: IAutoImporterObserver {
     
-    func autoImporter(didStart autoImporter: STImporter.AutoImporter) {
-        
-    }
+    func autoImporter(didStart autoImporter: STImporter.AutoImporter) {}
     
     func autoImporter(didEnd autoImporter: STImporter.AutoImporter) {
         guard self.isStarted else {
             return
         }
         self.endTask(isCompleted: true)
-        try? self.submit(scheduler: BGTaskScheduler.shared)
     }
     
 }

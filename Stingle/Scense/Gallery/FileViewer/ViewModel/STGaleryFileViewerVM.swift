@@ -50,5 +50,9 @@ class STGaleryFileViewerVM: STFileViewerVM<STLibrary.GaleryFile> {
     override func editVM(for file: STLibrary.GaleryFile) -> IFileEditVM {
         return STGaleryFileEditVM(file: file)
     }
+    
+    override func getShearedType(for file: STLibrary.GaleryFile) -> STSharedMembersVC.ShearedType {
+        return .files(files: [file])
+    }
 
 }

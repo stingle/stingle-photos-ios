@@ -25,7 +25,7 @@ class STFileSystem {
         self.userHomeFolderPath = userHomeFolderPath
         self.creatAllPath()
         #if DEBUG
-        print("user folder", self.appUrl?.path ?? "")
+        STLogger.log(info: "user folder, \(self.appUrl?.path ?? "")")
         #endif
     }
     
@@ -621,7 +621,7 @@ extension FileManager {
                 try self.removeItem(atPath: path)
             }
         } catch {
-            print(error)
+            STLogger.log(error: error)
         }
     }
 }
