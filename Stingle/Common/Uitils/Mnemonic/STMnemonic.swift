@@ -309,7 +309,7 @@ fileprivate extension Digest {
     }
 }
 
-fileprivate extension Array where Element == UInt8 {
+extension Array where Element == UInt8 {
     var hexString: String {
         self.map { String(format: "%02x", $0) }.joined()
     }
@@ -324,7 +324,7 @@ fileprivate extension Array where Element == UInt8 {
     
 }
 
-fileprivate extension Data {
+extension Data {
     
   func toBitArray() -> [String] {
     var toReturn = [String]()

@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		431E4DC51554E8A98C05573A /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003AC6592036B7A691B442AA /* Pods_Stingle.framework */; };
+		15491A98DF10805FDF7114E2 /* Pods_Stingle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A11AEE42D15627FC3CA942F5 /* Pods_Stingle.framework */; };
+		2BC9D9002869C99200D547AA /* STImageRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3351F312850D436003C83AA /* STImageRecognition.swift */; };
 		A001E6E6267CD8E900948E50 /* STGaleryFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001E6E5267CD8E900948E50 /* STGaleryFileViewerVM.swift */; };
 		A001E6E9267CD90700948E50 /* STAlbumFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001E6E8267CD90700948E50 /* STAlbumFileViewerVM.swift */; };
 		A001E6EB267CD93200948E50 /* STFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001E6EA267CD93200948E50 /* STFileViewerVM.swift */; };
@@ -380,7 +381,6 @@
 		B31D623927B64B4E00CBEA19 /* STRulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D621627B64B4E00CBEA19 /* STRulerView.swift */; };
 		B31D623B27B65D7900CBEA19 /* STFileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D623A27B65D7900CBEA19 /* STFileEditVC.swift */; };
 		B31D623E27B65F0500CBEA19 /* FileEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B31D623D27B65F0500CBEA19 /* FileEdit.storyboard */; };
-		B3351F322850D436003C83AA /* STImageRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3351F312850D436003C83AA /* STImageRecognition.swift */; };
 		B3469B9727F5E8480036C17A /* STGaleryFileEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9627F5E8480036C17A /* STGaleryFileEditVM.swift */; };
 		B3469B9927F5E8A50036C17A /* STAlbumFileEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3469B9827F5E8A50036C17A /* STAlbumFileEditVM.swift */; };
 		B372083C27C505E400FA7EFD /* STDataNetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F0C1F2607D3B800E81826 /* STDataNetworkOperation.swift */; };
@@ -392,9 +392,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		003AC6592036B7A691B442AA /* Pods_Stingle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stingle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		011E6083499BB61A328BD23D /* Pods-Stingle.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-dev.xcconfig"; sourceTree = "<group>"; };
-		2D93B9E1329131B74B695EC2 /* Pods-Stingle.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-dev.xcconfig"; sourceTree = "<group>"; };
+		323914FD72E93FC895A1870E /* Pods-Stingle.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-prod.xcconfig"; sourceTree = "<group>"; };
+		546A78EA8321CB901697F75D /* Pods-Stingle.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-prod.xcconfig"; sourceTree = "<group>"; };
 		A001E6E5267CD8E900948E50 /* STGaleryFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGaleryFileViewerVM.swift; sourceTree = "<group>"; };
 		A001E6E8267CD90700948E50 /* STAlbumFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFileViewerVM.swift; sourceTree = "<group>"; };
 		A001E6EA267CD93200948E50 /* STFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileViewerVM.swift; sourceTree = "<group>"; };
@@ -743,6 +742,7 @@
 		A0FD3F3A26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STNetworkDispatcher+IRequestEncoding.swift"; sourceTree = "<group>"; };
 		A0FD3F3C267141430042EB8D /* STStreamNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStreamNetworkOperation.swift; sourceTree = "<group>"; };
 		A0FF766C26151D86003DEC2B /* STUnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnfairLock.swift; sourceTree = "<group>"; };
+		A11AEE42D15627FC3CA942F5 /* Pods_Stingle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Stingle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B31D61E727B64B4E00CBEA19 /* UIImage+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Helper.swift"; sourceTree = "<group>"; };
 		B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helper.swift"; sourceTree = "<group>"; };
 		B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperExtensions.swift; sourceTree = "<group>"; };
@@ -779,8 +779,8 @@
 		B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilterToolBar.swift; sourceTree = "<group>"; };
 		B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilterToolBar.xib; sourceTree = "<group>"; };
 		B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IFileEditVM.swift; sourceTree = "<group>"; };
-		BF32A3059F7F65A89C060F1F /* Pods-Stingle.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-prod.xcconfig"; sourceTree = "<group>"; };
-		E7F3734B9E0D6793B81BA052 /* Pods-Stingle.release-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-prod.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-prod.xcconfig"; sourceTree = "<group>"; };
+		D443560FFFB26AFB51C3ADB3 /* Pods-Stingle.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.debug-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.debug-dev.xcconfig"; sourceTree = "<group>"; };
+		D9688E72C4B6B5D6FC1AA6B5 /* Pods-Stingle.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stingle.release-dev.xcconfig"; path = "Target Support Files/Pods-Stingle/Pods-Stingle.release-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -792,28 +792,28 @@
 				A07DF6FC283BC290007E0FB2 /* Clibsodium in Frameworks */,
 				A07DF701283BC29C007E0FB2 /* KeychainSwift in Frameworks */,
 				A07DF6FE283BC290007E0FB2 /* Sodium in Frameworks */,
-				431E4DC51554E8A98C05573A /* Pods_Stingle.framework in Frameworks */,
+				15491A98DF10805FDF7114E2 /* Pods_Stingle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		406DBF35971E18E21C49FB8E /* Pods */ = {
+		8DB50B38CF4A950D85E06ABE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				2D93B9E1329131B74B695EC2 /* Pods-Stingle.debug-dev.xcconfig */,
-				BF32A3059F7F65A89C060F1F /* Pods-Stingle.debug-prod.xcconfig */,
-				E7F3734B9E0D6793B81BA052 /* Pods-Stingle.release-prod.xcconfig */,
-				011E6083499BB61A328BD23D /* Pods-Stingle.release-dev.xcconfig */,
+				D443560FFFB26AFB51C3ADB3 /* Pods-Stingle.debug-dev.xcconfig */,
+				546A78EA8321CB901697F75D /* Pods-Stingle.debug-prod.xcconfig */,
+				323914FD72E93FC895A1870E /* Pods-Stingle.release-prod.xcconfig */,
+				D9688E72C4B6B5D6FC1AA6B5 /* Pods-Stingle.release-dev.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		73A53619DBCBC97AD1A4990B /* Frameworks */ = {
+		94F039368BE5F6A1AD69C19A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				003AC6592036B7A691B442AA /* Pods_Stingle.framework */,
+				A11AEE42D15627FC3CA942F5 /* Pods_Stingle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -974,8 +974,8 @@
 			children = (
 				A02203BF25EED86800D07C98 /* Stingle */,
 				A02203BE25EED86800D07C98 /* Products */,
-				73A53619DBCBC97AD1A4990B /* Frameworks */,
-				406DBF35971E18E21C49FB8E /* Pods */,
+				8DB50B38CF4A950D85E06ABE /* Pods */,
+				94F039368BE5F6A1AD69C19A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2703,11 +2703,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A02203D125EED86800D07C98 /* Build configuration list for PBXNativeTarget "Stingle" */;
 			buildPhases = (
-				85157DF9EF1F4F9055F71EF0 /* [CP] Check Pods Manifest.lock */,
+				2B25E043DA13A6360DC56EF3 /* [CP] Check Pods Manifest.lock */,
 				A02203B925EED86800D07C98 /* Sources */,
 				A02203BA25EED86800D07C98 /* Frameworks */,
 				A02203BB25EED86800D07C98 /* Resources */,
-				42BBEB8EC2B0F68FF1C0697F /* [CP] Copy Pods Resources */,
+				5FCBE4E1E43EC27A9AC5F4B7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2820,24 +2820,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		42BBEB8EC2B0F68FF1C0697F /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		85157DF9EF1F4F9055F71EF0 /* [CP] Check Pods Manifest.lock */ = {
+		2B25E043DA13A6360DC56EF3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2857,6 +2840,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5FCBE4E1E43EC27A9AC5F4B7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Stingle/Pods-Stingle-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -3002,7 +3002,7 @@
 				A00982F526234EAB00559C41 /* STUploadWorker.swift in Sources */,
 				A08F27A62785ACBC00EF8BE4 /* STAutoImportDialogVM.swift in Sources */,
 				A02ED2EB2603FD2200F10D58 /* STImageView.swift in Sources */,
-				B3351F322850D436003C83AA /* STImageRecognition.swift in Sources */,
+				2BC9D9002869C99200D547AA /* STImageRecognition.swift in Sources */,
 				B31D623127B64B4E00CBEA19 /* STCropScrollViewContainer.swift in Sources */,
 				B31D622027B64B4E00CBEA19 /* STFilters.swift in Sources */,
 				A04219962690983C001FBFBF /* STTrashFileViewerVM.swift in Sources */,
@@ -3287,7 +3287,7 @@
 		};
 		A02203D225EED86800D07C98 /* Debug-Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2D93B9E1329131B74B695EC2 /* Pods-Stingle.debug-dev.xcconfig */;
+			baseConfigurationReference = D443560FFFB26AFB51C3ADB3 /* Pods-Stingle.debug-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3296,7 +3296,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
+				DEVELOPMENT_TEAM = 75XL269LGD;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
@@ -3379,7 +3379,7 @@
 		};
 		A02204FF25EEEB0600D07C98 /* Debug-Prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BF32A3059F7F65A89C060F1F /* Pods-Stingle.debug-prod.xcconfig */;
+			baseConfigurationReference = 546A78EA8321CB901697F75D /* Pods-Stingle.debug-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3388,7 +3388,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
+				DEVELOPMENT_TEAM = 75XL269LGD;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
@@ -3466,7 +3466,7 @@
 		};
 		A022050325EEEB4200D07C98 /* Release-Prod */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E7F3734B9E0D6793B81BA052 /* Pods-Stingle.release-prod.xcconfig */;
+			baseConfigurationReference = 323914FD72E93FC895A1870E /* Pods-Stingle.release-prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3475,7 +3475,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
+				DEVELOPMENT_TEAM = 75XL269LGD;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
@@ -3553,7 +3553,7 @@
 		};
 		A022051325EEEC4000D07C98 /* Release-Dev */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 011E6083499BB61A328BD23D /* Pods-Stingle.release-dev.xcconfig */;
+			baseConfigurationReference = D9688E72C4B6B5D6FC1AA6B5 /* Pods-Stingle.release-dev.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -3562,7 +3562,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
+				DEVELOPMENT_TEAM = 75XL269LGD;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stingle/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
