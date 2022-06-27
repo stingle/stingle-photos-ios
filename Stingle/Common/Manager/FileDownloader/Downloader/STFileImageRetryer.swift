@@ -61,14 +61,19 @@ extension STDownloaderManager {
         }
         
     }
-    
+        
     class DiskImageCache: DiskCache<UIImage> {
                 
         override func createObject(from data: Data, source: IDownloaderSource) throws -> UIImage {
             guard let source = source as? IFileRetrySource else {
                 throw RetryerError.invalidData
             }
+                                    
             let decryptData = try STApplication.shared.crypto.decryptData(data: data, header: source.header)
+            if source.header.fileName?.pathExtension.lowercased() == "gif", let image = UIImage.gif(data: decryptData) {
+                return image
+            }
+            
             guard let image = UIImage(data: decryptData) else {
                 throw RetryerError.invalidData
             }

@@ -38,7 +38,9 @@ class STGaleryFileViewerVM: STFileViewerVM<STLibrary.GaleryFile> {
         case .video:
             return allCasesWithoutEdit
         case .image:
-            allCasesWithoutEdit.append(.edit)
+            if file.decryptsHeaders.file?.fileName?.pathExtension.lowercased() != "gif" {
+                allCasesWithoutEdit.append(.edit)
+            }
             return allCasesWithoutEdit
         }
     }

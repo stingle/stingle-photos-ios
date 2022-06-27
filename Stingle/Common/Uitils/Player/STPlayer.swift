@@ -216,6 +216,7 @@ extension STPlayer {
         if self.state == .end && (self.duration - self.currentTime) < 1 {
             self.player.currentItem?.seek(to: .zero, completionHandler: nil)
         }
+        self.player.isMuted = false
         self.addAllEvents()
         self.player.play()
         self.change(state: .playing)
