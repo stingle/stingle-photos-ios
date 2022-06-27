@@ -36,7 +36,7 @@ class STShareAlbumVM {
 
     }
     
-    func shareFiles(name: String, files: [STLibrary.File], contact: [STContact], permitions: Permitions, result: @escaping (_ result: IError?) -> Void) {
+    func shareFiles(name: String, files: [STLibrary.GaleryFile], contact: [STContact], permitions: Permitions, result: @escaping (_ result: IError?) -> Void) {
         
         let permitions = STLibrary.Album.Permission(allowAdd: permitions.addPhoto, allowShare: permitions.sharing, allowCopy: permitions.copying)
         

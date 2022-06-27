@@ -20,10 +20,10 @@ class STVideoViewerVC: UIViewController {
     @IBOutlet weak private var timeLeftLabel: UILabel!
     @IBOutlet weak private var timeRightLabel: UILabel!
     
-    private(set) var videoFile: STLibrary.File!
+    private(set) var videoFile: STLibrary.FileBase!
     private var isSliding = false
     private let player = STPlayer()
-    var fileIndex: Int = .zero
+    private(set) var fileIndex: Int = .zero
     
     private let playerSeekTime: TimeInterval = 15
     
@@ -121,8 +121,8 @@ class STVideoViewerVC: UIViewController {
 }
 
 extension STVideoViewerVC: IFileViewer {
-   
-    static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer {
+
+    static func create(file: STLibrary.FileBase, fileIndex: Int) -> IFileViewer {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: STVideoViewerVC = storyboard.instantiateViewController(identifier: "STVodeoViewerVCID")
         vc.videoFile = file
@@ -130,7 +130,7 @@ extension STVideoViewerVC: IFileViewer {
         return vc
     }
 
-    var file: STLibrary.File {
+    var file: STLibrary.FileBase {
         return self.videoFile
     }
     
@@ -144,6 +144,14 @@ extension STVideoViewerVC: IFileViewer {
     
     func fileViewer(pauseContent fileViewer: STFileViewerVC) {
         self.player.pause()
+    }
+
+    func reload(file: STLibrary.FileBase, fileIndex: Int) {
+        self.fileIndex = fileIndex
+    }
+
+    func reload(fileIndex: Int) {
+        self.fileIndex = fileIndex
     }
 
 }

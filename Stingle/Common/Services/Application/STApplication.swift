@@ -26,8 +26,8 @@ class STApplication {
         return STFileUploader()
     }()
     
-    private(set) lazy var auotImporter: STImporter.AuotImporter = {
-        return STImporter.AuotImporter()
+    private(set) lazy var autoImporter: STImporter.AutoImporter = {
+        return STImporter.AutoImporter()
     }()
         
     var fileSystem: STFileSystem {
@@ -46,22 +46,25 @@ class STApplication {
         return self.dataBase.userProvider.user != nil
     }
     
-    private lazy var myFileSystem: STFileSystem? = {
-        guard let user = self.dataBase.userProvider.user else {
-            fatalError("user not found")
-        }
-        return STFileSystem(userHomeFolderPath: user.homeFolder)
-    }()
+    private var myFileSystem: STFileSystem?
         
     private init() {
         self.utils = Utils { [weak self] in
             self?.myFileSystem = nil
         }
+        self.createFileSystem()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             guard let weakSelf = self else { return }
             weakSelf.syncManager.configure(dataBase: weakSelf.dataBase, appLockUnlocker: weakSelf.appLockUnlocker, utils: weakSelf.utils)
         }
 
+    }
+    
+    private func createFileSystem() {
+        guard self.myFileSystem == nil, let user = self.dataBase.userProvider.user else {
+            return
+        }
+        self.myFileSystem = STFileSystem(userHomeFolderPath: user.homeFolder)
     }
     
 }

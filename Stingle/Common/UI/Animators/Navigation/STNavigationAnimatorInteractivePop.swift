@@ -48,6 +48,7 @@ extension STNavigationAnimator {
         private func addInteractionGesture() {
             let panGesture = InteractionPanGesture(target: self, action: #selector(interactionDismiss(panGesture:)))
             panGesture.userInfo = self
+            panGesture.allowedScrollTypesMask = .continuous
             self.panGesture = panGesture
             self.destinationVC.view.addGestureRecognizer(panGesture)
         }
@@ -58,7 +59,7 @@ extension STNavigationAnimator {
         
         private func updateTransitionContextProgress() {
             guard let animatedPreview = self.dataSource?.animatedPreview, let translationCenter = self.translationCenter else {
-                print("updateTransitionContextProgress error")
+                STLogger.log(info: "updateTransitionContextProgress error")
                 return
             }
             let previewCenter = animatedPreview.center
@@ -77,7 +78,7 @@ extension STNavigationAnimator {
             
                         
             guard let panGesture = self.panGesture else {
-                print("interactionGestureDidChanged error")
+                STLogger.log(info: "interactionGestureDidChanged error")
                 return
             }
             
@@ -101,7 +102,7 @@ extension STNavigationAnimator {
         
         private func interactionGestureDidCancelled(velocity: CGFloat? = nil) {
             guard let transitionContext = self.transitionContext else {
-                print("interactionGestureDidCancelled error")
+                STLogger.log(info: "interactionGestureDidCancelled error")
                 return
             }
             
@@ -181,7 +182,7 @@ extension STNavigationAnimator {
                 self.isInteractionDismiss = false
             default:
                 self.isInteractionDismiss = false
-                print("interactionDismiss Cancelled error")
+                STLogger.log(info: "interactionDismiss Cancelled error")
                 self.interactionGestureDidCancelled()
                 break
             }

@@ -14,22 +14,21 @@ extension STGalleryVC {
                               
         typealias Header = STGaleryHeaderView
         typealias Cell = STGalleryCollectionViewCell
-        typealias CDModel = STCDFile
+        typealias CDModel = STCDGaleryFile
         
         var isSelectedMode = false
         
-        func cellModel(for indexPath: IndexPath, data: STLibrary.File?) -> CellModel {
-            
+        func cellModel(for indexPath: IndexPath, data: STLibrary.GaleryFile?) -> CellModel {
             let image = STImageView.Image(file: data, isThumb: true)
-            
             var videoDurationStr: String? = nil
             if let duration = data?.decryptsHeaders.file?.videoDuration, duration > 0 {
                 videoDurationStr = TimeInterval(duration).timeFormat()
             }
+            let isRemote = (data?.isRemote ?? false) && (data?.isSynched ?? false)
             return CellModel(image: image,
                              name: data?.file,
                              videoDuration: videoDurationStr,
-                             isRemote: data?.isRemote ?? true,
+                             isRemote: isRemote,
                              selectedMode: self.isSelectedMode)
         }
         
@@ -84,7 +83,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
     @IBOutlet weak private var syncView: STGallerySyncView!
     @IBOutlet weak private var selectButtonItem: UIBarButtonItem!
     
-    private var selectedItem: STLibrary.File?
+    private var selectedItem: ILibraryFile?
     private var viewModel = STGalleryVM()
     
     lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
@@ -156,6 +155,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
     }
     
     override func collectionView(didBeginMultipleSelectionInteractionAt indexPath: IndexPath) {
+        super.collectionView(didBeginMultipleSelectionInteractionAt: indexPath)
         UIView.animate(withDuration: 0.3) {
             self.navigationController?.navigationBar.alpha = 0.7
             self.accessoryView.alpha = 0.7
@@ -163,6 +163,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
     }
     
     override func collectionViewDidEndMultipleSelectionInteraction() {
+        super.collectionViewDidEndMultipleSelectionInteraction()
         UIView.animate(withDuration: 0.3) {
             self.navigationController?.navigationBar.alpha = 1
             self.accessoryView.alpha = 1
@@ -215,7 +216,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
     
     //MARK: - Private
         
-    private func getSelectedFiles() -> [STLibrary.File] {
+    private func getSelectedFiles() -> [STLibrary.GaleryFile] {
         let selectedFileNames = [String](self.selectionObjectsIdentifiers)
         guard !selectedFileNames.isEmpty else {
             return []
@@ -244,7 +245,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         guard !files.isEmpty else {
             return
         }
-        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+        let storyboard = UIStoryboard(name: "Share", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
         
         let sharedMembersVC = (vc.viewControllers.first as? STSharedMembersVC)
@@ -323,7 +324,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         STFilesDownloaderActivityVC.showActivity(downloadingFiles: shearing, controller: self.tabBarController ?? self, delegate: self, userInfo: action)
     }
     
-    private func deleteCurrentFile(files: [STLibrary.File]) {
+    private func deleteCurrentFile(files: [STLibrary.GaleryFile]) {
         guard !files.isEmpty else {
             return
         }
@@ -368,7 +369,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         importer.progressHendler = { progress in
             let progressValue = progress.fractionCompleted
                         
-            if let asset = (progress.importingFile as? STImporter.FileUploadable)?.asset {
+            if let asset = progress.importingFile?.asset {
                 importedAssets.append(asset)
             }
             
@@ -383,7 +384,7 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         
         importer.complition = { [weak self] _, importableFiles in
             var assets = [PHAsset]()
-            (importableFiles as? [STImporter.FileUploadable])?.forEach({assets.append($0.asset)})
+            importableFiles.forEach({assets.append($0.asset)})
             DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
                 progressView.hide()
                 guard !assets.isEmpty else {
@@ -544,7 +545,7 @@ extension STGalleryVC: INavigationAnimatorSourceVC {
     
     func navigationAnimator(sourceView animator: STNavigationAnimator.TransitioningOperation, sendnerItem sendner: Any?) -> INavigationAnimatorSourceView? {
         
-        guard let selectedItem = sendner as? STLibrary.File, let indexPath = self.dataSource.indexPath(at: selectedItem) else {
+        guard let selectedItem = sendner as? STLibrary.GaleryFile, let indexPath = self.dataSource.indexPath(at: selectedItem) else {
             return nil
         }
         

@@ -94,7 +94,7 @@ class STFilesDownloaderActivityVM {
         self.srartDownload(downloaderSources: downloaderSources)
     }
     
-    private func srartDownload(files: [STLibrary.File]) {
+    private func srartDownload(files: [ILibraryFile]) {
         var downloaderSources = [IDownloaderSource]()
         files.forEach { file in
             if self.fileSystem.isExistFile(file: file, isThumb: false), let fileOreginalUrl = file.fileOreginalUrl {
@@ -126,7 +126,7 @@ extension STFilesDownloaderActivityVM: STFileDownloaderObserver {
             let file = DecryptDownloadFile(header: decryptHeader, url: decryptURL)
             self.decryptFileURLs.append(file)
         } catch {
-            print(error)
+            STLogger.log(error: error)
         }
     }
     

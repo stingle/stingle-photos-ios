@@ -36,34 +36,19 @@ extension UIImage {
 		return newImage
 	}
 	
-	func scale(to width: CGFloat) -> UIImage? {
-		let scale =  width / CGFloat(size.width)
-		let h = size.height * scale
-		let w = size.width * scale
-		let newRect = CGRect(x: 0, y: 0, width: w, height: h)
-		UIGraphicsBeginImageContext(newRect.size)
-		UIImage(cgImage: cgImage!).draw(in: newRect)
-		let newImage = UIGraphicsGetImageFromCurrentImageContext()
-		UIGraphicsEndImageContext()
-		return newImage
+	func scale(to width: CGFloat) -> UIImage {
+        let scale =  width / CGFloat(self.size.width)
+        let h = self.size.height * scale
+        let w = self.size.width * scale
+        return self.scaled(newSize: CGSize(width: w, height: h))
 	}
 
+    func scaled(newSize: CGSize) -> UIImage {
+        UIGraphicsBeginImageContext(newSize)
+        self.draw(in: CGRect(origin: .zero, size: newSize))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage ?? self
+    }
+
 }
-
-
-extension UIImageView {
-  func enableZoom() {
-    let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(startZooming(_:)))
-    isUserInteractionEnabled = true
-    addGestureRecognizer(pinchGesture)
-  }
-
-  @objc
-  private func startZooming(_ sender: UIPinchGestureRecognizer) {
-    let scaleResult = sender.view?.transform.scaledBy(x: sender.scale, y: sender.scale)
-    guard let scale = scaleResult, scale.a > 1, scale.d > 1 else { return }
-    sender.view?.transform = scale
-    sender.scale = 1
-  }
-}
-

@@ -9,15 +9,17 @@ import UIKit
 
 protocol IFileViewer: UIViewController {
     
-    static func create(file: STLibrary.File, fileIndex: Int) -> IFileViewer
-    var file: STLibrary.File { get }
-    var fileIndex: Int { get set }
+    static func create(file: STLibrary.FileBase, fileIndex: Int) -> IFileViewer
+    var file: STLibrary.FileBase { get }
+    var fileIndex: Int { get }
     var fileViewerDelegate: IFileViewerDelegate? { get set }
     
     var animatorSourceView: INavigationAnimatorSourceView? { get }
     
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool)
     func fileViewer(pauseContent fileViewer: STFileViewerVC)
+    func reload(file: STLibrary.FileBase, fileIndex: Int)
+    func reload(fileIndex: Int)
     
 }
 
@@ -34,7 +36,7 @@ class STFileViewerVC: UIViewController {
     private var viewControllers = STObserverEvents<IFileViewer>()
     private var viewerStyle: ViewerStyle = .white
     private weak var titleView: STFileViewerNavigationTitleView?
-    private var initialFile: STLibrary.File?
+    private var initialFile: STLibrary.FileBase?
     
     @IBOutlet weak private var toolBar: UIView!
         
@@ -47,7 +49,7 @@ class STFileViewerVC: UIViewController {
         return STPHPhotoHelper(controller: nil)
     }()
     
-    private var currentFile: STLibrary.File? {
+    private var currentFile: STLibrary.FileBase? {
         guard let currentIndex = self.currentIndex, let file = self.viewModel.object(at: currentIndex) else {
             return nil
         }
@@ -104,6 +106,11 @@ class STFileViewerVC: UIViewController {
         }
     }
     
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        super.pressesBegan(presses, with: event)
+        presses.first?.key.flatMap{ self.onKeyPressed($0) }
+    }
+    
     //MARK: - User action
     
     @IBAction private func didSelectMoreButton(_ sender: UIBarButtonItem) {
@@ -138,12 +145,41 @@ class STFileViewerVC: UIViewController {
         }
     }
     
-    private func didSelectMore(action: MoreAction, file: STLibrary.File) {
+    //MARK: - Private methods
+    
+    private func didSelectMore(action: MoreAction, file: STLibrary.FileBase) {
         self.viewModel.selectMore(action: action, file: file)
     }
-        
-    //MARK: - Private methods
-        
+    
+    private func onKeyPressed(_ key: UIKey) {
+        switch key.keyCode {
+        case .keyboardSpacebar:
+            self.navigationController?.popViewController(animated: true)
+        case .keyboardRightArrow:
+            self.swapToRight(animated: false)
+        case .keyboardLeftArrow:
+            self.swapToLeft(animated: false)
+        default:
+            break
+        }
+    }
+            
+    private func swapToRight(animated: Bool) {
+        guard let currentIndex = self.currentIndex, let vc = self.viewController(for: (currentIndex + 1)) else {
+            return
+        }
+        self.pageViewController.setViewControllers([vc], direction: .forward, animated: animated, completion: nil)
+        self.currentIndex = currentIndex + 1
+    }
+    
+    private func swapToLeft(animated: Bool) {
+        guard let currentIndex = self.currentIndex, let vc = self.viewController(for: (currentIndex - 1)) else {
+            return
+        }
+        self.pageViewController.setViewControllers([vc], direction: .reverse, animated: animated, completion: nil)
+        self.currentIndex = currentIndex - 1
+    }
+            
     private func configureAccessoryView() {
         if let tabBarController = self.tabBarController {
             self.toolBar.isHidden = true
@@ -207,7 +243,6 @@ class STFileViewerVC: UIViewController {
             self.tabBarController?.tabBar.alpha = 1
             self.viewerStyle = .white
         }
-        
         self.splitMenuViewController?.setNeedsStatusBarAppearanceUpdate()
         self.viewControllers.forEach({ $0.fileViewer(didChangeViewerStyle: self, isFullScreen: self.viewerStyle == .balck)})
     }
@@ -280,9 +315,9 @@ class STFileViewerVC: UIViewController {
         guard let file = self.currentFile else {
             return
         }
-        let storyboard = UIStoryboard(name: "Shear", bundle: .main)
+        let storyboard = UIStoryboard(name: "Share", bundle: .main)
         let vc = (storyboard.instantiateViewController(identifier: "STSharedMembersNavVCID") as! UINavigationController)
-        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = .files(files: [file])
+        (vc.viewControllers.first as? STSharedMembersVC)?.shearedType = self.viewModel.getShearedType(for: file)
         self.showDetailViewController(vc, sender: nil)
     }
     
@@ -304,13 +339,22 @@ class STFileViewerVC: UIViewController {
         }
         self.showDetailViewController(alert, sender: nil)
     }
-    
+
+    private func didSelectEdit() {
+        guard let file = self.currentFile else {
+            return
+        }
+        let viewModel = self.viewModel.editVM(for: file)
+        let vc = STFileEditVC.create(viewModel: viewModel)
+        vc.delegate = self
+        self.present(vc, animated: true)
+    }
+
 }
 
-
 extension STFileViewerVC {
-    
-    static func create(galery sortDescriptorsKeys: [STDataBase.DataSource<STCDFile>.Sort], predicate: NSPredicate?, file: STLibrary.File) -> STFileViewerVC {
+
+    static func create(galery sortDescriptorsKeys: [STDataBase.DataSource<STLibrary.GaleryFile>.Sort], predicate: NSPredicate?, file: STLibrary.GaleryFile) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STGaleryFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys, predicate: predicate)
@@ -320,7 +364,7 @@ extension STFileViewerVC {
         return vc
     }
     
-    static func create(album: STLibrary.Album, file: STLibrary.AlbumFile, sortDescriptorsKeys: [STDataBase.DataSource<STCDAlbumFile>.Sort]) -> STFileViewerVC {
+    static func create(album: STLibrary.Album, file: STLibrary.AlbumFile, sortDescriptorsKeys: [STDataBase.DataSource<STLibrary.AlbumFile>.Sort]) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STAlbumFileViewerVM(album: album, sortDescriptorsKeys: sortDescriptorsKeys)
@@ -330,7 +374,7 @@ extension STFileViewerVC {
         return vc
     }
     
-    static func create(trash file: STLibrary.TrashFile, sortDescriptorsKeys: [STDataBase.DataSource<STCDTrashFile>.Sort]) -> STFileViewerVC {
+    static func create(trash file: STLibrary.TrashFile, sortDescriptorsKeys: [STDataBase.DataSource<STLibrary.TrashFile>.Sort]) -> STFileViewerVC {
         let storyboard = UIStoryboard(name: "Gallery", bundle: .main)
         let vc: Self = storyboard.instantiateViewController(identifier: "STFileViewerVCID")
         let viewModel = STTrashFileViewerVM(sortDescriptorsKeys: sortDescriptorsKeys)
@@ -443,13 +487,30 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
                     self?.didSelectTrash(sendner: buttonItem)
                 }
                 result.append(trash)
+            case .edit:
+                let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
+                    self?.didSelectEdit()
+                }
+                result.append(edit)
             }
         }
-        
+
         return result
         
     }
     
+}
+
+extension STFileViewerVC: STFileEditVCDelegate {
+
+    func fileEdit(didSelectCancel vc: STFileEditVC) {
+        vc.dismiss(animated: true)
+    }
+
+    func fileEdit(didEditFile vc: STFileEditVC, viewModel: IFileEditVM) {
+        vc.dismiss(animated: true)
+    }
+
 }
 
 extension STFileViewerVC: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
@@ -500,7 +561,7 @@ extension STFileViewerVC: STFileViewerVMDelegate {
         let index = self.viewModel.index(at: file)
         
         if index == nil || index == NSNotFound {
-            if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex)  {
+            if currentIndex < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex) {
                 self.pageViewController.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
             } else if currentIndex - 1 < self.viewModel.countOfItems, let vc = self.viewController(for: currentIndex - 1) {
                 self.currentIndex = currentIndex - 1
@@ -509,10 +570,17 @@ extension STFileViewerVC: STFileViewerVMDelegate {
                 self.navigationController?.popViewController(animated: true)
             }
         } else if let index = index, let currentFileViewer = self.currentFileViewer {
-            currentFileViewer.fileIndex = index
+            
+            if let newFile = self.viewModel.object(at: index), newFile > file {
+                currentFileViewer.reload(file: newFile, fileIndex: index)
+            } else {
+                self.currentIndex = index
+                currentFileViewer.reload(fileIndex: index)
+            }
             if self.pageViewController.viewControllers?.count != 1 {
                 self.pageViewController.setViewControllers([currentFileViewer], direction: .forward, animated: false, completion: nil)
             }
+            
         }
     }
     
@@ -583,6 +651,7 @@ extension STFileViewerVC {
         case move
         case saveToDevice
         case trash
+        case edit
         
         var stringValue: String {
             switch self {
@@ -594,6 +663,8 @@ extension STFileViewerVC {
                 return "saveToDevice"
             case .trash:
                 return "trash"
+            case .edit:
+                return "edit"
             }
         }
         

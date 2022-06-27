@@ -6,6 +6,7 @@
 //
 
 import Sodium
+import Foundation
 
 extension STCrypto {
     

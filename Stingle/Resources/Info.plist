@@ -4,6 +4,10 @@
 <dict>
 	<key>BASE_API_URL</key>
 	<string>$(BASE_API_URL)</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>org.stingle.photos.auto.import</string>
+	</array>
 	<key>BUILD_TYPE</key>
 	<string>$(BUILD_TYPE)</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -22,6 +26,8 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.photography</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -59,6 +65,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>processing</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

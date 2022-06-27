@@ -6,34 +6,35 @@
 //
 
 import Foundation
+import UIKit
 
 enum STImporter {
     
-    class Importer {
-                
+    static private let importerDispatchQueue = DispatchQueue(label: "Importer.queue", attributes: .concurrent)
+    
+    static private var importerOperationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 3, underlyingQueue: STImporter.importerDispatchQueue)
+    
+    class Importer<File: ILibraryFile, Importable: ImportableFile<File>> {
+        
         struct Progress {
             let totalUnitCount: Int
             let completedUnitCount: Int
             let fractionCompleted: Double
-            let importingFile: IImportable?
+            let importingFile: Importable?
         }
         
         typealias ProgressHendler = (_ progress: Progress) -> Void
         typealias Hendler = () -> Void
-        typealias Complition = (_ files: [STLibrary.File], _ importableFiles: [IImportable]) -> Void
+        typealias Complition = (_ files: [File], _ importableFiles: [Importable]) -> Void
         
-        static private let importerDispatchQueue = DispatchQueue(label: "Importer.queue", attributes: .concurrent)
-        
-        static private var operationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 3, underlyingQueue: Importer.importerDispatchQueue)
-        
-        private var operations = Set<Operation>()
+        private var operations = Set<Operation<File>>()
         private var completedUnitCount: Int = .zero
-        private var importedFiles = [STLibrary.File]()
-        private var importedImportableFiles = [IImportable]()
+        private var importedFiles = [File]()
+        private var importedImportableFiles = [Importable]()
         private var totalProgress = [Int: Double]()
         private var uploadIfNeeded: Bool
         
-        let importFiles: [IImportable]
+        let importFiles: [Importable]
         let responseQueue: DispatchQueue
         
         var startHendler: ProgressHendler?
@@ -46,10 +47,10 @@ enum STImporter {
             return STOperationManager.shared
         }
         
-        init(importFiles: [IImportable], responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
+        init(importFiles: [Importable], responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
             self.importFiles = importFiles
             self.responseQueue = responseQueue
-            self.operationQueue = Self.operationQueue
+            self.operationQueue = STImporter.importerOperationQueue
             self.uploadIfNeeded = false
             
             defer {
@@ -57,9 +58,9 @@ enum STImporter {
             }
         }
         
-        init(importFiles: [IImportable], operationQueue: STOperationQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition, uploadIfNeeded: Bool) {
+        init(importFiles: [Importable], operationQueue: STOperationQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition, uploadIfNeeded: Bool) {
             self.importFiles = importFiles
-            self.responseQueue = operationQueue.underlyingQueue ?? Self.importerDispatchQueue
+            self.responseQueue = operationQueue.underlyingQueue ?? STImporter.importerDispatchQueue
             self.operationQueue = operationQueue
             self.uploadIfNeeded = uploadIfNeeded
             
@@ -74,9 +75,8 @@ enum STImporter {
                 
         //MARK: - Private methods
         
-        fileprivate func addDB(file: STLibrary.File, reloadData: Bool) {
-            let dataBase = STApplication.shared.dataBase
-            dataBase.galleryProvider.add(models: [file], reloadData: reloadData)
+        fileprivate func addDB(file: File, reloadData: Bool) {
+            fatalError("implement chide classes")
         }
         
         private func startImport(startHendler:  @escaping Hendler, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
@@ -97,7 +97,7 @@ enum STImporter {
             }
         }
         
-        private func importDidSuccess(file: STLibrary.File, importFile: IImportable, operationIndex: Int, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
+        private func importDidSuccess(file: File, importFile: Importable, operationIndex: Int, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
             
             let totalUnitCount = self.importFiles.count
             self.completedUnitCount = self.completedUnitCount + 1
@@ -116,7 +116,7 @@ enum STImporter {
             }
         }
         
-        private func importProgress(importFile: IImportable, progress: Foundation.Progress, operationIndex: Int, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
+        private func importProgress(importFile: Importable, progress: Foundation.Progress, operationIndex: Int, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
             let totalUnitCount = self.importFiles.count
             self.totalProgress[operationIndex] = progress.fractionCompleted
             let fractionCompleted = self.totalProgress.map { $0.value }.reduce(0, +) / Double(totalUnitCount)
@@ -152,8 +152,8 @@ enum STImporter {
             }
         }
         
-        private func addOperation(importFile: IImportable, index: Int, startHendler: @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
-            var operation: Operation!
+        private func addOperation(importFile: Importable, index: Int, startHendler: @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
+            var operation:  Operation<File>!
             operation = Operation(uploadFile: importFile, operationIndex: index, success: { file in
                 self.responseQueue.async(flags: .barrier) {
                     self.importDidSuccess(file: file, importFile: importFile, operationIndex: operation.operationIndex, progressHendler: progressHendler, complition: complition)
@@ -174,43 +174,50 @@ enum STImporter {
             self.operations.insert(operation)
         }
       
-    }
+    }    
     
 }
 
 
 extension STImporter {
     
-    class AlbumFileImporter: Importer {
+    class GaleryFileImporter: Importer<STLibrary.GaleryFile, GaleryFileImportable> {
+        
+        override func addDB(file: STLibrary.GaleryFile, reloadData: Bool) {
+            let dataBase = STApplication.shared.dataBase
+            dataBase.galleryProvider.add(models: [file], reloadData: reloadData)
+        }
+                
+    }
+    
+    class AlbumFileImporter: Importer<STLibrary.AlbumFile, AlbumFileImportable> {
         
         let album: STLibrary.Album
         
-        init(uploadFiles: [IImportable], album: STLibrary.Album, responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
+        init(importFiles: [STImporter.AlbumFileImportable], album: STLibrary.Album, responseQueue: DispatchQueue, startHendler: @escaping STImporter.Importer<STLibrary.AlbumFile, STImporter.AlbumFileImportable>.Hendler, progressHendler: @escaping STImporter.Importer<STLibrary.AlbumFile, STImporter.AlbumFileImportable>.ProgressHendler, complition: @escaping STImporter.Importer<STLibrary.AlbumFile, STImporter.AlbumFileImportable>.Complition) {
             self.album = album
-            super.init(importFiles: uploadFiles, responseQueue: responseQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition)
+            super.init(importFiles: importFiles, responseQueue: responseQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition)
         }
         
-        override fileprivate func addDB(file: STLibrary.File, reloadData: Bool) {
-            guard let albumFile = file as? STLibrary.AlbumFile else {
-                fatalError("files not correct")
-            }
+        override func addDB(file: STLibrary.AlbumFile, reloadData: Bool) {
             let dataBase = STApplication.shared.dataBase
-            dataBase.addAlbumFiles(albumFiles: [albumFile], album: self.album, reloadData: reloadData)
+            dataBase.addAlbumFiles(albumFiles: [file], album: self.album, reloadData: reloadData)
         }
         
     }
+
     
 }
 
 extension STImporter.Importer {
     
-    class Operation: STOperation<STLibrary.File> {
+    class Operation<File: ILibraryFile>: STOperation<File> {
         
-        let uploadFile: IImportable
+        let uploadFile: STImporter.ImportableFile<File>
         let operationIndex: Int
         private var isEnded: Bool = false
         
-        init(uploadFile: IImportable, operationIndex: Int, success: @escaping STOperationSuccess, failure: @escaping STOperationFailure, progress: STOperationProgress?) {
+        init(uploadFile: STImporter.ImportableFile<File>, operationIndex: Int, success: @escaping STOperationSuccess, failure: @escaping STOperationFailure, progress: STOperationProgress?) {
             
             self.operationIndex = operationIndex
             self.uploadFile = uploadFile
@@ -225,6 +232,7 @@ extension STImporter.Importer {
                                 
                 return
             }
+                        
             self.uploadFile.requestFile(in: self.delegate?.underlyingQueue, progressHandler: { [weak self] progress, stop in
                 guard let weakSelf = self else {
                     return

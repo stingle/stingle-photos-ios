@@ -112,7 +112,7 @@ class STShareAlbumVC: UITableViewController {
         }
     }
     
-    private func shareFiles(files: [STLibrary.File]) {
+    private func shareFiles(files: [STLibrary.GaleryFile]) {
         let loadingView: UIView = (self.navigationController?.view ?? self.view)
         STLoadingView.show(in: loadingView)
         let name = self.shareAlbumNameTextField.text ?? ""

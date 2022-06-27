@@ -19,12 +19,8 @@ class STDataBaseContainer {
             }
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.undoManager = nil
         container.viewContext.shouldDeleteInaccessibleFaults = true
-        
-        
-        
         return container
     }()
     
@@ -35,9 +31,7 @@ class STDataBaseContainer {
     lazy var backgroundContext: NSManagedObjectContext = {
         let background = self.newBackgroundContext()
         background.automaticallyMergesChangesFromParent = true
-        background.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        background.undoManager = nil
-        background.shouldDeleteInaccessibleFaults = true
+        background.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         return background
     }()
     

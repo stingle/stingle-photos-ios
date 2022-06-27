@@ -8,29 +8,24 @@
 import Photos
 import UIKit
 
-protocol IImportable {
-            
-    func requestData(in queue: DispatchQueue?, progress: STImporter.ProgressHandler?, success: @escaping (_ uploadInfo: STImporter.UploadFileInfo) -> Void, failure: @escaping (IError) -> Void)
-    
-    func requestFile(in queue: DispatchQueue?, progressHandler: STImporter.ProgressHandler?, success: @escaping (_ file: STLibrary.File) -> Void, failure: @escaping (_ failure: IError ) -> Void)
-    
-}
+protocol IImportable { }
 
 extension STImporter {
     
-    struct UploadFileInfo {
+    struct ImportFileInfo {
         let oreginalUrl: URL
         let thumbImage: Data
         let fileType: STFileUploader.FileType
         let duration: TimeInterval
-        var fileSize: UInt
-        var creationDate: Date?
-        var modificationDate: Date?
+        let fileSize: UInt
+        let creationDate: Date?
+        let modificationDate: Date?
+        let freeBuffer: (() -> Void)?
     }
     
     typealias ProgressHandler = ((_ progress: Foundation.Progress, _ stop: inout Bool?) -> Void)
     
-    class FileUploadable: IImportable {
+    class ImportableFile<File: ILibraryFile>: IImportable {
         
         let asset: PHAsset
         
@@ -38,12 +33,12 @@ extension STImporter {
             self.asset = asset
         }
         
-        func requestFile(in queue: DispatchQueue?, progressHandler: ProgressHandler?, success: @escaping (_ file: STLibrary.File) -> Void, failure: @escaping (_ failure: IError ) -> Void) {
+        func requestFile(in queue: DispatchQueue?, progressHandler: STImporter.ProgressHandler?, success: @escaping (File) -> Void, failure: @escaping (IError) -> Void) {
             
             let totalProgress = Progress()
             totalProgress.totalUnitCount = 10000
             var progressValue = Double.zero
-            
+           
             self.requestData(in: queue, progress: { progress, stop in
                 progressValue = progress.fractionCompleted / 4
                 totalProgress.completedUnitCount = Int64(progressValue * Double(totalProgress.totalUnitCount))
@@ -73,7 +68,8 @@ extension STImporter {
             }, failure: failure)
         }
 
-        func createUploadFile(info: UploadFileInfo, progressHandler: @escaping ProgressHandler) throws -> STLibrary.File {
+        func createUploadFile(info: ImportFileInfo, progressHandler: @escaping ProgressHandler) throws -> File {
+            
             var fileType: STHeader.FileType!
             switch info.fileType {
             case .image:
@@ -108,26 +104,11 @@ extension STImporter {
             return file
         }
         
-        func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, progressHandler: @escaping ProgressHandler) throws -> STLibrary.File {
-            
-            let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(oreginalUrl: oreginalUrl, thumbImage: thumbImageData, fileType: fileType, duration: duration, toUrl: toUrl, toThumbUrl: toThumbUrl, fileSize: fileSize, progressHandler: { progress, stop in
-                var isEnded: Bool?
-                progressHandler(progress, &isEnded)
-                if let isEnded = isEnded {
-                    stop = isEnded
-                }
-            })
-            
-            let version = "\(STCrypto.Constants.CurrentFileVersion)"
-            let dateCreated = creationDate ?? Date()
-            let dateModified = modificationDate ?? Date()
-
-            let file = try STLibrary.File(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, managedObjectID: nil)
-            
-            return file
+        func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, progressHandler: @escaping ProgressHandler) throws -> File {
+            fatalError("implement childe classes")
         }
         
-        func requestData(in queue: DispatchQueue?, progress: ProgressHandler?, success: @escaping (_ uploadInfo: UploadFileInfo) -> Void, failure: @escaping (IError) -> Void) {
+        func requestData(in queue: DispatchQueue?, progress: ProgressHandler?, success: @escaping (_ uploadInfo: ImportFileInfo) -> Void, failure: @escaping (IError) -> Void) {
                         
             guard let fileType = STFileUploader.FileType(rawValue: self.asset.mediaType.rawValue) else {
                 failure(STFileUploader.UploaderError.phAssetNotValid)
@@ -144,7 +125,7 @@ extension STImporter {
                 }
             }
             
-            func compled(uploadInfo: UploadFileInfo) {
+            func compled(uploadInfo: ImportFileInfo) {
                 if let queue = queue {
                     queue.async {
                         success(uploadInfo)
@@ -157,8 +138,7 @@ extension STImporter {
             let totalProgress = Progress()
             totalProgress.totalUnitCount = 10000
             var myProgressValue = Double.zero
-            
-            STPHPhotoHelper.requestGetURL(asset: self.asset, progressHandler: { progressValue, stop in
+            STPHPhotoHelper.requestGetURL(asset: self.asset, queue: queue, progressHandler: { progressValue, stop in
                
                 myProgressValue = progressValue / 2
                 totalProgress.completedUnitCount = Int64(myProgressValue * Double(totalProgress.totalUnitCount))
@@ -175,7 +155,7 @@ extension STImporter {
                     return
                 }
                 
-                STPHPhotoHelper.requestThumb(asset: weakSelf.asset, progressHandler: { progressValue, stop in
+                STPHPhotoHelper.requestThumb(asset: weakSelf.asset, queue: queue, progressHandler: { progressValue, stop in
                     
                     myProgressValue = 0.5 + progressValue / 2
                     totalProgress.completedUnitCount = Int64(myProgressValue * Double(totalProgress.totalUnitCount))
@@ -191,14 +171,15 @@ extension STImporter {
                         return
                     }
                     
-                    let uploadInfo = UploadFileInfo(oreginalUrl: info.url,
-                                                                   thumbImage: thumbData,
-                                                                   fileType: fileType,
-                                                                   duration: info.videoDuration,
-                                                                   fileSize: info.fileSize,
-                                                                   creationDate: info.creationDate,
-                                                                   modificationDate: info.modificationDate)
-                    compled(uploadInfo: uploadInfo)
+                    let importFileInfo = ImportFileInfo(oreginalUrl: info.dataInfo,
+                                                                    thumbImage: thumbData,
+                                                                    fileType: fileType,
+                                                                    duration: info.videoDuration,
+                                                                    fileSize: info.fileSize,
+                                                                    creationDate: info.creationDate,
+                                                                    modificationDate: info.modificationDate,
+                                                                    freeBuffer: info.freeBuffer)
+                    compled(uploadInfo: importFileInfo)
                 }
             }
         }
@@ -209,7 +190,29 @@ extension STImporter {
 
 extension STImporter {
     
-    class AlbumFileUploadable: FileUploadable {
+    class GaleryFileImportable: ImportableFile<STLibrary.GaleryFile> {
+        
+        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.GaleryFile {
+            
+            let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(oreginalUrl: oreginalUrl, thumbImage: thumbImageData, fileType: fileType, duration: duration, toUrl: toUrl, toThumbUrl: toThumbUrl, fileSize: fileSize, progressHandler: { progress, stop in
+                var isEnded: Bool?
+                progressHandler(progress, &isEnded)
+                if let isEnded = isEnded {
+                    stop = isEnded
+                }
+            })
+            
+            let version = "\(STCrypto.Constants.CurrentFileVersion)"
+            let dateCreated = creationDate ?? Date()
+            let dateModified = modificationDate ?? Date()
+
+            let file = STLibrary.GaleryFile(fileName: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, isSynched: false, managedObjectID: nil)
+            return file
+        }
+        
+    }
+    
+    class AlbumFileImportable: ImportableFile<STLibrary.AlbumFile> {
         
         let album: STLibrary.Album
         
@@ -217,8 +220,8 @@ extension STImporter {
             self.album = album
             super.init(asset: asset)
         }
-                
-        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, progressHandler: @escaping ProgressHandler) throws -> STLibrary.File {
+        
+        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.AlbumFile {
             
             guard let publicKey = self.album.albumMetadata?.publicKey else {
                 throw STFileUploader.UploaderError.fileNotFound
@@ -230,13 +233,13 @@ extension STImporter {
                     stop = isEnded
                 }
             })
-            
-            
+
+
             let version = "\(STCrypto.Constants.CurrentFileVersion)"
             let dateCreated = creationDate ?? Date()
             let dateModified = modificationDate ?? Date()
-            
-            let file = try STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, albumId: self.album.albumId, managedObjectID: nil)
+
+            let file = STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, isSynched: false, albumId: self.album.albumId, managedObjectID: nil)
             file.updateIfNeeded(albumMetadata: self.album.albumMetadata)
             return file
         }

@@ -28,9 +28,9 @@ extension IDataBaseProviderProviderObserver {
 
 extension STDataBase {
     
-    class DataBaseProvider<ManagedObject: IManagedObject>: IDataBaseProviderProvider {
+    class DataBaseProvider<Model: ICDConvertable>: IDataBaseProviderProvider {
         
-        typealias Model = ManagedObject.Model
+        typealias ManagedObject = Model.ManagedModel
         private(set) var container: STDataBaseContainer
         
         let observerProvider = STObserverEvents<IDataBaseProviderProviderObserver>()

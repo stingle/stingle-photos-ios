@@ -32,7 +32,7 @@ class STSharedMembersVM {
     }
     
     func getContacts(contactsIds: [String]) -> [STContact] {
-        let result: [STContact] = self.contactProvider.fetch(identifiers: contactsIds)
+        let result: [STContact] = self.contactProvider.fetchObjects(identifiers: contactsIds)
         return result
     }
     

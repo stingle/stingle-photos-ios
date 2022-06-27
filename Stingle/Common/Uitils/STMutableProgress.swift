@@ -71,9 +71,21 @@ public final class STMutableProgress: Progress {
     }
 }
 
-private extension Progress {
+extension Progress {
+    
+    private static let startedDateKey = ProgressUserInfoKey("started_date")
+    
     var isCompleted: Bool {
         guard totalUnitCount > 0 else { return true }
         return completedUnitCount >= totalUnitCount
     }
+    
+    var startedDate: Date? {
+        set {
+            self.setUserInfoObject(newValue, forKey: Self.startedDateKey)
+        } get {
+            return self.userInfo[Self.startedDateKey] as? Date
+        }
+    }
+    
 }

@@ -15,7 +15,6 @@ class STNetworkSession: NSObject {
     
     fileprivate let rootQueue: DispatchQueue
     fileprivate var urlSession: URLSession!
-        
     fileprivate var tasks = [Int: INetworkSessionTask]()
     
     weak var sessionEvent: INetworkSessionEvent?
@@ -25,7 +24,7 @@ class STNetworkSession: NSObject {
         super.init()
         
         let operationsQueue = OperationQueue()
-        operationsQueue.maxConcurrentOperationCount = 1
+        operationsQueue.maxConcurrentOperationCount = 10
         operationsQueue.qualityOfService = .userInteractive
         operationsQueue.underlyingQueue = self.rootQueue
                         
@@ -62,7 +61,9 @@ extension STNetworkSession {
 extension STNetworkSession: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
-        self.tasks[task.taskIdentifier]?.urlSession(task: task, didSendBodyData: bytesSent, totalBytesSent: totalBytesSent, totalBytesExpectedToSend: totalBytesExpectedToSend)
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.tasks[task.taskIdentifier]?.urlSession(task: task, didSendBodyData: bytesSent, totalBytesSent: totalBytesSent, totalBytesExpectedToSend: totalBytesExpectedToSend)
+        }
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
@@ -74,21 +75,27 @@ extension STNetworkSession: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         self.sessionEvent?.networkSession(networkSession: self, didReceive: data)
-        self.tasks[dataTask.taskIdentifier]?.urlSession(dataTask: dataTask, didReceive: data)
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.tasks[dataTask.taskIdentifier]?.urlSession(dataTask: dataTask, didReceive: data)
+        }
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void) {
-        self.tasks[task.taskIdentifier]?.urlSession(task: task, needNewBodyStream: completionHandler)
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.tasks[task.taskIdentifier]?.urlSession(task: task, needNewBodyStream: completionHandler)
+        }
     }
-
+    
 }
 
 extension STNetworkSession {
     
     class var backroundConfiguration: URLSessionConfiguration {
-        let configuration = URLSessionConfiguration.background(withIdentifier: "group.swiftlee.apps")
-        configuration.httpMaximumConnectionsPerHost = 10
-        configuration.sessionSendsLaunchEvents = false
+        let appBundleName = Bundle.main.bundleURL.lastPathComponent.lowercased().replacingOccurrences(of: " ", with: ".")
+        let sessionIdentifier: String = "com.networking.\(appBundleName)"
+        let configuration = URLSessionConfiguration.background(withIdentifier: sessionIdentifier)
+        configuration.isDiscretionary = true
+        configuration.sessionSendsLaunchEvents = true
         return configuration
     }
         

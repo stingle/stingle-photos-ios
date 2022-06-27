@@ -36,5 +36,9 @@ extension UIColor {
     class var appPlaceholder: UIColor {
         return UIColor(named: "STPlaceholder") ?? UIColor.black
     }
+
+    class var appYellow: UIColor {
+        return UIColor(named: "STYellow") ?? UIColor.yellow
+    }
     
 }

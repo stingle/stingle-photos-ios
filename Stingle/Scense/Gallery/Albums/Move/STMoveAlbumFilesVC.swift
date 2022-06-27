@@ -187,11 +187,10 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
                 self?.isSuccessMoved = true
                 self?.dismiss(animated: true, completion: nil)
             }
-           
         }
     }
     
-    private func moveFilesToAlbum(toAlbum: STLibrary.Album, files: [STLibrary.File]) {
+    private func moveFilesToAlbum(toAlbum: STLibrary.Album, files: [STLibrary.GaleryFile]) {
         let view: UIView = (self.navigationController?.view ?? self.view)
         STLoadingView.show(in: view)
         self.isModalInPresentation = true
@@ -219,10 +218,6 @@ class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
     }
     
     ////////////////////////////////////////////////////////////////////////
-    
-    private func moveFilesToNewAlbum(albumName: String, files: [STLibrary.File]) {
-        
-    }
     
     private func moveFilesToNewAlbum(albumName: String, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile]) {
         let view: UIView = (self.navigationController?.view ?? self.view)
@@ -363,7 +358,7 @@ extension STMoveAlbumFilesVC: UICollectionViewDelegate {
 extension STMoveAlbumFilesVC {
     
     enum MoveInfo {
-        case files(files: [STLibrary.File])
+        case files(files: [STLibrary.GaleryFile])
         case albumFiles(album: STLibrary.Album, files: [STLibrary.AlbumFile])
     }
     

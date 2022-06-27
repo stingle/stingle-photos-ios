@@ -9,7 +9,7 @@ import CoreData
 
 extension STDataBase {
     
-    class DBInfoProvider: DataBaseProvider<STCDDBInfo> {
+    class DBInfoProvider: DataBaseProvider<STDBInfo> {
         
         private var myDBInfo: STDBInfo?
         
@@ -27,14 +27,31 @@ extension STDataBase {
             let context = self.container.viewContext
             context.performAndWait {
                 guard let cdInfo = self.getInfo(context: context) else {
-                    STCDDBInfo(model: info, context: context)
+                    info.createCDModel(context: context)
                     self.container.saveContext(context)
                     return
                 }
-                cdInfo.update(model: info, context: context)
+                
+                info.update(model: cdInfo)
                 self.container.saveContext(context)
                 context.reset()
             }
+            self.observerProvider.forEach { obs in
+                DispatchQueue.main.async {
+                    obs.dataBaseProvider(didUpdated: self, models: [info])
+                }
+            }
+        }
+        
+        func update(model info: STDBInfo, context: NSManagedObjectContext, notify: Bool) {
+            self.myDBInfo = info
+            if  let cdInfo = self.getInfo(context: context) {
+                info.update(model: cdInfo)
+            }
+        }
+        
+        func notifyAllUpdates() {
+            let info = self.dbInfo
             self.observerProvider.forEach { obs in
                 DispatchQueue.main.async {
                     obs.dataBaseProvider(didUpdated: self, models: [info])

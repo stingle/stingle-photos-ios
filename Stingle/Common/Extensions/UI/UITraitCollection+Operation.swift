@@ -38,7 +38,23 @@ extension UITraitCollection {
     func isBothRegular() -> Bool {
         return self.horizontalSizeClass == .regular && self.verticalSizeClass == .regular
     }
-    
+
+    func isBothCompact() -> Bool {
+        return self.horizontalSizeClass == .compact && self.verticalSizeClass == .compact
+    }
+
+    func isWidthRegular() -> Bool {
+        return self.horizontalSizeClass == .regular
+    }
+
+    func isHeightRegular() -> Bool {
+        return self.verticalSizeClass == .regular
+    }
+
+    func isCompactRegular() -> Bool {
+        return self.horizontalSizeClass == .compact && self.verticalSizeClass == .regular
+    }
+
     func isTVOS() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .tv
     }
