@@ -61,7 +61,11 @@ extension String {
         let hashString = sh512.compactMap { String(format: "%02x", $0) }.joined()
         return hashString
     }
-
+    
+    var pathExtension: String {
+        return (self as NSString).pathExtension
+    }
+        
 }
 
 

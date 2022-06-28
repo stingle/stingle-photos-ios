@@ -30,17 +30,7 @@ class STGaleryFileViewerVM: STFileViewerVM<STLibrary.GaleryFile> {
     }
 
     override func getAction(for file: STLibrary.GaleryFile) -> [STFileViewerVC.ActionType] {
-        var allCasesWithoutEdit = STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
-        guard let originalType = file.decryptsHeaders.file?.fileOreginalType else {
-            return allCasesWithoutEdit
-        }
-        switch originalType {
-        case .video:
-            return allCasesWithoutEdit
-        case .image:
-            allCasesWithoutEdit.append(.edit)
-            return allCasesWithoutEdit
-        }
+        return self.getDefaultActions(for: file)
     }
     
     override func moveInfo(for file: STLibrary.GaleryFile) -> STMoveAlbumFilesVC.MoveInfo {
