@@ -154,6 +154,7 @@
 		A052FA98263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A052FA97263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib */; };
 		A05661FD2753A163006A1295 /* STAboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05661FC2753A163006A1295 /* STAboutVC.swift */; };
 		A05661FF2753A1CF006A1295 /* STAboutVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05661FE2753A1CF006A1295 /* STAboutVM.swift */; };
+		A057C9C42869DA9300BA01B4 /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = A057C9C32869DA9300BA01B4 /* UIImage+Gif.swift */; };
 		A059D1D226C98CCE0045AC61 /* STAuthWorker+CheckRecoveryPhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059D1D126C98CCE0045AC61 /* STAuthWorker+CheckRecoveryPhrase.swift */; };
 		A059D1D626C99AEB0045AC61 /* STBackupInputPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059D1D526C99AEB0045AC61 /* STBackupInputPhraseView.swift */; };
 		A059D1D826C99B030045AC61 /* STBackupInputPhraseView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A059D1D726C99B010045AC61 /* STBackupInputPhraseView.xib */; };
@@ -545,6 +546,7 @@
 		A052FA97263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilesActionTabBarAccessoryView.xib; sourceTree = "<group>"; };
 		A05661FC2753A163006A1295 /* STAboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAboutVC.swift; sourceTree = "<group>"; };
 		A05661FE2753A1CF006A1295 /* STAboutVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAboutVM.swift; sourceTree = "<group>"; };
+		A057C9C32869DA9300BA01B4 /* UIImage+Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
 		A059D1D126C98CCE0045AC61 /* STAuthWorker+CheckRecoveryPhrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAuthWorker+CheckRecoveryPhrase.swift"; sourceTree = "<group>"; };
 		A059D1D526C99AEB0045AC61 /* STBackupInputPhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBackupInputPhraseView.swift; sourceTree = "<group>"; };
 		A059D1D726C99B010045AC61 /* STBackupInputPhraseView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = STBackupInputPhraseView.xib; sourceTree = "<group>"; };
@@ -1176,6 +1178,8 @@
 				A06942D0260CDE3E009CFD3A /* UIColor+Operation.swift */,
 				A021A17A264F325900394713 /* UINavigationBar+Progress.swift */,
 				A060010D27050A290071812C /* UIFont+Operation.swift */,
+				B31D61E727B64B4E00CBEA19 /* UIImage+Helper.swift */,
+				A057C9C32869DA9300BA01B4 /* UIImage+Gif.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -2545,7 +2549,6 @@
 		B31D61E627B64B4E00CBEA19 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				B31D61E727B64B4E00CBEA19 /* UIImage+Helper.swift */,
 				B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */,
 				B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */,
 			);
@@ -2923,6 +2926,7 @@
 				A02203C125EED86800D07C98 /* AppDelegate.swift in Sources */,
 				A0FD3F382670F4C40042EB8D /* STFileUrl.swift in Sources */,
 				B31D622427B64B4E00CBEA19 /* STImageEditorVC.swift in Sources */,
+				A057C9C42869DA9300BA01B4 /* UIImage+Gif.swift in Sources */,
 				A086FD9125F5AC7200A8BC9C /* STUserProvider.swift in Sources */,
 				A074AE3E26460203004C9E9E /* STMoveAlbumFilesVC.swift in Sources */,
 				A013D85E269F7C81007ED786 /* STAppSettings+Security.swift in Sources */,

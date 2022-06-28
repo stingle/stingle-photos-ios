@@ -125,6 +125,22 @@ class STFileViewerVM<File: STLibrary.FileBase> where File: ICDSynchConvertable {
     func editVM(for file: File) -> IFileEditVM {
         fatalError("this method must be implemented in chile classes")
     }
+    
+    func getDefaultActions(for file: File) -> [STFileViewerVC.ActionType] {
+        var allCasesWithoutEdit = STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
+        guard let originalType = file.decryptsHeaders.file?.fileOreginalType else {
+            return allCasesWithoutEdit
+        }
+        switch originalType {
+        case .video:
+            return allCasesWithoutEdit
+        case .image:
+            if file.decryptsHeaders.file?.fileName?.pathExtension.lowercased() != "gif" {
+                allCasesWithoutEdit.append(.edit)
+            }
+            return allCasesWithoutEdit
+        }
+    }
 }
 
 extension STFileViewerVM: IProviderDelegate {

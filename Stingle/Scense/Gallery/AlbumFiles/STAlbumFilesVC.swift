@@ -475,7 +475,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         }
         
         importer.progressHendler = { progress in
-            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            let progressValue = progress.fractionCompleted
             
             if let asset = progress.importingFile?.asset {
                 importedAssets.append(asset)
@@ -483,7 +483,7 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
             
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
-                    progressView.progress = progressValue
+                    progressView.progress = Float(progressValue)
                     let completedUnitCount = min(progress.completedUnitCount + 1, progress.totalUnitCount)
                     progressView.subTitle = "\(completedUnitCount)/\(progress.totalUnitCount)"
                 }
