@@ -118,7 +118,6 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         super.configureLocalize()
         self.navigationItem.title = "gallery".localized
         self.navigationController?.tabBarItem.title = "gallery".localized
-        
         self.emptyDataTitleLabel?.text = "empy_gallery_title".localized
         self.emptyDataSubTitleLabel?.text = "empy_gallery_message".localized
         self.selectButtonItem.title = self.dataSource.viewModel.isSelectedMode ? "cancel".localized : "select".localized

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewController, STCollectionViewDataSourceDelegate {
+class STCollectionSyncViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewController, STCollectionViewDataSourceDelegate {
     
     private(set) var dataSource: STCollectionViewDataSource<ViewModel>!
     let refreshControl = UIRefreshControl()
@@ -114,7 +114,7 @@ class STFilesViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewCo
     
 }
 
-extension STFilesViewController: ISyncManagerObserver {
+extension STCollectionSyncViewController: ISyncManagerObserver {
     
     var isSyncing: Bool {
         return STApplication.shared.syncManager.isSyncing

@@ -11,7 +11,7 @@ protocol ISelectionCollectionViewCell: IViewDataSourceCell {
     func setSelectedMode(mode: Bool)
 }
 
-class STFilesSelectCollectionViewController<ViewModel: ICollectionDataSourceViewModel>: STFilesViewController<ViewModel>, UICollectionViewDelegate where ViewModel.Cell: ISelectionCollectionViewCell {
+class STFilesSelectCollectionViewController<DataSourceViewModel: ICollectionDataSourceViewModel>: STCollectionSyncViewController<DataSourceViewModel>, UICollectionViewDelegate where DataSourceViewModel.Cell: ISelectionCollectionViewCell {
     
     private(set) var isSelectionMode = false
     private(set) var selectionObjectsIdentifiers = Set<String>()

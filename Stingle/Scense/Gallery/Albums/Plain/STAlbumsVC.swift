@@ -70,7 +70,7 @@ extension STAlbumsVC {
     
 }
 
-class STAlbumsVC: STFilesViewController<STAlbumsVC.ViewModel> {
+class STAlbumsVC: STCollectionSyncViewController<STAlbumsVC.ViewModel> {
         
     private let viewModel = STAlbumsVM()
     private let segueIdentifierAlbumFiles = "AlbumFiles"

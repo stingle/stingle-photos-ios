@@ -12,3 +12,5 @@ APP_NAME = StingleDev Photos
 APP_BUNDLE_ID = org.stingle.photos.dev
 BASE_API_URL = https:/$()/apidev.stingle.org/v2
 BUILD_TYPE = Development
+
+APP_FILE_SHARING_BUNDLE_ID = org.stingle.photos.dev.file.sharing
