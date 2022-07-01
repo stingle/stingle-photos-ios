@@ -19,17 +19,24 @@ extension STLibrary {
             try super.init(from: decoder)
         }
         
-        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool, isSynched: Bool?, managedObjectID: NSManagedObjectID?) throws {
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool, isSynched: Bool?, searchIndexes: [STLibrary.SearchIndex]?, managedObjectID: NSManagedObjectID?) throws {
             self.managedObjectID = managedObjectID
-            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote, isSynched: isSynched)
+            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote, isSynched: isSynched, searchIndexes: searchIndexes)
         }
                 
-        init(fileName: String, version: String, headers: String, dateCreated: Date, dateModified: Date, isRemote: Bool, isSynched: Bool, managedObjectID: NSManagedObjectID?) {
+        init(fileName: String, version: String, headers: String, dateCreated: Date, dateModified: Date, isRemote: Bool, isSynched: Bool, searchIndexes: [STLibrary.SearchIndex]?, managedObjectID: NSManagedObjectID?) {
             self.managedObjectID = managedObjectID
-            super.init(fileName: fileName, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote, isSynched: isSynched)
+            super.init(fileName: fileName, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote, isSynched: isSynched, searchIndexes: searchIndexes)
         }
                 
         required convenience init(model: CDModel) throws {
+            let searchIndexes: [SearchIndex]? = try model.searchIndexes?.compactMap({ cdSearchIndex in
+                guard let cdSearchIndex = cdSearchIndex as? STCDFileSearchIndex else {
+                    return nil
+                }
+                return try SearchIndex(model: cdSearchIndex)
+            })
+
             try self.init(file: model.file,
                           version: model.version,
                           headers: model.headers,
@@ -37,6 +44,7 @@ extension STLibrary {
                           dateModified: model.dateModified,
                           isRemote: model.isRemote,
                           isSynched: model.isSynched,
+                          searchIndexes: searchIndexes,
                           managedObjectID: model.objectID)
         }
         
@@ -60,6 +68,7 @@ extension STLibrary {
                         dateModified: dateModified,
                         isRemote: isRemote,
                         isSynched: isSynched,
+                        searchIndexes: self.searchIndexes,
                         managedObjectID: managedObjectID) as! Self
 
         }

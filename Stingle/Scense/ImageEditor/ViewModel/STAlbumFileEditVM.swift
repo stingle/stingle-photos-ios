@@ -49,8 +49,9 @@ class STAlbumFileEditVM: IFileEditVM {
         let encryptedFileInfo = try self.saveNewImage(image: image, fileName: fileName, publicKey: publicKey)
         let version = "\(STCrypto.Constants.CurrentFileVersion)"
         let date = Date()
-        
-        let file = STLibrary.AlbumFile(file: self.file.file, version: version, headers: encryptedFileInfo.headers, dateCreated: date, dateModified: date, isRemote: false, isSynched: false, albumId: self.albumFile.albumId, managedObjectID: nil)
+
+        // TODO: Shahen run image recognition to update edited image faces/objects info.
+        let file = STLibrary.AlbumFile(file: self.file.file, version: version, headers: encryptedFileInfo.headers, dateCreated: date, dateModified: date, isRemote: false, isSynched: false, albumId: self.albumFile.albumId, searchIndexes: self.file.searchIndexes, managedObjectID: nil)
         
         STApplication.shared.dataBase.albumFilesProvider.add(models: [file], reloadData: true)
         let updatedAlbum = STLibrary.Album(album: self.album, dateModified: Date())

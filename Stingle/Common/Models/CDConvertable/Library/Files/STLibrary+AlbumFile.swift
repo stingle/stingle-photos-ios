@@ -37,6 +37,13 @@ extension STLibrary {
             guard let albumId = model.albumId else {
                 throw LibraryError.parsError
             }
+            let searchIndexes: [SearchIndex]? = try model.searchIndexes?.compactMap({ cdSearchIndex in
+                guard let cdSearchIndex = cdSearchIndex as? STCDFileSearchIndex else {
+                    return nil
+                }
+                return try SearchIndex(model: cdSearchIndex)
+            })
+
             self.albumId = albumId
             try super.init(file: model.file,
                            version: model.version,
@@ -45,11 +52,12 @@ extension STLibrary {
                            dateModified: model.dateModified,
                            isRemote: model.isRemote,
                            isSynched: model.isSynched,
+                           searchIndexes: searchIndexes,
                            managedObjectID: model.objectID)
             
         }
         
-        init(file: String, version: String, headers: String, dateCreated: Date, dateModified: Date, isRemote: Bool, isSynched: Bool, albumId: String, managedObjectID: NSManagedObjectID?) {
+        init(file: String, version: String, headers: String, dateCreated: Date, dateModified: Date, isRemote: Bool, isSynched: Bool, albumId: String, searchIndexes: [SearchIndex]?, managedObjectID: NSManagedObjectID?) {
             self.albumId = albumId
             super.init(fileName: file,
                        version: version,
@@ -58,13 +66,14 @@ extension STLibrary {
                        dateModified: dateModified,
                        isRemote: isRemote,
                        isSynched: isSynched,
+                       searchIndexes: searchIndexes,
                        managedObjectID: managedObjectID)
           
         }
         
-        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool,  isSynched: Bool?, albumId: String, managedObjectID: NSManagedObjectID?) throws {
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool,  isSynched: Bool?, albumId: String, searchIndexes: [SearchIndex]?, managedObjectID: NSManagedObjectID?) throws {
             self.albumId = albumId
-            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote, isSynched: isSynched, managedObjectID: managedObjectID)
+            try super.init(file: file, version: version, headers: headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: isRemote, isSynched: isSynched, searchIndexes: searchIndexes, managedObjectID: managedObjectID)
         }
         
         override func copy(fileName: String? = nil, version: String? = nil, headers: String? = nil, dateCreated: Date? = nil, dateModified: Date? = nil, isRemote: Bool? = nil, isSynched: Bool? = nil, managedObjectID: NSManagedObjectID? = nil) -> Self {
@@ -86,6 +95,7 @@ extension STLibrary {
                              isRemote: isRemote,
                              isSynched: isSynched,
                              albumId: self.albumId,
+                             searchIndexes: self.searchIndexes,
                              managedObjectID: managedObjectID) as! Self
             
         }
@@ -136,6 +146,7 @@ extension STLibrary {
                              isRemote: isRemote,
                              isSynched: isSynched,
                              albumId: albumId,
+                             searchIndexes: self.searchIndexes,
                              managedObjectID: managedObjectID) as! Self
             
         }

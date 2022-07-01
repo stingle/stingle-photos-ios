@@ -80,8 +80,8 @@ class STDataBase {
     let contactProvider: SyncProvider<STContact, STLibrary.DeleteFile.Contact>
     
     init() {
-        self.userProvider = UserProvider(container: self.container)
-        self.dbInfoProvider = DBInfoProvider(container: self.container)
+        self.userProvider = .init(container: self.container)
+        self.dbInfoProvider = .init(container: self.container)
         self.galleryProvider = .init(container: self.container, providerType: .gallery)
         self.albumsProvider = .init(container: self.container, providerType: .albums)
         self.albumFilesProvider = .init(container: self.container, providerType: .albumFiles)

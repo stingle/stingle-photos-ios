@@ -20,7 +20,7 @@ extension STImporter {
         let fileSize: UInt
         let creationDate: Date?
         let modificationDate: Date?
-        let searchInfo: [STLibrary.SearchIndex]?
+        let searchIndexes: [STLibrary.SearchIndex]?
         let freeBuffer: (() -> Void)?
     }
     
@@ -100,13 +100,13 @@ extension STImporter {
                                            fileSize: info.fileSize,
                                            creationDate: info.creationDate,
                                            modificationDate: info.modificationDate,
-                                           searchInfo: info.searchInfo,
+                                           searchIndexes: info.searchIndexes,
                                            progressHandler: progressHandler)
             
             return file
         }
         
-        func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, searchInfo: [STLibrary.SearchIndex]?, progressHandler: @escaping ProgressHandler) throws -> File {
+        func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, searchIndexes: [STLibrary.SearchIndex]?, progressHandler: @escaping ProgressHandler) throws -> File {
             fatalError("implement childe classes")
         }
         
@@ -179,7 +179,7 @@ extension STImporter {
                                                             fileSize: info.fileSize,
                                                             creationDate: info.creationDate,
                                                             modificationDate: info.modificationDate,
-                                                            searchInfo: searchInfos,
+                                                            searchIndexes: searchInfos,
                                                             freeBuffer: info.freeBuffer)
                         compled(uploadInfo: importFileInfo)
                     }
@@ -203,7 +203,7 @@ extension STImporter {
     
     class GaleryFileImportable: ImportableFile<STLibrary.GaleryFile> {
         
-        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, searchInfo: [STLibrary.SearchIndex]?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.GaleryFile {
+        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, searchIndexes: [STLibrary.SearchIndex]?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.GaleryFile {
             
             let encryptedFileInfo = try STApplication.shared.crypto.createEncryptedFile(oreginalUrl: oreginalUrl, thumbImage: thumbImageData, fileType: fileType, duration: duration, toUrl: toUrl, toThumbUrl: toThumbUrl, fileSize: fileSize, progressHandler: { progress, stop in
                 var isEnded: Bool?
@@ -217,9 +217,8 @@ extension STImporter {
             let dateCreated = creationDate ?? Date()
             let dateModified = modificationDate ?? Date()
 
-            let file = STLibrary.GaleryFile(fileName: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, isSynched: false, managedObjectID: nil)
-            searchInfo?.forEach({ $0.fileName = file.file })
-            file.searchIndexes = searchInfo
+            let file = STLibrary.GaleryFile(fileName: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, isSynched: false, searchIndexes: searchIndexes, managedObjectID: nil)
+            searchIndexes?.forEach({ $0.fileName = file.file })
             return file
         }
         
@@ -234,7 +233,7 @@ extension STImporter {
             super.init(asset: asset)
         }
         
-        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, searchInfo: [STLibrary.SearchIndex]?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.AlbumFile {
+        override func createFile(fileType: STHeader.FileType, oreginalUrl: URL, thumbImageData: Data, duration: TimeInterval, toUrl: URL, toThumbUrl: URL, fileSize: UInt, creationDate: Date?, modificationDate: Date?, searchIndexes: [STLibrary.SearchIndex]?, progressHandler: @escaping STImporter.ProgressHandler) throws -> STLibrary.AlbumFile {
             
             guard let publicKey = self.album.albumMetadata?.publicKey else {
                 throw STFileUploader.UploaderError.fileNotFound
@@ -252,9 +251,9 @@ extension STImporter {
             let dateCreated = creationDate ?? Date()
             let dateModified = modificationDate ?? Date()
 
-            let file = STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, isSynched: false, albumId: self.album.albumId, managedObjectID: nil)
-            searchInfo?.forEach({ $0.fileName = file.file })
-            file.searchIndexes = searchInfo
+            let file = STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: dateCreated, dateModified: dateModified, isRemote: false, isSynched: false, albumId: self.album.albumId, searchIndexes: searchIndexes, managedObjectID: nil)
+            searchIndexes?.forEach({ $0.fileName = file.file })
+            file.searchIndexes = searchIndexes
             file.updateIfNeeded(albumMetadata: self.album.albumMetadata)
             return file
         }

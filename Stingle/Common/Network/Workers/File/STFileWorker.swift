@@ -23,7 +23,7 @@ class STFileWorker: STWorker {
         do {
             var trashFiles = [STLibrary.TrashFile]()
             for file in files {
-                let file = try STLibrary.TrashFile(file: file.file, version: file.version, headers: file.headers, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: file.isRemote, isSynched: file.isSynched, managedObjectID: file.managedObjectID)
+                let file = try STLibrary.TrashFile(file: file.file, version: file.version, headers: file.headers, dateCreated: file.dateCreated, dateModified: file.dateModified, isRemote: file.isRemote, isSynched: file.isSynched, searchIndexes: file.searchIndexes, managedObjectID: file.managedObjectID)
                 trashFiles.append(file)
                 uploader.cancelUploadIng(for: file)
             }
@@ -76,7 +76,7 @@ class STFileWorker: STWorker {
         STApplication.shared.uploader.cancelUploadIng(for: files)
         
         let galleryFiles = files.compactMap({
-            return STLibrary.GaleryFile(fileName: $0.file, version: $0.version, headers: $0.headers, dateCreated: $0.dateCreated, dateModified: $0.dateModified, isRemote: $0.isRemote, isSynched: $0.isSynched, managedObjectID: nil)
+            return STLibrary.GaleryFile(fileName: $0.file, version: $0.version, headers: $0.headers, dateCreated: $0.dateCreated, dateModified: $0.dateModified, isRemote: $0.isRemote, isSynched: $0.isSynched, searchIndexes: $0.searchIndexes, managedObjectID: nil)
         })
         
         guard !remoteFiles.isEmpty else {

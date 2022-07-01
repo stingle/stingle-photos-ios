@@ -104,7 +104,8 @@ extension STApplication.Utils {
             }
             
             let dateCreated = file.value.oreginal.date ?? Date()
-            let file = STLibrary.GaleryFile(fileName: file.key, version: "1", headers: headers, dateCreated: dateCreated, dateModified: dateCreated, isRemote: false, isSynched: false, managedObjectID: nil)
+            // TODO: Shahen run image recognition to recreate image faces/objects info.
+            let file = STLibrary.GaleryFile(fileName: file.key, version: "1", headers: headers, dateCreated: dateCreated, dateModified: dateCreated, isRemote: false, isSynched: false, searchIndexes: nil, managedObjectID: nil)
             files.append(file)
         }
         

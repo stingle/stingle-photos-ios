@@ -19,7 +19,9 @@ protocol ILibraryFile {
     var isSynched: Bool { get }
     
     var identifier: String { get }
-    
+
+    var searchIndexes: [STLibrary.SearchIndex]? { get }
+
     var fileThumbUrl: URL? { get }
     var fileOreginalUrl: URL? { get }
     
@@ -43,8 +45,20 @@ extension STLibrary {
             self.dateModified = dateModified
         }
 
-        func toManagedModelJson() -> [String : Any] {
-            var json = [String : Any]()
+        init(model: STCDFileSearchIndex) throws {
+            guard let identifier = model.identifier,
+                  let dateModified = model.dateModified,
+                  let fileName = model.fileName else {
+                throw LibraryError.parsError
+            }
+            self.identifier = identifier
+            self.isProc = model.isProc
+            self.dateModified = dateModified
+            self.fileName = fileName
+        }
+
+        func toManagedModelJson() -> [String : AnyHashable] {
+            var json = [String : AnyHashable]()
             json.addIfNeeded(key: "fileName", value: self.fileName)
             json.addIfNeeded(key: "identifier", value: self.identifier)
             json.addIfNeeded(key: "isProc", value: self.isProc)
@@ -116,7 +130,7 @@ extension STLibrary {
             self.isSynched = true
         }
         
-        init(fileName: String, version: String, headers: String, dateCreated: Date, dateModified: Date, isRemote: Bool, isSynched: Bool) {
+        init(fileName: String, version: String, headers: String, dateCreated: Date, dateModified: Date, isRemote: Bool, isSynched: Bool, searchIndexes: [SearchIndex]?) {
             self.file = fileName
             self.version = version
             self.headers = headers
@@ -124,9 +138,10 @@ extension STLibrary {
             self.dateModified = dateModified
             self.isRemote = isRemote
             self.isSynched = isSynched
+            self.searchIndexes = searchIndexes
         }
         
-        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool, isSynched: Bool?) throws {
+        init(file: String?, version: String?, headers: String?, dateCreated: Date?, dateModified: Date?, isRemote: Bool, isSynched: Bool?, searchIndexes: [SearchIndex]?) throws {
             guard let file = file,
                   let version = version,
                   let headers = headers,
@@ -144,6 +159,7 @@ extension STLibrary {
             self.dateModified = dateModified
             self.isRemote = isRemote
             self.isSynched = isSynched
+            self.searchIndexes = searchIndexes
         }
                 
         func copy(fileName: String? = nil, version: String? = nil, headers: String? = nil, dateCreated: Date? = nil, dateModified: Date? = nil, isRemote: Bool? = nil, isSynched: Bool? = nil) -> Self {
@@ -157,12 +173,13 @@ extension STLibrary {
             let isSynched = isSynched ?? self.isSynched
             
             return FileBase(fileName: fileName,
-                        version: version,
-                        headers: headers,
-                        dateCreated: dateCreated,
-                        dateModified: dateModified,
-                        isRemote: isRemote,
-                        isSynched: isSynched) as! Self
+                            version: version,
+                            headers: headers,
+                            dateCreated: dateCreated,
+                            dateModified: dateModified,
+                            isRemote: isRemote,
+                            isSynched: isSynched,
+                            searchIndexes: self.searchIndexes) as! Self
             
         }
         

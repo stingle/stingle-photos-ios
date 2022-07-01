@@ -72,6 +72,7 @@ extension STAlbumWorker {
                                                        isRemote: file.isRemote,
                                                        isSynched: file.isSynched,
                                                        albumId: toAlbum.albumId,
+                                                       searchIndexes: file.searchIndexes,
                                                        managedObjectID: file.managedObjectID)
                 if file.isRemote {
                     newHeaders[file.file] = newHeader
@@ -199,13 +200,14 @@ extension STAlbumWorker {
                 
                 let newHeader = try crypto.reencryptFileHeaders(headersStr: file.headers, publicKeyTo: publicKey, privateKeyFrom: fromAlbumData.privateKey, publicKeyFrom: fromAlbumData.publicKey)
                 let file = STLibrary.GaleryFile(fileName: file.file,
-                                              version: file.version,
-                                              headers: newHeader,
-                                              dateCreated: file.dateCreated,
-                                              dateModified: file.dateModified,
-                                              isRemote: file.isRemote,
-                                              isSynched: file.isSynched,
-                                              managedObjectID: file.managedObjectID)
+                                                version: file.version,
+                                                headers: newHeader,
+                                                dateCreated: file.dateCreated,
+                                                dateModified: file.dateModified,
+                                                isRemote: file.isRemote,
+                                                isSynched: file.isSynched,
+                                                searchIndexes: file.searchIndexes,
+                                                managedObjectID: file.managedObjectID)
 
                 if file.isRemote {
                     newHeaders[file.file] = newHeader

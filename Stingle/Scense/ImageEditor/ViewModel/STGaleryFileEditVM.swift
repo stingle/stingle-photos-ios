@@ -42,7 +42,8 @@ class STGaleryFileEditVM: IFileEditVM {
         let encryptedFileInfo = try self.saveNewImage(image: image, fileName: fileName)
         let version = "\(STCrypto.Constants.CurrentFileVersion)"
         let date = Date()
-        let file =  STLibrary.GaleryFile(fileName: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: date, dateModified: date, isRemote: false, isSynched: false, managedObjectID: nil)
+        // TODO: Shahen run image recognition to update edited image faces/objects info.
+        let file =  STLibrary.GaleryFile(fileName: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: date, dateModified: date, isRemote: false, isSynched: false, searchIndexes: self.file.searchIndexes, managedObjectID: nil)
         STApplication.shared.dataBase.galleryProvider.add(models: [file], reloadData: true)
         STApplication.shared.uploader.upload(files: [file])
     }

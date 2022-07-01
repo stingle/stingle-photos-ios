@@ -122,12 +122,25 @@ class STImageRecognition {
 
     private func collectSearchIndexes(for objects: [ObjectDetector.Prediction]) -> [STLibrary.SearchIndex] {
         var searchIndexes = [STLibrary.SearchIndex]()
-        for object in objects {
+        let uniqueObjects = Set(objects)
+        for object in uniqueObjects {
             // TODO: Shahen - Fix search index creationg and save object in database as well
             let searchIndex = STLibrary.SearchIndex(identifier: object.classification, isProc: false, dateModified: Date())
             searchIndexes.append(searchIndex)
         }
         return searchIndexes
+    }
+
+}
+
+extension ObjectDetector.Prediction: Hashable {
+
+    public static func == (lhs: ObjectDetector.Prediction, rhs: ObjectDetector.Prediction) -> Bool {
+        return lhs.classification == rhs.classification
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.classification)
     }
 
 }

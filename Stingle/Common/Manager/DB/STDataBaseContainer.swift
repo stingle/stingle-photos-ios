@@ -32,6 +32,7 @@ class STDataBaseContainer {
         let background = self.newBackgroundContext()
         background.automaticallyMergesChangesFromParent = true
         background.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
+        background.shouldDeleteInaccessibleFaults = true
         return background
     }()
     
