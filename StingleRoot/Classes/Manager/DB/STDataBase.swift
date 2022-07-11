@@ -75,11 +75,15 @@ public class STDataBase {
     public let trashProvider: SyncProvider<STLibrary.TrashFile, STLibrary.DeleteFile.Trash>
     public let contactProvider: SyncProvider<STContact, STLibrary.DeleteFile.Contact>
     
-    private let container = STDataBaseContainer(modelName: "StingleModel")
+    private let container: STDataBaseContainer
         
     init() {
+        let modelBundles = [Bundle(for: STCDUser.self), Bundle(for: STDBInfo.self), Bundle(for: STCDGaleryFile.self), Bundle(for: STCDAlbumFile.self), Bundle(for: STCDAlbum.self), Bundle(for: STCDTrashFile.self), Bundle(for: STCDContact.self)]
+        
+        self.container = STDataBaseContainer(modelName: "StingleModel", modelBundles: modelBundles)
         self.userProvider = UserProvider(container: self.container)
         self.dbInfoProvider = DBInfoProvider(container: self.container)
+        
         self.galleryProvider = .init(container: self.container, providerType: .gallery)
         self.albumsProvider = .init(container: self.container, providerType: .albums)
         self.albumFilesProvider = .init(container: self.container, providerType: .albumFiles)
@@ -111,8 +115,6 @@ public class STDataBase {
                                 STLogger.log(error: error)
                             }
                         }
-
-
                     }
                 }
                                  

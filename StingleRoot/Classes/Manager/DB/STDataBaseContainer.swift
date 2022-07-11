@@ -10,21 +10,13 @@ import CoreData
 public class STDataBaseContainer {
     
     private let modelName: String
+    private let modelBundles: [Bundle]
     
     private lazy var container: NSPersistentContainer = {
-        
-        let sharingGroup = "group." + STEnvironment.current.appFileSharingBundleId
-                
-        guard let url = URL.storeURL(for: sharingGroup, databaseName: self.modelName) else {
-            STLogger.log(logMessage: "Bundle not work")
-            fatalError("Bundle not work")
+        guard let model = NSManagedObjectModel.mergedModel(from: self.modelBundles) else {
+            fatalError("model not found")
         }
-        
-        
-        let description = NSPersistentStoreDescription(url: url)
-        var container = NSPersistentContainer(name: STEnvironment.current.appName)
-        container.persistentStoreDescriptions = [description]
-
+        var container = NSPersistentContainer(name: self.modelName, managedObjectModel: model)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -47,8 +39,9 @@ public class STDataBaseContainer {
         return background
     }()
     
-    init(modelName: String) {
+    init(modelName: String, modelBundles: [Bundle]) {
         self.modelName = modelName
+        self.modelBundles = modelBundles
     }
     
     // MARK: - Core Data Saving support
