@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StingleRoot
 
 protocol IStorageItemModel {
     var identifier: String { get }

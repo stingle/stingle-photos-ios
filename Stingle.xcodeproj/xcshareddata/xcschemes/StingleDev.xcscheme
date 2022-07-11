@@ -28,6 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A0A06BC22875DC6E0087B9FD"
+               BuildableName = "RootTests.xctest"
+               BlueprintName = "RootTests"
+               ReferencedContainer = "container:Stingle.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A0A06BE92875DCD30087B9FD"
+               BuildableName = "StingleRootTests.xctest"
+               BlueprintName = "StingleRootTests"
+               ReferencedContainer = "container:Stingle.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

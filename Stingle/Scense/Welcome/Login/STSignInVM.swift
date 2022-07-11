@@ -1,4 +1,5 @@
 import Foundation
+import StingleRoot
 
 class STSignInVM {
 	

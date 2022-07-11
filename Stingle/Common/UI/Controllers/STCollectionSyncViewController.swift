@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 class STCollectionSyncViewController<ViewModel: ICollectionDataSourceViewModel>: UIViewController, STCollectionViewDataSourceDelegate {
     

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 protocol STFilesActionTabBarAccessoryViewDataSource: AnyObject {
     func accessoryView(actions accessoryView: STFilesActionTabBarAccessoryView) -> [STFilesActionTabBarAccessoryView.ActionItem]

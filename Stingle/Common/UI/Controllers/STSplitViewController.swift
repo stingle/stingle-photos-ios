@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 protocol IMasterViewController: UIViewController {
     func width(forPresentation splitViewController: STSplitViewController, traitCollection: UITraitCollection, size: CGSize) -> CGFloat

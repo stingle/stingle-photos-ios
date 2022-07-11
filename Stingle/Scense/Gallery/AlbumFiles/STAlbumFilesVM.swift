@@ -7,6 +7,7 @@
 
 import Foundation
 import Photos
+import StingleRoot
 
 protocol STAlbumFilesVMDelegate: AnyObject {
     func albumFilesVM(didDeletedAlbum albumFilesVM: STAlbumFilesVM)

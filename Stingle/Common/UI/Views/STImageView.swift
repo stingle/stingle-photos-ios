@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 class STImageView: UIImageView {
     
@@ -39,7 +40,7 @@ extension STImageView {
         let isRemote: Bool
         
         private(set) var imageParameters: [String : Any]?
-        let header: STHeader
+        let header: StingleRoot.STHeader
         
         init?(file: ILibraryFile?, isThumb: Bool) {
             guard let file = file, let header = isThumb ? file.decryptsHeaders.thumb : file.decryptsHeaders.file, let imageType = ImageType(rawValue: file.dbSet.rawValue) else {
@@ -73,7 +74,7 @@ extension STImageView {
 }
 
 extension STImageView.Image: IFileRetrySource {
-    
+        
     var folderType: STFileSystem.FolderType {
         let fileType: STFileSystem.FileType = self.isThumb ? .thumbs : .oreginals
         if self.isRemote {
@@ -109,4 +110,47 @@ extension STImageView.Image: STDownloadRequest {
         return STNetworkDispatcher.Encoding.body
     }
        
+}
+
+class STImageDownloadPlainAnimator: IImageViewDownloadAnimator {
+    
+    static private let animationViewTag = 10003
+    
+    func imageView(startAnimation imageView: UIImageView) {
+        self.addAnimation(view: imageView)
+    }
+    
+    func imageView(progressAnimation progress: (total: Float, completed: Float), imageView: UIImageView) {}
+    
+    func imageView(endAnimation imageView: UIImageView) {
+        self.removeAnimation(view: imageView)
+    }
+    
+    func imageView(failEndAnimation imageView: UIImageView) {
+        self.removeAnimation(view: imageView)
+    }
+    
+    //MARK: - Private func
+    
+    private func addAnimation(view: UIView) {
+        if let gradientView = view.viewWithTag(Self.animationViewTag) as? STGradientView {
+            gradientView.addFadeAnimation(fromValue: 1, toValue: 0.5, byValue: 0.5)
+            gradientView.isHidden = false
+        } else {
+            let gradientView = STGradientView(frame: view.bounds)
+            let color = UIColor.appPlaceholder
+            gradientView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            gradientView.backgroundColor = .clear
+            gradientView.colors = [color]
+            gradientView.tag = Self.animationViewTag
+            view.addSubview(gradientView)
+        }
+    }
+    
+    private func removeAnimation(view: UIView) {
+        let loadingView = view.viewWithTag(Self.animationViewTag) as? STGradientView
+        loadingView?.isHidden = true
+        loadingView?.removeAllAnimation()
+    }
+    
 }

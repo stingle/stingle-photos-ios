@@ -6,11 +6,12 @@
 //
 
 import UIKit
-import Sodium
+import StingleRoot
 import UniformTypeIdentifiers
+import Sodium
 
 protocol IFileEditVM: AnyObject {
-    var file: ILibraryFile { get }
+    var file: STLibrary.FileBase { get }
     
     func save(image: UIImage) throws
     func saveAsNewFile(image: UIImage) throws
@@ -31,7 +32,7 @@ extension IFileEditVM {
             type = .jpeg
             fileExtension = type.preferredFilenameExtension ?? "jpeg"
         }
-        guard var heicData = self.imageData(image: image, for: type), var thumbData = thumb.jpegData(compressionQuality: 0.7) else {
+        guard var heicData = image.imageData(for: type), var thumbData = thumb.jpegData(compressionQuality: 0.7) else {
             throw STError.fileIsUnavailable
         }
         if var properties = self.fileProperties() as? [String: Any] {
@@ -108,26 +109,6 @@ extension IFileEditVM {
         CGImageDestinationFinalize(destination)
 
         return dataWithEXIF as Data
-    }
-
-    private func imageData(image: UIImage, for type: UTType) -> Data? {
-        var cgImage = image.cgImage
-        if cgImage == nil, let ciImage = image.ciImage {
-            cgImage = CIContext().createCGImage(ciImage, from: ciImage.extent)
-        }
-        guard
-            let mutableData = CFDataCreateMutable(nil, 0),
-            let destination = CGImageDestinationCreateWithData(mutableData, type.identifier as CFString, 1, nil),
-            let cgImage = cgImage
-        else {
-            return nil
-        }
-        let cgImageOrientation = CGImagePropertyOrientation(image.imageOrientation)
-        CGImageDestinationAddImage(destination, cgImage, [kCGImageDestinationLossyCompressionQuality: 1.0, kCGImagePropertyOrientation: cgImageOrientation.rawValue] as CFDictionary)
-        guard CGImageDestinationFinalize(destination) else {
-            return nil
-        }
-        return mutableData as Data
     }
 
     private func fileProperties() -> CFDictionary? {

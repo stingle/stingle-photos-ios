@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import StingleRoot
 
 class STGaleryFileEditVM: IFileEditVM {
     
     let galeryFile: STLibrary.GaleryFile
     
-    var file: ILibraryFile {
+    var file: STLibrary.FileBase {
         return self.galeryFile
     }
 

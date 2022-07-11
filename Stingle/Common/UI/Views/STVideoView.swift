@@ -7,6 +7,7 @@
 
 import UIKit
 import AVKit
+import StingleRoot
 
 class STVideoView: UIView {
     

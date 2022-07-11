@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 protocol STFileEditVCDelegate: AnyObject {
     func fileEdit(didSelectCancel vc: STFileEditVC)

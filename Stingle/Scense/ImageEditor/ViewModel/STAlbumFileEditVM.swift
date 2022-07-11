@@ -7,13 +7,14 @@
 
 import UIKit
 import CoreData
+import StingleRoot
 
 class STAlbumFileEditVM: IFileEditVM {
     
     let albumFile: STLibrary.AlbumFile
     let album: STLibrary.Album!
     
-    var file: ILibraryFile {
+    var file: STLibrary.FileBase {
         return self.albumFile
     }
 

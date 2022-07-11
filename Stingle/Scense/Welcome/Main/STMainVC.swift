@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 class STMainVC: UIViewController {
 	

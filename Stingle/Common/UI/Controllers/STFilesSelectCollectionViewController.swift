@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 protocol ISelectionCollectionViewCell: IViewDataSourceCell {
     func setSelectedMode(mode: Bool)
@@ -13,8 +14,8 @@ protocol ISelectionCollectionViewCell: IViewDataSourceCell {
 
 class STFilesSelectCollectionViewController<DataSourceViewModel: ICollectionDataSourceViewModel>: STCollectionSyncViewController<DataSourceViewModel>, UICollectionViewDelegate where DataSourceViewModel.Cell: ISelectionCollectionViewCell {
     
-    private(set) var isSelectionMode = false
-    private(set) var selectionObjectsIdentifiers = Set<String>()
+    public private(set) var isSelectionMode = false
+    public private(set) var selectionObjectsIdentifiers = Set<String>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
