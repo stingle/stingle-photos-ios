@@ -63,19 +63,17 @@ public class STFileUploader {
         self.uploadAllLocalFilesInQueue(files: files)
     }
     
-    @discardableResult public func upload(files: [STImporter.GaleryFileImportable]) -> STImporter.GaleryFileImporter {
+    @discardableResult public func upload(files: [STImporter.GaleryFileAssetImportable]) -> STImporter.GaleryAssetFileImporter {
         let importer = STImporter.GaleryFileImporter(importFiles: files, responseQueue: self.dispatchQueue, startHendler: {}, progressHendler: { progress in }) { [weak self] files, importableFiles in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
         return importer
     }
     
-    @discardableResult public func uploadAlbum(files: [STImporter.AlbumFileImportable], album: STLibrary.Album) -> STImporter.AlbumFileImporter {
-        
-        let importer = STImporter.AlbumFileImporter(importFiles: files, album: album, responseQueue: self.dispatchQueue, startHendler: {}, progressHendler: { progress in }) { [weak self] files, importableFiles in
+    @discardableResult public func uploadAlbum(files: [STImporter.AlbumFileAssetImportable], album: STLibrary.Album) -> STImporter.AlbumAssetFileImporter {
+        let importer = STImporter.AlbumFileImporter(album: album, importFiles: files, responseQueue: self.dispatchQueue, startHendler: {}, progressHendler: { progress in }) { [weak self]  files, importableFiles in
             self?.uploadAllLocalFilesInQueue(files: files)
         }
-
         return importer
     }
     

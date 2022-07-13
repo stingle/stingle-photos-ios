@@ -6,12 +6,20 @@
 	<string>$(APP_FILE_SHARING_BUNDLE_ID)</string>
 	<key>BASE_API_URL</key>
 	<string>$(BASE_API_URL)</string>
+	<key>BUILD_TYPE</key>
+	<string>$(BUILD_TYPE)</string>
+	<key>APP_BUNDLE_ID</key>
+	<string>$(APP_BUNDLE_ID)</string>
+	<key>APP_NAME</key>
+	<string>$(APP_NAME)</string>
+	<key>APP_RUN_IS_EXTENSION</key>
+	<false/>
+	<key>CFBundleName</key>
+	<string>$(APP_NAME)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>org.stingle.photos.auto.import</string>
 	</array>
-	<key>BUILD_TYPE</key>
-	<string>$(BUILD_TYPE)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -20,8 +28,6 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>$(APP_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>

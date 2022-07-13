@@ -13,19 +13,7 @@ public class STDataBaseContainer {
     private let modelBundles: [Bundle]
     
     private lazy var container: NSPersistentContainer = {
-        guard let model = NSManagedObjectModel.mergedModel(from: self.modelBundles) else {
-            fatalError("model not found")
-        }
-        var container = NSPersistentContainer(name: self.modelName, managedObjectModel: model)
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        container.viewContext.undoManager = nil
-        container.viewContext.shouldDeleteInaccessibleFaults = true
-        return container
+        return self.getContaner()
     }()
     
     var viewContext: NSManagedObjectContext {
@@ -66,6 +54,50 @@ public class STDataBaseContainer {
     
     private func newBackgroundContext() -> NSManagedObjectContext {
         return self.container.newBackgroundContext()
+    }
+    
+    private func getContaner() -> NSPersistentContainer {
+        if STEnvironment.current.appRunIsExtension {
+            return self.getSharedContaner()
+        } else {
+            return self.getDefaultContaner()
+        }
+    }
+    
+    private func getSharedContaner() -> SharedPersistentContainer {
+        return self.createContaner()
+    }
+    
+    private func getDefaultContaner() -> NSPersistentContainer {
+        return self.createContaner()
+    }
+    
+    private func createContaner<T: NSPersistentContainer>() -> T {
+        guard let model = NSManagedObjectModel.mergedModel(from: self.modelBundles) else {
+            fatalError("model not found")
+        }
+        let container = T(name: self.modelName, managedObjectModel: model)
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.undoManager = nil
+        container.viewContext.shouldDeleteInaccessibleFaults = true
+        return container
+    }
+    
+}
+
+class SharedPersistentContainer: NSPersistentContainer {
+
+    override open class func defaultDirectoryURL() -> URL {
+        let environment = STEnvironment.current
+        let id = "group." + environment.appFileSharingBundleId
+        var storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: id)
+        storeURL = storeURL?.appendingPathComponent(environment.productName)
+        return storeURL!
     }
     
 }

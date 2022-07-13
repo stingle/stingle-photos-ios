@@ -10,6 +10,8 @@ import UIKit
 import Social
 import MobileCoreServices
 import UniformTypeIdentifiers
+import StingleRoot
+import Photos
 
 class ShareViewController: UIViewController {
     
@@ -25,12 +27,12 @@ class ShareViewController: UIViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        var user = STApplication.shared.utils.user()
         
-//        Stingle.STApplication.shared
+        let mm = STApplication.shared.dataBase.galleryProvider.getAllObjects()
         
-//        StingleRoot.HelloStingle.ppppd()
-        
-        
+
         self.manageImages()
     }
     
@@ -39,32 +41,27 @@ class ShareViewController: UIViewController {
     
     private func manageImages() {
         
-//        let supportTypes = self.supportTypes
-//        let content = self.extensionContext!.inputItems[0] as! NSExtensionItem
-//
-//        var inputItems = [NSItemProvider]()
-//
-//
-//        content.attachments?.forEach({ itemProvider in
-//
-//            if let file =  self.calculateType(for: itemProvider) {
-//
-//                itemProvider.loadFileRepresentation(forTypeIdentifier: file.type.description) { url, error in
-//                    print("ddddddd", itemProvider.suggestedName ?? "")
-//
-//                    print("dddddddeee",  file.type.preferredFilenameExtension ?? "")
-//
-//
-//
-//
-//                }
-//
-//
-//            }
-//
-//
-//        })
-        
+        let supportTypes = self.supportTypes
+        let content = self.extensionContext!.inputItems[0] as! NSExtensionItem
+        var inputItems = [NSItemProvider]()
+
+        content.attachments?.forEach({ itemProvider in
+
+            if let file =  self.calculateType(for: itemProvider) {
+                itemProvider.loadFileRepresentation(forTypeIdentifier: file.type.description) { url, error in
+                    
+                    print("ddddddd", itemProvider.suggestedName ?? "")
+                    print("dddddddeee",  file.type.preferredFilenameExtension ?? "")
+
+//                    PHAsset.init()
+                    
+//                    STImporter
+                }
+
+
+            }
+        })
+
     }
     
     private func calculateType(for itemProvider: NSItemProvider) -> (fileType: FileType, type: UTType)? {
@@ -109,5 +106,28 @@ class ShareViewController: UIViewController {
         return [.image: imagesTypes, .video: videoTypes]
     }
     
+    
+}
+
+
+extension ShareViewController: NSFilePresenter {
+    
+    var sharedUrl: URL {
+        let id = STEnvironment.current.appFileSharingBundleId
+        let sharedUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: id)
+        return sharedUrl!
+    }
+        
+    var presentedItemURL: URL? {
+        return self.sharedUrl.appendingPathComponent("Items")
+    }
+    
+    var presentedItemOperationQueue: OperationQueue {
+        return .main
+    }
+    
+    func presentedItemDidChange() {
+        
+    }
     
 }

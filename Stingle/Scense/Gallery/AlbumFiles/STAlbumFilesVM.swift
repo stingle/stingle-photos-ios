@@ -139,8 +139,8 @@ class STAlbumFilesVM {
         STApplication.shared.downloaderManager.fileDownloader.download(files: files)
     }
     
-    func upload(assets: [PHAsset]) -> STImporter.AlbumFileImporter {
-        let files = assets.compactMap({ return STImporter.AlbumFileImportable(asset: $0, album: self.album) })
+    func upload(assets: [PHAsset]) -> STImporter.AlbumAssetFileImporter {
+        let files = assets.compactMap({ return STImporter.AlbumFileAssetImportable(asset: $0, album: self.album) })
         return self.uploader.uploadAlbum(files: files, album: self.album)
     }
     

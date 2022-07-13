@@ -56,6 +56,7 @@
 		A02204AB25EEDC0400D07C98 /* STSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045625EEDC0400D07C98 /* STSignInVC.swift */; };
 		A02204AC25EEDC0400D07C98 /* STSignInVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045725EEDC0400D07C98 /* STSignInVM.swift */; };
 		A02204F225EEE12000D07C98 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A02204F425EEE12000D07C98 /* Localizable.strings */; };
+		A025BA35287C741A00993CDB /* StingleRoot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */; };
 		A027CE2526B2139F00829162 /* STChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2426B2139F00829162 /* STChangePasswordVC.swift */; };
 		A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2726B213B300829162 /* STChangePasswordVM.swift */; };
 		A02ED2EB2603FD2200F10D58 /* STImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02ED2EA2603FD2200F10D58 /* STImageView.swift */; };
@@ -319,6 +320,7 @@
 		A0AAA938261C7C1B009E9F51 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0AAA937261C7C1B009E9F51 /* Settings.storyboard */; };
 		A0AAA93B261C7C33009E9F51 /* STSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AAA93A261C7C33009E9F51 /* STSettingsVC.swift */; };
 		A0AAA944261C7D6E009E9F51 /* STBackupPhraseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AAA943261C7D6E009E9F51 /* STBackupPhraseVC.swift */; };
+		A0AF6537287DAEB5003BDDD4 /* IImportable+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF6536287DAEB5003BDDD4 /* IImportable+PHAsset.swift */; };
 		A0B152D42636DB0700D36619 /* Gallery.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0A9F33A261C76CC000252F2 /* Gallery.storyboard */; };
 		A0B267742624D7B30090E4ED /* STCollectionSyncViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B267732624D7B30090E4ED /* STCollectionSyncViewController.swift */; };
 		A0B267782624DFA10090E4ED /* STTrashVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B267772624DFA10090E4ED /* STTrashVM.swift */; };
@@ -721,6 +723,7 @@
 		A0AAA93A261C7C33009E9F51 /* STSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSettingsVC.swift; sourceTree = "<group>"; };
 		A0AAA943261C7D6E009E9F51 /* STBackupPhraseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBackupPhraseVC.swift; sourceTree = "<group>"; };
 		A0ABFF8B26592E2A009CB7B5 /* Sequence+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Operation.swift"; sourceTree = "<group>"; };
+		A0AF6536287DAEB5003BDDD4 /* IImportable+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IImportable+PHAsset.swift"; sourceTree = "<group>"; };
 		A0B267732624D7B30090E4ED /* STCollectionSyncViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STCollectionSyncViewController.swift; sourceTree = "<group>"; };
 		A0B267772624DFA10090E4ED /* STTrashVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashVM.swift; sourceTree = "<group>"; };
 		A0B267832624E0650090E4ED /* STTrashHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashHeaderView.swift; sourceTree = "<group>"; };
@@ -869,6 +872,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A025BA35287C741A00993CDB /* StingleRoot.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2133,7 +2137,7 @@
 		A09A95CA276A8ED900B25569 /* Importer */ = {
 			isa = PBXGroup;
 			children = (
-				A065508A27A0BB14008553DA /* IImportable.swift */,
+				A0AF6538287DAEB9003BDDD4 /* IImportable */,
 				A0287EE026D1761D009E002B /* STImporter.swift */,
 				A09A95CB276A926B00B25569 /* STFileAutoImporter.swift */,
 			);
@@ -2368,6 +2372,15 @@
 				A0D4E83426C81CF300556871 /* Items */,
 			);
 			path = BackupPhrase;
+			sourceTree = "<group>";
+		};
+		A0AF6538287DAEB9003BDDD4 /* IImportable */ = {
+			isa = PBXGroup;
+			children = (
+				A065508A27A0BB14008553DA /* IImportable.swift */,
+				A0AF6536287DAEB5003BDDD4 /* IImportable+PHAsset.swift */,
+			);
+			path = IImportable;
 			sourceTree = "<group>";
 		};
 		A0B152DE2636F8EB00D36619 /* Shared */ = {
@@ -3314,6 +3327,7 @@
 				A09FE6B42876C95A00CBA53E /* STAssetResourceLoader+NetworkReader.swift in Sources */,
 				A09FE6DA2876D0C900CBA53E /* STDownloadNetworkOperation.swift in Sources */,
 				A09FE6D62876D0C900CBA53E /* STNetworkOperationDecodable.swift in Sources */,
+				A0AF6537287DAEB5003BDDD4 /* IImportable+PHAsset.swift in Sources */,
 				A09FE6E42876D0D400CBA53E /* STContactRequest.swift in Sources */,
 				A09FE66D2876C20000CBA53E /* STFileAutoImporter.swift in Sources */,
 				A09FE68F2876C84000CBA53E /* STLibrary+Delete.swift in Sources */,
@@ -3847,7 +3861,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -3932,7 +3946,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -4017,7 +4031,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -4096,7 +4110,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -4248,6 +4262,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = FileSharing/FileSharing.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -4329,6 +4344,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = FileSharing/FileSharing.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;

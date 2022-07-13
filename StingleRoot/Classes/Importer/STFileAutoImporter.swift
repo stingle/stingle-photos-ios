@@ -251,10 +251,12 @@ public extension STImporter.AutoImporter {
             
     class Operation: STOperation<Int?> {
         
+        typealias Importable = STImporter.GaleryFileAssetImportable
+                
         let date: Date?
         let fetchLimit: Int
         let importQueue: STOperationQueue
-        private weak var importer: STImporter.GaleryFileImporter?
+        private weak var importer: STImporter.GaleryAssetFileImporter?
         private var progress: Progress
         private var isCancel = false
         
@@ -294,13 +296,13 @@ public extension STImporter.AutoImporter {
         //MARK: - Private methods
         
         private func enumerateObjects() {
-            var importFiles = [STImporter.GaleryFileImportable]()
+            var importFiles = [Importable]()
             self.enumerateObjects { asset, index, stop in
                 if self.isExpired {
                     stop.pointee = true
                     return
                 }
-                let importFile = STImporter.GaleryFileImportable(asset: asset)
+                let importFile = STImporter.GaleryFileAssetImportable(asset: asset)
                 importFiles.append(importFile)
             }
             guard !self.isExpired else {
@@ -309,7 +311,7 @@ public extension STImporter.AutoImporter {
             self.startImport(importFiles: importFiles)
         }
         
-        private func startImport(importFiles: [STImporter.GaleryFileImportable]) {
+        private func startImport(importFiles: [Importable]) {
             
             guard let queue = self.delegate?.underlyingQueue else {
                 self.responseFailed(error: AutoImporterError.canceled)
