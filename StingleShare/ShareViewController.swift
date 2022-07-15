@@ -45,6 +45,7 @@ class ShareViewController: UIViewController {
     //MARK: - Private methods
     
     private func manageImages2() {
+        self.view.backgroundColor = .red
         let content = self.extensionContext!.inputItems[0] as! NSExtensionItem
         guard let attachments = content.attachments, !attachments.isEmpty else {
             self.endProcess()

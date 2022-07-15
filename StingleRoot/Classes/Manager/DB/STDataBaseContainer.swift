@@ -71,73 +71,51 @@ public class STDataBaseContainer {
         }
 
         let persistentContainer = NSPersistentContainer(name: self.modelName, managedObjectModel: model)
-
-        let environment = STEnvironment.current
-        let id = "group." + environment.appFileSharingBundleId
         
-        let storeURL = URL.storeURL(for: id, databaseName: environment.productName)
-        let storeDescription = NSPersistentStoreDescription(url: storeURL)
-        persistentContainer.persistentStoreDescriptions = [storeDescription]
+        if !self.shouldMigrate() {
+            let environment = STEnvironment.current
+            let id = "group." + environment.appFileSharingBundleId
+            let storeURL = URL.storeURL(for: id, databaseName: self.modelName)
+            let storeDescription = NSPersistentStoreDescription(url: storeURL)
+            persistentContainer.persistentStoreDescriptions = [storeDescription]
+        }
+        
         
         persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         persistentContainer.viewContext.undoManager = nil
         persistentContainer.viewContext.shouldDeleteInaccessibleFaults = true
-        
         persistentContainer.loadPersistentStores(completionHandler: { (storeDescription, error) in
+
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
+            } else  {
+                do {
+                    try self.migraIfNeeded(persistentContainer: persistentContainer)
+                } catch {
+                    fatalError("Unresolved error \(error)")
+                }
             }
         })
    
         return persistentContainer
     }
     
-    private func getDefaultContaner() -> NSPersistentContainer {
-        return self.createContaner()
-    }
-    
-    private func createContaner<T: NSPersistentContainer>() -> T {
-                
-        guard let model = NSManagedObjectModel.mergedModel(from: self.modelBundles) else {
-            fatalError("model not found")
-        }
-        let container = T(name: self.modelName, managedObjectModel: model)
-        
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        container.viewContext.undoManager = nil
-        container.viewContext.shouldDeleteInaccessibleFaults = true
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        
-        
-        return container
-    }
     
 }
 
 public extension URL {
 
     static func storeURL(for appGroup: String, databaseName: String) -> URL {
+        return self.containerURL(for: appGroup).appendingPathComponent("\(databaseName).sqlite")
+    }
+    
+    static func containerURL(for appGroup: String) -> URL {
         guard let fileContainer = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) else {
             fatalError("Shared file container could not be created.")
         }
-        return fileContainer.appendingPathComponent("\(databaseName).sqlite")
+        return fileContainer
     }
-}
-
-class SharedPersistentContainer: NSPersistentContainer {
-//
-//    override open class func defaultDirectoryURL() -> URL {
-//        let environment = STEnvironment.current
-//        let id = "group." + environment.appFileSharingBundleId
-//        var storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: id)
-//        storeURL = storeURL?.appendingPathComponent(environment.productName)
-//        return storeURL!
-//    }
-//
+    
 }
 
 extension NSManagedObjectContext {
@@ -156,6 +134,61 @@ extension NSManagedObjectContext {
             result = executeBlock()
         })
         return result
+    }
+    
+}
+
+
+extension STDataBaseContainer {
+    
+    static let currentDBVersion:Int = 1
+    
+    func migratedVersion() -> Int {
+        return UserDefaults.standard.integer(forKey: "data.base.container.migrated.version.\(self.modelName)")
+    }
+    
+    func shouldMigrate() -> Bool {
+        return Self.currentDBVersion != self.migratedVersion() && !STEnvironment.current.appRunIsExtension
+    }
+    
+    func updateMigrateVersion(version: Int) {
+        UserDefaults.standard.set(version, forKey: "data.base.container.migrated.version.\(self.modelName)")
+        UserDefaults.standard.synchronize()
+    }
+    
+    func migraIfNeeded(persistentContainer: NSPersistentContainer) throws {
+        
+        guard self.shouldMigrate() else {
+            return
+        }
+        
+        let currentDBVersion = Self.currentDBVersion
+        for index in self.migratedVersion()..<currentDBVersion {
+            try self.migrate(to: index, persistentContainer: persistentContainer)
+        }
+        
+    }
+    
+    func migrate(to version: Int, persistentContainer: NSPersistentContainer) throws {
+        switch version {
+        case 0:
+            try self.migrateV0_1(persistentContainer: persistentContainer)
+        default:
+            break
+        }
+    }
+    
+    func migrateV0_1(persistentContainer: NSPersistentContainer) throws {
+        guard let oldStore =  persistentContainer.persistentStoreCoordinator.persistentStores.first else {
+            return
+        }
+        let environment = STEnvironment.current
+        let id = "group." + environment.appFileSharingBundleId
+        let storeURL = URL.storeURL(for: id, databaseName: self.modelName)
+        
+        try persistentContainer.persistentStoreCoordinator.migratePersistentStore(oldStore, to: storeURL, options: nil, withType: NSSQLiteStoreType)
+        self.updateMigrateVersion(version: 1)
+        
     }
     
 }
