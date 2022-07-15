@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A0A80838286B21E500093085"
-               BuildableName = "FileSharing.appex"
-               BlueprintName = "FileSharing"
+               BlueprintIdentifier = "A0844C7F28804F810088FF60"
+               BuildableName = "StingleShare.appex"
+               BlueprintName = "StingleShare"
                ReferencedContainer = "container:Stingle.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -57,12 +57,8 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
-      <RemoteRunnable
-         runnableDebuggingMode = "1"
-         BundleIdentifier = "com.apple.mobileslideshow"
-         RemotePath = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/Applications/MobileSlideShow.app">
-      </RemoteRunnable>
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A02203BC25EED86800D07C98"
@@ -70,10 +66,10 @@
             BlueprintName = "Stingle"
             ReferencedContainer = "container:Stingle.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release-Prod"
+      buildConfiguration = "Release-Dev"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -95,7 +91,7 @@
       buildConfiguration = "Debug-Dev">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release-Prod"
+      buildConfiguration = "Release-Dev"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

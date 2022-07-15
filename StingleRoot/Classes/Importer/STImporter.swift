@@ -65,7 +65,7 @@ public enum STImporter {
             self.responseQueue = operationQueue.underlyingQueue ?? STImporter.importerDispatchQueue
             self.operationQueue = operationQueue
             self.uploadIfNeeded = uploadIfNeeded
-            
+                        
             defer {
                 self.startImport(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
             }
@@ -80,11 +80,21 @@ public enum STImporter {
         fileprivate func addDB(file: File, reloadData: Bool) {
             fatalError("implement chide classes")
         }
-        
+                
         private func startImport(startHendler:  @escaping Hendler, progressHendler: @escaping ProgressHendler, complition:  @escaping Complition) {
-                        
             self.responseQueue.asyncAfter(deadline: .now() + 0.1) {
+                self.startImport(start: startHendler)
                 self.importFiles(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
+            }
+        }
+        
+        private func startImport(start: @escaping Hendler) {
+            self.responseQueue.async(flags: .barrier) {
+                self.responseQueue.async {
+                    let progress = Importer.Progress(totalUnitCount: self.importFiles.count, completedUnitCount: .zero, fractionCompleted: .zero, importingFile: nil)
+                    start()
+                    self.startHendler?(progress)
+                }
             }
         }
         

@@ -173,6 +173,20 @@ public extension UIImage {
         return mutableData as Data
     }
 
+}
+
+public extension UTType {
     
+    var headerFileType: STHeader.FileType? {
+        switch self {
+        case .heic, .rawImage, .tiff, .gif, .heif, .svg, .ico, .jpeg, .image, .png, .icns, .bmp, .livePhoto, .webP:
+            return .image
+        case .avi, .appleProtectedMPEG4Video, .quickTimeMovie, .movie, .mpeg4Movie, .mpeg2Video, .mpeg, .video:
+            return .image
+        default:
+            return nil
+        }
+    }
+
 }
 

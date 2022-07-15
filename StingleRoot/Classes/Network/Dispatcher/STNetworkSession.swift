@@ -35,7 +35,7 @@ class STNetworkSession: NSObject {
 
 extension STNetworkSession {
         
-    func upload(request: STNetworkUploadTask.Request, completion: @escaping (STNetworkDispatcher.Result<Data>) -> Void, progress: @escaping (Progress) -> Void) -> INetworkSessionTask {
+    @discardableResult func upload(request: STNetworkUploadTask.Request, completion: @escaping (STNetworkDispatcher.Result<Data>) -> Void, progress: @escaping (Progress) -> Void) -> INetworkSessionTask {
         let taks = STNetworkUploadTask(session: self.urlSession, request: request, queue: self.rootQueue, completion: completion, progress: progress)
        
         taks.start { [weak self] urlTask in
@@ -46,8 +46,29 @@ extension STNetworkSession {
         return taks
     }
     
-    func dataTask(request: STNetworkDataTask.Request, completion: @escaping (STNetworkDispatcher.Result<Data>) -> Void) -> INetworkSessionTask {
+    @discardableResult func dataTask(request: STNetworkDataTask.Request, completion: @escaping (STNetworkDispatcher.Result<Data>) -> Void) -> INetworkSessionTask {
         let taks = STNetworkDataTask(session: self.urlSession, request: request, queue: self.rootQueue, completion: completion)
+        taks.start { [weak self] urlTask in
+            self?.rootQueue.async(flags: .barrier) { [weak self] in
+                self?.tasks[urlTask.taskIdentifier] = taks
+            }
+        }
+        return taks
+    }
+    
+    @discardableResult func downloadTask(request: STNetworkDownloadTask.Request, completion: @escaping (STNetworkDispatcher.Result<Data>) -> Void, progress: @escaping (Progress) -> Void) -> INetworkSessionTask {
+        let taks = STNetworkDownloadTask(session: self.urlSession, request: request, queue: self.rootQueue, completion: completion, progress: progress)
+        taks.start { [weak self] urlTask in
+            self?.rootQueue.async(flags: .barrier) { [weak self] in
+                self?.tasks[urlTask.taskIdentifier] = taks
+            }
+        }
+        return taks
+    }
+    
+    @discardableResult func downloadTask(url: URL, saveFileURL: URL, completion: @escaping (STNetworkDispatcher.Result<Data>) -> Void, progress: @escaping (Progress) -> Void) -> INetworkSessionTask {
+        let request = STNetworkDownloadTask.Request(url: url, saveFileURL: saveFileURL)
+        let taks = STNetworkDownloadTask(session: self.urlSession, request: request, queue: self.rootQueue, completion: completion, progress: progress)
         taks.start { [weak self] urlTask in
             self?.rootQueue.async(flags: .barrier) { [weak self] in
                 self?.tasks[urlTask.taskIdentifier] = taks
@@ -86,9 +107,29 @@ extension STNetworkSession: URLSessionDataDelegate {
         }
     }
     
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.tasks[downloadTask.taskIdentifier]?.urlSession(session, downloadTask: downloadTask, didFinishDownloadingTo: location)
+        }
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.tasks[downloadTask.taskIdentifier]?.urlSession(session, downloadTask: downloadTask, didWriteData: bytesWritten, totalBytesWritten: totalBytesWritten, totalBytesExpectedToWrite: totalBytesExpectedToWrite)
+        }
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.tasks[downloadTask.taskIdentifier]?.urlSession(session, downloadTask: downloadTask, didResumeAtOffset: fileOffset, expectedTotalBytes: expectedTotalBytes)
+        }
+    }
+    
 }
 
 extension STNetworkSession {
+    
+    static let `default` = STNetworkSession(configuration: URLSessionConfiguration.default)
     
     class var backroundConfiguration: URLSessionConfiguration {
         let appBundleName = Bundle.main.bundleURL.lastPathComponent.lowercased().replacingOccurrences(of: " ", with: ".")
@@ -98,5 +139,5 @@ extension STNetworkSession {
         configuration.sessionSendsLaunchEvents = true
         return configuration
     }
-        
+            
 }

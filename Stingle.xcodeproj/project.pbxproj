@@ -56,7 +56,6 @@
 		A02204AB25EEDC0400D07C98 /* STSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045625EEDC0400D07C98 /* STSignInVC.swift */; };
 		A02204AC25EEDC0400D07C98 /* STSignInVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022045725EEDC0400D07C98 /* STSignInVM.swift */; };
 		A02204F225EEE12000D07C98 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A02204F425EEE12000D07C98 /* Localizable.strings */; };
-		A025BA35287C741A00993CDB /* StingleRoot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */; };
 		A027CE2526B2139F00829162 /* STChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2426B2139F00829162 /* STChangePasswordVC.swift */; };
 		A027CE2826B213B300829162 /* STChangePasswordVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027CE2726B213B300829162 /* STChangePasswordVM.swift */; };
 		A02ED2EB2603FD2200F10D58 /* STImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02ED2EA2603FD2200F10D58 /* STImageView.swift */; };
@@ -76,6 +75,8 @@
 		A03DAFC928770F2B00EA3B44 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A03DAFC828770F2B00EA3B44 /* KeychainSwift */; };
 		A03E21E6278397930071A2AF /* STAutoImportDialogTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03E21E5278397930071A2AF /* STAutoImportDialogTableVC.swift */; };
 		A040E21E269A356300003199 /* STGalleryTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A040E21D269A356300003199 /* STGalleryTabBarVC.swift */; };
+		A041AD04287F110E00F7CF3F /* IImportable+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A041AD03287F110E00F7CF3F /* IImportable+URL.swift */; };
+		A041AD06287F305700F7CF3F /* STNetworkDownloadTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A041AD05287F305700F7CF3F /* STNetworkDownloadTask.swift */; };
 		A04219962690983C001FBFBF /* STTrashFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */; };
 		A04561C026AF652900DDFE53 /* STAccountVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04561BF26AF652900DDFE53 /* STAccountVM.swift */; };
 		A049459C2611CDF4008D5E48 /* STView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A049459B2611CDF4008D5E48 /* STView.swift */; };
@@ -88,7 +89,6 @@
 		A05006D8273D9627004FE229 /* STNavigationAnimatorInteractivePop.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05006D7273D9627004FE229 /* STNavigationAnimatorInteractivePop.swift */; };
 		A052FA96263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A052FA95263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift */; };
 		A052FA98263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A052FA97263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib */; };
-		A0556B7F287C23D900D34157 /* URL+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0556B7E287C23D900D34157 /* URL+Operation.swift */; };
 		A05661FD2753A163006A1295 /* STAboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05661FC2753A163006A1295 /* STAboutVC.swift */; };
 		A05661FF2753A1CF006A1295 /* STAboutVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05661FE2753A1CF006A1295 /* STAboutVM.swift */; };
 		A059D1D626C99AEB0045AC61 /* STBackupInputPhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059D1D526C99AEB0045AC61 /* STBackupInputPhraseView.swift */; };
@@ -143,6 +143,10 @@
 		A0794B9B269E433D00B40FE9 /* STSettingsSwichTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0794B99269E433D00B40FE9 /* STSettingsSwichTableViewCell.swift */; };
 		A0794B9C269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0794B9A269E433D00B40FE9 /* STSettingsSwichTableViewCell.xib */; };
 		A07B45B626C0263A003EB470 /* STAdvancedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B45B526C0263A003EB470 /* STAdvancedVM.swift */; };
+		A0844C8328804F810088FF60 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0844C8228804F810088FF60 /* ShareViewController.swift */; };
+		A0844C8628804F810088FF60 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0844C8428804F810088FF60 /* MainInterface.storyboard */; };
+		A0844C8A28804F810088FF60 /* StingleShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A0844C8028804F810088FF60 /* StingleShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A0844C92288054D90088FF60 /* StingleRoot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */; };
 		A08512D1277A5C640006A2DD /* STAutoImportDialogVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */; };
 		A08512D3277A6F060006A2DD /* STAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08512D2277A6F060006A2DD /* STAlertViewController.swift */; };
 		A08F27A62785ACBC00EF8BE4 /* STAutoImportDialogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F27A52785ACBC00EF8BE4 /* STAutoImportDialogVM.swift */; };
@@ -310,9 +314,6 @@
 		A0A2567627DA113F00B2C645 /* STBGTaskScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */; };
 		A0A7974A264FF41F00917C91 /* STFilesDownloaderActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A79749264FF41F00917C91 /* STFilesDownloaderActivityVC.swift */; };
 		A0A7974C264FF42F00917C91 /* STFilesDownloaderActivityVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A7974B264FF42F00917C91 /* STFilesDownloaderActivityVM.swift */; };
-		A0A8083C286B21E500093085 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A8083B286B21E500093085 /* ShareViewController.swift */; };
-		A0A8083F286B21E500093085 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0A8083D286B21E500093085 /* MainInterface.storyboard */; };
-		A0A80843286B21E500093085 /* FileSharing.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A0A80839286B21E500093085 /* FileSharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A0A97675263DCE5E00E391D1 /* STSharedMembersVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A97674263DCE5E00E391D1 /* STSharedMembersVM.swift */; };
 		A0A9767A263DD78400E391D1 /* STSharedMembersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A97678263DD78400E391D1 /* STSharedMembersTableViewCell.swift */; };
 		A0A9767B263DD78400E391D1 /* STSharedMembersTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0A97679263DD78400E391D1 /* STSharedMembersTableViewCell.xib */; };
@@ -406,19 +407,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A0844C8828804F810088FF60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A02203B525EED86800D07C98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A0844C7F28804F810088FF60;
+			remoteInfo = StingleShare;
+		};
 		A0A06C242875DD7A0087B9FD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A02203B525EED86800D07C98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A0A06C1D2875DD7A0087B9FD;
 			remoteInfo = StingleRoot;
-		};
-		A0A80841286B21E500093085 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A02203B525EED86800D07C98 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A0A80838286B21E500093085;
-			remoteInfo = FileSharing;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -440,7 +441,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				A0A80843286B21E500093085 /* FileSharing.appex in Embed App Extensions */,
+				A0844C8A28804F810088FF60 /* StingleShare.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -569,6 +570,8 @@
 		A03D555D26AC6596008705F2 /* STFileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileSystem.swift; sourceTree = "<group>"; };
 		A03E21E5278397930071A2AF /* STAutoImportDialogTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAutoImportDialogTableVC.swift; sourceTree = "<group>"; };
 		A040E21D269A356300003199 /* STGalleryTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGalleryTabBarVC.swift; sourceTree = "<group>"; };
+		A041AD03287F110E00F7CF3F /* IImportable+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IImportable+URL.swift"; sourceTree = "<group>"; };
+		A041AD05287F305700F7CF3F /* STNetworkDownloadTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNetworkDownloadTask.swift; sourceTree = "<group>"; };
 		A04219952690983C001FBFBF /* STTrashFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STTrashFileViewerVM.swift; sourceTree = "<group>"; };
 		A042199826909E58001FBFBF /* STFileWorker+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STFileWorker+Download.swift"; sourceTree = "<group>"; };
 		A042199A2690A23C001FBFBF /* STFilesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesRequest.swift; sourceTree = "<group>"; };
@@ -596,7 +599,6 @@
 		A050C50827066B23007587B5 /* STAssetResourceLoader+LocaleReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAssetResourceLoader+LocaleReader.swift"; sourceTree = "<group>"; };
 		A052FA95263C9C7200946A8F /* STFilesActionTabBarAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesActionTabBarAccessoryView.swift; sourceTree = "<group>"; };
 		A052FA97263C9C7E00946A8F /* STFilesActionTabBarAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilesActionTabBarAccessoryView.xib; sourceTree = "<group>"; };
-		A0556B7E287C23D900D34157 /* URL+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Operation.swift"; sourceTree = "<group>"; };
 		A05661FC2753A163006A1295 /* STAboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAboutVC.swift; sourceTree = "<group>"; };
 		A05661FE2753A1CF006A1295 /* STAboutVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAboutVM.swift; sourceTree = "<group>"; };
 		A057C9C32869DA9300BA01B4 /* UIImage+Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
@@ -671,6 +673,11 @@
 		A07B45B526C0263A003EB470 /* STAdvancedVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAdvancedVM.swift; sourceTree = "<group>"; };
 		A07B5E04278CA3BE006BE012 /* STAppLockUnlocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAppLockUnlocker.swift; sourceTree = "<group>"; };
 		A0821FDC27A1F3DE000A341D /* STMutableProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STMutableProgress.swift; sourceTree = "<group>"; };
+		A0844C8028804F810088FF60 /* StingleShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StingleShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0844C8228804F810088FF60 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		A0844C8528804F810088FF60 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		A0844C8728804F810088FF60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A0844C8B28804F820088FF60 /* StingleShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StingleShare.entitlements; sourceTree = "<group>"; };
 		A08512D0277A5C640006A2DD /* STAutoImportDialogVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAutoImportDialogVC.swift; sourceTree = "<group>"; };
 		A08512D2277A6F060006A2DD /* STAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlertViewController.swift; sourceTree = "<group>"; };
 		A086FD1525F5A10800A8BC9C /* STCDContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STCDContact.swift; sourceTree = "<group>"; };
@@ -709,11 +716,6 @@
 		A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBGTaskScheduler.swift; sourceTree = "<group>"; };
 		A0A79749264FF41F00917C91 /* STFilesDownloaderActivityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesDownloaderActivityVC.swift; sourceTree = "<group>"; };
 		A0A7974B264FF42F00917C91 /* STFilesDownloaderActivityVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesDownloaderActivityVM.swift; sourceTree = "<group>"; };
-		A0A80839286B21E500093085 /* FileSharing.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FileSharing.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		A0A8083B286B21E500093085 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
-		A0A8083E286B21E500093085 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		A0A80840286B21E500093085 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A0A80844286B21E500093085 /* FileSharing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FileSharing.entitlements; sourceTree = "<group>"; };
 		A0A97674263DCE5E00E391D1 /* STSharedMembersVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSharedMembersVM.swift; sourceTree = "<group>"; };
 		A0A97678263DD78400E391D1 /* STSharedMembersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSharedMembersTableViewCell.swift; sourceTree = "<group>"; };
 		A0A97679263DD78400E391D1 /* STSharedMembersTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STSharedMembersTableViewCell.xib; sourceTree = "<group>"; };
@@ -858,6 +860,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0844C7D28804F810088FF60 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0844C92288054D90088FF60 /* StingleRoot.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A0A06C1B2875DD7A0087B9FD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -865,14 +875,6 @@
 				A03DAFC928770F2B00EA3B44 /* KeychainSwift in Frameworks */,
 				A03DAFC528770F2300EA3B44 /* Alamofire in Frameworks */,
 				A03DAFC728770F2700EA3B44 /* Sodium in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A0A80836286B21E500093085 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A025BA35287C741A00993CDB /* StingleRoot.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -938,6 +940,7 @@
 				A00ADC0527B94FE70046CA38 /* STNetworkTask.swift */,
 				A00ADC0827B954250046CA38 /* STNetworkUploadTask.swift */,
 				A0C3669727C4FE6D00A9DBD2 /* STNetworkDataTask.swift */,
+				A041AD05287F305700F7CF3F /* STNetworkDownloadTask.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -1041,7 +1044,7 @@
 			children = (
 				A02203BF25EED86800D07C98 /* Stingle */,
 				A0A06C1F2875DD7A0087B9FD /* StingleRoot */,
-				A0A8083A286B21E500093085 /* FileSharing */,
+				A0844C8128804F810088FF60 /* StingleShare */,
 				A02203BE25EED86800D07C98 /* Products */,
 				73A53619DBCBC97AD1A4990B /* Frameworks */,
 			);
@@ -1051,8 +1054,8 @@
 			isa = PBXGroup;
 			children = (
 				A02203BD25EED86800D07C98 /* Stingle.app */,
-				A0A80839286B21E500093085 /* FileSharing.appex */,
 				A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */,
+				A0844C8028804F810088FF60 /* StingleShare.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1449,7 +1452,6 @@
 		A033D6EA2601491B00E6AA83 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				A09FE70D2876DECB00CBA53E /* Uitils */,
 				A09FE6722876C6AE00CBA53E /* Manager */,
 				A033D6EF260149E000E6AA83 /* UI */,
 				A022043025EEDC0300D07C98 /* Extensions */,
@@ -2072,6 +2074,17 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		A0844C8128804F810088FF60 /* StingleShare */ = {
+			isa = PBXGroup;
+			children = (
+				A0844C8B28804F820088FF60 /* StingleShare.entitlements */,
+				A0844C8228804F810088FF60 /* ShareViewController.swift */,
+				A0844C8428804F810088FF60 /* MainInterface.storyboard */,
+				A0844C8728804F810088FF60 /* Info.plist */,
+			);
+			path = StingleShare;
+			sourceTree = "<group>";
+		};
 		A08512CF277A5C400006A2DD /* AutoImport */ = {
 			isa = PBXGroup;
 			children = (
@@ -2197,16 +2210,8 @@
 				A02ED2E72603EED800F10D58 /* UIImageView+Operation.swift */,
 				A057C9C32869DA9300BA01B4 /* UIImage+Gif.swift */,
 				A005FAFA25FF4D8F00E7D8B0 /* UICollectionView+Operation.swift */,
-				A0556B7E287C23D900D34157 /* URL+Operation.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		A09FE70D2876DECB00CBA53E /* Uitils */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Uitils;
 			sourceTree = "<group>";
 		};
 		A09FE7142876E86000CBA53E /* UI */ = {
@@ -2263,17 +2268,6 @@
 				A0A7974B264FF42F00917C91 /* STFilesDownloaderActivityVM.swift */,
 			);
 			path = Downloader;
-			sourceTree = "<group>";
-		};
-		A0A8083A286B21E500093085 /* FileSharing */ = {
-			isa = PBXGroup;
-			children = (
-				A0A80844286B21E500093085 /* FileSharing.entitlements */,
-				A0A8083B286B21E500093085 /* ShareViewController.swift */,
-				A0A8083D286B21E500093085 /* MainInterface.storyboard */,
-				A0A80840286B21E500093085 /* Info.plist */,
-			);
-			path = FileSharing;
 			sourceTree = "<group>";
 		};
 		A0A97676263DD71900E391D1 /* Items */ = {
@@ -2379,6 +2373,7 @@
 			children = (
 				A065508A27A0BB14008553DA /* IImportable.swift */,
 				A0AF6536287DAEB5003BDDD4 /* IImportable+PHAsset.swift */,
+				A041AD03287F110E00F7CF3F /* IImportable+URL.swift */,
 			);
 			path = IImportable;
 			sourceTree = "<group>";
@@ -2885,8 +2880,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				A0A80842286B21E500093085 /* PBXTargetDependency */,
 				A0A06C252875DD7A0087B9FD /* PBXTargetDependency */,
+				A0844C8928804F810088FF60 /* PBXTargetDependency */,
 			);
 			name = Stingle;
 			packageProductDependencies = (
@@ -2895,6 +2890,23 @@
 			productName = Stingle;
 			productReference = A02203BD25EED86800D07C98 /* Stingle.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A0844C7F28804F810088FF60 /* StingleShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0844C8C28804F820088FF60 /* Build configuration list for PBXNativeTarget "StingleShare" */;
+			buildPhases = (
+				A0844C7C28804F810088FF60 /* Sources */,
+				A0844C7D28804F810088FF60 /* Frameworks */,
+				A0844C7E28804F810088FF60 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StingleShare;
+			productName = StingleShare;
+			productReference = A0844C8028804F810088FF60 /* StingleShare.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		A0A06C1D2875DD7A0087B9FD /* StingleRoot */ = {
 			isa = PBXNativeTarget;
@@ -2919,23 +2931,6 @@
 			productReference = A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		A0A80838286B21E500093085 /* FileSharing */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A0A80845286B21E500093085 /* Build configuration list for PBXNativeTarget "FileSharing" */;
-			buildPhases = (
-				A0A80835286B21E500093085 /* Sources */,
-				A0A80836286B21E500093085 /* Frameworks */,
-				A0A80837286B21E500093085 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = FileSharing;
-			productName = FileSharing;
-			productReference = A0A80839286B21E500093085 /* FileSharing.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2949,10 +2944,10 @@
 					A02203BC25EED86800D07C98 = {
 						CreatedOnToolsVersion = 12.4;
 					};
-					A0A06C1D2875DD7A0087B9FD = {
+					A0844C7F28804F810088FF60 = {
 						CreatedOnToolsVersion = 13.4.1;
 					};
-					A0A80838286B21E500093085 = {
+					A0A06C1D2875DD7A0087B9FD = {
 						CreatedOnToolsVersion = 13.4.1;
 					};
 				};
@@ -2976,8 +2971,8 @@
 			projectRoot = "";
 			targets = (
 				A02203BC25EED86800D07C98 /* Stingle */,
-				A0A80838286B21E500093085 /* FileSharing */,
 				A0A06C1D2875DD7A0087B9FD /* StingleRoot */,
+				A0844C7F28804F810088FF60 /* StingleShare */,
 			);
 		};
 /* End PBXProject section */
@@ -3037,18 +3032,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0844C7E28804F810088FF60 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0844C8628804F810088FF60 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A0A06C1C2875DD7A0087B9FD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A0A80837286B21E500093085 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A0A8083F286B21E500093085 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3246,6 +3241,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0844C7C28804F810088FF60 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0844C8328804F810088FF60 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A0A06C1A2875DD7A0087B9FD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3278,7 +3281,6 @@
 				A09FE67B2876C72700CBA53E /* STFileDiskCache.swift in Sources */,
 				A09FE6AE2876C94900CBA53E /* English.swift in Sources */,
 				A09FE6C12876CA2600CBA53E /* STAppSettings+Import.swift in Sources */,
-				A0556B7F287C23D900D34157 /* URL+Operation.swift in Sources */,
 				A09FE67C2876C72700CBA53E /* STFileMemoryCache.swift in Sources */,
 				A09FE6862876C83500CBA53E /* STAuth.swift in Sources */,
 				A09FE6712876C69C00CBA53E /* STAppLockUnlocker.swift in Sources */,
@@ -3360,6 +3362,7 @@
 				A09FE6CA2876CA8800CBA53E /* String+Extensions.swift in Sources */,
 				A09FE6732876C6FA00CBA53E /* STFileSystem.swift in Sources */,
 				A09FE6882876C83500CBA53E /* STBillingInfo.swift in Sources */,
+				A041AD06287F305700F7CF3F /* STNetworkDownloadTask.swift in Sources */,
 				A09FE69C2876C86C00CBA53E /* STCDGaleryFile.swift in Sources */,
 				A09FE6AA2876C93F00CBA53E /* STLogger.swift in Sources */,
 				A09FE6A32876C93F00CBA53E /* STFileReader.swift in Sources */,
@@ -3379,6 +3382,7 @@
 				A03DAFC228770F1600EA3B44 /* STCrypto+Header.swift in Sources */,
 				A09FE6912876C84000CBA53E /* STSync.swift in Sources */,
 				A09FE6752876C70400CBA53E /* STFileUploaderOperation.swift in Sources */,
+				A041AD04287F110E00F7CF3F /* IImportable+URL.swift in Sources */,
 				A09FE6C92876CA8800CBA53E /* Codable+Operation.swift in Sources */,
 				A09FE6A42876C93F00CBA53E /* STUnfairLock.swift in Sources */,
 				A09FE70F2876DF0300CBA53E /* STEnvironment.swift in Sources */,
@@ -3407,26 +3411,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A0A80835286B21E500093085 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A0A8083C286B21E500093085 /* ShareViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A0844C8928804F810088FF60 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A0844C7F28804F810088FF60 /* StingleShare */;
+			targetProxy = A0844C8828804F810088FF60 /* PBXContainerItemProxy */;
+		};
 		A0A06C252875DD7A0087B9FD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A0A06C1D2875DD7A0087B9FD /* StingleRoot */;
 			targetProxy = A0A06C242875DD7A0087B9FD /* PBXContainerItemProxy */;
-		};
-		A0A80842286B21E500093085 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A0A80838286B21E500093085 /* FileSharing */;
-			targetProxy = A0A80841286B21E500093085 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3447,10 +3443,10 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
-		A0A8083D286B21E500093085 /* MainInterface.storyboard */ = {
+		A0844C8428804F810088FF60 /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A0A8083E286B21E500093085 /* Base */,
+				A0844C8528804F810088FF60 /* Base */,
 			);
 			name = MainInterface.storyboard;
 			sourceTree = "<group>";
@@ -3530,6 +3526,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
 				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3541,7 +3538,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3623,6 +3620,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
 				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3634,7 +3632,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3711,6 +3709,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
 				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3722,7 +3721,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3799,6 +3798,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_DEBUG_INFORMATION_LEVEL = default;
 				CODE_SIGN_ENTITLEMENTS = Stingle/Stingle.entitlements;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3810,13 +3810,326 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Release-Dev";
+		};
+		A0844C8D28804F820088FF60 /* Debug-Dev */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = StingleShare/StingleShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StingleShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Stringle Share";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev.file.sharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-Dev";
+		};
+		A0844C8E28804F820088FF60 /* Debug-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = StingleShare/StingleShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StingleShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Stringle Share";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.file.sharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-Prod";
+		};
+		A0844C8F28804F820088FF60 /* Release-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = StingleShare/StingleShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StingleShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Stringle Share";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.file.sharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-Prod";
+		};
+		A0844C9028804F820088FF60 /* Release-Dev */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = StingleShare/StingleShare.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StingleShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Stringle Share";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev.file.sharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = "Release-Dev";
 		};
@@ -4101,6 +4414,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -4148,320 +4462,6 @@
 			};
 			name = "Release-Dev";
 		};
-		A0A80846286B21E500093085 /* Debug-Dev */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FileSharing/FileSharing.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FileSharing/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FileSharing;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_FILE_SHARING_BUNDLE_ID)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = "Debug-Dev";
-		};
-		A0A80847286B21E500093085 /* Debug-Prod */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FileSharing/FileSharing.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = DK366LFCDT;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FileSharing/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FileSharing;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_FILE_SHARING_BUNDLE_ID)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = "Debug-Prod";
-		};
-		A0A80848286B21E500093085 /* Release-Prod */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FileSharing/FileSharing.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = DK366LFCDT;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FileSharing/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FileSharing;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_FILE_SHARING_BUNDLE_ID)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-Prod";
-		};
-		A0A80849286B21E500093085 /* Release-Dev */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = FileSharing/FileSharing.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = DK366LFCDT;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FileSharing/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FileSharing;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_FILE_SHARING_BUNDLE_ID)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-Dev";
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4487,6 +4487,17 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "Debug-Dev";
 		};
+		A0844C8C28804F820088FF60 /* Build configuration list for PBXNativeTarget "StingleShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0844C8D28804F820088FF60 /* Debug-Dev */,
+				A0844C8E28804F820088FF60 /* Debug-Prod */,
+				A0844C8F28804F820088FF60 /* Release-Prod */,
+				A0844C9028804F820088FF60 /* Release-Dev */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "Debug-Dev";
+		};
 		A0A06C282875DD7A0087B9FD /* Build configuration list for PBXNativeTarget "StingleRoot" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -4494,17 +4505,6 @@
 				A0A06C2A2875DD7A0087B9FD /* Debug-Prod */,
 				A0A06C2B2875DD7A0087B9FD /* Release-Prod */,
 				A0A06C2C2875DD7A0087B9FD /* Release-Dev */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Debug-Dev";
-		};
-		A0A80845286B21E500093085 /* Build configuration list for PBXNativeTarget "FileSharing" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A0A80846286B21E500093085 /* Debug-Dev */,
-				A0A80847286B21E500093085 /* Debug-Prod */,
-				A0A80848286B21E500093085 /* Release-Prod */,
-				A0A80849286B21E500093085 /* Release-Dev */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "Debug-Dev";

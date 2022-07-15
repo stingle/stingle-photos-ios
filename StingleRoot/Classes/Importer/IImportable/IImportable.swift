@@ -60,6 +60,7 @@ public extension IImportableFile {
                 return
             }
             do {
+                //TODO: Configure shearch indexes
                 let file = try weakSelf.createUploadFile(info: uploadInfo, progressHandler: { progress,stop in
                     progressValue = 0.25 + progress.fractionCompleted / (4 / 3)
                     totalProgress.completedUnitCount = Int64(progressValue * Double(totalProgress.totalUnitCount))

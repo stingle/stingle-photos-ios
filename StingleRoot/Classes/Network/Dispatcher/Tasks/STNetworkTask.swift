@@ -15,6 +15,10 @@ protocol INetworkSessionTask: INetworkTask {
     func urlSession(task: URLSessionTask, didCompleteWithError error: Error?)
     func urlSession(dataTask: URLSessionDataTask, didReceive data: Data)
     func urlSession(task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void)
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL)
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) 
 }
 
 protocol INetworkTaskRequest {
@@ -80,6 +84,10 @@ class STNetworkTask<UrlTask: URLSessionTask, Request: INetworkTaskRequest>: NSOb
     func didCompleteWithError(error: Error?) {}
     func didReceive(data: Data) {}
     func needNewBodyStream(completionHandler: @escaping (InputStream?) -> Void) {}
+    
+    func didFinishDownloadingTo(location: URL) {}
+    func didWriteData(bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {}
+    func didResumeAtOffset(fileOffset: Int64, expectedTotalBytes: Int64) {}
             
 }
 
@@ -166,4 +174,29 @@ extension STNetworkTask {
         self.needNewBodyStream(completionHandler: completionHandler)
     }
         
+}
+
+extension STNetworkTask {
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        guard downloadTask.taskIdentifier == self.urlTask?.taskIdentifier else {
+            return
+        }
+        self.didFinishDownloadingTo(location: location)
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        guard downloadTask.taskIdentifier == self.urlTask?.taskIdentifier else {
+            return
+        }
+        self.didWriteData(bytesWritten: bytesWritten, totalBytesWritten: totalBytesWritten, totalBytesExpectedToWrite: totalBytesExpectedToWrite)
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
+        guard downloadTask.taskIdentifier == self.urlTask?.taskIdentifier else {
+            return
+        }
+        self.didResumeAtOffset(fileOffset: fileOffset, expectedTotalBytes: expectedTotalBytes)
+    }
+    
 }

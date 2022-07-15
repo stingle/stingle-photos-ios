@@ -60,12 +60,29 @@ public class STDataBaseContainer {
         if STEnvironment.current.appRunIsExtension {
             return self.getSharedContaner()
         } else {
-            return self.getDefaultContaner()
+            return self.getSharedContaner()
         }
     }
     
-    private func getSharedContaner() -> SharedPersistentContainer {
-        return self.createContaner()
+    private func getSharedContaner() -> NSPersistentContainer {
+        
+        guard let model = NSManagedObjectModel.mergedModel(from: self.modelBundles) else {
+            fatalError("model not found")
+        }
+
+        let persistentContainer = SharedPersistentContainer(name: self.modelName, managedObjectModel: model)
+
+        persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
+        persistentContainer.viewContext.undoManager = nil
+        persistentContainer.viewContext.shouldDeleteInaccessibleFaults = true
+        
+        persistentContainer.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+   
+        return persistentContainer
     }
     
     private func getDefaultContaner() -> NSPersistentContainer {
@@ -73,21 +90,35 @@ public class STDataBaseContainer {
     }
     
     private func createContaner<T: NSPersistentContainer>() -> T {
+                
         guard let model = NSManagedObjectModel.mergedModel(from: self.modelBundles) else {
             fatalError("model not found")
         }
         let container = T(name: self.modelName, managedObjectModel: model)
+        
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.undoManager = nil
+        container.viewContext.shouldDeleteInaccessibleFaults = true
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        container.viewContext.undoManager = nil
-        container.viewContext.shouldDeleteInaccessibleFaults = true
+        
+        
         return container
     }
     
+}
+
+public extension URL {
+
+    static func storeURL(for appGroup: String, databaseName: String) -> URL {
+        guard let fileContainer = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) else {
+            fatalError("Shared file container could not be created.")
+        }
+        return fileContainer.appendingPathComponent("\(databaseName).sqlite")
+    }
 }
 
 class SharedPersistentContainer: NSPersistentContainer {
@@ -99,7 +130,7 @@ class SharedPersistentContainer: NSPersistentContainer {
         storeURL = storeURL?.appendingPathComponent(environment.productName)
         return storeURL!
     }
-    
+
 }
 
 extension NSManagedObjectContext {
