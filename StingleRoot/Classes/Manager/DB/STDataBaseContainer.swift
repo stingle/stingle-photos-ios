@@ -70,8 +70,15 @@ public class STDataBaseContainer {
             fatalError("model not found")
         }
 
-        let persistentContainer = SharedPersistentContainer(name: self.modelName, managedObjectModel: model)
+        let persistentContainer = NSPersistentContainer(name: self.modelName, managedObjectModel: model)
 
+        let environment = STEnvironment.current
+        let id = "group." + environment.appFileSharingBundleId
+        
+        let storeURL = URL.storeURL(for: id, databaseName: environment.productName)
+        let storeDescription = NSPersistentStoreDescription(url: storeURL)
+        persistentContainer.persistentStoreDescriptions = [storeDescription]
+        
         persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         persistentContainer.viewContext.undoManager = nil
         persistentContainer.viewContext.shouldDeleteInaccessibleFaults = true
@@ -122,15 +129,15 @@ public extension URL {
 }
 
 class SharedPersistentContainer: NSPersistentContainer {
-
-    override open class func defaultDirectoryURL() -> URL {
-        let environment = STEnvironment.current
-        let id = "group." + environment.appFileSharingBundleId
-        var storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: id)
-        storeURL = storeURL?.appendingPathComponent(environment.productName)
-        return storeURL!
-    }
-
+//
+//    override open class func defaultDirectoryURL() -> URL {
+//        let environment = STEnvironment.current
+//        let id = "group." + environment.appFileSharingBundleId
+//        var storeURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: id)
+//        storeURL = storeURL?.appendingPathComponent(environment.productName)
+//        return storeURL!
+//    }
+//
 }
 
 extension NSManagedObjectContext {

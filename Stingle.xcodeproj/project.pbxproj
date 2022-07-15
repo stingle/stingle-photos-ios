@@ -310,7 +310,6 @@
 		A0A06C232875DD7A0087B9FD /* StingleRoot.h in Headers */ = {isa = PBXBuildFile; fileRef = A0A06C202875DD7A0087B9FD /* StingleRoot.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0A06C262875DD7A0087B9FD /* StingleRoot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */; };
 		A0A06C272875DD7A0087B9FD /* StingleRoot.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A0A06C2F2875DDAA0087B9FD /* HelloStingle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A06C2E2875DDAA0087B9FD /* HelloStingle.swift */; };
 		A0A2567627DA113F00B2C645 /* STBGTaskScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */; };
 		A0A7974A264FF41F00917C91 /* STFilesDownloaderActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A79749264FF41F00917C91 /* STFilesDownloaderActivityVC.swift */; };
 		A0A7974C264FF42F00917C91 /* STFilesDownloaderActivityVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A7974B264FF42F00917C91 /* STFilesDownloaderActivityVM.swift */; };
@@ -712,7 +711,6 @@
 		A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StingleRoot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0A06C202875DD7A0087B9FD /* StingleRoot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StingleRoot.h; sourceTree = "<group>"; };
 		A0A06C212875DD7A0087B9FD /* StingleRoot.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = StingleRoot.docc; sourceTree = "<group>"; };
-		A0A06C2E2875DDAA0087B9FD /* HelloStingle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloStingle.swift; sourceTree = "<group>"; };
 		A0A2567527DA113F00B2C645 /* STBGTaskScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STBGTaskScheduler.swift; sourceTree = "<group>"; };
 		A0A79749264FF41F00917C91 /* STFilesDownloaderActivityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesDownloaderActivityVC.swift; sourceTree = "<group>"; };
 		A0A7974B264FF42F00917C91 /* STFilesDownloaderActivityVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilesDownloaderActivityVM.swift; sourceTree = "<group>"; };
@@ -2235,7 +2233,6 @@
 		A0A06C2D2875DD800087B9FD /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A0A06C2E2875DDAA0087B9FD /* HelloStingle.swift */,
 				A09FE7142876E86000CBA53E /* UI */,
 				A00E8C912629D37A0066ED9B /* DataSource */,
 				A09FE7002876D1C800CBA53E /* Extensions */,
@@ -3352,7 +3349,6 @@
 				A09FE6E82876D0D900CBA53E /* IResponse.swift in Sources */,
 				A09FE6802876C73300CBA53E /* STDBInfoProvider.swift in Sources */,
 				A09FE6A12876C93F00CBA53E /* STMat.swift in Sources */,
-				A0A06C2F2875DDAA0087B9FD /* HelloStingle.swift in Sources */,
 				A09FE6F72876D0ED00CBA53E /* STContactWorker.swift in Sources */,
 				A09FE6702876C69700CBA53E /* STKeyManagement.swift in Sources */,
 				A09FE6B82876C96100CBA53E /* STCrypto+PrivateKey.swift in Sources */,
