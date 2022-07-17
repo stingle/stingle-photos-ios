@@ -46,7 +46,7 @@ fileprivate extension STAppSettings {
 public class STAppSettings {
     
     static public let current: STAppSettings = STAppSettings()
-    static private let userDefaults = UserDefaults.standard
+    static private let userDefaults = STAppSettings.createUserDefaults()
     
     private var observers = STObserverEvents<ISettingsObserver>()
             
@@ -181,4 +181,30 @@ public class STAppSettings {
         Self.settings = [:]
     }
             
+}
+
+extension STAppSettings {
+        
+    class func migrate() {
+        let environment = STEnvironment.current
+        guard !environment.appRunIsExtension else {
+            return
+        }
+        let userDefaults = UserDefaults.standard
+        let groupUserDefaults =  UserDefaults(suiteName: "group." + environment.appFileSharingBundleId)
+        if let dic = userDefaults.dictionary(forKey: Constance.settingsKey), !dic.isEmpty  {
+            groupUserDefaults?.set(dic, forKey: Constance.settingsKey)
+            userDefaults.set(nil, forKey: Constance.settingsKey)
+        }
+    }
+    
+    private class func createUserDefaults() -> UserDefaults {
+        let environment = STEnvironment.current
+        guard let uefaults = UserDefaults(suiteName: "group." + environment.appFileSharingBundleId) else {
+            STLogger.log(logMessage: "create app group")
+            fatalError("create app group")
+        }
+        return uefaults
+    }
+    
 }

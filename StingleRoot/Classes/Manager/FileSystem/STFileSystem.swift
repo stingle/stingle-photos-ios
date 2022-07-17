@@ -7,23 +7,27 @@
 
 import Foundation
 
-public class STFileSystem {
+public class STFileSystem: NSObject {
     
     private let fileManager = FileManager.default
     private let userHomeFolderPath: String
     private var cacheFolderDataSize: STBytesUnits? = nil
     
-    static fileprivate var appUrl: URL? {
-        return URL.containerSharedURL.appendingPathComponent("Caches")
-        //  FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first
-//        FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first
+    static let privateFileName = "private"
+    
+    static fileprivate var appUrl: URL {
+        var url = URL.containerSharedURL
+        url = url.appendingPathComponent(STEnvironment.current.bundleIdentifier)
+        url = url.appendingPathComponent("Caches")
+        return url
     }
         
     public init(userHomeFolderPath: String) {
         self.userHomeFolderPath = userHomeFolderPath
+        super.init()
         self.creatAllPath()
         #if DEBUG
-        STLogger.log(info: "user folder, \(Self.appUrl?.path ?? "")")
+        STLogger.log(info: "user folder, \(Self.appUrl.path)")
         #endif
     }
     
@@ -36,7 +40,8 @@ public class STFileSystem {
     }
     
     public func deleteAccount() {
-        guard let userUrl = Self.appUrl?.appendingPathComponent(self.userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
+        let userUrl = Self.appUrl.appendingPathComponent(self.userHomeFolderPath)
+        guard let privateKeyUrl = STFileSystem.privateKeyUrl() else {
             return
         }
         self.remove(file: userUrl)
@@ -57,6 +62,35 @@ public class STFileSystem {
         }
         self.remove(file: oreginals)
     }
+    
+    func migrate() {
+        guard !STEnvironment.current.appRunIsExtension, let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+            return
+        }
+        
+        let bundleIdentifier = STEnvironment.current.bundleIdentifier
+        let folder = "Caches"
+        
+        
+        let userHome = cachesDirectory.appendingPathComponent(self.userHomeFolderPath)
+        let appGroupUserHome = Self.appUrl.appendingPathComponent(self.userHomeFolderPath).appendingPathComponent(bundleIdentifier).appendingPathComponent(folder)
+        
+        self.fileManager.delegate = self
+        
+        if self.fileManager.isExecutableFile(atPath: userHome.path) {
+            try? self.fileManager.removeItem(at: appGroupUserHome)
+            try? self.fileManager.moveItem(at: userHome, to: appGroupUserHome)
+            try? self.fileManager.removeItem(at: userHome)
+        }
+        
+        let userPrivate = cachesDirectory.appendingPathComponent(Self.privateFileName)
+        let appGroupPrivate = Self.appUrl.appendingPathComponent(Self.privateFileName).appendingPathComponent(bundleIdentifier).appendingPathComponent(folder)
+        if self.fileManager.isExecutableFile(atPath: userPrivate.path) {
+            try? self.fileManager.removeItem(at: appGroupUserHome)
+            try? self.fileManager.moveItem(at: userPrivate, to: appGroupPrivate)
+            try? self.fileManager.removeItem(at: appGroupPrivate)
+        }
+    }
         
     private func creatAllPath() {
         FolderType.allCases.forEach { type in
@@ -70,10 +104,17 @@ public class STFileSystem {
                 try? self.createDirectory(url: url)
             }
         }
-       self.fileManager.clearTmpDirectory()
+        self.fileManager.clearTmpDirectory()
     }
+}
+
+extension STFileSystem: FileManagerDelegate {
     
-    
+    public func fileManager(_ fileManager: FileManager, shouldMoveItemAtPath srcPath: String, toPath dstPath: String) -> Bool {
+        
+        
+        return true
+    }
     
 }
 
@@ -85,10 +126,7 @@ public extension STFileSystem {
     }
     
     func url(for type: FolderType) -> URL? {
-        let url = Self.appUrl?.appendingPathComponent(self.userHomeFolderPath).appendingPathComponent(type.stringValue)
-        
-//        FileManager.default.moveItem(at: <#T##URL#>, to: <#T##URL#>)
-        
+        let url = Self.appUrl.appendingPathComponent(self.userHomeFolderPath).appendingPathComponent(type.stringValue)
         return url
     }
     
@@ -100,9 +138,7 @@ public extension STFileSystem {
     }
     
     class func url(for type: FolderType, userHomeFolderPath: String) -> URL? {
-        guard let cachesDirectory = Self.appUrl else {
-            return nil
-        }
+        let cachesDirectory = Self.appUrl
         let url = cachesDirectory.appendingPathComponent(userHomeFolderPath).appendingPathComponent(type.stringValue)
         return url
     }
@@ -111,13 +147,10 @@ public extension STFileSystem {
         guard let cacheUrl = self.url(for: .storage(type: .server(type: nil)), userHomeFolderPath: userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
             return
         }
-        
         let fileManager = FileManager.default
-        
         if fileManager.fileExists(atPath: cacheUrl.path) {
             try? fileManager.removeItem(at: cacheUrl)
         }
-        
         if fileManager.fileExists(atPath: privateKeyUrl.path) {
             try? fileManager.removeItem(at: privateKeyUrl)
         }
@@ -336,24 +369,16 @@ public extension STFileSystem {
     }
     
     static func privateKeyUrl(filePath: String? = nil) -> URL? {
-        
-        guard let url = Self.appUrl else {
-            return nil
-        }
-        
-        let mm = URL.containerSharedURL
-        
-        var result = url.appendingPathComponent("private")
+        let url = Self.appUrl
+        var result = url.appendingPathComponent(self.privateFileName)
         
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: result.path) {
             try? fileManager.createDirectory(at: result, withIntermediateDirectories: true, attributes: nil)
         }
-        
         if let filePath = filePath {
             result = result.appendingPathComponent(filePath)
         }
-                        
         return result
     }
     

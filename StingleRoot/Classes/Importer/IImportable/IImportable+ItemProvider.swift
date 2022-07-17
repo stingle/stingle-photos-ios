@@ -17,7 +17,6 @@ public protocol IItemProviderImportable: IImportableFile {
 }
 
 public extension IItemProviderImportable {
-        
     
     func requestData(in queue: DispatchQueue?, progress: STImporter.ProgressHandler?, success: @escaping (STImporter.ImportFileInfo) -> Void, failure: @escaping (IError) -> Void) {
         

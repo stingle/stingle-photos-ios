@@ -14,7 +14,7 @@ class STMainVM {
     
     static private var isAppSetuped: Bool = false
 	
-	func setupApp(end: ((_ result: Bool) -> Void)) {
+	func setupApp(end: @escaping ((_ result: Bool) -> Void)) {
         guard !STMainVM.isAppSetuped else {
             end(true)
             return
@@ -22,9 +22,12 @@ class STMainVM {
         STNetworkReachableService.shared.start()
         UIDevice.current.isBatteryMonitoringEnabled = true
         
+        STApplication.shared.configure {
+            DispatchQueue.main.async {
+                end(true)
+            }
+        }
         
-        
-        end(true)
 	}
 	
 	func isLogined() -> Bool {

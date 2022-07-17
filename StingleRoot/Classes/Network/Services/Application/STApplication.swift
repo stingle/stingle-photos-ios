@@ -65,5 +65,19 @@ public class STApplication {
         }
         self.myFileSystem = STFileSystem(userHomeFolderPath: user.homeFolder)
     }
+        
+}
+
+public extension STApplication {
+    
+    func configure(end: @escaping (() -> Void)) {
+        DispatchQueue.global().async { [weak self] in
+            self?.myFileSystem?.migrate()
+            STAppSettings.migrate()
+            DispatchQueue.main.async {
+                end()
+            }
+        }
+    }
     
 }
