@@ -136,7 +136,7 @@ public class STView: UIView {
 
 extension STView {
     
-    func display(roundRect: RoundRect) {
+    public func display(roundRect: RoundRect) {
         self.isUpdatingVarebles = true
         switch roundRect {
         case .top:

@@ -12,8 +12,6 @@
 	<string>$(BASE_API_URL)</string>
 	<key>BUILD_TYPE</key>
 	<string>$(BUILD_TYPE)</string>
-	<key>CFBundleName</key>
-	<string>$(APP_FILE_SHARING_APP_NAME)</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>
@@ -27,8 +25,8 @@
     SUBQUERY (
         $extensionItem.attachments,
         $attachment,
-        ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;public.movie&quot; ||
-        ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;public.image&quot;
+        ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.movie" ||
+        ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.image"
     ).@count == $extensionItem.attachments.@count
 ).@count &gt; 0</string>
 		</dict>

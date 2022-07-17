@@ -29,7 +29,7 @@ public struct STDarwinNotification {
 public extension STDarwinNotification.Name {
     
     /// Initializes a new Notification Name, based on a custom string. This string should be identifying for not only this notification, but for the full system. Therefore, you should include a bundle identifier to the string.
-    public init(_ rawValue: String) {
+    init(_ rawValue: String) {
         self.rawValue = rawValue as CFString
     }
     
@@ -38,7 +38,7 @@ public extension STDarwinNotification.Name {
         rawValue = cfNotificationName.rawValue
     }
     
-    public static func == (lhs: STDarwinNotification.Name, rhs: STDarwinNotification.Name) -> Bool {
+    static func == (lhs: STDarwinNotification.Name, rhs: STDarwinNotification.Name) -> Bool {
         return (lhs.rawValue as String) == (rhs.rawValue as String)
     }
     
