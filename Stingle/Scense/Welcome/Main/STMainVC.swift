@@ -84,8 +84,7 @@ extension STMainVC {
             let options: UIView.AnimationOptions = .transitionFlipFromRight
             let duration: TimeInterval = 0.5
             UIView.transition(with: rootWindow, duration: duration, options: options, animations: {
-            }, completion:
-                                { completed in
+            }, completion:{ completed in
             })
         }
         

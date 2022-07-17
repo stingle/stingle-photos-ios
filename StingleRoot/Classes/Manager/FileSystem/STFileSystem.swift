@@ -73,7 +73,7 @@ public class STFileSystem: NSObject {
         
         
         let userHome = cachesDirectory.appendingPathComponent(self.userHomeFolderPath)
-        let appGroupUserHome = Self.appUrl.appendingPathComponent(self.userHomeFolderPath).appendingPathComponent(bundleIdentifier).appendingPathComponent(folder)
+        let appGroupUserHome = Self.appUrl.appendingPathComponent(self.userHomeFolderPath)
         
         self.fileManager.delegate = self
         
@@ -84,7 +84,8 @@ public class STFileSystem: NSObject {
         }
         
         let userPrivate = cachesDirectory.appendingPathComponent(Self.privateFileName)
-        let appGroupPrivate = Self.appUrl.appendingPathComponent(Self.privateFileName).appendingPathComponent(bundleIdentifier).appendingPathComponent(folder)
+        let appGroupPrivate = Self.appUrl.appendingPathComponent(Self.privateFileName)
+        
         if self.fileManager.isExecutableFile(atPath: userPrivate.path) {
             try? self.fileManager.removeItem(at: appGroupUserHome)
             try? self.fileManager.moveItem(at: userPrivate, to: appGroupPrivate)

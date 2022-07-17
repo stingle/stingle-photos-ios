@@ -195,6 +195,8 @@ extension STAppSettings {
         if let dic = userDefaults.dictionary(forKey: Constance.settingsKey), !dic.isEmpty  {
             groupUserDefaults?.set(dic, forKey: Constance.settingsKey)
             userDefaults.set(nil, forKey: Constance.settingsKey)
+            userDefaults.synchronize()
+            groupUserDefaults?.synchronize()
         }
     }
     
