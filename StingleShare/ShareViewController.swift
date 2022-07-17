@@ -64,7 +64,7 @@ class ShareViewController: UIViewController {
             let files = importableFiles.map({$0.itemProvider})
             DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
                 progressView.hide()
-                self?.endProcess(providers: files)
+                self?.endProcess(providers: files)                
             })
         }, uploadIfNeeded: true)
     }

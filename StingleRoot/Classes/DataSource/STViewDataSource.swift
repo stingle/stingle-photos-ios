@@ -23,17 +23,6 @@ open class STViewDataSource<Model: ICDConvertable>: NSObject, IViewDataSource, I
         self.dbDataSource = dbDataSource
         super.init()
         dbDataSource.delegate = self
-        
-        let name = NSNotification.Name.init(rawValue: "ffffff")
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(hello), name: name, object: nil)
-        
-    }
-    
-    @objc func hello() {
-        
-        print("")
-        
     }
     
     //MARK: - Public func

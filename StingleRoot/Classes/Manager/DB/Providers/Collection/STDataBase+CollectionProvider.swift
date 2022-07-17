@@ -11,11 +11,23 @@ import UIKit
 public extension STDataBase {
     
     class CollectionProvider<Model: ICDConvertable>: DataBaseProvider<Model> {
-                
+        
+        let notificationReloadDataProviderAppIsExtension = STDarwinNotification.Name("notificationReloadDataProviderAppIsExtension")
+                        
         public typealias ManagedObject = Model.ManagedModel
         public typealias Model = Model
         
         let dataSources = STObserverEvents<STDataBase.DataSource<Model>>()
+        
+        public override init(container: STDataBaseContainer) {
+            super.init(container: container)
+            STDarwinNotificationCenter.shared.addObserver(self, for: self.notificationReloadDataProviderAppIsExtension) { [weak self] _ in
+                guard !STEnvironment.current.appIsExtension else {
+                    return
+                }
+                self?.reloadData()
+            }
+        }
         
         public func reloadData(models: [Model]? = nil) {
             DispatchQueue.main.async { [weak self] in
@@ -205,7 +217,15 @@ public extension STDataBase {
                         observer.dataBaseProvider(didDeleted: weakSelf, models: models)
                     }
                 }
+                
+                if STEnvironment.current.appIsExtension, let name = self?.notificationReloadDataProviderAppIsExtension  {
+                    STDarwinNotificationCenter.shared.postNotification(name)
+                }
             }
+        }
+        
+        deinit {
+            STDarwinNotificationCenter.shared.removeObserver(self)
         }
                 
     }
