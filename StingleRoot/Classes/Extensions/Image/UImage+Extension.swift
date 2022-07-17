@@ -1,8 +1,21 @@
 import Foundation
 import UIKit
 
-extension UIImage {
-	
+public extension UIImage {
+    
+    var thumbnail: UIImage {
+        let size = STConstants.thumbSize(for: CGSize(width: self.size.width, height: self.size.height))
+        let thumb = self.scaled(newSize: size)
+        return thumb
+    }
+    
+    var thumbnailData: Data? {
+        guard let thumbData = self.thumbnail.jpegData(compressionQuality: 0.7)  else {
+            return nil
+        }
+        return thumbData
+    }
+    
 	func resize(size: CGSize) -> UIImage? {
 		
 		//Calculate x and y positions and edge size for cropping

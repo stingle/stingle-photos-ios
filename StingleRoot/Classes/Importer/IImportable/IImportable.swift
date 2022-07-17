@@ -70,6 +70,7 @@ public extension IImportableFile {
             } catch {
                 failure(STFileUploader.UploaderError.error(error: error))
             }
+            uploadInfo.freeBuffer?()
         }, failure: failure)
     }
     

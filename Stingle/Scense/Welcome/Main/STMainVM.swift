@@ -21,6 +21,9 @@ class STMainVM {
         }
         STNetworkReachableService.shared.start()
         UIDevice.current.isBatteryMonitoringEnabled = true
+        
+        
+        
         end(true)
 	}
 	

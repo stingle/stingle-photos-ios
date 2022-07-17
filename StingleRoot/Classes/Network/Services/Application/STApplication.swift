@@ -57,7 +57,6 @@ public class STApplication {
             guard let weakSelf = self else { return }
             weakSelf.syncManager.configure(dataBase: weakSelf.dataBase, appLockUnlocker: weakSelf.appLockUnlocker, utils: weakSelf.utils)
         }
-
     }
     
     private func createFileSystem() {

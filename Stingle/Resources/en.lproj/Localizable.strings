@@ -141,6 +141,9 @@
 "terms_of_use" = "Terms Of Use";
 "privacy_policy" = "Privacy Policy";
 
+"file_no_support" = "File No Support";
+"can't_create_file_thumbnail" = "can't create file thumbnail";
+
 "100_gb" = "100 GB";
 "300_gb" = "300 GB";
 "1_tb" = "1 TB";
@@ -324,7 +327,6 @@
 
 "import_existing_photos_and_videos" = "Import existing photos and videos";
 "import_existing_files_alert_message" = "Are you sure you want to import all existing photos and videos from your library? Depending on you library size this process might take some time.";
-
 
 
 //MARK: - Menu

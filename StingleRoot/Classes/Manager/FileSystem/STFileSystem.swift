@@ -11,21 +11,19 @@ public class STFileSystem {
     
     private let fileManager = FileManager.default
     private let userHomeFolderPath: String
-    
     private var cacheFolderDataSize: STBytesUnits? = nil
+    
+    static fileprivate var appUrl: URL? {
+        return URL.containerSharedURL.appendingPathComponent("Caches")
+        //  FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first
+//        FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first
+    }
         
-    lazy private var appUrl: URL? = {
-        guard let url = self.fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
-            return nil
-        }
-        return url
-    }()
-   
     public init(userHomeFolderPath: String) {
         self.userHomeFolderPath = userHomeFolderPath
         self.creatAllPath()
         #if DEBUG
-        STLogger.log(info: "user folder, \(self.appUrl?.path ?? "")")
+        STLogger.log(info: "user folder, \(Self.appUrl?.path ?? "")")
         #endif
     }
     
@@ -38,7 +36,7 @@ public class STFileSystem {
     }
     
     public func deleteAccount() {
-        guard let userUrl = self.appUrl?.appendingPathComponent(self.userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
+        guard let userUrl = Self.appUrl?.appendingPathComponent(self.userHomeFolderPath), let privateKeyUrl = STFileSystem.privateKeyUrl() else {
             return
         }
         self.remove(file: userUrl)
@@ -75,6 +73,8 @@ public class STFileSystem {
        self.fileManager.clearTmpDirectory()
     }
     
+    
+    
 }
 
 public extension STFileSystem {
@@ -85,7 +85,10 @@ public extension STFileSystem {
     }
     
     func url(for type: FolderType) -> URL? {
-        let url = self.appUrl?.appendingPathComponent(self.userHomeFolderPath).appendingPathComponent(type.stringValue)
+        let url = Self.appUrl?.appendingPathComponent(self.userHomeFolderPath).appendingPathComponent(type.stringValue)
+        
+//        FileManager.default.moveItem(at: <#T##URL#>, to: <#T##URL#>)
+        
         return url
     }
     
@@ -97,15 +100,10 @@ public extension STFileSystem {
     }
     
     class func url(for type: FolderType, userHomeFolderPath: String) -> URL? {
-        
-        let fileManager = FileManager.default
-        
-        guard let cachesDirectory = fileManager.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+        guard let cachesDirectory = Self.appUrl else {
             return nil
         }
-        
         let url = cachesDirectory.appendingPathComponent(userHomeFolderPath).appendingPathComponent(type.stringValue)
-        
         return url
     }
     
@@ -338,9 +336,13 @@ public extension STFileSystem {
     }
     
     static func privateKeyUrl(filePath: String? = nil) -> URL? {
-        guard let url = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+        
+        guard let url = Self.appUrl else {
             return nil
         }
+        
+        let mm = URL.containerSharedURL
+        
         var result = url.appendingPathComponent("private")
         
         let fileManager = FileManager.default
@@ -624,4 +626,11 @@ extension FileManager {
             STLogger.log(error: error)
         }
     }
+    
+    func fileSize(url: URL) -> UInt? {
+        let attr = try? self.attributesOfItem(atPath: url.path)
+        let fileSize = (attr?[FileAttributeKey.size] as? UInt) ?? 0
+        return fileSize
+    }
+    
 }

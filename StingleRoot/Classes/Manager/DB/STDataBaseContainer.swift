@@ -80,7 +80,6 @@ public class STDataBaseContainer {
             persistentContainer.persistentStoreDescriptions = [storeDescription]
         }
         
-        
         persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         persistentContainer.viewContext.undoManager = nil
         persistentContainer.viewContext.shouldDeleteInaccessibleFaults = true
@@ -104,6 +103,11 @@ public class STDataBaseContainer {
 }
 
 public extension URL {
+    
+    static var containerSharedURL: URL {
+        let appGroup = "group." + STEnvironment.current.appFileSharingBundleId
+        return self.containerURL(for: appGroup)
+    }
 
     static func storeURL(for appGroup: String, databaseName: String) -> URL {
         return self.containerURL(for: appGroup).appendingPathComponent("\(databaseName).sqlite")
@@ -139,7 +143,7 @@ extension NSManagedObjectContext {
 }
 
 
-extension STDataBaseContainer {
+fileprivate extension STDataBaseContainer {
     
     static let currentDBVersion:Int = 1
     
@@ -157,11 +161,9 @@ extension STDataBaseContainer {
     }
     
     func migraIfNeeded(persistentContainer: NSPersistentContainer) throws {
-        
         guard self.shouldMigrate() else {
             return
         }
-        
         let currentDBVersion = Self.currentDBVersion
         for index in self.migratedVersion()..<currentDBVersion {
             try self.migrate(to: index, persistentContainer: persistentContainer)
@@ -185,7 +187,6 @@ extension STDataBaseContainer {
         let environment = STEnvironment.current
         let id = "group." + environment.appFileSharingBundleId
         let storeURL = URL.storeURL(for: id, databaseName: self.modelName)
-        
         try persistentContainer.persistentStoreCoordinator.migratePersistentStore(oldStore, to: storeURL, options: nil, withType: NSSQLiteStoreType)
         self.updateMigrateVersion(version: 1)
         

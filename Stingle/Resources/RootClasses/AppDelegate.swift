@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             STLogger.log(info: "baseUrl, \(STEnvironment.current.baseUrl)")
             STLogger.log(info: "bundleIdentifier, \(STEnvironment.current.bundleIdentifier)")
         #endif
-        
+                
         STBGTaskScheduler.shared.start()
         return true
     }

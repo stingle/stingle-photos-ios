@@ -224,13 +224,6 @@ public extension STImporter {
 
 }
 
-public extension STImporter {
-    
-    typealias GaleryAssetFileImporter = GaleryFileImporter<GaleryFileAssetImportable>
-    typealias AlbumAssetFileImporter = AlbumFileImporter<AlbumFileAssetImportable>
-    
-}
-
 extension STImporter.Importer {
     
     class Operation<ImportableFile: IImportableFile>: STOperation<ImportableFile.File> {
@@ -280,3 +273,28 @@ extension STImporter.Importer {
 
 }
 
+
+public extension STImporter {
+    
+    typealias GaleryAssetFileImporter = GaleryFileImporter<GaleryFileAssetImportable>
+    typealias AlbumAssetFileImporter = AlbumFileImporter<AlbumFileAssetImportable>
+    
+    
+    enum ImporterError: IError {
+        case fileNotSupport
+        case cantCreateFileThumbnail
+        
+        public var message: String {
+            switch self {
+            case .fileNotSupport:
+                return "file_no_support".localized
+            case .cantCreateFileThumbnail:
+                return "can't_create_file_thumbnail".localized
+                
+            }
+            
+        }
+    }
+    
+    
+}

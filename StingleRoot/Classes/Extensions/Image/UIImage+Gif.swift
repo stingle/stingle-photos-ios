@@ -182,11 +182,10 @@ public extension UTType {
         case .heic, .rawImage, .tiff, .gif, .heif, .svg, .ico, .jpeg, .image, .png, .icns, .bmp, .livePhoto, .webP:
             return .image
         case .avi, .appleProtectedMPEG4Video, .quickTimeMovie, .movie, .mpeg4Movie, .mpeg2Video, .mpeg, .video:
-            return .image
+            return .video
         default:
             return nil
         }
     }
 
 }
-

@@ -88,17 +88,3 @@ class STVideoView: UIView {
     }
 
 }
-
-extension AVAsset {
-    
-    func videoSize() -> CGSize? {
-        guard let track = self.tracks(withMediaType: AVMediaType.video).first else {
-            return nil
-        }
-        let size = track.naturalSize
-        let txf = track.preferredTransform
-        let realVidSize = size.applying(txf)
-        return realVidSize
-    }
-
-}
