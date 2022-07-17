@@ -83,9 +83,9 @@ public class STFileSystem: NSObject {
         let appGroupPrivate = Self.appUrl.appendingPathComponent(Self.privateFileName)
         
         if self.fileManager.isExecutableFile(atPath: userPrivate.path) {
-            try? self.fileManager.removeItem(at: appGroupUserHome)
-            try? self.fileManager.moveItem(at: userPrivate, to: appGroupPrivate)
             try? self.fileManager.removeItem(at: appGroupPrivate)
+            try? self.fileManager.moveItem(at: userPrivate, to: appGroupPrivate)
+            try? self.fileManager.removeItem(at: userPrivate)
         }
     }
         
