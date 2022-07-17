@@ -67,11 +67,7 @@ public class STFileSystem: NSObject {
         guard !STEnvironment.current.appRunIsExtension, let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
             return
         }
-        
-        let bundleIdentifier = STEnvironment.current.bundleIdentifier
-        let folder = "Caches"
-        
-        
+    
         let userHome = cachesDirectory.appendingPathComponent(self.userHomeFolderPath)
         let appGroupUserHome = Self.appUrl.appendingPathComponent(self.userHomeFolderPath)
         
