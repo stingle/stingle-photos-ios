@@ -51,7 +51,7 @@ class STAlbumFileEditVM: IFileEditVM {
         let version = "\(STCrypto.Constants.CurrentFileVersion)"
         let date = Date()
         
-        let file = STLibrary.AlbumFile(file: self.file.file, version: version, headers: encryptedFileInfo.headers, dateCreated: date, dateModified: date, isRemote: false, isSynched: false, albumId: self.albumFile.albumId, managedObjectID: nil)
+        let file = STLibrary.AlbumFile(file: encryptedFileInfo.fileName, version: version, headers: encryptedFileInfo.headers, dateCreated: date, dateModified: date, isRemote: false, isSynched: false, albumId: self.albumFile.albumId, managedObjectID: nil)
         
         STApplication.shared.dataBase.albumFilesProvider.add(models: [file], reloadData: true)
         let updatedAlbum = STLibrary.Album(album: self.album, dateModified: Date())

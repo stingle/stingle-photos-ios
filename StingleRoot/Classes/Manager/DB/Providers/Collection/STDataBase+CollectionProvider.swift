@@ -16,17 +16,11 @@ public extension STDataBase {
                         
         public typealias ManagedObject = Model.ManagedModel
         public typealias Model = Model
-        
         let dataSources = STObserverEvents<STDataBase.DataSource<Model>>()
         
         public override init(container: STDataBaseContainer) {
             super.init(container: container)
-            STDarwinNotificationCenter.shared.addObserver(self, for: self.notificationReloadDataProviderAppIsExtension) { [weak self] _ in
-                guard !STEnvironment.current.appIsExtension else {
-                    return
-                }
-                self?.reloadData()
-            }
+            self.addReloadDataNotification()
         }
         
         public func reloadData(models: [Model]? = nil) {
@@ -185,6 +179,15 @@ public extension STDataBase {
         }
         
         //MARK: - private
+        
+        private func addReloadDataNotification() {
+            STDarwinNotificationCenter.shared.addObserver(self, for: self.notificationReloadDataProviderAppIsExtension) { [weak self] _ in
+                guard !STEnvironment.current.appIsExtension else {
+                    return
+                }
+                self?.reloadData()
+            }
+        }
         
         private func reloadData(models: [Model], ids: [NSManagedObjectID], changeType: DataBaseChangeType) {
             
