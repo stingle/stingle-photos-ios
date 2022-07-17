@@ -17,7 +17,7 @@ public class STFileSystem: NSObject {
     
     static fileprivate var appUrl: URL {
         var url = URL.containerSharedURL
-        url = url.appendingPathComponent(STEnvironment.current.bundleIdentifier)
+        url = url.appendingPathComponent(STEnvironment.current.productName)
         url = url.appendingPathComponent("Caches")
         return url
     }
