@@ -35,36 +35,83 @@ class ShareViewController: UIViewController {
             self.showLoginAlert()
             return
         }
-        self.manageImages2()
+        self.manageImages()
     }
     
     //MARK: - Private methods
     
-    private func manageImages2() {
-        self.view.backgroundColor = .red
+    private func manageImages() {
         let content = self.extensionContext!.inputItems[0] as! NSExtensionItem
         guard let attachments = content.attachments, !attachments.isEmpty else {
-            self.endProcess()
+            self.cancelRequest(error: ShareViewControllerError.emptyData)
             return
         }
-        
-        let importables = attachments.compactMap( {STImporter.GaleryItemProviderImportable.init(itemProvider: $0)} )
-        _ = STImporter.GaleryFileImporter(importFiles: importables, responseQueue: .main, startHendler: {
-            print("startHendler")
-        }, progressHendler: { progress in
-            print("progressHendler")
+        let progressView = STProgressView()
+        progressView.title = "importing".localized
+        progressView.subTitle = "\(0)/\(attachments.count)"
+        progressView.show(in: self.view)
+        let importables = attachments.compactMap( {STImporter.GaleryItemProviderImportable(itemProvider: $0)} )
+        _ = STImporter.GaleryFileImporter(importFiles: importables, responseQueue: .main, startHendler: {}, progressHendler: { progress in
+            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    progressView.progress = Float(progressValue)
+                    let number = progress.completedUnitCount + 1
+                    progressView.subTitle = "\(number)/\(progress.totalUnitCount)"
+                }
+            }
         }, complition: { files, importableFiles in
-            print("complition")
-        })
-        
+            let files = importableFiles.map({$0.itemProvider})
+            DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
+                progressView.hide()
+                self?.endProcess(providers: files)
+            })
+        }, uploadIfNeeded: true)
     }
     
     private func showLoginAlert() {
-        self.endProcess()
+        self.cancelRequest(error:  ShareViewControllerError.loginError)
     }
     
-    private func endProcess() {
+    private func cancelRequest(error: ShareViewControllerError) {
+        self.showError(error: error, handler: { [weak self] in
+            self?.endProcess(providers: [])
+        })
+    }
+        
+    private func endProcess(providers: [NSItemProvider]) {
         self.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+    }
+    
+}
+
+extension ShareViewController {
+    
+    enum ShareViewControllerError: Error, CustomStringConvertible, IError {
+        case loginError
+        case emptyData
+        
+        var description: String {
+            switch self {
+            case .loginError:
+                return "please_login_in_app".localized
+            case .emptyData:
+                return "you_havent_selected_any_item".localized
+            }
+        }
+        
+        var message: String {
+            return self.description
+        }
+    }
+    
+    fileprivate func showError(error: IError, handler: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: error.title, message: error.message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title:  "ok".localized, style: .default) { (_) in
+            handler?()
+        }
+        alert.addAction(okAction)
+        self.present(alert, animated: true)
     }
     
 }

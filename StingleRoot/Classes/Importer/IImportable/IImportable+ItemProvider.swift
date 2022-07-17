@@ -51,7 +51,6 @@ public extension IItemProviderImportable {
         }
                 
         self.itemProvider.loadFileRepresentation(forTypeIdentifier: type.description) { [weak self] url, error in
-           
             guard let url = url, url.isFileURL else {
                 if let error = error {
                     compled(error: STError.error(error: error))

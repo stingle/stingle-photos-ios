@@ -8,82 +8,82 @@
 import UIKit
 
 @IBDesignable
-class STView: UIView {
+public class STView: UIView {
     
-    @IBInspectable var cornerTopLeft: Bool = true {
-        didSet {
-            self.setRadius()
-        }
-    }
-    
-    @IBInspectable var cornerTopRight: Bool = true {
+    @IBInspectable public var cornerTopLeft: Bool = true {
         didSet {
             self.setRadius()
         }
     }
     
-    @IBInspectable var cornerBottomLeft: Bool = true {
+    @IBInspectable public var cornerTopRight: Bool = true {
         didSet {
             self.setRadius()
         }
     }
     
-    @IBInspectable var cornerBottomRight: Bool = true {
+    @IBInspectable public var cornerBottomLeft: Bool = true {
+        didSet {
+            self.setRadius()
+        }
+    }
+    
+    @IBInspectable public var cornerBottomRight: Bool = true {
         didSet {
             self.setRadius()
         }
     }
 
-    @IBInspectable var circle: Bool = false {
+    @IBInspectable public var circle: Bool = false {
         didSet {
             self.setRadius()
         }
     }
 
-    @IBInspectable var radius: CGFloat = 1 {
+    @IBInspectable public var radius: CGFloat = 1 {
         didSet {
             self.setRadius()
         }
     }
 
-    @IBInspectable var cornerRadius: CGFloat = 0.0 {
+    @IBInspectable public var cornerRadius: CGFloat = 0.0 {
         didSet {
             self.setRadius()
         }
     }
 
-    @IBInspectable var borderWidth: CGFloat = 0.0 {
+    @IBInspectable public var borderWidth: CGFloat = 0.0 {
         didSet {
             self.layer.borderWidth = self.borderWidth
 
         }
     }
 
-    @IBInspectable var shadowRadius: CGFloat = 0.0 {
+    @IBInspectable public var shadowRadius: CGFloat = 0.0 {
         didSet {
             self.layer.shadowRadius = shadowRadius
         }
     }
 
-    @IBInspectable var shadowOffset: CGSize = CGSize(width: 0, height: 0) {
+    @IBInspectable public var shadowOffset: CGSize = CGSize(width: 0, height: 0) {
         didSet {
             self.layer.shadowOffset = shadowOffset
         }
     }
 
-    @IBInspectable var shadowOpacity: Float = 1.0 {
+    @IBInspectable public var shadowOpacity: Float = 1.0 {
         didSet {
             self.layer.shadowOpacity = shadowOpacity
         }
     }
 
-    @IBInspectable var shadowColor: UIColor = UIColor.clear {
+    @IBInspectable public var shadowColor: UIColor = UIColor.clear {
         didSet {
             self.layer.shadowColor = shadowColor.cgColor
         }
     }
 
-    @IBInspectable var borderColor: UIColor = UIColor.black {
+    @IBInspectable public var borderColor: UIColor = UIColor.black {
         didSet {
             self.layer.borderColor = borderColor.cgColor
         }
@@ -91,7 +91,7 @@ class STView: UIView {
     
     private var isUpdatingVarebles: Bool = false
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         self.setRadius()
     }
@@ -176,7 +176,7 @@ extension STView {
     
 }
 
-extension UIView {
+public extension UIView {
     
     enum RoundRect {
         case none

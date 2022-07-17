@@ -57,7 +57,7 @@ public class STDataBaseContainer {
     }
     
     private func getContaner() -> NSPersistentContainer {
-        if STEnvironment.current.appRunIsExtension {
+        if STEnvironment.current.appIsExtension {
             return self.getSharedContaner()
         } else {
             return self.getSharedContaner()
@@ -152,7 +152,7 @@ fileprivate extension STDataBaseContainer {
     }
     
     func shouldMigrate() -> Bool {
-        return Self.currentDBVersion != self.migratedVersion() && !STEnvironment.current.appRunIsExtension
+        return Self.currentDBVersion != self.migratedVersion() && !STEnvironment.current.appIsExtension
     }
     
     func updateMigrateVersion(version: Int) {

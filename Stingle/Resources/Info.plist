@@ -8,8 +8,6 @@
 	<string>$(APP_FILE_SHARING_BUNDLE_ID)</string>
 	<key>APP_NAME</key>
 	<string>$(APP_NAME)</string>
-	<key>APP_RUN_IS_EXTENSION</key>
-	<false/>
 	<key>BASE_API_URL</key>
 	<string>$(BASE_API_URL)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>

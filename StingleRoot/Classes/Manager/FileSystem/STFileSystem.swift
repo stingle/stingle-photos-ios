@@ -64,7 +64,7 @@ public class STFileSystem: NSObject {
     }
     
     func migrate() {
-        guard !STEnvironment.current.appRunIsExtension, let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
+        guard !STEnvironment.current.appIsExtension, let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask).first else {
             return
         }
     

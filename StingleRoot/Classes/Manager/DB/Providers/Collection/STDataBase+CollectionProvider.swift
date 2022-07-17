@@ -80,11 +80,9 @@ public extension STDataBase {
             
             context.performAndWait { [weak self] in
                 guard let weakSelf = self else { return  }
-                
                 do {
                     if let inserts = try? weakSelf.getInsertObjects(with: models) {
                         let insertRequest = NSBatchInsertRequest(entityName: ManagedObject.entityName, objects: inserts.json)
-                        
                         insertRequest.resultType = .objectIDs
                         let result = try (context.execute(insertRequest) as? NSBatchInsertResult)?.result as? [NSManagedObjectID]
                         if let result = result {

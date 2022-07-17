@@ -287,7 +287,10 @@ class STFileViewerVC: UIViewController {
     }
     
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
-        let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: [])
+        let myApp = "group." + STEnvironment.current.appFileSharingBundleId
+        let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: nil)
+        vc.excludedActivityTypes = [UIActivity.ActivityType(rawValue: myApp)]
+
         vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: ActionType.share)
         vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
             if let folderUrl = folderUrl {

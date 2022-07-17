@@ -27,10 +27,11 @@ public extension String {
     
     static func localized(for key: String, replaceValue comment: String) -> String {
         let fallbackLanguage = "en"
-        let fallbackBundlePath = Bundle.main.path(forResource: fallbackLanguage, ofType: "lproj")
+        let bundle = Bundle(for: STApplication.self)
+        let fallbackBundlePath = bundle.path(forResource: fallbackLanguage, ofType: "lproj")
         let fallbackBundle = Bundle(path: fallbackBundlePath!)
         let fallbackString = fallbackBundle?.localizedString(forKey: key, value: comment, table: nil)
-        let localizedString = Bundle.main.localizedString(forKey: key, value: fallbackString, table: nil)
+        let localizedString = bundle.localizedString(forKey: key, value: fallbackString, table: nil)
         
         return localizedString
     }

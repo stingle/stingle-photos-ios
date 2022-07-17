@@ -7,13 +7,13 @@
 
 import UIKit
 
-class STProgressView: UIView {
+public class STProgressView: UIView {
     
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var subTitleLabel: UILabel!
     @IBOutlet weak private var progressView: UIProgressView!
     
-    var title: String? {
+    public var title: String? {
         set {
             self.titleLabel.text = newValue
         } get {
@@ -21,7 +21,7 @@ class STProgressView: UIView {
         }
     }
     
-    var subTitle: String? {
+    public var subTitle: String? {
         set {
             self.subTitleLabel.text = newValue
         } get {
@@ -29,7 +29,7 @@ class STProgressView: UIView {
         }
     }
     
-    var progress: Float {
+    public var progress: Float {
         set {
             self.progressView.progress = newValue
         } get {
@@ -37,8 +37,7 @@ class STProgressView: UIView {
         }
     }
     
-    
-    init() {
+    public init() {
         super.init(frame: CGRect.init(origin: .zero, size: CGSize.init(width: 100, height: 200)))
         defer {
             self.backgroundColor = .clear
@@ -50,15 +49,17 @@ class STProgressView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func show(in view: UIView) {
+    public func show(in view: UIView) {
         self.alpha = .zero
-        view.addSubviewFullContent(view: self)
+        self.frame = view.bounds
+        self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(self)
         UIView.animate(withDuration: 0.3) {
             self.alpha = 1
         }
     }
     
-    func hide() {
+    public func hide() {
         UIView.animate(withDuration: 0.3) {
             self.alpha = .zero
         } completion: { [weak self] _ in
@@ -69,8 +70,11 @@ class STProgressView: UIView {
     //MARK: - Private methods
     
     private func setup() {
-        let contentView = Bundle.main.loadNibNamed("STProgressView", owner: self, options: nil)?.first as! UIView
-        self.addSubviewFullContent(view: contentView)
+        let bundle = Bundle(for: type(of: self))
+        let contentView = bundle.loadNibNamed("STProgressView", owner: self, options: nil)?.first as! UIView
+        contentView.frame = self.bounds
+        contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.addSubview(contentView)
     }
     
 }

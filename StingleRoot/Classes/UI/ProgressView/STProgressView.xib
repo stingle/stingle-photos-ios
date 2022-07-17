@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STProgressView" customModule="Stingle" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STProgressView" customModule="StingleRoot" customModuleProvider="target">
             <connections>
                 <outlet property="progressView" destination="J9X-di-Fbz" id="45r-v7-49H"/>
                 <outlet property="subTitleLabel" destination="bpA-3t-kGZ" id="Ppk-nL-X8i"/>
@@ -24,7 +24,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="586" height="869"/>
                     <color key="backgroundColor" name="STPlaceholder"/>
                 </view>
-                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="flq-4V-sfE" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="flq-4V-sfE" customClass="STView" customModule="StingleRoot" customModuleProvider="target">
                     <rect key="frame" x="118" y="404.5" width="350" height="60"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6jf-QA-0od">
@@ -92,7 +92,7 @@
             <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STPrimaryTransparent">
-            <color red="0.71799999475479126" green="0.10999999940395355" blue="0.10999999940395355" alpha="0.20000000298023224" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.71799999475479126" green="0.10999999940395355" blue="0.10999999940395355" alpha="0.25" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="STText">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

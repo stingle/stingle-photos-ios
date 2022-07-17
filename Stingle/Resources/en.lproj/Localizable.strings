@@ -110,6 +110,9 @@
 "app_unauthorized_message" = "App automatically log out for your security. Please login and enjoy again";
 "please_set_a_new_password" = "Please set a new password";
 
+"please_login_in_app" = "Please login in app";
+"you_havent_selected_any_item" = "You haven't selected any item";
+
 "reconnect_server_try_again_message" = "An error has occurred. click the try again button to reconnect to the server";
 "try_again" = "Try again";
 

@@ -49,12 +49,11 @@ public enum STImporter {
             return STOperationManager.shared
         }
         
-        public init(importFiles: [Importable], responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
+        public init(importFiles: [Importable], responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition, uploadIfNeeded: Bool = false) {
             self.importFiles = importFiles
             self.responseQueue = responseQueue
             self.operationQueue = STImporter.importerOperationQueue
-            self.uploadIfNeeded = false
-            
+            self.uploadIfNeeded = uploadIfNeeded
             defer {
                 self.startImport(startHendler: startHendler, progressHendler: progressHendler, complition: complition)
             }
@@ -206,9 +205,9 @@ public extension STImporter {
 
         let album: STLibrary.Album
         
-        public init(album: STLibrary.Album, importFiles: [Importable], responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition) {
+        public init(album: STLibrary.Album, importFiles: [Importable], responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition, uploadIfNeeded: Bool = false) {
             self.album = album
-            super.init(importFiles: importFiles, responseQueue: responseQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition)
+            super.init(importFiles: importFiles, responseQueue: responseQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition, uploadIfNeeded: uploadIfNeeded)
         }
         
         init(album: STLibrary.Album, importFiles: [Importable], operationQueue: STOperationQueue, startHendler: @escaping STImporter.Importer<Importable>.Hendler, progressHendler: @escaping STImporter.Importer<Importable>.ProgressHendler, complition: @escaping STImporter.Importer<Importable>.Complition, uploadIfNeeded: Bool) {

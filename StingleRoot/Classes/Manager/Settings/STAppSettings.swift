@@ -187,7 +187,7 @@ extension STAppSettings {
         
     class func migrate() {
         let environment = STEnvironment.current
-        guard !environment.appRunIsExtension else {
+        guard !environment.appIsExtension else {
             return
         }
         let userDefaults = UserDefaults.standard
