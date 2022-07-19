@@ -15,12 +15,6 @@ public extension STApplication {
             return STApplication.shared
         }
         
-        private var userRemoveHendler: (() -> Void)?
-        
-        init(userRemoveHendler: (() -> Void)?) {
-            self.userRemoveHendler = userRemoveHendler
-        }
-        
         func deleteFilesIfNeeded(files: [ILibraryFile], complition:(() -> Void)?) {
             DispatchQueue.global().async { [weak self] in
                 guard let weakSelf = self else { return }
@@ -210,47 +204,15 @@ public extension STApplication.Utils  {
         }
     }
     
-    func logout() {
-        self.logout(appInUnauthorized: false)
-    }
-    
-    func deleteAccount() {
-        STOperationManager.shared.logout()
-        self.application.fileSystem.deleteAccount()
-        self.application.dataBase.deleteAll()
-        self.application.autoImporter.logout()
-        STKeyManagement.signOut()
-        STBiometricAuthServices().removeBiometricAuth()
-        STAppSettings.current.logOut()
-        self.userRemoveHendler?()
-        //TODO: Khoren
-//        STMainVC.show(appInUnauthorized: false)
-    }
     
     func networkDispatcher(didReceive networkDispatcher: STNetworkDispatcher, logOunt: STResponse<STLogoutResponse>) {
         guard  logOunt.parts?.logout == true else {
             return
         }
-        self.logout(appInUnauthorized: true)
-    }
-    
-    //MARK: - private
-    
-    private func logout(appInUnauthorized: Bool) {
-        STOperationManager.shared.logout()
-        self.application.autoImporter.logout()
-        self.application.fileSystem.logOut()
-        self.application.dataBase.deleteAll()
-        STKeyManagement.signOut()
-        STBiometricAuthServices().removeBiometricAuth()
-        STAppSettings.current.logOut()
-        self.userRemoveHendler?()
-        //TODO: Khoren
-//        STMainVC.show(appInUnauthorized: appInUnauthorized)
+        self.application.logout(appInUnauthorized: true)
     }
     
 }
-
 
 extension STApplication {
     

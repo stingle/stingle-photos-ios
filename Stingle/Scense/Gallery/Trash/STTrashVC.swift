@@ -181,19 +181,7 @@ class STTrashVC: STFilesSelectCollectionViewController<STTrashVC.ViewModel> {
         self.show(vc, sender: nil)
     }
     
-    //MARK: - UserAction
-    
-    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
-        self.setSelectionMode(isSelectionMode: !self.isSelectionMode)
-    }
-    
-    //MARK: - Private methods
-        
-    private func updateTabBarAccessoryView() {
-        self.accessoryView.reloadData()
-    }
-    
-    private func updateSelectedItesmCount() {
+    override func updateSelectedItesmCount() {
         let count = self.selectionObjectsIdentifiers.count
         let title = self.isSelectionMode ? count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)") : nil
         self.accessoryView.title = title
@@ -201,11 +189,11 @@ class STTrashVC: STFilesSelectCollectionViewController<STTrashVC.ViewModel> {
         self.accessoryView.setEnabled(isEnabled: isEnabled)
     }
     
-    private func didSelectedTrash() {
+    override func deleteSelectedItems() {
+        super.deleteSelectedItems()
         guard !self.selectionObjectsIdentifiers.isEmpty else {
             return
         }
-        
         let fileNames = [String](self.selectionObjectsIdentifiers)
         let files = self.viewModel.getFiles(fileNames: fileNames)
         let loadingView: UIView = self.tabBarController?.view ?? self.view
@@ -224,7 +212,22 @@ class STTrashVC: STFilesSelectCollectionViewController<STTrashVC.ViewModel> {
                 }
             })
         })
+    }
+    
+    //MARK: - UserAction
+    
+    @IBAction private func didSelectSelecedButtonItem(_ sender: UIBarButtonItem) {
+        self.setSelectionMode(isSelectionMode: !self.isSelectionMode)
+    }
+    
+    //MARK: - Private methods
         
+    private func updateTabBarAccessoryView() {
+        self.accessoryView.reloadData()
+    }
+        
+    private func didSelectedTrash() {
+        self.deleteSelectedItems()
     }
     
     private func didSelectedRecover() {

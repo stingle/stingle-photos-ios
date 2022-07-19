@@ -192,6 +192,7 @@
 
 "enter_app_password" = "Enter app password";
 
+"alert_import_error_message" = "Out of %@ items it was possible to import %@ items";
 
 //MARK: - Gallery
 

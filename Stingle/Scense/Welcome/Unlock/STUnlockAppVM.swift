@@ -41,7 +41,7 @@ class STUnlockAppVM {
     }
     
     func logOutApp() {
-        STApplication.shared.utils.logout()
+        STApplication.shared.logout(appInUnauthorized: false)
     }
     
 }

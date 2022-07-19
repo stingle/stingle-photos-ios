@@ -40,6 +40,10 @@ class STFileViewerVC: UIViewController {
     private var initialFile: STLibrary.FileBase?
     
     @IBOutlet weak private var toolBar: UIView!
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
         
     lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
         let resilt = STFilesActionTabBarAccessoryView.loadNib()
@@ -287,12 +291,9 @@ class STFileViewerVC: UIViewController {
     }
     
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
-        let myApp = "group." + STEnvironment.current.appFileSharingBundleId
-        let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: nil)
-        vc.excludedActivityTypes = [UIActivity.ActivityType(rawValue: myApp)]
-
+        let vc = STActivityViewController(activityItems: downloadedUrls, applicationActivities: nil)
         vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: ActionType.share)
-        vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
+        vc.complition = { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
             }

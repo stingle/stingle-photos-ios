@@ -19,6 +19,10 @@ class STCollectionSyncViewController<ViewModel: ICollectionDataSourceViewModel>:
     @IBOutlet weak var emptyDataSubTitleLabel: UILabel?
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView?
     
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureRefreshControl()
@@ -31,7 +35,7 @@ class STCollectionSyncViewController<ViewModel: ICollectionDataSourceViewModel>:
     }
     
     func configureLocalize() {}
-    
+        
     func configureRefreshControl() {
         guard self.shouldAddRefreshControl() else {
             return
@@ -116,7 +120,7 @@ class STCollectionSyncViewController<ViewModel: ICollectionDataSourceViewModel>:
 }
 
 extension STCollectionSyncViewController: ISyncManagerObserver {
-    
+        
     var isSyncing: Bool {
         return STApplication.shared.syncManager.isSyncing
     }

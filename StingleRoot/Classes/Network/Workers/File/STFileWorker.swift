@@ -10,9 +10,7 @@ import Foundation
 public class STFileWorker: STWorker {
     
     public func moveFilesToTrash(files: [STLibrary.GaleryFile], reloadDBData: Bool = true, success: Success<STEmptyResponse>?, failure: Failure?) {
-        
-        //TODO: - khoren
-        
+                
         guard !files.isEmpty else {
             success?(STEmptyResponse())
             return

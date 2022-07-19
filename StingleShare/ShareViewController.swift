@@ -52,7 +52,7 @@ class ShareViewController: UIViewController {
         progressView.show(in: self.view)
         let importables = attachments.compactMap( {STImporter.GaleryItemProviderImportable(itemProvider: $0)} )
         _ = STImporter.GaleryFileImporter(importFiles: importables, responseQueue: .main, startHendler: {}, progressHendler: { progress in
-            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            let progressValue = progress.fractionCompleted
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
                     progressView.progress = Float(progressValue)
@@ -63,10 +63,21 @@ class ShareViewController: UIViewController {
         }, complition: { files, importableFiles in
             let files = importableFiles.map({$0.itemProvider})
             DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
-                progressView.hide()
-                self?.endProcess(providers: files)                
+                if files.count < importableFiles.count {
+                    let error = ShareViewControllerError.importError(totalUnitCount: importableFiles.count, completedUnitCount: files.count)
+                    self?.cancelRequest(error: error)
+                } else {
+                    progressView.hide()
+                    self?.endProcess(providers: files)
+                }
+                
+                
             })
         }, uploadIfNeeded: true)
+    }
+    
+    private func showErrorImportlert() {
+        self.cancelRequest(error:  ShareViewControllerError.loginError)
     }
     
     private func showLoginAlert() {
@@ -90,6 +101,7 @@ extension ShareViewController {
     enum ShareViewControllerError: Error, CustomStringConvertible, IError {
         case loginError
         case emptyData
+        case importError(totalUnitCount: Int, completedUnitCount: Int)
         
         var description: String {
             switch self {
@@ -97,6 +109,9 @@ extension ShareViewController {
                 return "please_login_in_app".localized
             case .emptyData:
                 return "you_havent_selected_any_item".localized
+            case .importError(let totalUnitCount, let completedUnitCount):
+                let result = String.init(format: "alert_import_error_message".localized, "\(totalUnitCount)", "\(completedUnitCount)")
+                return result
             }
         }
         

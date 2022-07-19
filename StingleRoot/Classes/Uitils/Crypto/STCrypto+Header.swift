@@ -8,6 +8,7 @@
 import Sodium
 import Clibsodium
 import Foundation
+import UniformTypeIdentifiers
 
 public struct STHeaders {
     public var file: STHeader?
@@ -56,6 +57,20 @@ extension STHeader {
     
     public var fileOreginalType: FileType? {
         return FileType(rawValue: Int(self.fileType))
+    }
+    
+    var uiType: UTType? {
+        if let fileName = self.fileName, !fileName.pathExtension.isEmpty, let type = UTType(filenameExtension: fileName.pathExtension) {
+            return type
+        }
+        switch self.fileOreginalType {
+        case .image:
+            return .image
+        case .video:
+            return .video
+        default:
+            return nil
+        }
     }
     
 }

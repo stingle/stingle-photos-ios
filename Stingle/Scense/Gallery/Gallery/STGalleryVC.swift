@@ -170,6 +170,24 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         }
     }
     
+    override func updateSelectedItesmCount() {
+        super.updateSelectedItesmCount()
+        let count = self.selectionObjectsIdentifiers.count
+        let title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
+        self.accessoryView.title = title
+        self.accessoryView.setEnabled(isEnabled: count != .zero)
+    }
+    
+    override func deleteSelectedItems() {
+        super.deleteSelectedItems()
+        let files = self.getSelectedFiles()
+        let title = "delete_files_alert_title".localized
+        let message = String(format: "delete_move_files_alert_message".localized, "\(files.count)")
+        self.showOkCancelTextAlert(title: title, message: message, handler: { [weak self] _ in
+            self?.deleteCurrentFile(files: files)
+        })
+    }
+    
     //MARK: - User action
     
     @IBAction private func didSelectOpenImagePicker(_ sender: Any) {
@@ -225,13 +243,6 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         return files
     }
     
-    private func updateSelectedItesmCount() {
-        let count = self.selectionObjectsIdentifiers.count
-        let title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
-        self.accessoryView.title = title
-        self.accessoryView.setEnabled(isEnabled: count != .zero)
-    }
-    
     private func updateTabBarAccessoryView() {
         if self.dataSource.viewModel.isSelectedMode {
             (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
@@ -260,18 +271,16 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
     }
     
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
-        let myApp = STEnvironment.current.appFileSharingBundleId
-        let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: nil)
-        vc.excludedActivityTypes = [UIActivity.ActivityType(rawValue: myApp)]
+        let vc = STActivityViewController(activityItems: downloadedUrls, applicationActivities: nil)
         vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: FileAction.share)
-        vc.completionWithItemsHandler = { [weak self] (type, completed, items, error) in
+        
+        vc.complition = { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
             }
-            if completed {
-                self?.setSelectionMode(isSelectionMode: false)
-            }
+            self?.setSelectionMode(isSelectionMode: false)
         }
+        
         self.present(vc, animated: true)
     }
     
@@ -355,10 +364,10 @@ class STGalleryVC: STFilesSelectCollectionViewController<STGalleryVC.ViewModel> 
         var importedAssets = [PHAsset]()
     
         importer.startHendler = { progress in
-            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            let progressValue = progress.fractionCompleted
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
-                    progressView.progress = progressValue
+                    progressView.progress = Float(progressValue)
                     let completedUnitCount = min(progress.completedUnitCount + 1, progress.totalUnitCount)
                     progressView.subTitle = "\(completedUnitCount)/\(progress.totalUnitCount)"
                 }
@@ -506,12 +515,7 @@ extension STGalleryVC {
     }
     
     private func didSelectTrash(sendner: UIBarButtonItem) {
-        let files = self.getSelectedFiles()
-        let title = "delete_files_alert_title".localized
-        let message = String(format: "delete_move_files_alert_message".localized, "\(files.count)")
-        self.showOkCancelTextAlert(title: title, message: message, handler: { [weak self] _ in
-            self?.deleteCurrentFile(files: files)
-        })
+        self.deleteSelectedItems()
     }
     
 }

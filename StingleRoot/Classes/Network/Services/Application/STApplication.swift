@@ -7,7 +7,14 @@
 
 import Foundation
 
+public protocol STApplicationDelegate: AnyObject {
+    func application(appDidLogouted app: STApplication, appInUnauthorized: Bool)
+    func application(appDidDeleteAccount app: STApplication)
+}
+
 public class STApplication {
+    
+    static fileprivate var appIsConfigureed = false
     
     public static let shared = STApplication()
     
@@ -15,6 +22,8 @@ public class STApplication {
     public let appLockUnlocker = STAppLockUnlocker()
     public let dataBase = STDataBase()
     public let crypto = STCrypto()
+    
+    public weak var delegate: STApplicationDelegate?
     
     public private(set) var utils: Utils!
     
@@ -42,16 +51,14 @@ public class STApplication {
         return result
     }
     
-    var isFileSystemAvailable: Bool {
+    public var isFileSystemAvailable: Bool {
         return self.dataBase.userProvider.user != nil
     }
     
     private var myFileSystem: STFileSystem?
         
     private init() {
-        self.utils = Utils { [weak self] in
-            self?.myFileSystem = nil
-        }
+        self.utils = Utils()
         self.createFileSystem()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             guard let weakSelf = self else { return }
@@ -72,12 +79,63 @@ public extension STApplication {
     
     func configure(end: @escaping (() -> Void)) {
         DispatchQueue.global().async { [weak self] in
+            guard !STApplication.appIsConfigureed else {
+                return
+            }
             self?.myFileSystem?.migrate()
             STAppSettings.migrate()
+            STApplication.appIsConfigureed = true
             DispatchQueue.main.async {
                 end()
             }
         }
+    }
+    
+    func logout(appInUnauthorized: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.logoutCashe()
+            weakSelf.delegate?.application(appDidLogouted: weakSelf, appInUnauthorized: appInUnauthorized)
+        }
+        
+    }
+    
+    func deleteAccount() {
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.deleteAccountCashe()
+            weakSelf.delegate?.application(appDidDeleteAccount: weakSelf)
+        }
+    }
+    
+}
+
+fileprivate extension STApplication {
+    
+    func deleteAccountCashe() {
+        STOperationManager.shared.logout()
+        self.myFileSystem?.deleteAccount()
+        self.dataBase.deleteAll()
+        self.autoImporter.logout()
+        STKeyManagement.signOut()
+        STBiometricAuthServices().removeBiometricAuth()
+        STAppSettings.current.logOut()
+        self.myFileSystem = nil
+    }
+    
+    func logoutCashe() {
+        STOperationManager.shared.logout()
+        self.autoImporter.logout()
+        self.myFileSystem?.logOut()
+        self.dataBase.deleteAll()
+        STKeyManagement.signOut()
+        STBiometricAuthServices().removeBiometricAuth()
+        STAppSettings.current.logOut()
+        self.myFileSystem = nil
     }
     
 }

@@ -98,7 +98,7 @@ public extension STAuthWorker {
         
         let request = STUserRequest.deleteAccount(loginHash: loginHash)
         self.request(request: request, success: { (response: STEmptyResponse) in
-            application.utils.deleteAccount()
+            application.deleteAccount()
             success?(response)
         }, failure: failure)
         

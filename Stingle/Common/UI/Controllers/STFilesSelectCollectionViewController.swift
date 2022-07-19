@@ -40,6 +40,37 @@ class STFilesSelectCollectionViewController<DataSourceViewModel: ICollectionData
         }
     }
     
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        super.pressesBegan(presses, with: event)
+        presses.first?.key.flatMap{ self.onKeyPressed($0) }
+    }
+    
+    
+    func onKeyPressed(_ key: UIKey) {
+        
+        if key.modifierFlags == .command, key.keyCode == .keyboardA  {
+            self.setSelectionMode(isSelectionMode: true)
+            for section in 0..<self.collectionView.numberOfSections {
+                for item in 0..<self.collectionView.numberOfItems(inSection: section) {
+                    let indexPath = IndexPath(item: item, section: section)
+                    self.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .left)
+                    if let identifier = self.dataSource.object(at: indexPath)?.identifier {
+                        self.selectionObjectsIdentifiers.insert(identifier)
+                    }
+                }
+            }
+            self.updateSelectedItesmCount()
+        } else if key.modifierFlags == .command, (key.keyCode == .keyboardDeleteForward || key.keyCode == .keyboardDeleteOrBackspace) {
+            guard !self.selectionObjectsIdentifiers.isEmpty, self.isSelectionMode else {
+                return
+            }
+            self.deleteSelectedItems()
+        }
+    }
+    
+    func updateSelectedItesmCount() {}
+    func deleteSelectedItems() {}
+    
     func collectionView(didSelectItemAt indexPath: IndexPath) {
         //Implement chid classes
     }
