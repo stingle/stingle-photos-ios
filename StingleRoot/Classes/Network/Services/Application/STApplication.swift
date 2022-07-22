@@ -10,6 +10,7 @@ import Foundation
 public protocol STApplicationDelegate: AnyObject {
     func application(appDidLogouted app: STApplication, appInUnauthorized: Bool)
     func application(appDidDeleteAccount app: STApplication)
+    func application(appDidLoced app: STApplication, isAutoLock: Bool)
 }
 
 public class STApplication {
@@ -19,10 +20,9 @@ public class STApplication {
     public static let shared = STApplication()
     
     public let syncManager: STSyncManager = STSyncManager()
-    public let appLockUnlocker = STAppLockUnlocker()
+    public let appLockUnlocker: STAppLockUnlocker
     public let dataBase = STDataBase()
     public let crypto = STCrypto()
-    
     public weak var delegate: STApplicationDelegate?
     
     public private(set) var utils: Utils!
@@ -59,8 +59,11 @@ public class STApplication {
         
     private init() {
         self.utils = Utils()
+        self.appLockUnlocker = STAppLockUnlocker(callBackLock: { appIsLocked, isAutoLock  in
+            STApplication.shared.appDidLocked(appIsLocked: appIsLocked, isAutoLock: isAutoLock)
+        })
         self.createFileSystem()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             guard let weakSelf = self else { return }
             weakSelf.syncManager.configure(dataBase: weakSelf.dataBase, appLockUnlocker: weakSelf.appLockUnlocker, utils: weakSelf.utils)
         }
@@ -72,7 +75,19 @@ public class STApplication {
         }
         self.myFileSystem = STFileSystem(userHomeFolderPath: user.homeFolder)
     }
-        
+    
+    private func appDidLocked(appIsLocked: Bool, isAutoLock: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            if !appIsLocked {
+                weakSelf.dataBase.reloadData()
+            } else {
+                weakSelf.delegate?.application(appDidLoced: weakSelf, isAutoLock: isAutoLock)
+            }
+        }
+    }
 }
 
 public extension STApplication {

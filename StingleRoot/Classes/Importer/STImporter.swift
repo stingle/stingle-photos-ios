@@ -10,7 +10,7 @@ import UIKit
 
 public enum STImporter {
     
-    static private let importerDispatchQueue = DispatchQueue(label: "Importer.queue", attributes: .concurrent)
+    static public let importerDispatchQueue = DispatchQueue(label: "Importer.queue", attributes: .concurrent)
     
     static private var importerOperationQueue: STOperationQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 3, underlyingQueue: STImporter.importerDispatchQueue)
     
@@ -59,9 +59,9 @@ public enum STImporter {
             }
         }
         
-        public init(importFiles: [Importable], operationQueue: STOperationQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition, uploadIfNeeded: Bool) {
+        public init(importFiles: [Importable], operationQueue: STOperationQueue, responseQueue: DispatchQueue, startHendler:  @escaping Hendler, progressHendler:  @escaping ProgressHendler, complition:  @escaping Complition, uploadIfNeeded: Bool) {
             self.importFiles = importFiles
-            self.responseQueue = operationQueue.underlyingQueue ?? STImporter.importerDispatchQueue
+            self.responseQueue = responseQueue
             self.operationQueue = operationQueue
             self.uploadIfNeeded = uploadIfNeeded
                         
@@ -210,9 +210,9 @@ public extension STImporter {
             super.init(importFiles: importFiles, responseQueue: responseQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition, uploadIfNeeded: uploadIfNeeded)
         }
         
-        init(album: STLibrary.Album, importFiles: [Importable], operationQueue: STOperationQueue, startHendler: @escaping STImporter.Importer<Importable>.Hendler, progressHendler: @escaping STImporter.Importer<Importable>.ProgressHendler, complition: @escaping STImporter.Importer<Importable>.Complition, uploadIfNeeded: Bool) {
+        init(album: STLibrary.Album, importFiles: [Importable], operationQueue: STOperationQueue, responseQueue: DispatchQueue, startHendler: @escaping STImporter.Importer<Importable>.Hendler, progressHendler: @escaping STImporter.Importer<Importable>.ProgressHendler, complition: @escaping STImporter.Importer<Importable>.Complition, uploadIfNeeded: Bool) {
             self.album = album
-            super.init(importFiles: importFiles, operationQueue: operationQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition, uploadIfNeeded: uploadIfNeeded)
+            super.init(importFiles: importFiles, operationQueue: operationQueue, responseQueue: responseQueue, startHendler: startHendler, progressHendler: progressHendler, complition: complition, uploadIfNeeded: uploadIfNeeded)
         }
 
         override func addDB(file: STImporter.Importer<Importable>.File, reloadData: Bool) {

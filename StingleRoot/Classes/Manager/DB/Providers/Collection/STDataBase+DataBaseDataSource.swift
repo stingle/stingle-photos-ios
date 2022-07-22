@@ -40,6 +40,7 @@ public extension STDataBase {
                         
         public typealias ManagedModel = Model.ManagedModel
         
+        weak public var delegate: IProviderDelegate?
         public let sortDescriptorsKeys: [Sort]
         public let sectionNameKeyPath: String?
         public let ascending: Bool
@@ -47,21 +48,24 @@ public extension STDataBase {
         public private(set) var isFetching = false
         
         private(set) var snapshotReference: NSDiffableDataSourceSnapshotReference?
-        let viewContext: NSManagedObjectContext
         private var controller: NSFetchedResultsController<ManagedModel>!
         
-        private var invalidIds: [NSManagedObjectID]?
+        let viewContext: NSManagedObjectContext
+                
+        private var invalidIds = [NSManagedObjectID]()
         
         var isSyncing: Bool {
             return STApplication.shared.syncManager.isSyncing
         }
         
+        public var canReloadData: Bool {
+            return STApplication.shared.appLockUnlocker.state == .unlocked
+        }
+        
         public var identifier: String {
             return UUID().uuidString
         }
-        
-        weak public var delegate: IProviderDelegate?
-        
+                
         public init(sortDescriptorsKeys: [Sort], viewContext: NSManagedObjectContext, predicate: NSPredicate? = nil, sectionNameKeyPath: String?, ascending: Bool = false, cacheName: String? = ManagedModel.entityName) {
             self.ascending = ascending
             self.sortDescriptorsKeys = sortDescriptorsKeys
@@ -124,22 +128,27 @@ public extension STDataBase {
         //MARK: - IProviderDataSource
         
         public func reloadData() {
+            guard self.canReloadData else {
+                return
+            }
             self.isFetching = true
-            self.invalidIds = nil
             try? self.controller.performFetch()
         }
         
         public func reloadData(ids: [NSManagedObjectID], changeType: DataBaseChangeType) {
+            self.invalidIds.append(contentsOf: ids)
+            guard self.canReloadData else {
+                return
+            }
             self.isFetching = true
-            self.invalidIds = ids
             try? self.controller.performFetch()
         }
         
         //MARK: - NSFetchedResultsControllerDelegate
         
         public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-            if self.snapshotReference == snapshot, var invalidIds = self.invalidIds {
-                invalidIds = invalidIds.filter({ element in
+            if self.snapshotReference == snapshot {
+                self.invalidIds = invalidIds.filter({ element in
                     if #available(iOS 15.0, *) {
                         let isReloaded = snapshot.reloadedItemIdentifiers.first(where: { element == $0 as? NSManagedObjectID }) != nil
                         if isReloaded {
@@ -150,7 +159,7 @@ public extension STDataBase {
                 })
                 snapshot.reloadItems(withIdentifiers: invalidIds)
             }
-            self.invalidIds = nil
+            self.invalidIds.removeAll()
             self.snapshotReference = snapshot
             self.isFetching = false
             self.delegate?.dataSource(self, didChangeContentWith: snapshot)

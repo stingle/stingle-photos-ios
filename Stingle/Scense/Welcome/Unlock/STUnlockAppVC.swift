@@ -27,11 +27,9 @@ class STUnlockAppVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         guard self.showBiometricUnlocer else {
             return
         }
-        
         self.unlockApp { [weak self] error in
             guard let error = error else {
                 return

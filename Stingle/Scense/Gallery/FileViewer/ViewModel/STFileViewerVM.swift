@@ -128,18 +128,18 @@ class STFileViewerVM<File: STLibrary.FileBase> where File: ICDSynchConvertable {
     }
     
     func getDefaultActions(for file: File) -> [STFileViewerVC.ActionType] {
-        var allCasesWithoutEdit = STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
         guard let originalType = file.decryptsHeaders.file?.fileOreginalType else {
-            return allCasesWithoutEdit
+            return STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
         }
         switch originalType {
         case .video:
-            return allCasesWithoutEdit
+            return STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
         case .image:
             if file.decryptsHeaders.file?.fileName?.pathExtension.lowercased() != "gif" {
-                allCasesWithoutEdit.append(.edit)
+                return STFileViewerVC.ActionType.allCases
+            } else {
+                return STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
             }
-            return allCasesWithoutEdit
         }
     }
 }

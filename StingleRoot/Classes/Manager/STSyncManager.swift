@@ -35,18 +35,14 @@ public class STSyncManager {
         guard !self.isConfigured else {
             return
         }
-                
         self.isConfigured = true
         self.dataBase = dataBase
         self.appLockUnlocker = appLockUnlocker
         self.utils = utils
-        
         appLockUnlocker.add(self)
-        
         let center = NotificationCenter.default
         center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
         center.addObserver(self, selector: #selector(didEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
-        
         self.sync()
     }
     

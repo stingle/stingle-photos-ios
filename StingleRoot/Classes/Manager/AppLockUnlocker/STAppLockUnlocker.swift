@@ -27,8 +27,11 @@ public class STAppLockUnlocker {
     
     public let locker = Locker()
     public let unLocker = UnLocker()
-    
     private var myState = AppLockState.unknown
+    
+    public typealias CallBackLock = ((_ appIsLocked: Bool, _ isAutoLock: Bool) -> Void)
+    
+    private var callBackLock: CallBackLock?
     
     public var state: AppLockState {
         switch self.myState {
@@ -41,7 +44,8 @@ public class STAppLockUnlocker {
     
     private let observer = STObserverEvents<IAppLockUnlockerObserver>()
     
-    public init() {
+    public init(callBackLock: CallBackLock?) {
+        self.callBackLock = callBackLock
         self.locker.delegate = self
         self.unLocker.delegate = self
     }
@@ -54,11 +58,15 @@ public class STAppLockUnlocker {
         self.observer.removeObject(observer)
     }
     
+    
+    deinit {
+        self.callBackLock = nil
+    }
 }
 
 extension STAppLockUnlocker: LockerDelegate, UnLockerDelegate {
     
-    func appLocker(didLockApp locker: Locker) {
+    func appLocker(didLockApp locker: Locker, isAutoLock: Bool) {
         self.myState = .locked
         self.observer.forEach { [weak self] observer in
             DispatchQueue.main.async { [weak self] in
@@ -68,6 +76,7 @@ extension STAppLockUnlocker: LockerDelegate, UnLockerDelegate {
                 observer.appLockUnlocker(didLockApp: weakSelf)
             }
         }
+        self.callBackLock?(true, isAutoLock)
     }
     
     func appUnLocker(didUnlockApp locker: UnLocker) {
@@ -80,12 +89,13 @@ extension STAppLockUnlocker: LockerDelegate, UnLockerDelegate {
                 observer.appLockUnlocker(didUnlockApp: weakSelf)
             }
         }
+        self.callBackLock?(false, false)
     }
     
 }
 
 fileprivate protocol LockerDelegate: AnyObject {
-    func appLocker(didLockApp locker: STAppLockUnlocker.Locker)
+    func appLocker(didLockApp locker: STAppLockUnlocker.Locker, isAutoLock: Bool)
 }
 
 public extension STAppLockUnlocker {
@@ -101,14 +111,8 @@ public extension STAppLockUnlocker {
             self.addNotifications()
         }
         
-        public func lockApp(showBiometricUnlocer: Bool) {
-            guard STApplication.shared.utils.isLogedIn() else {
-                return
-            }
-            STKeyManagement.key = nil
-            //TODO: Khoren
-//            STUnlockAppVC.show(showBiometricUnlocer: showBiometricUnlocer)
-            self.delegate?.appLocker(didLockApp: self)
+        public func lockApp() {
+            self.appDidLock(isAutoLock: false)
         }
             
         //MARK: - Private
@@ -119,12 +123,20 @@ public extension STAppLockUnlocker {
             center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
         }
         
+        public func appDidLock(isAutoLock: Bool) {
+            guard STApplication.shared.utils.isLogedIn() else {
+                return
+            }
+            STKeyManagement.key = nil
+            self.delegate?.appLocker(didLockApp: self, isAutoLock: isAutoLock)
+        }
+        
         @objc private func didActivate(_ notification: Notification) {
             let timeInterval = STAppSettings.current.security.lockUpApp.timeInterval
             guard let resignActiveDate = self.resignActiveDate, resignActiveDate.distance(to: Date()) >= timeInterval  else {
                 return
             }
-            self.lockApp(showBiometricUnlocer: true)
+            self.appDidLock(isAutoLock: true)
         }
          
         @objc private func willResignActive(_ notification: Notification) {

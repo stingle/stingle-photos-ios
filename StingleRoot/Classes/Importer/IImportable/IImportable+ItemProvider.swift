@@ -97,7 +97,13 @@ public extension IItemProviderImportable {
                 }
                 
                 try? fileManager.createDirectory(at: fileFolderURL, withIntermediateDirectories: true)
-                try imageData.write(to: temporaryDirectory)
+                
+                if let url = url {
+                    try fileManager.moveItem(at: url, to: temporaryDirectory)
+                } else {
+                    try imageData.write(to: temporaryDirectory)
+                }
+                
             } catch {
                 try? fileManager.removeItem(at: fileFolderURL)
                 failure(STImporter.ImporterError.fileNotSupport)

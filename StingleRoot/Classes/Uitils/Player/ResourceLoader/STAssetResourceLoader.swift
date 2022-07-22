@@ -30,7 +30,7 @@ class STAssetResourceLoader: NSObject {
     private var decrypters = [Decrypter]()
     
     lazy var networkSession: STNetworkSession = {
-        let config = URLSessionConfiguration.default
+        let config = STNetworkSession.avStreamingConfiguration
         let networkSession = STNetworkSession(rootQueue: self.dispatchQueue, configuration: config)
         return networkSession
     }()

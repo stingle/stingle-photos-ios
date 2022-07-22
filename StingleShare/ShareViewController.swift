@@ -51,28 +51,24 @@ class ShareViewController: UIViewController {
         progressView.subTitle = "\(0)/\(attachments.count)"
         progressView.show(in: self.view)
         let importables = attachments.compactMap( {STImporter.GaleryItemProviderImportable(itemProvider: $0)} )
-        _ = STImporter.GaleryFileImporter(importFiles: importables, responseQueue: .main, startHendler: {}, progressHendler: { progress in
+        
+        let queue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 1, underlyingQueue: STImporter.importerDispatchQueue)
+        _ = STImporter.GaleryFileImporter.init(importFiles: importables, operationQueue: queue, responseQueue: .main, startHendler: {}, progressHendler: { progress in
             let progressValue = progress.fractionCompleted
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.2) {
-                    progressView.progress = Float(progressValue)
-                    let number = progress.completedUnitCount + 1
-                    progressView.subTitle = "\(number)/\(progress.totalUnitCount)"
-                }
+            UIView.animate(withDuration: 0.2) {
+                progressView.progress = Float(progressValue)
+                let number = progress.completedUnitCount + 1
+                progressView.subTitle = "\(number)/\(progress.totalUnitCount)"
             }
-        }, complition: { files, importableFiles in
+        }, complition: { [weak self] files, importableFiles in
             let files = importableFiles.map({$0.itemProvider})
-            DispatchQueue.main.asyncAfter(wallDeadline: .now() + 0.3, execute: { [weak self] in
-                if files.count < importableFiles.count {
-                    let error = ShareViewControllerError.importError(totalUnitCount: importableFiles.count, completedUnitCount: files.count)
-                    self?.cancelRequest(error: error)
-                } else {
-                    progressView.hide()
-                    self?.endProcess(providers: files)
-                }
-                
-                
-            })
+            if files.count < importableFiles.count {
+                let error = ShareViewControllerError.importError(totalUnitCount: importableFiles.count, completedUnitCount: files.count)
+                self?.cancelRequest(error: error)
+            } else {
+                progressView.hide()
+                self?.endProcess(providers: files)
+            }
         }, uploadIfNeeded: true)
     }
     

@@ -487,16 +487,16 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
                     self?.didSelectSaveToDevice(sendner: buttonItem)
                 }
                 result.append(saveToDevice)
-            case .trash:
-                let trash = STFilesActionTabBarAccessoryView.ActionItem.trash(identifier: type) { [weak self] _, buttonItem in
-                    self?.didSelectTrash(sendner: buttonItem)
-                }
-                result.append(trash)
             case .edit:
                 let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
                     self?.didSelectEdit()
                 }
                 result.append(edit)
+            case .trash:
+                let trash = STFilesActionTabBarAccessoryView.ActionItem.trash(identifier: type) { [weak self] _, buttonItem in
+                    self?.didSelectTrash(sendner: buttonItem)
+                }
+                result.append(trash)
             }
         }
 
@@ -655,8 +655,8 @@ extension STFileViewerVC {
         case share
         case move
         case saveToDevice
-        case trash
         case edit
+        case trash
         
         var stringValue: String {
             switch self {
@@ -666,10 +666,10 @@ extension STFileViewerVC {
                 return "move"
             case .saveToDevice:
                 return "saveToDevice"
-            case .trash:
-                return "trash"
             case .edit:
                 return "edit"
+            case .trash:
+                return "trash"
             }
         }
         

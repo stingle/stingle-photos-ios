@@ -7,9 +7,9 @@
 
 import Foundation
 
-class STOperationManager {
+public class STOperationManager {
     
-    static let shared: STOperationManager = STOperationManager()
+    static public let shared: STOperationManager = STOperationManager()
     private let defaultQueue = STOperationQueue(qualityOfService: .userInteractive)
     private let uploadQueue = STOperationQueue(maxConcurrentOperationCount: 4000, qualityOfService: .background)
     private let downloadQueue = STOperationQueue(qualityOfService: .background)
@@ -19,7 +19,7 @@ class STOperationManager {
     
     private init() {}
     
-    func createQueue(maxConcurrentOperationCount: Int, qualityOfService: QualityOfService = .userInteractive, underlyingQueue: DispatchQueue?) -> STOperationQueue {
+    public func createQueue(maxConcurrentOperationCount: Int, qualityOfService: QualityOfService = .userInteractive, underlyingQueue: DispatchQueue?) -> STOperationQueue {
         let queue = STOperationQueue(maxConcurrentOperationCount: maxConcurrentOperationCount, qualityOfService: qualityOfService, underlyingQueue: underlyingQueue)
         self.othersQueue.append(queue)
         return queue

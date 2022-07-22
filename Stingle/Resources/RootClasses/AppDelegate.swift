@@ -55,5 +55,9 @@ extension AppDelegate: STApplicationDelegate {
     func application(appDidDeleteAccount app: STApplication) {
         STMainVC.show(appInUnauthorized: false)
     }
+    
+    func application(appDidLoced app: STApplication, isAutoLock: Bool) {
+        STUnlockAppVC.show(showBiometricUnlocer: isAutoLock)
+    }
         
 }

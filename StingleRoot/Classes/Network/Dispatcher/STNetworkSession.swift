@@ -136,7 +136,14 @@ extension STNetworkSession {
         let sessionIdentifier: String = "com.networking.\(appBundleName)"
         let configuration = URLSessionConfiguration.background(withIdentifier: sessionIdentifier)
         configuration.isDiscretionary = true
+        configuration.sharedContainerIdentifier = "group.\(STEnvironment.current.appFileSharingBundleId)"
         configuration.sessionSendsLaunchEvents = true
+        return configuration
+    }
+    
+    class var avStreamingConfiguration: URLSessionConfiguration {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.networkServiceType = .avStreaming
         return configuration
     }
             

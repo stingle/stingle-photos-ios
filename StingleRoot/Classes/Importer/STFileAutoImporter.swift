@@ -328,7 +328,9 @@ public extension STImporter.AutoImporter {
             var resultDate = self.date
             var importedAssets = [PHAsset]()
             
-            let importer = STImporter.GaleryFileImporter(importFiles: importFiles, operationQueue: self.importQueue, startHendler: {}, progressHendler: { [weak self] progress in
+            let responseQueue = self.importQueue.underlyingQueue ?? STImporter.importerDispatchQueue
+                        
+            let importer = STImporter.GaleryFileImporter(importFiles: importFiles, operationQueue: self.importQueue, responseQueue: responseQueue, startHendler: {}, progressHendler: { [weak self] progress in
                                 
                 queue.async { [weak self] in
                     guard let weakSelf = self else {
