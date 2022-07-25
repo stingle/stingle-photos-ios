@@ -84,22 +84,18 @@ public extension IItemProviderImportable {
             let fileFolderURL = temporaryDirectory
 
             do {
-                
                 if let lastPathComponent = url?.lastPathComponent {
                     temporaryDirectory = temporaryDirectory.appendingPathComponent(lastPathComponent)
                 } else if let suggestedName = self.itemProvider.suggestedName {
                     temporaryDirectory = temporaryDirectory.appendingPathComponent(suggestedName)
                 }
-                
                 if temporaryDirectory.pathExtension.isEmpty {
                     let preferredFilenameExtension = type.preferredFilenameExtension ?? "JPEG"
                     temporaryDirectory = temporaryDirectory.appendingPathExtension(preferredFilenameExtension)
                 }
-                
                 try? fileManager.createDirectory(at: fileFolderURL, withIntermediateDirectories: true)
-                
-                if let url = url {
-                    try fileManager.moveItem(at: url, to: temporaryDirectory)
+                if let url = url, let data = try? Data(contentsOf: url) {
+                    try data.write(to: temporaryDirectory)
                 } else {
                     try imageData.write(to: temporaryDirectory)
                 }
