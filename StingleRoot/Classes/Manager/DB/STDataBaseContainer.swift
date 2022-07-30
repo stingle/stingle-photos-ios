@@ -180,7 +180,6 @@ fileprivate extension STDataBaseContainer {
         for index in self.migratedVersion()..<currentDBVersion {
             try self.migrate(to: index, persistentContainer: persistentContainer)
         }
-        
     }
     
     func migrate(to version: Int, persistentContainer: NSPersistentContainer) throws {
