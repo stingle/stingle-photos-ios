@@ -70,9 +70,7 @@ public class STFileSystem: NSObject {
     
         let userHome = cachesDirectory.appendingPathComponent(self.userHomeFolderPath)
         let appGroupUserHome = Self.appUrl.appendingPathComponent(self.userHomeFolderPath)
-        
-        self.fileManager.delegate = self
-        
+                
         if self.fileManager.isExecutableFile(atPath: userHome.path) {
             try? self.fileManager.removeItem(at: appGroupUserHome)
             try? self.fileManager.moveItem(at: userHome, to: appGroupUserHome)
@@ -103,16 +101,6 @@ public class STFileSystem: NSObject {
         }
         self.fileManager.clearTmpDirectory()
     }
-}
-
-extension STFileSystem: FileManagerDelegate {
-    
-    public func fileManager(_ fileManager: FileManager, shouldMoveItemAtPath srcPath: String, toPath dstPath: String) -> Bool {
-        
-        
-        return true
-    }
-    
 }
 
 public extension STFileSystem {

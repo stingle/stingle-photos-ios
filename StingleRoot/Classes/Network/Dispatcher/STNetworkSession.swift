@@ -28,6 +28,21 @@ class STNetworkSession: NSObject {
         operationsQueue.underlyingQueue = self.rootQueue
                         
         self.urlSession = URLSession(configuration: configuration, delegate: self, delegateQueue: operationsQueue)
+        self.cancelAllTask()
+    }
+    
+    private func cancelAllTask() {
+        self.urlSession .getAllTasks { tasks in
+            self.rootQueue.async(flags: .barrier) {
+                let myTasks = self.tasks
+                tasks.forEach { task in
+                    if myTasks[task.taskIdentifier] == nil {
+                        task.cancel()
+                    }
+                }
+            }
+                        
+        }
     }
         
 }
@@ -77,6 +92,7 @@ extension STNetworkSession {
     }
     
 }
+
 
 extension STNetworkSession: URLSessionDataDelegate {
     

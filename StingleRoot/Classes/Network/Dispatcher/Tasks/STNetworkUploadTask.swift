@@ -37,6 +37,7 @@ class STNetworkUploadTask: STNetworkTask<URLSessionUploadTask, STNetworkUploadTa
                         weakSelf?.didBuildProgress(totalUnitCount: progress.totalUnitCount, completedUnitCount: progress.completedUnitCount)
                     }
                 }
+                                
                 let task = weakSelf.session.uploadTask(with: weakSelf.request.asURLRequest(), fromFile: weakSelf.request.fileURL)
                 task.earliestBeginDate = Date()
                 weakSelf.urlTask = task
