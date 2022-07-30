@@ -122,9 +122,7 @@ public class STDataBase {
                 failure(DataBaseError.error(error: error))
                 return
             }
-        }
-        
-       
+        }       
     }
     
     func deleteAll() {

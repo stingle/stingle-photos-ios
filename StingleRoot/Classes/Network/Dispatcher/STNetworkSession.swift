@@ -135,7 +135,6 @@ extension STNetworkSession {
         let appBundleName = Bundle.main.bundleURL.lastPathComponent.lowercased().replacingOccurrences(of: " ", with: ".")
         let sessionIdentifier: String = "com.networking.\(appBundleName)"
         let configuration = URLSessionConfiguration.background(withIdentifier: sessionIdentifier)
-        configuration.isDiscretionary = true
         configuration.sharedContainerIdentifier = "group.\(STEnvironment.current.appFileSharingBundleId)"
         configuration.sessionSendsLaunchEvents = true
         return configuration

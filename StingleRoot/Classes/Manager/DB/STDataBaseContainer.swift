@@ -11,11 +11,7 @@ public class STDataBaseContainer {
     
     private let modelName: String
     private let modelBundles: [Bundle]
-    
-    private lazy var container: NSPersistentContainer = {
-        return self.getContaner()
-    }()
-    
+        
     var viewContext: NSManagedObjectContext {
         return self.container.viewContext
     }
@@ -25,6 +21,24 @@ public class STDataBaseContainer {
         background.automaticallyMergesChangesFromParent = true
         background.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         return background
+    }()
+    
+    private lazy var container: NSPersistentContainer = {
+        return self.getContaner()
+    }()
+    
+    private lazy var storeURL: URL = {
+        let environment = STEnvironment.current
+        let id = "group." + environment.appFileSharingBundleId
+        let path = "Databases" + "/\(self.modelName)"
+        var storeURL = URL.storeURL(for: id, databaseName: self.modelName, pathExtation: path)
+        let fileManager = FileManager.default
+        var dbUrl = storeURL
+        dbUrl.deleteLastPathComponent()
+        if !fileManager.fileExists(atPath: dbUrl.path) {
+            try? fileManager.createDirectory(at: dbUrl, withIntermediateDirectories: true)
+        }
+        return storeURL
     }()
     
     init(modelName: String, modelBundles: [Bundle]) {
@@ -71,20 +85,14 @@ public class STDataBaseContainer {
         }
 
         let persistentContainer = NSPersistentContainer(name: self.modelName, managedObjectModel: model)
-        
-        if !self.shouldMigrate() {
-            let environment = STEnvironment.current
-            let id = "group." + environment.appFileSharingBundleId
-            let storeURL = URL.storeURL(for: id, databaseName: self.modelName)
-            let storeDescription = NSPersistentStoreDescription(url: storeURL)
-            persistentContainer.persistentStoreDescriptions = [storeDescription]
+        if let storeDescriptions = self.getCurrentVersionStoreDescriptions() {
+            persistentContainer.persistentStoreDescriptions = storeDescriptions
         }
         
         persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         persistentContainer.viewContext.undoManager = nil
         persistentContainer.viewContext.shouldDeleteInaccessibleFaults = true
         persistentContainer.loadPersistentStores(completionHandler: { (storeDescription, error) in
-
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             } else  {
@@ -95,7 +103,6 @@ public class STDataBaseContainer {
                 }
             }
         })
-   
         return persistentContainer
     }
     
@@ -109,8 +116,13 @@ public extension URL {
         return self.containerURL(for: appGroup)
     }
 
-    static func storeURL(for appGroup: String, databaseName: String) -> URL {
-        return self.containerURL(for: appGroup).appendingPathComponent("\(databaseName).sqlite")
+    static func storeURL(for appGroup: String, databaseName: String, pathExtation: String? = nil) -> URL {
+        var containerURL = self.containerURL(for: appGroup)
+        if let pathExtation = pathExtation {
+            containerURL = containerURL.appendingPathComponent(pathExtation)
+        }
+        containerURL = containerURL.appendingPathComponent("\(databaseName).sqlite")
+        return containerURL
     }
     
     static func containerURL(for appGroup: String) -> URL {
@@ -139,9 +151,7 @@ extension NSManagedObjectContext {
         })
         return result
     }
-    
 }
-
 
 fileprivate extension STDataBaseContainer {
     
@@ -184,12 +194,25 @@ fileprivate extension STDataBaseContainer {
         guard let oldStore =  persistentContainer.persistentStoreCoordinator.persistentStores.first else {
             return
         }
-        let environment = STEnvironment.current
-        let id = "group." + environment.appFileSharingBundleId
-        let storeURL = URL.storeURL(for: id, databaseName: self.modelName)
+        let storeURL = self.storeURL
         try persistentContainer.persistentStoreCoordinator.migratePersistentStore(oldStore, to: storeURL, options: nil, withType: NSSQLiteStoreType)
         self.updateMigrateVersion(version: 1)
         
+    }
+    
+    func getCurrentVersionStoreDescriptions() -> [NSPersistentStoreDescription]? {
+        switch self.migratedVersion() {
+        case 0:
+            //The first version db using NSPersistentContainer.defaultDirectoryURL()
+            return nil
+        case 1:
+            let storeURL = self.storeURL
+            let storeDescription = NSPersistentStoreDescription(url: storeURL)
+            return [storeDescription]
+        default:
+            return nil
+            
+        }
     }
     
 }
