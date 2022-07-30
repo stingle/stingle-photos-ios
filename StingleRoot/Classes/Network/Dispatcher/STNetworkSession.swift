@@ -143,7 +143,6 @@ extension STNetworkSession {
     class var avStreamingConfiguration: URLSessionConfiguration {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.networkServiceType = .avStreaming
-        configuration.urlCache = nil
         return configuration
     }
             
