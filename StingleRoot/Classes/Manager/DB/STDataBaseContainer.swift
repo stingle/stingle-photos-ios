@@ -199,13 +199,9 @@ fileprivate extension STDataBaseContainer {
         let storeURL = self.storeURL
         try persistentContainer.persistentStoreCoordinator.migratePersistentStore(oldStore, to: storeURL, options: nil, withType: NSSQLiteStoreType)
         self.updateMigrateVersion(version: 1)
-        
     }
     
     func getCurrentVersionStoreDescriptions() -> [NSPersistentStoreDescription]? {
-        
-        self.migratedVersion()
-        
         switch self.migratedVersion() {
         case 0:
             //The first version db using NSPersistentContainer.defaultDirectoryURL()
