@@ -16,7 +16,6 @@ class STNetworkSession: NSObject {
     fileprivate let rootQueue: DispatchQueue
     fileprivate var urlSession: URLSession!
     fileprivate var tasks = [Int: INetworkSessionTask]()
-    
     weak var sessionEvent: INetworkSessionEvent?
     
     init(rootQueue: DispatchQueue = DispatchQueue(label: "org.stingle.session.rootQueue", attributes: .concurrent), configuration: URLSessionConfiguration = .default) {
@@ -137,12 +136,14 @@ extension STNetworkSession {
         let configuration = URLSessionConfiguration.background(withIdentifier: sessionIdentifier)
         configuration.sharedContainerIdentifier = "group.\(STEnvironment.current.appFileSharingBundleId)"
         configuration.sessionSendsLaunchEvents = true
+        configuration.urlCache = nil
         return configuration
     }
     
     class var avStreamingConfiguration: URLSessionConfiguration {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.networkServiceType = .avStreaming
+        configuration.urlCache = nil
         return configuration
     }
             

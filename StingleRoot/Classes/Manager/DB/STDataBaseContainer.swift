@@ -106,7 +106,6 @@ public class STDataBaseContainer {
         return persistentContainer
     }
     
-    
 }
 
 public extension URL {
@@ -158,6 +157,9 @@ fileprivate extension STDataBaseContainer {
     static let currentDBVersion:Int = 1
     
     func migratedVersion() -> Int {
+        if STEnvironment.current.appIsExtension {
+            return Self.currentDBVersion
+        }
         return UserDefaults.standard.integer(forKey: "data.base.container.migrated.version.\(self.modelName)")
     }
     
@@ -201,17 +203,20 @@ fileprivate extension STDataBaseContainer {
     }
     
     func getCurrentVersionStoreDescriptions() -> [NSPersistentStoreDescription]? {
+        
+        self.migratedVersion()
+        
         switch self.migratedVersion() {
         case 0:
             //The first version db using NSPersistentContainer.defaultDirectoryURL()
             return nil
         case 1:
+            //For version 1 db using group app url
             let storeURL = self.storeURL
             let storeDescription = NSPersistentStoreDescription(url: storeURL)
             return [storeDescription]
         default:
             return nil
-            
         }
     }
     
