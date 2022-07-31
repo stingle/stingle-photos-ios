@@ -22,6 +22,10 @@ class STUnlockAppVM {
         return self.unlocker.canUnlockAppBiometric
     }
     
+    var userEmail: String? {
+        return STApplication.shared.utils.user()?.email
+    }
+    
     func unlockAppBiometric(success: @escaping () -> Void, failure: @escaping (IError?) -> Void) {
         self.unlocker.unlockAppBiometric(success: success, failure: failure)
     }

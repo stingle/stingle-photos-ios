@@ -93,7 +93,7 @@ public class STBiometricAuthServices {
         }
         let authContext = LAContext()
         authContext.evaluateAccessControl(accessControl, operation: .useItem, localizedReason: "unlock".localized) { (successPolicy, error) in
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 if let error = error {
                     failure?(AuthError.error(error: error))
                 } else {

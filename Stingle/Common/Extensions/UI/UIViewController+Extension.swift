@@ -41,6 +41,15 @@ extension UIViewController {
 		self.showInfoAlert(title: error.title, message: error.message, handler: handler)
 	}
     
+    func showError(error: Error, handler: (() -> Void)? = nil) {
+        if let error = error as? IError {
+            self.showInfoAlert(title: error.title, message: error.message, handler: handler)
+        } else {
+            let error = STError.error(error: error)
+            self.showInfoAlert(title: error.title, message: error.message, handler: handler)
+        }
+    }
+    
     func showOkCancelTextAlert(title: String?, message: String?, textFieldHandler: ((UITextField) -> Void)? = nil, handler: ((String?) -> Void)? = nil, cancel: (() -> Void)? = nil) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

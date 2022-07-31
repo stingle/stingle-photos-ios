@@ -27,11 +27,11 @@ public class STSyncManager {
     private var utils: STApplication.Utils!
     
     private let observer = STObserverEvents<ISyncManagerObserver>()
-    private var isEnteredBackground = false
-    
+    private let applicationStateMonitoring = STApplicationStateMonitoring()
+    private var applicationStateMonitoringID: String?
     public private(set) var isSyncing = false
     
-    public func configure(dataBase: STDataBase, appLockUnlocker: STAppLockUnlocker, utils: STApplication.Utils) {
+    func configure(dataBase: STDataBase, appLockUnlocker: STAppLockUnlocker, utils: STApplication.Utils) {
         guard !self.isConfigured else {
             return
         }
@@ -40,9 +40,7 @@ public class STSyncManager {
         self.appLockUnlocker = appLockUnlocker
         self.utils = utils
         appLockUnlocker.add(self)
-        let center = NotificationCenter.default
-        center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
-        center.addObserver(self, selector: #selector(didEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        self.addAppActivateMonitoring()
         self.sync()
     }
     
@@ -62,6 +60,15 @@ public class STSyncManager {
     }
 
     //MARK: - private
+    
+    private func addAppActivateMonitoring() {
+        self.applicationStateMonitoringID = self.applicationStateMonitoring.addObserver { [weak self] state in
+            guard state == .active else {
+                return
+            }
+            self?.sync()
+        }
+    }
     
     private func sync() {
         self.sync(success: nil, failure: nil)
@@ -124,21 +131,10 @@ public class STSyncManager {
         }
     }
     
-    @objc private func didActivate(_ notification: Notification) {
-        if self.isEnteredBackground {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                self?.sync()
-            }
-        }
-        self.isEnteredBackground = false
-    }
-    
-    @objc private func didEnterBackground(_ notification: Notification) {
-        self.isEnteredBackground = true
-    }
-    
     deinit {
-        NotificationCenter.default.removeObserver(self)
+        if let applicationStateMonitoringID = self.applicationStateMonitoringID {
+            self.applicationStateMonitoring.removeObserver(identifier: applicationStateMonitoringID)
+        }
     }
     
 }

@@ -21,6 +21,7 @@
 		A012B48B2700BED5001E79E9 /* STStoragePeriodHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A012B4892700BED5001E79E9 /* STStoragePeriodHeaderView.xib */; };
 		A012B48D2700D53A001E79E9 /* STStorageProductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A012B48C2700D53A001E79E9 /* STStorageProductCell.xib */; };
 		A0134D8C26ADDB4C00FA5129 /* STSettingsDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0134D8B26ADDB4C00FA5129 /* STSettingsDetailVC.swift */; };
+		A013C9C62895B5DE00EE5BC6 /* STApplicationStateMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = A013C9C52895B5DE00EE5BC6 /* STApplicationStateMonitoring.swift */; };
 		A013D859269F700A007ED786 /* STSettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A013D858269F700A007ED786 /* STSettingsHeaderView.swift */; };
 		A013D85B269F701D007ED786 /* STSettingsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A013D85A269F701D007ED786 /* STSettingsHeaderView.xib */; };
 		A013D860269F9F7B007ED786 /* STSecurityVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A013D85F269F9F7B007ED786 /* STSecurityVM.swift */; };
@@ -219,7 +220,6 @@
 		A09FE6A12876C93F00CBA53E /* STMat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A076A631273EE6AE00106E87 /* STMat.swift */; };
 		A09FE6A22876C93F00CBA53E /* STConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A060010F27050BAC0071812C /* STConstants.swift */; };
 		A09FE6A32876C93F00CBA53E /* STFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A3E43265CF1F000F16EF9 /* STFileReader.swift */; };
-		A09FE6A42876C93F00CBA53E /* STUnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF766C26151D86003DEC2B /* STUnfairLock.swift */; };
 		A09FE6A52876C93F00CBA53E /* STPHPhotoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A046A80E261FA815005EDB89 /* STPHPhotoHelper.swift */; };
 		A09FE6A62876C93F00CBA53E /* STBytesUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = A087C46126147DA8006775D2 /* STBytesUnits.swift */; };
 		A09FE6A72876C93F00CBA53E /* STError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A022042B25EEDC0300D07C98 /* STError.swift */; };
@@ -480,6 +480,7 @@
 		A012B4892700BED5001E79E9 /* STStoragePeriodHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STStoragePeriodHeaderView.xib; sourceTree = "<group>"; };
 		A012B48C2700D53A001E79E9 /* STStorageProductCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STStorageProductCell.xib; sourceTree = "<group>"; };
 		A0134D8B26ADDB4C00FA5129 /* STSettingsDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSettingsDetailVC.swift; sourceTree = "<group>"; };
+		A013C9C52895B5DE00EE5BC6 /* STApplicationStateMonitoring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = STApplicationStateMonitoring.swift; sourceTree = "<group>"; };
 		A013D858269F700A007ED786 /* STSettingsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSettingsHeaderView.swift; sourceTree = "<group>"; };
 		A013D85A269F701D007ED786 /* STSettingsHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STSettingsHeaderView.xib; sourceTree = "<group>"; };
 		A013D85D269F7C81007ED786 /* STAppSettings+Security.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Security.swift"; sourceTree = "<group>"; };
@@ -817,7 +818,6 @@
 		A0FD3F372670F4C40042EB8D /* STFileUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileUrl.swift; sourceTree = "<group>"; };
 		A0FD3F3A26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STNetworkDispatcher+IRequestEncoding.swift"; sourceTree = "<group>"; };
 		A0FD3F3C267141430042EB8D /* STStreamNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStreamNetworkOperation.swift; sourceTree = "<group>"; };
-		A0FF766C26151D86003DEC2B /* STUnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STUnfairLock.swift; sourceTree = "<group>"; };
 		B31D61E727B64B4E00CBEA19 /* UIImage+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Helper.swift"; sourceTree = "<group>"; };
 		B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helper.swift"; sourceTree = "<group>"; };
 		B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperExtensions.swift; sourceTree = "<group>"; };
@@ -1272,7 +1272,6 @@
 		A022044C25EEDC0300D07C98 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				A059D1D326C998E80045AC61 /* Views */,
 				A022044D25EEDC0300D07C98 /* Welcome.storyboard */,
 			);
 			path = Common;
@@ -1512,7 +1511,6 @@
 				A0E1B504266BAAE20063CB40 /* STFileHandle.swift */,
 				A04A3E43265CF1F000F16EF9 /* STFileReader.swift */,
 				A046A80E261FA815005EDB89 /* STPHPhotoHelper.swift */,
-				A0FF766C26151D86003DEC2B /* STUnfairLock.swift */,
 				A087C46126147DA8006775D2 /* STBytesUnits.swift */,
 				A022042E25EEDC0300D07C98 /* STValidator.swift */,
 				A024330225F6384C0054BED9 /* STObserverEvents.swift */,
@@ -1640,13 +1638,6 @@
 				A0F980D12753E85E00DE9958 /* Items */,
 			);
 			path = About;
-			sourceTree = "<group>";
-		};
-		A059D1D326C998E80045AC61 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		A059D1D426C99AA70045AC61 /* BackupInputPhraseView */ = {
@@ -2180,6 +2171,7 @@
 		A09FE6C32876CA6500CBA53E /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A013C9C52895B5DE00EE5BC6 /* STApplicationStateMonitoring.swift */,
 				A09FE6C42876CA7D00CBA53E /* Extensions */,
 			);
 			path = Common;
@@ -3321,6 +3313,7 @@
 				A09FE6AF2876C94900CBA53E /* Chinese.swift in Sources */,
 				A09FE6932876C84600CBA53E /* STLibrary+AlbumFile.swift in Sources */,
 				A09FE6842876C73B00CBA53E /* STDataBase+SyncProvider.swift in Sources */,
+				A013C9C62895B5DE00EE5BC6 /* STApplicationStateMonitoring.swift in Sources */,
 				A09FE69B2876C86600CBA53E /* STCDAlbum.swift in Sources */,
 				A09FE66E2876C68F00CBA53E /* STSyncManager.swift in Sources */,
 				A09FE6D12876D0B900CBA53E /* STNetworkDispatcher.swift in Sources */,
@@ -3390,7 +3383,6 @@
 				A09FE6752876C70400CBA53E /* STFileUploaderOperation.swift in Sources */,
 				A041AD04287F110E00F7CF3F /* IImportable+ItemProvider.swift in Sources */,
 				A09FE6C92876CA8800CBA53E /* Codable+Operation.swift in Sources */,
-				A09FE6A42876C93F00CBA53E /* STUnfairLock.swift in Sources */,
 				A09FE70F2876DF0300CBA53E /* STEnvironment.swift in Sources */,
 				A093B72228847202003CA7DF /* AVAsset+Helper.swift in Sources */,
 				A09FE6D42876D0BF00CBA53E /* STNetworkTask.swift in Sources */,

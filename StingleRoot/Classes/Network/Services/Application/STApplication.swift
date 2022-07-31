@@ -16,7 +16,6 @@ public protocol STApplicationDelegate: AnyObject {
 public class STApplication {
     
     static fileprivate var appIsConfigureed = false
-    
     public static let shared = STApplication()
     
     public let syncManager: STSyncManager = STSyncManager()
@@ -82,6 +81,7 @@ public class STApplication {
                 return
             }
             if !appIsLocked {
+                weakSelf.syncManager.sync()
                 weakSelf.dataBase.reloadData()
             } else {
                 weakSelf.delegate?.application(appDidLoced: weakSelf, isAutoLock: isAutoLock)
@@ -95,6 +95,7 @@ public extension STApplication {
     func configure(end: @escaping (() -> Void)) {
         DispatchQueue.global().async { [weak self] in
             guard !STApplication.appIsConfigureed else {
+                end()
                 return
             }
             self?.myFileSystem?.migrate()

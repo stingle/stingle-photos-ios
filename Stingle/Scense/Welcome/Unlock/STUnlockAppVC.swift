@@ -98,7 +98,7 @@ class STUnlockAppVC: UIViewController {
     }
     
     private func configureLocalized() {
-        self.descriptionLabel.text = nil
+        self.descriptionLabel.text = self.viewModel.userEmail
         self.logOutButton.setTitle("log_out".localized, for: .normal)
         self.unlockButton.setTitle("unlock".localized, for: .normal)
     }

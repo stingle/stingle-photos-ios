@@ -1,4 +1,5 @@
 import UIKit
+import StingleRoot
 
 class STLandingVM {
 	
@@ -79,5 +80,36 @@ class STLandingVM {
 			break
 		}
 		return nil
-	}	
+	}
+    
+    func getAppServer() -> String {
+        return STEnvironment.current.baseUrl
+    }
+    
+    func setAppServerDefault() {
+        STEnvironment.current.setBaseUrl(url: nil)
+    }
+    
+    func setAppServer(url: String?) throws {
+        guard let urlStr = url, urlStr.isValidURL, let url = URL(string: urlStr) else {
+            throw LandingError.cantCreateUrl
+        }
+        STEnvironment.current.setBaseUrl(url: url)
+    }
+    
+}
+
+extension STLandingVM {
+    
+    enum LandingError: IError {
+        case cantCreateUrl
+        
+        var message: String {
+            switch self {
+            case .cantCreateUrl:
+                return "error_url_not_valid".localized
+            }
+        }
+    }
+    
 }
