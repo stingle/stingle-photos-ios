@@ -75,6 +75,14 @@ class STSplitViewController: UIViewController {
     override var prefersHomeIndicatorAutoHidden: Bool {
         return self.detailViewController?.prefersHomeIndicatorAutoHidden ?? super.prefersHomeIndicatorAutoHidden
     }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return self.detailViewController?.preferredStatusBarUpdateAnimation ?? super.preferredStatusBarUpdateAnimation
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return self.detailViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
+    }
             
     //MARK: override
     

@@ -68,10 +68,18 @@ class STFileViewerVC: UIViewController {
         return vc
     }
     
-    override var prefersHomeIndicatorAutoHidden: Bool {
-        return self.currentFileViewer?.prefersHomeIndicatorAutoHidden ?? super.prefersHomeIndicatorAutoHidden
+    override var prefersStatusBarHidden: Bool {
+        return self.viewerStyle == .balck
     }
-            
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return self.viewerStyle == .balck
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .slide
+    }
+              
     override func viewDidLoad() {
         super.viewDidLoad()
         if let initialFile = self.initialFile, self.currentIndex == nil {
@@ -236,19 +244,20 @@ class STFileViewerVC: UIViewController {
     private func changeViewerStyle() {
         switch self.viewerStyle {
         case .white:
+            self.viewerStyle = .balck
             self.view.backgroundColor = .black
-            self.navigationController?.setNavigationBarHidden(true, animated: false)
+            self.navigationController?.navigationBar.alpha = 0
             self.toolBar.alpha = .zero
             self.tabBarController?.tabBar.alpha = .zero
-            self.viewerStyle = .balck
         case .balck:
+            self.viewerStyle = .white
             self.view.backgroundColor = .appBackground
-            self.navigationController?.setNavigationBarHidden(false, animated: false)
+            self.navigationController?.navigationBar.alpha = 1
             self.toolBar.alpha = 1
             self.tabBarController?.tabBar.alpha = 1
-            self.viewerStyle = .white
         }
-        self.splitMenuViewController?.setNeedsStatusBarAppearanceUpdate()
+        self.setNeedsStatusBarAppearanceUpdate()
+        self.setNeedsUpdateOfHomeIndicatorAutoHidden()
         self.viewControllers.forEach({ $0.fileViewer(didChangeViewerStyle: self, isFullScreen: self.viewerStyle == .balck)})
     }
     
@@ -286,7 +295,6 @@ class STFileViewerVC: UIViewController {
             return
         }
         let shearing = STFilesDownloaderActivityVC.DownloadFiles.files(files: [file])
-        
         STFilesDownloaderActivityVC.showActivity(downloadingFiles: shearing, controller: self.tabBarController ?? self, delegate: self, userInfo: action)
     }
     
