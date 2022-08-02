@@ -11,6 +11,15 @@ public protocol IDownloaderSource: STDownloadRequest {
     var identifier: String { get }
     var fileTmpUrl: URL { get }
     var fileSaveUrl: URL { get }
+    
+    func asLibraryFile() -> ILibraryFile?
+}
+
+public extension IDownloaderSource {
+    
+    func asLibraryFile() -> ILibraryFile? {
+        return nil
+    }
 }
 
 extension STDownloaderManager {

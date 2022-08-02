@@ -168,6 +168,7 @@ extension STNetworkUploadTask {
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.setValue("multipart/form-data; boundary=\(self.boundary)", forHTTPHeaderField: "Content-Type")
+            request.timeoutInterval = 3 * 60
             if let headers = self.headers {
                 headers.forEach { header in
                     request.setValue(header.value, forHTTPHeaderField: header.key)

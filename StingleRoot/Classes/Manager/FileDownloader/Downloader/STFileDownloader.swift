@@ -258,4 +258,8 @@ extension STDownloaderManager.FileDownloaderSource: IDownloaderSource {
         return self.fileSaveUrl
     }
     
+    public func asLibraryFile() -> ILibraryFile? {
+        return self.file
+    }
+    
 }

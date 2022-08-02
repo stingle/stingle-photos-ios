@@ -47,7 +47,6 @@ class STLandingVC: UIViewController {
     }
     
     private func configure() {
-        self.appServerButton.setTitle("app_server".localized, for: .normal)
 		self.signInButton.titleLabel?.attributedText = self.viewModel.signInTitle()
         self.signInButton.setTitleColor(UIColor.appPrimary, for: UIControl.State.normal)
 		self.signUpButton.titleLabel?.attributedText = self.viewModel.signUpTitle()

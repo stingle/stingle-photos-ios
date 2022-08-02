@@ -213,10 +213,17 @@ public extension STPlayer {
     }
     
     func play() {
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+        } catch {
+            STLogger.log(error: error)
+        }
+        
         if self.state == .end && (self.duration - self.currentTime) < 1 {
             self.player.currentItem?.seek(to: .zero, completionHandler: nil)
         }
-        self.player.isMuted = false
+        self.isMuted = false
         self.addAllEvents()
         self.player.play()
         self.change(state: .playing)
@@ -321,9 +328,10 @@ fileprivate extension STPlayer {
 extension STPlayer: STFileDownloaderObserver {
     
     public func downloader(didEndDownload downloader: STDownloaderManager.FileDownloader, source: IDownloaderSource) {
-        guard let file = (source as? STLibrary.File), file.file == self.file?.file, file.dbSet == self.file?.dbSet else {
+        guard let file = source.asLibraryFile(), file.file == self.file?.file, file.dbSet == self.file?.dbSet else {
             return
         }
+                
         let currentTime = self.currentTime
         let isPLaying = self.isPlaying
         self.replaceCurrentFile(file: file)
