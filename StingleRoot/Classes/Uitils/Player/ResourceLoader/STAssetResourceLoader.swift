@@ -29,6 +29,8 @@ class STAssetResourceLoader: NSObject {
     private let file: ILibraryFile
     private var decrypters = [Decrypter]()
     
+    let isLocalPlaying: Bool
+    
     lazy var networkSession: STNetworkSession = {
         let config = STNetworkSession.avStreamingConfiguration
         let networkSession = STNetworkSession(rootQueue: self.dispatchQueue, configuration: config)
@@ -51,6 +53,8 @@ class STAssetResourceLoader: NSObject {
         self.url = url
         self.scheme = Scheme(identifier: scheme)
         self.file = file
+        self.isLocalPlaying =  STApplication.shared.fileSystem.fileExists(atPath: url.path)
+                
         super.init()
         self.asset.resourceLoader.setDelegate(self, queue: self.dispatchQueue)
     }
@@ -96,7 +100,6 @@ extension STAssetResourceLoader: AVAssetResourceLoaderDelegate {
             self.decrypters[decrypteIdex].cancel()
             self.decrypters.remove(at: decrypteIdex)
         }
-        
     }
     
 }

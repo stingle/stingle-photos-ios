@@ -70,11 +70,9 @@ public class STPlayer: NSObject {
     }
     
     private func addObserverTime(oldItem: AVPlayerItem? = nil) {
-        
-        guard let currentItem = self.player.currentItem else {
+        guard let currentItem = self.player.currentItem, self.observerToken == nil else {
             return
         }
-        
         self.player.addObserver(self, forKeyPath: "timeControlStatus", options: [.old, .new], context: nil)
         currentItem.addObserver(self, forKeyPath: "status", options: [.new], context: nil)
         let interval = CMTimeMake(value: 1, timescale: 1)
@@ -144,7 +142,7 @@ public class STPlayer: NSObject {
         guard let fileHeader = file.decryptsHeaders.file else {
             return
         }
-        
+        self.removeAllEvents()
         self.file = file
         let resourceLoader = STAssetResourceLoader(file: file, header: fileHeader)
         self.assetResourceLoader = resourceLoader
@@ -328,10 +326,12 @@ fileprivate extension STPlayer {
 extension STPlayer: STFileDownloaderObserver {
     
     public func downloader(didEndDownload downloader: STDownloaderManager.FileDownloader, source: IDownloaderSource) {
+        guard let assetResourceLoader = self.assetResourceLoader, !assetResourceLoader.isLocalPlaying else {
+            return
+        }
         guard let file = source.asLibraryFile(), file.file == self.file?.file, file.dbSet == self.file?.dbSet else {
             return
         }
-                
         let currentTime = self.currentTime
         let isPLaying = self.isPlaying
         self.replaceCurrentFile(file: file)
