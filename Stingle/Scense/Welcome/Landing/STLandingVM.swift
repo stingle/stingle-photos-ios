@@ -82,19 +82,16 @@ class STLandingVM {
 		return nil
 	}
     
-    func getAppServer() -> String {
-        return STEnvironment.current.baseUrl
+    func getAppServer() -> String? {
+        return STApplication.getAppServer()
     }
     
     func setAppServerDefault() {
-        STEnvironment.current.setBaseUrl(url: nil)
+        try? STApplication.setAppServer(url: nil)
     }
     
     func setAppServer(url: String?) throws {
-        guard let urlStr = url, urlStr.isValidURL, let url = URL(string: urlStr) else {
-            throw LandingError.cantCreateUrl
-        }
-        STEnvironment.current.setBaseUrl(url: url)
+        try STApplication.setAppServer(url: url)
     }
     
 }

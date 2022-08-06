@@ -130,6 +130,31 @@ public extension STApplication {
     
 }
 
+public extension STApplication {
+    
+    static func getAppServer() -> String? {
+        let baseUrl = STEnvironment.current.baseUrl
+        guard var url = URL(string: baseUrl) else {
+            return nil
+        }
+        url = url.deletingLastPathComponent()
+        return url.absoluteString
+    }
+    
+    static func setAppServer(url: String?) throws {
+        guard let urlStr = url else {
+            STEnvironment.current.setBaseUrl(url: nil)
+            return
+        }
+        guard urlStr.isValidURL, var url = URL(string: urlStr) else {
+            throw STError.notValidUrl
+        }
+        url.appendPathComponent("v2")
+        STEnvironment.current.setBaseUrl(url: url)
+    }
+    
+}
+
 fileprivate extension STApplication {
     
     func deleteAccountCashe() {

@@ -150,7 +150,7 @@
 "app_server" = "App server";
 "change_app_server_url" = "Change app server url";
 "set_default" = "Set default";
-"error_url_not_valid" = "Enter valid url";
+"error_url_not_valid" = "Not valid URL";
 
 "100_gb" = "100 GB";
 "300_gb" = "300 GB";

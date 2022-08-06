@@ -77,7 +77,7 @@ class STFileViewerVC: UIViewController {
     }
     
     override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        return .slide
+        return .fade
     }
               
     override func viewDidLoad() {
@@ -102,8 +102,15 @@ class STFileViewerVC: UIViewController {
         super.viewWillDisappear(animated)
         (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = nil
         if self.viewerStyle == .balck {
-            self.changeViewerStyle()
+            self.changeViewerStyleAnimated()
         }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            self?.updateAdditionalSafeAreaInsets()
+        }, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -153,9 +160,7 @@ class STFileViewerVC: UIViewController {
     }
     
     @objc private func didSelectBackground(tap: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.15) {
-            self.changeViewerStyle()
-        }
+        self.changeViewerStyleAnimated()
     }
     
     //MARK: - Private methods
@@ -231,13 +236,21 @@ class STFileViewerVC: UIViewController {
         case .video:
             let vc = STVideoViewerVC.create(file: file, fileIndex: index)
             vc.fileViewerDelegate = self
+            vc.additionalSafeAreaInsets = self.calculateAdditionalSafeAreaInsets()
             self.viewControllers.addObject(vc)
             return vc
         case .image:
             let vc = STPhotoViewerVC.create(file: file, fileIndex: index)
             vc.fileViewerDelegate = self
+            vc.additionalSafeAreaInsets = self.calculateAdditionalSafeAreaInsets()
             self.viewControllers.addObject(vc)
             return vc
+        }
+    }
+    
+    private func changeViewerStyleAnimated() {
+        UIView.animate(withDuration: UINavigationController.hideShowBarDuration) {
+            self.changeViewerStyle()
         }
     }
     
@@ -245,20 +258,48 @@ class STFileViewerVC: UIViewController {
         switch self.viewerStyle {
         case .white:
             self.viewerStyle = .balck
-            self.view.backgroundColor = .black
-            self.navigationController?.navigationBar.alpha = 0
-            self.toolBar.alpha = .zero
-            self.tabBarController?.tabBar.alpha = .zero
         case .balck:
             self.viewerStyle = .white
-            self.view.backgroundColor = .appBackground
-            self.navigationController?.navigationBar.alpha = 1
-            self.toolBar.alpha = 1
-            self.tabBarController?.tabBar.alpha = 1
         }
         self.setNeedsStatusBarAppearanceUpdate()
         self.setNeedsUpdateOfHomeIndicatorAutoHidden()
+        self.updateAppearance()
+        self.updateAdditionalSafeAreaInsets()
         self.viewControllers.forEach({ $0.fileViewer(didChangeViewerStyle: self, isFullScreen: self.viewerStyle == .balck)})
+    }
+    
+    private func updateAppearance() {
+        switch self.viewerStyle {
+        case .balck:
+            self.view.backgroundColor = .black
+            self.navigationController?.setNavigationBarHidden(true, animated: false)
+            self.toolBar.alpha = .zero
+            self.tabBarController?.tabBar.alpha = .zero
+        case .white:
+            self.view.backgroundColor = .appBackground
+            self.navigationController?.setNavigationBarHidden(false, animated: false)
+            self.toolBar.alpha = 1
+            self.tabBarController?.tabBar.alpha = 1
+        }
+    }
+    
+    private func updateAdditionalSafeAreaInsets()  {
+        let inset = self.calculateAdditionalSafeAreaInsets()
+        self.pageViewController.viewControllers?.forEach( { vc in
+            vc.additionalSafeAreaInsets = inset
+        })
+    }
+    
+    private func calculateAdditionalSafeAreaInsets() -> UIEdgeInsets {
+        switch self.viewerStyle {
+        case .balck:
+            var inset = UIEdgeInsets.zero
+            let tollBar: UIView = self.tabBarController?.tabBar ?? self.toolBar
+            inset.bottom = -tollBar.height + (self.view.window?.safeAreaInsets.bottom ?? .zero)
+            return inset
+        case .white:
+            return .zero
+        }
     }
     
     private func didChangeFileViewer() {
@@ -637,7 +678,7 @@ extension STFileViewerVC: IFileViewerDelegate {
         guard self.viewerStyle == .white else {
             return
         }
-        self.changeViewerStyle()
+        self.changeViewerStyleAnimated()
     }
     
     var isFullScreenMode: Bool {
@@ -707,7 +748,5 @@ extension STFileViewerVC {
         }
         
     }
-    
-    
-    
+        
 }

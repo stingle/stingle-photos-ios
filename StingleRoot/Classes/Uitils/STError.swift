@@ -77,6 +77,7 @@ public enum STError: IError {
     case unknown
     case canceled
     case fileIsUnavailable
+    case notValidUrl
     
     public var message: String {
         switch self {
@@ -93,6 +94,8 @@ public enum STError: IError {
             return "error_canceled".localized
         case .fileIsUnavailable:
             return "error_file_is_unavailable".localized
+        case .notValidUrl:
+            return "error_url_not_valid".localized
         }
     }
 }
