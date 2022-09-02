@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,7 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             STLogger.log(info: "bundleIdentifier, \(STEnvironment.current.bundleIdentifier)")
         #endif
         
-        STBGTaskScheduler.shared.start()
+        DispatchQueue.main.async {
+            STBGTaskScheduler.shared.start()
+            STApplication.shared.delegate = self
+        }
+        
         return true
     }
 
@@ -41,3 +46,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension AppDelegate: STApplicationDelegate {
+    
+    func application(appDidLogouted app: STApplication, appInUnauthorized: Bool) {
+        STMainVC.show(appInUnauthorized: appInUnauthorized)
+    }
+    
+    func application(appDidDeleteAccount app: STApplication) {
+        STMainVC.show(appInUnauthorized: false)
+    }
+    
+    func application(appDidLoced app: STApplication, isAutoLock: Bool) {
+        STUnlockAppVC.show(showBiometricUnlocer: isAutoLock)
+    }
+        
+}

@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import StingleRoot
 
 protocol STAlbumsDataSourceViewModelDelegate: AnyObject {
     func viewModel(albumMedadataFor album: STLibrary.Album?) -> (countFiles: Int, file: STLibrary.AlbumFile?, members: [STContact]?)

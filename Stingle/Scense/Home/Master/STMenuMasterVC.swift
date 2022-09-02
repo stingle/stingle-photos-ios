@@ -6,17 +6,17 @@
 //
 
 import UIKit
+import StingleRoot
 
 class STMenuMasterVC: UIViewController {
+    
+    @IBOutlet weak private var tableView: UITableView!
     
     private(set) var currentControllerType = ControllerType.gallery
     private let cellReuseIdentifier = "CellReuseIdentifier"
     private let headerViewReuseIdentifier = "HeaderViewReuseIdentifier"
-    
     private var menu: Menu?
         
-    @IBOutlet weak private var tableView: UITableView!
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.registrTableView()
@@ -76,12 +76,12 @@ extension STMenuMasterVC: UITableViewDataSource, UITableViewDelegate {
             let title = "alert_log_out_title".localized
             let message = "alert_log_out_message".localized
             self.showOkCancelTextAlert(title: title, message: message, textFieldHandler: nil, handler: { _ in
-                STApplication.shared.utils.logout()
+                STApplication.shared.logout(appInUnauthorized: false)
             }, cancel: nil)
             self.selectCurrentRow()
         case .lockApp:
             self.splitMenuViewController?.closeMenu()
-            STApplication.shared.appLockUnlocker.locker.lockApp(showBiometricUnlocer: false)
+            STApplication.shared.appLockUnlocker.locker.lockApp()
         case .freeUpSpace:
             STApplication.shared.fileSystem.freeUpSpace()
             let title = "alert_free_up_space_title".localized

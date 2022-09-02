@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 protocol STAlbumsCollectionViewCellDelegate: AnyObject {
     func albumsCell(didSelectDelete cell: STAlbumsCollectionViewCell)

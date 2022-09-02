@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StingleRoot
 
 class STUnlockAppVM {
     
@@ -19,6 +20,10 @@ class STUnlockAppVM {
     
     var canUnlockAppBiometric: Bool {
         return self.unlocker.canUnlockAppBiometric
+    }
+    
+    var userEmail: String? {
+        return STApplication.shared.utils.user()?.email
     }
     
     func unlockAppBiometric(success: @escaping () -> Void, failure: @escaping (IError?) -> Void) {
@@ -40,7 +45,7 @@ class STUnlockAppVM {
     }
     
     func logOutApp() {
-        STApplication.shared.utils.logout()
+        STApplication.shared.logout(appInUnauthorized: false)
     }
     
 }

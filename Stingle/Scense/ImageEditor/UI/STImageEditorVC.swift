@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 protocol STImageEditorVCDelegate: AnyObject {
     func imageEditor(didSelectCancel vc: STImageEditorVC)

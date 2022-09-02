@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 class STUnlockAppVC: UIViewController {
 
@@ -26,11 +27,9 @@ class STUnlockAppVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         guard self.showBiometricUnlocer else {
             return
         }
-        
         self.unlockApp { [weak self] error in
             guard let error = error else {
                 return
@@ -99,7 +98,7 @@ class STUnlockAppVC: UIViewController {
     }
     
     private func configureLocalized() {
-        self.descriptionLabel.text = nil
+        self.descriptionLabel.text = self.viewModel.userEmail
         self.logOutButton.setTitle("log_out".localized, for: .normal)
         self.unlockButton.setTitle("unlock".localized, for: .normal)
     }

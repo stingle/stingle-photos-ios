@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 protocol IFileViewer: UIViewController {
     
@@ -39,6 +40,10 @@ class STFileViewerVC: UIViewController {
     private var initialFile: STLibrary.FileBase?
     
     @IBOutlet weak private var toolBar: UIView!
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
         
     lazy private var accessoryView: STFilesActionTabBarAccessoryView = {
         let resilt = STFilesActionTabBarAccessoryView.loadNib()
@@ -63,10 +68,18 @@ class STFileViewerVC: UIViewController {
         return vc
     }
     
-    override var prefersHomeIndicatorAutoHidden: Bool {
-        return self.currentFileViewer?.prefersHomeIndicatorAutoHidden ?? super.prefersHomeIndicatorAutoHidden
+    override var prefersStatusBarHidden: Bool {
+        return self.viewerStyle == .balck
     }
-            
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return self.viewerStyle == .balck
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .fade
+    }
+              
     override func viewDidLoad() {
         super.viewDidLoad()
         if let initialFile = self.initialFile, self.currentIndex == nil {
@@ -89,8 +102,15 @@ class STFileViewerVC: UIViewController {
         super.viewWillDisappear(animated)
         (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = nil
         if self.viewerStyle == .balck {
-            self.changeViewerStyle()
+            self.changeViewerStyleAnimated()
         }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            self?.updateAdditionalSafeAreaInsets()
+        }, completion: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -140,9 +160,7 @@ class STFileViewerVC: UIViewController {
     }
     
     @objc private func didSelectBackground(tap: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.15) {
-            self.changeViewerStyle()
-        }
+        self.changeViewerStyleAnimated()
     }
     
     //MARK: - Private methods
@@ -218,33 +236,70 @@ class STFileViewerVC: UIViewController {
         case .video:
             let vc = STVideoViewerVC.create(file: file, fileIndex: index)
             vc.fileViewerDelegate = self
+            vc.additionalSafeAreaInsets = self.calculateAdditionalSafeAreaInsets()
             self.viewControllers.addObject(vc)
             return vc
         case .image:
             let vc = STPhotoViewerVC.create(file: file, fileIndex: index)
             vc.fileViewerDelegate = self
+            vc.additionalSafeAreaInsets = self.calculateAdditionalSafeAreaInsets()
             self.viewControllers.addObject(vc)
             return vc
+        }
+    }
+    
+    private func changeViewerStyleAnimated() {
+        UIView.animate(withDuration: UINavigationController.hideShowBarDuration) {
+            self.changeViewerStyle()
         }
     }
     
     private func changeViewerStyle() {
         switch self.viewerStyle {
         case .white:
+            self.viewerStyle = .balck
+        case .balck:
+            self.viewerStyle = .white
+        }
+        self.setNeedsStatusBarAppearanceUpdate()
+        self.setNeedsUpdateOfHomeIndicatorAutoHidden()
+        self.updateAppearance()
+        self.updateAdditionalSafeAreaInsets()
+        self.viewControllers.forEach({ $0.fileViewer(didChangeViewerStyle: self, isFullScreen: self.viewerStyle == .balck)})
+    }
+    
+    private func updateAppearance() {
+        switch self.viewerStyle {
+        case .balck:
             self.view.backgroundColor = .black
             self.navigationController?.setNavigationBarHidden(true, animated: false)
             self.toolBar.alpha = .zero
             self.tabBarController?.tabBar.alpha = .zero
-            self.viewerStyle = .balck
-        case .balck:
+        case .white:
             self.view.backgroundColor = .appBackground
             self.navigationController?.setNavigationBarHidden(false, animated: false)
             self.toolBar.alpha = 1
             self.tabBarController?.tabBar.alpha = 1
-            self.viewerStyle = .white
         }
-        self.splitMenuViewController?.setNeedsStatusBarAppearanceUpdate()
-        self.viewControllers.forEach({ $0.fileViewer(didChangeViewerStyle: self, isFullScreen: self.viewerStyle == .balck)})
+    }
+    
+    private func updateAdditionalSafeAreaInsets()  {
+        let inset = self.calculateAdditionalSafeAreaInsets()
+        self.pageViewController.viewControllers?.forEach( { vc in
+            vc.additionalSafeAreaInsets = inset
+        })
+    }
+    
+    private func calculateAdditionalSafeAreaInsets() -> UIEdgeInsets {
+        switch self.viewerStyle {
+        case .balck:
+            var inset = UIEdgeInsets.zero
+            let tollBar: UIView = self.tabBarController?.tabBar ?? self.toolBar
+            inset.bottom = -tollBar.height + (self.view.window?.safeAreaInsets.bottom ?? .zero)
+            return inset
+        case .white:
+            return .zero
+        }
     }
     
     private func didChangeFileViewer() {
@@ -281,14 +336,13 @@ class STFileViewerVC: UIViewController {
             return
         }
         let shearing = STFilesDownloaderActivityVC.DownloadFiles.files(files: [file])
-        
         STFilesDownloaderActivityVC.showActivity(downloadingFiles: shearing, controller: self.tabBarController ?? self, delegate: self, userInfo: action)
     }
     
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
-        let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: [])
+        let vc = STActivityViewController(activityItems: downloadedUrls, applicationActivities: nil)
         vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: ActionType.share)
-        vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
+        vc.complition = { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
             }
@@ -482,16 +536,16 @@ extension STFileViewerVC: STFilesActionTabBarAccessoryViewDataSource {
                     self?.didSelectSaveToDevice(sendner: buttonItem)
                 }
                 result.append(saveToDevice)
-            case .trash:
-                let trash = STFilesActionTabBarAccessoryView.ActionItem.trash(identifier: type) { [weak self] _, buttonItem in
-                    self?.didSelectTrash(sendner: buttonItem)
-                }
-                result.append(trash)
             case .edit:
                 let edit = STFilesActionTabBarAccessoryView.ActionItem.edit(identifier: type) { [weak self] _, _ in
                     self?.didSelectEdit()
                 }
                 result.append(edit)
+            case .trash:
+                let trash = STFilesActionTabBarAccessoryView.ActionItem.trash(identifier: type) { [weak self] _, buttonItem in
+                    self?.didSelectTrash(sendner: buttonItem)
+                }
+                result.append(trash)
             }
         }
 
@@ -624,7 +678,7 @@ extension STFileViewerVC: IFileViewerDelegate {
         guard self.viewerStyle == .white else {
             return
         }
-        self.changeViewerStyle()
+        self.changeViewerStyleAnimated()
     }
     
     var isFullScreenMode: Bool {
@@ -650,8 +704,8 @@ extension STFileViewerVC {
         case share
         case move
         case saveToDevice
-        case trash
         case edit
+        case trash
         
         var stringValue: String {
             switch self {
@@ -661,10 +715,10 @@ extension STFileViewerVC {
                 return "move"
             case .saveToDevice:
                 return "saveToDevice"
-            case .trash:
-                return "trash"
             case .edit:
                 return "edit"
+            case .trash:
+                return "trash"
             }
         }
         
@@ -694,7 +748,5 @@ extension STFileViewerVC {
         }
         
     }
-    
-    
-    
+        
 }

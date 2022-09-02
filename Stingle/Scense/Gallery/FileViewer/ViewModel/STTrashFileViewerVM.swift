@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StingleRoot
 
 class STTrashFileViewerVM: STFileViewerVM<STLibrary.TrashFile> {
     

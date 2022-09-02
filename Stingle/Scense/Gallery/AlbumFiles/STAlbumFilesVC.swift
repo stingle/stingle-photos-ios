@@ -7,6 +7,7 @@
 
 import UIKit
 import Photos
+import StingleRoot
 
 extension STAlbumFilesVC {
     
@@ -195,6 +196,24 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         self.show(vc, sender: nil)
     }
     
+    override func updateSelectedItesmCount() {
+        super.updateSelectedItesmCount()
+        let count = self.selectionObjectsIdentifiers.count
+        let title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
+        self.accessoryView.title = title
+        self.accessoryView.setEnabled(isEnabled: count != .zero)
+    }
+    
+    override func deleteSelectedItems() {
+        super.deleteSelectedItems()
+        let count = self.selectionObjectsIdentifiers.count
+        let title = "delete_files_alert_title".localized
+        let message = String(format: "delete_move_files_alert_message".localized, "\(count)")
+        self.showOkCancelTextAlert(title: title, message: message, handler: { [weak self] _ in
+            self?.deleteSelectedFiles()
+        })
+    }
+    
     //MARK: - UserAction
     
     @IBAction private func didSelectMoreButton(_ sender: UIBarButtonItem) {
@@ -323,13 +342,6 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         
     }
     
-    private func updateSelectedItesmCount() {
-        let count = self.selectionObjectsIdentifiers.count
-        let title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
-        self.accessoryView.title = title
-        self.accessoryView.setEnabled(isEnabled: count != .zero)
-    }
-    
     private func updateTabBarAccessoryView() {
         if self.isSelectionMode {
             (self.tabBarController?.tabBar as? STTabBar)?.accessoryView = self.accessoryView
@@ -409,15 +421,14 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
     }
     
     private func openActivityViewController(downloadedUrls: [URL], folderUrl: URL?) {
-        let vc = UIActivityViewController(activityItems: downloadedUrls, applicationActivities: [])
+        let vc = STActivityViewController(activityItems: downloadedUrls, applicationActivities: nil)
         vc.popoverPresentationController?.barButtonItem = self.accessoryView.barButtonItem(for: FileAction.share)
-        vc.completionWithItemsHandler = { [weak self] (type,completed,items,error) in
+        
+        vc.complition = { [weak self] in
             if let folderUrl = folderUrl {
                 self?.viewModel.removeFileSystemFolder(url: folderUrl)
             }
-            if completed {
-                self?.setSelectionMode(isSelectionMode: false)
-            }
+            self?.setSelectionMode(isSelectionMode: false)
         }
         self.present(vc, animated: true)
     }
@@ -464,10 +475,10 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         progressView.show(in: view)
     
         importer.startHendler = { progress in
-            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
+            let progressValue = progress.fractionCompleted
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
-                    progressView.progress = progressValue
+                    progressView.progress = Float(progressValue)
                     let completedUnitCount = min(progress.completedUnitCount + 1, progress.totalUnitCount)
                     progressView.subTitle = "\(completedUnitCount)/\(progress.totalUnitCount)"
                 }
@@ -475,15 +486,14 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
         }
         
         importer.progressHendler = { progress in
-            let progressValue = progress.totalUnitCount == .zero ? .zero : Float(progress.completedUnitCount) / Float(progress.totalUnitCount)
-            
+            let progressValue = progress.fractionCompleted
             if let asset = progress.importingFile?.asset {
                 importedAssets.append(asset)
             }
             
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
-                    progressView.progress = progressValue
+                    progressView.progress = Float(progressValue)
                     let completedUnitCount = min(progress.completedUnitCount + 1, progress.totalUnitCount)
                     progressView.subTitle = "\(completedUnitCount)/\(progress.totalUnitCount)"
                 }
@@ -623,12 +633,7 @@ extension STAlbumFilesVC {
     }
     
     private func didSelectTrashButton(files sendner: UIBarButtonItem) {
-        let count = self.selectionObjectsIdentifiers.count
-        let title = "delete_files_alert_title".localized
-        let message = String(format: "delete_move_files_alert_message".localized, "\(count)")
-        self.showOkCancelTextAlert(title: title, message: message, handler: { [weak self] _ in
-            self?.deleteSelectedFiles()
-        })
+        self.deleteSelectedItems()
     }
     
 }

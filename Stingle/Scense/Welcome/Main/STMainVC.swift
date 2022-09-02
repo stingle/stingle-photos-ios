@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 class STMainVC: UIViewController {
 	
@@ -16,18 +17,12 @@ class STMainVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.configure()
-        
-        let theme = STAppSettings.current.appearance.theme
-        UIView.animate(withDuration: 0.3) {
-            UIApplication.shared.windows.forEach { window in
-                window.overrideUserInterfaceStyle = theme.interfaceStyle
-            }
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.viewModel.setupApp { [weak self] (_) in
+            self?.configure()
             if self?.appInUnauthorized == true {
                 self?.showUnauthorizedAlert()
             } else {
@@ -40,6 +35,13 @@ class STMainVC: UIViewController {
 	
 	private func configure() {
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .appText
+        
+        let theme = STAppSettings.current.appearance.theme
+        UIView.animate(withDuration: 0.3) {
+            UIApplication.shared.windows.forEach { window in
+                window.overrideUserInterfaceStyle = theme.interfaceStyle
+            }
+        }
 	}
     
     private func showUnauthorizedAlert() {
@@ -82,8 +84,7 @@ extension STMainVC {
             let options: UIView.AnimationOptions = .transitionFlipFromRight
             let duration: TimeInterval = 0.5
             UIView.transition(with: rootWindow, duration: duration, options: options, animations: {
-            }, completion:
-                                { completed in
+            }, completion:{ completed in
             })
         }
         

@@ -1,4 +1,5 @@
 import UIKit
+import StingleRoot
 
 class STLandingVM {
 	
@@ -79,5 +80,33 @@ class STLandingVM {
 			break
 		}
 		return nil
-	}	
+	}
+    
+    func getAppServer() -> String? {
+        return STApplication.getAppServer()
+    }
+    
+    func setAppServerDefault() {
+        try? STApplication.setAppServer(url: nil)
+    }
+    
+    func setAppServer(url: String?) throws {
+        try STApplication.setAppServer(url: url)
+    }
+    
+}
+
+extension STLandingVM {
+    
+    enum LandingError: IError {
+        case cantCreateUrl
+        
+        var message: String {
+            switch self {
+            case .cantCreateUrl:
+                return "error_url_not_valid".localized
+            }
+        }
+    }
+    
 }

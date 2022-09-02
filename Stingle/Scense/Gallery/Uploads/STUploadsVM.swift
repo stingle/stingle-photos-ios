@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StingleRoot
 
 protocol STUploadsVMDelegate: AnyObject {
     func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [ILibraryFile], progresses: [String: Progress])

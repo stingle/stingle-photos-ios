@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StingleRoot
 
 class STAlbumFileViewerVM: STFileViewerVM<STLibrary.AlbumFile> {
     
@@ -28,14 +29,13 @@ class STAlbumFileViewerVM: STFileViewerVM<STLibrary.AlbumFile> {
     
     override func getAction(for file: STLibrary.AlbumFile) -> [STFileViewerVC.ActionType] {
         if self.album.isOwner {
-            return STFileViewerVC.ActionType.allCases
+            return self.getDefaultActions(for: file)
         } else {
             var result = [STFileViewerVC.ActionType]()
             if self.album.permission.allowCopy {
                 result.append(.move)
                 result.append(.saveToDevice)
             }
-            
             if self.album.permission.allowShare {
                 result.append(.share)
             }

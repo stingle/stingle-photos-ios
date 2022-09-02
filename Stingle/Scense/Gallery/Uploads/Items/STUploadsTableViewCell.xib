@@ -30,7 +30,7 @@
                                 <color key="textColor" name="STText"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zUx-Yf-JUW" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zUx-Yf-JUW" customClass="STView" customModule="StingleRoot">
                                 <rect key="frame" x="502" y="13" width="64" height="64"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_empty_files" translatesAutoresizingMaskIntoConstraints="NO" id="Dni-0U-j1R" customClass="STImageView" customModule="Stingle" customModuleProvider="target">

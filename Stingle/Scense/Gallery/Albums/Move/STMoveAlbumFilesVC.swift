@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 extension STMoveAlbumFilesVC {
     
@@ -117,7 +118,7 @@ extension STMoveAlbumFilesVC {
     
 }
 
-class STMoveAlbumFilesVC: STFilesViewController<STMoveAlbumFilesVC.ViewModel> {
+class STMoveAlbumFilesVC: STCollectionSyncViewController<STMoveAlbumFilesVC.ViewModel> {
     
     var moveInfo: MoveInfo!
     private let viewModel = STMoveAlbumFilesVM()

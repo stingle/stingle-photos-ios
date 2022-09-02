@@ -5,7 +5,8 @@
 //  Created by Khoren Asatryan on 7/14/21.
 //
 
-import UIKit 
+import UIKit
+import StingleRoot
 
 class STStorageVC: UIViewController {
     

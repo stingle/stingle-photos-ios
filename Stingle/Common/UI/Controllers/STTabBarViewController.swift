@@ -29,6 +29,18 @@ class STTabBarViewController: UITabBarController {
         return self.selectedViewController?.prefersStatusBarHidden ?? super.prefersStatusBarHidden
     }
     
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return self.selectedViewController?.prefersHomeIndicatorAutoHidden ?? super.prefersHomeIndicatorAutoHidden
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return self.selectedViewController?.preferredStatusBarUpdateAnimation ?? super.preferredStatusBarUpdateAnimation
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return self.selectedViewController?.preferredStatusBarStyle ?? super.preferredStatusBarStyle
+    }
+    
     override var shouldAutorotate: Bool {
         return self.selectedViewController?.shouldAutorotate ?? super.shouldAutorotate
     }
@@ -39,10 +51,6 @@ class STTabBarViewController: UITabBarController {
 
     override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation {
         return self.selectedViewController?.preferredInterfaceOrientationForPresentation ?? super.preferredInterfaceOrientationForPresentation
-    }
-    
-    override var prefersHomeIndicatorAutoHidden: Bool {
-        return self.selectedViewController?.prefersHomeIndicatorAutoHidden ?? super.prefersHomeIndicatorAutoHidden
     }
     
     private func updateSplitViewController() {

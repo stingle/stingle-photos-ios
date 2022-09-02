@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 protocol IFileViewerVM {
     
@@ -124,6 +125,22 @@ class STFileViewerVM<File: STLibrary.FileBase> where File: ICDSynchConvertable {
 
     func editVM(for file: File) -> IFileEditVM {
         fatalError("this method must be implemented in chile classes")
+    }
+    
+    func getDefaultActions(for file: File) -> [STFileViewerVC.ActionType] {
+        guard let originalType = file.decryptsHeaders.file?.fileOreginalType else {
+            return STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
+        }
+        switch originalType {
+        case .video:
+            return STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
+        case .image:
+            if file.decryptsHeaders.file?.fileName?.pathExtension.lowercased() != "gif" {
+                return STFileViewerVC.ActionType.allCases
+            } else {
+                return STFileViewerVC.ActionType.allCases.filter({ $0 != .edit })
+            }
+        }
     }
 }
 

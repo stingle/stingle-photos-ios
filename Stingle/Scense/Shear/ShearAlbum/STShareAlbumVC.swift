@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 protocol STShareAlbumVCDelegate: AnyObject {
     func shareAlbumVC(didShare shareAlbumVC: STShareAlbumVC)
