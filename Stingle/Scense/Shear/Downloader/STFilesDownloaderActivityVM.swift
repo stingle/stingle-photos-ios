@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StingleRoot
 
 protocol STShareActivityVMDelegate: AnyObject {
     func shareActivityVM(didUpdedProgress vm: STFilesDownloaderActivityVM, progress: Double)

@@ -7,6 +7,7 @@
 
 import Foundation
 import BackgroundTasks
+import StingleRoot
 import UIKit
 
 class STBGTaskScheduler {

@@ -7,8 +7,7 @@
 
 import UIKit
 
-@IBDesignable
-class STSlider: UISlider {
+@IBDesignable class STSlider: UISlider {
     
     @IBInspectable var trackHeight: CGFloat = 4 {
         didSet {

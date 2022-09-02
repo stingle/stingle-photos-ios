@@ -6,11 +6,10 @@
 //
 
 import Foundation
+import StingleRoot
 
 protocol STStorageVMDelegate: AnyObject {
-    
     func storageVM(didUpdateData storageVM: STStorageVM, billingInfo: STBillingInfo, products: [STStore.Product])
-    
 }
 
 class STStorageVM {

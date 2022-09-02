@@ -7,6 +7,7 @@
 
 import Photos
 import UIKit
+import StingleRoot
 
 class STGalleryVM {
     
@@ -24,8 +25,8 @@ class STGalleryVM {
         self.syncManager.sync()
     }
     
-    func upload(assets: [PHAsset]) -> STImporter.GaleryFileImporter {
-        let files = assets.compactMap({ return STImporter.GaleryFileImportable(asset: $0) })
+    func upload(assets: [PHAsset]) -> STImporter.GaleryAssetFileImporter {
+        let files = assets.compactMap({ return STImporter.GaleryFileAssetImportable(asset: $0) })
         let importer = self.uploader.upload(files: files)
         return importer
     }

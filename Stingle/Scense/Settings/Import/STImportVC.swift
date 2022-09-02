@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 class STImportVC: STSettingsDetailTableVC<STImportVC.SectionType, STImportVC.ItemType> {
         

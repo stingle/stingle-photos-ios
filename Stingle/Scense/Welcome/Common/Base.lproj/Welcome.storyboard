@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CXM-lh-l29">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CXM-lh-l29">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -105,20 +105,43 @@
                                     <constraint firstItem="jjx-5q-gGD" firstAttribute="leading" secondItem="02m-fv-OJi" secondAttribute="leading" id="uap-68-0Ai"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jn4-sg-TG5" customClass="STButton" customModule="Stingle" customModuleProvider="target">
+                                <rect key="frame" x="334.33333333333331" y="44" width="43.666666666666686" height="46"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
+                                <color key="tintColor" name="STPlaceholder"/>
+                                <inset key="contentEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="ic_menu_settings"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                                        <real key="value" value="0.20000000000000001"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="didSelectAppServerButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lzz-sf-gyF"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="STBackground"/>
                         <constraints>
                             <constraint firstItem="02m-fv-OJi" firstAttribute="height" secondItem="6Tk-OE-BBY" secondAttribute="height" multiplier="477:568" id="3lz-m6-jTl"/>
                             <constraint firstItem="02m-fv-OJi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="AKH-gL-1uE"/>
+                            <constraint firstItem="jn4-sg-TG5" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Fab-6i-Lk0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="02m-fv-OJi" secondAttribute="trailing" id="VN2-Tb-Ejx"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jn4-sg-TG5" secondAttribute="trailing" constant="12" id="c2K-P4-k2c"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="02m-fv-OJi" secondAttribute="bottom" constant="27" id="o3O-wC-ACK"/>
+                            <constraint firstItem="jn4-sg-TG5" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="vbM-Ek-TK0"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Xcq-Sv-1yA"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="alreadyHaveAnAccountLabel" destination="i67-Mc-OOU" id="bHX-pg-WII"/>
+                        <outlet property="appServerButton" destination="jn4-sg-TG5" id="2D7-En-jyL"/>
                         <outlet property="signInButton" destination="mgN-bI-81S" id="QME-B4-3dL"/>
                         <outlet property="signUpButton" destination="ZH5-tE-YJu" id="GDo-IT-qfP"/>
                     </connections>
@@ -1338,6 +1361,9 @@ may be vulnerable to brute force attacks.</string>
         <designable name="hFL-fg-WsP">
             <size key="intrinsicContentSize" width="5" height="22"/>
         </designable>
+        <designable name="jn4-sg-TG5">
+            <size key="intrinsicContentSize" width="43.666666666666664" height="46"/>
+        </designable>
         <designable name="oEH-dP-giw">
             <size key="intrinsicContentSize" width="77.666666666666671" height="22"/>
         </designable>
@@ -1359,6 +1385,7 @@ may be vulnerable to brute force attacks.</string>
         <image name="camera" catalog="system" width="128" height="94"/>
         <image name="ic_app_logo_rounded" width="512" height="512"/>
         <image name="ic_face_id" width="40" height="40"/>
+        <image name="ic_menu_settings" width="19.666666030883789" height="20"/>
         <image name="info.circle.fill" catalog="system" width="128" height="121"/>
         <image name="landing_trust_no_one" width="191" height="235.33332824707031"/>
         <namedColor name="STBackground">

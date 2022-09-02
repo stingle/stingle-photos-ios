@@ -8,7 +8,11 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
-APP_NAME = StingleDev Photos
+APP_NAME = Stingle Photos Dev
 APP_BUNDLE_ID = org.stingle.photos.dev
-BASE_API_URL = https:/$()/apidev.stingle.org/v2
+DEFAULT_API_URL = https:/$()/api.stingle.org/v2
+BASE_API_URL = $(DEFAULT_API_URL)
 BUILD_TYPE = Development
+
+APP_FILE_SHARING_BUNDLE_ID = org.stingle.photos.dev.sharing
+APP_FILE_SHARING_APP_NAME = StinglePhotosDevShare

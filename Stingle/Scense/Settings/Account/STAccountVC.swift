@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 class STAccountVC: STSettingsDetailTableVC<STAccountVC.SectionType, STAccountVC.ItemType> {
     

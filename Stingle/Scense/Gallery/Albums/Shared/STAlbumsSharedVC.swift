@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 extension STAlbumsSharedVC {
     
@@ -85,7 +86,7 @@ extension STAlbumsSharedVC {
     
 }
 
-class STAlbumsSharedVC: STFilesViewController<STAlbumsSharedVC.ViewModel> {
+class STAlbumsSharedVC: STCollectionSyncViewController<STAlbumsSharedVC.ViewModel> {
         
     private let viewModel = STAlbumsSharedVM()
     private let segueIdentifierAlbumFiles = "AlbumFiles"

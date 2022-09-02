@@ -8,19 +8,26 @@
 
 import Foundation
 import UIKit
+import StingleRoot
 
 class STMainVM {
     
     static private var isAppSetuped: Bool = false
 	
-	func setupApp(end: ((_ result: Bool) -> Void)) {
+	func setupApp(end: @escaping ((_ result: Bool) -> Void)) {
         guard !STMainVM.isAppSetuped else {
             end(true)
             return
         }
         STNetworkReachableService.shared.start()
         UIDevice.current.isBatteryMonitoringEnabled = true
-        end(true)
+        
+        STApplication.shared.configure {
+            DispatchQueue.main.async {
+                end(true)
+            }
+        }
+        
 	}
 	
 	func isLogined() -> Bool {

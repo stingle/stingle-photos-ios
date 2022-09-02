@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import StingleRoot
 
 class STAlbumFileViewerVM: STFileViewerVM<STLibrary.AlbumFile> {
     

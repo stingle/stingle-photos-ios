@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="STProgressView" customModule="StingleRoot" customModuleProvider="target">
+            <connections>
+                <outlet property="progressView" destination="J9X-di-Fbz" id="45r-v7-49H"/>
+                <outlet property="subTitleLabel" destination="bpA-3t-kGZ" id="Ppk-nL-X8i"/>
+                <outlet property="titleLabel" destination="6jf-QA-0od" id="UO9-d4-Srh"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="586" height="869"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c81-W7-EfB">
+                    <rect key="frame" x="0.0" y="0.0" width="586" height="869"/>
+                    <color key="backgroundColor" name="STPlaceholder"/>
+                </view>
+                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="flq-4V-sfE" customClass="STView" customModule="StingleRoot" customModuleProvider="target">
+                    <rect key="frame" x="118" y="404.5" width="350" height="60"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6jf-QA-0od">
+                            <rect key="frame" x="8" y="8" width="0.0" height="0.0"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                            <color key="textColor" name="STText"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J9X-di-Fbz">
+                            <rect key="frame" x="8" y="28" width="334" height="4"/>
+                            <color key="progressTintColor" name="STPrimary"/>
+                            <color key="trackTintColor" name="STPrimaryTransparent"/>
+                        </progressView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpA-3t-kGZ">
+                            <rect key="frame" x="342" y="52" width="0.0" height="0.0"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" name="STText"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" name="STMenuBackground"/>
+                    <constraints>
+                        <constraint firstItem="J9X-di-Fbz" firstAttribute="top" secondItem="6jf-QA-0od" secondAttribute="bottom" constant="20" id="25z-Ku-gXW"/>
+                        <constraint firstAttribute="trailing" secondItem="J9X-di-Fbz" secondAttribute="trailing" constant="8" id="GCv-iy-c5M"/>
+                        <constraint firstItem="bpA-3t-kGZ" firstAttribute="top" secondItem="J9X-di-Fbz" secondAttribute="bottom" constant="20" id="NFN-DO-JS8"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6jf-QA-0od" secondAttribute="trailing" constant="8" id="Se0-h8-8DQ"/>
+                        <constraint firstItem="6jf-QA-0od" firstAttribute="top" secondItem="flq-4V-sfE" secondAttribute="top" constant="8" id="WjZ-CF-B2m"/>
+                        <constraint firstItem="J9X-di-Fbz" firstAttribute="leading" secondItem="flq-4V-sfE" secondAttribute="leading" constant="8" id="gL6-Dw-9CD"/>
+                        <constraint firstItem="bpA-3t-kGZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="flq-4V-sfE" secondAttribute="leading" constant="8" id="q19-xI-E1P"/>
+                        <constraint firstItem="6jf-QA-0od" firstAttribute="leading" secondItem="flq-4V-sfE" secondAttribute="leading" constant="8" id="uqO-Hy-7Gu"/>
+                        <constraint firstAttribute="bottom" secondItem="bpA-3t-kGZ" secondAttribute="bottom" constant="8" id="veR-pb-n2o"/>
+                        <constraint firstAttribute="width" priority="750" constant="350" id="vxO-or-8lK"/>
+                        <constraint firstAttribute="trailing" secondItem="bpA-3t-kGZ" secondAttribute="trailing" constant="8" id="w46-vZ-OAV"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="radius">
+                            <real key="value" value="0.10000000000000001"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="c81-W7-EfB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="4z4-pl-XyD"/>
+                <constraint firstItem="c81-W7-EfB" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="90f-gV-ViG"/>
+                <constraint firstItem="flq-4V-sfE" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Nsu-OQ-QHT"/>
+                <constraint firstItem="flq-4V-sfE" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Y3o-gf-7x5"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="flq-4V-sfE" secondAttribute="trailing" constant="20" id="hJv-hG-woA"/>
+                <constraint firstAttribute="bottom" secondItem="c81-W7-EfB" secondAttribute="bottom" id="nkn-td-hZk"/>
+                <constraint firstAttribute="trailing" secondItem="c81-W7-EfB" secondAttribute="trailing" id="oV5-F3-4pI"/>
+                <constraint firstItem="flq-4V-sfE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="rbr-Mw-GOf"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="240.57971014492756" y="56.584821428571423"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="STMenuBackground">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPlaceholder">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPrimary">
+            <color red="0.71764705882352942" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STPrimaryTransparent">
+            <color red="0.71799999475479126" green="0.10999999940395355" blue="0.10999999940395355" alpha="0.25" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="STText">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

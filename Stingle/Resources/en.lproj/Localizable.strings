@@ -110,6 +110,9 @@
 "app_unauthorized_message" = "App automatically log out for your security. Please login and enjoy again";
 "please_set_a_new_password" = "Please set a new password";
 
+"please_login_in_app" = "Please login in app";
+"you_havent_selected_any_item" = "You haven't selected any item";
+
 "reconnect_server_try_again_message" = "An error has occurred. click the try again button to reconnect to the server";
 "try_again" = "Try again";
 
@@ -140,6 +143,14 @@
 
 "terms_of_use" = "Terms Of Use";
 "privacy_policy" = "Privacy Policy";
+
+"file_no_support" = "File No Support";
+"can't_create_file_thumbnail" = "can't create file thumbnail";
+
+"app_server" = "App server";
+"change_app_server_url" = "Change app server url";
+"set_default" = "Set default";
+"error_url_not_valid" = "Not valid URL";
 
 "100_gb" = "100 GB";
 "300_gb" = "300 GB";
@@ -186,6 +197,7 @@
 
 "enter_app_password" = "Enter app password";
 
+"alert_import_error_message" = "Out of %@ items it was possible to import %@ items";
 
 //MARK: - Gallery
 
@@ -324,7 +336,6 @@
 
 "import_existing_photos_and_videos" = "Import existing photos and videos";
 "import_existing_files_alert_message" = "Are you sure you want to import all existing photos and videos from your library? Depending on you library size this process might take some time.";
-
 
 
 //MARK: - Menu

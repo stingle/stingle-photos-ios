@@ -1001,7 +1001,7 @@
         <!--Item-->
         <scene sceneID="RdD-tw-RSB">
             <objects>
-                <viewController storyboardIdentifier="STFileViewerVCID" extendedLayoutIncludesOpaqueBars="YES" id="wnw-fg-4Rc" customClass="STFileViewerVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="STFileViewerVCID" id="wnw-fg-4Rc" customClass="STFileViewerVC" customModule="Stingle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lIY-Yr-Y3M">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1116,7 +1116,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cPn-ey-qMT" customClass="STView" customModule="Stingle" customModuleProvider="target">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cPn-ey-qMT" customClass="STView" customModule="StingleRoot">
                                 <rect key="frame" x="167.66666666666666" y="386" width="40" height="40"/>
                                 <subviews>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="1Ee-jX-pcz">
@@ -1137,7 +1137,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vg7-ni-0TF" customClass="STGradientView" customModule="Stingle" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vg7-ni-0TF">
                                 <rect key="frame" x="0.0" y="695.33333333333337" width="375" height="82.666666666666629"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" translatesAutoresizingMaskIntoConstraints="NO" id="Rh3-gX-PCG">
@@ -1157,7 +1157,7 @@
                                                 <real key="value" value="1"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="thumbHeight">
-                                                <real key="value" value="10"/>
+                                                <real key="value" value="25"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
@@ -1208,14 +1208,6 @@
                                     <constraint firstItem="Beg-hh-rpG" firstAttribute="top" secondItem="31D-KR-QeI" secondAttribute="bottom" constant="8" id="vny-eu-eRa"/>
                                     <constraint firstItem="31D-KR-QeI" firstAttribute="centerX" secondItem="Vg7-ni-0TF" secondAttribute="centerX" id="wsf-CF-IEG"/>
                                 </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="primaryColor">
-                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="secondaryColor">
-                                        <color key="value" white="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="jC9-9f-VIe" appends="YES" id="vkW-dk-T6J"/>
                                 </connections>
