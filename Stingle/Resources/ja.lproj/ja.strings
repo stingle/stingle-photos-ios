@@ -255,9 +255,9 @@
 "appearance" = "外観";
 "advanced" = "その他";
 
-"lock_up_the_app_after" = "アプリをロックする時間";
+"lock_up_the_app_after" = "アプリを再ロックするまでの時間";
 
-"app_access" = "アプリのアクセス";
+"app_access" = "アプリのロック";
 "authentication" = "認証";
 
 "biometric_authentication" = "生体認証";
@@ -371,9 +371,9 @@
 
 "immediately" = "時間を置かない";
 "seconds_count" = "%@秒";
-"minute" = "分";
+"minute" = "1分";
 "minutes_count" = "%@分";
-"hour" = "時間";
+"hour" = "1時間";
 
 //MARK: - Sync
 
