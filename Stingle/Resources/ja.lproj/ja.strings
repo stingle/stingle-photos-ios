@@ -1,0 +1,440 @@
+/* 
+  Localizable.strings
+  Stingle
+
+  Created by Khoren Asatryan on 3/3/21.
+  
+*/
+
+//Landing Page
+
+"welcome"="ようこそ";
+
+"landing_trust_no_one_title"="ゼロトラスト暗号";
+"landing_trust_no_one_description"="あなたのデータは他の誰のものでもありません。Stingle Photosの開発者やStingle Photosの使用しているクラウドのプロバイダー、 政府などの他の人は誰もあなたのデータを見ることができない仕組みになっています。データは常に暗号化され、安全に保存されています。";
+
+"landing_true_privacy_title"="本当のプライバシーをあなたに";
+"landing_true_privacy_description"="Stingle Photosはユーザーのプライバシーを最大限に尊重しています。いかなる個人情報や分析情報も取得せず、広告も表示いたしません。";
+
+"landing_backup_and_sync_title"="バックアップと同期";
+"landing_backup_and_sync_description"="すべての写真や動画は安全にクラウド上に保存され、デバイス間で同期されます。";
+
+"landing_fast_easy_to_use_title"="速く、使いやすく。";
+"landing_fast_easy_to_use_description"="Stingle Photosはセキュリティーのみでなく、速さも念頭に置き作られています。その速さは、通常は動作が遅くなってしまいがちな高度な暗号化を施しているということを忘れさせてしまうほどです。";
+
+"landing_have_an_account" = "アカウントをお持ちですか？";
+
+//MARK: - Sign up-in
+
+"sign_up_description" = "パスワードを設定してください。文字の種類に制限は設けておりませんが、大文字と小文字および記号を含む12文字以上のパスワードを推奨しています。パスワードが短すぎる場合、総当たり攻撃によりお客様の写真・動画が解読される危険性が高まります。";
+
+"sign_up" = "登録";
+"sign_in" = "ログイン";
+
+"backup_my_keys_description" = "アカウントの作成時、セキュリティー上最も重要な秘密鍵が端末内で生成されます。\n\nバックアップを選択されると、秘密鍵は強固に暗号化された上でクラウドに保存され、他のデバイスから簡単にログインすることができるようになります。\n\n秘密鍵をバックアップしないことも選択できますが、その場合は秘密の合鍵を用いることでのみ他のデバイスからログインできるようになるため、必ず秘密の合鍵を保存してください。";
+
+//MARK: - Common
+
+"email" = "メールアドレス";
+"already_have_an_account" = "アカウントをお持ちの場合";
+"dont_have_an_accout" = "アカウントを作成";
+"advanced" = "その他";
+"backup_my_keys" = "秘密鍵をバックアップ";
+"info" = "詳細";
+"gallery" = "ギャラリー";
+"forgot_password?" = "パスワードを忘れた";
+
+"importing" = "取り込み中";
+
+"service_busy?" = "ビジー状態です";
+
+"storage_space_used_info" = "%@を使用中（%@中（%@%%））";
+
+"alert_error_permission_photos_title" = "写真へアクセスできません";
+"alert_error_permission_photos_message" = "写真へのアクセスができませんでした。設定からStingle Photosへ写真のアクセスを許可してください。";
+
+"cancel" = "キャンセル";
+"ok" = "確定";
+"delete" = "削除";
+"trash" = "ごみ箱";
+"albums" = "アルバム";
+"sharing" = "共有";
+
+"change" = "変更";
+
+"items_count" = "%@件";
+
+"have_not_any_uploading_item" = "アップロード完了";
+
+"edit" = "編集";
+"done" = "終了";
+"select" = "選択";
+"copy" = "コピー";
+
+"selected_items_count" = "%@件選択中";
+"select_items" = "選択する";
+"next" = "次へ";
+"share" = "共有";
+"skip" = "スキップ";
+"settings" = "設定";
+
+"never" = "オフ";
+"ask_every_time" = "毎回選択する";
+"always" = "オン";
+
+"create_new_album" = "アルバムの新規作成";
+"main_gallery" = "メインギャラリー";
+"preparing" = "準備中";
+"remove" = "削除";
+"add_member" = "メンバーを追加";
+"members" = "メンバー";
+"save" = "保存";
+"save_as_new_file" = "新しく保存";
+
+"delete_all" = "すべて削除";
+"recover_all" = "すべて復元";
+
+"others" = "その他";
+
+"unlock" = "ロック解除";
+"log_out" = "ログアウト";
+
+"confirm_password" = "パスワードをもう一度入力";
+"change_password" = "パスワードの変更";
+"current_password" = "現在のパスワードを入力";
+"password" = "パスワード";
+"new_password" = "新しいパスワードを入力";
+
+"check" = "確認";
+
+"app_unauthorized_message" = "安全のため、一度ログアウトします。再度ログインし、お楽しみください。";
+"please_set_a_new_password" = "新しいパスワードを設定";
+
+"please_login_in_app" = "ログインしてください";
+"you_havent_selected_any_item" = "一つ以上選択してください";
+
+"reconnect_server_try_again_message" = "エラーが発生しました。再試行をタップすると、サーバーへの接続を再試行します。";
+"try_again" = "再試行";
+
+"day" = "日";
+"week" = "週";
+"month" = "月";
+"year" = "年";
+
+"current_storage" = "現在の容量";
+"current_plan" = "現在のプラン";
+"free" = "無料";
+
+"service_busy" = "サービスがビジー状態です。しばらくお待ちください。";
+"payment_failed_message" = "お支払いに失敗しました。";
+
+"yearly_plan_save" = "2ヶ月分お得";
+"billed_monthly" = "月ごとのお支払い";
+"billed_yearly" = "一年ごとのお支払い";
+"yearly" = "一年ごと";
+
+"delete_original_files" = "元のファイルを削除してよろしいですか？";
+"alert_delete_original_files_message" = "取り込み済みの写真をデバイスから削除します。続行しますか？";
+"about" = "詳細情報";
+"version" = "バージョン";
+"buy_now" = "購入する";
+"home" = "ホーム";
+"legal_policies" = "法的情報";
+
+"terms_of_use" = "利用規約";
+"privacy_policy" = "プライバシーポリシー";
+
+"file_no_support" = "未対応のファイルです";
+"can't_create_file_thumbnail" = "サムネイルの生成に失敗しました";
+
+"app_server" = "サーバー";
+"change_app_server_url" = "サーバーのURLを変更";
+"set_default" = "既定に戻す";
+"error_url_not_valid" = "URLが正しくありません";
+
+"100_gb" = "100GB";
+"300_gb" = "300GB";
+"1_tb" = "1TB";
+"3_tb" = "3TB";
+"5_tb" = "5TB";
+"10_tb" = "10TB";
+"20_tb" = "20TB";
+
+//MARK: - Share
+
+"share_via_stingle_photos" = "共有";
+"sharch_contact_text_feild_placeholder" = "相手のメールアドレス";
+"sorry_you_cant_add_yourself" = "自分自身を追加することはできません";
+"share_empty_recipient_list" = "メンバーを一人以上追加してください";
+
+"permition_add_new_photos" = "写真を追加";
+"permition_add_new_photos_description" = "メンバーが写真を追加できるようにします";
+
+"permition_sharing" = "共有";
+"permition_sharing_description" = "メンバーが他のメンバーを追加できるようにします";
+
+"permition_copying" = "コピー中";
+"permition_copying_description" = "メンバーが写真を保存できるようにします";
+
+"permissions" = "権限";
+"shared_album" = "共有アルバム";
+"please_wait_for_backup_to_finish_before_you_can_proceed" = "バックアップが完了するまでしばらくお待ちください。";
+
+"share_via_stingle_photos" = "Stingle photos同士で共有";
+"share_to_other_apps" = "他のアプリで共有";
+
+"alert_save_to_device_library_title" = "復号しますか？";
+"alert_save_files_to_device_library_message" = "選択したものを復号してよろしいですか？復号した写真は他のアプリからアクセスできるようになります。";
+
+"alert_save_file_to_device_library_message" = "復号してよろしいですか？復号した写真は他のアプリからアクセスできるようになります。";
+
+"album_info" = "アルバム情報";
+"album_settings" = "アルバム設定";
+"unshare" = "共有を停止";
+
+"alert_remove_album_member_title" = "メンバーの退会";
+"alert_remove_album_member_message" = "%@を退会させますか？";
+
+"enter_app_password" = "アプリのパスワードを入力";
+
+"alert_import_error_message" = "%@件中%@件の取り込みに失敗しました。";
+
+//MARK: - Gallery
+
+"empy_gallery_title" = "写真はありません";
+"empy_gallery_message" = "取り込んだ写真はここに表示されます。";
+
+"empy_albums_title" = "アルバムはありません";
+"empy_albums_message" = "アルバムを作って写真を整理したり、他の人と共有したりしましょう。";
+
+"empy_shared_albums_title" = "共有アルバムはありません";
+"empy_shared_albums_message" = "共有された写真はここに表示されます。";
+
+"empy_trash_title" = "ごみ箱は空です";
+"empy_trash_message" = "削除した写真や動画はここに表示されます。";
+"album_more_members" = "とその他%@件";
+
+"create_album_title" = "アルバム名を入力";
+"album_name" = "アルバム名";
+
+"delete_album_alert_title" = "%@の削除";
+"delete_album_alert_message" = "アルバム（%@）を削除してよろしいですか？";
+
+"delete_files_alert_title" = "写真の削除";
+"delete_files_alert_message" = "%@件の写真または動画を削除してよろしいですか？";
+"delete_move_files_alert_message" = "%件の写真または動画をごみ箱に移動してよろしいですか？";
+"empty_trash" = "ごみ箱を空にする";
+"delete_all_files_alert_message" = "ごみ箱を空にしてよろしいですか？復元することはできなくなります。";
+
+"add_or_move_album" = "アルバムを追加または移動";
+"delete_original_items_after_adding" = "追加後元の写真を削除";
+
+"rename_album" = "アルバムを解明？改名";
+"set_blank_album_cover" = "アルバムの表紙を設定しない";
+"reset_album_cover" = "アルバムの表紙をリセット";
+"set_album_cover" = "アルバムの表紙に設定";
+"delate_album" = "アルバムを削除";
+"leave_album" = "退出する";
+"download_selection" = "選択してダウンロード";
+"please_select_items" = "写真を選択してください";
+"leave" = "退出";
+"leave_album_alert_message" = "この共有アルバムから退出しますか？";
+
+"stop_sharing" = "共有を停止";
+"alert_stop_sharing_message" = "アルバム（%@）の共有を停止しますか？";
+
+"move_trash_file_alert_message" = "この写真はごみ箱へ移動します";
+"download_file" = "ダウンロード";
+
+//MARK: - Settings
+
+"account" = "アカウント";
+"security" = "セキュリティー";
+"backup" = "バックアップ";
+"import" = "取り込み";
+"appearance" = "外観";
+"advanced" = "その他";
+
+"lock_up_the_app_after" = "アプリを再ロックするまでの時間";
+
+"app_access" = "アプリのロック";
+"authentication" = "認証";
+
+"biometric_authentication" = "生体認証";
+"biometric_authentication_message" = "Stingle Photosを開く際に生体認証を使用します。";
+
+"require_confirmation" = "確認ボタンを表示";
+"require_confirmation_message" = "ロック解除の際に確認ボタンを表示します";
+
+"disallow_screenshots_off_this_app" = "アプリ内でのスクリーンショットを禁止する";
+
+"backup_my_keys" = "秘密鍵をバックアップ";
+"backup_my_keys_description" = "秘密鍵をバックアップすると、ログインする際に秘密の合鍵も入力する必要がなくなります。";
+
+"delete_account" = "アカウントの削除";
+
+"remove_backcup_keys_alert_title" = "秘密鍵のバックアップを削除";
+"remove_backcup_keys_alert_message" = "秘密鍵のバックアップを削除してよろしいですか？\n次回以降ログインされる際、秘密の合鍵が必要になります。";
+
+"delete_account_alert_title" = "アカウントの削除";
+"delete_account_alert_message" = "アカウントを削除してよろしいですか？\nデータはすべて削除され、復元できなくなります。";
+
+"delete_account_seccoundry_alert_title" = "本当によろしいですか？";
+"delete_account_seccoundry_alert_message" = "最終確認です。アカウント、アップロードした写真、動画、アルバム、共有アルバムはすべて削除されます。復元はできません。";
+
+
+"reset_password_title" = "注意　パスワードを変更すると、現在ログインしている端末が他にある場合、新しいパスワードで再度ログインが必要になります。";
+
+"alert_log_out_title" = "ログアウト";
+"alert_log_out_message" = "ログアウトしてよろしいですか？";
+
+"alert_free_up_space_title" = "削除するものはありませんでした。";
+"alert_free_up_space_message" = "現時点で削除していいものは見当たりませんでした。";
+
+"enable_backup" = "バックアップ";
+"enable_backup_description" = "写真や動画を撮影した時や取り込んだ際、自動でアップロードを行います。";
+
+"backup_only_wifi" = "Wi-Fiのみでバックアップ";
+"backup_only_wifi_description" = "Wi-Fiに接続されている時のみバックアップを行います。";
+
+"backup_battery" = "指定の電池残量以下の時にバックアップを行わない";
+
+"follow_system" = "システム設定に合わせる";
+"light" = "ライト";
+"dark" = "ダーク";
+"theme" = "テーマ";
+
+"max_cache_size" = "キャッシュサイズの上限";
+"unlimited" = "制限なし";
+"delete_cache" = "キャッシュを削除";
+"delete_cache_description" = "サムネイルのキャッシュやその他の一時データを削除します。";
+
+"delete?" = "削除";
+"delete?" = "削除";
+
+"delete_cache_alert_message" = "キャッシュを削除してよろしいですか？";
+
+"auto_import_description" = "デバイス上の写真と動画が自動的にアップロードされます。";
+"auto_import_settings" = "自動取り込み設定";
+"true_on_auto_import" = "自動取り込み";
+
+"import_existing_items" = "元からある写真もすべて取り込む";
+
+"auto_import_info" = "設定からいつでもオンオフの切り替えができます。";
+"auto_import_error_photos_access" = "Stingle Photosが写真を自動で取り込めるようにするため、すべての写真へのアクセスを許可してください。";
+
+"auto_import_settings" = "自動取り込み設定";
+
+"enable_auto_import" = "自動取り込み";
+"enable_auto_import_description" = "デバイス上の写真と動画を自動で取り込みます。";
+
+"delete_original_files_after_import" = "取り込んだ写真を自動で削除";
+"delete_original_files_after_import_description" = "取り込んだ写真や動画を自動でデバイス上から削除します。";
+
+"manual_import" = "手動取り込み";
+"manual_import_title" = "手動で取り込んだ写真を自動で削除";
+
+"import_existing_photos_and_videos" = "元からある写真もすべて取り込む";
+"import_existing_files_alert_message" = "今ある写真をすべて取り込みますか？写真の多さによってはかなりの時間を要することがあります。";
+
+
+//MARK: - Menu
+
+"menu_gallery" = "ギャラリー";
+"menu_trash" = "ごみ箱";
+"menu_storage" = "容量";
+"menu_backup_phrase" = "秘密の合鍵";
+"menu_settings" = "設定";
+"menu_lock_app" = "アプリをロック";
+"menu_official_website" = "公式サイト";
+"menu_sign_out" = "ログアウト";
+"menu_free_up_space" = "容量を解放";
+
+//MARK: - Backup phrase
+
+"backup_phrase_description" = "この秘密の合鍵はパスワードの代わりに使用できるものですので、何より重要なものです。他の人に知られれば写真や動画にアクセスされてしまう恐れがあるので、絶対に別の安全なところに保存してください。";
+"ok_get_backup_phrase" = "理解した上で秘密の合鍵を表示";
+
+"your_backup_phrase" = "お客様の秘密の合鍵";
+"backup_phrase_input_title" = "秘密の合鍵を入力してください";
+"backup_phrase_input_sup_title" = "秘密鍵をバックアップされない場合、秘密の合鍵を入力してください。この手順は秘密鍵を端末内で再生成し、写真および動画をもう一度閲覧できるようにするために必要な手順です。";
+"backup_phrase_input_placeholder" = "秘密の合鍵の単語24単語を入力してください。";
+
+"forget_password_title" = "メールアドレスと秘密の合鍵を入力してください。正しく入力していただけますと、新しいパスワードの設定に進むことができます。";
+
+//MARK: - Storage
+
+"storage_payment_method" = "お支払い方法　%@";
+"storage_expiry_date" = "有効期限　%@まで";
+
+//MARK: - Time
+
+"immediately" = "時間を置かない";
+"seconds_count" = "%@秒";
+"minute" = "1分";
+"minutes_count" = "%@分";
+"hour" = "1時間";
+
+//MARK: - Sync
+
+"sync_backup_complete" = "アップロード完了";
+"sync_uploading_file_of_out" = "%@件目をアップロード中（%@件中）";
+"sync_refreshing" = "更新中";
+
+//MARK: - Error
+
+"warning" = "警告";
+"empty_data" = "空データ";
+"incorrect_password" = "パスワードが違います";
+"storage_size_isover" = "空き容量がありません";
+
+
+"error_empty_text" = "何か入力してください";
+"error_empty_email" = "メールアドレスを入力してください";
+"error_empty_password" = "パスワードを入力してください";
+"error_incorrect_email" = "メールアドレスが正しくありません";
+"error_incorrect_password" = "パスワードは6文字以上で設定してください";
+"error_password_not_valed" = "パスワードが違います";
+"error_unknown_error" = "エラーが発生しました。時間をおいて再度お試しください。";
+"error_incorrect_confirm_password" = "パスワードが一致していません";
+
+"error_data_not_found" = "データが見つかりませんでした";
+"error_canceled" = "キャンセルしました";
+"error_memory_low" = "メモリがいっぱいです";
+"error_file_is_unavailable" = "ファイルがありません";
+
+"error_maching_passwords" = "パスワードが一致していません。確認のため、同じパスワードを二度入力してください。";
+
+"error_incorrect_phrase" = "秘密の合鍵が違います";
+"error_import_assets" = "%@件の写真の取り込みに失敗しました。写真へのアクセスを許可した上で、もう一度お試しください。";
+
+//MARK: - NETWORK
+
+"nework_error_data_not_found" = "データが見つかりませんでした";
+"nework_error_request_not_valed" = "リクエストにエラーが発生しました";
+"nework_error_bad_request" = "400エラー（Bad request）が発生しました";
+"nework_error_data_not_found" = "データが見つかりませんでした";
+"nework_error_request_cancelled" = "リクエストがキャンセルされました";
+
+//MARK: - Editor
+
+"editor_brightness" = "明るさ";
+"editor_contrast" = "コントラスト";
+"editor_saturation" = "彩度";
+"editor_vibrance" = "鮮やかさ";
+"editor_exposuer" = "露出";
+"editor_highlights" = "ハイライト";
+"editor_shadows" = "シャドウ";
+"editor_white_point" = "ホワイトポイント";
+"editor_remperature" = "暖かさ";
+"editor_tint" = "色味";
+"editor_sharpness" = "シャープネス";
+"editor_noise_reduction" = "ノイズ除去";
+"editor_vignette" = "ビネット（周辺減光）";
+"editor_adjust" = "調整";
+"editor_original" = "元の写真";
+"editor_freeform" = "指定";
+"editor_square" = "四角";
+"editor_resize" = "サイズ変更";
+"editor_width" = "横幅";
+"editor_height" = "縦幅";
