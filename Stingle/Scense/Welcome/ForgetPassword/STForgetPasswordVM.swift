@@ -24,11 +24,15 @@ class STForgetPasswordVM {
             return
         }
         
-        self.authWorker.checkRecoveryPhrase(email: email, phrase: phrase) { [weak self] response in
-            self?.recoveryPhraseResponse = response
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let response = try await self.authWorker.checkRecoveryPhrase(email: email, phrase: phrase)
+                self.recoveryPhraseResponse = response
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
@@ -43,9 +47,15 @@ class STForgetPasswordVM {
                 return
             }
             let password = try self.validator.validate(password: newPassword, confirmPassword: confirmPassword)
-            self.authWorker.recoverAccount(email: email, password: password, phraseResponse: phraseResponse, success: { _ in
-                success(password)
-            }, failure: failure)
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                do {
+                    _ = try await self.authWorker.recoverAccount(email: email, password: password, phraseResponse: phraseResponse)
+                    success(password)
+                } catch {
+                    failure((error as? IError) ?? STError.error(error: error))
+                }
+            }
         } catch {
             failure(STError.error(error: error))
         }

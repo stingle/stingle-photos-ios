@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class STBaseNetworkOperation<T>: STOperation<T> {
+public class STBaseNetworkOperation<T>: STOperation<T>, @unchecked Sendable {
 
     private(set) var currentProgress: Progress?
     private(set) var request: IRequest

@@ -18,10 +18,14 @@ class STShareAlbumVM {
     func shareAlbum(album: STLibrary.Album, contact: [STContact], permitions: Permitions, result: @escaping (_ result: IError?) -> Void) {
 
         let permitions = STLibrary.Album.Permission(allowAdd: permitions.addPhoto, allowShare: permitions.sharing, allowCopy: permitions.copying)
-        self.albumWorker.shareAlbum(album: album, contacts: contact, permitions: permitions) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.shareAlbum(album: album, contacts: contact, permitions: permitions)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
@@ -29,10 +33,14 @@ class STShareAlbumVM {
     
         let permitions = STLibrary.Album.Permission(allowAdd: permitions.addPhoto, allowShare: permitions.sharing, allowCopy: permitions.copying)
         
-        self.albumWorker.createSharedAlbum(name: name, fromAlbum: album, files: files, contacts: contact, permitions: permitions) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.createSharedAlbum(name: name, fromAlbum: album, files: files, contacts: contact, permitions: permitions)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
 
     }
@@ -41,10 +49,14 @@ class STShareAlbumVM {
         
         let permitions = STLibrary.Album.Permission(allowAdd: permitions.addPhoto, allowShare: permitions.sharing, allowCopy: permitions.copying)
         
-        self.albumWorker.createSharedAlbum(name: name, files: files, contacts: contact, permitions: permitions) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.createSharedAlbum(name: name, files: files, contacts: contact, permitions: permitions)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
 
     }

@@ -139,17 +139,33 @@ class STTabBar: UITabBar {
             self.accessoryView?.removeFromSuperview()
         }
         didSet {
-            self.subviews.forEach { view in
-                view.isHidden = self.accessoryView != nil
-            }
             if let accessoryView = self.accessoryView {
-                accessoryView.frame = self.bounds
-                self.addSubview(accessoryView)
-                accessoryView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                accessoryView.isHidden = false
+                // The action bar is placed as a SIBLING on top of the tab bar (not
+                // as a child), and the tab bar's interaction is disabled entirely.
+                //
+                // Injecting the action bar *into* the tab bar and hiding its buttons
+                // did not work: the tab bar nests its buttons below `subviews`, so
+                // hiding/hit-testing at this level never reached them and the
+                // (invisible) tab buttons kept stealing the taps. Disabling
+                // userInteraction on the whole bar disables every nested descendant
+                // at once, and the sibling overlay receives the touches itself.
+                self.isUserInteractionEnabled = false
+                self.subviews.forEach { $0.isHidden = true }
+                if let superview = self.superview {
+                    accessoryView.frame = self.frame
+                    accessoryView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+                    superview.addSubview(accessoryView)
+                    superview.bringSubviewToFront(accessoryView)
+                } else {
+                    accessoryView.frame = self.bounds
+                    accessoryView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    self.addSubview(accessoryView)
+                }
+            } else {
+                self.isUserInteractionEnabled = true
+                self.subviews.forEach { $0.isHidden = false }
             }
         }
     }
-    
 
 }

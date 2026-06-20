@@ -14,7 +14,7 @@ class STSignInVM {
 			let validPassword = try self.validator.validate(password: password, withCharacters: false)
 			self.login(email: validEmail, password: validPassword, success: success, failure: failure)
 		} catch {
-			failure(error as! IError)
+			failure((error as? IError) ?? STSignInVM.SignInError.incorrectPassword)
 		}
 	}
     
@@ -34,20 +34,30 @@ class STSignInVM {
             return
         }
         
-        self.authWorker.checkRecoveryPhraseAfterLogin(user: user, phrase: phrase, password: password) { _ in
-            compliation(nil)
-        } failure: { error in
-            compliation(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.authWorker.checkRecoveryPhraseAfterLogin(user: user, phrase: phrase, password: password)
+                compliation(nil)
+            } catch {
+                compliation((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
 	
 	//MARK: - Private funcs
 	
 	private func login(email: String, password: String, success: @escaping ((_ result: STUser, _ appPassword: String) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
-        self.authWorker.login(email: email, password: password, success: { [weak self] user in
-            self?.user = user
-            success(user, password)
-        }, failure: failure)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let user = try await self.authWorker.login(email: email, password: password)
+                self.user = user
+                success(user, password)
+            } catch {
+                failure((error as? IError) ?? STError.error(error: error))
+            }
+        }
 	}
     	
 }

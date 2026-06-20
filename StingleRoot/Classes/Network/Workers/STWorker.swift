@@ -123,8 +123,49 @@ extension STWorker {
         
 }
 
+//MARK: - async/await bridges
+
 extension STWorker {
-	
+
+    // async/await bridges over the operation-based worker API. These let call
+    // sites use structured concurrency while the underlying request still runs
+    // through STOperationManager. The callback-based methods above remain
+    // available so the migration can proceed incrementally.
+
+    func request<T: IResponse>(request: IRequest) async throws -> T {
+        try await withCheckedThrowingContinuation { continuation in
+            self.request(request: request, success: { (result: T) in
+                continuation.resume(returning: result)
+            }, failure: { error in
+                continuation.resume(throwing: error)
+            })
+        }
+    }
+
+    func request<T: Decodable>(request: IRequest) async throws -> T {
+        try await withCheckedThrowingContinuation { continuation in
+            self.request(request: request, success: { (result: T) in
+                continuation.resume(returning: result)
+            }, failure: { error in
+                continuation.resume(throwing: error)
+            })
+        }
+    }
+
+    func requestData(request: IRequest) async throws -> Data {
+        try await withCheckedThrowingContinuation { continuation in
+            self.requestData(request: request, success: { data in
+                continuation.resume(returning: data)
+            }, failure: { error in
+                continuation.resume(throwing: error)
+            })
+        }
+    }
+
+}
+
+extension STWorker {
+
 	enum WorkerError: IError {
 		
 		case emptyData

@@ -54,8 +54,28 @@ open class STBillingWorker: STWorker {
                 STLogger.log(error: error)
             }
         }
-        
+
         return nil
     }
-    
+
+}
+
+//MARK: - async/await
+
+extension STBillingWorker {
+
+    public func getBillingInfo() async throws -> STBillingInfo {
+        try await withCheckedThrowingContinuation { continuation in
+            self.getBillingInfo(success: { continuation.resume(returning: $0) },
+                                failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    public func verifi(transactions: [SKPaymentTransaction]) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.verifi(transactions: transactions, success: { continuation.resume(returning: $0) },
+                        failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
 }

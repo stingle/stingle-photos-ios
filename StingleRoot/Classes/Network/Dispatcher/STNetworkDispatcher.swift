@@ -18,7 +18,7 @@ protocol INetworkTask {
 
 typealias IDecoder = DataDecoder
 
-public class STNetworkDispatcher {
+public final class STNetworkDispatcher: @unchecked Sendable {
     
     static let sheared: STNetworkDispatcher = STNetworkDispatcher()
 

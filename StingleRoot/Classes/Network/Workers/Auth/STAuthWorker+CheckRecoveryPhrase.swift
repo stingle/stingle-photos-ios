@@ -89,6 +89,7 @@ public extension STAuthWorker {
                 let publicKey = try crypto.getPublicKeyFromPrivateKey(byte: privateKey)
                 let msgBytes = try crypto.decryptSeal(enc: challengeBytes, publicKey: publicKey, privateKey: privateKey)
                 guard let msg = String(bytes: msgBytes, encoding: .utf8), msg.hasPrefix("validkey_") else {
+                    failure(AuthWorkerError.loginError)
                     return
                 }
                 let result = RecoveryPhraseResponse(publicKey: publicKey,
@@ -105,14 +106,45 @@ public extension STAuthWorker {
 }
 
 public extension STAuthWorker {
-    
+
     struct RecoveryPhraseResponse {
         let publicKey: [UInt8]
         let privateKey: [UInt8]
         let serverPK: String
         let isKeyBackedUp: Bool
     }
-    
+
+}
+
+//MARK: - async/await
+
+public extension STAuthWorker {
+
+    @discardableResult
+    func checkRecoveryPhraseAfterLogin(user: STUser, phrase: String, password: String) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.checkRecoveryPhraseAfterLogin(user: user, phrase: phrase, password: password,
+                                               success: { continuation.resume(returning: $0) },
+                                               failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func checkRecoveryPhrase(email: String, phrase: String) async throws -> RecoveryPhraseResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.checkRecoveryPhrase(email: email, phrase: phrase,
+                                     success: { continuation.resume(returning: $0) },
+                                     failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    @discardableResult
+    func recoverAccount(email: String, password: String, phraseResponse: RecoveryPhraseResponse) async throws -> STUser {
+        try await withCheckedThrowingContinuation { continuation in
+            self.recoverAccount(email: email, password: password, phraseResponse: phraseResponse,
+                                success: { continuation.resume(returning: $0) },
+                                failure: { continuation.resume(throwing: $0) })
+        }
+    }
 }
 
 

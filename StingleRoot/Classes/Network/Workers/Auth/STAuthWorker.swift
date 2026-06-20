@@ -127,8 +127,55 @@ open class STAuthWorker: STWorker {
 	
 }
 
+//MARK: - async/await
+
+public extension STAuthWorker {
+
+    func login(email: String, password: String) async throws -> STUser {
+        if let path = STFileSystem.privateKeyUrl() {
+            try? FileManager.default.removeItem(at: path)
+        }
+        return try await self.loginRequest(email: email, password: password, isPrivateKeyIsAlreadySaved: false)
+    }
+
+    func registerAndLogin(email: String, password: String, includePrivateKey: Bool) async throws -> STUser {
+        if let path = STFileSystem.privateKeyUrl() {
+            try? FileManager.default.removeItem(at: path)
+        }
+        _ = try await self.register(email: email, password: password, includePrivateKey: includePrivateKey)
+        return try await self.loginRequest(email: email, password: password, isPrivateKeyIsAlreadySaved: true)
+    }
+
+    func preLogin(email: String) async throws -> STAuth.PreLogin {
+        let request = STAuthRequest.preLogin(email: email)
+        return try await self.request(request: request)
+    }
+
+    func loginRequest(email: String, password: String, isPrivateKeyIsAlreadySaved: Bool) async throws -> STUser {
+        let preLogin = try await self.preLogin(email: email)
+        let pHash = try self.crypto.getPasswordHashForStorage(password: password, salt: preLogin.salt)
+        return try await self.finishLogin(email: email, password: password, pHash: pHash, isPrivateKeyIsAlreadySaved: isPrivateKeyIsAlreadySaved)
+    }
+
+}
+
+private extension STAuthWorker {
+
+    func register(email: String, password: String, includePrivateKey: Bool) async throws -> STAuth.Register {
+        let request = try self.generateSignUpRequest(email: email, password: password, includePrivateKey: includePrivateKey)
+        return try await self.request(request: request)
+    }
+
+    func finishLogin(email: String, password: String, pHash: String, isPrivateKeyIsAlreadySaved: Bool) async throws -> STUser {
+        let request = STAuthRequest.login(email: email, password: pHash)
+        let response: STAuth.Login = try await self.request(request: request)
+        return try self.updateUserParams(login: response, email: email, password: password, isPrivateKeyIsAlreadySaved: isPrivateKeyIsAlreadySaved)
+    }
+
+}
+
 extension STAuthWorker {
-	
+
 	enum AuthWorkerError: IError {
 		
 		case passwordError

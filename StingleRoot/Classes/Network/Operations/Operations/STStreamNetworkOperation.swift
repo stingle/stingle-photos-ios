@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class STStreamNetworkOperation: STBaseNetworkOperation<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)> {
+public class STStreamNetworkOperation: STBaseNetworkOperation<(requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>)>, @unchecked Sendable {
     
     let queue: DispatchQueue
     

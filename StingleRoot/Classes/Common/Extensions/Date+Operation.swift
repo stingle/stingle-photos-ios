@@ -19,14 +19,14 @@ public extension Date {
 public extension TimeInterval {
     
     func timeFormat() -> String {
-        let ti = Int(self)
+        let ti = Int(self.isFinite ? self : 0)
         let seconds = ti % 60
         let minutes = (ti / 60) % 60
         let hours = (ti / 3600)
         if hours > 0 {
-            return String(format: "%0.2d:%0.2d:%0.2d%", hours, minutes, seconds)
+            return String(format: "%02lld:%02lld:%02lld", hours, minutes, seconds)
         }
-        return String(format: "%0.2d:%0.2d%", minutes, seconds)
+        return String(format: "%02lld:%02lld", minutes, seconds)
     }
     
 }

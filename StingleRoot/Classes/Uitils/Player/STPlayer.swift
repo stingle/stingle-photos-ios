@@ -43,7 +43,13 @@ public class STPlayer: NSObject {
     private(set) var isAddedObserver = false
     
     private var observerToken: Any?
-    
+
+    // Smooth-scrubbing state: while a seek is in flight we don't start another, we
+    // just remember the latest target (`chaseTime`) and seek to it once the current
+    // one finishes. Prevents flooding AVPlayer during a drag.
+    private var isSeekInProgress = false
+    private var chaseTime: CMTime = .invalid
+
     public override init() {
         super.init()
         STApplication.shared.downloaderManager.fileDownloader.add(self)
@@ -189,11 +195,33 @@ public extension STPlayer {
     }
     
     func seek(currentTime: TimeInterval) {
-        guard let timescale = self.player.currentItem?.currentTime().timescale else {
+        guard self.player.currentItem != nil else {
             return
         }
-        let time = CMTime(seconds: currentTime, preferredTimescale: timescale)
-        self.player.seek(to: time)
+        self.chaseTime = CMTime(seconds: currentTime, preferredTimescale: 600)
+        if !self.isSeekInProgress {
+            self.seekToChaseTime()
+        }
+    }
+
+    private func seekToChaseTime() {
+        guard self.player.currentItem?.status == .readyToPlay else {
+            self.isSeekInProgress = false
+            return
+        }
+        self.isSeekInProgress = true
+        let target = self.chaseTime
+        // A small tolerance keeps scrubbing responsive (snap to a nearby sync sample)
+        // instead of decoding to an exact frame on every drag of a streamed asset.
+        let tolerance = CMTime(seconds: 0.5, preferredTimescale: 600)
+        self.player.seek(to: target, toleranceBefore: tolerance, toleranceAfter: tolerance) { [weak self] _ in
+            guard let weakSelf = self else { return }
+            if weakSelf.chaseTime == target {
+                weakSelf.isSeekInProgress = false
+            } else {
+                weakSelf.seekToChaseTime()
+            }
+        }
     }
     
     func replaceCurrentItem(with file: ILibraryFile?) {

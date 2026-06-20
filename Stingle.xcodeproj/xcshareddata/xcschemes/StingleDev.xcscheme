@@ -70,6 +70,9 @@
             ReferencedContainer = "container:Stingle.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <StoreKitConfigurationFileReference
+         identifier = "../../../Stingle/Resources/Config/Storage.storekit">
+      </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Debug-Dev"

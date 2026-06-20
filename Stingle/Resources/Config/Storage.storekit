@@ -1,0 +1,318 @@
+{
+  "identifier": "6BD67A78-E76A-4DF4-B4F5-337E3512A5BA",
+  "nonRenewingSubscriptions": [],
+  "products": [],
+  "settings": {
+    "_applicationInternalID": "0000000000",
+    "_developerTeamID": "DK366LFCDT",
+    "_failTransactionsEnabled": false,
+    "_lastSynchronizedDate": 0
+  },
+  "subscriptionGroups": [
+    {
+      "id": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+      "localizations": [],
+      "name": "Stingle Storage",
+      "subscriptions": [
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "0.99",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "27655F3D-07F6-4CF1-A73C-66F89F5B7C4F",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "100 GB storage",
+              "displayName": "100 GB (Monthly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "100gb_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "100 GB Monthly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "9.99",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "0FF26F91-6D78-4F2F-AED5-7E595ADA6B24",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "100 GB storage",
+              "displayName": "100 GB (Yearly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "100gb_yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "100 GB Yearly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "2.99",
+          "familyShareable": false,
+          "groupNumber": 2,
+          "internalID": "9137057E-A256-42CF-86BE-CAD6CBB32715",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "300 GB storage",
+              "displayName": "300 GB (Monthly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "300gb_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "300 GB Monthly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "29.99",
+          "familyShareable": false,
+          "groupNumber": 2,
+          "internalID": "985B99C4-31F0-4415-AA36-516C21B39E7C",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "300 GB storage",
+              "displayName": "300 GB (Yearly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "300gb_yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "300 GB Yearly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "9.99",
+          "familyShareable": false,
+          "groupNumber": 3,
+          "internalID": "794C140E-A3C9-4AAC-B9DA-9ABEC3E00934",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "1 TB storage",
+              "displayName": "1 TB (Monthly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "1tb_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "1 TB Monthly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "99.99",
+          "familyShareable": false,
+          "groupNumber": 3,
+          "internalID": "88C8918F-C263-43E5-89A4-4DDFA19A7CC3",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "1 TB storage",
+              "displayName": "1 TB (Yearly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "1tb_yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "1 TB Yearly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "19.99",
+          "familyShareable": false,
+          "groupNumber": 4,
+          "internalID": "692848C2-DD9D-4901-98A3-6D98A256363B",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "3 TB storage",
+              "displayName": "3 TB (Monthly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "3tb_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "3 TB Monthly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "199.99",
+          "familyShareable": false,
+          "groupNumber": 4,
+          "internalID": "A472FAE5-C952-4207-835F-AC9A52206C1E",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "3 TB storage",
+              "displayName": "3 TB (Yearly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "3tb_yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "3 TB Yearly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "29.99",
+          "familyShareable": false,
+          "groupNumber": 5,
+          "internalID": "FC610D9E-33FA-401F-8FC1-A0754CB908A5",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "5 TB storage",
+              "displayName": "5 TB (Monthly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "5tb_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "5 TB Monthly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "299.99",
+          "familyShareable": false,
+          "groupNumber": 5,
+          "internalID": "C6267D4C-AB59-4A24-9903-08F09C3F63CC",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "5 TB storage",
+              "displayName": "5 TB (Yearly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "5tb_yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "5 TB Yearly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "49.99",
+          "familyShareable": false,
+          "groupNumber": 6,
+          "internalID": "8E1D732B-F94B-4619-8854-D7A63B2B3AFA",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "10 TB storage",
+              "displayName": "10 TB (Monthly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "10tb_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "10 TB Monthly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "499.99",
+          "familyShareable": false,
+          "groupNumber": 6,
+          "internalID": "36C71BE7-7F10-4876-84D9-3C8BFDB6BECB",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "10 TB storage",
+              "displayName": "10 TB (Yearly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "10tb_yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "10 TB Yearly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "89.99",
+          "familyShareable": false,
+          "groupNumber": 7,
+          "internalID": "53927E5F-C917-44CF-8851-514CF344E27C",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "20 TB storage",
+              "displayName": "20 TB (Monthly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "20tb_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "20 TB Monthly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "899.99",
+          "familyShareable": false,
+          "groupNumber": 7,
+          "internalID": "778BDE2E-7224-4CE3-81FF-91B5BE51F0F9",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "20 TB storage",
+              "displayName": "20 TB (Yearly)",
+              "locale": "en_US"
+            }
+          ],
+          "productID": "20tb_yearly",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "20 TB Yearly",
+          "subscriptionGroupID": "4A601949-1D26-424B-99B9-0ABFBBCFF1C7",
+          "type": "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}

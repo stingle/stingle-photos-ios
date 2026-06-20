@@ -13,7 +13,7 @@ public protocol IOperation: Operation {
     func didStartRun(with delegate: IOperationQueue)
 }
 
-public class STOperation<T>: Operation, IOperation {
+public class STOperation<T>: Operation, IOperation, @unchecked Sendable {
 
     enum Status: String {
         case ready  = "isReady"
@@ -200,6 +200,12 @@ public class STOperation<T>: Operation, IOperation {
             super.cancel()
             self.status = .canceled
         } else if self.isReady {
+            // Resolve any waiter before tearing down: a ready (not-yet-started)
+            // operation that is cancelled must still deliver a terminal callback,
+            // otherwise an async/await bridge over success/failure would leak its
+            // continuation (the awaiting Task would never resume). This mirrors the
+            // executing-cancel path, which already reports `.cancelled`.
+            self.failure?(STNetworkDispatcher.NetworkError.cancelled)
             self.success = nil
             self.failure = nil
             self.progress = nil

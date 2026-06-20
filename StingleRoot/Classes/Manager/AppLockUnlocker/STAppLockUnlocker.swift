@@ -171,6 +171,10 @@ public extension STAppLockUnlocker {
         public var canUnlockAppBiometric: Bool {
             return self.biometric.canUnlockApp
         }
+
+        public var isBiometricConfigured: Bool {
+            return self.biometric.isBiometricConfigured
+        }
         
         public func unlockAppBiometric(success: @escaping () -> Void, failure: @escaping (IError?) -> Void) {
             self.biometric.unlockApp { [weak self] _ in

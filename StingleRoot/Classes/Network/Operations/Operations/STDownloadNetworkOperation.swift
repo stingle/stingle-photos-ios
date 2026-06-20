@@ -8,7 +8,7 @@
 import Alamofire
 import Foundation
 
-class STDownloadNetworkOperation: STBaseNetworkOperation<URL> {
+class STDownloadNetworkOperation: STBaseNetworkOperation<URL>, @unchecked Sendable {
     
     var session: Alamofire.Session?
     

@@ -14,7 +14,7 @@ protocol IMasterViewController: UIViewController {
 
 @objc extension UIViewController  {
     
-    private static var splitViewControllerKey: String = "splitViewControllerKey"
+    private static var splitViewControllerKey: UInt8 = 0
     
     var splitMenuViewController: STSplitViewController? {
         get {

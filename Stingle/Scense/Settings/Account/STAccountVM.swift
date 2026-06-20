@@ -17,13 +17,17 @@ class STAccountVM {
     }
     
     func removeBackcupKeys(completion: @escaping (IError?) -> Void) {
-        self.authWorker.removeBackcupKeys { _ in
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.authWorker.removeBackcupKeys()
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func addBackcupKeys(password: String, completion: @escaping (IError?) -> Void) {
         do {
             let _ = try STApplication.shared.crypto.getPrivateKey(password: password)
@@ -31,10 +35,14 @@ class STAccountVM {
             completion(STError.passwordNotValied)
             return
         }
-        self.authWorker.addBackcupKeys(password: password) { _ in
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.authWorker.addBackcupKeys(password: password)
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
@@ -49,10 +57,14 @@ class STAccountVM {
     }
     
     func deleteAccount(password: String, completion: @escaping (IError?) -> Void) {
-        self.authWorker.deleteAccount(password: password) { _ in
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.authWorker.deleteAccount(password: password)
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     

@@ -23,48 +23,50 @@ extension STFilesActionTabBarAccessoryView {
         let identifier: StringPointer?
         
         static func share(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
-            let image = UIImage(named: "ic_shared_album_min")
-            let result = ActionItem(title: nil, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
+            let image = UIImage(systemName: "square.and.arrow.up")
+            let result = ActionItem(title: "share".localized, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
             return result
         }
-        
+
         static func move(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
-            let image = UIImage(named: "ic_move")
-            let result = ActionItem(title: nil, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
+            let image = UIImage(systemName: "folder")
+            let result = ActionItem(title: "move".localized, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
             return result
         }
-        
+
         static func saveToDevice(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
-            let image = UIImage(named: "ic_save_device")
-            let result = ActionItem(title: nil, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
+            let image = UIImage(systemName: "square.and.arrow.down")
+            let result = ActionItem(title: "save".localized, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
             return result
         }
-        
-        static func trash(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
-            let image = UIImage(named: "ic_trash")
-            let result = ActionItem(title: nil, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
+
+        static func trash(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .systemRed) -> ActionItem {
+            let image = UIImage(systemName: "trash")
+            let result = ActionItem(title: "trash".localized, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
             return result
         }
-        
+
         static func recover(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
-            let image = UIImage(named: "ic_ recover")
-            let result = ActionItem(title: nil, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
+            let image = UIImage(systemName: "arrow.uturn.backward")
+            let result = ActionItem(title: "recover".localized, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
             return result
         }
-        
-        static func deleteAll(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
-            let result = ActionItem(title: "delete_all".localized, image: nil, tintColor: tintColor, handler: handler, identifier: identifier)
+
+        static func deleteAll(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .systemRed) -> ActionItem {
+            let image = UIImage(systemName: "trash")
+            let result = ActionItem(title: "delete_all".localized, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
             return result
         }
-        
+
         static func recoverAll(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
-            let result = ActionItem(title: "recover_all".localized, image: nil, tintColor: tintColor, handler: handler, identifier: identifier)
+            let image = UIImage(systemName: "arrow.uturn.backward")
+            let result = ActionItem(title: "recover_all".localized, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
             return result
         }
 
         static func edit(identifier: StringPointer?, handler: @escaping ((Self, UIBarButtonItem) -> Void), tintColor: UIColor = .appText) -> ActionItem {
-            let image = UIImage(named: "ic_edit")
-            let result = ActionItem(title: nil, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
+            let image = UIImage(systemName: "slider.horizontal.3")
+            let result = ActionItem(title: "edit".localized, image: image, tintColor: tintColor, handler: handler, identifier: identifier)
             return result
         }
         
@@ -100,50 +102,67 @@ class STFilesActionTabBarAccessoryView: UIView {
     }
     
     private weak var titleLabel: UILabel?
-    
-    
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        let appearance = UIToolbarAppearance()
+        appearance.configureWithDefaultBackground()
+        self.toolBar.standardAppearance = appearance
+        self.toolBar.compactAppearance = appearance
+        self.toolBar.scrollEdgeAppearance = appearance
+    }
+
     func setEnabled(isEnabled: Bool) {
         self.toolBar.items?.forEach({ item in
-            (item as? ButtonItem)?.isEnabled = isEnabled
+            guard let item = item as? ButtonItem else { return }
+            item.isEnabled = isEnabled
+            (item.customView as? UIButton)?.isEnabled = isEnabled
         })
     }
-    
+
     func reloadData() {
         guard let dataSource = self.dataSource else {
             self.toolBar.setItems(nil, animated: false)
             return
         }
         let actions = dataSource.accessoryView(actions: self)
-        
-        var items = [UIBarButtonItem]()
-        
+
+        // Evenly distribute the action buttons across the bar (flexible spaces
+        // on both ends and between items) instead of left-aligned fixed gaps.
+        var items: [UIBarButtonItem] = [.flexibleSpace()]
         actions.forEach { action in
-            let item = ButtonItem(image: action.image, style: .done, target: self, action: #selector(didSelectItem(item:)))
-            item.actionItem = action
-            item.title = action.title
-            item.tintColor = action.tintColor
-            items.append(item)
-            let space = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-            space.width = 20
-            items.append(space)
-        }
-       
-        if let item = self.getTtileItem() {
-            items.append(item)
+            items.append(self.makeButtonItem(for: action))
+            items.append(.flexibleSpace())
         }
         self.toolBar.setItems(items, animated: false)
+    }
+
+    private func makeButtonItem(for action: ActionItem) -> ButtonItem {
+        var config = UIButton.Configuration.plain()
+        config.image = action.image
+        config.title = action.title
+        config.imagePlacement = .top
+        config.imagePadding = 2
+        config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 3, trailing: 8)
+        config.baseForegroundColor = action.tintColor
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var out = incoming
+            out.font = UIFont.regular(light: 11)
+            return out
+        }
+        let button = UIButton(configuration: config)
+        let item = ButtonItem(customView: button)
+        item.actionItem = action
+        button.addAction(UIAction { [weak item] _ in
+            guard let item = item, let actionItem = item.actionItem else { return }
+            actionItem.handler(actionItem, item)
+        }, for: .touchUpInside)
+        return item
     }
     
     func barButtonItem(for identifier: StringPointer?) -> UIBarButtonItem? {
         self.toolBar.items?.first(where: { ($0 as? ButtonItem)?.actionItem?.identifier?.stringValue == identifier?.stringValue })
-    }
-    
-    //MARK: - User action
-    
-    @objc private func didSelectItem(item: ButtonItem) {
-        if let actionItem = item.actionItem {
-            actionItem.handler(actionItem, item)
-        }
     }
     
     //MARK: - Private methods

@@ -211,8 +211,8 @@ extension STDarwinNotificationCenter.Observation: Equatable {
                 fatalError("Invalid Darwin observation info.")
         }
         let notificationName = CFNotificationName(rawValue: name.rawValue)
-        var observer = self
-        CFNotificationCenterRemoveObserver(cfCenter, &observer, notificationName, nil)
+        let observer = Unmanaged.passUnretained(self).toOpaque()
+        CFNotificationCenterRemoveObserver(cfCenter, observer, notificationName, nil)
     }
 
     static func == (lhs: STDarwinNotificationCenter.Observation, rhs: STDarwinNotificationCenter.Observation) -> Bool {

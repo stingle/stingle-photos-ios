@@ -28,7 +28,33 @@ public extension STFileWorker {
         let request = STFileStreamRequest.downloadRange(url: url, offset: offset, length: length)
         return self.stream(request: request, queue: queue, success: success, stream: stream, failure: failure)
     }
-    
+
+}
+
+//MARK: - async/await
+
+public extension STFileWorker {
+
+    func getFileDownloadUrl(filename: String, dbSet: STLibrary.DBSet) async throws -> STFileUrl {
+        try await withCheckedThrowingContinuation { continuation in
+            self.getFileDownloadUrl(filename: filename, dbSet: dbSet, success: { result in
+                continuation.resume(returning: result)
+            }, failure: { error in
+                continuation.resume(throwing: error)
+            })
+        }
+    }
+
+    func stream(url: URL, offset: UInt64, length: UInt64, queue: DispatchQueue, stream: @escaping StreamTask) async throws -> (requestLength: UInt64, contentLength: UInt64, range: Range<UInt64>) {
+        try await withCheckedThrowingContinuation { continuation in
+            self.stream(url: url, offset: offset, length: length, queue: queue, success: { result in
+                continuation.resume(returning: result)
+            }, stream: stream, failure: { error in
+                continuation.resume(throwing: error)
+            })
+        }
+    }
+
 }
 
 

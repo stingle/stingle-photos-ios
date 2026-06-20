@@ -249,7 +249,7 @@ public extension STImporter.AutoImporter {
         }
     }
             
-    class Operation: STOperation<Int?> {
+    class Operation: STOperation<Int?>, @unchecked Sendable {
         
         typealias Importable = STImporter.GaleryFileAssetImportable
                 

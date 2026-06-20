@@ -44,10 +44,14 @@ class STAlbumFileViewerVM: STFileViewerVM<STLibrary.AlbumFile> {
     }
     
     override func deleteFile(file: STLibrary.AlbumFile, completion: @escaping (_ result: IError?) -> Void) {
-        self.albumWorker.deleteAlbumFiles(album: self.album, files: [file]) { _ in
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.deleteAlbumFiles(album: self.album, files: [file])
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
@@ -64,8 +68,13 @@ class STAlbumFileViewerVM: STFileViewerVM<STLibrary.AlbumFile> {
         case .download:
             self.downloadFile(file: file)
         case .setAlbumCover:
-            self.albumWorker.setCover(album: self.album, caver: file.file, success: { _ in
-            }, failure: nil)
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                do {
+                    _ = try await self.albumWorker.setCover(album: self.album, caver: file.file)
+                } catch {
+                }
+            }
         }
     }
     

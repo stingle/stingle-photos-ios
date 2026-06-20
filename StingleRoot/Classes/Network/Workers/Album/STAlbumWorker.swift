@@ -143,5 +143,39 @@ public class STAlbumWorker: STWorker {
            success(response)
        }, failure: failure)
    }
-    
+
+}
+
+//MARK: - async/await
+
+public extension STAlbumWorker {
+
+    func setCover(album: STLibrary.Album, caver: String?) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.setCover(album: album, caver: caver, success: { continuation.resume(returning: $0) },
+                          failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func rename(album: STLibrary.Album, name: String?) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.rename(album: album, name: name, success: { continuation.resume(returning: $0) },
+                        failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func deleteAlbumWithFiles(album: STLibrary.Album) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.deleteAlbumWithFiles(album: album, success: { continuation.resume(returning: $0) },
+                                      failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func deleteAlbumFiles(album: STLibrary.Album, files: [STLibrary.AlbumFile]) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.deleteAlbumFiles(album: album, files: files, success: { continuation.resume(returning: $0) },
+                                  failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
 }

@@ -67,7 +67,11 @@ extension STAssetResourceLoader {
             let filename: NSString = self.header.fileName! as NSString
             let pathExtention = filename.pathExtension
             self.request.contentInformationRequest?.contentType = self.mimeTypeForPath(pathExtension: pathExtention)
-            self.request.contentInformationRequest?.isByteRangeAccessSupported = false
+            // The loader serves arbitrary byte ranges (each request computes its start
+            // chunk from `requestedOffset`; the per-chunk crypto key is derived from the
+            // chunk number, so chunks decrypt independently). Advertising range access
+            // lets AVPlayer issue seeks — verified end-to-end against streamed + local.
+            self.request.contentInformationRequest?.isByteRangeAccessSupported = true
             self.request.contentInformationRequest?.contentLength = Int64(self.header.dataSize)
         }
         
@@ -87,7 +91,7 @@ extension STAssetResourceLoader {
             endChankIndex = min(self.chankCount, endChankIndex)
             let length = (endChankIndex - startChankIndex) * self.chankSize
             startIndex = startIndex + self.startOffSetHeader
-                                    
+
             self.reader.startRead(startOffSet: startIndex, length: length, dataChunkSize: self.chankSize, fullDataSize: self.encrypedDataSize, request: self.request.request) { [weak self] chunk in
                 guard let weakSelf = self else { return true }
                 do {
@@ -123,12 +127,12 @@ extension STAssetResourceLoader {
             
             let start = currentOffset
             var end = requestedOffset + requestedLength
-            
+
             end = min(UInt64(self.receiveData.count), end)
             guard end >= start, start < self.receiveData.count else {
                 return
             }
-                        
+
             self.receiveDataByteCount = self.receiveDataByteCount + end - start
             let isFinish = self.receiveDataByteCount >= dataRequest.requestedLength
             let range = Range(uncheckedBounds: (Int(start), Int(end)))

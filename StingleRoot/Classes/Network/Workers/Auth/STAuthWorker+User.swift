@@ -110,5 +110,45 @@ public extension STAuthWorker {
         let request = STUserRequest.updateBackcupKeys(keyBundle: keyBundle)
         self.request(request: request, success: success, failure: failure)
     }
-    
+
+}
+
+//MARK: - async/await
+
+public extension STAuthWorker {
+
+    @discardableResult
+    func removeBackcupKeys() async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.removeBackcupKeys(success: { continuation.resume(returning: $0) },
+                                   failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    @discardableResult
+    func addBackcupKeys(password: String) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.addBackcupKeys(password: password,
+                                success: { continuation.resume(returning: $0) },
+                                failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    @discardableResult
+    func resetPassword(oldPassword: String, newPassword: String) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.resetPassword(oldPassword: oldPassword, newPassword: newPassword,
+                               success: { continuation.resume(returning: $0) },
+                               failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    @discardableResult
+    func deleteAccount(password: String) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.deleteAccount(password: password,
+                               success: { continuation.resume(returning: $0) },
+                               failure: { continuation.resume(throwing: $0) })
+        }
+    }
 }

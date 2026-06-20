@@ -18,19 +18,26 @@ class STAlbumsVM {
     }
     
     func createAlbum(with name: String, compliation: @escaping (_ error: IError?) -> Void) {
-        self.albumWorker.createAlbum(name: name) { (album) in
-            compliation(nil)
-        } failure: { (error) in
-            compliation(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.createAlbum(name: name)
+                compliation(nil)
+            } catch {
+                compliation((error as? IError) ?? STError.error(error: error))
+            }
         }
-        
     }
-    
+
     func deleteAlbum(album: STLibrary.Album, compliation: @escaping (_ error: IError?) -> Void) {
-        self.albumWorker.deleteAlbumWithFiles(album: album) { _ in
-            compliation(nil)
-        } failure: { error in
-            compliation(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.deleteAlbumWithFiles(album: album)
+                compliation(nil)
+            } catch {
+                compliation((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     

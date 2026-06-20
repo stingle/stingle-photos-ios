@@ -225,7 +225,7 @@ public extension STImporter {
 
 extension STImporter.Importer {
     
-    class Operation<ImportableFile: IImportableFile>: STOperation<ImportableFile.File> {
+    class Operation<ImportableFile: IImportableFile>: STOperation<ImportableFile.File>, @unchecked Sendable {
         
         let uploadFile: ImportableFile
         let operationIndex: Int

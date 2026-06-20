@@ -26,5 +26,18 @@ class STSyncWorker: STWorker {
         
     }
 
-    
+
+}
+
+//MARK: - async/await
+
+extension STSyncWorker {
+
+    func getUpdates() async throws -> STSync {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.getUpdates(success: { continuation.resume(returning: $0) },
+                            failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
 }

@@ -17,13 +17,17 @@ class STChangePasswordVM {
         
         do {
             let password = try self.validate(oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword)
-            
-            self.authWorker.resetPassword(oldPassword: password.oldPassword, newPassword: password.newPassword) { _ in
-                completion(nil)
-            } failure: { errno in
-                completion(errno)
+
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                do {
+                    _ = try await self.authWorker.resetPassword(oldPassword: password.oldPassword, newPassword: password.newPassword)
+                    completion(nil)
+                } catch {
+                    completion((error as? IError) ?? STError.error(error: error))
+                }
             }
-            
+
         } catch {
             completion(STError.error(error: error))
         }

@@ -11,7 +11,7 @@ import StingleRoot
 class STVideoViewerVC: UIViewController {
 
     @IBOutlet weak private var videoView: STVideoImageView!
-    @IBOutlet weak private var slider: UISlider!
+    @IBOutlet weak private var slider: STSlider!
     @IBOutlet weak private var playerControllView: STGradientView!
    
     @IBOutlet weak private var loadingView: UIActivityIndicatorView!
@@ -22,7 +22,7 @@ class STVideoViewerVC: UIViewController {
     @IBOutlet weak private var timeRightLabel: UILabel!
     
     private(set) var videoFile: STLibrary.FileBase!
-    private var isSliding = false
+    private var isActiveViewer = false
     private let player = STPlayer()
     private(set) var fileIndex: Int = .zero
     
@@ -41,9 +41,15 @@ class STVideoViewerVC: UIViewController {
         self.loadingBgView.alpha = .zero
         self.player.addObserver(deleagte: self)
         self.setImage()
+        self.slider.applyMediaScrubberStyle()
         self.playerControllView.alpha = (self.fileViewerDelegate?.isFullScreenMode ?? false) ? .zero : 1
         self.videoView.setPlayer(player: self.player)
         self.player.replaceCurrentItem(with: self.file)
+        // Autoplay if this page is already the active one (covers the case where
+        // `activateContent` arrived before the view finished loading).
+        if self.isActiveViewer {
+            self.player.play()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -76,20 +82,10 @@ class STVideoViewerVC: UIViewController {
     }
     
     @IBAction private func sliderDidChange(_ sender: UISlider, forEvent: UIEvent) {
-        guard let touchEvent = forEvent.allTouches?.first else {
-            return
-        }
-        switch touchEvent.phase {
-        case .began:
-            self.isSliding = true
-        case .moved:
-            self.didChangedSildeValue()
-        default:
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
-                 self?.isSliding = false
-            }
-            break
-        }
+        // Seek on every value change while dragging. The previous phase-based logic
+        // relied on `forEvent.allTouches`, which is nil for a slider's valueChanged
+        // on current iOS — so the seek was never triggered at all.
+        self.didChangedSildeValue()
     }
     
     //MARK: - Private methods
@@ -105,14 +101,14 @@ class STVideoViewerVC: UIViewController {
     }
     
     private func stringFromTimeInterval(interval: TimeInterval) -> String {
-        let ti = Int(interval)
+        let ti = Int(interval.isFinite ? interval : 0)
         let seconds = ti % 60
         let minutes = (ti / 60) % 60
         let hours = (ti / 3600)
         if hours > 0 {
-            return String(format: "%0.2d:%0.2d:%0.2d%", hours, minutes, seconds)
+            return String(format: "%02lld:%02lld:%02lld", hours, minutes, seconds)
         }
-        return String(format: "%0.2d:%0.2d%", minutes, seconds)
+        return String(format: "%02lld:%02lld", minutes, seconds)
     }
     
     deinit {
@@ -144,7 +140,16 @@ extension STVideoViewerVC: IFileViewer {
     }
     
     func fileViewer(pauseContent fileViewer: STFileViewerVC) {
+        self.isActiveViewer = false
         self.player.pause()
+    }
+
+    func fileViewer(activateContent fileViewer: STFileViewerVC) {
+        // This page became the current one (on open or after a swipe) → autoplay.
+        self.isActiveViewer = true
+        if self.isViewLoaded {
+            self.player.play()
+        }
     }
 
     func reload(file: STLibrary.FileBase, fileIndex: Int) {
@@ -184,7 +189,9 @@ extension STVideoViewerVC: IPlayerObservers {
     }
         
     private func updateSlider() {
-        guard !self.isSliding else {
+        // Don't fight the user's finger: only resync the thumb to playback when they
+        // aren't actively dragging it.
+        guard !self.slider.isTracking else {
             return
         }
         self.slider.value = self.player.duration != .zero ? Float(self.player.currentTime / self.player.duration) : .zero

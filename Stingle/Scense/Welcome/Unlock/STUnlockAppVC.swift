@@ -17,24 +17,54 @@ class STUnlockAppVC: UIViewController {
     
     private var currentViewController: UIViewController?
     private var viewModel = STUnlockAppVM()
-    
+
     private var showBiometricUnlocer = true
-    
+    private var isAutoUnlocking = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureUi()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.protectedDataDidBecomeAvailable), name: UIApplication.protectedDataDidBecomeAvailableNotification, object: nil)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard self.showBiometricUnlocer else {
+        self.attemptAutoUnlock()
+    }
+
+    @objc private func protectedDataDidBecomeAvailable() {
+        // After a long device lock the keychain/private key may not be readable the
+        // instant this screen appears. Retry once protected data becomes available
+        // instead of having already dropped to the password dialog.
+        self.attemptAutoUnlock()
+    }
+
+    private func attemptAutoUnlock() {
+        guard self.showBiometricUnlocer, !self.isAutoUnlocking else {
             return
         }
-        self.unlockApp { [weak self] error in
-            guard let error = error else {
+        if self.viewModel.isBiometricConfigured {
+            // Biometric is enabled. Defer until protected data is available so a
+            // transient post-lock read failure can't make us fall back to password.
+            guard UIApplication.shared.isProtectedDataAvailable else {
                 return
             }
-            self?.showError(error: error)
+            self.isAutoUnlocking = true
+            self.unlockAppBiometric { [weak self] error in
+                self?.isAutoUnlocking = false
+                if let error = error {
+                    self?.showError(error: error)
+                }
+            }
+        } else {
+            // Biometric was never set up: prompt for the password, as before.
+            self.isAutoUnlocking = true
+            self.unlockAppPassword { [weak self] error in
+                self?.isAutoUnlocking = false
+                if let error = error {
+                    self?.showError(error: error)
+                }
+            }
         }
     }
     
@@ -92,7 +122,7 @@ class STUnlockAppVC: UIViewController {
     }
     
     private func configureBiometricAuthButton() {
-        self.biometricAuthButton.isHidden = !self.viewModel.canUnlockAppBiometric
+        self.biometricAuthButton.isHidden = !self.viewModel.isBiometricConfigured
         let imageName = self.viewModel.biometricAuthServicesType == .faceID ? "ic_face_id" : "ic_touch_id"
         self.biometricAuthButton.setImage(UIImage(named: imageName), for: .normal)
     }
@@ -113,11 +143,15 @@ class STUnlockAppVC: UIViewController {
     }
         
     private func unlockApp(completion: ( (IError?) -> Void)?) {
-        if self.viewModel.canUnlockAppBiometric {
+        if self.viewModel.isBiometricConfigured {
             self.unlockAppBiometric(completion: completion)
         } else {
             self.unlockAppPassword(completion: completion)
         }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func unlockAppPassword(completion: ( (IError?) -> Void)?) {

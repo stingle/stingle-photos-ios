@@ -42,10 +42,14 @@ class STGalleryVM {
     }
     
     func deleteFile(files: [STLibrary.GaleryFile], completion: @escaping (IError?) -> Void) {
-        self.fileWorker.moveFilesToTrash(files: files, reloadDBData: true) { _ in
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.fileWorker.moveFilesToTrash(files: files, reloadDBData: true)
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     

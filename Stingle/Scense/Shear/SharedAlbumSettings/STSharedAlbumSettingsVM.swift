@@ -50,34 +50,50 @@ class STSharedAlbumSettingsVM {
     func removeMember(memberID: String, result: @escaping (_ result: IError?) -> Void) {
         let contacts = self.getAlbumContacts()
         let newContacts = contacts.filter( {$0.userId != memberID} )
-        self.albumWorker.resetAlbumMembers(album: self.album, contacts: newContacts) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.resetAlbumMembers(album: self.album, contacts: newContacts)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
     func leaveAlbum(result: @escaping (_ result: IError?) -> Void) {
-        self.albumWorker.leaveAlbum(album: self.album) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.leaveAlbum(album: self.album)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
     func unshareAlbum(result: @escaping (_ result: IError?) -> Void) {
-        self.albumWorker.unshareAlbum(album: self.album) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.unshareAlbum(album: self.album)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
     func updatePermission(permission: STLibrary.Album.Permission, result: @escaping (_ result: IError?) -> Void) {
-        self.albumWorker.updatePermission(album: self.album, permission: permission) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.updatePermission(album: self.album, permission: permission)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
         

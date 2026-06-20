@@ -52,5 +52,26 @@ public extension STAlbumWorker {
             failure?(error)
         }
     }
-    
+
+}
+
+//MARK: - async/await
+
+public extension STAlbumWorker {
+
+    func createAlbum(name: String, reloadDBData: Bool = true) async throws -> STLibrary.Album {
+        try await withCheckedThrowingContinuation { continuation in
+            self.createAlbum(name: name, reloadDBData: reloadDBData, success: { continuation.resume(returning: $0) },
+                             failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func createAlbum(name: String, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isMoving: Bool) async throws -> STLibrary.Album {
+        try await withCheckedThrowingContinuation { continuation in
+            self.createAlbum(name: name, fromAlbum: fromAlbum, files: files, isMoving: isMoving,
+                             success: { continuation.resume(returning: $0) },
+                             failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
 }

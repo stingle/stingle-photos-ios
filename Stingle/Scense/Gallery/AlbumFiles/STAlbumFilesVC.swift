@@ -199,8 +199,11 @@ class STAlbumFilesVC: STFilesSelectCollectionViewController<STAlbumFilesVC.ViewM
     override func updateSelectedItesmCount() {
         super.updateSelectedItesmCount()
         let count = self.selectionObjectsIdentifiers.count
-        let title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
-        self.accessoryView.title = title
+        if self.dataSource.viewModel.isSelectedMode {
+            self.navigationItem.title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
+        } else {
+            self.navigationItem.title = self.album.albumMetadata?.name
+        }
         self.accessoryView.setEnabled(isEnabled: count != .zero)
     }
     

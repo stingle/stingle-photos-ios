@@ -34,8 +34,9 @@ public extension STAlbumWorker {
             }
         } catch {
             failure?(WorkerError.error(error: error))
+            return
         }
-       
+
         let membersStr = members.joined(separator: ",")
         let sharedAlbum = STLibrary.Album(albumId: album.albumId,
                                           encPrivateKey: album.encPrivateKey,
@@ -117,8 +118,9 @@ public extension STAlbumWorker {
             }
         } catch {
             failure?(WorkerError.error(error: error))
+            return
         }
-       
+
         let membersStr = members.joined(separator: ",")
         let sharedAlbum = STLibrary.Album(albumId: album.albumId,
                                           encPrivateKey: album.encPrivateKey,
@@ -218,5 +220,65 @@ public extension STAlbumWorker {
             success?(response)
         }, failure: failure)
     }
-    
+
+}
+
+//MARK: - async/await
+
+public extension STAlbumWorker {
+
+    func shareAlbum(album: STLibrary.Album, contacts: [STContact], permitions: STLibrary.Album.Permission, reloadDBData: Bool = true, isHidden: Bool? = nil, isLocked: Bool? = nil, isRemote: Bool? = nil) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.shareAlbum(album: album, contacts: contacts, permitions: permitions, reloadDBData: reloadDBData, isHidden: isHidden, isLocked: isLocked, isRemote: isRemote,
+                            success: { continuation.resume(returning: $0) },
+                            failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func createSharedAlbum(name: String, files: [STLibrary.GaleryFile], contacts: [STContact], permitions: STLibrary.Album.Permission) async throws -> STLibrary.Album {
+        try await withCheckedThrowingContinuation { continuation in
+            self.createSharedAlbum(name: name, files: files, contacts: contacts, permitions: permitions,
+                                   success: { continuation.resume(returning: $0) },
+                                   failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func createSharedAlbum(name: String, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], contacts: [STContact], permitions: STLibrary.Album.Permission) async throws -> STLibrary.Album {
+        try await withCheckedThrowingContinuation { continuation in
+            self.createSharedAlbum(name: name, fromAlbum: fromAlbum, files: files, contacts: contacts, permitions: permitions,
+                                   success: { continuation.resume(returning: $0) },
+                                   failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func resetAlbumMembers(album: STLibrary.Album, contacts: [STContact]) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.resetAlbumMembers(album: album, contacts: contacts,
+                                   success: { continuation.resume(returning: $0) },
+                                   failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func leaveAlbum(album: STLibrary.Album) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.leaveAlbum(album: album, success: { continuation.resume(returning: $0) },
+                            failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func unshareAlbum(album: STLibrary.Album) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.unshareAlbum(album: album, success: { continuation.resume(returning: $0) },
+                              failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func updatePermission(album: STLibrary.Album, permission: STLibrary.Album.Permission) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.updatePermission(album: album, permission: permission,
+                                  success: { continuation.resume(returning: $0) },
+                                  failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
 }

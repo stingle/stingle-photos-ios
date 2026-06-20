@@ -30,36 +30,52 @@ class STTrashVM {
     }
     
     func delete(files: [STLibrary.TrashFile], completion: @escaping (IError?) -> Void) {
-        self.fileWorker.deleteFiles(files: files) { _ in
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.fileWorker.deleteFiles(files: files)
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func deleteAll(completion: @escaping (IError?) -> Void) {
         let files = self.trashProvider.fetchObjects()
-        self.fileWorker.deleteFiles(files: files) { _ in
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.fileWorker.deleteFiles(files: files)
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func recover(files: [STLibrary.TrashFile], completion: @escaping (IError?) -> Void) {
-        self.fileWorker.moveToGalery(files: files) { _ in
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.fileWorker.moveToGalery(files: files)
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func recoverAll(completion: @escaping (IError?) -> Void) {
         let files = self.trashProvider.fetchObjects()
-        self.fileWorker.moveToGalery(files: files) { _ in
-            completion(nil)
-        } failure: { error in
-            completion(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.fileWorker.moveToGalery(files: files)
+                completion(nil)
+            } catch {
+                completion((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     

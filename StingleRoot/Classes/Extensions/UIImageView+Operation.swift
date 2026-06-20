@@ -16,7 +16,7 @@ public protocol IImageViewDownloadAnimator {
 
 public extension UIImageView {
     
-    private static var retryerIdentifier: String = "retryerIdentifier"
+    private static var retryerIdentifier: UInt8 = 0
     
     typealias ISuccess = (_ result: UIImage?) -> Void
     typealias IProgress = (_ progress: Progress) -> Void

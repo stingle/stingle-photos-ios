@@ -84,14 +84,18 @@ class STStorageVM {
             success(billingInfo)
             return
         }
-        self.billingWorker.getBillingInfo { [weak self] billingInfo in
-            self?.billingInfo = billingInfo
-            success(billingInfo)
-        } failure: { error in
-            failure(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let billingInfo = try await self.billingWorker.getBillingInfo()
+                self.billingInfo = billingInfo
+                success(billingInfo)
+            } catch {
+                failure((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func buy(product identifier: String, complition: @escaping ((_ error: IError?) -> Void))  {
         guard let product = self.products?.first(where: { $0.productIdentifier == identifier }) else {
             complition(STError.unknown)

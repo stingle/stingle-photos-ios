@@ -7,10 +7,10 @@
 
 import Foundation
 
-class STNetworkOperationDecodable<T: Decodable>: STBaseNetworkOperation<T> {
+class STNetworkOperationDecodable<T: Decodable>: STBaseNetworkOperation<T>, @unchecked Sendable {
     
     private var decoder: IDecoder?
-    typealias Result<T> = STNetworkDispatcher.Result<T>
+    typealias Result<R> = STNetworkDispatcher.Result<R>
         
     init(request: IRequest, decoder: IDecoder? = nil, success: @escaping STOperationSuccess, failure: @escaping STOperationFailure) {
         super.init(request: request, success: success, failure: failure)

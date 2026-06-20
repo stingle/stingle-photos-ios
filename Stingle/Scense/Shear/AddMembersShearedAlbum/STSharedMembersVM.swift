@@ -54,10 +54,14 @@ class STSharedMembersVM {
             failure(SharedMembersError.addingCurrentUserMail)
             return
         }
-        self.contactWorker.addContact(email: email) { contact in
-            success(contact)
-        } failure: { error in
-            failure(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let contact = try await self.contactWorker.addContact(email: email)
+                success(contact)
+            } catch {
+                failure((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
@@ -67,10 +71,14 @@ class STSharedMembersVM {
         var contacts = oldContacts
         contacts.append(contentsOf: newContacts)
         
-        self.albumWorker.resetAlbumMembers(album: album, contacts: contacts) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.resetAlbumMembers(album: album, contacts: contacts)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     

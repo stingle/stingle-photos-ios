@@ -27,5 +27,19 @@ class STUploadWorker: STWorker {
         
         return self.upload(request: request, success: success, progress: progress, failure: failure)
     }
-    
+
+}
+
+//MARK: - async/await
+
+extension STUploadWorker {
+
+    func upload(file: ILibraryFile, progress: ProgressTask? = nil) async throws -> STDBUsed {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.upload(file: file, success: { continuation.resume(returning: $0) },
+                        progress: progress,
+                        failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
 }

@@ -1,12 +1,13 @@
 {
+  "originHash" : "2544137df0555cf86608b394d620278232f622660d335df1cac355caeffed2b5",
   "pins" : [
     {
       "identity" : "alamofire",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Alamofire/Alamofire",
       "state" : {
-        "branch" : "master",
-        "revision" : "51d67100121d586c9d15ec0227de96442af4dd6d"
+        "revision" : "7595cbcf59809f9977c5f6378500de2ad73b7ddb",
+        "version" : "5.12.0"
       }
     },
     {
@@ -14,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/evgenyneu/keychain-swift",
       "state" : {
-        "branch" : "master",
-        "revision" : "32a99b537d1c6f3529a08257c28a5feb70c0c5af"
+        "revision" : "5e1b02b6a9dac2a759a1d5dbc175c86bd192a608",
+        "version" : "24.0.0"
       }
     },
     {
@@ -23,10 +24,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jedisct1/swift-sodium",
       "state" : {
-        "branch" : "master",
-        "revision" : "54d520eb1c0a3d54bfa3175b5310c13fab15bea8"
+        "revision" : "cfd195c76882aa9b997560ca7cb95d72fbf5db00",
+        "version" : "0.11.0"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

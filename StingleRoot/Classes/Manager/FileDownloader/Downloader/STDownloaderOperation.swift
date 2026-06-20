@@ -9,7 +9,7 @@ import UIKit
 
 extension STDownloaderManager {
         
-    class DownloaderOperation<T: IDiskCacheObject>: STDownloadNetworkOperation {
+    class DownloaderOperation<T: IDiskCacheObject>: STDownloadNetworkOperation, @unchecked Sendable {
         
         let memoryCache: MemoryCache
         let diskCache: DiskCache<T>

@@ -21,6 +21,10 @@ class STUnlockAppVM {
     var canUnlockAppBiometric: Bool {
         return self.unlocker.canUnlockAppBiometric
     }
+
+    var isBiometricConfigured: Bool {
+        return self.unlocker.isBiometricConfigured
+    }
     
     var userEmail: String? {
         return STApplication.shared.utils.user()?.email

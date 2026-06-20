@@ -24,7 +24,7 @@ protocol STFileUploaderOperationDelegate: AnyObject {
 
 extension STFileUploader {
     
-    class Operation<File: STLibrary.FileBase>: STOperation<File> {
+    class Operation<File: STLibrary.FileBase>: STOperation<File>, @unchecked Sendable {
         
         private weak var uploaderOperationDelegate: STFileUploaderOperationDelegate?
         private let uploadWorker = STUploadWorker()

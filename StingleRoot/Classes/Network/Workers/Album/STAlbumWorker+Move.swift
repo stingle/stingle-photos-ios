@@ -228,7 +228,37 @@ public extension STAlbumWorker {
         } catch {
             failure?(WorkerError.error(error: error))
         }
-        
+
     }
-    
+
+}
+
+//MARK: - async/await
+
+public extension STAlbumWorker {
+
+    func moveFiles(files: [STLibrary.GaleryFile], toAlbum: STLibrary.Album, isMoving: Bool, reloadDBData: Bool = true) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.moveFiles(files: files, toAlbum: toAlbum, isMoving: isMoving, reloadDBData: reloadDBData,
+                           success: { continuation.resume(returning: $0) },
+                           failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func moveFiles(fromAlbum: STLibrary.Album, toAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isMoving: Bool, reloadDBData: Bool = true) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.moveFiles(fromAlbum: fromAlbum, toAlbum: toAlbum, files: files, isMoving: isMoving, reloadDBData: reloadDBData,
+                           success: { continuation.resume(returning: $0) },
+                           failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    func moveFilesToGallery(fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isMoving: Bool, reloadDBData: Bool = true) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.moveFilesToGallery(fromAlbum: fromAlbum, files: files, isMoving: isMoving, reloadDBData: reloadDBData,
+                                    success: { continuation.resume(returning: $0) },
+                                    failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
 }

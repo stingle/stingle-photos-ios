@@ -1,5 +1,4 @@
 import Foundation
-import Foundation
 import StingleRoot
 
 class STSignUpVM {
@@ -13,17 +12,21 @@ class STSignUpVM {
             let password = try self.validator.validate(password: password, confirmPassword: confirmPassword)
 			self.registr(email: email, password: password, includePrivateKey: includePrivateKey, success: success, failure: failure)
 		} catch {
-			failure(error as! IError)
+			failure((error as? IError) ?? STError.error(error: error))
 		}
 	}
 	
 	//MARK: - Private fupasswordncs
 
     private func registr(email: String, password: String, includePrivateKey: Bool, success: @escaping ((_ result: STUser, _ password: String) -> Void), failure: @escaping ((_ error: IError) -> Void)) {
-        self.authWorker.registerAndLogin(email: email, password: password, includePrivateKey: includePrivateKey, success: { user in
-            success(user, password)
-        }, failure: failure)
-        
+        Task { @MainActor in
+            do {
+                let user = try await self.authWorker.registerAndLogin(email: email, password: password, includePrivateKey: includePrivateKey)
+                success(user, password)
+            } catch {
+                failure((error as? IError) ?? STError.error(error: error))
+            }
+        }
 	}
 	
 }

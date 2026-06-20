@@ -41,6 +41,13 @@ extension STStore {
 extension STStore.ProductsRequest: SKProductsRequestDelegate {
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+        if !response.invalidProductIdentifiers.isEmpty {
+            // If these are the IDs we asked for, the App Store isn't returning them
+            // as valid products — almost always an App Store Connect issue (Paid
+            // Apps agreement inactive, products not "Approved"/"Ready to Submit", or
+            // an identifier mismatch) rather than a client bug.
+            print("⚠️ StoreKit: \(response.products.count) valid product(s); invalid identifiers (\(response.invalidProductIdentifiers.count)): \(response.invalidProductIdentifiers)")
+        }
         let products = response.products.compactMap { product in
             return STStore.Product(with: product)
         }
@@ -99,7 +106,7 @@ public extension STStore {
         }
         
         public var currencyCode: String? {
-            return self.priceLocale.currencyCode
+            return self.priceLocale.currency?.identifier
         }
         
     }

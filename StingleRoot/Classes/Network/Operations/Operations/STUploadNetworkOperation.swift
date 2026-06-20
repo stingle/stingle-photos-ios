@@ -7,9 +7,9 @@
 
 import Foundation
 
-class STUploadNetworkOperation<T: Decodable>: STBaseNetworkOperation<T> {
+class STUploadNetworkOperation<T: Decodable>: STBaseNetworkOperation<T>, @unchecked Sendable {
     
-    typealias Result<T> = STNetworkDispatcher.Result<T>
+    typealias Result<R> = STNetworkDispatcher.Result<R>
     
     init(request: IUploadRequest, success: STOperationSuccess?, failure: STOperationFailure?,  progress: STOperationProgress?) {
         super.init(request: request, success: success, failure: failure, progress: progress, stream: nil)

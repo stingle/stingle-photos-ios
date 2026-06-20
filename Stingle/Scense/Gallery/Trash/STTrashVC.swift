@@ -183,8 +183,11 @@ class STTrashVC: STFilesSelectCollectionViewController<STTrashVC.ViewModel> {
     
     override func updateSelectedItesmCount() {
         let count = self.selectionObjectsIdentifiers.count
-        let title = self.isSelectionMode ? count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)") : nil
-        self.accessoryView.title = title
+        if self.isSelectionMode {
+            self.navigationItem.title = count == 0 ? "select_items".localized : String(format: "selected_items_count".localized, "\(count)")
+        } else {
+            self.navigationItem.title = "trash".localized
+        }
         let isEnabled = self.isSelectionMode ? count != .zero : !self.dataSource.isEmptyData
         self.accessoryView.setEnabled(isEnabled: isEnabled)
     }

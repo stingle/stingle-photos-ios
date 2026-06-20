@@ -26,9 +26,29 @@ public class STContactWorker: STWorker {
 }
 
 extension STContactWorker {
-    
+
     public struct ContactResponse: Codable {
         let contact: STContact
     }
-    
+
+}
+
+//MARK: - async/await
+
+extension STContactWorker {
+
+    public func getContact(email: String) async throws -> STContact {
+        try await withCheckedThrowingContinuation { continuation in
+            self.getContact(email: email, success: { continuation.resume(returning: $0) },
+                            failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
+    public func addContact(email: String) async throws -> STContact {
+        try await withCheckedThrowingContinuation { continuation in
+            self.addContact(email: email, success: { continuation.resume(returning: $0) },
+                            failure: { continuation.resume(throwing: $0) })
+        }
+    }
+
 }

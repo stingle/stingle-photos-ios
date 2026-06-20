@@ -71,8 +71,10 @@
 "select" = "Select";
 "copy" = "Copy";
 
-"selected_items_count" = "%@ items Selected";
+"selected_items_count" = "%@ Selected";
 "select_items" = "Select items";
+"move" = "Move";
+"recover" = "Recover";
 "next" = "Next";
 "share" = "Share";
 "skip" = "Skip";

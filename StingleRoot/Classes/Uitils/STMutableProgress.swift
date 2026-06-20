@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class STMutableProgress: Progress {
+public final class STMutableProgress: Progress, @unchecked Sendable {
 
     public override var totalUnitCount: Int64 {
         get {

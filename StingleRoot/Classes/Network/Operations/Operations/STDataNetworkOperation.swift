@@ -7,7 +7,7 @@
 
 import Foundation
 
-class STDataNetworkOperation: STBaseNetworkOperation<Data> {
+class STDataNetworkOperation: STBaseNetworkOperation<Data>, @unchecked Sendable {
     
     override func resume() {
         super.resume()

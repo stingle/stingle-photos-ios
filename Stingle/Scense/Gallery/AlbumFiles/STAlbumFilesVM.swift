@@ -42,10 +42,14 @@ class STAlbumFilesVM {
     
     func deleteFiles(identifiers: [String], result: @escaping ((IError?) -> Void)) {
         let files = self.getFiles(identifiers: identifiers)
-        self.albumWorker.deleteAlbumFiles(album: album, files: files) { responce in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.deleteAlbumFiles(album: self.album, files: files)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
@@ -86,51 +90,75 @@ class STAlbumFilesVM {
     }
     
     func renameAlbum(newName: String?, result: @escaping ((IError?) -> Void)) {
-        self.albumWorker.rename(album: self.album, name: newName) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.rename(album: self.album, name: newName)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func setBlankCover(result: @escaping ((IError?) -> Void)) {
         let cover = STLibrary.Album.imageBlankImageName
-        self.albumWorker.setCover(album: self.album, caver: cover) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.setCover(album: self.album, caver: cover)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func resetBlankCover(result: @escaping ((IError?) -> Void)) {
-        self.albumWorker.setCover(album: self.album, caver: nil) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.setCover(album: self.album, caver: nil)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func delete(result: @escaping ((IError?) -> Void)) {
-        self.albumWorker.deleteAlbumWithFiles(album: self.album) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.deleteAlbumWithFiles(album: self.album)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func leave(result: @escaping ((IError?) -> Void)) {
-        self.albumWorker.leaveAlbum(album: self.album) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.leaveAlbum(album: self.album)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func setCover(fileName: String, result: @escaping ((IError?) -> Void)) {
-        self.albumWorker.setCover(album: self.album, caver: fileName) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.setCover(album: self.album, caver: fileName)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     

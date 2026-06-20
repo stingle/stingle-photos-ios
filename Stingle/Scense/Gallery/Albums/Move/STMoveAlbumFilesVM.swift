@@ -24,10 +24,14 @@ class STMoveAlbumFilesVM {
     func moveToAlbum(toAlbum: STLibrary.Album, files: [STLibrary.GaleryFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
         self.isDeleteFilesLastValue = isDeleteFiles
         let isMoving = self.isDeleteFilesLastValue
-        self.albumWorker.moveFiles(files: files, toAlbum: toAlbum, isMoving: isMoving) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.moveFiles(files: files, toAlbum: toAlbum, isMoving: isMoving)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
@@ -35,39 +39,55 @@ class STMoveAlbumFilesVM {
     func moveToAlbum(fromAlbum: STLibrary.Album, toAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
         self.isDeleteFilesLastValue = isDeleteFiles
         let isMoving = self.isDeleteFilesLastValue && fromAlbum.isOwner
-        self.albumWorker.moveFiles(fromAlbum: fromAlbum, toAlbum: toAlbum, files: files, isMoving: isMoving, reloadDBData: true) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.moveFiles(fromAlbum: fromAlbum, toAlbum: toAlbum, files: files, isMoving: isMoving, reloadDBData: true)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
     func moveFilesToGallery(fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
         self.isDeleteFilesLastValue = isDeleteFiles
         let isMoving = self.isDeleteFilesLastValue && fromAlbum.isOwner
-        self.albumWorker.moveFilesToGallery(fromAlbum: fromAlbum, files: files, isMoving: isMoving) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.moveFilesToGallery(fromAlbum: fromAlbum, files: files, isMoving: isMoving)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
     
     func createAlbum(name: String, fromAlbum: STLibrary.Album, files: [STLibrary.AlbumFile], isDeleteFiles: Bool, result: @escaping (_ result: IError?) -> Void) {
         self.isDeleteFilesLastValue = isDeleteFiles
         let isMoving = self.isDeleteFilesLastValue && fromAlbum.isOwner
-        self.albumWorker.createAlbum(name: name, fromAlbum: fromAlbum, files: files, isMoving: isMoving) { _ in
-            result(nil)
-        } failure: { error in
-            result(error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.createAlbum(name: name, fromAlbum: fromAlbum, files: files, isMoving: isMoving)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
         }
     }
-    
+
     func createAlbum(name: String, result: @escaping (_ result: IError?) -> Void) {
-        self.albumWorker.createAlbum(name: name) { album in
-            result(nil)
-        } failure: { error in
-            result(error)
-        }        
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                _ = try await self.albumWorker.createAlbum(name: name)
+                result(nil)
+            } catch {
+                result((error as? IError) ?? STError.error(error: error))
+            }
+        }
     }
     
 }

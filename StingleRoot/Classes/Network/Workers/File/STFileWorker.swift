@@ -91,7 +91,43 @@ public class STFileWorker: STWorker {
             galleryProvider.add(models: galleryFiles, reloadData: true)
             success?(response)
         }, failure: failure)
-        
+
     }
-        
+
+}
+
+//MARK: - async/await
+
+public extension STFileWorker {
+
+    func moveFilesToTrash(files: [STLibrary.GaleryFile], reloadDBData: Bool = true) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.moveFilesToTrash(files: files, reloadDBData: reloadDBData, success: { result in
+                continuation.resume(returning: result)
+            }, failure: { error in
+                continuation.resume(throwing: error)
+            })
+        }
+    }
+
+    func deleteFiles(files: [STLibrary.TrashFile]) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.deleteFiles(files: files, success: { result in
+                continuation.resume(returning: result)
+            }, failure: { error in
+                continuation.resume(throwing: error)
+            })
+        }
+    }
+
+    func moveToGalery(files: [STLibrary.TrashFile]) async throws -> STEmptyResponse {
+        try await withCheckedThrowingContinuation { continuation in
+            self.moveToGalery(files: files, success: { result in
+                continuation.resume(returning: result)
+            }, failure: { error in
+                continuation.resume(throwing: error)
+            })
+        }
+    }
+
 }

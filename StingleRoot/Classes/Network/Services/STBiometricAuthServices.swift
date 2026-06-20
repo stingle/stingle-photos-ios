@@ -177,6 +177,16 @@ public extension STBiometricAuthServices {
             return false
         }
     }
+
+    /// Whether the user has enabled biometric unlock — independent of whether the
+    /// credential is readable *right now*. Backed by the UserDefaults-stored
+    /// encrypted password (available after first unlock), so unlike `canUnlockApp`
+    /// it does not return `false` due to a transient keychain/file read failure
+    /// right after a long device lock. Use this to decide whether to OFFER Face ID /
+    /// Touch ID; the actual credential read still happens during the unlock attempt.
+    var isBiometricConfigured: Bool {
+        return self.state != .notAvailable && self.encryptedPassword != nil
+    }
         
     func isValiedPassword(password: String) -> Bool {
         do {

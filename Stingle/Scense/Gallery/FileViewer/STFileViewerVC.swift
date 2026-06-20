@@ -19,9 +19,17 @@ protocol IFileViewer: UIViewController {
     
     func fileViewer(didChangeViewerStyle fileViewer: STFileViewerVC, isFullScreen: Bool)
     func fileViewer(pauseContent fileViewer: STFileViewerVC)
+    func fileViewer(activateContent fileViewer: STFileViewerVC)
     func reload(file: STLibrary.FileBase, fileIndex: Int)
     func reload(fileIndex: Int)
-    
+
+}
+
+extension IFileViewer {
+    // Called when this viewer becomes the current (visible) page. Default no-op so
+    // only viewers that need it (e.g. video autoplay) implement it. Declared in the
+    // protocol so the override is dynamically dispatched.
+    func fileViewer(activateContent fileViewer: STFileViewerVC) {}
 }
 
 protocol IFileViewerDelegate: AnyObject {
@@ -275,11 +283,15 @@ class STFileViewerVC: UIViewController {
             self.navigationController?.setNavigationBarHidden(true, animated: false)
             self.toolBar.alpha = .zero
             self.tabBarController?.tabBar.alpha = .zero
+            // The action bar is a sibling of the tab bar (so it can receive taps),
+            // so `tabBar.alpha` no longer hides it — fade it explicitly with the chrome.
+            self.accessoryView.alpha = .zero
         case .white:
             self.view.backgroundColor = .appBackground
             self.navigationController?.setNavigationBarHidden(false, animated: false)
             self.toolBar.alpha = 1
             self.tabBarController?.tabBar.alpha = 1
+            self.accessoryView.alpha = 1
         }
     }
     
@@ -313,6 +325,15 @@ class STFileViewerVC: UIViewController {
         self.titleView?.title = dateManager.dateToString(date: file.dateCreated, withFormate: .mmm_dd_yyyy)
         self.titleView?.subTitle = dateManager.dateToString(date: file.dateCreated, withFormate: .HH_mm)
         self.accessoryView.reloadData()
+        // Autoplay the page that is now current; pause every other (incl. the
+        // pre-loaded adjacent pages) so off-screen videos never play.
+        self.viewControllers.objects.forEach { viewer in
+            if viewer.fileIndex == currentIndex {
+                viewer.fileViewer(activateContent: self)
+            } else {
+                viewer.fileViewer(pauseContent: self)
+            }
+        }
     }
     
     private func deleteCurrentFile() {

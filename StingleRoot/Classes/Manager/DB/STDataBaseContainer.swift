@@ -133,25 +133,6 @@ public extension URL {
     
 }
 
-extension NSManagedObjectContext {
-    
-    func performAndWait<T>(_ executeBlock: @escaping () -> T) -> T {
-        var result: T!
-        self.performAndWait( {
-            result = executeBlock()
-        })
-        return result
-    }
-    
-    func performAndWait<T>(_ executeBlock: @escaping () -> T?) -> T? {
-        var result: T?
-        self.performAndWait( {
-            result = executeBlock()
-        })
-        return result
-    }
-}
-
 fileprivate extension STDataBaseContainer {
     
     static let currentDBVersion:Int = 1
