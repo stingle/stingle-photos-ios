@@ -16,8 +16,8 @@ public protocol IAutoImporterObserver: AnyObject {
 
 public extension STImporter {
     
-    class AutoImporter {
-        
+    class AutoImporter: NSObject {
+
         public enum ImportData {
             case setupDate
             case currentDate
@@ -40,18 +40,30 @@ public extension STImporter {
         private var isImporting: Bool = false
         private var importFilesCount: Int = .zero
         private var canSetDate = true
+        private var needsRestart: Bool = false
+        private var isObservingLibrary: Bool = false
         private var endImportingCallBack: (() -> Void)?
-        
+
         private let observerEvents = STObserverEvents<IAutoImporterObserver>()
         private var importQueue: STOperationQueue
         private var autoImportQueue: STOperationQueue
         private weak var currentOporation: Operation?
         public let dispatchQueue = DispatchQueue(label: "AutoImporter.queue")
-                        
+
+        // Persisted set of already-imported asset localIdentifiers. Used to dedup the
+        // (now inclusive `>=`) creationDate scan so assets that share the boundary
+        // timestamp with the last import aren't silently skipped. Bounded to the most
+        // recent `importedIdentifiersCap` entries: only assets at the advancing
+        // boundary date are ever re-queried, so pruning older ids can't cause re-imports.
+        private let importedIdentifiersKey = "autoImporter.importedIdentifiers"
+        private let importedIdentifiersCap = 2000
+        private var importedIdentifiers: [String]
+        private var importedIdentifiersSet: Set<String>
+
         private var importSettings: STAppSettings.Import {
             return STAppSettings.current.import
         }
-        
+
         private(set) var lastImportDate: Date? {
             set {
                 UserDefaults.standard.set(newValue, forKey: "auotImporter.lastImportDate")
@@ -59,20 +71,37 @@ public extension STImporter {
                 return (UserDefaults.standard.object(forKey: "auotImporter.lastImportDate") as? Date)
             }
         }
-        
+
         //MARK: - Public methods
-        
-        public init() {
+
+        public override init() {
             self.autoImportQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 1, underlyingQueue: self.dispatchQueue)
             self.importQueue = STOperationManager.shared.createQueue(maxConcurrentOperationCount: 1, underlyingQueue: self.dispatchQueue)
+            self.importedIdentifiers = UserDefaults.standard.stringArray(forKey: self.importedIdentifiersKey) ?? []
+            self.importedIdentifiersSet = Set(self.importedIdentifiers)
+            super.init()
             STAppSettings.current.addObserver(self)
+            self.startObservingLibraryIfNeeded()
         }
-        
+
+        deinit {
+            if self.isObservingLibrary {
+                PHPhotoLibrary.shared().unregisterChangeObserver(self)
+            }
+        }
+
         public func startImport() {
-            guard !self.isStarted else {
+            guard self.canStartImport else {
                 return
             }
-                        
+            guard !self.isStarted else {
+                // A trigger (photo-library change, sync, background task) arrived while an
+                // import was already running. Coalesce it so it isn't dropped — we re-run
+                // once the current cycle finishes.
+                self.needsRestart = true
+                return
+            }
+            self.needsRestart = false
             self.observerEvents.forEach { observer in
                 observer.autoImporter(didStart: self)
             }
@@ -81,10 +110,11 @@ public extension STImporter {
                 self?.startImportAssets()
             }
         }
-        
+
         public func resetImportDate(date: ImportData, startImport: Bool, end: (() -> Void)? = nil) {
             self.cancelImporting { [weak self] in
                 self?.lastImportDate = date.date
+                self?.clearImportedIdentifiers()
                 if startImport {
                     self?.startImport()
                 }
@@ -170,6 +200,42 @@ public extension STImporter {
             self.observerEvents.forEach { observer in
                 observer.autoImporter(didEnd: self)
             }
+            if self.needsRestart {
+                self.needsRestart = false
+                self.dispatchQueue.asyncAfter(wallDeadline: .now() + 0.5) { [weak self] in
+                    self?.startImport()
+                }
+            }
+        }
+
+        private func startObservingLibraryIfNeeded() {
+            guard !self.isObservingLibrary else {
+                return
+            }
+            self.isObservingLibrary = true
+            PHPhotoLibrary.shared().register(self)
+        }
+
+        private func recordImported(identifiers: [String]) {
+            guard !identifiers.isEmpty else {
+                return
+            }
+            for identifier in identifiers where !self.importedIdentifiersSet.contains(identifier) {
+                self.importedIdentifiers.append(identifier)
+                self.importedIdentifiersSet.insert(identifier)
+            }
+            if self.importedIdentifiers.count > self.importedIdentifiersCap {
+                let overflow = self.importedIdentifiers.count - self.importedIdentifiersCap
+                self.importedIdentifiers.prefix(overflow).forEach { self.importedIdentifiersSet.remove($0) }
+                self.importedIdentifiers.removeFirst(overflow)
+            }
+            UserDefaults.standard.set(self.importedIdentifiers, forKey: self.importedIdentifiersKey)
+        }
+
+        private func clearImportedIdentifiers() {
+            self.importedIdentifiers = []
+            self.importedIdentifiersSet = []
+            UserDefaults.standard.removeObject(forKey: self.importedIdentifiersKey)
         }
         
         private func updateDate(date: Date) {
@@ -186,7 +252,11 @@ public extension STImporter {
         private func startNextImport() {
             self.isImporting = true
                         
-            let operation = Operation(importQueue: self.importQueue, fromDate: self.lastImportDate, fetchLimit: self.fetchLimit) { [weak self] importCount in
+            let operation = Operation(importQueue: self.importQueue, fromDate: self.lastImportDate, fetchLimit: self.fetchLimit, importedIdentifiers: self.importedIdentifiersSet, onImported: { [weak self] identifiers in
+                self?.dispatchQueue.async { [weak self] in
+                    self?.recordImported(identifiers: identifiers)
+                }
+            }) { [weak self] importCount in
                 guard let weakSelf = self else {
                     return
                 }
@@ -210,6 +280,20 @@ public extension STImporter {
         }
     }
     
+}
+
+extension STImporter.AutoImporter: PHPhotoLibraryChangeObserver {
+
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {
+        // Photos delivers this on a private background queue. New media added while the
+        // app is alive (taken in the camera, saved from Messages/AirDrop, downloaded from
+        // iCloud) triggers an import immediately, instead of waiting for the next sync or
+        // background task.
+        DispatchQueue.main.async { [weak self] in
+            self?.startImport()
+        }
+    }
+
 }
 
 extension STImporter.AutoImporter: ISettingsObserver {
@@ -256,15 +340,19 @@ public extension STImporter.AutoImporter {
         let date: Date?
         let fetchLimit: Int
         let importQueue: STOperationQueue
+        let importedIdentifiers: Set<String>
+        let onImported: (([String]) -> Void)?
         private weak var importer: STImporter.GaleryAssetFileImporter?
         private var progress: Progress
         private var isCancel = false
-        
-        init(importQueue: STOperationQueue, fromDate: Date?, fetchLimit: Int, success: STOperationSuccess?, failure: STOperationFailure?,  progress: STOperationProgress?) {
+
+        init(importQueue: STOperationQueue, fromDate: Date?, fetchLimit: Int, importedIdentifiers: Set<String>, onImported: (([String]) -> Void)?, success: STOperationSuccess?, failure: STOperationFailure?,  progress: STOperationProgress?) {
             self.progress = Progress(totalUnitCount: Int64(fetchLimit))
             self.fetchLimit = fetchLimit
             self.date = fromDate
             self.importQueue = importQueue
+            self.importedIdentifiers = importedIdentifiers
+            self.onImported = onImported
             super.init(success: success, failure: failure, progress: progress)
         }
         
@@ -302,8 +390,17 @@ public extension STImporter.AutoImporter {
                     stop.pointee = true
                     return
                 }
+                // Skip assets already imported. The creationDate scan is inclusive (`>=`)
+                // so the boundary asset(s) re-appear every cycle; the dedup keeps us from
+                // re-importing them while still catching siblings that share the timestamp.
+                if self.importedIdentifiers.contains(asset.localIdentifier) {
+                    return
+                }
                 let importFile = STImporter.GaleryFileAssetImportable(asset: asset)
                 importFiles.append(importFile)
+                if importFiles.count >= self.fetchLimit {
+                    stop.pointee = true
+                }
             }
             guard !self.isExpired else {
                 return
@@ -353,6 +450,7 @@ public extension STImporter.AutoImporter {
                 }
                 
             }, complition: { [weak self] files, importableFiles in
+                self?.onImported?(importableFiles.map { $0.asset.localIdentifier })
                 func response(count: Int) {
                     queue.async { [weak self] in
                         guard let weakSelf = self else {
@@ -385,10 +483,12 @@ public extension STImporter.AutoImporter {
             
             let sortDescriptor = NSSortDescriptor(key: "\(#keyPath(PHAsset.creationDate))", ascending: true)
             options.sortDescriptors = [sortDescriptor]
-            options.fetchLimit = self.fetchLimit
-                        
+            // No `fetchLimit` here: callers stop enumeration once `fetchLimit` *unimported*
+            // assets are collected. A hard fetch limit combined with the dedup skip could
+            // return a page that is entirely already-imported and hide newer assets behind it.
+
             if let lastImportDate = self.date {
-                let predicate = NSPredicate(format: "\(#keyPath(PHAsset.creationDate)) > %@", lastImportDate as CVarArg)
+                let predicate = NSPredicate(format: "\(#keyPath(PHAsset.creationDate)) >= %@", lastImportDate as CVarArg)
                 options.predicate = predicate
             }
             let assets = PHAsset.fetchAssets(with: options)

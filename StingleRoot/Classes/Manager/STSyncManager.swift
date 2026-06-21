@@ -81,13 +81,10 @@ public class STSyncManager {
     private func startDBSync(sync: STSync, success: (() -> Void)? = nil, failure: ((_ error: IError) -> Void)? = nil)  {
         
         self.dataBase.sync(sync) { [weak self] in
-            
+
             success?()
             self?.didEndSync(error: nil)
-            let application = STApplication.shared
-            application.uploader.uploadAllLocalFiles()
-            application.autoImporter.startImport()
-            
+
         } willFinish: { info in
             
             let galleryDelete = info.gallery.upgrade.compactMap({ $0.file })
@@ -129,6 +126,13 @@ public class STSyncManager {
         self.observer.forEach { (lisner) in
             lisner.syncManager(didEndSync: self, with: error)
         }
+        // Kick uploads and auto-import after *every* sync attempt, not only on success.
+        // Previously these lived inside the sync success closure, so a failed sync (offline,
+        // server hiccup, expired token) meant nothing got imported that session even in the
+        // foreground. `startImport()` self-guards via `canStartImport`.
+        let application = STApplication.shared
+        application.uploader.uploadAllLocalFiles()
+        application.autoImporter.startImport()
     }
     
     deinit {

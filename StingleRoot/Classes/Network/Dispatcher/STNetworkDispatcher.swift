@@ -22,6 +22,13 @@ public final class STNetworkDispatcher: @unchecked Sendable {
     
     static let sheared: STNetworkDispatcher = STNetworkDispatcher()
 
+    /// Entry point for `AppDelegate.application(_:handleEventsForBackgroundURLSession:completionHandler:)`.
+    /// Forwards the system completion handler to the background upload session so it can be
+    /// invoked once the session finishes processing the events it accumulated while suspended.
+    public static func handleEventsForBackgroundURLSession(identifier: String, completionHandler: @escaping () -> Void) {
+        STNetworkDispatcher.sheared.backroundSession.setBackgroundCompletionHandler(completionHandler, forSessionIdentifier: identifier)
+    }
+
     private var session: Alamofire.Session!
     private var uploadSession: Alamofire.Session!
     private var streamSession: Alamofire.Session!

@@ -14,10 +14,11 @@ class STBGTaskScheduler {
     
     enum BackgroundIdentifie: String, CaseIterable {
         case autoImport = "org.stingle.photos.auto.import"
-        
+        case autoImportRefresh = "org.stingle.photos.auto.import.refresh"
+
         var dispatchQueue: DispatchQueue {
             switch self {
-            case .autoImport:
+            case .autoImport, .autoImportRefresh:
                 return STApplication.shared.autoImporter.dispatchQueue
             }
         }
@@ -73,6 +74,10 @@ class STBGTaskScheduler {
         switch identifie {
         case .autoImport:
             let task = AutoImporter(identifier: identifie)
+            task.delegate = self
+            self.tasks.insert(task)
+        case .autoImportRefresh:
+            let task = AutoImporterRefresh(identifier: identifie)
             task.delegate = self
             self.tasks.insert(task)
         }
@@ -181,26 +186,34 @@ extension STBGTaskScheduler.Task: Hashable {
 extension STBGTaskScheduler {
     
     class AutoImporter: Task {
-        
+
         let bgImptortTimeInterval: TimeInterval = 20 * 60
-        
+
         let autoImporter = STApplication.shared.autoImporter
         private(set) var isStarted = false
-        
+
         override init(identifier: STBGTaskScheduler.BackgroundIdentifie) {
             super.init(identifier: identifier)
             self.autoImporter.add(self)
         }
-        
-        override func submit(scheduler: BGTaskScheduler) throws {
+
+        // A long-running processing task. `requiresExternalPower` was previously `true`,
+        // which meant background auto-import only ran while the device was charging — the
+        // main reason imports "stopped" once the app was closed. Dropped so it can also run
+        // on battery; network is still required since imports upload.
+        func makeRequest() -> BGTaskRequest {
             let request = BGProcessingTaskRequest(identifier: self.identifier.rawValue)
             request.requiresNetworkConnectivity = true
-            request.requiresExternalPower = true
+            request.requiresExternalPower = false
             request.earliestBeginDate = Date(timeIntervalSinceNow: self.bgImptortTimeInterval)
-            try scheduler.submit(request)
+            return request
+        }
+
+        override func submit(scheduler: BGTaskScheduler) throws {
+            try scheduler.submit(self.makeRequest())
             self.isStarted = false
         }
-        
+
         override func resume(task: BGTask) {
             try? self.submit(scheduler: BGTaskScheduler.shared)
             guard !self.isStarted else {
@@ -214,13 +227,27 @@ extension STBGTaskScheduler {
             }
             self.autoImporter.startImport()
         }
-        
+
         override func cancel() {
             super.cancel()
             self.autoImporter.cancelImporting(end: nil)
         }
     }
-        
+
+    // A lighter, more frequently-granted app-refresh task. iOS schedules `BGAppRefreshTask`
+    // more readily than a processing task, giving auto-import an extra (short) wake-up
+    // opportunity. It shares all of `AutoImporter`'s lifecycle, only the request differs.
+    class AutoImporterRefresh: AutoImporter {
+
+        let bgRefreshTimeInterval: TimeInterval = 15 * 60
+
+        override func makeRequest() -> BGTaskRequest {
+            let request = BGAppRefreshTaskRequest(identifier: self.identifier.rawValue)
+            request.earliestBeginDate = Date(timeIntervalSinceNow: self.bgRefreshTimeInterval)
+            return request
+        }
+    }
+
 }
 
 extension STBGTaskScheduler.AutoImporter: IAutoImporterObserver {

@@ -16,6 +16,7 @@ class STNetworkSession: NSObject {
     fileprivate let rootQueue: DispatchQueue
     fileprivate var urlSession: URLSession!
     fileprivate var tasks = [Int: INetworkSessionTask]()
+    fileprivate var backgroundCompletionHandler: (() -> Void)?
     weak var sessionEvent: INetworkSessionEvent?
     
     init(rootQueue: DispatchQueue = DispatchQueue(label: "org.stingle.session.rootQueue", attributes: .concurrent), configuration: URLSessionConfiguration = .default) {
@@ -31,6 +32,15 @@ class STNetworkSession: NSObject {
         self.cancelAllTask()
     }
     
+    func setBackgroundCompletionHandler(_ handler: @escaping () -> Void, forSessionIdentifier identifier: String) {
+        guard self.urlSession.configuration.identifier == identifier else {
+            return
+        }
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            self?.backgroundCompletionHandler = handler
+        }
+    }
+
     private func cancelAllTask() {
         self.urlSession .getAllTasks { tasks in
             self.rootQueue.async(flags: .barrier) {
@@ -137,7 +147,20 @@ extension STNetworkSession: URLSessionDataDelegate {
             self?.tasks[downloadTask.taskIdentifier]?.urlSession(session, downloadTask: downloadTask, didResumeAtOffset: fileOffset, expectedTotalBytes: expectedTotalBytes)
         }
     }
-    
+
+    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+        // The background session has finished delivering all events queued while the app was
+        // suspended. Invoke (and clear) the system-provided completion handler on the main
+        // thread, per Apple's contract, so iOS knows the app is done and can snapshot/suspend.
+        self.rootQueue.async(flags: .barrier) { [weak self] in
+            let handler = self?.backgroundCompletionHandler
+            self?.backgroundCompletionHandler = nil
+            DispatchQueue.main.async {
+                handler?()
+            }
+        }
+    }
+
 }
 
 extension STNetworkSession {

@@ -167,11 +167,14 @@ public extension STApplication.Utils {
         }
         
         let level = UIDevice.current.batteryLevel
-        
+
         #if targetEnvironment(simulator)
         return true
         #else
-        if level < settings.batteryLevel {
+        // `batteryLevel` is -1 when monitoring is unavailable (e.g. a cold background launch
+        // before monitoring is enabled). Only enforce the threshold when the level is known,
+        // otherwise an unknown level would silently block all background uploads.
+        if level >= 0, level < settings.batteryLevel {
             return false
         }
         return true

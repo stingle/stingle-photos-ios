@@ -13,6 +13,7 @@
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>org.stingle.photos.auto.import</string>
+		<string>org.stingle.photos.auto.import.refresh</string>
 	</array>
 	<key>BUILD_TYPE</key>
 	<string>$(BUILD_TYPE)</string>
