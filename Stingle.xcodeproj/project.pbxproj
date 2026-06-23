@@ -7,6 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0068CB2764A7E14DB8A0BA57 /* STCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122DCC09194F4CB56B2D5418 /* STCameraVC.swift */; };
+		0071EC8C0E319B2E6744F186 /* StingleAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D0A88721AD71F0867C274E /* StingleAppShortcuts.swift */; };
+		099BA6701C3DEBB886CD6D05 /* LockedCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50520A353DD2B47ABCF4169A /* LockedCaptureController.swift */; };
+		0A9DB81ED3B38659D9764A4E /* STCameraImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A3C97A9FBA4E3F5C165867 /* STCameraImporter.swift */; };
+		0E640747588A415F6D800806 /* STCameraEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74AD2D289028C62AA66E49E /* STCameraEngine.swift */; };
+		0F9D1EB1F054312BA6057BDB /* STTimeLapseAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9872D63D494ACA83B101873B /* STTimeLapseAssembler.swift */; };
+		12B9308EA64EC7048CA5467F /* STCameraLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E279016E0F962C75CA0C4B49 /* STCameraLauncher.swift */; };
+		13C2BDEBB72EDC83F34ED7CD /* StingleWidgets.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E038E72E1791079FDDE97AE0 /* StingleWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		17A1B9C179200CA1193890BC /* OpenCameraIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84DB0C50DE85F9CEDE06CCA /* OpenCameraIntent.swift */; };
+		17A7BEF879006DC95116EA6E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE80357809A11ADADFD0CAE /* Foundation.framework */; };
+		1A353660B9FE3DA5E8B7EEFD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE80357809A11ADADFD0CAE /* Foundation.framework */; };
+		1DB17350DA2896005884F0C6 /* CameraControlWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E8F4B7A71AEC756A8B9E69 /* CameraControlWidget.swift */; };
+		2A56889796D4E4514C546B99 /* LockedCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F7938C9EB146CAAA1BC41D /* LockedCaptureView.swift */; };
+		42ED9CE7208E33043C26A4BF /* STAppSettings+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487884E064D24B14C7040A49 /* STAppSettings+Camera.swift */; };
+		4C6AB97615181028E1B7B888 /* STCameraShutterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1769FE500DDBBA20B0B61B92 /* STCameraShutterButton.swift */; };
+		5120FFAB7880B7346BFCD091 /* StingleWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59787F7E77695AD98F1166B /* StingleWidgetsBundle.swift */; };
+		539DCB6B28C08D251539639D /* STCameraGridOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A91F1A42AA200EE5E75705F /* STCameraGridOverlayView.swift */; };
+		58DBC091F2E690F798A094D0 /* STCameraEngine+Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFAE2E94D590CE4FBADF71F /* STCameraEngine+Photo.swift */; };
+		6B1A3CB8FE9808519C2D84CB /* STCameraDeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3865C47539648A3011665260 /* STCameraDeepLink.swift */; };
+		85125CB23ACA86A51C47D7E9 /* OpenCameraIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84DB0C50DE85F9CEDE06CCA /* OpenCameraIntent.swift */; };
+		8634D80566DACA46D3388912 /* STCameraEngine+TimeLapse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8267287D94F8C2A38120D5D3 /* STCameraEngine+TimeLapse.swift */; };
+		9C61088A9AF1277421389E44 /* IImportable+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C99A87B5989D9F64E3742A0 /* IImportable+Camera.swift */; };
 		A001E6E6267CD8E900948E50 /* STGaleryFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001E6E5267CD8E900948E50 /* STGaleryFileViewerVM.swift */; };
 		A001E6E9267CD90700948E50 /* STAlbumFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001E6E8267CD90700948E50 /* STAlbumFileViewerVM.swift */; };
 		A001E6EB267CD93200948E50 /* STFileViewerVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001E6EA267CD93200948E50 /* STFileViewerVM.swift */; };
@@ -374,6 +396,8 @@
 		A0F980E12753F00C00DE9958 /* STAboutDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A0F980DF2753F00C00DE9958 /* STAboutDetailTableViewCell.xib */; };
 		A0F99DC82683662800B0F36F /* STZoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F99DC72683662800B0F36F /* STZoomView.swift */; };
 		A0F99DCA2683696100B0F36F /* STImageZoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F99DC92683696100B0F36F /* STImageZoomView.swift */; };
+		A122AB984DBBFE18343B3E90 /* STCameraVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B080F5699215A609F99E253 /* STCameraVM.swift */; };
+		A9BB1A09947D39388CF97450 /* STCameraDeviceDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DACD0744166D033C5BCFE6 /* STCameraDeviceDiscovery.swift */; };
 		B31D621927B64B4E00CBEA19 /* UIView+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */; };
 		B31D621A27B64B4E00CBEA19 /* HelperExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */; };
 		B31D621C27B64B4E00CBEA19 /* STFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31D61F127B64B4E00CBEA19 /* STFilterCell.swift */; };
@@ -406,9 +430,26 @@
 		B3A417E627BBE72600F64CB2 /* STFilterToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */; };
 		B3A417E827BBE74200F64CB2 /* STFilterToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */; };
 		B3A6EC3727F6E5BA000876C6 /* IFileEditVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */; };
+		B55F2405D6672C62F9D02BF4 /* StingleRoot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */; };
+		BD1770F9187BD74BFAF03958 /* StingleRoot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */; };
+		C5C0517B50F9308BAF528570 /* StingleCameraCaptureExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D6126CBA1E92E4B7943AF3 /* StingleCameraCaptureExtension.swift */; };
+		CF60E2BA213623C083F6E50A /* STCameraConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A198D1BE38D7372376AD3C /* STCameraConfiguration.swift */; };
+		D668D672CD2C8C774DC14647 /* STCameraDeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3865C47539648A3011665260 /* STCameraDeepLink.swift */; };
+		D6A407C4F6D39DCC037234E3 /* STCameraLensSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B054BAB100DCBBA3B82A77 /* STCameraLensSelectorView.swift */; };
+		DFC095B74C6F6194B0EB5A54 /* STCameraModeSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB271F3156103CB558844BA1 /* STCameraModeSelectorView.swift */; };
+		E7BAED17A5FB993BFC2DEE2C /* STCameraEngine+Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC65AF28215D2BE7ED38366 /* STCameraEngine+Video.swift */; };
+		EBFEFA1A5DF3F1B3F7A81613 /* STCameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE05B9A957B09046820ECB09 /* STCameraPreviewView.swift */; };
+		F1F5A1D5080A3CDE5A297EF9 /* CameraLockScreenWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC0A1C136555E596C3D9C7F /* CameraLockScreenWidget.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5208C5D0681DEB6166FBEEED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A02203B525EED86800D07C98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBB0BEA0DBAFF9E2E3BAE1A6;
+			remoteInfo = StingleWidgets;
+		};
 		A0844C8828804F810088FF60 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A02203B525EED86800D07C98 /* Project object */;
@@ -417,6 +458,20 @@
 			remoteInfo = StingleShare;
 		};
 		A0A06C242875DD7A0087B9FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A02203B525EED86800D07C98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A0A06C1D2875DD7A0087B9FD;
+			remoteInfo = StingleRoot;
+		};
+		A66D90192790CD3D8A7B8C69 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A02203B525EED86800D07C98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A0A06C1D2875DD7A0087B9FD;
+			remoteInfo = StingleRoot;
+		};
+		D66074F0F21BA6D941A954D4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A02203B525EED86800D07C98 /* Project object */;
 			proxyType = 1;
@@ -444,6 +499,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				A0844C8A28804F810088FF60 /* StingleShare.appex in Embed App Extensions */,
+				13C2BDEBB72EDC83F34ED7CD /* StingleWidgets.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -451,6 +507,27 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		09D6126CBA1E92E4B7943AF3 /* StingleCameraCaptureExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StingleCameraCaptureExtension.swift; path = StingleCameraCapture/StingleCameraCaptureExtension.swift; sourceTree = "<group>"; };
+		122DCC09194F4CB56B2D5418 /* STCameraVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraVC.swift; path = Camera/STCameraVC.swift; sourceTree = "<group>"; };
+		1769FE500DDBBA20B0B61B92 /* STCameraShutterButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraShutterButton.swift; path = Camera/Views/STCameraShutterButton.swift; sourceTree = "<group>"; };
+		1A15E9CFBD17ABE82E222AFD /* StingleCameraCapture.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; name = StingleCameraCapture.entitlements; path = StingleCameraCapture/StingleCameraCapture.entitlements; sourceTree = "<group>"; };
+		1BDAB8A98DD8656850F8F0B4 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = StingleWidgets/Info.plist; sourceTree = "<group>"; };
+		24D0A88721AD71F0867C274E /* StingleAppShortcuts.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StingleAppShortcuts.swift; path = Camera/Intents/StingleAppShortcuts.swift; sourceTree = "<group>"; };
+		2FC0A1C136555E596C3D9C7F /* CameraLockScreenWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CameraLockScreenWidget.swift; path = StingleWidgets/CameraLockScreenWidget.swift; sourceTree = "<group>"; };
+		30DACD0744166D033C5BCFE6 /* STCameraDeviceDiscovery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraDeviceDiscovery.swift; path = Camera/STCameraDeviceDiscovery.swift; sourceTree = "<group>"; };
+		3865C47539648A3011665260 /* STCameraDeepLink.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraDeepLink.swift; path = Camera/Intents/STCameraDeepLink.swift; sourceTree = "<group>"; };
+		39B054BAB100DCBBA3B82A77 /* STCameraLensSelectorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraLensSelectorView.swift; path = Camera/Views/STCameraLensSelectorView.swift; sourceTree = "<group>"; };
+		3B080F5699215A609F99E253 /* STCameraVM.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraVM.swift; path = Camera/STCameraVM.swift; sourceTree = "<group>"; };
+		40F7938C9EB146CAAA1BC41D /* LockedCaptureView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LockedCaptureView.swift; path = StingleCameraCapture/LockedCaptureView.swift; sourceTree = "<group>"; };
+		487884E064D24B14C7040A49 /* STAppSettings+Camera.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "STAppSettings+Camera.swift"; sourceTree = "<group>"; };
+		50520A353DD2B47ABCF4169A /* LockedCaptureController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LockedCaptureController.swift; path = StingleCameraCapture/LockedCaptureController.swift; sourceTree = "<group>"; };
+		5AC65AF28215D2BE7ED38366 /* STCameraEngine+Video.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "STCameraEngine+Video.swift"; path = "Camera/STCameraEngine+Video.swift"; sourceTree = "<group>"; };
+		5DE80357809A11ADADFD0CAE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		7A91F1A42AA200EE5E75705F /* STCameraGridOverlayView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraGridOverlayView.swift; path = Camera/Views/STCameraGridOverlayView.swift; sourceTree = "<group>"; };
+		7C99A87B5989D9F64E3742A0 /* IImportable+Camera.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "IImportable+Camera.swift"; sourceTree = "<group>"; };
+		8267287D94F8C2A38120D5D3 /* STCameraEngine+TimeLapse.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "STCameraEngine+TimeLapse.swift"; path = "Camera/STCameraEngine+TimeLapse.swift"; sourceTree = "<group>"; };
+		9872D63D494ACA83B101873B /* STTimeLapseAssembler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STTimeLapseAssembler.swift; path = Camera/STTimeLapseAssembler.swift; sourceTree = "<group>"; };
+		9AFAE2E94D590CE4FBADF71F /* STCameraEngine+Photo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "STCameraEngine+Photo.swift"; path = "Camera/STCameraEngine+Photo.swift"; sourceTree = "<group>"; };
 		A001E6E5267CD8E900948E50 /* STGaleryFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STGaleryFileViewerVM.swift; sourceTree = "<group>"; };
 		A001E6E8267CD90700948E50 /* STAlbumFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAlbumFileViewerVM.swift; sourceTree = "<group>"; };
 		A001E6EA267CD93200948E50 /* STFileViewerVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileViewerVM.swift; sourceTree = "<group>"; };
@@ -818,6 +895,8 @@
 		A0FD3F372670F4C40042EB8D /* STFileUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFileUrl.swift; sourceTree = "<group>"; };
 		A0FD3F3A26713DB80042EB8D /* STNetworkDispatcher+IRequestEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "STNetworkDispatcher+IRequestEncoding.swift"; sourceTree = "<group>"; };
 		A0FD3F3C267141430042EB8D /* STStreamNetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STStreamNetworkOperation.swift; sourceTree = "<group>"; };
+		A3A3C97A9FBA4E3F5C165867 /* STCameraImporter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = STCameraImporter.swift; sourceTree = "<group>"; };
+		AC4AAD9FDF9FD012AA32D9A5 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = StingleCameraCapture/Info.plist; sourceTree = "<group>"; };
 		B31D61E727B64B4E00CBEA19 /* UIImage+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Helper.swift"; sourceTree = "<group>"; };
 		B31D61E927B64B4E00CBEA19 /* UIView+Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helper.swift"; sourceTree = "<group>"; };
 		B31D61EA27B64B4E00CBEA19 /* HelperExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperExtensions.swift; sourceTree = "<group>"; };
@@ -852,9 +931,38 @@
 		B3A417E527BBE72600F64CB2 /* STFilterToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STFilterToolBar.swift; sourceTree = "<group>"; };
 		B3A417E727BBE74200F64CB2 /* STFilterToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = STFilterToolBar.xib; sourceTree = "<group>"; };
 		B3A6EC3627F6E5BA000876C6 /* IFileEditVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IFileEditVM.swift; sourceTree = "<group>"; };
+		B74AD2D289028C62AA66E49E /* STCameraEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraEngine.swift; path = Camera/STCameraEngine.swift; sourceTree = "<group>"; };
+		C0E8F4B7A71AEC756A8B9E69 /* CameraControlWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CameraControlWidget.swift; path = StingleWidgets/CameraControlWidget.swift; sourceTree = "<group>"; };
+		C84DB0C50DE85F9CEDE06CCA /* OpenCameraIntent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OpenCameraIntent.swift; path = Camera/Intents/OpenCameraIntent.swift; sourceTree = "<group>"; };
+		D15551A5BE957FBB08A6EB41 /* StingleWidgets.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; name = StingleWidgets.entitlements; path = StingleWidgets/StingleWidgets.entitlements; sourceTree = "<group>"; };
+		E038E72E1791079FDDE97AE0 /* StingleWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StingleWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E279016E0F962C75CA0C4B49 /* STCameraLauncher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraLauncher.swift; path = Camera/STCameraLauncher.swift; sourceTree = "<group>"; };
+		F1DBA7B3E9DA02D81850EC19 /* StingleCameraCapture.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StingleCameraCapture.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F59787F7E77695AD98F1166B /* StingleWidgetsBundle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StingleWidgetsBundle.swift; path = StingleWidgets/StingleWidgetsBundle.swift; sourceTree = "<group>"; };
+		F6A198D1BE38D7372376AD3C /* STCameraConfiguration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraConfiguration.swift; path = Camera/STCameraConfiguration.swift; sourceTree = "<group>"; };
+		FB271F3156103CB558844BA1 /* STCameraModeSelectorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraModeSelectorView.swift; path = Camera/Views/STCameraModeSelectorView.swift; sourceTree = "<group>"; };
+		FE05B9A957B09046820ECB09 /* STCameraPreviewView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraPreviewView.swift; path = Camera/Views/STCameraPreviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		86EC456BB76838E737996BC8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A353660B9FE3DA5E8B7EEFD /* Foundation.framework in Frameworks */,
+				BD1770F9187BD74BFAF03958 /* StingleRoot.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9697A8259964C3A109EE803B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17A7BEF879006DC95116EA6E /* Foundation.framework in Frameworks */,
+				B55F2405D6672C62F9D02BF4 /* StingleRoot.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A02203BA25EED86800D07C98 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -885,11 +993,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		06C54DB775EDBDC4A68CA93A /* StingleWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				F59787F7E77695AD98F1166B /* StingleWidgetsBundle.swift */,
+				C0E8F4B7A71AEC756A8B9E69 /* CameraControlWidget.swift */,
+				2FC0A1C136555E596C3D9C7F /* CameraLockScreenWidget.swift */,
+				1BDAB8A98DD8656850F8F0B4 /* Info.plist */,
+				D15551A5BE957FBB08A6EB41 /* StingleWidgets.entitlements */,
+			);
+			name = StingleWidgets;
+			sourceTree = "<group>";
+		};
+		4F48F482C7ED1B86C641FFD6 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				5DE80357809A11ADADFD0CAE /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 		73A53619DBCBC97AD1A4990B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4F48F482C7ED1B86C641FFD6 /* iOS */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9701086B6B273DC7ACB323C0 /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				3865C47539648A3011665260 /* STCameraDeepLink.swift */,
+				C84DB0C50DE85F9CEDE06CCA /* OpenCameraIntent.swift */,
+				24D0A88721AD71F0867C274E /* StingleAppShortcuts.swift */,
+			);
+			name = Intents;
 			sourceTree = "<group>";
 		};
 		A000F691261232C200357953 /* Section */ = {
@@ -1015,6 +1154,7 @@
 				A01EC21B26B9F146000FF4AC /* STAppSettings+Appearance.swift */,
 				A07B45B326C02442003EB470 /* STAppSettings+Advanced.swift */,
 				A08F27A72785AD7700EF8BE4 /* STAppSettings+Import.swift */,
+				487884E064D24B14C7040A49 /* STAppSettings+Camera.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1044,6 +1184,8 @@
 				A0844C8128804F810088FF60 /* StingleShare */,
 				A02203BE25EED86800D07C98 /* Products */,
 				73A53619DBCBC97AD1A4990B /* Frameworks */,
+				06C54DB775EDBDC4A68CA93A /* StingleWidgets */,
+				D12A16BAD4991F38B51A433B /* StingleCameraCapture */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1053,6 +1195,8 @@
 				A02203BD25EED86800D07C98 /* Stingle.app */,
 				A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */,
 				A0844C8028804F810088FF60 /* StingleShare.appex */,
+				E038E72E1791079FDDE97AE0 /* StingleWidgets.appex */,
+				F1DBA7B3E9DA02D81850EC19 /* StingleCameraCapture.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1426,6 +1570,7 @@
 				A0AAA934261C7BFF009E9F51 /* Settings */,
 				A00B4C21263D75090085C55E /* Shear */,
 				A022044525EEDC0300D07C98 /* Welcome */,
+				B0C6DFDAD3998F811FC6B552 /* Camera */,
 			);
 			path = Scense;
 			sourceTree = "<group>";
@@ -1535,6 +1680,7 @@
 				A0D29CD5262051260083967D /* FileUploader */,
 				A078F78E2608A915005F40E4 /* FileDownloader */,
 				A022041E25EEDC0300D07C98 /* DB */,
+				D3E150483C2246B20A25BA86 /* Camera */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -2147,6 +2293,7 @@
 				A0AF6538287DAEB9003BDDD4 /* IImportable */,
 				A0287EE026D1761D009E002B /* STImporter.swift */,
 				A09A95CB276A926B00B25569 /* STFileAutoImporter.swift */,
+				A3A3C97A9FBA4E3F5C165867 /* STCameraImporter.swift */,
 			);
 			path = Importer;
 			sourceTree = "<group>";
@@ -2372,6 +2519,7 @@
 				A065508A27A0BB14008553DA /* IImportable.swift */,
 				A0AF6536287DAEB5003BDDD4 /* IImportable+PHAsset.swift */,
 				A041AD03287F110E00F7CF3F /* IImportable+ItemProvider.swift */,
+				7C99A87B5989D9F64E3742A0 /* IImportable+Camera.swift */,
 			);
 			path = IImportable;
 			sourceTree = "<group>";
@@ -2692,6 +2840,30 @@
 			path = Dispatcher;
 			sourceTree = "<group>";
 		};
+		A55B2A22D501D9C60ABE2849 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FE05B9A957B09046820ECB09 /* STCameraPreviewView.swift */,
+				1769FE500DDBBA20B0B61B92 /* STCameraShutterButton.swift */,
+				FB271F3156103CB558844BA1 /* STCameraModeSelectorView.swift */,
+				7A91F1A42AA200EE5E75705F /* STCameraGridOverlayView.swift */,
+				39B054BAB100DCBBA3B82A77 /* STCameraLensSelectorView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		B0C6DFDAD3998F811FC6B552 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				9701086B6B273DC7ACB323C0 /* Intents */,
+				3B080F5699215A609F99E253 /* STCameraVM.swift */,
+				122DCC09194F4CB56B2D5418 /* STCameraVC.swift */,
+				E279016E0F962C75CA0C4B49 /* STCameraLauncher.swift */,
+				A55B2A22D501D9C60ABE2849 /* Views */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
 		B31D61E527B649D400CBEA19 /* ImageEditor */ = {
 			isa = PBXGroup;
 			children = (
@@ -2851,6 +3023,32 @@
 			path = Toolbar;
 			sourceTree = "<group>";
 		};
+		D12A16BAD4991F38B51A433B /* StingleCameraCapture */ = {
+			isa = PBXGroup;
+			children = (
+				09D6126CBA1E92E4B7943AF3 /* StingleCameraCaptureExtension.swift */,
+				50520A353DD2B47ABCF4169A /* LockedCaptureController.swift */,
+				40F7938C9EB146CAAA1BC41D /* LockedCaptureView.swift */,
+				AC4AAD9FDF9FD012AA32D9A5 /* Info.plist */,
+				1A15E9CFBD17ABE82E222AFD /* StingleCameraCapture.entitlements */,
+			);
+			name = StingleCameraCapture;
+			sourceTree = "<group>";
+		};
+		D3E150483C2246B20A25BA86 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				F6A198D1BE38D7372376AD3C /* STCameraConfiguration.swift */,
+				30DACD0744166D033C5BCFE6 /* STCameraDeviceDiscovery.swift */,
+				B74AD2D289028C62AA66E49E /* STCameraEngine.swift */,
+				9AFAE2E94D590CE4FBADF71F /* STCameraEngine+Photo.swift */,
+				5AC65AF28215D2BE7ED38366 /* STCameraEngine+Video.swift */,
+				8267287D94F8C2A38120D5D3 /* STCameraEngine+TimeLapse.swift */,
+				9872D63D494ACA83B101873B /* STTimeLapseAssembler.swift */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2865,6 +3063,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		83A9D3400C943D4F935129A3 /* StingleCameraCapture */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D8EAFAD0FADC92AD3D0D65B /* Build configuration list for PBXNativeTarget "StingleCameraCapture" */;
+			buildPhases = (
+				91510B1C9F2CE7B7BB56FE80 /* Sources */,
+				9697A8259964C3A109EE803B /* Frameworks */,
+				3463B804274D64601076442D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7AAFA9441EE43EA271859ED1 /* PBXTargetDependency */,
+			);
+			name = StingleCameraCapture;
+			productName = StingleCameraCapture;
+			productReference = F1DBA7B3E9DA02D81850EC19 /* StingleCameraCapture.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		A02203BC25EED86800D07C98 /* Stingle */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A02203D125EED86800D07C98 /* Build configuration list for PBXNativeTarget "Stingle" */;
@@ -2880,6 +3096,7 @@
 			dependencies = (
 				A0A06C252875DD7A0087B9FD /* PBXTargetDependency */,
 				A0844C8928804F810088FF60 /* PBXTargetDependency */,
+				BC0862D22A2FBAA125034E6A /* PBXTargetDependency */,
 			);
 			name = Stingle;
 			packageProductDependencies = (
@@ -2929,6 +3146,24 @@
 			productReference = A0A06C1E2875DD7A0087B9FD /* StingleRoot.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		BBB0BEA0DBAFF9E2E3BAE1A6 /* StingleWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6945D9A1643A214C6A89A546 /* Build configuration list for PBXNativeTarget "StingleWidgets" */;
+			buildPhases = (
+				575A90B13AA747B6A13078E4 /* Sources */,
+				86EC456BB76838E737996BC8 /* Frameworks */,
+				D9FE6A6844BA9EB332A6C3EC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3AAB5C137A4253EC1FF85EF2 /* PBXTargetDependency */,
+			);
+			name = StingleWidgets;
+			productName = StingleWidgets;
+			productReference = E038E72E1791079FDDE97AE0 /* StingleWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2971,11 +3206,20 @@
 				A02203BC25EED86800D07C98 /* Stingle */,
 				A0A06C1D2875DD7A0087B9FD /* StingleRoot */,
 				A0844C7F28804F810088FF60 /* StingleShare */,
+				BBB0BEA0DBAFF9E2E3BAE1A6 /* StingleWidgets */,
+				83A9D3400C943D4F935129A3 /* StingleCameraCapture */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3463B804274D64601076442D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A02203BB25EED86800D07C98 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3045,9 +3289,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D9FE6A6844BA9EB332A6C3EC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		575A90B13AA747B6A13078E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5120FFAB7880B7346BFCD091 /* StingleWidgetsBundle.swift in Sources */,
+				1DB17350DA2896005884F0C6 /* CameraControlWidget.swift in Sources */,
+				F1F5A1D5080A3CDE5A297EF9 /* CameraLockScreenWidget.swift in Sources */,
+				17A1B9C179200CA1193890BC /* OpenCameraIntent.swift in Sources */,
+				6B1A3CB8FE9808519C2D84CB /* STCameraDeepLink.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91510B1C9F2CE7B7BB56FE80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5C0517B50F9308BAF528570 /* StingleCameraCaptureExtension.swift in Sources */,
+				099BA6701C3DEBB886CD6D05 /* LockedCaptureController.swift in Sources */,
+				2A56889796D4E4514C546B99 /* LockedCaptureView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A02203B925EED86800D07C98 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3233,6 +3506,17 @@
 				A06C56BC26406E15009D0596 /* STShareAlbumVM.swift in Sources */,
 				A0134D8C26ADDB4C00FA5129 /* STSettingsDetailVC.swift in Sources */,
 				A0DDF5A6273BF86400368FBF /* STNavigationAnimatorPop.swift in Sources */,
+				D668D672CD2C8C774DC14647 /* STCameraDeepLink.swift in Sources */,
+				85125CB23ACA86A51C47D7E9 /* OpenCameraIntent.swift in Sources */,
+				0071EC8C0E319B2E6744F186 /* StingleAppShortcuts.swift in Sources */,
+				A122AB984DBBFE18343B3E90 /* STCameraVM.swift in Sources */,
+				0068CB2764A7E14DB8A0BA57 /* STCameraVC.swift in Sources */,
+				12B9308EA64EC7048CA5467F /* STCameraLauncher.swift in Sources */,
+				EBFEFA1A5DF3F1B3F7A81613 /* STCameraPreviewView.swift in Sources */,
+				4C6AB97615181028E1B7B888 /* STCameraShutterButton.swift in Sources */,
+				DFC095B74C6F6194B0EB5A54 /* STCameraModeSelectorView.swift in Sources */,
+				539DCB6B28C08D251539639D /* STCameraGridOverlayView.swift in Sources */,
+				D6A407C4F6D39DCC037234E3 /* STCameraLensSelectorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3408,12 +3692,34 @@
 				A09FE66F2876C69400CBA53E /* STDateManager.swift in Sources */,
 				A09FE6CF2876D0B900CBA53E /* STNetworkSession.swift in Sources */,
 				A09FE6BE2876CA2600CBA53E /* STAppSettings+Appearance.swift in Sources */,
+				CF60E2BA213623C083F6E50A /* STCameraConfiguration.swift in Sources */,
+				A9BB1A09947D39388CF97450 /* STCameraDeviceDiscovery.swift in Sources */,
+				0E640747588A415F6D800806 /* STCameraEngine.swift in Sources */,
+				58DBC091F2E690F798A094D0 /* STCameraEngine+Photo.swift in Sources */,
+				E7BAED17A5FB993BFC2DEE2C /* STCameraEngine+Video.swift in Sources */,
+				8634D80566DACA46D3388912 /* STCameraEngine+TimeLapse.swift in Sources */,
+				0F9D1EB1F054312BA6057BDB /* STTimeLapseAssembler.swift in Sources */,
+				42ED9CE7208E33043C26A4BF /* STAppSettings+Camera.swift in Sources */,
+				9C61088A9AF1277421389E44 /* IImportable+Camera.swift in Sources */,
+				0A9DB81ED3B38659D9764A4E /* STCameraImporter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3AAB5C137A4253EC1FF85EF2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = StingleRoot;
+			target = A0A06C1D2875DD7A0087B9FD /* StingleRoot */;
+			targetProxy = D66074F0F21BA6D941A954D4 /* PBXContainerItemProxy */;
+		};
+		7AAFA9441EE43EA271859ED1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = StingleRoot;
+			target = A0A06C1D2875DD7A0087B9FD /* StingleRoot */;
+			targetProxy = A66D90192790CD3D8A7B8C69 /* PBXContainerItemProxy */;
+		};
 		A0844C8928804F810088FF60 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A0844C7F28804F810088FF60 /* StingleShare */;
@@ -3423,6 +3729,12 @@
 			isa = PBXTargetDependency;
 			target = A0A06C1D2875DD7A0087B9FD /* StingleRoot */;
 			targetProxy = A0A06C242875DD7A0087B9FD /* PBXContainerItemProxy */;
+		};
+		BC0862D22A2FBAA125034E6A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = StingleWidgets;
+			target = BBB0BEA0DBAFF9E2E3BAE1A6 /* StingleWidgets */;
+			targetProxy = 5208C5D0681DEB6166FBEEED /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3454,6 +3766,154 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1A3CDF13B1992B2045D70559 /* Release-Dev */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = StingleWidgets/StingleWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StingleWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-Dev";
+		};
+		1AE8E6A0917989D7F5123D29 /* Release-Dev */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = StingleCameraCapture/StingleCameraCapture.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StingleCameraCapture/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev.lockedcamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-Dev";
+		};
+		20688855FBC002B34D4B2659 /* Debug-Dev */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = StingleWidgets/StingleWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StingleWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-Dev";
+		};
+		4CC01BFC1E7126F082868AA4 /* Release-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = StingleCameraCapture/StingleCameraCapture.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StingleCameraCapture/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.lockedcamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-Prod";
+		};
+		917BDB585BE4C8B73E4288FF /* Debug-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = StingleCameraCapture/StingleCameraCapture.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StingleCameraCapture/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.lockedcamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-Prod";
+		};
 		A02203CF25EED86800D07C98 /* Debug-Dev */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A02204FA25EEE6B500D07C98 /* Development.xcconfig */;
@@ -4478,9 +4938,119 @@
 			};
 			name = "Release-Dev";
 		};
+		D042EC35D0769FE04E230D2A /* Debug-Dev */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = StingleCameraCapture/StingleCameraCapture.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StingleCameraCapture/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.dev.lockedcamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-Dev";
+		};
+		D55FA6DC3C59E4C6FB0AC8FE /* Release-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = StingleWidgets/StingleWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StingleWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-Prod";
+		};
+		E3909ED7B0806C2F37B4B794 /* Debug-Prod */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = StingleWidgets/StingleWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = DK366LFCDT;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StingleWidgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stingle.photos.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-Prod";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2D8EAFAD0FADC92AD3D0D65B /* Build configuration list for PBXNativeTarget "StingleCameraCapture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D042EC35D0769FE04E230D2A /* Debug-Dev */,
+				917BDB585BE4C8B73E4288FF /* Debug-Prod */,
+				4CC01BFC1E7126F082868AA4 /* Release-Prod */,
+				1AE8E6A0917989D7F5123D29 /* Release-Dev */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6945D9A1643A214C6A89A546 /* Build configuration list for PBXNativeTarget "StingleWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20688855FBC002B34D4B2659 /* Debug-Dev */,
+				E3909ED7B0806C2F37B4B794 /* Debug-Prod */,
+				D55FA6DC3C59E4C6FB0AC8FE /* Release-Prod */,
+				1A3CDF13B1992B2045D70559 /* Release-Dev */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A02203B825EED86800D07C98 /* Build configuration list for PBXProject "Stingle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

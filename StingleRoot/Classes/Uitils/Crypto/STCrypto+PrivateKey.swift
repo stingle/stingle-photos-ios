@@ -33,8 +33,8 @@ public extension STCrypto {
             publicKey = publicKey ?? keyPair.publicKey
         }
         
-        let pwdKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
-        
+        let pwdKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyLocal)
+
         guard let pwdEncNonce = self.sodium.randomBytes.buf(length: sodium.secretBox.NonceBytes) else {
             throw CryptoError.Internal.randomBytesGenerationFailure
         }
@@ -47,25 +47,47 @@ public extension STCrypto {
     }
     
     func getPrivateKey(password: String) throws  -> Bytes {
-        let encKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
         let encPrivKey = try self.readPrivateFile(fileName: Constants.PrivateKeyFilename)
         let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
-        let privateKey = try self.decryptSymmetric(key:encKey, nonce:nonce, data: encPrivKey)
+        return try self.decryptLocalPrivateKey(password: password, encPrivKey: encPrivKey, nonce: nonce)
+    }
+
+    /// Decrypts the on-disk private key, transparently migrating legacy installs whose key was wrapped
+    /// at the weak `KdfDifficultyNormal` (Interactive) preset up to `KdfDifficultyLocal` (Moderate).
+    ///
+    /// We try the strong difficulty first; if that fails we fall back to the legacy preset and, on
+    /// success, re-wrap the key in place so the next unlock uses the strong KDF. A wrong password
+    /// fails both and the error propagates (the fallback `decryptSymmetric` throws), so this does not
+    /// weaken password checking.
+    func decryptLocalPrivateKey(password: String, encPrivKey: Bytes, nonce: Bytes) throws -> Bytes {
+        if let strongKey = try? self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyLocal),
+           let privateKey = try? self.decryptSymmetric(key: strongKey, nonce: nonce, data: encPrivKey) {
+            return privateKey
+        }
+
+        let legacyKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
+        let privateKey = try self.decryptSymmetric(key: legacyKey, nonce: nonce, data: encPrivKey)
+
+        // Upgrade the at-rest wrapping; best-effort so a failed re-wrap never blocks unlock.
+        if let upgradedKey = try? self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyLocal),
+           let reEncrypted = try? self.encryptSymmetric(key: upgradedKey, nonce: nonce, data: privateKey) {
+            try? self.savePrivateFile(filename: Constants.PrivateKeyFilename, data: reEncrypted)
+        }
         return privateKey
     }
-    
+
     func reencryptPrivateKey(oldPassword: String, newPassword: String) throws {
         let privateKey = try self.getPrivateKey(password: oldPassword)
-        let pwdKey = try self.getKeyFromPassword(password: newPassword, difficulty: Constants.KdfDifficultyNormal)
+        let pwdKey = try self.getKeyFromPassword(password: newPassword, difficulty: Constants.KdfDifficultyLocal)
         let pwdEncNonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
         let encryptedPrivateKey = try self.encryptSymmetric(key: pwdKey, nonce: pwdEncNonce, data: privateKey)
         try self.savePrivateFile(filename: Constants.PrivateKeyFilename, data: encryptedPrivateKey)
     }
-   
+
     func getPrivateKeyFromExportedKey(password: String, encPrivKey: Bytes) throws -> Bytes {
         let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
         let decPK = try self.decryptSymmetric(key: self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard), nonce: nonce, data: encPrivKey)
-        return try self.encryptSymmetric(key: self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal), nonce: nonce, data: decPK)
+        return try self.encryptSymmetric(key: self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyLocal), nonce: nonce, data: decPK)
     }
     
     func getKeyFromPassword(password: String, difficulty: Int) throws -> Bytes {

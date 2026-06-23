@@ -124,6 +124,10 @@ extension STFilesDownloaderActivityVM: STFileDownloaderObserver {
         }
         do {
             try STApplication.shared.crypto.decrypt(fromUrl: source.fileSaveUrl, toUrl: decryptURL, header: decryptHeader)
+            // This is plaintext written for the share sheet. It is only produced while the user is
+            // interacting (device unlocked), so protect it at `.complete` — unreadable at the FS layer
+            // once the device locks — to limit the window an attacker has on this decrypted copy.
+            try? FileManager.default.setAttributes([.protectionKey: FileProtectionType.complete], ofItemAtPath: decryptURL.path)
             let file = DecryptDownloadFile(header: decryptHeader, url: decryptURL)
             self.decryptFileURLs.append(file)
         } catch {

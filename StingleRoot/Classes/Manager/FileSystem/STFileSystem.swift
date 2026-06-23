@@ -37,6 +37,16 @@ public class STFileSystem: NSObject {
         }
         self.remove(file: cacheUrl)
         self.remove(file: privateKeyUrl)
+        // After logout `STApplication` nils the fileSystem, so `creatAllPath()` (which normally clears
+        // tmp on next init) won't run until the next login. Wipe the tmp + local-staging folders now so
+        // decrypted plaintext from an interrupted share/export or import doesn't survive the logout.
+        if let tmpUrl = self.url(for: .tmp) {
+            self.remove(file: tmpUrl)
+        }
+        if let localUrl = self.url(for: .storage(type: .local(type: nil))) {
+            self.remove(file: localUrl)
+        }
+        self.fileManager.clearTmpDirectory()
     }
     
     public func deleteAccount() {
@@ -88,6 +98,14 @@ public class STFileSystem: NSObject {
     }
         
     private func creatAllPath() {
+        // The vault lives under the *app-group* container in a folder literally named "Caches" — but
+        // because it is NOT the sandbox `Library/Caches`, iOS does not auto-exclude it from iCloud /
+        // iTunes / Finder backups. Without this, an unencrypted PC backup captures the full ciphertext
+        // vault plus the (password-wrapped) private key. Excluding the root recursively covers
+        // everything created under it (vault, thumbnails, the `private` key folder).
+        try? self.createDirectory(url: Self.appUrl)
+        Self.excludeFromBackup(url: Self.appUrl)
+
         FolderType.allCases.forEach { type in
             if let url = self.url(for: type) {
                 switch type {
@@ -101,13 +119,44 @@ public class STFileSystem: NSObject {
         }
         self.fileManager.clearTmpDirectory()
     }
+
+    /// Marks a file/directory (and, for a directory, its contents) as excluded from iCloud/iTunes backups.
+    static func excludeFromBackup(url: URL) {
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            return
+        }
+        var url = url
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        try? url.setResourceValues(values)
+    }
 }
 
 public extension STFileSystem {
     
     func url(for type: FolderType, filePath: String) -> URL? {
+        // `filePath` is the server-supplied opaque file name; reject anything that could escape the
+        // per-user storage folder via path traversal (a malicious/compromised server could otherwise
+        // return `../../…` and clobber/read other files inside the app-group container).
+        guard STFileSystem.isSafeFileName(filePath) else {
+            return nil
+        }
         let url = self.url(for: type)?.appendingPathComponent(filePath)
         return url
+    }
+
+    /// A safe single path component: non-empty, no separators, no `..`, no null byte.
+    static func isSafeFileName(_ name: String) -> Bool {
+        guard !name.isEmpty, name != ".", name != ".." else {
+            return false
+        }
+        if name.contains("/") || name.contains("\\") || name.contains("\0") {
+            return false
+        }
+        if name.hasPrefix("..") || name.contains("../") || name.contains("..\\") {
+            return false
+        }
+        return true
     }
     
     func url(for type: FolderType) -> URL? {

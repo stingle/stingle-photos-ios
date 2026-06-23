@@ -48,13 +48,17 @@ public extension IImportableFile {
             totalProgress.completedUnitCount = Int64(progressValue * Double(totalProgress.totalUnitCount))
             progressHandler?(totalProgress, &stop)
         }, success: { [weak self] uploadInfo in
+            // Free the plaintext source temp (camera capture / share-extension item / PHAsset export)
+            // on EVERY exit path. The early returns below previously skipped this, leaving decrypted
+            // plaintext on disk after a low-disk or deinit failure.
+            defer { uploadInfo.freeBuffer?() }
             guard let weakSelf = self else {
                 failure(STFileUploader.UploaderError.fileNotFound)
                 return
             }
             let freeDiskUnits = STFileSystem.DiskStatus.freeDiskSpaceUnits
             let afterImportfreeDiskUnits = STBytesUnits(bytes: freeDiskUnits.bytes - Int64(uploadInfo.fileSize))
-            
+
             guard afterImportfreeDiskUnits > STConstants.minFreeDiskUnits else {
                 failure(STFileUploader.UploaderError.memoryLow)
                 return
@@ -70,7 +74,6 @@ public extension IImportableFile {
             } catch {
                 failure(STFileUploader.UploaderError.error(error: error))
             }
-            uploadInfo.freeBuffer?()
         }, failure: failure)
     }
     

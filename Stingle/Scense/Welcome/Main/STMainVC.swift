@@ -63,8 +63,13 @@ class STMainVC: UIViewController {
             identifier = "goToAuth"
         }
 		self.performSegue(withIdentifier: identifier, sender: nil)
+        // Cold launch from a camera entry point: present the camera over whatever
+        // root we just routed to (gallery or the lock screen) without unlocking.
+        DispatchQueue.main.async {
+            STCameraLauncher.shared.presentIfPending()
+        }
 	}
-    
+
 }
 
 extension STMainVC {

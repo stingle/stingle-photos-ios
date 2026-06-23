@@ -41,8 +41,10 @@ class ShareViewController: UIViewController {
     //MARK: - Private methods
     
     private func manageImages() {
-        let content = self.extensionContext!.inputItems[0] as! NSExtensionItem
-        guard let attachments = content.attachments, !attachments.isEmpty else {
+        // Don't force-unwrap the host-supplied extension context: a malformed share invocation with no
+        // input items would otherwise crash the extension.
+        guard let content = self.extensionContext?.inputItems.first as? NSExtensionItem,
+              let attachments = content.attachments, !attachments.isEmpty else {
             self.cancelRequest(error: ShareViewControllerError.emptyData)
             return
         }

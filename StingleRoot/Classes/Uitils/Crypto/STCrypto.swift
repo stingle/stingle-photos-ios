@@ -25,6 +25,11 @@ public extension STCrypto {
         
         static public let XCHACHA20POLY1305_IETF_CONTEXT = "__data__"
         static public let MAX_BUFFER_LENGTH = 1024*1024*64
+        // Hard upper bound on the encrypted header blob read from an untrusted .sp/.spk file.
+        // A real header is a sealed box of (version + chunkSize + dataSize + symmetricKey + fileType
+        // + fileName + videoDuration); 64 KiB is far larger than any legitimate header yet prevents
+        // an attacker-controlled length field from forcing a multi-GB allocation (memory-exhaustion DoS).
+        static public let MaxFileHeaderSize = 1024 * 64
         static public let FileExtension = ".sp"
         static public let FileNameLen = 32
         
@@ -50,6 +55,12 @@ public extension STCrypto {
         static public let KdfDifficultyNormal = 1
         static public let KdfDifficultyHard = 2
         static public let KdfDifficultyUltra = 3
+        // Difficulty used to wrap the private key *at rest on this device*. Historically the local
+        // copy was wrapped at `KdfDifficultyNormal` (libsodium's weakest "Interactive" preset),
+        // which made an offline brute-force against a filesystem/backup dump cheap. We now wrap the
+        // local key at least as hard as the exported bundle. Existing installs are upgraded in place
+        // on first unlock (see `decryptLocalPrivateKey`).
+        static public let KdfDifficultyLocal = Constants.KdfDifficultyHard
         static public let PWHASH_LEN = 64
         
         static public let CurrentAlbumMedadataVersionLen = 1
@@ -117,35 +128,39 @@ public class STCrypto {
 	
 	public func importKeyBundle(keys: Bytes, password: String) throws {
 		var offset:Int = 0
-		let fileBegginingStr:String = String(bytes: Bytes(keys[offset..<(offset + Constants.KeyFileBegginingLen)]), encoding: String.Encoding.utf8) ?? ""
+		// The key bundle is supplied by the (untrusted) server on login; validate every slice against
+		// the actual length so a short/truncated bundle throws instead of fatally trapping.
+		func take(_ length: Int) throws -> ArraySlice<UInt8> {
+			guard length >= 0, offset <= keys.count, length <= keys.count - offset else {
+				throw CryptoError.Bundle.incorrectKeyFileType
+			}
+			let slice = keys[offset..<offset + length]
+			offset += length
+			return slice
+		}
+
+		let fileBegginingStr:String = String(bytes: Bytes(try take(Constants.KeyFileBegginingLen)), encoding: String.Encoding.utf8) ?? ""
 		if fileBegginingStr != Constants.KeyFileBeggining {
 			throw CryptoError.Bundle.incorrectKeyFileBeginning
 		}
-		offset += Constants.KeyFileBegginingLen
-		let keyFileVersion = keys[offset]
+		let keyFileVersion = try take(Constants.KeyFileVerLen).first ?? 0
 		if keyFileVersion > Constants.CurrentKeyFileVersion {
 			throw CryptoError.Bundle.incorrectKeyFileVersion
 		}
-		offset += 1
-		
-		let keyFileType = keys[offset]
+
+		let keyFileType = try take(Constants.KeyFileTypeLen).first ?? 0
 		if keyFileType != Constants.KeyFileTypeBundleEncrypted && keyFileType != Constants.KeyFileTypeBundlePlain && keyFileType != Constants.KeyFileTypePublicPlain {
 			throw CryptoError.Bundle.incorrectKeyFileType
 		}
-		offset += 1
-		
-		let publicKey = keys[offset..<(offset + self.sodium.box.PublicKeyBytes)]
-		offset += self.sodium.box.PublicKeyBytes
+
+		let publicKey = try take(self.sodium.box.PublicKeyBytes)
 		if keyFileType == Constants.KeyFileTypeBundleEncrypted {
-			let encryptedPrivateKey = keys[offset..<(offset + sodium.box.SecretKeyBytes + sodium.secretBox.MacBytes)]
-			offset += self.sodium.box.SecretKeyBytes + self.sodium.secretBox.MacBytes
-			
-			let pwdSalt = keys[offset..<(offset + self.sodium.pwHash.SaltBytes)]
-			offset += self.sodium.pwHash.SaltBytes
-			
-			let skNonce = keys[offset..<(offset + self.sodium.secretBox.NonceBytes)]
-			offset += self.sodium.secretBox.NonceBytes
-			
+			let encryptedPrivateKey = try take(sodium.box.SecretKeyBytes + sodium.secretBox.MacBytes)
+
+			let pwdSalt = try take(self.sodium.pwHash.SaltBytes)
+
+			let skNonce = try take(self.sodium.secretBox.NonceBytes)
+
 			try self.savePrivateFile(filename: Constants.PublicKeyFilename, data: Bytes(publicKey))
 			try self.savePrivateFile(filename: Constants.PwdSaltFilename, data: Bytes(pwdSalt))
 			try self.savePrivateFile(filename: Constants.SKNONCEFilename, data: Bytes(skNonce))
@@ -168,9 +183,9 @@ public class STCrypto {
 	public func getPrivateKeyForExport(password: String) throws -> Bytes {
 		let encPK = try self.readPrivateFile(fileName: Constants.PrivateKeyFilename)
 		let nonce = try self.readPrivateFile(fileName: Constants.SKNONCEFilename)
-		let key = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyNormal)
-		
-		let decPK = try self.decryptSymmetric(key: key, nonce: nonce, data: encPK)
+		// Decrypt the at-rest key regardless of which KDF preset it is currently wrapped at
+		// (legacy Interactive vs. upgraded Moderate); export always re-wraps at `KdfDifficultyHard`.
+		let decPK = try self.decryptLocalPrivateKey(password: password, encPrivKey: encPK, nonce: nonce)
 		let encryptKey = try self.getKeyFromPassword(password: password, difficulty: Constants.KdfDifficultyHard)
 		let encrypt = try self.encryptSymmetric(key: encryptKey, nonce: nonce, data: decPK)
 		return encrypt
@@ -440,13 +455,13 @@ public class STCrypto {
         
         let headerSize: UInt32 = STCrypto.fromBytes(b: Bytes((buf[offset..<offset + Constants.FileHeaderSizeLen])))
         offset += Constants.FileHeaderSizeLen
-        guard headerSize > 0 else {
+        guard headerSize > 0, headerSize <= UInt32(Constants.MaxFileHeaderSize) else {
             throw CryptoError.Header.incorrectHeaderSize
         }
-        
+
         var encHeaderBytes = Bytes(repeating: 0, count: Int(headerSize))
         let numRead = input.read(&encHeaderBytes, maxLength: Int(headerSize))
-                
+
         guard numRead > 0  else {
             throw CryptoError.IO.readFailure
         }
@@ -499,7 +514,15 @@ public class STCrypto {
 		guard data.count == out.write(data, maxLength: data.count) else {
 			throw CryptoError.IO.writeFailure
 		}
-		
+
+		// Private key material (and the salt/nonce required to unwrap it) is only ever read while the
+		// device is unlocked — login, app-unlock, change-password, export — so `.complete` is safe and
+		// blocks a filesystem/forensic read while the device is locked. The PUBLIC key is deliberately
+		// left at the default protection class: the camera encrypts to it while the device is locked.
+		if filename == Constants.PrivateKeyFilename || filename == Constants.SKNONCEFilename || filename == Constants.PwdSaltFilename {
+			try? FileManager.default.setAttributes([.protectionKey: FileProtectionType.complete], ofItemAtPath: fullPath.path)
+		}
+
 		return true
 	}
     

@@ -15,7 +15,8 @@ public protocol ISettingsObserver: AnyObject {
     func appSettings(didChange settings: STAppSettings, appearance: STAppSettings.Appearance)
     func appSettings(didChange settings: STAppSettings, advanced: STAppSettings.Advanced)
     func appSettings(didChange settings: STAppSettings, import: STAppSettings.Import)
-  
+    func appSettings(didChange settings: STAppSettings, camera: STAppSettings.Camera)
+
 }
 
 public extension ISettingsObserver {
@@ -26,7 +27,8 @@ public extension ISettingsObserver {
     func appSettings(didChange settings: STAppSettings, appearance: STAppSettings.Appearance) {}
     func appSettings(didChange settings: STAppSettings, advanced: STAppSettings.Advanced) {}
     func appSettings(didChange settings: STAppSettings, import: STAppSettings.Import) {}
-    
+    func appSettings(didChange settings: STAppSettings, camera: STAppSettings.Camera) {}
+
 }
 
 fileprivate extension STAppSettings {
@@ -39,6 +41,7 @@ fileprivate extension STAppSettings {
         static let appearance = "appearance"
         static let advanced = "advanced"
         static let `import` = "import"
+        static let camera = "camera"
     }
     
 }
@@ -165,6 +168,24 @@ public class STAppSettings {
         }
     }
     
+    public var camera: Camera {
+        set {
+            let oldValue = self.camera
+            let json = newValue.toJson()
+            Self.settings[Constance.camera] = json
+            if oldValue != newValue {
+                self.observers.forEach { observer in
+                    observer.appSettings(didChange: self, camera: newValue)
+                }
+            }
+        } get {
+            guard let json = Self.settings[Constance.camera], let result = Camera(from: json) else {
+                return .default
+            }
+            return result
+        }
+    }
+
     public var isExistImportInfo: Bool {
         return Self.settings[Constance.import] != nil
     }

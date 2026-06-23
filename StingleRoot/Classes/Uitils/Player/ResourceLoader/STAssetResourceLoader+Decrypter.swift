@@ -64,7 +64,7 @@ extension STAssetResourceLoader {
         }
         
         private func fillContentInformation() {
-            let filename: NSString = self.header.fileName! as NSString
+            let filename: NSString = (self.header.fileName ?? "") as NSString
             let pathExtention = filename.pathExtension
             self.request.contentInformationRequest?.contentType = self.mimeTypeForPath(pathExtension: pathExtention)
             // The loader serves arbitrary byte ranges (each request computes its start

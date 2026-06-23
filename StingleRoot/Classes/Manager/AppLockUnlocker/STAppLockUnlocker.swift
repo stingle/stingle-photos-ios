@@ -104,7 +104,29 @@ public extension STAppLockUnlocker {
         
         private var resignActiveDate: Date?
         private var timer: Timer?
-        
+        private var pauseStartDate: Date?
+
+        /// Upper bound on how long the camera pause may suppress auto-lock. Acts as a watchdog: if the
+        /// flag is left set (e.g. the camera VC is torn down without `viewDidDisappear` firing), a
+        /// later foreground event will lock anyway instead of leaving the app permanently unlockable.
+        private let maxAutoLockPauseInterval: TimeInterval = 5 * 60
+
+        /// When true, foreground re-entry won't auto-lock. Set while the camera is
+        /// presented so a brief backgrounding (e.g. a permission prompt) doesn't
+        /// tear down an active capture session. Clearing it re-evaluates the lock so a
+        /// timeout that elapsed while paused (e.g. the user backgrounded on the camera
+        /// then returned and left the camera tab) is not permanently skipped.
+        public var isAutoLockPaused: Bool = false {
+            didSet {
+                if !oldValue && isAutoLockPaused {
+                    self.pauseStartDate = Date()
+                } else if oldValue && !isAutoLockPaused {
+                    self.pauseStartDate = nil
+                    self.evaluateAutoLockIfNeeded(ignorePause: true)
+                }
+            }
+        }
+
         weak fileprivate var delegate: LockerDelegate?
             
         init() {
@@ -132,6 +154,16 @@ public extension STAppLockUnlocker {
         }
         
         @objc private func didActivate(_ notification: Notification) {
+            self.evaluateAutoLockIfNeeded(ignorePause: false)
+        }
+
+        private func evaluateAutoLockIfNeeded(ignorePause: Bool) {
+            if !ignorePause && self.isAutoLockPaused {
+                // Honor the camera pause, unless it has been held past the watchdog cap.
+                if let pauseStart = self.pauseStartDate, pauseStart.distance(to: Date()) < self.maxAutoLockPauseInterval {
+                    return
+                }
+            }
             let timeInterval = STAppSettings.current.security.lockUpApp.timeInterval
             guard let resignActiveDate = self.resignActiveDate, resignActiveDate.distance(to: Date()) >= timeInterval  else {
                 return

@@ -33,7 +33,15 @@ class STBackupPhraseVM {
     }
     
     func copy(backupPhrase: String?) {
-        UIPasteboard.general.string = backupPhrase
+        guard let backupPhrase = backupPhrase else {
+            return
+        }
+        // The backup phrase encodes the user's private key. Keep it on this device only (no Universal
+        // Clipboard / Handoff sync to other Apple devices) and auto-expire it so it does not linger in
+        // the shared pasteboard for other apps / clipboard managers to read.
+        UIPasteboard.general.setItems([["public.utf8-plain-text": backupPhrase]],
+                                      options: [.localOnly: true,
+                                                .expirationDate: Date(timeIntervalSinceNow: 60)])
     }
     
 }

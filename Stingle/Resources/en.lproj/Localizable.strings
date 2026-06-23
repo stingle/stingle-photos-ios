@@ -398,6 +398,7 @@
 "error_incorrect_password" = "Password must have at least 6 characters";
 "error_password_not_valed" = "Incorrect password";
 "error_unknown_error" = "Something went wrong, please try again later";
+"biometric_needs_password_reauth" = "Biometric unlock needs to be re-enabled. Please unlock once with your password — Face ID / Touch ID will work again afterward.";
 "error_incorrect_confirm_password" = "Confirm  passwordnot valid";
 
 "error_data_not_found" = "Data not found";
@@ -440,3 +441,20 @@
 "editor_resize" = "Resize";
 "editor_width" = "Width";
 "editor_height" = "Height";
+
+/* Camera */
+"camera" = "Camera";
+"error" = "Error";
+"camera_mode_photo" = "PHOTO";
+"camera_mode_video" = "VIDEO";
+"camera_mode_slowmo" = "SLO-MO";
+"camera_mode_timelapse" = "TIME-LAPSE";
+"camera_mode_portrait" = "PORTRAIT";
+"camera_not_authorized" = "Camera access is off";
+"microphone_not_authorized" = "Microphone access is off";
+"camera_configuration_failed" = "Couldn't start the camera";
+"camera_no_device" = "No camera available";
+"camera_capture_failed" = "Capture failed";
+"camera_mode_not_supported" = "This mode isn't supported on this device";
+"camera_interrupted" = "Camera was interrupted";
+"camera_permission_message" = "Stingle needs camera access to capture photos and videos. Enable it in Settings.";

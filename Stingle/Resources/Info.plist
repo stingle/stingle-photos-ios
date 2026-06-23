@@ -33,7 +33,16 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
-		<dict/>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>$(APP_BUNDLE_ID)</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>stingle</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -43,11 +52,19 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
+		<!-- Blanket NSAllowsArbitraryLoads was removed: it disabled ATS for every host (incl. the
+		     default api.stingle.org in Prod), letting an attacker downgrade TLS and capture the auth
+		     token + catalog metadata. NSAllowsLocalNetworking keeps self-hosted servers on a LAN
+		     reachable over HTTP; public hosts must use TLS 1.2+. -->
+		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires access to the camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Stingle Photos needs microphone access to record audio when you capture videos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Stingle Photos can tag photos and videos you capture with your location, if you enable geotagging in camera settings.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Accessing sample keychain entry</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -71,6 +88,17 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>org.stingle.photos.shortcut.camera</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Camera</string>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeCapturePhoto</string>
+		</dict>
+	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

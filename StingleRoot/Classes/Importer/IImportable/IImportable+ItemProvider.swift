@@ -84,10 +84,13 @@ public extension IItemProviderImportable {
             let fileFolderURL = temporaryDirectory
 
             do {
-                if let lastPathComponent = url?.lastPathComponent {
-                    temporaryDirectory = temporaryDirectory.appendingPathComponent(lastPathComponent)
-                } else if let suggestedName = self.itemProvider.suggestedName {
-                    temporaryDirectory = temporaryDirectory.appendingPathComponent(suggestedName)
+                // `lastPathComponent` / `suggestedName` are influenced by the sharing app; reduce them
+                // to a safe basename so an embedded separator can't redirect the temp write outside the
+                // per-import UUID folder.
+                let rawName = url?.lastPathComponent ?? self.itemProvider.suggestedName
+                if let safeName = rawName.flatMap({ ($0 as NSString).lastPathComponent }),
+                   STFileSystem.isSafeFileName(safeName) {
+                    temporaryDirectory = temporaryDirectory.appendingPathComponent(safeName)
                 }
                 if temporaryDirectory.pathExtension.isEmpty {
                     let preferredFilenameExtension = type.preferredFilenameExtension ?? "JPEG"

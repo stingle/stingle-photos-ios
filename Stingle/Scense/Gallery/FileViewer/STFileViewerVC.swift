@@ -48,6 +48,11 @@ class STFileViewerVC: UIViewController {
     private var initialFile: STLibrary.FileBase?
     
     @IBOutlet weak private var toolBar: UIView!
+
+    /// When true the bottom action bar is suppressed entirely (used when the
+    /// viewer is presented standalone, e.g. reviewing the last camera capture,
+    /// where the action bar would otherwise overlap the video seeker).
+    var hidesActionBar: Bool = false
     
     override var canBecomeFirstResponder: Bool {
         return true
@@ -207,6 +212,10 @@ class STFileViewerVC: UIViewController {
     }
             
     private func configureAccessoryView() {
+        if self.hidesActionBar {
+            self.toolBar.isHidden = true
+            return
+        }
         if let tabBarController = self.tabBarController {
             self.toolBar.isHidden = true
             (tabBarController.tabBar as? STTabBar)?.accessoryView = self.accessoryView
@@ -305,6 +314,9 @@ class STFileViewerVC: UIViewController {
     private func calculateAdditionalSafeAreaInsets() -> UIEdgeInsets {
         switch self.viewerStyle {
         case .balck:
+            if self.hidesActionBar {
+                return .zero
+            }
             var inset = UIEdgeInsets.zero
             let tollBar: UIView = self.tabBarController?.tabBar ?? self.toolBar
             inset.bottom = -tollBar.height + (self.view.window?.safeAreaInsets.bottom ?? .zero)

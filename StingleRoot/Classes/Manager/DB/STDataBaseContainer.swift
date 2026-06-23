@@ -38,6 +38,10 @@ public class STDataBaseContainer {
         if !fileManager.fileExists(atPath: dbUrl.path) {
             try? fileManager.createDirectory(at: dbUrl, withIntermediateDirectories: true)
         }
+        // The Core Data catalog holds the (encrypted) file metadata index and the session token; it
+        // lives in the app-group container and is otherwise backup-eligible. Keep it out of PC/iCloud
+        // backups. Excluding the parent folder covers the .sqlite, -wal and -shm sidecar files.
+        STFileSystem.excludeFromBackup(url: dbUrl)
         return storeURL
     }()
     
@@ -190,6 +194,11 @@ fileprivate extension STDataBaseContainer {
             //For version 1 db using group app url
             let storeURL = self.storeURL
             let storeDescription = NSPersistentStoreDescription(url: storeURL)
+            // Background tasks (auto-import, upload finalization) write to the DB while the device may
+            // be locked, so use CompleteUntilFirstUserAuthentication (readable after first unlock)
+            // rather than .complete, which would break those background paths.
+            storeDescription.setOption(FileProtectionType.completeUntilFirstUserAuthentication as NSObject,
+                                       forKey: NSPersistentStoreFileProtectionKey)
             return [storeDescription]
         default:
             return nil

@@ -59,15 +59,23 @@ extension STCrypto {
         }
         
         var albumNameSizeBytes = Bytes(repeating: 0, count: 4)
-        input.read(&albumNameSizeBytes, maxLength: 4)
-        
+        guard input.read(&albumNameSizeBytes, maxLength: 4) == 4 else {
+            return ""
+        }
+
         let albumNameSize: Int =  Self.fromBytes(b: albumNameSizeBytes)
-        guard albumNameSize > 0 || albumNameSize > Constants.MAX_BUFFER_LENGTH else {
+        // NOTE: the original guard was `> 0 || > MAX_BUFFER_LENGTH`, which collapses to `> 0` and left
+        // the size unbounded — a forged metadata blob could request a multi-GB allocation. The intent
+        // was an inclusive lower / exclusive upper bound (logical AND).
+        guard albumNameSize > 0, albumNameSize < Constants.MAX_BUFFER_LENGTH else {
             return ""
         }
         var albumNameBytes = Bytes(repeating: 0, count: albumNameSize)
-        input.read(&albumNameBytes, maxLength: albumNameSize)
-        let nameData = Data(albumNameBytes)
+        let nameRead = input.read(&albumNameBytes, maxLength: albumNameSize)
+        guard nameRead > 0 else {
+            return ""
+        }
+        let nameData = Data(albumNameBytes.prefix(nameRead))
         let name = String(data: nameData, encoding: .utf8) ?? ""
         return name
     }

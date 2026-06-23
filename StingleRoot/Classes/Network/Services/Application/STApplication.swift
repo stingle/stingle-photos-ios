@@ -149,6 +149,12 @@ public extension STApplication {
         guard urlStr.isValidURL, var url = URL(string: urlStr) else {
             throw STError.notValidUrl
         }
+        // Require HTTPS for a custom/self-hosted server: the auth token is sent on every request and
+        // all (ciphertext) uploads/downloads flow through this host, so an http:// endpoint would let a
+        // network attacker capture the token and metadata. (`isValidURL` accepts http:// otherwise.)
+        guard let scheme = url.scheme?.lowercased(), scheme == "https" else {
+            throw STError.notValidUrl
+        }
         url.appendPathComponent("v2")
         STEnvironment.current.setBaseUrl(url: url)
     }

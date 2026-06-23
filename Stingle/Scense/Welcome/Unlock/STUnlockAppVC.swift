@@ -71,6 +71,8 @@ class STUnlockAppVC: UIViewController {
     //MARK: User Action
     
     @IBAction private func didSelectCameraButton(_ sender: Any) {
+        // Capture without unlocking: encryption seals to the on-disk public key.
+        STCameraLauncher.shared.handle(.unlockScreenButton)
     }
     
     @IBAction private func didSelectLogOutButton(_ sender: Any) {
