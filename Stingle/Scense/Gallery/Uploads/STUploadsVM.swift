@@ -11,19 +11,30 @@ import StingleRoot
 protocol STUploadsVMDelegate: AnyObject {
     func uploadsVM(didUpdateFiles uploadsVM: STUploadsVM, uploadFiles: [ILibraryFile], progresses: [String: Progress])
     func uploadsVM(didUpdateProgress uploadsVM: STUploadsVM, for files: [ILibraryFile], uploadFiles: [ILibraryFile], progresses: [String: Progress])
+    func uploadsVM(didUpdateThumbnailSync uploadsVM: STUploadsVM, state: STThumbnailSyncManager.State)
 }
 
 class STUploadsVM {
-    
+
     weak var delegate: STUploadsVMDelegate?
     private let uploader = STApplication.shared.uploader
-    
+    private let thumbnailSyncManager = STApplication.shared.thumbnailSyncManager
+
     private var progresses = [String: Progress]()
     private var uploadFiles = [ILibraryFile]()
-    
+
     init() {
         self.updateFiles(files: [])
         self.uploader.addListener(self)
+        self.thumbnailSyncManager.addListener(self)
+        self.didUpdateThumbnailSync(state: self.thumbnailSyncManager.state)
+    }
+
+    private func didUpdateThumbnailSync(state: STThumbnailSyncManager.State) {
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.delegate?.uploadsVM(didUpdateThumbnailSync: weakSelf, state: state)
+        }
     }
     
     private func updateFiles(files: [ILibraryFile]) {
@@ -98,5 +109,13 @@ extension STUploadsVM: IFileUploaderObserver {
         }
         self.updateFiles(files: [file])
     }
-    
+
+}
+
+extension STUploadsVM: IThumbnailSyncObserver {
+
+    func thumbnailSyncManager(didUpdate manager: STThumbnailSyncManager, state: STThumbnailSyncManager.State) {
+        self.didUpdateThumbnailSync(state: state)
+    }
+
 }

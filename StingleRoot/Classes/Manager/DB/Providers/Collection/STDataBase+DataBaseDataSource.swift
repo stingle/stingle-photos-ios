@@ -175,6 +175,12 @@ public extension STDataBase {
             
             filesFetchRequest.predicate = self.predicate
             filesFetchRequest.sortDescriptors = sortDescriptors
+            // Fault rows in batches. `performFetch()` runs on the viewContext (MAIN thread) on every
+            // sync (finishSync -> reloadData -> performFetch); without a batch size it materializes
+            // every object's property values at once, blocking the UI for seconds on a large library.
+            // The diffable snapshot only needs object IDs, and cells fault their values in as they
+            // scroll into view, so batching makes the post-sync reload cheap.
+            filesFetchRequest.fetchBatchSize = 80
             let resultsController = NSFetchedResultsController(fetchRequest: filesFetchRequest, managedObjectContext: self.viewContext, sectionNameKeyPath: self.sectionNameKeyPath, cacheName: cacheName)
             resultsController.delegate = self
             return resultsController

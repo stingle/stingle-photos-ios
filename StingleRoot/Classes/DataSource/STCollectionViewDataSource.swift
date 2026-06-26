@@ -143,7 +143,12 @@ open class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>
         self.isReloadingCollectionView = true
         self.delegate?.dataSource(willApplySnapshot: self)
         super.didChangeContent(with: snapshot)
-        self.dataSourceReference?.applySnapshot(snapshot, animatingDifferences: true) { [weak self] in
+        // Don't animate the diff for a sync-driven reload: a sync can change many rows at once and the
+        // insert/move animation is the visible hitch right after sync (and pure jank on a first/large
+        // sync). User-initiated edits (delete, move, favorite) still animate because `isSyncing` is
+        // false then. `animatingDifferences: false` still diffs, so unchanged cells aren't reloaded.
+        let animatingDifferences = !STApplication.shared.syncManager.isSyncing
+        self.dataSourceReference?.applySnapshot(snapshot, animatingDifferences: animatingDifferences) { [weak self] in
             guard let weakSelf = self else {
                 self?.isReloadingCollectionView = false
                 return

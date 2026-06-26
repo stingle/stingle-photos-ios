@@ -133,6 +133,9 @@ public class STSyncManager {
         let application = STApplication.shared
         application.uploader.uploadAllLocalFiles()
         application.autoImporter.startImport()
+        // Pull any thumbnails the catalog references but the local cache is missing (e.g. files
+        // synced on another device, or after a cache trim) so the gallery renders offline.
+        application.thumbnailSyncManager.startSync()
     }
     
     deinit {

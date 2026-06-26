@@ -66,6 +66,8 @@
 
 "have_not_any_uploading_item" = "Backup and sync complete";
 
+"thumbnail_sync" = "Thumbnail sync";
+
 "edit" = "Edit";
 "done" = "Done";
 "select" = "Select";

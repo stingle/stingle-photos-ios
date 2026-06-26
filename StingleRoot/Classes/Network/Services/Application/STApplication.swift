@@ -37,6 +37,10 @@ public class STApplication {
     public private(set) lazy var autoImporter: STImporter.AutoImporter = {
         return STImporter.AutoImporter()
     }()
+
+    public private(set) lazy var thumbnailSyncManager: STThumbnailSyncManager = {
+        return STThumbnailSyncManager()
+    }()
         
     public var fileSystem: STFileSystem {
         guard let user = self.dataBase.userProvider.user else {
@@ -168,6 +172,7 @@ fileprivate extension STApplication {
         self.myFileSystem?.deleteAccount()
         self.dataBase.deleteAll()
         self.autoImporter.logout()
+        self.thumbnailSyncManager.logout()
         STKeyManagement.signOut()
         STBiometricAuthServices().removeBiometricAuth()
         STAppSettings.current.logOut()
@@ -177,6 +182,7 @@ fileprivate extension STApplication {
     func logoutCashe() {
         STOperationManager.shared.logout()
         self.autoImporter.logout()
+        self.thumbnailSyncManager.logout()
         self.myFileSystem?.logOut()
         self.dataBase.deleteAll()
         STKeyManagement.signOut()

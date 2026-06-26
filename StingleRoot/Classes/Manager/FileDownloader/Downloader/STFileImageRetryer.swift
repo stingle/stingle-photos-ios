@@ -59,7 +59,15 @@ public extension STDownloaderManager {
         func isFileExists(source: IDownloaderSource) -> Bool {
             return self.memoryCache.isFileExists(source: source)
         }
-        
+
+        /// Synchronous lookup of an already-decoded image in the in-memory (`NSCache`) layer. Returns
+        /// nil on a miss; callers then fall back to the async disk/network path. Used to paint a
+        /// cached thumbnail immediately instead of clearing to a grey placeholder and resolving the
+        /// hit one runloop later (which caused the whole gallery to flash grey on a post-sync reload).
+        func memoryCachedImage(source: IDownloaderSource) -> UIImage? {
+            return self.diskCache.object(for: source.identifier)
+        }
+
     }
         
     class DiskImageCache: DiskCache<UIImage> {

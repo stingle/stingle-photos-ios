@@ -18,6 +18,7 @@
 		17A1B9C179200CA1193890BC /* OpenCameraIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84DB0C50DE85F9CEDE06CCA /* OpenCameraIntent.swift */; };
 		17A7BEF879006DC95116EA6E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE80357809A11ADADFD0CAE /* Foundation.framework */; };
 		1A353660B9FE3DA5E8B7EEFD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE80357809A11ADADFD0CAE /* Foundation.framework */; };
+		1C5191F3600E21BE7237620D /* STThumbnailSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F8B47F04E4A50A9FEA13D3 /* STThumbnailSyncManager.swift */; };
 		1DB17350DA2896005884F0C6 /* CameraControlWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E8F4B7A71AEC756A8B9E69 /* CameraControlWidget.swift */; };
 		2A56889796D4E4514C546B99 /* LockedCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F7938C9EB146CAAA1BC41D /* LockedCaptureView.swift */; };
 		42ED9CE7208E33043C26A4BF /* STAppSettings+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487884E064D24B14C7040A49 /* STAppSettings+Camera.swift */; };
@@ -523,6 +524,7 @@
 		50520A353DD2B47ABCF4169A /* LockedCaptureController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LockedCaptureController.swift; path = StingleCameraCapture/LockedCaptureController.swift; sourceTree = "<group>"; };
 		5AC65AF28215D2BE7ED38366 /* STCameraEngine+Video.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "STCameraEngine+Video.swift"; path = "Camera/STCameraEngine+Video.swift"; sourceTree = "<group>"; };
 		5DE80357809A11ADADFD0CAE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		67F8B47F04E4A50A9FEA13D3 /* STThumbnailSyncManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = STThumbnailSyncManager.swift; sourceTree = "<group>"; };
 		7A91F1A42AA200EE5E75705F /* STCameraGridOverlayView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = STCameraGridOverlayView.swift; path = Camera/Views/STCameraGridOverlayView.swift; sourceTree = "<group>"; };
 		7C99A87B5989D9F64E3742A0 /* IImportable+Camera.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "IImportable+Camera.swift"; sourceTree = "<group>"; };
 		8267287D94F8C2A38120D5D3 /* STCameraEngine+TimeLapse.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "STCameraEngine+TimeLapse.swift"; path = "Camera/STCameraEngine+TimeLapse.swift"; sourceTree = "<group>"; };
@@ -2061,6 +2063,7 @@
 				A02D88AF260BEEA800B82F16 /* STDownloaderManager.swift */,
 				A062E0E7264C7F9B000B3595 /* Downloader */,
 				A062E0EA264C808D000B3595 /* Cache */,
+				67F8B47F04E4A50A9FEA13D3 /* STThumbnailSyncManager.swift */,
 			);
 			path = FileDownloader;
 			sourceTree = "<group>";
@@ -3702,6 +3705,7 @@
 				42ED9CE7208E33043C26A4BF /* STAppSettings+Camera.swift in Sources */,
 				9C61088A9AF1277421389E44 /* IImportable+Camera.swift in Sources */,
 				0A9DB81ED3B38659D9764A4E /* STCameraImporter.swift in Sources */,
+				1C5191F3600E21BE7237620D /* STThumbnailSyncManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

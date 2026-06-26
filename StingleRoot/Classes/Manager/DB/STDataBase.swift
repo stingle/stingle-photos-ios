@@ -94,37 +94,55 @@ public class STDataBase {
     func sync(_ sync: STSync, finish: @escaping () -> Void, willFinish: @escaping (DBSyncInfo) -> Void, failure: @escaping (IError) -> Void) {
         self.didStartSync()
         let context = self.container.backgroundContext
-        
-        context.performAndWait { [weak self] in
+
+        // All sync DB work runs on the context's private queue, NOT the main thread. The block runs
+        // on the same queue whether dispatched via `perform` or `performAndWait`; the old code used
+        // `performAndWait` (and later hopped to main to `performAndWait` the save), which blocked the
+        // main thread for the entire import + save — on a first/large sync that's thousands of rows
+        // and froze the whole UI for several seconds. With `perform` the caller (usually main) isn't
+        // blocked; only the post-save UI work (`endSync` drives the gallery's FRC reload, which must
+        // be on main) hops back via `DispatchQueue.main.async`.
+        context.perform { [weak self] in
             guard let weakSelf = self else { return }
             do {
                 let oldInfo = weakSelf.dbInfoProvider.dbInfo
                 let synchInfo = try weakSelf.syncImportFiles(sync: sync, in: context, dbInfo: oldInfo)
                 weakSelf.dbInfoProvider.update(model: synchInfo.dbInfo, context: context, notify: false)
-                
+
                 DispatchQueue.global().async {
                     willFinish(synchInfo)
-                    DispatchQueue.main.async {
-                        context.performAndWait {
-                            do {
-                                try context.save()
+                    context.perform {
+                        do {
+                            try context.save()
+                            DispatchQueue.main.async {
                                 weakSelf.endSync()
                                 finish()
-                            } catch {
+                            }
+                        } catch {
+                            STLogger.log(error: error)
+                            DispatchQueue.main.async {
                                 failure(DataBaseError.error(error: error))
-                                STLogger.log(error: error)
                             }
                         }
                     }
                 }
-                                 
+
             } catch {
-                failure(DataBaseError.error(error: error))
+                DispatchQueue.main.async {
+                    failure(DataBaseError.error(error: error))
+                }
                 return
             }
-        }       
+        }
     }
     
+    /// A fresh, throwaway background context for read-only scans (e.g. the thumbnail sync's
+    /// full-catalog walk). Using a dedicated context keeps a big read off the shared
+    /// `backgroundContext` that sync writes through, so the two never serialize behind each other.
+    public func makeReadContext() -> NSManagedObjectContext {
+        return self.container.newReadContext()
+    }
+
     func deleteAll() {
         self.galleryProvider.deleteAll()
         self.albumsProvider.deleteAll()

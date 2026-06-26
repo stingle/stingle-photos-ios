@@ -262,11 +262,26 @@ public extension STDataBase.CollectionProvider {
 
 public extension STDataBase.CollectionProvider {
     
-    func fetchObjects(predicate: NSPredicate? = nil, context: NSManagedObjectContext? = nil) -> [Model] {
-        let cdModels: [ManagedObject] = self.fetch(predicate: predicate)
-        return cdModels.compactMap({ try? Model(model: $0) })
+    func fetchObjects(predicate: NSPredicate? = nil, batchSize: Int = .zero, context: NSManagedObjectContext? = nil) -> [Model] {
+        let context = context ?? self.container.backgroundContext
+        return context.performAndWait { () -> [Model] in
+            let fetchRequest = NSFetchRequest<ManagedObject>(entityName: ManagedObject.entityName)
+            fetchRequest.includesSubentities = true
+            fetchRequest.includesPropertyValues = true
+            // `batchSize > 0` faults rows in chunks instead of materializing the whole result set at
+            // once, so a large scan can't hold the persistent-store lock long enough to stall the
+            // main thread.
+            fetchRequest.fetchBatchSize = batchSize
+            fetchRequest.predicate = predicate
+            let cdModels = (try? context.fetch(fetchRequest)) ?? []
+            // Build the plain models *inside* the context's queue: `Model(model:)` reads managed-object
+            // properties, which is only safe on the owning context's queue. The previous version did
+            // this after the fetch returned, on the caller's thread — a Core Data threading violation
+            // that also contended with the main-thread gallery merge and froze the UI on big scans.
+            return cdModels.compactMap({ try? Model(model: $0) })
+        }
     }
-    
+
     func fetchObjects(identifiers: [String], context: NSManagedObjectContext? = nil) -> [Model] {
         let predicate = NSPredicate(format: "identifier IN %@", identifiers)
         return self.fetchObjects(predicate: predicate, context: context)

@@ -73,6 +73,14 @@ public class STDataBaseContainer {
     private func newBackgroundContext() -> NSManagedObjectContext {
         return self.container.newBackgroundContext()
     }
+
+    /// A dedicated background context for read-only work. It doesn't merge parent changes (nothing
+    /// to keep in sync — it's discarded after the read) and reads committed store state directly.
+    func newReadContext() -> NSManagedObjectContext {
+        let context = self.newBackgroundContext()
+        context.automaticallyMergesChangesFromParent = false
+        return context
+    }
     
     private func getContaner() -> NSPersistentContainer {
         if STEnvironment.current.appIsExtension {

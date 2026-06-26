@@ -17,7 +17,11 @@ class STUploadsTableViewCell: UITableViewCell {
     func configure(model: STUploadsVC.CellModel?) {
         self.model = model
         self.nameLabel.text = model?.name
-        self.fileImageView?.setImage(source: model?.image)
+        let showsImage = model?.showsImage ?? true
+        // The thumbnail lives inside a grey `STPlaceholder` container view; hide the whole
+        // container (not just the image view) for status rows that have no thumbnail.
+        self.fileImageView?.superview?.isHidden = !showsImage
+        self.fileImageView?.setImage(source: showsImage ? model?.image : nil)
         self.progressView.progress = model?.progress ?? 0
     }
     
