@@ -28,14 +28,22 @@ class STAssetResourceLoader: NSObject {
     private let dispatchQueue = DispatchQueue(label: "Player.Queue", attributes: .concurrent)
     private let file: ILibraryFile
     private var decrypters = [Decrypter]()
-    
+
     let isLocalPlaying: Bool
-    
-    lazy var networkSession: STNetworkSession = {
-        let config = STNetworkSession.avStreamingConfiguration
-        let networkSession = STNetworkSession(rootQueue: self.dispatchQueue, configuration: config)
-        return networkSession
-    }()
+
+    // One session shared by ALL video playback so the HTTP/TLS connection to the
+    // storage host (Wasabi/S3) is kept alive and reused between videos. Previously each
+    // loader made its own session, so every video re-established the connection on its
+    // first range request — the stream trace showed that first GET costing ~1.5–1.8s
+    // while later GETs on the same (warm) session cost ~0.2s. URLSession is thread-safe
+    // and tasks are cancelled individually, so sharing is safe; the session is never
+    // invalidated and lives for the app's lifetime. The reader still processes bytes on
+    // its own per-loader `dispatchQueue`, independent of the session's delegate queue.
+    private static let sharedStreamingSession = STNetworkSession(configuration: STNetworkSession.avStreamingConfiguration)
+
+    var networkSession: STNetworkSession {
+        return Self.sharedStreamingSession
+    }
     
     init(file: ILibraryFile, header: STHeader) {
         guard let url = file.fileOreginalUrl,
@@ -54,7 +62,7 @@ class STAssetResourceLoader: NSObject {
         self.scheme = Scheme(identifier: scheme)
         self.file = file
         self.isLocalPlaying =  STApplication.shared.fileSystem.fileExists(atPath: url.path)
-                
+
         super.init()
         self.asset.resourceLoader.setDelegate(self, queue: self.dispatchQueue)
     }
@@ -70,7 +78,7 @@ class STAssetResourceLoader: NSObject {
             return fileReader
         }
     }
-    
+
     private func createDecrypter(for request: AVAssetResourceLoadingRequest) -> Decrypter {
         let resourceReader = self.createResourceReader()
         let decrypter = Decrypter(header: self.header, reader: resourceReader, request: request)
@@ -146,9 +154,8 @@ extension STAssetResourceLoader {
     
 }
 
-
 extension STAssetResourceLoader {
-    
+
     enum LoaderError: Error, IError {
         case readError
         case error(error: Error)

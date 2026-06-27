@@ -42,7 +42,16 @@ public class STDataBase {
         static var empty: SyncInfo<T> {
             return SyncInfo(inserts: [], updates: [], upgrade: [], deletes: [])
         }
-       
+
+        /// True when this sync touched the provider's Core Data at all. When it's false there is
+        /// nothing for the gallery's FRC to pick up, so the (main-thread, full-catalog) `performFetch`
+        /// can be skipped — this is what keeps a no-op sync (the common app-open case) from freezing
+        /// the UI. The sync's file moves/deletes (`moveLocalToRemot`/`deleteFiles`) are filesystem-only
+        /// and derived from these same sets, so an empty `SyncInfo` means no visible change either.
+        var hasChanges: Bool {
+            return !self.inserts.isEmpty || !self.updates.isEmpty || !self.upgrade.isEmpty || !self.deletes.isEmpty
+        }
+
     }
     
     public enum ModelModifyStatus {
@@ -115,7 +124,7 @@ public class STDataBase {
                         do {
                             try context.save()
                             DispatchQueue.main.async {
-                                weakSelf.endSync()
+                                weakSelf.endSync(info: synchInfo)
                                 finish()
                             }
                         } catch {
@@ -229,12 +238,15 @@ public class STDataBase {
     
     //MARK: - private func
     
-    private func endSync() {
-        self.galleryProvider.finishSync()
-        self.albumFilesProvider.finishSync()
-        self.albumsProvider.finishSync()
-        self.trashProvider.finishSync()
-        self.contactProvider.finishSync()
+    private func endSync(info: DBSyncInfo) {
+        // Only re-fetch (a main-thread, full-catalog `performFetch`) the providers that actually
+        // changed this sync. A no-op delta — the usual app-open case — now does no fetch at all, so
+        // it no longer freezes the UI. Providers with no active data source are no-ops regardless.
+        self.galleryProvider.finishSync(reload: info.gallery.hasChanges)
+        self.albumFilesProvider.finishSync(reload: info.albumFiles.hasChanges)
+        self.albumsProvider.finishSync(reload: info.albums.hasChanges)
+        self.trashProvider.finishSync(reload: info.trash.hasChanges)
+        self.contactProvider.finishSync(reload: info.contact.hasChanges)
         self.dbInfoProvider.notifyAllUpdates()
     }
     

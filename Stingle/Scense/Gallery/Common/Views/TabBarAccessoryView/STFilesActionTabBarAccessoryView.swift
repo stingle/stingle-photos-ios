@@ -75,7 +75,7 @@ extension STFilesActionTabBarAccessoryView {
     private class ButtonItem: UIBarButtonItem {
         var actionItem: ActionItem?
     }
-    
+
 }
 
 class STFilesActionTabBarAccessoryView: UIView {
@@ -143,12 +143,12 @@ class STFilesActionTabBarAccessoryView: UIView {
         config.title = action.title
         config.imagePlacement = .top
         config.imagePadding = 2
-        config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 19, weight: .regular)
-        config.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 8, bottom: 3, trailing: 8)
+        config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 7, bottom: 2, trailing: 7)
         config.baseForegroundColor = action.tintColor
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var out = incoming
-            out.font = UIFont.regular(light: 11)
+            out.font = UIFont.regular(light: 10)
             return out
         }
         let button = UIButton(configuration: config)

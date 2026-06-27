@@ -63,9 +63,14 @@ extension STDataBase {
             }
         }
         
-        func finishSync() {
+        func finishSync(reload: Bool = true) {
             self.dataSources.forEach { (controller) in
-                controller.reloadData()
+                // `reloadData()` is a main-thread `performFetch()` over the whole catalog; only do it
+                // when this sync actually changed the provider's data. `didEndSync()` (refresh control,
+                // empty-state) always runs.
+                if reload {
+                    controller.reloadData()
+                }
                 controller.didEndSync()
             }
         }

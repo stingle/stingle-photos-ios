@@ -50,9 +50,30 @@ public class STPlayer: NSObject {
     private var isSeekInProgress = false
     private var chaseTime: CMTime = .invalid
 
+    // When a remote file is played from the network (not yet on disk) we kick off a
+    // one-time full-file download so the encrypted original lands in the local cache.
+    // Guarded so repeated `play()` calls (pause/resume, seek-to-start) enqueue once
+    // per file; reset whenever a new file becomes current.
+    private var didStartCaching = false
+
+    // Sticky: becomes true the first time the current item actually renders frames
+    // (`timeControlStatus == .playing`); reset when a new file becomes current. Used
+    // to decide whether a finished cache download may swap the live item to the local
+    // file — once playback has begun we must NOT swap (it would restart from zero).
+    private var hasStartedPlayback = false
+
+    // Caching is deferred until the user has actually been watching for a beat, so the
+    // full-file cache download (a) doesn't race the stream for first-frame bandwidth and
+    // (b) is skipped entirely when the user is rapidly skimming through videos. After
+    // first frame we wait `cacheStartSettleDelay`; if still playing the same file, we
+    // cache. A stuck stream that never reaches first frame is covered by the longer
+    // `cacheStartFallbackDelay`, which then lets the rescue swap recover it from local.
+    private let cacheStartSettleDelay: TimeInterval = 3
+    private let cacheStartFallbackDelay: TimeInterval = 10
+
     public override init() {
         super.init()
-        STApplication.shared.downloaderManager.fileDownloader.add(self)
+        STApplication.shared.downloaderManager.videoCacheDownloader.add(self)
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -127,6 +148,12 @@ public class STPlayer: NSObject {
             break
         }
         DispatchQueue.main.async {
+            if myStatus == .playing {
+                self.hasStartedPlayback = true
+                // Playback is healthy — cache after a short "is the user actually watching
+                // this?" settle, so skimming quickly through videos doesn't enqueue them all.
+                self.scheduleCacheDownloadAfterSettle()
+            }
             if myStatus != self.status {
                 self.change(status: myStatus)
             }
@@ -150,13 +177,75 @@ public class STPlayer: NSObject {
         }
         self.removeAllEvents()
         self.file = file
+        self.didStartCaching = false
+        self.hasStartedPlayback = false
         let resourceLoader = STAssetResourceLoader(file: file, header: fileHeader)
         self.assetResourceLoader = resourceLoader
         let assetKeys = ["playable","hasProtectedContent"]
         let item = AVPlayerItem(asset: resourceLoader.asset, automaticallyLoadedAssetKeys: assetKeys)
         self.player.replaceCurrentItem(with: item)
     }
-    
+
+    // After first frame, wait a beat before caching: if the user skips on before the
+    // settle delay, the video is never enqueued — so skimming through a feed of videos
+    // doesn't queue them all for download. Only kept if still playing the same file.
+    private func scheduleCacheDownloadAfterSettle() {
+        guard !self.didStartCaching, let fileName = self.file?.file else {
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + self.cacheStartSettleDelay) { [weak self] in
+            guard let self = self,
+                  !self.didStartCaching,
+                  self.state == .playing,
+                  self.file?.file == fileName else {
+                return
+            }
+            self.cacheCurrentFileIfNeeded()
+        }
+    }
+
+    // Persist the currently-playing remote file into the local encrypted cache via the
+    // dedicated `videoCacheDownloader` (single-concurrency, so caches never pile up and
+    // starve the foreground stream). It writes the encrypted original to
+    // `…/server/oreginals` (the same path `LocaleReader` reads from); the cache
+    // downloader's `didEndDownload` then lets this player swap to local playback for a
+    // stalled stream, and every later open is instant instead of re-streaming. No-op
+    // when already local or already enqueued. The download lives on the shared cache
+    // downloader, so it finishes even if this player (and its viewer) is torn down.
+    private func cacheCurrentFileIfNeeded() {
+        guard STAppSettings.current.advanced.autoCacheVideos else {
+            return
+        }
+        guard let file = self.file,
+              let assetResourceLoader = self.assetResourceLoader,
+              !assetResourceLoader.isLocalPlaying,
+              !self.didStartCaching else {
+            return
+        }
+        self.didStartCaching = true
+        // Silent: caching is automatic, so it must not raise any download progress bar.
+        // The player still gets the terminal `didEndDownload` and may swap to local.
+        STApplication.shared.downloaderManager.videoCacheDownloader.download(files: [file], showsProgress: false)
+    }
+
+    // Backstop for a stream that never produces a first frame: if playback still hasn't
+    // begun after `cacheStartFallbackDelay`, start caching so the finished download can
+    // swap the stalled item to the reliable local file.
+    private func scheduleCacheDownloadFallback() {
+        guard let fileName = self.file?.file else {
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + self.cacheStartFallbackDelay) { [weak self] in
+            guard let self = self,
+                  !self.didStartCaching,
+                  self.state == .playing,
+                  self.file?.file == fileName else {
+                return
+            }
+            self.cacheCurrentFileIfNeeded()
+        }
+    }
+
 }
 
 
@@ -253,6 +342,7 @@ public extension STPlayer {
         self.addAllEvents()
         self.player.play()
         self.change(state: .playing)
+        self.scheduleCacheDownloadFallback()
     }
     
     func pause() {
@@ -360,13 +450,25 @@ extension STPlayer: STFileDownloaderObserver {
         guard let file = source.asLibraryFile(), file.file == self.file?.file, file.dbSet == self.file?.dbSet else {
             return
         }
-        let currentTime = self.currentTime
-        let isPLaying = self.isPlaying
-        self.replaceCurrentFile(file: file)
-        self.seek(currentTime: currentTime)
-        if isPLaying {
-            self.play()
+        // The cache download finished while we were still streaming this file.
+        // Only swap the live item over to the now-local file if playback hasn't
+        // begun yet — swapping creates a fresh AVPlayerItem at zero, so doing it
+        // mid-playback would visibly reload and restart from the beginning. Once
+        // frames are on screen we leave the network stream running to the end and
+        // let the cached file serve the *next* open.
+        guard self.state == .playing, !self.hasStartedPlayback else {
+            return
         }
+        // Download often wins the race against the network item becoming ready (and
+        // the network item sometimes never readies — the "stuck until I pause/play"
+        // case). Switch to the reliable local file and start it. Preserve a pre-play
+        // scrub position if the user dragged the slider while it was still buffering.
+        let currentTime = self.currentTime
+        self.replaceCurrentFile(file: file)
+        if currentTime > 0 {
+            self.seek(currentTime: currentTime)
+        }
+        self.play()
     }
     
 }

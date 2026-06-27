@@ -22,7 +22,7 @@ extension STAssetResourceLoader {
         private let networkSession: STNetworkSession
         private(set) var request: URLRequest?
         private var sessionTask: INetworkSessionTask?
-        
+
         init(filename: String, dbSet: STLibrary.DBSet, queue: DispatchQueue, networkSession: STNetworkSession) {
             self.networkSession = networkSession
             self.filename = filename
@@ -58,26 +58,37 @@ extension STAssetResourceLoader {
         private func didReceiveNewData(_ data: Data, startOffSet: UInt64, length: UInt64, dataChunkSize: UInt64, fullDataSize: UInt64, handler: @escaping (Data) -> Bool) {
             self.receiveData.append(data)
             self.receiveCount = self.receiveCount + UInt64(data.count)
-            let currentChankIndex = UInt64(self.receiveData.count) / dataChunkSize
-            let endIndex = self.receiveCount + startOffSet
-            let isEndChank = endIndex >= fullDataSize || currentChankIndex == 1
-            if isEndChank {
-                                
-                let start: UInt64 = .zero
-                let end = min(UInt64(self.receiveData.count), dataChunkSize)
-                let range = Range(uncheckedBounds: (Int(start), Int(end)))
-                let requestedDataChank = self.receiveData.subdata(in: range)
-                
-                let myDataRange = Range(uncheckedBounds: (Int(end), Int(self.receiveData.count)))
-                self.receiveData = self.receiveData.subdata(in: myDataRange)
-                                
-                self.queue.async { [weak self] in
-                    let ended = handler(requestedDataChank)
-                    if ended {
-                        self?.sessionTask?.cancel()
-                    }
+            let reachedEndOfData = (self.receiveCount + startOffSet) >= fullDataSize
+            let chunkSize = Int(dataChunkSize)
+
+            // Emit every *complete* encrypted chunk, in order. The Decrypter derives each
+            // chunk's key from its sequence number, so chunks must arrive whole and
+            // ordered. The previous logic only emitted when exactly one chunk was buffered
+            // (`receiveData.count / chunkSize == 1`); a single network delivery that
+            // buffered two or more chunks at once skipped past that test and the read hung
+            // forever — the cause of "some videos load forever from the server". Draining
+            // in a loop (and calling the handler synchronously on this queue) also removes
+            // the prior out-of-order hazard of dispatching each handler async onto a
+            // concurrent queue.
+            while self.receiveData.count >= chunkSize {
+                let chunk = self.takeReceivedData(upTo: chunkSize)
+                if handler(chunk) {
+                    self.sessionTask?.cancel()
+                    return
                 }
             }
+            // The file's final chunk is shorter than a full chunk; flush it once every
+            // byte of the requested range has arrived.
+            if reachedEndOfData, !self.receiveData.isEmpty {
+                let chunk = self.takeReceivedData(upTo: self.receiveData.count)
+                _ = handler(chunk)
+            }
+        }
+
+        private func takeReceivedData(upTo size: Int) -> Data {
+            let chunk = self.receiveData.subdata(in: 0 ..< size)
+            self.receiveData = self.receiveData.subdata(in: size ..< self.receiveData.count)
+            return chunk
         }
         
         deinit {
@@ -100,7 +111,6 @@ extension STAssetResourceLoader.NetworkReader: IAssetResourceLoader {
                 self?.read(url: result.url, startOffSet: startOffSet, length: length, dataChunkSize: dataChunkSize, fullDataSize: fullDataSize, handler: handler, failure: error)
             }, failure: error)
         }
-        
     }
     
     func cancel() {

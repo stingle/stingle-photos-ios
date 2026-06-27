@@ -33,15 +33,15 @@ extension STAssetResourceLoader {
         private(set) var isFinished = false
         private(set) var receiveDataByteCount: UInt64 = .zero
         private(set) var requestedOffset: UInt64?
-        
+
         let id = UUID().uuidString
-        
+
         init(header: STHeader, reader: IAssetResourceLoader, request: AVAssetResourceLoadingRequest) {
             self.header = header
             self.reader = reader
             self.request = request
         }
-        
+
         func start() {
             self.fillContentInformation()
             self.startLoading()

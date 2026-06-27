@@ -310,6 +310,8 @@
 
 "max_cache_size" = "Maximum cache size";
 "unlimited" = "Unlimited";
+"auto_cache_videos" = "Auto-cache videos";
+"auto_cache_videos_description" = "Save played videos for instant playback next time";
 "delete_cache" = "Delete cache";
 "delete_cache_description" = "Clear cache of thumbnails and other temporary data";
 

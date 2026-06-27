@@ -78,11 +78,12 @@ public class STFileUploader {
     }
     
     public func uploadAllLocalFiles() {
-        guard STApplication.shared.utils.canUploadFile() else {
-            return
-        }
+        // Runs from `didEndSync` on the main thread after *every* sync. Do the `canUploadFile()`
+        // guard (and the `getLocalFiles()` DB fetch) on the background queue so the upload path adds
+        // no main-thread work to a sync — including the cold-launch case where the user record isn't
+        // cached yet and the guard would otherwise fetch it on main.
         self.dispatchQueue.async(flags: .barrier) { [weak self] in
-            guard let weakSelf = self else {
+            guard let weakSelf = self, STApplication.shared.utils.canUploadFile() else {
                 return
             }
             let files = weakSelf.getLocalFiles()

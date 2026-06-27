@@ -53,37 +53,57 @@ public extension STDownloaderManager {
         
         //MARK: public
         
-        public func download(sources: [IDownloaderSource]) {
-            self.progressesCount = self.progressesCount + sources.count
+        // `showsProgress: false` runs a *silent* download — it still fetches and caches
+        // the file and still reports its terminal `didEndDownload` to observers (so the
+        // video player can swap to the now-local file), but it stays out of the visible
+        // progress accounting entirely: no `progressesCount`/`progresses`, no start/
+        // change/finished notifications. Used for video auto-caching, which must not
+        // surface a download progress bar the user didn't ask for.
+        public func download(sources: [IDownloaderSource], showsProgress: Bool = true) {
+            if showsProgress {
+                self.progressesCount = self.progressesCount + sources.count
+            }
             let queue = DispatchQueue.main
             sources.forEach { source in
-                queue.async { [weak self] in
-                    if self?.progresses[source.identifier] == nil {
-                        self?.progresses[source.identifier] = 0
+                if showsProgress {
+                    queue.async { [weak self] in
+                        if self?.progresses[source.identifier] == nil {
+                            self?.progresses[source.identifier] = 0
+                        }
+                        self?.didStartDownload(source: source)
                     }
-                    self?.didStartDownload(source: source)
                 }
                 self.download(source: source) { [weak self] _ in
                     queue.async {
-                        self?.progresses[source.identifier] = 1
-                        self?.didEndDownload(source: source)
+                        guard let self = self else { return }
+                        if showsProgress {
+                            self.progresses[source.identifier] = 1
+                            self.didEndDownload(source: source)
+                        } else {
+                            self.notifyEndDownloadWithoutProgress(source: source)
+                        }
                     }
                 } progress: { [weak self] progress in
                     queue.async {
-                        self?.progresses[source.identifier] = progress.fractionCompleted
-                        self?.didChangeProgress(source: source)
+                        guard showsProgress, let self = self else { return }
+                        self.progresses[source.identifier] = progress.fractionCompleted
+                        self.didChangeProgress(source: source)
                     }
-                    
+
                 } failure: { [weak self] error in
                     queue.async {
-                        self?.progresses[source.identifier] = 1
-                        self?.didFailDownload(source: source)
+                        guard let self = self else { return }
+                        // A silent download that fails surfaces nothing — the player
+                        // simply keeps streaming and the next open retries.
+                        guard showsProgress else { return }
+                        self.progresses[source.identifier] = 1
+                        self.didFailDownload(source: source)
                     }
                 }
             }
         }
-        
-        public func download(files: [ILibraryFile]) {
+
+        public func download(files: [ILibraryFile], showsProgress: Bool = true) {
             var sources = [FileDownloaderSource]()
             files.forEach { file in
                 if let fileOreginalUrl = file.fileOreginalUrl {
@@ -91,7 +111,7 @@ public extension STDownloaderManager {
                     sources.append(source)
                 }
             }
-            self.download(sources: sources)
+            self.download(sources: sources, showsProgress: showsProgress)
         }
         
         public func add(_ listener: STFileDownloaderObserver) {
@@ -142,6 +162,15 @@ public extension STDownloaderManager {
                 self.updateFinished()
             }
         }
+
+        // Terminal notification for a silent download: tell observers the file is ready
+        // (the player swaps to local) without touching the progress counters, so the
+        // gallery nav-bar progress bar never reacts.
+        private func notifyEndDownloadWithoutProgress(source: IDownloaderSource) {
+            self.observerEvents.forEach { observ in
+                observ.downloader(didEndDownload: self, source: source)
+            }
+        }
         
         private func didFailDownload(source: IDownloaderSource) {
             self.progressesCount = self.progressesCount - 1
@@ -175,10 +204,17 @@ public extension STDownloaderManager {
         
     }
     
+    // Single-concurrency `FileDownloader` for video auto-caching. Identical behavior,
+    // but at most one cache download runs at a time so background caching of watched
+    // videos doesn't compete with (and slow the start of) the video being streamed now.
+    class VideoCacheDownloader: FileDownloader {
+        override var maxConcurrentDownloads: Int { 1 }
+    }
+
     class DiskCacheObject: IDiskCacheObject {
-        
+
         let fileName: String
-        
+
         init(fileName: String) {
             self.fileName = fileName
         }

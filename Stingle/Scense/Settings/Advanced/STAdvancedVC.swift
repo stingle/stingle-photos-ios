@@ -38,8 +38,27 @@ class STAdvancedVC: STSettingsDetailTableVC<STAdvancedVC.SectionType, STAdvanced
                 return
             }
             self.showCacheSizeSheet(in: detailCell)
+        case .autoCacheVideos:
+            break
         case .deleteCache:
             self.deleteCache()
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        let identifier = self.sections?[indexPath.section].cells[indexPath.row].reusableIdentifier
+        return identifier == .detail
+    }
+
+    override func settingsyCel(didSelectSwich cell: ISettingsTableViewCell, model: ISettingsTableViewCellModel, isOn: Bool) {
+        guard let indexPath = self.tableView.indexPath(for: cell), let identifier = self.cellModel(for: indexPath)?.identifier else {
+            return
+        }
+        switch identifier {
+        case .autoCacheVideos:
+            self.viewModel.update(autoCacheVideos: isOn)
+        default:
+            break
         }
     }
     
@@ -58,11 +77,14 @@ class STAdvancedVC: STSettingsDetailTableVC<STAdvancedVC.SectionType, STAdvanced
     private func generateSections() -> [Section] {
         let cacheSizeModel = STSettingsDetailTableViewCell.Model(image: UIImage(named: "ic_settings_cache_size")!, title: "max_cache_size".localized, subTitle: self.appearance.cacheSize.localized)
         let cacheSize = CellModel(reusableIdentifier: .detail, identifier: .cacheSize, cellModel: cacheSizeModel)
-                
+
+        let autoCacheModel = STSettingsSwichTableViewCell.Model(image: UIImage(named: "ic_cloud_done")!, title: "auto_cache_videos".localized, subTitle: "auto_cache_videos_description".localized, isOn: self.appearance.autoCacheVideos, isEnabled: true)
+        let autoCacheVideos = CellModel(reusableIdentifier: .swich, identifier: .autoCacheVideos, cellModel: autoCacheModel)
+
         let deleteCacheModel = STSettingsDetailTableViewCell.Model(image: UIImage(named: "ic_menu_trash")!, title: "delete_cache".localized, subTitle: "delete_cache_description".localized)
         let deleteCache = CellModel(reusableIdentifier: .detail, identifier: .deleteCache, cellModel: deleteCacheModel)
-        
-        let cells: [CellModel] = [cacheSize, deleteCache]
+
+        let cells: [CellModel] = [cacheSize, autoCacheVideos, deleteCache]
         let section = Section(identifier: nil, header: nil, cells: cells)
         return [section]
     }
@@ -112,7 +134,8 @@ extension STAdvancedVC {
     
     enum ItemType: Int {
         case cacheSize = 0
-        case deleteCache = 1
+        case autoCacheVideos = 1
+        case deleteCache = 2
     }
 
 }

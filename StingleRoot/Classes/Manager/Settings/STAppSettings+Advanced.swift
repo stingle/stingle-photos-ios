@@ -10,12 +10,34 @@ import Foundation
 extension STAppSettings {
     
     public struct Advanced: Codable {
-        
+
         public var cacheSize: CacheSize
-        
+        // Auto-cache a remote video into the local encrypted store the first time it's
+        // played, so re-watching is instant instead of re-streaming. On by default.
+        public var autoCacheVideos: Bool
+
+        public init(cacheSize: CacheSize, autoCacheVideos: Bool) {
+            self.cacheSize = cacheSize
+            self.autoCacheVideos = autoCacheVideos
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.cacheSize = try container.decode(CacheSize.self, forKey: .cacheSize)
+            // Backward-compatible: installs saved before this setting existed have no
+            // key — default to enabled instead of failing the whole decode (which would
+            // also reset the user's `cacheSize` back to `.default`).
+            self.autoCacheVideos = try container.decodeIfPresent(Bool.self, forKey: .autoCacheVideos) ?? true
+        }
+
         public static var `default`: Advanced {
-            let result = Advanced(cacheSize: .unlimited)
+            let result = Advanced(cacheSize: .unlimited, autoCacheVideos: true)
             return result
+        }
+
+        enum CodingKeys: String, CodingKey {
+            case cacheSize
+            case autoCacheVideos
         }
         
         public enum CacheSize: String, Codable, CaseIterable {
@@ -49,7 +71,7 @@ extension STAppSettings {
         }
         
         public static func != (lhs: Self, rhs: Self) -> Bool {
-            return lhs.cacheSize != rhs.cacheSize
+            return lhs.cacheSize != rhs.cacheSize || lhs.autoCacheVideos != rhs.autoCacheVideos
         }
     }
         

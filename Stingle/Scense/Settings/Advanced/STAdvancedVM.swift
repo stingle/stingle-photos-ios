@@ -18,6 +18,11 @@ class STAdvancedVM {
         self.advanced.cacheSize = cacheSize
         STAppSettings.current.advanced = self.advanced
     }
+
+    func update(autoCacheVideos: Bool) {
+        self.advanced.autoCacheVideos = autoCacheVideos
+        STAppSettings.current.advanced = self.advanced
+    }
     
     func removeCache() {
         STApplication.shared.fileSystem.removeCache()

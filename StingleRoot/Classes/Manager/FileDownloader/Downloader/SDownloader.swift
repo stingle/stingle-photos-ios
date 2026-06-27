@@ -31,11 +31,15 @@ extension STDownloaderManager {
         let operations = STObserverEvents<Operation>()
         let dispatchQueue = DispatchQueue(label: "Retryer.queue.\(T.self)", attributes: .concurrent)
         
+        // Overridable so a downloader can cap parallelism (e.g. video auto-caching runs
+        // one at a time so it doesn't starve the foreground stream's bandwidth).
+        var maxConcurrentDownloads: Int { 20 }
+
         lazy var operationQueue: STOperationQueue = {
-            let queue = self.operationManager.createQueue(maxConcurrentOperationCount: 20, underlyingQueue: dispatchQueue)
+            let queue = self.operationManager.createQueue(maxConcurrentOperationCount: self.maxConcurrentDownloads, underlyingQueue: dispatchQueue)
             return queue
         }()
-        
+
         public init() {}
         
         @discardableResult public func download(source: IDownloaderSource, success: RetryerSuccess<T>?, progress: RetryerProgress?, failure: RetryerFailure?) -> String {

@@ -8,10 +8,15 @@
 import Foundation
 
 public class STDownloaderManager {
-    
+
     public let imageRetryer = ImageRetryer()
     public let fileDownloader = FileDownloader()
-    
+    // Auto-caching of played videos goes through its own downloader so it can't pile
+    // up: watching many videos quickly enqueues many full-file downloads, and on the
+    // shared `fileDownloader` (20-wide) they'd all run at once and starve the
+    // foreground stream. This one runs a single download at a time; the rest queue.
+    public let videoCacheDownloader = VideoCacheDownloader()
+
 }
 
 public extension STDownloaderManager {
