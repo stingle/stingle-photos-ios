@@ -102,7 +102,7 @@ public extension STAppLockUnlocker {
     
     class Locker {
         
-        private var resignActiveDate: Date?
+        private var backgroundDate: Date?
         private var timer: Timer?
         private var pauseStartDate: Date?
 
@@ -112,10 +112,11 @@ public extension STAppLockUnlocker {
         private let maxAutoLockPauseInterval: TimeInterval = 5 * 60
 
         /// When true, foreground re-entry won't auto-lock. Set while the camera is
-        /// presented so a brief backgrounding (e.g. a permission prompt) doesn't
-        /// tear down an active capture session. Clearing it re-evaluates the lock so a
-        /// timeout that elapsed while paused (e.g. the user backgrounded on the camera
-        /// then returned and left the camera tab) is not permanently skipped.
+        /// presented so a brief background trip (e.g. tapping away and back, or a system
+        /// prompt that backgrounds the app) doesn't tear down an active capture session.
+        /// Clearing it re-evaluates the lock so a timeout that elapsed while paused (the
+        /// user backgrounded on the camera past the timeout, then returned and left the
+        /// camera tab) is not permanently skipped.
         public var isAutoLockPaused: Bool = false {
             didSet {
                 if !oldValue && isAutoLockPaused {
@@ -141,7 +142,7 @@ public extension STAppLockUnlocker {
         
         private func addNotifications() {
             let center = NotificationCenter.default
-            center.addObserver(self, selector: #selector(willResignActive(_:)), name: UIApplication.willResignActiveNotification, object: nil)
+            center.addObserver(self, selector: #selector(didEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
             center.addObserver(self, selector: #selector(didActivate(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
         }
         
@@ -160,19 +161,28 @@ public extension STAppLockUnlocker {
         private func evaluateAutoLockIfNeeded(ignorePause: Bool) {
             if !ignorePause && self.isAutoLockPaused {
                 // Honor the camera pause, unless it has been held past the watchdog cap.
+                // `backgroundDate` is intentionally preserved here so the eventual
+                // un-pause can still lock if the app sat in the background past the
+                // timeout while the camera held the pause.
                 if let pauseStart = self.pauseStartDate, pauseStart.distance(to: Date()) < self.maxAutoLockPauseInterval {
                     return
                 }
             }
-            let timeInterval = STAppSettings.current.security.lockUpApp.timeInterval
-            guard let resignActiveDate = self.resignActiveDate, resignActiveDate.distance(to: Date()) >= timeInterval  else {
+            // Consume the pending background episode now, whatever the outcome, so a
+            // stale timestamp can't later lock a transition that happened entirely in
+            // the foreground (e.g. just switching away from the camera tab).
+            guard let backgroundDate = self.backgroundDate else {
                 return
             }
-            self.appDidLock(isAutoLock: true)
+            self.backgroundDate = nil
+            let timeInterval = STAppSettings.current.security.lockUpApp.timeInterval
+            if backgroundDate.distance(to: Date()) >= timeInterval {
+                self.appDidLock(isAutoLock: true)
+            }
         }
-         
-        @objc private func willResignActive(_ notification: Notification) {
-            self.resignActiveDate = Date()
+
+        @objc private func didEnterBackground(_ notification: Notification) {
+            self.backgroundDate = Date()
         }
         
         deinit {

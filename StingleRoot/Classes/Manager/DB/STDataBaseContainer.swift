@@ -74,25 +74,6 @@ public class STDataBaseContainer {
         return self.container.newBackgroundContext()
     }
 
-    #if DEBUG
-    static var __lastBgSave: CFAbsoluteTime?
-    private func setupPerfObservers(viewContext: NSManagedObjectContext) {
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidSave, object: nil, queue: nil) { note in
-            guard let ctx = note.object as? NSManagedObjectContext, ctx !== viewContext else { return }
-            let ins = (note.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>)?.count ?? 0
-            let upd = (note.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>)?.count ?? 0
-            let del = (note.userInfo?[NSDeletedObjectsKey] as? Set<NSManagedObject>)?.count ?? 0
-            STDataBaseContainer.__lastBgSave = CFAbsoluteTimeGetCurrent()
-            NSLog("[STPERF] bgContext DidSave ins=%d upd=%d del=%d", ins, upd, del)
-        }
-        NotificationCenter.default.addObserver(forName: .NSManagedObjectContextDidMergeChangesObjectIDs, object: viewContext, queue: nil) { _ in
-            if let t = STDataBaseContainer.__lastBgSave {
-                NSLog("[STPERF] viewContext merge DONE +%.3fs after last bgSave", CFAbsoluteTimeGetCurrent() - t)
-            }
-        }
-    }
-    #endif
-
     /// A dedicated background context for read-only work. It doesn't merge parent changes (nothing
     /// to keep in sync — it's discarded after the read) and reads committed store state directly.
     func newReadContext() -> NSManagedObjectContext {
@@ -123,9 +104,6 @@ public class STDataBaseContainer {
         persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
         persistentContainer.viewContext.undoManager = nil
         persistentContainer.viewContext.shouldDeleteInaccessibleFaults = true
-        #if DEBUG
-        self.setupPerfObservers(viewContext: persistentContainer.viewContext)
-        #endif
         persistentContainer.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")

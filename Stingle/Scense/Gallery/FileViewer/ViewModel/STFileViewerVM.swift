@@ -39,8 +39,7 @@ protocol STFileViewerVMDelegate: AnyObject {
 class STFileViewerVM<File: STLibrary.FileBase> where File: ICDSynchConvertable {
         
     private let dataSource: STDataBase.DataSource<File>
-    private var snapshot: NSDiffableDataSourceSnapshotReference?
-    
+
     weak var delegate: STFileViewerVMDelegate? {
         didSet {
             self.dataSource.reloadData()
@@ -76,10 +75,7 @@ class STFileViewerVM<File: STLibrary.FileBase> where File: ICDSynchConvertable {
     }
     
     var countOfItems: Int {
-        guard let snapshot = self.snapshot, let section = snapshot.sectionIdentifiers.first else {
-            return .zero
-        }
-        return snapshot.numberOfItems(inSection: section)
+        return self.dataSource.numberOfItems
     }
     
     func deleteFile(file: File, completion: @escaping (_ result: IError?) -> Void) {
@@ -145,9 +141,12 @@ class STFileViewerVM<File: STLibrary.FileBase> where File: ICDSynchConvertable {
 }
 
 extension STFileViewerVM: IProviderDelegate {
-        
-    func dataSource(_ dataSource: IProviderDataSource, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        self.snapshot = snapshot
+
+    func dataSource(_ dataSource: IProviderDataSource, didChange changes: STDataSourceChanges) {
+        self.delegate?.fileViewerVM(didUpdateedData: self)
+    }
+
+    func dataSourceDidReloadData(_ dataSource: IProviderDataSource) {
         self.delegate?.fileViewerVM(didUpdateedData: self)
     }
 

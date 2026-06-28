@@ -55,14 +55,7 @@ extension STDataBase {
                     snapshot.createCDModel(context: context)
                 }
                 if context.hasChanges {
-                    #if DEBUG
-                    let __ts = CFAbsoluteTimeGetCurrent()
-                    #endif
                     try? context.save()
-                    #if DEBUG
-                    let __dt = CFAbsoluteTimeGetCurrent() - __ts
-                    if __dt > 0.1 { NSLog("[STPERF] DBInfoProvider CONTEXT.SAVE took %.3fs", __dt) }
-                    #endif
                 }
             }
             self.observerProvider.forEach { obs in

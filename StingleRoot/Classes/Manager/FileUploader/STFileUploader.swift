@@ -289,9 +289,6 @@ public class STFileUploader {
         }
         self.pendingDBUpdateFiles[dbSet] = []
         let reload = pending.allSatisfy { $0.isRemote && $0.isSynched }
-        #if DEBUG
-        NSLog("[STPERF] flushPendingDBUpdates dbSet=%d count=%d reload=%d", dbSet.rawValue, pending.count, reload ? 1 : 0)
-        #endif
         switch dbSet {
         case .album:
             let models = pending.compactMap { $0 as? STLibrary.AlbumFile }
@@ -423,9 +420,6 @@ extension STFileUploader: STFileUploaderOperationDelegate {
             guard let weakSelf = self else {
                 return
             }
-            #if DEBUG
-            NSLog("[STPERF] ==== upload didEndSucces file=%@ remaining=%d ====", file.file, weakSelf.uploadingFiles.count - 1)
-            #endif
             if let index = weakSelf.uploadingFiles.firstIndex(where: { $0.file == file.file }) {
                 weakSelf.uploadingFiles.remove(at: index)
             }

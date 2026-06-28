@@ -76,125 +76,94 @@ public extension STDataBase {
         //MARK: - Methods
         
         public func add(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
-            
+
             guard !models.isEmpty else {
                 return
             }
-            
+
             let context = context ?? self.container.backgroundContext
             var ids = [NSManagedObjectID]()
-            
-            context.performAndWait { [weak self] in
-                guard let weakSelf = self else { return  }
+
+            context.performAndWait {
                 do {
-                    if let inserts = try? weakSelf.getInsertObjects(with: models) {
+                    if let inserts = try? self.getInsertObjects(with: models) {
                         let insertRequest = NSBatchInsertRequest(entityName: ManagedObject.entityName, objects: inserts.json)
                         insertRequest.resultType = .objectIDs
-                        #if DEBUG
-                        let __ts = CFAbsoluteTimeGetCurrent()
-                        #endif
                         let result = try (context.execute(insertRequest) as? NSBatchInsertResult)?.result as? [NSManagedObjectID]
-                        #if DEBUG
-                        let __dt = CFAbsoluteTimeGetCurrent() - __ts
-                        if __dt > 0.1 { NSLog("[STPERF] CollectionProvider.add BATCH-INSERT took %.3fs entity=%@ count=%d", __dt, ManagedObject.entityName, models.count) }
-                        #endif
                         if let result = result {
                             ids.append(contentsOf: result)
                         }
                     }
-                    if reloadData {
-                        weakSelf.reloadData(models: models, ids: ids, changeType: .add)
-                    }
-                    
                 } catch {
                     STLogger.log(error: error)
                 }
             }
-           
+
+            if reloadData {
+                // Batch insert bypasses the contexts; merge the new ids into the view context so the
+                // gallery FRC emits incremental item inserts (O(changes)) instead of a full re-fetch.
+                self.mergeBatchChanges(inserted: ids, deleted: [])
+                self.notifyObservers(models: models, changeType: .add)
+            }
+
         }
-        
+
         public func delete(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
             guard !models.isEmpty else {
                 return
             }
             let context = context ?? self.container.backgroundContext
             var ids = [NSManagedObjectID]()
-            context.performAndWait { [weak self] in
-                
-                guard let weakSelf = self else { return  }
-                
+            context.performAndWait {
                 do {
-                    let cdModes = try weakSelf.getObjects(by: models, in: context)
+                    let cdModes = try self.getObjects(by: models, in: context)
                     let objectIDs = cdModes.compactMap { (model) -> NSManagedObjectID? in
                         return model.objectID
                     }
                     let deleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
                     deleteRequest.resultType = .resultTypeObjectIDs
-                    #if DEBUG
-                    let __ts = CFAbsoluteTimeGetCurrent()
-                    #endif
                     let result = try (context.execute(deleteRequest) as? NSBatchDeleteResult)?.result as? [NSManagedObjectID]
-                    #if DEBUG
-                    let __dt = CFAbsoluteTimeGetCurrent() - __ts
-                    if __dt > 0.1 { NSLog("[STPERF] CollectionProvider.delete BATCH-DELETE took %.3fs entity=%@ count=%d", __dt, ManagedObject.entityName, objectIDs.count) }
-                    #endif
-                    
                     if let result = result {
                         ids.append(contentsOf: result)
                     }
-                    
-                    if reloadData {
-                        weakSelf.reloadData(models: models, ids: ids, changeType: .delete)
-                    }
-                    
                 } catch {
                 }
             }
-            
+
+            if reloadData {
+                // Batch delete also bypasses the contexts; merge the removed ids so the FRC emits
+                // incremental item deletes.
+                self.mergeBatchChanges(inserted: [], deleted: ids)
+                self.notifyObservers(models: models, changeType: .delete)
+            }
+
         }
-        
+
         public func update(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
             let context = context ?? self.container.backgroundContext
-            var ids = [NSManagedObjectID]()
-            #if DEBUG
-            let __tCall = CFAbsoluteTimeGetCurrent()
-            #endif
-            context.performAndWait {[weak self] in
-                guard let weakSelf = self else { return }
+            context.performAndWait {
                 do {
-                    let cdModels = try weakSelf.getObjects(by: models, in: context)
+                    let cdModels = try self.getObjects(by: models, in: context)
                     cdModels.forEach { cdbject in
                         if let model = models.first(where: { $0.identifier == cdbject.identifier }) {
                             model.update(model: cdbject)
-                            ids.append(cdbject.objectID)
                         }
                     }
 
                     if context.hasChanges {
-                        #if DEBUG
-                        let __tSave = CFAbsoluteTimeGetCurrent()
-                        #endif
+                        // A normal save auto-merges into the view context, which makes the gallery FRC
+                        // emit incremental item updates — no batch op / mergeChanges needed here.
                         try context.save()
-                        #if DEBUG
-                        let __dtSave = CFAbsoluteTimeGetCurrent() - __tSave
-                        if __dtSave > 0.1 { NSLog("[STPERF] CollectionProvider.update CONTEXT.SAVE took %.3fs entity=%@ count=%d", __dtSave, ManagedObject.entityName, models.count) }
-                        #endif
                     }
-
-                    if reloadData {
-                        weakSelf.reloadData(models: models, ids: ids, changeType: .update)
-                    }
-
                 } catch {
                     STLogger.log(error: error)
                 }
-
             }
-            #if DEBUG
-            let __dtCall = CFAbsoluteTimeGetCurrent() - __tCall
-            if __dtCall > 0.1 { NSLog("[STPERF] CollectionProvider.update TOTAL (incl performAndWait wait) took %.3fs entity=%@ count=%d", __dtCall, ManagedObject.entityName, models.count) }
-            #endif
-            
+
+            if reloadData {
+                self.notifyObservers(models: models, changeType: .update)
+            }
+
         }
         
 
@@ -217,23 +186,37 @@ public extension STDataBase {
             }
         }
         
-        private func reloadData(models: [Model], ids: [NSManagedObjectID], changeType: DataBaseChangeType) {
-            
-            guard !ids.isEmpty else {
+        // Merge batch-operation results (which bypass the managed-object contexts) into the view context,
+        // so the gallery FRC observing it emits incremental item-level changes. This is what keeps a
+        // single add/delete an O(changes) UI update instead of an O(library) `performFetch`.
+        private func mergeBatchChanges(inserted: [NSManagedObjectID], deleted: [NSManagedObjectID]) {
+            var changes = [AnyHashable: Any]()
+            if !inserted.isEmpty {
+                changes[NSInsertedObjectsKey] = inserted
+            }
+            if !deleted.isEmpty {
+                changes[NSDeletedObjectsKey] = deleted
+            }
+            guard !changes.isEmpty else {
                 return
             }
-            
-            self.dataSources.forEach { (controller) in
-                DispatchQueue.main.async {
-                    controller.reloadData(ids: ids, changeType: changeType)
-                }
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self.container.viewContext])
+        }
+
+        // Notify the non-FRC observers (storage screen, album/menu, etc.). The FRC-backed collection
+        // views update themselves from `mergeBatchChanges` (add/delete) or the save auto-merge (update),
+        // so this no longer drives a `performFetch`.
+        private func notifyObservers(models: [Model], changeType: DataBaseChangeType) {
+
+            guard !models.isEmpty else {
+                return
             }
-            
+
             DispatchQueue.main.async { [weak self] in
-                guard let weakSelf = self, !models.isEmpty else {
+                guard let weakSelf = self else {
                     return
                 }
-                
+
                 switch changeType {
                 case .add:
                     weakSelf.observerProvider.forEach { observer in
@@ -248,9 +231,9 @@ public extension STDataBase {
                         observer.dataBaseProvider(didDeleted: weakSelf, models: models)
                     }
                 }
-                
-                if STEnvironment.current.appIsExtension, let name = self?.notificationReloadDataProviderAppIsExtension  {
-                    STDarwinNotificationCenter.shared.postNotification(name)
+
+                if STEnvironment.current.appIsExtension {
+                    STDarwinNotificationCenter.shared.postNotification(weakSelf.notificationReloadDataProviderAppIsExtension)
                 }
             }
         }
