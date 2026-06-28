@@ -31,10 +31,35 @@ public class STFileUploader {
     private var observer = STObserverEvents<IFileUploaderObserver>()
     
     private(set) var uploadedFiles = [STLibrary.DBSet: [ILibraryFile]]()
-    
+
+    // Successfully-uploaded files whose isRemote/isSynched flip hasn't been written to Core Data yet,
+    // accumulated per DB set so the writes can be flushed in batches (see `updateDB`).
+    private var pendingDBUpdateFiles = [STLibrary.DBSet: [ILibraryFile]]()
+
     private var progresses = [String: Progress]()
     private var uploadingFiles = [ILibraryFile]()
-    
+
+    // Thread-safe, synchronously-readable mirror of `!uploadingFiles.isEmpty`. The gallery data source
+    // reads `isUploading` on the MAIN thread (in `STCollectionViewDataSource.didChangeContent`) to skip
+    // diff *animations* while an upload is in flight: the animated apply of the full-library diffable
+    // snapshot is the visible per-upload hitch (~0.5s animated vs ~0.08s non-animated on a large
+    // library). `uploadingFiles` is only safe to read on the barrier `dispatchQueue`, so the boolean is
+    // mirrored here under a lock and republished (`refreshUploadingState`) after every mutation.
+    //
+    // The flag is *debounced off*: when the last file drains it stays true for `uploadSettleDelay`. The
+    // final batch's flush -> backgroundContext save -> viewContext auto-merge -> gallery applySnapshot
+    // happens just AFTER `uploadingFiles` empties, so clearing the flag synchronously made that last
+    // reload animate (the residual per-upload freeze). A new upload within the window cancels the clear.
+    private let uploadingStateLock = NSLock()
+    private var _isUploading = false
+    private var uploadIdleWorkItem: DispatchWorkItem?
+    private let uploadSettleDelay: TimeInterval = 2.0
+    public var isUploading: Bool {
+        self.uploadingStateLock.lock()
+        defer { self.uploadingStateLock.unlock() }
+        return self._isUploading
+    }
+
     let maxCountUploads = 100
     let maxCountUpdateDB = 5
     
@@ -170,9 +195,10 @@ public class STFileUploader {
                     weakSelf.countAllFiles[file.dbSet] = (weakSelf.countAllFiles[file.dbSet] ?? .zero) + 1
                 }
             }
+            weakSelf.refreshUploadingState()
             weakSelf.updateProgress(files: files)
         }
-        
+
     }
     
     private func culculateProgress() -> Double {
@@ -197,6 +223,31 @@ public class STFileUploader {
         return true
     }
         
+    /// Recompute the synchronously-readable `isUploading` flag from `uploadingFiles`. MUST be called on
+    /// the barrier `dispatchQueue` (where `uploadingFiles` is mutated). Raising is immediate; clearing
+    /// is debounced by `uploadSettleDelay` so the final batch's auto-merge reload still counts as
+    /// upload-driven (and is applied without animation).
+    private func refreshUploadingState() {
+        if !self.uploadingFiles.isEmpty {
+            self.uploadIdleWorkItem?.cancel()
+            self.uploadIdleWorkItem = nil
+            self.setIsUploading(true)
+        } else if self.uploadIdleWorkItem == nil {
+            let work = DispatchWorkItem(flags: .barrier) { [weak self] in
+                self?.uploadIdleWorkItem = nil
+                self?.setIsUploading(false)
+            }
+            self.uploadIdleWorkItem = work
+            self.dispatchQueue.asyncAfter(deadline: .now() + self.uploadSettleDelay, execute: work)
+        }
+    }
+
+    private func setIsUploading(_ value: Bool) {
+        self.uploadingStateLock.lock()
+        self._isUploading = value
+        self.uploadingStateLock.unlock()
+    }
+
     private func updateDB(file: ILibraryFile, updateDB: Bool) {
         var uploadFiles = self.uploadedFiles[file.dbSet] ?? [ILibraryFile]()
         if !uploadFiles.contains(where: { $0.file == file.file }) {
@@ -210,16 +261,69 @@ public class STFileUploader {
         guard updateDB else {
             return
         }
-        let reload = file.isRemote && file.isSynched && uploadFiles.isEmpty
-        if let albumFile = file as? STLibrary.AlbumFile {
-            STApplication.shared.dataBase.albumFilesProvider.update(models: [albumFile], reloadData: reload)
-        } else if let trashFile = file as? STLibrary.TrashFile {
-            STApplication.shared.dataBase.trashProvider.update(models: [trashFile], reloadData: reload)
-        } else if let galeryFile = file as? STLibrary.GaleryFile {
-            STApplication.shared.dataBase.galleryProvider.update(models: [galeryFile], reloadData: reload)
+        // Batch the gallery/trash/album DB writes. Each `provider.update(models:)` does a
+        // backgroundContext `save()` that the main `viewContext` auto-merges (it has
+        // `automaticallyMergesChangesFromParent = true`), and that merge fires the gallery FRC, which
+        // rebuilds the full diffable snapshot (O(library)) on the MAIN thread. Doing it once per
+        // uploaded file made the UI hitch on *every* file. Accumulate the successfully-uploaded files
+        // and flush them through a single `update(models:)` per batch (every `maxCountUpdateDB`, and a
+        // final flush when the whole upload drains — see the completion handlers), so the FRC fires
+        // per batch, not per file. Persistence of isRemote/isSynched lags by < a batch; a mid-upload
+        // kill self-heals because the next launch's sync reconciles already-uploaded files before
+        // `uploadAllLocalFiles` would re-send them.
+        var pending = self.pendingDBUpdateFiles[file.dbSet] ?? [ILibraryFile]()
+        if !pending.contains(where: { $0.file == file.file }) {
+            pending.append(file)
+        }
+        self.pendingDBUpdateFiles[file.dbSet] = pending
+        if pending.count >= self.maxCountUpdateDB {
+            self.flushPendingDBUpdates(for: file.dbSet)
         }
     }
-    
+
+    // Writes one accumulated batch of uploaded files to Core Data in a single `update(models:)`
+    // (one backgroundContext save → one FRC reload), instead of one save per file.
+    private func flushPendingDBUpdates(for dbSet: STLibrary.DBSet) {
+        guard let pending = self.pendingDBUpdateFiles[dbSet], !pending.isEmpty else {
+            return
+        }
+        self.pendingDBUpdateFiles[dbSet] = []
+        let reload = pending.allSatisfy { $0.isRemote && $0.isSynched }
+        #if DEBUG
+        NSLog("[STPERF] flushPendingDBUpdates dbSet=%d count=%d reload=%d", dbSet.rawValue, pending.count, reload ? 1 : 0)
+        #endif
+        switch dbSet {
+        case .album:
+            let models = pending.compactMap { $0 as? STLibrary.AlbumFile }
+            STApplication.shared.dataBase.albumFilesProvider.update(models: models, reloadData: reload)
+        case .trash:
+            let models = pending.compactMap { $0 as? STLibrary.TrashFile }
+            STApplication.shared.dataBase.trashProvider.update(models: models, reloadData: reload)
+        case .galery:
+            let models = pending.compactMap { $0 as? STLibrary.GaleryFile }
+            // reloadData: false on purpose. `update(models:)` still does a backgroundContext `save()`,
+            // which the main `viewContext` auto-merges (automaticallyMergesChangesFromParent), and that
+            // merge drives the gallery FRC to reload exactly the changed cells (it marks the
+            // isRemote/isSynched flip as an update). Passing reloadData: true would *additionally* run a
+            // full-catalog `performFetch` (O(library), ~0.5s on a large library) on the main thread to
+            // surface the very same change — pure redundancy, and the residual per-upload freeze.
+            // Nothing observes the gallery provider's `didUpdated`, so dropping that notification is
+            // safe. (Album/trash keep `reload`: STAlbumsDataSource observes albumFilesProvider.)
+            STApplication.shared.dataBase.galleryProvider.update(models: models, reloadData: false)
+        case .none:
+            break
+        }
+    }
+
+    // Flush every remaining partial batch. Called when the whole upload drains (`uploadingFiles` is
+    // empty) from both the success and failure handlers, so a trailing batch smaller than
+    // `maxCountUpdateDB` — or one left behind when the last file failed — is never stranded.
+    private func flushAllPendingDBUpdates() {
+        Array(self.pendingDBUpdateFiles.keys).forEach { dbSet in
+            self.flushPendingDBUpdates(for: dbSet)
+        }
+    }
+
 }
 
 extension STFileUploader {
@@ -277,6 +381,7 @@ extension STFileUploader: STFileUploaderOperationDelegate {
             if !(self?.uploadingFiles.contains(where: { file.file == $0.file }) ?? false) {
                 self?.uploadingFiles.append(file)
             }
+            self?.refreshUploadingState()
             self?.updateDB(file: file, updateDB: false)
             self?.updateProgress(files: [file])
         }
@@ -297,6 +402,7 @@ extension STFileUploader: STFileUploaderOperationDelegate {
             if let file = file, let index = weakSelf.uploadingFiles.firstIndex(where: { $0.file == file.file }) {
                 weakSelf.uploadingFiles.remove(at: index)
             }
+            weakSelf.refreshUploadingState()
             weakSelf.totalCompletedUnitCount = weakSelf.totalCompletedUnitCount + 1
             guard let file = file else {
                 return
@@ -304,6 +410,9 @@ extension STFileUploader: STFileUploaderOperationDelegate {
             weakSelf.countAllFiles[file.dbSet] = (weakSelf.countAllFiles[file.dbSet] ?? .zero) - 1
             weakSelf.progresses.removeValue(forKey: file.file)
             weakSelf.updateDB(file: file, updateDB: false)
+            if weakSelf.uploadingFiles.isEmpty {
+                weakSelf.flushAllPendingDBUpdates()
+            }
             weakSelf.updateProgress(didEndFailed: file, error: error)
         }
     }
@@ -314,19 +423,26 @@ extension STFileUploader: STFileUploaderOperationDelegate {
             guard let weakSelf = self else {
                 return
             }
+            #if DEBUG
+            NSLog("[STPERF] ==== upload didEndSucces file=%@ remaining=%d ====", file.file, weakSelf.uploadingFiles.count - 1)
+            #endif
             if let index = weakSelf.uploadingFiles.firstIndex(where: { $0.file == file.file }) {
                 weakSelf.uploadingFiles.remove(at: index)
             }
+            weakSelf.refreshUploadingState()
             weakSelf.totalCompletedUnitCount = weakSelf.totalCompletedUnitCount + 1
             weakSelf.countAllFiles[file.dbSet] = (weakSelf.countAllFiles[file.dbSet] ?? .zero) - 1
             weakSelf.progresses.removeValue(forKey: file.file)
-            
+
             if let spaceUsed = spaceUsed {
                 let dbInfo = STApplication.shared.dataBase.dbInfoProvider.dbInfo
                 dbInfo.update(with: spaceUsed)
                 STApplication.shared.dataBase.dbInfoProvider.update(model: dbInfo)
             }
             weakSelf.updateDB(file: file, updateDB: true)
+            if weakSelf.uploadingFiles.isEmpty {
+                weakSelf.flushAllPendingDBUpdates()
+            }
             weakSelf.updateProgress(didEndSucces: file)
         }
                 

@@ -12,6 +12,8 @@ public class STFileSystem: NSObject {
     private let fileManager = FileManager.default
     private let userHomeFolderPath: String
     private var cacheFolderDataSize: STBytesUnits? = nil
+    // Serializes cache-size bookkeeping/eviction (see `updateUrlDataSize`) off the main thread.
+    private let cacheSizeQueue = DispatchQueue(label: "org.stingle.STFileSystem.cacheSize", qos: .utility)
     
     static let privateFileName = "private"
     
@@ -359,12 +361,27 @@ public extension STFileSystem {
     }
     
     func updateUrlDataSize(url: URL) {
-        
+        // Run on a dedicated serial background queue, NEVER on the caller's thread. This recursively
+        // scans the whole server-cache folder (one `attributesOfItem`/`lstat` per file) to tally its
+        // size and evict the oldest files when over the cache limit. On a large library (tens of
+        // thousands of cached files) the first scan after launch takes SECONDS (cold inode cache).
+        // The uploader's success callback (`continueOperation(didUpload:)`) and the download cache
+        // both call this, and those callbacks run on the MAIN thread (Alamofire's default queue) —
+        // so every upload froze the UI for ~5s on the first file. It's pure file I/O and the only
+        // place `cacheFolderDataSize` is touched, so the serial queue both fixes the freeze and keeps
+        // that state race-free. Fire-and-forget: no caller uses a result.
+        self.cacheSizeQueue.async { [weak self] in
+            self?.updateUrlDataSizeImpl(url: url)
+        }
+    }
+
+    private func updateUrlDataSizeImpl(url: URL) {
+
         let megabytes: Double = STAppSettings.current.advanced.cacheSize.bytesUnits.megabytes
         guard let cacheURL = self.url(for: .storage(type: .server(type: nil))),  url.path.contains(cacheURL.path) else {
             return
         }
-        
+
         var cacheFolderDataSize: STBytesUnits
         
         if let size = self.cacheFolderDataSize {

@@ -90,7 +90,14 @@ public extension STDataBase {
                     if let inserts = try? weakSelf.getInsertObjects(with: models) {
                         let insertRequest = NSBatchInsertRequest(entityName: ManagedObject.entityName, objects: inserts.json)
                         insertRequest.resultType = .objectIDs
+                        #if DEBUG
+                        let __ts = CFAbsoluteTimeGetCurrent()
+                        #endif
                         let result = try (context.execute(insertRequest) as? NSBatchInsertResult)?.result as? [NSManagedObjectID]
+                        #if DEBUG
+                        let __dt = CFAbsoluteTimeGetCurrent() - __ts
+                        if __dt > 0.1 { NSLog("[STPERF] CollectionProvider.add BATCH-INSERT took %.3fs entity=%@ count=%d", __dt, ManagedObject.entityName, models.count) }
+                        #endif
                         if let result = result {
                             ids.append(contentsOf: result)
                         }
@@ -123,7 +130,14 @@ public extension STDataBase {
                     }
                     let deleteRequest = NSBatchDeleteRequest(objectIDs: objectIDs)
                     deleteRequest.resultType = .resultTypeObjectIDs
+                    #if DEBUG
+                    let __ts = CFAbsoluteTimeGetCurrent()
+                    #endif
                     let result = try (context.execute(deleteRequest) as? NSBatchDeleteResult)?.result as? [NSManagedObjectID]
+                    #if DEBUG
+                    let __dt = CFAbsoluteTimeGetCurrent() - __ts
+                    if __dt > 0.1 { NSLog("[STPERF] CollectionProvider.delete BATCH-DELETE took %.3fs entity=%@ count=%d", __dt, ManagedObject.entityName, objectIDs.count) }
+                    #endif
                     
                     if let result = result {
                         ids.append(contentsOf: result)
@@ -142,6 +156,9 @@ public extension STDataBase {
         public func update(models: [Model], reloadData: Bool, context: NSManagedObjectContext? = nil) {
             let context = context ?? self.container.backgroundContext
             var ids = [NSManagedObjectID]()
+            #if DEBUG
+            let __tCall = CFAbsoluteTimeGetCurrent()
+            #endif
             context.performAndWait {[weak self] in
                 guard let weakSelf = self else { return }
                 do {
@@ -152,20 +169,31 @@ public extension STDataBase {
                             ids.append(cdbject.objectID)
                         }
                     }
-                    
+
                     if context.hasChanges {
+                        #if DEBUG
+                        let __tSave = CFAbsoluteTimeGetCurrent()
+                        #endif
                         try context.save()
+                        #if DEBUG
+                        let __dtSave = CFAbsoluteTimeGetCurrent() - __tSave
+                        if __dtSave > 0.1 { NSLog("[STPERF] CollectionProvider.update CONTEXT.SAVE took %.3fs entity=%@ count=%d", __dtSave, ManagedObject.entityName, models.count) }
+                        #endif
                     }
-                    
+
                     if reloadData {
                         weakSelf.reloadData(models: models, ids: ids, changeType: .update)
                     }
-                    
+
                 } catch {
                     STLogger.log(error: error)
                 }
-                
+
             }
+            #if DEBUG
+            let __dtCall = CFAbsoluteTimeGetCurrent() - __tCall
+            if __dtCall > 0.1 { NSLog("[STPERF] CollectionProvider.update TOTAL (incl performAndWait wait) took %.3fs entity=%@ count=%d", __dtCall, ManagedObject.entityName, models.count) }
+            #endif
             
         }
         

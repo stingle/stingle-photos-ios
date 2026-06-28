@@ -30,9 +30,16 @@ class STMenuMasterVC: UIViewController {
     //MARK: - Private
     
     private func reloadData() {
+        #if DEBUG
+        let __t0 = CFAbsoluteTimeGetCurrent()
+        #endif
         self.menu = Menu.current()
         self.tableView.reloadData()
         self.selectCurrentRow()
+        #if DEBUG
+        let __dt = CFAbsoluteTimeGetCurrent() - __t0
+        if __dt > 0.1 { NSLog("[STPERF] STMenuMasterVC.reloadData took %.3fs", __dt) }
+        #endif
     }
     
     private func selectCurrentRow() {

@@ -53,7 +53,10 @@ public extension STDataBase {
         let viewContext: NSManagedObjectContext
                 
         private var invalidIds = [NSManagedObjectID]()
-        
+        // Set while a coalesced `performFetch` is already queued for the next run-loop turn (see
+        // `scheduleReload`), so a burst of reload requests collapses into a single fetch.
+        private var reloadScheduled = false
+
         var isSyncing: Bool {
             return STApplication.shared.syncManager.isSyncing
         }
@@ -128,25 +131,58 @@ public extension STDataBase {
         //MARK: - IProviderDataSource
         
         public func reloadData() {
-            guard self.canReloadData else {
-                return
-            }
-            self.isFetching = true
-            try? self.controller.performFetch()
+            self.scheduleReload()
         }
-        
+
         public func reloadData(ids: [NSManagedObjectID], changeType: DataBaseChangeType) {
             self.invalidIds.append(contentsOf: ids)
+            self.scheduleReload()
+        }
+
+        // A `performFetch()` on the gallery FRC re-builds a full-catalog diffable snapshot (O(library),
+        // ~0.4-0.5s on a large library) on the MAIN thread. During an import/upload burst the providers
+        // request several reloads in quick succession (an import `add`, the post-upload sync
+        // re-processing the same files via `finishSync`, etc.), each of which ran its own back-to-back
+        // performFetch. Since performFetch always reflects the *current committed store*, collapsing a
+        // burst of requests into a single fetch on the next run-loop turn loses nothing — the one fetch
+        // sees every change. Accumulated `invalidIds` (the force-reload set) is preserved across the
+        // coalesced calls and consumed by the single resulting `didChangeContentWith`.
+        private func scheduleReload() {
             guard self.canReloadData else {
                 return
             }
-            self.isFetching = true
-            try? self.controller.performFetch()
+            guard !self.reloadScheduled else {
+                return
+            }
+            self.reloadScheduled = true
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.reloadScheduled = false
+                guard self.canReloadData else { return }
+                self.isFetching = true
+                #if DEBUG
+                let __t0 = CFAbsoluteTimeGetCurrent()
+                let __d0 = STCDFile.__dayCalls, __h0 = STCDFile.__dayHits, __m0 = STCDFile.__dayMiss
+                #endif
+                try? self.controller.performFetch()
+                #if DEBUG
+                NSLog("[STPERF] coalesced performFetch entity=%@ took %.3fs | dayCalls=%d hits=%d miss=%d", ManagedModel.entityName, CFAbsoluteTimeGetCurrent() - __t0, STCDFile.__dayCalls - __d0, STCDFile.__dayHits - __h0, STCDFile.__dayMiss - __m0)
+                #endif
+            }
         }
         
         //MARK: - NSFetchedResultsControllerDelegate
         
         public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
+            #if DEBUG
+            let __t0 = CFAbsoluteTimeGetCurrent()
+            let __items = snapshot.numberOfItems
+            let __sections = snapshot.numberOfSections
+            let __d0 = STCDFile.__dayCalls
+            defer {
+                NSLog("[STPERF] didChangeContentWith entity=%@ items=%d sections=%d took %.3fs | dayCalls(cum)=%d Δ=%d", ManagedModel.entityName, __items, __sections, CFAbsoluteTimeGetCurrent() - __t0, STCDFile.__dayCalls, STCDFile.__dayCalls - __d0)
+            }
+            #endif
             if self.snapshotReference == snapshot {
                 self.invalidIds = invalidIds.filter({ element in
                     if #available(iOS 15.0, *) {

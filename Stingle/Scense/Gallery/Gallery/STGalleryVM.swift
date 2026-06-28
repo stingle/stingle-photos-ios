@@ -7,6 +7,7 @@
 
 import Photos
 import UIKit
+import CoreData
 import StingleRoot
 
 class STGalleryVM {
@@ -63,10 +64,60 @@ class STGalleryVM {
 }
 
 extension STCDFile {
-    
+
+    // `day` is the `sectionNameKeyPath` for the gallery / trash / albumFiles FRCs (all three CD
+    // classes inherit STCDFile). It is NOT a stored Core Data attribute, so
+    // `NSFetchedResultsController.performFetch()` cannot section in SQLite — it must evaluate `day`
+    // for *every* object to build the sections, which faults the whole library and runs a
+    // DateFormatter per row, on the MAIN thread, on every reload (incremental sync, and the
+    // completion burst at the end of an upload). That O(N) main-thread work was the multi-second
+    // "freeze when upload finishes" (and the residual sync hitch). `fetchBatchSize` can't help —
+    // section evaluation forces full faulting regardless.
+    //
+    // Two optimizations, both preserving the exact same section strings:
+    //  1. A dedicated formatter whose `dateFormat` is set ONCE. `STDateManager.dateToString`
+    //     reassigns `dateFormat` on every call, and reassigning it re-parses the ICU pattern —
+    //     pathologically slow when called N times in a tight loop.
+    //  2. Memoize the result by `objectID` (`NSCache`: thread-safe + auto-evicting under memory
+    //     pressure). `dateCreated` is immutable per file, so a cached value never goes stale. The
+    //     getter resolves a cache hit from `objectID` alone — it does NOT touch `dateCreated`, so a
+    //     hit does not fault the object. After the gallery's first load warms the cache, later
+    //     `performFetch`es (upload completion, incremental sync, the per-file auto-merge) re-section
+    //     every existing row straight from the cache without faulting it, so the reload is cheap.
+    private static let dayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar.current
+        formatter.dateFormat = STDateManager.DateFormat.mmm_dd_yyyy.rawValue
+        return formatter
+    }()
+
+    private static let dayCache = NSCache<NSManagedObjectID, NSString>()
+
     @objc var day: String {
-        let str = STDateManager.shared.dateToString(date: self.dateCreated, withFormate: .mmm_dd_yyyy)
+        #if DEBUG
+        STCDFile.__dayCalls += 1
+        #endif
+        let objectID = self.objectID
+        // Only memoize rows with a permanent ID (FRC-fetched and batch-inserted rows have one);
+        // a temporary ID changes on save, so caching under it would be wasted.
+        let isCacheable = !objectID.isTemporaryID
+        if isCacheable, let cached = Self.dayCache.object(forKey: objectID) {
+            #if DEBUG
+            STCDFile.__dayHits += 1
+            #endif
+            return cached as String
+        }
+        #if DEBUG
+        STCDFile.__dayMiss += 1
+        #endif
+        guard let dateCreated = self.dateCreated else {
+            return ""
+        }
+        let str = Self.dayFormatter.string(from: dateCreated)
+        if isCacheable {
+            Self.dayCache.setObject(str as NSString, forKey: objectID)
+        }
         return str
     }
-    
+
 }

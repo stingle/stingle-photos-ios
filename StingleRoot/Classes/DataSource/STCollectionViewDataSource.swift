@@ -143,12 +143,22 @@ open class STCollectionViewDataSource<ViewModel: ICollectionDataSourceViewModel>
         self.isReloadingCollectionView = true
         self.delegate?.dataSource(willApplySnapshot: self)
         super.didChangeContent(with: snapshot)
-        // Don't animate the diff for a sync-driven reload: a sync can change many rows at once and the
-        // insert/move animation is the visible hitch right after sync (and pure jank on a first/large
-        // sync). User-initiated edits (delete, move, favorite) still animate because `isSyncing` is
-        // false then. `animatingDifferences: false` still diffs, so unchanged cells aren't reloaded.
-        let animatingDifferences = !STApplication.shared.syncManager.isSyncing
+        // Don't animate the diff for a sync- or upload-driven reload: both can change many rows (or
+        // re-apply the full-library snapshot) at once, and the animated insert/move/reload of a large
+        // snapshot is the visible hitch (~0.5s animated vs ~0.08s non-animated here). It's pure jank
+        // right after a first/large sync, and the per-upload residual freeze. User-initiated edits
+        // (delete, move, favorite) still animate because neither flag is set then. `animatingDifferences:
+        // false` still diffs, so unchanged cells aren't reloaded and the changed cell still updates.
+        let animatingDifferences = !STApplication.shared.syncManager.isSyncing && !STApplication.shared.uploader.isUploading
+        #if DEBUG
+        let __t0 = CFAbsoluteTimeGetCurrent()
+        let __items = snapshot.numberOfItems
+        NSLog("[STPERF] applySnapshot START items=%d animating=%d", __items, animatingDifferences ? 1 : 0)
+        #endif
         self.dataSourceReference?.applySnapshot(snapshot, animatingDifferences: animatingDifferences) { [weak self] in
+            #if DEBUG
+            NSLog("[STPERF] applySnapshot END items=%d animating=%d took %.3fs", __items, animatingDifferences ? 1 : 0, CFAbsoluteTimeGetCurrent() - __t0)
+            #endif
             guard let weakSelf = self else {
                 self?.isReloadingCollectionView = false
                 return
