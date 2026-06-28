@@ -61,6 +61,12 @@ class STSharedMembersVC: UIViewController {
     
     private func configuewTabelView() {
         self.tableView.register(UINib.init(nibName: "STSharedMembersTableViewCell", bundle: .main), forCellReuseIdentifier: self.cellID)
+        // Every contact row is a fixed 59pt cell (see STSharedMembersTableViewCell.xib: single-line,
+        // truncating label). The storyboard left the table at automatic row height + automatic estimate,
+        // so UITableView measured off-screen rows lazily and rewrote contentSize mid-scroll — the visible
+        // "jumps up and down" while scrolling. A concrete rowHeight with estimation disabled removes it.
+        self.tableView.rowHeight = 59
+        self.tableView.estimatedRowHeight = 0
     }
     
     private func updateLocalizes() {

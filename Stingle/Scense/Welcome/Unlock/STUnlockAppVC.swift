@@ -29,6 +29,11 @@ class STUnlockAppVC: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // A pending camera launch (URL scheme / quick action / Control Center / Siri)
+        // is presented over the lock screen here — the correct moment, once this screen
+        // has finished its appearance transition. attemptAutoUnlock then sees a launch
+        // in flight and skips the biometric prompt.
+        STCameraLauncher.shared.presentIfPending()
         self.attemptAutoUnlock()
     }
 
@@ -40,6 +45,14 @@ class STUnlockAppVC: UIViewController {
     }
 
     private func attemptAutoUnlock() {
+        // Launching the camera over the lock screen captures to the public key without
+        // unlocking, so don't auto-prompt for Face ID: the prompt is pointless here and
+        // racing it with the camera presentation produces a "user interaction required"
+        // failure. The biometric button stays available, and closing the camera lets
+        // viewDidAppear fire this again to unlock normally.
+        guard !STCameraLauncher.shared.hasPendingLaunch, !STCameraLauncher.shared.isPresenting else {
+            return
+        }
         guard self.showBiometricUnlocer, !self.isAutoUnlocking else {
             return
         }

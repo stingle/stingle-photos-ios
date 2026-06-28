@@ -33,6 +33,12 @@ enum STCameraLaunch {
         self.groupDefaults?.set(true, forKey: self.pendingKey)
     }
 
+    /// Non-consuming peek at the pending flag (lets the unlock screen suppress its
+    /// biometric prompt while a cross-process camera launch is still in flight).
+    static var isPending: Bool {
+        return self.groupDefaults?.bool(forKey: self.pendingKey) == true
+    }
+
     /// Returns true (once) if a pending camera launch was requested, clearing it.
     static func consumePending() -> Bool {
         guard self.groupDefaults?.bool(forKey: self.pendingKey) == true else { return false }

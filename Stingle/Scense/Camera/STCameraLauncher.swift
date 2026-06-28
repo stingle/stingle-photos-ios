@@ -9,6 +9,7 @@
 //
 
 import UIKit
+import StingleRoot
 
 enum STCameraLaunchSurface {
     case urlScheme
@@ -29,30 +30,51 @@ final class STCameraLauncher {
     private var pendingSurface: STCameraLaunchSurface?
     private(set) var isPresenting = false
 
-    /// Warm path: present now if the UI is ready, otherwise stash for cold launch.
-    func handle(_ surface: STCameraLaunchSurface) {
-        if self.topMostViewController() != nil {
-            self.presentCamera(surface: surface)
-        } else {
-            self.pendingSurface = surface
-        }
+    /// True while a camera launch has been requested but not yet shown. The unlock
+    /// screen consults this to suppress its automatic biometric prompt, which would
+    /// otherwise race the camera presentation (and surface a "user interaction
+    /// required" error when its Face ID sheet can't present under the camera modal).
+    var hasPendingLaunch: Bool {
+        return self.pendingSurface != nil || STCameraLaunch.isPending
     }
 
-    /// Called once the root UI is ready (e.g. after STMainVC finishes setup) and
-    /// when the scene becomes active, to consume a pending or cross-process launch.
+    /// Entry point for every launch surface. Records the request and tries to show
+    /// it now; if the UI isn't ready yet (cold launch) it stays pending until a
+    /// later drain (`presentIfPending`) fires from a fully-routed root.
+    func handle(_ surface: STCameraLaunchSurface) {
+        self.pendingSurface = surface
+        self.presentIfPending()
+    }
+
+    /// Drains a pending or cross-process launch. Safe to call repeatedly — it only
+    /// presents once the real routed root (gallery or lock screen) is on screen, and
+    /// keeps the request pending otherwise so no entry point is ever silently lost.
     func presentIfPending() {
+        // A cross-process request (Control Center control / Siri App Intent) signals
+        // via the app-group flag; fold it into the in-process slot so both the flag
+        // and the in-app surfaces share a single, idempotent drain.
         if STCameraLaunch.consumePending() {
-            self.pendingSurface = self.pendingSurface ?? .controlCenter
+            self.pendingSurface = self.pendingSurface ?? .appIntent
         }
         guard let surface = self.pendingSurface else { return }
+        guard !self.isPresenting else {
+            self.pendingSurface = nil
+            return
+        }
+        // Only present over the real, fully-routed root — never the transient STMainVC
+        // router, the login screen, or a not-yet-interactive scene. Otherwise keep the
+        // request pending; a later drain (scene activation, the lock/gallery screen
+        // appearing) retries at the correct moment.
+        guard STApplication.shared.utils.isLogedIn(), let top = self.readyTopMostViewController() else {
+            return
+        }
         self.pendingSurface = nil
-        self.presentCamera(surface: surface)
+        self.presentCamera(surface: surface, over: top)
     }
 
     // MARK: - Presentation
 
-    private func presentCamera(surface: STCameraLaunchSurface) {
-        guard !self.isPresenting, let top = self.topMostViewController() else { return }
+    private func presentCamera(surface: STCameraLaunchSurface, over top: UIViewController) {
         // Don't stack a second camera.
         if top is STCameraVC || top.children.contains(where: { $0 is STCameraVC }) { return }
 
@@ -66,14 +88,23 @@ final class STCameraLauncher {
         top.present(camera, animated: true)
     }
 
-    private func topMostViewController() -> UIViewController? {
-        let scene = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first { $0.activationState == .foregroundActive } ?? UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first
-        guard let window = scene?.windows.first(where: { $0.isKeyWindow }) ?? scene?.windows.first,
-              var top = window.rootViewController else {
+    /// The deepest presented controller of the active scene, but only once it's
+    /// genuinely presentable: the scene is foreground-active, the root view is in the
+    /// window hierarchy, and the root is past the transient `STMainVC` bootstrap
+    /// router. Returns nil (→ stay pending and retry) until then.
+    private func readyTopMostViewController() -> UIViewController? {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        guard let scene = scenes.first(where: { $0.activationState == .foregroundActive }) else {
             return nil
         }
+        guard let window = scene.windows.first(where: { $0.isKeyWindow }) ?? scene.windows.first(where: { !$0.isHidden }),
+              var top = window.rootViewController,
+              top.viewIfLoaded?.window != nil else {
+            return nil
+        }
+        // STMainVC is the bootstrap router that immediately swaps the window root to
+        // the gallery or the lock screen — presenting over it would be torn down.
+        if top is STMainVC { return nil }
         while let presented = top.presentedViewController {
             top = presented
         }

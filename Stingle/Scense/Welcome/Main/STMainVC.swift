@@ -63,10 +63,14 @@ class STMainVC: UIViewController {
             identifier = "goToAuth"
         }
 		self.performSegue(withIdentifier: identifier, sender: nil)
-        // Cold launch from a camera entry point: present the camera over whatever
-        // root we just routed to (gallery or the lock screen) without unlocking.
-        DispatchQueue.main.async {
-            STCameraLauncher.shared.presentIfPending()
+        // Cold launch from a camera entry point. For the gallery route, drain the
+        // pending launch once the root swap settles. The lock route is drained by
+        // STUnlockAppVC when it appears (so it can also suppress the biometric prompt),
+        // and an un-routable state (login) keeps the request pending until it resolves.
+        if identifier == "goToApp" {
+            DispatchQueue.main.async {
+                STCameraLauncher.shared.presentIfPending()
+            }
         }
 	}
 
